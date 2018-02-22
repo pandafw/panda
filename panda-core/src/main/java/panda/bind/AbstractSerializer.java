@@ -15,6 +15,7 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.adapter.CalendarAdapter;
 import panda.bind.adapter.DateAdapter;
+import panda.codec.binary.Base64;
 import panda.lang.Arrays;
 import panda.lang.Chars;
 import panda.lang.Collections;
@@ -22,7 +23,6 @@ import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
 
 @SuppressWarnings("rawtypes")
 public abstract class AbstractSerializer extends AbstractBinder implements Serializer {

@@ -9,8 +9,8 @@ import org.apache.poi.hwpf.usermodel.CharacterRun;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
 
+import panda.codec.binary.Hex;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Hex;
 
 /**
  * 

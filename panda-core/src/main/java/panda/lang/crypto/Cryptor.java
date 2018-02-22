@@ -9,9 +9,9 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.SecretKeySpec;
 
+import panda.codec.binary.Base64;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
 
 public class Cryptor {
 	protected String algorithm;

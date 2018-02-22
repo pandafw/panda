@@ -12,8 +12,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import panda.lang.codec.binary.Base64;
-import panda.lang.codec.binary.Hex;
+import panda.codec.binary.Base64;
+import panda.codec.binary.Hex;
 
 /**
  * A {@code DomainKey} holds the information about a domain key.

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.validation.module.ValidateModule;
 

@@ -21,10 +21,10 @@ public class Base64 {
 			try {
 				String s = null;
 				if (d) {
-					s = Strings.newStringUtf8(panda.lang.codec.binary.Base64.decodeBase64(args[i]));
+					s = Strings.newStringUtf8(panda.codec.binary.Base64.decodeBase64(args[i]));
 				}
 				else {
-					s = panda.lang.codec.binary.Base64.encodeBase64String(args[i].getBytes(Charsets.CS_UTF_8));
+					s = panda.codec.binary.Base64.encodeBase64String(args[i].getBytes(Charsets.CS_UTF_8));
 				}
 				System.out.println(s);
 			}

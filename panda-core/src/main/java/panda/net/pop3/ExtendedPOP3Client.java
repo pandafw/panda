@@ -8,7 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 
 /**
  * A POP3 Cilent class with protocol and authentication extensions support (RFC2449 and RFC2195).

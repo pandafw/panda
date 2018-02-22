@@ -9,8 +9,8 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import panda.codec.binary.Hex;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Hex;
 import panda.lang.crypto.Digests;
 
 /**

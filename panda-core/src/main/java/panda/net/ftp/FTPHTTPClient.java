@@ -13,7 +13,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 
 /**
  * Experimental attempt at FTP client that tunnels over an HTTP proxy connection.

@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import panda.codec.DecoderException;
+import panda.codec.EncoderException;
+import panda.codec.binary.Base64;
+import panda.codec.net.BCodec;
+import panda.codec.net.QCodec;
 import panda.lang.Charsets;
 import panda.lang.Strings;
-import panda.lang.codec.DecoderException;
-import panda.lang.codec.EncoderException;
-import panda.lang.codec.binary.Base64;
-import panda.lang.codec.net.BCodec;
-import panda.lang.codec.net.QCodec;
 
 /**
  * Utility class to decode MIME texts.

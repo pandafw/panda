@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.codec.binary.Base64;
 import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.io.Streams;
@@ -28,7 +29,6 @@ import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Randoms;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
 import panda.net.Mimes;
 import panda.net.URLBuilder;
 

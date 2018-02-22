@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import panda.cast.Castors;
+import panda.codec.binary.Base32;
+import panda.codec.binary.Bencode;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base32;
-import panda.lang.codec.binary.Bencode;
 import panda.lang.crypto.Digests;
 import panda.lang.reflect.Types;
 

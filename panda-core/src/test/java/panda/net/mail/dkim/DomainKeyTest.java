@@ -20,8 +20,8 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
+import panda.codec.binary.Base64;
 import panda.io.Streams;
-import panda.lang.codec.binary.Base64;
 import panda.lang.crypto.Keys;
 
 public final class DomainKeyTest {

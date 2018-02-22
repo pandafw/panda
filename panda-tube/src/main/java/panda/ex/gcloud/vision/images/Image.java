@@ -1,6 +1,6 @@
 package panda.ex.gcloud.vision.images;
 
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 
 public class Image {
 	private String content;

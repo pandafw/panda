@@ -10,7 +10,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.SSLContext;
 
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 
 /**
  * An SMTP Client class with authentication support (RFC4954).

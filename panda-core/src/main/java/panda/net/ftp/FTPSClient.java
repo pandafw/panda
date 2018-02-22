@@ -16,7 +16,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 import panda.net.ssl.SSLContexts;
 import panda.net.ssl.SSLSockets;
 import panda.net.ssl.TrustManagers;

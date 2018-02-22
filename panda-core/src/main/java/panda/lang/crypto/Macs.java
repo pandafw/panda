@@ -8,10 +8,10 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import panda.codec.binary.Base64;
+import panda.codec.binary.Hex;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
-import panda.lang.codec.binary.Base64;
-import panda.lang.codec.binary.Hex;
 
 
 public class Macs {

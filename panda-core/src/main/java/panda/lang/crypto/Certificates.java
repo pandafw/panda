@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 
+import panda.codec.binary.Base64;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
 
 public class Certificates {
 	public final static String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";

@@ -5,12 +5,12 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.codec.binary.Base64;
 import panda.ex.wordpress.bean.MediaFile;
 import panda.ex.wordpress.bean.MediaItem;
 import panda.ex.wordpress.bean.MediaObject;
 import panda.io.FileNames;
 import panda.io.Streams;
-import panda.lang.codec.binary.Base64;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpResponse;
 import panda.net.http.HttpStatus;

@@ -11,7 +11,7 @@ import java.util.Arrays;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 
 public class Base64Test {
 

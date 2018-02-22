@@ -17,7 +17,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractDeserializer;
-import panda.lang.codec.binary.Base64;
+import panda.codec.binary.Base64;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 

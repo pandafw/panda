@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.codec.binary.Base64;
+import panda.codec.binary.Base64OutputStream;
 import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.io.Streams;
@@ -25,8 +27,6 @@ import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Randoms;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
-import panda.lang.codec.binary.Base64OutputStream;
 import panda.lang.reflect.Methods;
 import panda.lang.time.DateTimes;
 import panda.log.Log;

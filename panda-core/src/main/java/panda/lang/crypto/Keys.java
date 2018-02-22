@@ -14,9 +14,9 @@ import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import panda.codec.binary.Base64;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
 
 public class Keys {
 	public final static String BEGIN_PRIVATE_KEY = "-----BEGIN PRIVATE KEY-----";

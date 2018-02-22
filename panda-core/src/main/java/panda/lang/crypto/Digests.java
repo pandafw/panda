@@ -10,8 +10,8 @@ import java.security.Security;
 import java.util.HashSet;
 import java.util.Set;
 
+import panda.codec.binary.Hex;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Hex;
 
 
 public class Digests {

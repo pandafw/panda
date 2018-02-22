@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import panda.codec.binary.Base64;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
 import panda.lang.crypto.Keys;
 import panda.net.Mimes;
 import panda.net.smtp.SMTPHeader;
