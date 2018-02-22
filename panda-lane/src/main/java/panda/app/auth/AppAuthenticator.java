@@ -18,12 +18,12 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.lang.crypto.Cryptor;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.net.http.HttpHeader;
 import panda.servlet.HttpServlets;
+import panda.util.crypto.Cryptor;
 
 @IocBean(type=UserAuthenticator.class)
 public class AppAuthenticator extends UserAuthenticator {

@@ -13,8 +13,8 @@ import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.lang.crypto.Digests;
 import panda.lang.reflect.Types;
+import panda.util.crypto.Digests;
 
 public class Torrent {
 	public static class Item {

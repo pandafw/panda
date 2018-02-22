@@ -1,4 +1,4 @@
-package panda.lang.crypto;
+package panda.util.crypto;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;

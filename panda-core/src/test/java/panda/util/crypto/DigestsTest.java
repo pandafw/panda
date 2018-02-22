@@ -1,4 +1,4 @@
-package panda.lang.crypto;
+package panda.util.crypto;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import panda.codec.binary.Hex;
 import panda.lang.Strings;
-import panda.lang.crypto.Digests;
+import panda.util.crypto.Digests;
 
 /**
  * test class for Digests

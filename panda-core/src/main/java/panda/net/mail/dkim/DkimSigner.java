@@ -20,9 +20,9 @@ import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.crypto.Keys;
 import panda.net.Mimes;
 import panda.net.smtp.SMTPHeader;
+import panda.util.crypto.Keys;
 
 
 /**

@@ -1,10 +1,12 @@
-package panda.lang.crypto;
+package panda.util.crypto;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import panda.util.crypto.Cryptor;
 
 public class PairKeyCryptorTest {
 	@Test

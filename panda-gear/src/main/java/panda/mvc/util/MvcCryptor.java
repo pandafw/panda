@@ -12,9 +12,9 @@ import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
-import panda.lang.crypto.Cryptor;
-import panda.lang.crypto.Keys;
 import panda.mvc.MvcConstants;
+import panda.util.crypto.Cryptor;
+import panda.util.crypto.Keys;
 
 @IocBean(type=Cryptor.class)
 public class MvcCryptor extends Cryptor {

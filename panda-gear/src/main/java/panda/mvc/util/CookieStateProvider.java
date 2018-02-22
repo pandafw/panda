@@ -6,11 +6,11 @@ import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
-import panda.lang.crypto.Cryptor;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.servlet.HttpServlets;
+import panda.util.crypto.Cryptor;
 
 
 /**

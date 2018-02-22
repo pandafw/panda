@@ -1,4 +1,4 @@
-package panda.lang.crypto;
+package panda.util.crypto;
 
 /**
  * https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher

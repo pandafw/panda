@@ -1,8 +1,8 @@
-package panda.lang.crypto;
+package panda.util.crypto;
 
 import org.junit.Test;
 
-import panda.lang.crypto.Macs;
+import panda.util.crypto.Macs;
 
 /**
  * test class for Digests

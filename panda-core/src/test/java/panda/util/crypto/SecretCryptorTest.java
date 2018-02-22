@@ -1,4 +1,4 @@
-package panda.lang.crypto;
+package panda.util.crypto;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,6 +13,8 @@ import org.junit.Test;
 
 import panda.lang.Randoms;
 import panda.lang.time.StopWatch;
+import panda.util.crypto.Ciphers;
+import panda.util.crypto.Cryptor;
 
 /**
  * test class for Encrypts

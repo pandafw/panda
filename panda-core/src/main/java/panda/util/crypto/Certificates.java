@@ -1,4 +1,4 @@
-package panda.lang.crypto;
+package panda.util.crypto;
 
 import java.io.IOException;
 import java.security.cert.Certificate;

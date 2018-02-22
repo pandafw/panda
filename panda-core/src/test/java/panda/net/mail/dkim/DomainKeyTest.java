@@ -22,7 +22,7 @@ import javax.naming.directory.InitialDirContext;
 
 import panda.codec.binary.Base64;
 import panda.io.Streams;
-import panda.lang.crypto.Keys;
+import panda.util.crypto.Keys;
 
 public final class DomainKeyTest {
 
