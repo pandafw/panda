@@ -1,4 +1,4 @@
-package panda.lang.chardet ;
+package panda.util.chardet ;
 
 public class Big5Statistics extends nsEUCStatistics {
 

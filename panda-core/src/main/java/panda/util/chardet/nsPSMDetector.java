@@ -1,4 +1,4 @@
-package panda.lang.chardet;
+package panda.util.chardet;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -6,10 +6,10 @@ import java.net.URL;
 import panda.args.Argument;
 import panda.args.Option;
 import panda.io.Streams;
-import panda.lang.Charsets;
 import panda.lang.HandledException;
-import panda.lang.chardet.LangHint;
 import panda.tool.AbstractCommandTool;
+import panda.util.chardet.CharDetects;
+import panda.util.chardet.LangHint;
 
 /**
  * A class used for detect text encoding
@@ -54,7 +54,7 @@ public class CharDetect extends AbstractCommandTool {
 		try {
 			is = new URL(url).openStream();
 			is = Streams.buffer(is);
-			String charset = Charsets.detectCharset(is, hint);
+			String charset = CharDetects.detectCharset(is, hint);
 			
 			System.out.println(charset);
 		}

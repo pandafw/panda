@@ -22,10 +22,10 @@ import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.lang.Strings;
-import panda.lang.chardet.LangHint;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.net.Inets;
+import panda.util.chardet.CharDetects;
 
 /**
  */
@@ -169,7 +169,7 @@ public class HttpResponse implements Closeable {
 	public String detectContentCharset() throws IOException {
 		String cs = getContentCharset();
 		if (!Charsets.isSupportedCharset(cs)) {
-			cs = Charsets.detectCharset(getContent(), LangHint.ALL);
+			cs = CharDetects.detectCharset(getContent());
 			if (!Charsets.isSupportedCharset(cs)) {
 				cs = Charsets.UTF_8;
 			}

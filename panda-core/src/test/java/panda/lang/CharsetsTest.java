@@ -5,8 +5,6 @@ import java.nio.charset.Charset;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.io.Streams;
-
 /**
  * test class for ClassUtils
  */
@@ -54,10 +52,4 @@ public class CharsetsTest {
 		Assert.assertEquals("UTF-8", Charsets.UTF_8);
 		Assert.assertEquals("UTF-8", Charsets.CS_UTF_8.name());
 	}
-
-	@Test
-	public void testDetectCharsets() throws Exception {
-		Assert.assertEquals("Shift_JIS,GB18030", Strings.join(Charsets.detectCharsets(Streams.toByteArray(getClass().getResource("Shift-JIS.txt"))), ","));
-	}
-
 }
