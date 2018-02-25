@@ -1103,6 +1103,7 @@ public class GaeDao extends AbstractDao {
 				}
 			}
 
+			autoCommit();
 			return cnt;
 		}
 		catch (Exception e) {
