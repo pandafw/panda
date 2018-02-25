@@ -2301,9 +2301,13 @@ public abstract class Classes {
 				ZipInputStream zis = null;
 				try {
 					zis = Streams.zip(new FileInputStream(url.getFile()));
-					ZipEntry ens = null;
-					while (null != (ens = zis.getNextEntry())) {
-						String cp = ens.getName();
+					ZipEntry ze = null;
+					while ((ze = zis.getNextEntry()) != null) {
+						if (ze.isDirectory()) {
+							continue;
+						}
+
+						String cp = ze.getName();
 						if (cp.endsWith(CLASS_FILE_SUFFIX)) {
 							String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
 							classes.add(cn);
