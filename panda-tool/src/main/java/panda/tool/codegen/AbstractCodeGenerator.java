@@ -593,10 +593,13 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 		vtmap.put("binary", "Validators.BINARY");
 		vtmap.put("cidr", "Validators.CIDR");
 		vtmap.put("date", "Validators.DATE");
+
 		vtmap.put("byte", "Validators.NUMBER");
 		vtmap.put("short", "Validators.NUMBER");
 		vtmap.put("int", "Validators.NUMBER");
 		vtmap.put("long", "Validators.NUMBER");
+		vtmap.put("float", "Validators.NUMBER");
+		vtmap.put("double", "Validators.NUMBER");
 		vtmap.put("number", "Validators.NUMBER");
 
 		vtmap.put("string", "Validators.STRING");
