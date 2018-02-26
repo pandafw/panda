@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import panda.Panda;
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.Link;
@@ -50,6 +51,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeExtras();
 			writeRespondJs();
 			writePanda();
+			writeJscripts();
 		}
 	}
 
@@ -252,6 +254,14 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				else {
 					writeStaticJs("/respondjs/respondjs");
 				}
+			}
+		}
+	}
+	
+	private void writeJscripts() throws IOException {
+		if (js && Collections.isNotEmpty(tag.getJscripts())) {
+			for (String js : tag.getJscripts()) {
+				writeJs(js);
 			}
 		}
 	}

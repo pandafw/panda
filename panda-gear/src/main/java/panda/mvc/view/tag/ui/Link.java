@@ -1,5 +1,6 @@
 package panda.mvc.view.tag.ui;
 
+import java.util.List;
 import java.util.Locale;
 
 import panda.io.Settings;
@@ -32,6 +33,7 @@ import panda.mvc.SiteConstants;
  *    <li>mousewheel</li>
  *    <li>tablesorter</li>
  *    <li>respondjs</li>
+ *    <li>jscripts</li>
  * </ul>
  *
  * <p></p>
@@ -73,6 +75,7 @@ public class Link extends UIBean {
 	protected boolean mousewheel;
 	protected boolean tablesorter;
 	protected boolean respondjs;
+	protected List<String> jscripts;
 
 	/**
 	 * Evaluate extra parameters
@@ -429,6 +432,20 @@ public class Link extends UIBean {
 	 */
 	public void setRespondjs(boolean respondjs) {
 		this.respondjs = respondjs;
+	}
+
+	/**
+	 * @return the jscripts
+	 */
+	public List<String> getJscripts() {
+		return jscripts;
+	}
+
+	/**
+	 * @param jscripts the jscripts to set
+	 */
+	public void setJscripts(List<String> jscripts) {
+		this.jscripts = jscripts;
 	}
 }
 
