@@ -193,34 +193,28 @@ if (typeof String.prototype.unescapePhtml != "function") {
 }
 if (typeof String.prototype.prettifyXml != "function") {
 	String.prototype.prettifyXml = function() {
-		var fmt = '';
-		var reg = /(>)(<)(\/*)/g;
-		var xml = this.replace(reg, '$1\r\n$2$3');
+		var xml = '';
 		var pad = 0;
-		var ss = xml.split('\r\n');
+		var ss = this.replace(/(>)(<)(\/*)/g, '$1\r\n$2$3').split('\r\n');
 		for (var i = 0; i < ss.length; i++) {
 			var s = ss[i];
 			var indent = 0;
 			if (s.match( /.+<\/\w[^>]*>$/ )) {
-				indent = 0;
 			}
 			else if (s.match( /^<\/\w/ )) {
-				if (pad != 0) {
+				if (pad > 0) {
 					pad -= 1;
 				}
 			}
-			else if (s.match( /^<\w[^>]*[^\/]>.*$/ )) {
+			else if (s.match( /^<\w[^>]*[^\/]*>.*$/ )) {
 				indent = 1;
 			}
-			else {
-				indent = 0;
-			}
 	
-			fmt += ("").leftPad(' ', pad * 2) + s + '\r\n';
+			xml += ('').leftPad(' ', pad * 2) + s + '\r\n';
 			pad += indent;
 		}
 	
-		return fmt;
+		return xml;
 	};
 }
 if (typeof String.prototype.encodeUtf8 != "function") {
