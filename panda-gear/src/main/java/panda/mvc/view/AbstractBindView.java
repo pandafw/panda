@@ -200,7 +200,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 		}
 		
 		result.put("success", success);
-		result.put("params", ac.getParams());
+		result.put("params", ac.getReqParams());
 		result.put("result", ac.getResult());
 
 		if (Strings.isNotEmpty(location)) {
