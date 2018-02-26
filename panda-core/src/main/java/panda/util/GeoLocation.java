@@ -20,6 +20,48 @@ public class GeoLocation {
 	}
 
 	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the latitude
+	 */
+	public double getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	public double getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	/**
 	 * calculate the distance between this location and that location
 	 * @param that that location
 	 * @return distance between this location and that location
@@ -31,7 +73,7 @@ public class GeoLocation {
 	/**
 	 * http://digdeeply.org/archives/06152067.html
 	 * @param dis distance (meter)
-	 * @return square point geolocations array
+	 * @return square point GeoLocation array (left-top, right-top, left-bottom, right-bottom)
 	 */
 	public GeoLocation[] squarePoints(double dis) {
 		return calcSquarePoints(this.latitude, this.longitude, dis);
@@ -73,7 +115,7 @@ public class GeoLocation {
 	 * @param lat latitude
 	 * @param lng longitude
 	 * @param dis distance
-	 * @return square point geolocations array
+	 * @return square point GeoLocation array (left-top, right-top, left-bottom, right-bottom)
 	 */
 	public static GeoLocation[] calcSquarePoints(double lat, double lng, double dis) {
 		double dlng = Math.toDegrees(2 * Math.asin(Math.sin(dis / (2 * EARTH_RADIUS)) / Math.cos(Math.toRadians(lat))));
