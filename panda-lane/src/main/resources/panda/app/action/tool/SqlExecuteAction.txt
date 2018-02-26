@@ -1,1 +1,3 @@
+icon=fa fa-strikethrough
+
 title=SQL Executor

@@ -1,3 +1,5 @@
+icon=fa fa-clock-o
+
 title=Cron Jobs
 
 lbl-no=No.

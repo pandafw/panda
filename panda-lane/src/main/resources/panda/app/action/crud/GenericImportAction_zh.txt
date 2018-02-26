@@ -1,3 +1,5 @@
+title=数据导入
+
 p.file=数据文件
 p.update=覆盖原有数据
 p.loose=忽略错误数据

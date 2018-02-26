@@ -1,3 +1,7 @@
+icon=fa fa-upload
+
+title=Import
+
 p.file=File
 p.update=Override if data already exists
 p.loose=Continue if error occurs

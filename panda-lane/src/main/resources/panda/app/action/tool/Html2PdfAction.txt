@@ -1,3 +1,5 @@
+icon=fa fa-file-pdf-o
+
 title=HTML->PDF
 
 p.url=URL

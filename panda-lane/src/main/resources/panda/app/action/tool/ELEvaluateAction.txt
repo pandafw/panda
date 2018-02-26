@@ -1,1 +1,3 @@
+icon=fa fa-keyboard-o
+
 title=EL Evaluator

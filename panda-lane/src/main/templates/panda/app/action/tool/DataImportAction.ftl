@@ -7,7 +7,7 @@
 
 <div class="p-section" id="a_dataimp">
 	<div class="p-header">
-		<h3><i class="fa fa-cloud-upload"></i> <@p.text name="title"/></h3>
+		<h3><@p.i icon="icon"/> <@p.text name="title"/></h3>
 	</div>
 	<#include "/action-alert.ftl"/>
 

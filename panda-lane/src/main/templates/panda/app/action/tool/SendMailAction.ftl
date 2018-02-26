@@ -6,7 +6,7 @@
 
 <div class="p-section a-sendmail">
 	<div class="p-header">
-		<h3><i class="fa fa-envelope-o"></i> <@p.text name="title"/></h3>
+		<h3><@p.i icon="icon"/> <@p.text name="title"/></h3>
 	</div>
 	<#include "/action-alert.ftl"/>
 

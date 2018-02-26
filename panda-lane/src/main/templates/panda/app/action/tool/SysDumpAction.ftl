@@ -17,7 +17,7 @@
 </style>
 <div class="p-section a-debug">
 	<div class="p-header">
-		<h3><i class="fa fa-bug"></i> <@p.text name="title"/></h3>
+		<h3><@p.i icon="icon"/> <@p.text name="title"/></h3>
 	</div>
 
 	<#include "/panda/mvc/view/action-alert-debug.ftl"/>

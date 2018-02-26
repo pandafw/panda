@@ -1,3 +1,5 @@
+icon=fa fa-strikethrough
+
 title=Hash
 
 btn-hash=Hash

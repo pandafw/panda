@@ -1,3 +1,5 @@
+icon=fa fa-cloud-upload
+
 title=Data Import
 
 p.target=Target

@@ -1,3 +1,5 @@
+icon=fa fa-envelope-o
+
 title=Send Mail
 
 p.host=Host
