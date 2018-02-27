@@ -37,31 +37,27 @@
 		}
 
 		function cmdExecute() {
-			try {
-				cmdSetResult();
-				if ($('#cmdexec_cmd').val().strip().isEmpty()) {
-					return false;
+			cmdSetResult();
+
+			if ($('#cmdexec_cmd').val().strip().isEmpty()) {
+				return false;
+			}
+			
+			var $o = $('#cmdexec').loadmask("Executing...");
+			$.ajax({
+				url: $o.attr('action'),
+				data: $o.serializeArray(),
+				dataType: 'text',
+				success: function(data, ts, xhr) {
+					cmdSetResult(data.prettifyXml());
+				},
+				error: function(xhr, ts, err) {
+					cmdSetResult(err + '\r\n' + xhr.responseText);
+				},
+				complete: function(xhr, ts) {
+					$o.unloadmask();
 				}
-				
-				var $o = $('#cmdexec').loadmask("Executing...");
-				$.ajax({
-					url: $o.attr('action'),
-					data: $o.serializeArray(),
-					dataType: 'text',
-					success: function(data, ts, xhr) {
-						cmdSetResult(data.prettifyXml());
-					},
-					error: function(xhr, ts, err) {
-						cmdSetResult(err + '\r\n' + xhr.responseText);
-					},
-					complete: function(xhr, ts) {
-						$o.unloadmask();
-					}
-				});
-			}
-			catch (ex) {
-				cmdSetResult("ERROR:\r\n" + ex);
-			}
+			});
 			return false;
 		}
 	</script>

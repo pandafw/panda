@@ -74,32 +74,26 @@
 			var $a = $d.find('.cron-td-url');
 			var $r = $d.find('.cron-td-result');
 
-			try {
-				$d.loadmask();
-				$r.html((new Date()).format('yyyy-MM-dd HH:mm:ss'));
+			$d.loadmask();
 
-				$.ajax({
-					url: $a.text(),
-					dataType: 'text',
-					success: function(data, ts, xhr) {
-						$r.html($r.html() 
-							+ '<pre class="alert alert-info">' + data.prettifyXml().escapeHtml() + '</pre>');
-					},
-					error: function(xhr, ts, err) {
-						$r.html($r.html()
-							+ '<pre class="alert alert-danger">'
-							+ ((err ? (err + '\r\n') : '') + xhr.responseText).prettifyXml().escapeHtml()
-							+ '</pre>');
-					},
-					complete: function(xhr, ts) {
-						$d.unloadmask();
-					}
-				});
-			}
-			catch (ex) {
-				$r.html((new Date()).format('yyyy-MM-dd HH:mm:ss') 
-					+ '<pre class="alert alert-danger">' + ('ERROR:\r\n' + ex).escapeHtml() + '</pre>');
-			}
+			$r.html((new Date()).format('yyyy-MM-dd HH:mm:ss'));
+			$.ajax({
+				url: $a.text(),
+				dataType: 'text',
+				success: function(data, ts, xhr) {
+					$r.html($r.html() 
+						+ '<pre class="alert alert-info">' + data.escapeHtml() + '</pre>');
+				},
+				error: function(xhr, ts, err) {
+					$r.html($r.html()
+						+ '<pre class="alert alert-danger">'
+						+ ((err ? (err + '\r\n') : '') + xhr.responseText).escapeHtml()
+						+ '</pre>');
+				},
+				complete: function(xhr, ts) {
+					$d.unloadmask();
+				}
+			});
 			return false;
 		}
 	</script>

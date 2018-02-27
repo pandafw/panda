@@ -33,31 +33,26 @@
 		}
 
 		function elEvaluate() {
-			try {
-				elSetResult();
-				if ($('#eleval_expr').val().strip().isEmpty()) {
-					return false;
+			elSetResult();
+			if ($('#eleval_expr').val().strip().isEmpty()) {
+				return false;
+			}
+			
+			var $o = $('#eleval').loadmask("Evaluating...");
+			$.ajax({
+				url: $o.attr('action'),
+				data: $o.serializeArray(),
+				dataType: 'text',
+				success: function(data, ts, xhr) {
+					elSetResult(data.prettifyXml());
+				},
+				error: function(xhr, ts, err) {
+					elSetResult(err + '\r\n' + xhr.responseText);
+				},
+				complete: function(xhr, ts) {
+					$o.unloadmask();
 				}
-				
-				var $o = $('#eleval').loadmask("Evaluating...");
-				$.ajax({
-					url: $o.attr('action'),
-					data: $o.serializeArray(),
-					dataType: 'text',
-					success: function(data, ts, xhr) {
-						elSetResult(data.prettifyXml());
-					},
-					error: function(xhr, ts, err) {
-						elSetResult(err + '\r\n' + xhr.responseText);
-					},
-					complete: function(xhr, ts) {
-						$o.unloadmask();
-					}
-				});
-			}
-			catch (ex) {
-				elSetResult("ERROR:\r\n" + ex);
-			}
+			});
 			return false;
 		}
 	</script>
