@@ -436,7 +436,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 		if (!checkOnUpdate(pdat, sdat)) {
 			setResultOnExecCheckError();
-			return data;
+			return pdat;
 		}
 
 		try {
