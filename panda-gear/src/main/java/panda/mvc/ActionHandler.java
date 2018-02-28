@@ -23,7 +23,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.impl.ActionInvoker;
-import panda.mvc.impl.DefaultMvcLoading;
+import panda.mvc.impl.DefaultMvcLoader;
 import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.ioc.IocSessionListener;
 import panda.mvc.ioc.RequestIocContext;
@@ -36,7 +36,7 @@ public class ActionHandler {
 
 	private boolean deposed;
 	
-	private Loading loading;
+	private MvcLoader loading;
 
 	private ActionMapping mapping;
 
@@ -55,7 +55,7 @@ public class ActionHandler {
 	/**
 	 * @return the loading
 	 */
-	public Loading getLoading() {
+	public MvcLoader getLoading() {
 		return loading;
 	}
 
@@ -79,7 +79,7 @@ public class ActionHandler {
 	 */
 	public ActionHandler(AbstractMvcConfig config) {
 		this.config = config;
-		this.loading = new DefaultMvcLoading();
+		this.loading = new DefaultMvcLoader();
 		this.mapping = loading.load(config);
 
 		String ignores = config.getInitParameter("ignores");

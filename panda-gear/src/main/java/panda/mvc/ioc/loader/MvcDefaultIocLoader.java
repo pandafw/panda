@@ -16,6 +16,8 @@ import panda.mvc.alert.ParamAlertSupport;
 import panda.mvc.annotation.Modules;
 import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.impl.DefaultActionChainMaker;
+import panda.mvc.impl.DefaultValidateHandler;
+import panda.mvc.impl.DefaultValidatorCreator;
 import panda.mvc.impl.RegexActionMapping;
 import panda.mvc.processor.AdaptProcessor;
 import panda.mvc.processor.FatalProcessor;
@@ -28,34 +30,33 @@ import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
-import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.ActionTextProvider;
+import panda.mvc.util.CookieStateProvider;
+import panda.mvc.util.MvcCryptor;
 import panda.mvc.util.MvcResourceLoader;
 import panda.mvc.util.MvcSettings;
-import panda.mvc.util.MvcCryptor;
 import panda.mvc.util.MvcURLBuilder;
-import panda.mvc.validation.DefaultValidators;
-import panda.mvc.validation.validator.BinaryValidator;
-import panda.mvc.validation.validator.CIDRValidator;
-import panda.mvc.validation.validator.CastErrorValidator;
-import panda.mvc.validation.validator.ConstantValidator;
-import panda.mvc.validation.validator.CreditCardNoValidator;
-import panda.mvc.validation.validator.DateValidator;
-import panda.mvc.validation.validator.DecimalValidator;
-import panda.mvc.validation.validator.ElValidator;
-import panda.mvc.validation.validator.EmailValidator;
-import panda.mvc.validation.validator.EmptyValidator;
-import panda.mvc.validation.validator.FileValidator;
-import panda.mvc.validation.validator.FilenameValidator;
-import panda.mvc.validation.validator.ImageValidator;
-import panda.mvc.validation.validator.ImailValidator;
-import panda.mvc.validation.validator.NumberValidator;
-import panda.mvc.validation.validator.ProhibitedValidator;
-import panda.mvc.validation.validator.RegexValidator;
-import panda.mvc.validation.validator.RequiredValidator;
-import panda.mvc.validation.validator.StringValidator;
-import panda.mvc.validation.validator.URLValidator;
-import panda.mvc.validation.validator.VisitValidator;
+import panda.mvc.validator.BinaryValidator;
+import panda.mvc.validator.CIDRValidator;
+import panda.mvc.validator.CastErrorValidator;
+import panda.mvc.validator.ConstantValidator;
+import panda.mvc.validator.CreditCardNoValidator;
+import panda.mvc.validator.DateValidator;
+import panda.mvc.validator.DecimalValidator;
+import panda.mvc.validator.ElValidator;
+import panda.mvc.validator.EmailValidator;
+import panda.mvc.validator.EmptyValidator;
+import panda.mvc.validator.FileValidator;
+import panda.mvc.validator.FilenameValidator;
+import panda.mvc.validator.ImageValidator;
+import panda.mvc.validator.ImailValidator;
+import panda.mvc.validator.NumberValidator;
+import panda.mvc.validator.ProhibitedValidator;
+import panda.mvc.validator.RegexValidator;
+import panda.mvc.validator.RequiredValidator;
+import panda.mvc.validator.StringValidator;
+import panda.mvc.validator.URLValidator;
+import panda.mvc.validator.VisitValidator;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.mvc.view.ftl.FreemarkerManager;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
@@ -186,7 +187,8 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			ParamAlertSupport.class,
 			
 			// validator
-			DefaultValidators.class,
+			DefaultValidateHandler.class,
+			DefaultValidatorCreator.class,
 			
 			// validators
 			BinaryValidator.class,

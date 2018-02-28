@@ -6,8 +6,8 @@ import java.lang.reflect.Method;
 import panda.ioc.annotation.IocBean;
 import panda.lang.reflect.Methods;
 import panda.mvc.ActionContext;
+import panda.mvc.ValidateException;
 import panda.mvc.View;
-import panda.mvc.validation.ValidateException;
 import panda.mvc.view.Views;
 
 @IocBean

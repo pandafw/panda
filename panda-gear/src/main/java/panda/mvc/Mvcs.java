@@ -23,9 +23,8 @@ import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.mvc.impl.DefaultValidateHandler;
 import panda.mvc.util.TextProvider;
-import panda.mvc.validation.DefaultValidators;
-import panda.mvc.validation.Validators;
 
 /**
  * Mvc helper methods
@@ -521,16 +520,16 @@ public abstract class Mvcs {
 	}
 
 	/**
-	 * create validators
+	 * create validate handler
 	 * @param context action context
-	 * @return validators instance
+	 * @return validate handler instance
 	 */
-	public static Validators getValidators(ActionContext context) {
-		Validators validators = context.getIoc().getIfExists(Validators.class);
-		if (validators == null) {
-			validators = new DefaultValidators();
+	public static ValidateHandler getValidateHandler(ActionContext context) {
+		ValidateHandler vh = context.getIoc().getIfExists(ValidateHandler.class);
+		if (vh == null) {
+			vh = new DefaultValidateHandler();
 		}
-		return validators;
+		return vh;
 	}
 
 	/**
@@ -544,15 +543,15 @@ public abstract class Mvcs {
 	}
 
 	/**
-	 * Use validators to validate object
+	 * Use validate handler to validate object
 	 * @param context action context
 	 * @param value validate value
 	 * @param name object name
 	 * @return true if no validation error
 	 */
 	public static boolean validate(ActionContext context, Object value, String name) {
-		Validators vs = getValidators(context);
-		return vs.validate(context, name, value);
+		ValidateHandler vh = getValidateHandler(context);
+		return vh.validate(context, name, value);
 	}
 
 	/**

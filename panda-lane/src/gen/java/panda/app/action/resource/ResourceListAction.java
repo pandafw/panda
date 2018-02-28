@@ -7,9 +7,9 @@ import panda.app.entity.Resource;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.bean.Queryer;
-import panda.mvc.validation.annotation.Validates;
 
 @At("${super_path}/resource")
 @Auth(AUTH.SUPER)

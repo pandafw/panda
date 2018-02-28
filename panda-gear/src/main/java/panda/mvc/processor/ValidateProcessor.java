@@ -8,21 +8,21 @@ import panda.ioc.annotation.IocBean;
 import panda.lang.Arrays;
 import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
+import panda.mvc.ValidateException;
+import panda.mvc.ValidateHandler;
 import panda.mvc.View;
 import panda.mvc.adaptor.DefaultParamAdaptor;
+import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.validation.ValidateException;
-import panda.mvc.validation.Validators;
-import panda.mvc.validation.annotation.Validates;
 import panda.mvc.view.Views;
 
 @IocBean
 public class ValidateProcessor extends AbstractProcessor {
 	@Override
 	public void process(ActionContext ac) {
-		Validators validators = Mvcs.getValidators(ac);
+		ValidateHandler vh = Mvcs.getValidateHandler(ac);
 
-		if (validate(ac, validators)) {
+		if (validate(ac, vh)) {
 			doNext(ac);
 			return;
 		}
@@ -30,12 +30,12 @@ public class ValidateProcessor extends AbstractProcessor {
 		doErrorView(ac);
 	}
 
-	protected boolean validate(ActionContext ac, Validators vts) {
-		validateParams(ac, vts);
+	protected boolean validate(ActionContext ac, ValidateHandler vh) {
+		validateParams(ac, vh);
 		return !(ac.getActionAlert().hasErrors() || ac.getParamAlert().hasErrors());
 	}
 	
-	protected void validateParams(ActionContext ac, Validators vts) {
+	protected void validateParams(ActionContext ac, ValidateHandler vh) {
 		if (Arrays.isEmpty(ac.getArgs())) {
 			return;
 		}
@@ -68,7 +68,7 @@ public class ValidateProcessor extends AbstractProcessor {
 			Object obj = ac.getArgs()[i];
 			String name = DefaultParamAdaptor.indexedName(i, param);
 
-			if (!vts.validate(ac, null, name, obj, vs.value())) {
+			if (!vh.validate(ac, null, name, obj, vs.value())) {
 				if (vs.shortCircuit()) {
 					break;
 				}

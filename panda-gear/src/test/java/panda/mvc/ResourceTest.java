@@ -10,7 +10,7 @@ import panda.el.ELTemplate;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.reflect.Fields;
-import panda.mvc.validation.validator.ImageValidator;
+import panda.mvc.validator.ImageValidator;
 
 public class ResourceTest {
 
