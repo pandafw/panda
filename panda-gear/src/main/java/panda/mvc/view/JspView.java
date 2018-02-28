@@ -1,5 +1,7 @@
 package panda.mvc.view;
 
+import panda.ioc.annotation.IocBean;
+
 /**
  * 指向/WebRoot/下面的jsp视图<br>
  * 通过 request.getRequestDispatcher(path).forward(request, response)方式来处理页面<br>
@@ -34,10 +36,14 @@ package panda.mvc.view;
  * <li>'@Ok("jsp:/abc/cbc.jsp")' => /abc/cbc.jsp
  * </ul>
  */
+@IocBean(singleton=false)
 public class JspView extends ForwardView {
 
-	public JspView(String name) {
-		super(name);
+	public JspView() {
+	}
+	
+	public JspView(String location) {
+		super(location);
 	}
 
 	@Override

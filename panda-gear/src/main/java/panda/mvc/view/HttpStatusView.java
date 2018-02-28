@@ -1,14 +1,15 @@
 package panda.mvc.view;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.net.http.HttpException;
 import panda.net.http.HttpStatus;
-
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 返回特定的响应码
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * <b>注意,400或以上,会调用resp.sendError,而非resp.setStatus.这样做的原因是
  * errorPage的配置,只有resp.sendError会触发,且绝大多数情况下,只会配置400或以上</b>
  */
+@IocBean(singleton=false)
 public class HttpStatusView implements View {
 
 	public static final View BAD_REQUEST = new HttpStatusView(HttpStatus.SC_BAD_REQUEST);
@@ -26,10 +28,20 @@ public class HttpStatusView implements View {
 
 	private int statusCode;
 
+	public HttpStatusView() {
+		this(HttpStatus.SC_OK);
+	}
+
 	public HttpStatusView(int statusCode) {
 		this.statusCode = statusCode;
 	}
 
+	@Override
+	public void setDescription(String desc) {
+		statusCode = Integer.parseInt(desc);
+	}
+
+	@Override
 	public void render(ActionContext ac) {
 		HttpServletResponse res = ac.getResponse();
 

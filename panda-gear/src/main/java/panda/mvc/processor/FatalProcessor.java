@@ -4,8 +4,8 @@ import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.Mvcs;
 import panda.mvc.View;
-import panda.mvc.view.Views;
 import panda.servlet.HttpServlets;
 
 @IocBean
@@ -35,7 +35,7 @@ public class FatalProcessor extends AbstractProcessor {
 			}
 
 			// process error view
-			View view = Views.evalView(ac.getIoc(), ac.getConfig().getFatalView());
+			View view = Mvcs.createView(ac, ac.getConfig().getFatalView());
 			if (view != null) {
 				try {
 					HttpServlets.safeReset(ac.getResponse());

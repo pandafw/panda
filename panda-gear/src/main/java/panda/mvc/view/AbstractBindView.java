@@ -61,8 +61,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 	 * Constructor.
 	 * @param location the location
 	 */
-	public AbstractBindView(String location) {
-		super(location);
+	public AbstractBindView() {
 		setBom(true);
 	}
 
@@ -136,20 +135,6 @@ public abstract class AbstractBindView extends AbstractDataView {
 		this.prettyPrint = prettyPrint;
 	}
 
-	/**
-	 * @return the properties
-	 */
-	public String getProperties() {
-		return getLocation();
-	}
-
-	/**
-	 * @param properties the properties to set
-	 */
-	public void setProperties(String properties) {
-		setLocation(properties);
-	}
-
 	@SuppressWarnings("unchecked")
 	public void render(ActionContext ac) {
 		Object o = ac.getError();
@@ -203,11 +188,11 @@ public abstract class AbstractBindView extends AbstractDataView {
 		result.put("params", ac.getReqParams());
 		result.put("result", ac.getResult());
 
-		if (Strings.isNotEmpty(location)) {
+		if (Strings.isNotEmpty(description)) {
 			@SuppressWarnings("rawtypes")
 			BeanHandler acb = Mvcs.getBeans().getBeanHandler(ac.getClass());
 
-			List<String> pnl = toList(location);
+			List<String> pnl = toList(description);
 			for (String pn : pnl) {
 				Object value = acb.getBeanValue(ac, pn);
 				if (value != null) {

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import panda.bind.json.JsonSerializer;
 import panda.bind.json.Jsons;
 import panda.io.MimeTypes;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -14,13 +15,13 @@ import panda.mvc.ActionContext;
 /**
  * serialize json object to output
  */
+@IocBean(singleton=false)
 public class JsonView extends AbstractBindView {
 	private static final Log log = Logs.getLog(JsonView.class);
 
-	public static final JsonView DEFAULT = new JsonView("");
+	public static final JsonView DEFAULT = new JsonView();
 	
-	public JsonView(String location) {
-		super(location);
+	public JsonView() {
 		setContentType(MimeTypes.TEXT_JAVASCRIPT);
 	}
 

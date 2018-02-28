@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import panda.io.MimeTypes;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
@@ -11,24 +12,17 @@ import panda.mvc.view.tag.Csv;
 import panda.mvc.view.util.CsvExporter;
 
 
+@IocBean(singleton=false)
 public class CsvView extends AbstractDataView {
-	public static final CsvView DEFAULT = new CsvView("");
+	public static final CsvView DEFAULT = new CsvView();
 
 	private Object result;
 	
 	/**
 	 * Constructor.
-	 */
-	public CsvView() {
-		this("");
-	}
-
-	/**
-	 * Constructor.
 	 * @param location the location
 	 */
-	public CsvView(String location) {
-		super(location);
+	public CsvView() {
 		setContentType(MimeTypes.TEXT_CSV);
 		setBom(true);
 	}

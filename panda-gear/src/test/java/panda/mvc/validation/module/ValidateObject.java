@@ -46,7 +46,7 @@ public class ValidateObject {
 	@Validates(@Validate(value=Validators.REGEX, params="{ regex: '#(regex-telno)' }", message="not a telephone number."))
 	public String telno;
 
-	private final static String SV = "#panda.mvc.validation.validator.StringValidator";
+	private final static String SV = "#panda.mvc.validator.StringValidator";
 
 	@Validates(@Validate(value=SV, params="{type:'A'}", message="'${top.value}' is not A."))
 	public String string;

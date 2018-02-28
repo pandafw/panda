@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import panda.io.Files;
 import panda.io.MimeTypes;
 import panda.io.Streams;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -50,15 +51,23 @@ import panda.net.http.HttpStatus;
  * <li><b>默认的</b>(即 '@Ok("raw")' ) - 将采用 <b>ContentType=text/plain</b>
  * </ul>
  */
+@IocBean(singleton=false)
 public class RawView implements View {
 
 	private static final Log log = Logs.getLog(RawView.class);
 
 	public static final boolean DISABLE_RANGE_DOWNLOAD = false; // 禁用断点续传
 
-	protected String contentType;
+	protected String contentType = MimeTypes.TEXT_PLAIN;;
+
+	public RawView() {
+	}
 
 	public RawView(String contentType) {
+		setContentType(contentType);
+	}
+
+	public void setContentType(String contentType) {
 		if (Strings.isBlank(contentType)) {
 			this.contentType = MimeTypes.TEXT_PLAIN;
 		}
@@ -66,7 +75,13 @@ public class RawView implements View {
 			this.contentType = MimeTypes.getMimeType(contentType);
 		}
 	}
-
+	
+	@Override
+	public void setDescription(String desc) {
+		setContentType(desc);
+	}
+	
+	@Override
 	public void render(ActionContext ac) {
 		try {
 			_render(ac);

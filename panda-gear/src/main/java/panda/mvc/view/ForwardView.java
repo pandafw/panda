@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.io.FileNames;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
@@ -29,16 +30,19 @@ import panda.mvc.ActionContext;
  * <li>'@Ok("forward:/abc/cbc.jsp")' => /abc/cbc.jsp
  * </ul>
  */
-public class ForwardView extends AbstractPathView {
-
+@IocBean(singleton=false)
+public class ForwardView extends AbstractView {
 	private static final Log log = Logs.getLog(ForwardView.class);
-	
-	public ForwardView(String dest) {
-		super(dest == null ? null : dest.replace('\\', '/'));
-	}
 
+	public ForwardView() {
+	}
+	
+	public ForwardView(String location) {
+		setDescription(location);
+	}
+	
 	public void render(ActionContext ac) {
-		String path = evalPath(ac);
+		String path = description;
 		String args = "";
 		if (path != null) {
 			int q = path.indexOf("?");

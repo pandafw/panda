@@ -2,6 +2,7 @@ package panda.mvc.view;
 
 import panda.io.FileNames;
 import panda.io.MimeTypes;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -16,8 +17,16 @@ import panda.mvc.view.ftl.FreemarkerHelper;
  * <li>'@Ok("ftl:/abc/cbc.ftl")' => /abc/cbc.ftl
  * </ul>
  */
-public class FreemarkerView extends AbstractPathView {
-	public static final FreemarkerView DEFAULT = new FreemarkerView(null);
+@IocBean(singleton=false)
+public class FreemarkerView extends AbstractView {
+	public static final FreemarkerView DEFAULT = new FreemarkerView();
+
+	public FreemarkerView() {
+	}
+	
+	public FreemarkerView(String location) {
+		setDescription(location);
+	}
 	
 	/**
 	 * alternative method
@@ -31,10 +40,6 @@ public class FreemarkerView extends AbstractPathView {
 	
 	protected String encoding = Charsets.UTF_8;
 	protected String contentType = MimeTypes.TEXT_HTML;
-
-	public FreemarkerView(String location) {
-		super(location);
-	}
 
 	/**
 	 * @return the encoding
@@ -92,7 +97,7 @@ public class FreemarkerView extends AbstractPathView {
 	public void render(ActionContext ac) {
 		FreemarkerHelper fh = ac.getIoc().get(FreemarkerHelper.class);
 
-		String path = evalPath(ac);
+		String path = description;
 
 		// not defined
 		if (Strings.isEmpty(path)) {

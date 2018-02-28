@@ -9,6 +9,8 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String MVC_VALIDATORS = "panda.mvc.validators";
 
+	public static final String MVC_VIEWS = "panda.mvc.views";
+
 	public static final String DEFAULT_RESOURCE_BUNDLES = "panda.resources.default";
 
 	/* Crypto */

@@ -12,11 +12,11 @@ public interface ActionMapping {
 	/**
 	 * add a mapping
 	 * 
-	 * @param acm action chain maker
+	 * @param acc action chain creator
 	 * @param acfg action config
 	 * @param mcfg MVC config
 	 */
-	void add(ActionChainMaker acm, ActionConfig acfg, MvcConfig mcfg);
+	void add(ActionChainCreator acc, ActionConfig acfg, MvcConfig mcfg);
 
 	/**
 	 * get action invoker by path

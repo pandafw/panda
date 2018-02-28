@@ -1,6 +1,7 @@
 package panda.mvc.view;
 
 import panda.io.stream.StringBuilderWriter;
+import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.mvc.view.sitemesh.Sitemesher;
@@ -19,11 +20,15 @@ import panda.mvc.view.sitemesh.Sitemesher;
  * <li>'@Ok("ftl:/abc/cbc.ftl")' => /abc/cbc.ftl
  * </ul>
  */
+@IocBean(singleton=false)
 public class SitemeshFreemarkerView extends FreemarkerView {
-	public static final SitemeshFreemarkerView DEFAULT = new SitemeshFreemarkerView(null);
+	public static final SitemeshFreemarkerView DEFAULT = new SitemeshFreemarkerView();
 
+	public SitemeshFreemarkerView() {
+	}
+	
 	public SitemeshFreemarkerView(String location) {
-		super(location);
+		setDescription(location);
 	}
 
 	@Override

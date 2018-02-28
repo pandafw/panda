@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import panda.bind.xml.XmlSerializer;
 import panda.bind.xml.Xmls;
 import panda.io.MimeTypes;
+import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
@@ -13,20 +14,19 @@ import panda.mvc.ActionContext;
 /**
  * serialize XML object to output
  */
+@IocBean(singleton=false)
 public class XmlView extends AbstractBindView {
 
 	protected static final Log log = Logs.getLog(XmlView.class);
 
-	public static final XmlView DEFAULT = new XmlView("");
+	public static final XmlView DEFAULT = new XmlView();
 
 	private String rootName = "result";
 	
 	/**
 	 * Constructor.
-	 * @param location the location
 	 */
-	public XmlView(String location) {
-		super(location);
+	public XmlView() {
 		setContentType(MimeTypes.TEXT_XML);
 	}
 

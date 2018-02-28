@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import panda.io.MimeTypes;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.mvc.view.util.XlsExporter;
 
 
+@IocBean(singleton=false)
 public class XlsView extends AbstractDataView {
-	public static final XlsView DEFAULT = new XlsView("");
+	public static final XlsView DEFAULT = new XlsView();
 
 	private Object result;
 	
@@ -18,17 +20,7 @@ public class XlsView extends AbstractDataView {
 	 * Constructor.
 	 */
 	public XlsView() {
-		this("");
-	}
-
-	/**
-	 * Constructor.
-	 * @param location the location
-	 */
-	public XlsView(String location) {
-		super(location);
 		setContentType(MimeTypes.APP_XLS);
-		setBom(false);
 	}
 
 	/**

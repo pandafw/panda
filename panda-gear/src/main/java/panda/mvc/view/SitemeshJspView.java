@@ -1,15 +1,13 @@
 package panda.mvc.view;
 
+import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
 import panda.mvc.view.sitemesh.Sitemesher;
 import panda.servlet.HttpServletResponseBlocker;
 
+@IocBean(singleton=false)
 public class SitemeshJspView extends JspView {
-	public static final SitemeshJspView DEFAULT = new SitemeshJspView(null);
-
-	public SitemeshJspView(String location) {
-		super(location);
-	}
+	public static final SitemeshJspView DEFAULT = new SitemeshJspView();
 
 	@Override
 	protected void forward(ActionContext ac, String path) {

@@ -14,7 +14,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChain;
-import panda.mvc.ActionChainMaker;
+import panda.mvc.ActionChainCreator;
 import panda.mvc.ActionConfig;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionMapping;
@@ -32,7 +32,7 @@ public abstract class AbstractActionMapping implements ActionMapping {
 	private Map<String, ActionConfig> acfgs = new HashMap<String, ActionConfig>();
 
 	@Override
-	public void add(ActionChainMaker acm, ActionConfig acfg, MvcConfig mcfg) {
+	public void add(ActionChainCreator acc, ActionConfig acfg, MvcConfig mcfg) {
 		// add method
 		String mn = acfg.getActionType().getName() + '.' + acfg.getActionMethod().getName();
 		if (acfgs.put(mn, acfg) != null) {
@@ -55,7 +55,7 @@ public abstract class AbstractActionMapping implements ActionMapping {
 			}
 		}
 
-		ActionChain chain = acm.eval(mcfg, acfg);
+		ActionChain chain = acc.create(mcfg, acfg);
 
 		// mapping path
 		for (String path : paths) {

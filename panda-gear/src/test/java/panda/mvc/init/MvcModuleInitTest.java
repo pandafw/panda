@@ -19,7 +19,7 @@ public class MvcModuleInitTest extends AbstractMvcTestCase {
 		request.setParameter("ids", new String[] { "1", "2", "3" });
 		servlet.service(request, response);
 		String re = response.getContentAsString();
-		assertEquals("{\"success\":true,\"params\":{\"ids\":[1,2,3]},\"result\":[\"1\",\"2\",\"3\"]}", re);
+		assertEquals("{\"success\":true,\"params\":{\"ids\":[\"1\",\"2\",\"3\"]},\"result\":[\"1\",\"2\",\"3\"]}", re);
 	}
 
 	@Test

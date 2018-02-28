@@ -11,7 +11,7 @@ import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionChain;
-import panda.mvc.ActionChainMaker;
+import panda.mvc.ActionChainCreator;
 import panda.mvc.ActionConfig;
 import panda.mvc.MvcConfig;
 import panda.mvc.MvcConstants;
@@ -25,8 +25,8 @@ import panda.mvc.processor.RedirectProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
 
-@IocBean(type=ActionChainMaker.class, create="initialize")
-public class DefaultActionChainMaker implements ActionChainMaker {
+@IocBean(type=ActionChainCreator.class, create="initialize")
+public class DefaultActionChainCreator implements ActionChainCreator {
 
 	private static final String DEFAULT_CHAIN = "default";
 	
@@ -61,7 +61,8 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		return map.get(key);
 	}
 	
-	public ActionChain eval(MvcConfig mcfg, ActionConfig acfg) {
+	@Override
+	public ActionChain create(MvcConfig mcfg, ActionConfig acfg) {
 		List<String> procs = getProcessors(acfg.getChainName());
 		if (procs == null) {
 			throw new IllegalArgumentException("Failed to find chain [" + acfg.getChainName() + "] for " + acfg.getActionType());

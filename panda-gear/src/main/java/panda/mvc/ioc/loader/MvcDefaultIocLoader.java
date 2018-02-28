@@ -15,9 +15,10 @@ import panda.mvc.alert.ActionAlertSupport;
 import panda.mvc.alert.ParamAlertSupport;
 import panda.mvc.annotation.Modules;
 import panda.mvc.filepool.MvcLocalFilePool;
-import panda.mvc.impl.DefaultActionChainMaker;
+import panda.mvc.impl.DefaultActionChainCreator;
 import panda.mvc.impl.DefaultValidateHandler;
 import panda.mvc.impl.DefaultValidatorCreator;
+import panda.mvc.impl.DefaultViewCreator;
 import panda.mvc.impl.RegexActionMapping;
 import panda.mvc.processor.AdaptProcessor;
 import panda.mvc.processor.FatalProcessor;
@@ -57,6 +58,23 @@ import panda.mvc.validator.RequiredValidator;
 import panda.mvc.validator.StringValidator;
 import panda.mvc.validator.URLValidator;
 import panda.mvc.validator.VisitValidator;
+import panda.mvc.view.AltView;
+import panda.mvc.view.CsvView;
+import panda.mvc.view.ForwardView;
+import panda.mvc.view.FreemarkerView;
+import panda.mvc.view.HttpStatusView;
+import panda.mvc.view.JsonView;
+import panda.mvc.view.JspView;
+import panda.mvc.view.RawView;
+import panda.mvc.view.RedirectView;
+import panda.mvc.view.ServletErrorView;
+import panda.mvc.view.SitemeshFreemarkerView;
+import panda.mvc.view.SitemeshJspView;
+import panda.mvc.view.TsvView;
+import panda.mvc.view.VoidView;
+import panda.mvc.view.XlsView;
+import panda.mvc.view.XlsxView;
+import panda.mvc.view.XmlView;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.mvc.view.ftl.FreemarkerManager;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
@@ -146,7 +164,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 	protected void addDefaults(Set<Object> ss) {
 		Collections.addAll(ss,
 			RegexActionMapping.class,
-			DefaultActionChainMaker.class,
+			DefaultActionChainCreator.class,
 			
 			// file pool used by Upload
 			MvcLocalFilePool.class,
@@ -213,7 +231,29 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			URLValidator.class,
 			VisitValidator.class,
 			
-			// View
+			// ViewCreator
+			DefaultViewCreator.class,
+
+			// Views
+			AltView.class,
+			CsvView.class,
+			ForwardView.class,
+			FreemarkerView.class,
+			HttpStatusView.class,
+			JsonView.class,
+			JspView.class,
+			RawView.class,
+			RedirectView.class,
+			ServletErrorView.class,
+			SitemeshFreemarkerView.class,
+			SitemeshJspView.class,
+			TsvView.class,
+			XlsView.class,
+			XlsxView.class,
+			XmlView.class,
+			VoidView.class,
+			
+			// View Theme
 			ThemeRenderEngine.class,
 
 			// View Utils

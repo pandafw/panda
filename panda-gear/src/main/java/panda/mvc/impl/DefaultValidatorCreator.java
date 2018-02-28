@@ -6,11 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
-import panda.bean.Beans;
 import panda.bind.json.JsonException;
 import panda.bind.json.JsonObject;
 import panda.cast.CastException;
-import panda.cast.Castors;
 import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -52,12 +50,6 @@ public class DefaultValidatorCreator implements ValidatorCreator, Validators {
 	@IocInject
 	private Ioc ioc;
 	
-	@IocInject(required=false)
-	private Beans beans = Beans.i();
-
-	@IocInject(required=false)
-	private Castors castors = Mvcs.getCastors();
-
 	@IocInject(value=MvcConstants.MVC_VALIDATORS, required=false)
 	private Map<String, String> aliass;
 
@@ -126,7 +118,6 @@ public class DefaultValidatorCreator implements ValidatorCreator, Validators {
 		fv.setShortCircuit(v.shortCircuit());
 		
 		if (Strings.isNotEmpty(v.params())) {
-			BeanHandler bh = beans.getBeanHandler(fv.getClass());
 			JsonObject jo = null;
 			try {
 				jo = JsonObject.fromJson(v.params());
@@ -135,9 +126,12 @@ public class DefaultValidatorCreator implements ValidatorCreator, Validators {
 				throw new IllegalArgumentException("Failed to set params of Validator " + fv.getClass() + ", params: " + v.params(), e);
 			}
 			
-			// translate ${..} expression
+			// set parameters
+			BeanHandler bh = Mvcs.getBeans().getBeanHandler(fv.getClass());
 			for (Entry<String, Object> en : jo.entrySet()) {
 				String pn = en.getKey();
+
+				// translate ${..} expression
 				Object pv = Mvcs.evaluate(ac, en.getValue());
 				
 				Type pt = bh.getPropertyType(pn);
@@ -146,7 +140,7 @@ public class DefaultValidatorCreator implements ValidatorCreator, Validators {
 				}
 
 				try {
-					Object cv = castors.cast(pv, pt);
+					Object cv = Mvcs.getCastors().cast(pv, pt);
 					if (!bh.setPropertyValue(fv, pn, cv)) {
 						throw new IllegalArgumentException("Failed to set property('" + pn + "') of Validator " + fv.getClass() + ", params: " + v.params());
 					}

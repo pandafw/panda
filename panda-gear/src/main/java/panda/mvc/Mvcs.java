@@ -24,6 +24,7 @@ import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.impl.DefaultValidateHandler;
+import panda.mvc.impl.DefaultViewCreator;
 import panda.mvc.util.TextProvider;
 
 /**
@@ -520,6 +521,20 @@ public abstract class Mvcs {
 	}
 
 	/**
+	 * get text from code map
+	 * @param cm code map
+	 * @param k key
+	 * @return text
+	 */
+	public static String getCodeText(Map cm, Object k) {
+		Object v = cm.get(k);
+		if (v == null && k != null && !(k instanceof String)) {
+			v = cm.get(k.toString());
+		}
+		return (v == null ? Strings.EMPTY : v.toString());
+	}
+
+	/**
 	 * create validate handler
 	 * @param context action context
 	 * @return validate handler instance
@@ -555,17 +570,35 @@ public abstract class Mvcs {
 	}
 
 	/**
-	 * get text from code map
-	 * @param cm code map
-	 * @param k key
-	 * @return text
+	 * get view creator
+	 * @param ioc IOC
+	 * @return ViewCreator
 	 */
-	public static String getCodeText(Map cm, Object k) {
-		Object v = cm.get(k);
-		if (v == null && k != null && !(k instanceof String)) {
-			v = cm.get(k.toString());
+	public static ViewCreator getViewCreator(Ioc ioc) {
+		ViewCreator maker = ioc.getIfExists(ViewCreator.class);
+		if (maker == null) {
+			maker = new DefaultViewCreator();
 		}
-		return (v == null ? Strings.EMPTY : v.toString());
+		return maker;
+	}
+
+	/**
+	 * create a view
+	 * @param ac action context
+	 * @param viewer view description
+	 * @return View
+	 */
+	public static View createView(ActionContext ac, String viewer) {
+		if (Strings.isEmpty(viewer)) {
+			return null;
+		}
+
+		View view = getViewCreator(ac.getIoc()).create(ac, viewer);
+		if (view != null) {
+			return view;
+		}
+
+		throw new IllegalArgumentException("Can not create view '" + viewer + "'");
 	}
 }
 

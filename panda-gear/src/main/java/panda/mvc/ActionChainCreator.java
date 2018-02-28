@@ -1,6 +1,6 @@
 package panda.mvc;
 
-public interface ActionChainMaker {
+public interface ActionChainCreator {
 
 	/**
 	 * create action chain
@@ -9,6 +9,6 @@ public interface ActionChainMaker {
 	 * @param am  action meta
 	 * @return action chain
 	 */
-	ActionChain eval(MvcConfig mc, ActionConfig am);
+	ActionChain create(MvcConfig mc, ActionConfig am);
 
 }

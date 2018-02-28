@@ -1,5 +1,6 @@
 package panda.mvc.view;
 
+import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
 import panda.mvc.util.MvcURLBuilder;
 import panda.servlet.HttpServlets;
@@ -20,16 +21,18 @@ import panda.servlet.HttpServlets;
  * @To("+/some") -> redirect to: /thisContext + context.getPath() + /some
  * @To("~/some") -> redirect to: /thisContext + context.getPath() + /../some
  */
-public class RedirectView extends AbstractPathView {
+@IocBean(singleton=false)
+public class RedirectView extends AbstractView {
 
-	public RedirectView(String dest) {
-		super(dest);
+	public RedirectView() {
+	}
+	
+	public RedirectView(String location) {
+		setDescription(location);
 	}
 
 	public void render(ActionContext ac) {
-		String path = evalPath(ac);
-
-		String url = MvcURLBuilder.buildPath(ac, path);
+		String url = MvcURLBuilder.buildPath(ac, description);
 		
 		HttpServlets.sendRedirect(ac.getResponse(), url);
 	}

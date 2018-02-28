@@ -23,7 +23,7 @@ import panda.lang.Systems;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.ActionChainMaker;
+import panda.mvc.ActionChainCreator;
 import panda.mvc.ActionConfig;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionMapping;
@@ -32,7 +32,7 @@ import panda.mvc.MvcLoader;
 import panda.mvc.MvcConfig;
 import panda.mvc.Mvcs;
 import panda.mvc.Setup;
-import panda.mvc.ViewMaker;
+import panda.mvc.ViewCreator;
 import panda.mvc.annotation.AdaptBy;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Chain;
@@ -109,7 +109,7 @@ public class DefaultMvcLoader implements MvcLoader {
 		
 		createViewMaker(mcfg);
 
-		ActionChainMaker chainMaker = createChainMaker(mcfg);
+		ActionChainCreator acc = createChainMaker(mcfg);
 
 		// create action info for mail module
 		ActionConfig mainCfg = createActionConfig(mcfg.getIoc(), mainModule);
@@ -134,7 +134,7 @@ public class DefaultMvcLoader implements MvcLoader {
 						&& method.isAnnotationPresent(At.class)) {
 					// add to mapping
 					ActionConfig acfg = createActionConfig(mcfg.getIoc(), method).mergeWith(clsCfg);
-					mapping.add(chainMaker, acfg, mcfg);
+					mapping.add(acc, acfg, mcfg);
 					atMethods++;
 				}
 			}
@@ -167,25 +167,22 @@ public class DefaultMvcLoader implements MvcLoader {
 		return um;
 	}
 
-	protected ActionChainMaker createChainMaker(MvcConfig mcfg) {
-		ActionChainMaker maker = mcfg.getIoc().get(ActionChainMaker.class);
+	protected ActionChainCreator createChainMaker(MvcConfig mcfg) {
+		ActionChainCreator acc = mcfg.getIoc().get(ActionChainCreator.class);
 
 		if (log.isDebugEnabled()) {
-			log.debug("Use ActionChainMaker: " +  maker.getClass());
+			log.debug("Use ActionChainCreator: " +  acc.getClass());
 		}
-		return maker;
+		return acc;
 	}
 	
-	protected ViewMaker createViewMaker(MvcConfig config) {
-		ViewMaker maker = config.getIoc().getIfExists(ViewMaker.class);
-		if (maker == null) {
-			maker = new DefaultViewMaker();
-		}
+	protected ViewCreator createViewMaker(MvcConfig config) {
+		ViewCreator vc = config.getIoc().get(ViewCreator.class);
 
 		if (log.isDebugEnabled()) {
-			log.debug("Use ViewMaker: " +  maker.getClass());
+			log.debug("Use ViewCreator: " +  vc.getClass());
 		}
-		return maker;
+		return vc;
 	}
 
 	protected void evalSetup(MvcConfig config, boolean init) {

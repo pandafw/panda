@@ -22,14 +22,6 @@ public abstract class AbstractDataView extends AbstractView {
 	protected boolean bom;
 
 	/**
-	 * Constructor.
-	 * @param location the location
-	 */
-	public AbstractDataView(String location) {
-		super(location);
-	}
-
-	/**
 	 * @return the contentType
 	 */
 	public String getContentType() {

@@ -28,7 +28,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/oneCast");
 		request.addParameter("one", "a1000");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one\":[\"int cast error\"]}}},\"params\":{\"one\":0}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one\":[\"int cast error\"]}}},\"params\":{\"one\":\"a1000\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -36,7 +36,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/one");
 		request.addParameter("one", "1000");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one\":[\"min: -100, max: 100\"]}}},\"params\":{\"one\":1000}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one\":[\"min: -100, max: 100\"]}}},\"params\":{\"one\":\"1000\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.bin", Base64.encodeBase64String("1000".getBytes()));
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.bin\":[\"4, 5 ~ 100\"]}}},\"params\":{\"one\":{\"bin\":\"MTAwMA==\",\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.bin\":[\"4, 5 ~ 100\"]}}},\"params\":{\"one.bin\":\"MTAwMA==\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.consts", "x");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.consts\":[\"x, ['a', 'b']\"]}}},\"params\":{\"one\":{\"consts\":\"x\",\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.consts\":[\"x, ['a', 'b']\"]}}},\"params\":{\"one.consts\":\"x\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.cardno", "x");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.cardno\":[\"'x' is not a card no.\"]}}},\"params\":{\"one\":{\"cardno\":\"x\",\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.cardno\":[\"'x' is not a card no.\"]}}},\"params\":{\"one.cardno\":\"x\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.date", "2000-01-01 00:00:00");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.date\":[\"'946652400000', 1262271600000 ~ 1292123532000\"]}}},\"params\":{\"one\":{\"date\":946652400000,\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.date\":[\"'946652400000', 1262271600000 ~ 1292123532000\"]}}},\"params\":{\"one.date\":\"2000-01-01 00:00:00\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.el", "err");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.el\":[\"'err', 'top.value == \\\"ok\\\"'\"]}}},\"params\":{\"one\":{\"el\":\"err\",\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.el\":[\"'err', 'top.value == \\\"ok\\\"'\"]}}},\"params\":{\"one.el\":\"err\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.addParameter("one.el", "ok");
 		request.addParameter("one.el2", "ng");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.el2\":[\"'ng', 'top.value == top.parent.value.el'\"]}}},\"params\":{\"one\":{\"el\":\"ok\",\"el2\":\"ng\",\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.el2\":[\"'ng', 'top.value == top.parent.value.el'\"]}}},\"params\":{\"one.el\":\"ok\",\"one.el2\":\"ng\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.email", "err");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.email\":[\"'err' is not a email.\"]}}},\"params\":{\"one\":{\"email\":\"err\",\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.email\":[\"'err' is not a email.\"]}}},\"params\":{\"one.email\":\"err\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -166,7 +166,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.url", "http://err!xx");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.url\":[\"'http:\\/\\/err!xx' is not a url.\"]}}},\"params\":{\"one\":{\"number\":0,\"url\":\"http:\\/\\/err!xx\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.url\":[\"'http:\\/\\/err!xx' is not a url.\"]}}},\"params\":{\"one.url\":\"http:\\/\\/err!xx\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -182,7 +182,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.filename", "e/r/r");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.filename\":[\"'e\\/r\\/r' is not a filename.\"]}}},\"params\":{\"one\":{\"filename\":\"e\\/r\\/r\",\"number\":0}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.filename\":[\"'e\\/r\\/r' is not a filename.\"]}}},\"params\":{\"one.filename\":\"e\\/r\\/r\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -198,7 +198,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.number", "10000");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.number\":[\"10000, -100 ~ 100\"]}}},\"params\":{\"one\":{\"number\":10000}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.number\":[\"10000, -100 ~ 100\"]}}},\"params\":{\"one.number\":\"10000\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.prohibited", "a");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.prohibited\":[\"a, ['a', 'b']\"]}}},\"params\":{\"one\":{\"number\":0,\"prohibited\":\"a\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.prohibited\":[\"a, ['a', 'b']\"]}}},\"params\":{\"one.prohibited\":\"a\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -230,7 +230,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.regex", "err");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.regex\":[\"'err', 'ok'\"]}}},\"params\":{\"one\":{\"number\":0,\"regex\":\"err\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.regex\":[\"'err', 'ok'\"]}}},\"params\":{\"one.regex\":\"err\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -278,7 +278,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.telno", "err");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"err\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one.telno\":\"err\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -286,7 +286,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.telno", "111111 09012345678");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"111111 09012345678\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one.telno\":\"111111 09012345678\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -294,7 +294,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.telno", "+-87 09012345678");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"+-87 09012345678\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one.telno\":\"+-87 09012345678\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -302,7 +302,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.telno", "0312345678 123");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"0312345678 123\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one.telno\":\"0312345678 123\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -318,7 +318,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.string", "e-r-r");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.string\":[\"'e-r-r' is not A.\"]}}},\"params\":{\"one\":{\"number\":0,\"string\":\"e-r-r\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.string\":[\"'e-r-r' is not A.\"]}}},\"params\":{\"one.string\":\"e-r-r\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -334,7 +334,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.strlen", "1000");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.strlen\":[\"4, 5 ~ 100\"]}}},\"params\":{\"one\":{\"number\":0,\"strlen\":\"1000\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.strlen\":[\"4, 5 ~ 100\"]}}},\"params\":{\"one.strlen\":\"1000\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -342,7 +342,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.shortCircuitTrue", "----");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.shortCircuitTrue\":[\"4, 5 ~ 100\"]}}},\"params\":{\"one\":{\"number\":0,\"shortCircuitTrue\":\"----\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.shortCircuitTrue\":[\"4, 5 ~ 100\"]}}},\"params\":{\"one.shortCircuitTrue\":\"----\"}}", response.getContentAsString());
 	}
 
 	@Test
@@ -350,7 +350,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.shortCircuitFalse", "----");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.shortCircuitFalse\":[\"4, 5 ~ 100\",\"'----' is not A.\"]}}},\"params\":{\"one\":{\"number\":0,\"shortCircuitFalse\":\"----\"}}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.shortCircuitFalse\":[\"4, 5 ~ 100\",\"'----' is not A.\"]}}},\"params\":{\"one.shortCircuitFalse\":\"----\"}}", response.getContentAsString());
 	}
 
 
@@ -367,7 +367,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 	public void testRequiredAnyErr() throws Throwable {
 		request.setRequestURI("/reqirAny");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el2\":[\"required\"]}}},\"params\":{\"number\":0}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el2\":[\"required\"]}}},\"params\":{}}", response.getContentAsString());
 	}
 
 
@@ -384,7 +384,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 	public void testRequiredAny2Err() throws Throwable {
 		request.setRequestURI("/reqirAny2");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el\":[\"required\"]}}},\"params\":{\"number\":0}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el\":[\"required\"]}}},\"params\":{}}", response.getContentAsString());
 	}
 
 	@Test

@@ -2,15 +2,18 @@ package panda.mvc.view;
 
 import javax.servlet.http.HttpServletResponse;
 
+import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
+import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.net.http.HttpException;
 import panda.net.http.HttpStatus;
 
+@IocBean(singleton=false)
 public class ServletErrorView implements View {
 	private static final Log log = Logs.getLog(ServletErrorView.class);
 	
@@ -24,10 +27,20 @@ public class ServletErrorView implements View {
 
 	private int statusCode;
 
+	public ServletErrorView() {
+		this(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+	}
+	
 	public ServletErrorView(int statusCode) {
 		this.statusCode = statusCode;
 	}
 
+	@Override
+	public void setDescription(String desc) {
+		statusCode = Integer.parseInt(desc);
+	}
+	
+	@Override
 	public void render(ActionContext ac) {
 		HttpServletResponse res = ac.getResponse();
 
@@ -42,16 +55,16 @@ public class ServletErrorView implements View {
 			code = ((HttpException)err).getStatus();
 		}
 
-		String customView = ac.getIoc().getIfExists(String.class, MvcConstants.SERVLET_ERROR_VIEW);
-		if (Strings.isEmpty(customView)) {
-			customView = TPL;
+		String viewer = ac.getIoc().getIfExists(String.class, MvcConstants.SERVLET_ERROR_VIEW);
+		if (Strings.isEmpty(viewer)) {
+			viewer = TPL;
 		}
 		
 		res.setStatus(code);
 
-		View view = Views.evalView(ac.getIoc(), customView);
+		View view = Mvcs.createView(ac, viewer);
 		if (view == null) {
-			log.error("Failed to create view: " + customView);
+			log.error("Failed to create view: " + viewer);
 		}
 		else {
 			view.render(ac);
