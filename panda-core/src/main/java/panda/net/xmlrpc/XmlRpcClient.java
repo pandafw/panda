@@ -10,6 +10,7 @@ import panda.cast.Castors;
 import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Arrays;
+import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
@@ -26,6 +27,8 @@ public class XmlRpcClient {
 	private HttpClient http;
 	
 	private String url;
+	
+	private String userAgent;
 
 	/**
 	 * @param url the Xml-Rpc EntryPoint URL
@@ -35,6 +38,35 @@ public class XmlRpcClient {
 		castors = Castors.i();
 		http = new HttpClient();
 	}
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	/**
+	 * @return the userAgent
+	 */
+	public String getUserAgent() {
+		return userAgent;
+	}
+
+	/**
+	 * @param userAgent the userAgent to set
+	 */
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+
 
 	public <T> T call(String method, Type resultType, Object... params) throws XmlRpcFaultException, IOException {
 		XmlRpcDocument<Object> xreq = new XmlRpcDocument<Object>();
@@ -52,7 +84,10 @@ public class XmlRpcClient {
 		String xbody = XmlRpcs.toXml(xreq, true, log.isDebugEnabled());
 
 		HttpRequest hreq = HttpRequest.post(url);
-		hreq.getHeader().setDefaultAgentPC().setContentType(MimeTypes.TEXT_XML);
+		hreq.getHeader().setDefault().setContentType(MimeTypes.TEXT_XML);
+		if (Strings.isNotEmpty(userAgent)) {
+			hreq.getHeader().setUserAgent(userAgent);
+		}
 		hreq.setBody(xbody);
 		
 		http.setRequest(hreq);

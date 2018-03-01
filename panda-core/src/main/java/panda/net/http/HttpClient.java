@@ -30,8 +30,6 @@ public class HttpClient {
 
 	public static final String DEFAULT_USERAGENT = HttpClient.class.getName() + '/' + Panda.VERSION;
 
-	public static final String DEFAULT_USERAGENT_PC = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36";
-
 	public static HttpResponse get(String url) throws IOException {
 		return send(url, HttpMethod.GET, null);
 	}
@@ -62,7 +60,7 @@ public class HttpClient {
 	
 	public static HttpResponse send(String url, String method, Map<String, Object> params, byte[] body, int timeout) throws IOException {
 		HttpRequest hr = HttpRequest.create(url, method, params);
-		hr.getHeader().setDefaultAgentPC();
+		hr.getHeader().asWindowsChrome();
 		hr.setBody(body);
 		
 		HttpClient hc = new HttpClient(hr);

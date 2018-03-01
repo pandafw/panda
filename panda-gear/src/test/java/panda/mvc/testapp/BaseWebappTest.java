@@ -81,7 +81,7 @@ public abstract class BaseWebappTest {
 	public HttpResponse get(String path, boolean redirect) {
 		try {
 			HttpRequest hr = HttpRequest.create(getBaseURL() + path, HttpMethod.GET);
-			hr.getHeader().setDefaultAgentPC();
+			hr.getHeader().asWindowsChrome();
 			
 			HttpClient hc = new HttpClient(hr);
 			hc.setAutoRedirect(redirect);
@@ -112,7 +112,7 @@ public abstract class BaseWebappTest {
 	public HttpResponse post(String path, String data, String contentType) {
 		try {
 			HttpRequest hr = HttpRequest.create(getBaseURL() + path, HttpMethod.POST);
-			hr.getHeader().setDefaultAgentPC();
+			hr.getHeader().asWindowsChrome();
 			hr.setBody(data);
 			if (contentType != null) {
 				hr.getHeader().add(HttpHeader.CONTENT_TYPE, contentType);
