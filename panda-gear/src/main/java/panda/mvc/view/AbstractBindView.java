@@ -59,7 +59,6 @@ public abstract class AbstractBindView extends AbstractDataView {
 	
 	/**
 	 * Constructor.
-	 * @param location the location
 	 */
 	public AbstractBindView() {
 		setBom(true);

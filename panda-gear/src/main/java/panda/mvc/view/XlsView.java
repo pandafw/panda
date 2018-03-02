@@ -68,7 +68,6 @@ public class XlsView extends AbstractDataView {
 	/**
 	 * write result
 	 * @param os output stream
-	 * @param writer response writer
 	 * @param result result object
 	 * @throws IOException
 	 */

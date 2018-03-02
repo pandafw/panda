@@ -19,14 +19,14 @@ import panda.servlet.HttpServlets;
  * <p>
  * Samples：
  * <p>
- * By Annotation: '@Redirect("/pet/list")'
+ * By Annotation: &#64;Redirect("/pet/list")
  * <p>
  * 
  * <p>
- * @Redirect("//anotherContext/some") -> redirect to: /anotherContext/some
- * @Redirect("//some") -> redirect to: /thisContext/some
- * @Redirect("+/some") -> redirect to: /thisContext + context.getPath() + /some
- * @Redirect("~/some") -> redirect to: /thisContext + context.getPath() + /../some
+ * &#64;Redirect("//anotherContext/some") -> redirect to: /anotherContext/some
+ * &#64;Redirect("//some") -> redirect to: /thisContext/some
+ * &#64;Redirect("+/some") -> redirect to: /thisContext + context.getPath() + /some
+ * &#64;Redirect("~/some") -> redirect to: /thisContext + context.getPath() + /../some
  * 
  * <p>
  * By Parameter: 

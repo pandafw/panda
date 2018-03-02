@@ -10,16 +10,16 @@ import panda.servlet.HttpServlets;
  * <p>
  * Samples：
  * <p>
- * '@To("redirect:/pet/list.do")'
+ * &#64;To("redirect:/pet/list.do")
  * <p>
  * or：<br>
  * new RedirectView("/pet/list.do");
  * 
  * <p>
- * @To("//anotherContext/some") -> redirect to: /anotherContext/some
- * @To("//some") -> redirect to: /thisContext/some
- * @To("+/some") -> redirect to: /thisContext + context.getPath() + /some
- * @To("~/some") -> redirect to: /thisContext + context.getPath() + /../some
+ * &#64;To("//anotherContext/some") -> redirect to: /anotherContext/some
+ * &#64;To("//some") -> redirect to: /thisContext/some
+ * &#64;To("+/some") -> redirect to: /thisContext + context.getPath() + /some
+ * &#64;To("~/some") -> redirect to: /thisContext + context.getPath() + /../some
  */
 @IocBean(singleton=false)
 public class RedirectView extends AbstractView {

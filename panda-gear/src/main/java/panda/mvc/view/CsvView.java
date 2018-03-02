@@ -20,7 +20,6 @@ public class CsvView extends AbstractDataView {
 	
 	/**
 	 * Constructor.
-	 * @param location the location
 	 */
 	public CsvView() {
 		setContentType(MimeTypes.TEXT_CSV);

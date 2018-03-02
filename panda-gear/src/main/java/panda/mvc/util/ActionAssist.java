@@ -370,7 +370,6 @@ public class ActionAssist extends ActionSupport {
 	
 	/**
 	 * find value in context with argument
-	 * @param ac action context
 	 * @param expr expression
 	 * @param arg argument
 	 * @return value
