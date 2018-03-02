@@ -22,18 +22,18 @@ public class AltView extends AbstractView {
 	public void render(ActionContext ac) {
 		String name, type;
 
-		int pos = description.indexOf(':');
+		int pos = argument.indexOf(':');
 		if (pos > 0) {
-			name = Strings.stripToNull(description.substring(0, pos));
-			type = Strings.stripToNull(description.substring(pos + 1));
+			name = Strings.stripToNull(argument.substring(0, pos));
+			type = Strings.stripToNull(argument.substring(pos + 1));
 		}
 		else {
-			name = description;
+			name = argument;
 			type = null;
 		}
 		
 		if (Strings.isEmpty(name)) {
-			throw new IllegalArgumentException("Invalid altview: " + description 
+			throw new IllegalArgumentException("Invalid altview: " + argument 
 				+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
 		}
 
@@ -74,7 +74,7 @@ public class AltView extends AbstractView {
 					sv = acfg.getFatalView();
 				}
 				else {
-					throw new IllegalArgumentException("Invalid altview: " + description 
+					throw new IllegalArgumentException("Invalid altview: " + argument 
 						+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
 				}
 			}
@@ -87,12 +87,12 @@ public class AltView extends AbstractView {
 			}
 		}
 		
-		throw new IllegalArgumentException("Failed to find altview: " + description 
+		throw new IllegalArgumentException("Failed to find altview: " + argument 
 			+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
 	}
 
 	protected void cycleDetect(ActionContext ac) {
-		String key = ac.getAction().getClass().getName() + '.' + description;
+		String key = ac.getAction().getClass().getName() + '.' + argument;
 
 		@SuppressWarnings("unchecked")
 		Set<String> stack = (Set<String>)ac.getReq().get(STACK_KEY);
@@ -102,7 +102,7 @@ public class AltView extends AbstractView {
 		}
 		
 		if (!stack.add(key)) {
-			throw new IllegalArgumentException("Cycle altview detected: " + description
+			throw new IllegalArgumentException("Cycle altview detected: " + argument
 				+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
 		}
 	}

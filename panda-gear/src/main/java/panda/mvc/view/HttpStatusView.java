@@ -37,8 +37,8 @@ public class HttpStatusView implements View {
 	}
 
 	@Override
-	public void setDescription(String desc) {
-		statusCode = Integer.parseInt(desc);
+	public void setArgument(String arg) {
+		statusCode = Integer.parseInt(arg);
 	}
 
 	@Override

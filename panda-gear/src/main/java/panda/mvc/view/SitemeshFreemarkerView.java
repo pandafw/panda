@@ -28,7 +28,7 @@ public class SitemeshFreemarkerView extends FreemarkerView {
 	}
 	
 	public SitemeshFreemarkerView(String location) {
-		setDescription(location);
+		setArgument(location);
 	}
 
 	@Override

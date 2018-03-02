@@ -9,7 +9,7 @@ public class VoidView implements View {
 	public static final VoidView INSTANCE = new VoidView();
 
 	@Override
-	public void setDescription(String desc) {
+	public void setArgument(String arg) {
 	}
 
 	@Override

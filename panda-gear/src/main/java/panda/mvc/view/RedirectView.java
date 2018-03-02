@@ -28,11 +28,11 @@ public class RedirectView extends AbstractView {
 	}
 	
 	public RedirectView(String location) {
-		setDescription(location);
+		setArgument(location);
 	}
 
 	public void render(ActionContext ac) {
-		String url = MvcURLBuilder.buildPath(ac, description);
+		String url = MvcURLBuilder.buildPath(ac, argument);
 		
 		HttpServlets.sendRedirect(ac.getResponse(), url);
 	}

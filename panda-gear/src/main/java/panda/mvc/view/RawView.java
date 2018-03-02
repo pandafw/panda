@@ -77,8 +77,8 @@ public class RawView implements View {
 	}
 	
 	@Override
-	public void setDescription(String desc) {
-		setContentType(desc);
+	public void setArgument(String arg) {
+		setContentType(arg);
 	}
 	
 	@Override

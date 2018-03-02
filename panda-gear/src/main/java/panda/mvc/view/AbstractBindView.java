@@ -187,11 +187,11 @@ public abstract class AbstractBindView extends AbstractDataView {
 		result.put("params", ac.getReqParams());
 		result.put("result", ac.getResult());
 
-		if (Strings.isNotEmpty(description)) {
+		if (Strings.isNotEmpty(argument)) {
 			@SuppressWarnings("rawtypes")
 			BeanHandler acb = Mvcs.getBeans().getBeanHandler(ac.getClass());
 
-			List<String> pnl = toList(description);
+			List<String> pnl = toList(argument);
 			for (String pn : pnl) {
 				Object value = acb.getBeanValue(ac, pn);
 				if (value != null) {

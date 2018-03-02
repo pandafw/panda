@@ -22,7 +22,7 @@ public interface View {
 	public static final String REDIRECT2 = ">>";
 	public static final String HTTP = "http";
 	public static final String FTL = "ftl";
-	public static final String SFTL = "s" + FTL;
+	public static final String SFTL = "sftl";
 	public static final String FORWARD = "forward";
 	public static final String FORWARD2 = "->";
 	public static final String RAW = "raw";
@@ -31,7 +31,7 @@ public interface View {
 	public static final String NONE = "none";
 	public static final String NULL = "null";
 
-	void setDescription(String desc);
+	void setArgument(String arg);
 	
 	void render(ActionContext ac);
 }

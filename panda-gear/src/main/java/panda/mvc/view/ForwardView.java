@@ -38,11 +38,11 @@ public class ForwardView extends AbstractView {
 	}
 	
 	public ForwardView(String location) {
-		setDescription(location);
+		setArgument(location);
 	}
 	
 	public void render(ActionContext ac) {
-		String path = description;
+		String path = argument;
 		String args = "";
 		if (path != null) {
 			int q = path.indexOf("?");

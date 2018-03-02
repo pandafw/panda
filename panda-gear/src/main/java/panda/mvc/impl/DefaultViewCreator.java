@@ -97,29 +97,29 @@ public class DefaultViewCreator implements ViewCreator {
 			return null;
 		}
 
-		String type, desc;
-		int pos = viewer.indexOf(':');
-		if (pos > 0) {
-			type = Strings.stripToNull(viewer.substring(0, pos).toLowerCase());
-			desc = Strings.stripToNull(viewer.substring(pos + 1));
+		String alias, params;
+		int i = viewer.indexOf(':');
+		if (i > 0) {
+			alias = Strings.stripToNull(viewer.substring(0, i).toLowerCase());
+			params = Strings.stripToNull(viewer.substring(i + 1));
 		}
 		else {
-			type = viewer.toLowerCase();
-			desc = null;
+			alias = viewer.toLowerCase();
+			params = null;
 		}
 		
-		View v = createView(ac.getIoc(), type);
-		if (v == null || desc == null) {
+		View v = createView(ac.getIoc(), alias);
+		if (v == null || params == null) {
 			return v;
 		}
 		
-		if (desc.length() > 3 && desc.charAt(0) == '{' && desc.charAt(desc.length() - 1) == '}') {
+		if (params.length() > 3 && params.charAt(0) == '{' && params.charAt(params.length() - 1) == '}') {
 			JsonObject jo = null;
 			try {
-				jo = JsonObject.fromJson(desc);
+				jo = JsonObject.fromJson(params);
 			}
 			catch (JsonException e) {
-				throw new IllegalArgumentException("Failed to set params of View " + v.getClass() + ", description: " + desc, e);
+				throw new IllegalArgumentException("Invalid json parameters of view - " + viewer, e);
 			}
 
 			// set parameters
@@ -132,23 +132,23 @@ public class DefaultViewCreator implements ViewCreator {
 				
 				Type pt = bh.getPropertyType(pn);
 				if (pt == null) {
-					throw new IllegalArgumentException("Failed to find property('" + pn + "') of View " + v.getClass() + ", description: " + desc);
+					throw new IllegalArgumentException("Failed to find property('" + pn + "') of View " + v.getClass() + ", params: " + params);
 				}
 	
 				try {
 					Object cv = Mvcs.getCastors().cast(pv, pt);
 					if (!bh.setPropertyValue(v, pn, cv)) {
-						throw new IllegalArgumentException("Failed to set property('" + pn + "') of View " + v.getClass() + ", description: " + desc);
+						throw new IllegalArgumentException("Failed to set property('" + pn + "') of View " + v.getClass() + ", description: " + params);
 					}
 				}
 				catch (CastException e) {
-					throw new IllegalArgumentException("Failed to cast property('" + pn + "') of View " + v.getClass() + ", description: " + desc, e);
+					throw new IllegalArgumentException("Failed to cast property('" + pn + "') of View " + v.getClass() + ", description: " + params, e);
 				}
 			}
 		}
 		else {
-			desc = Mvcs.translate(ac, desc);
-			v.setDescription(desc);
+			params = Mvcs.translate(ac, params);
+			v.setArgument(params);
 		}
 		
 		return v;

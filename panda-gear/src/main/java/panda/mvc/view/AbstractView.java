@@ -4,24 +4,24 @@ import panda.mvc.View;
 
 public abstract class AbstractView implements View {
 
-	protected String description;
+	protected String argument;
 	
 	/**
-	 * @return the description
+	 * @return the argument
 	 */
-	public String getDescription() {
-		return description;
+	public String getArgument() {
+		return argument;
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param argument the argument to set
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setArgument(String argument) {
+		this.argument = argument;
 	}
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + ": " + description;
+		return this.getClass().getName() + ": " + argument;
 	}
 }

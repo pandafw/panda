@@ -25,7 +25,7 @@ public class FreemarkerView extends AbstractView {
 	}
 	
 	public FreemarkerView(String location) {
-		setDescription(location);
+		setArgument(location);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public class FreemarkerView extends AbstractView {
 	public void render(ActionContext ac) {
 		FreemarkerHelper fh = ac.getIoc().get(FreemarkerHelper.class);
 
-		String path = description;
+		String path = argument;
 
 		// not defined
 		if (Strings.isEmpty(path)) {
