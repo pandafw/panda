@@ -791,7 +791,7 @@ public class MongoDao extends AbstractDao {
 			
 			if (vf.getValue() instanceof Object[]) {
 				String s = (String)((Object[])vf.getValue())[0];
-				char esc = (char)((Object[])vf.getValue())[1];
+				Character esc = (Character)((Object[])vf.getValue())[1];
 				r = Sqls.like2regex(s, esc);
 			}
 			else {

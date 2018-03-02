@@ -1,9 +1,6 @@
 package panda.dao.query;
 
 
-
-
-
 /**
  * @param <E> query target type
  */

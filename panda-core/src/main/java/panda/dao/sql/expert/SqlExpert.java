@@ -549,7 +549,7 @@ public abstract class SqlExpert {
 		else if (op == Operator.LIKE || op == Operator.NOT_LIKE) {
 			if (vf.getValue() instanceof Object[]) {
 				Object[] vs = (Object[])vf.getValue();
-				sql.append(op).append(" ? ESCAPE '").append((char)vs[1]).append('\'');
+				sql.append(op).append(" ? ESCAPE '").append(vs[1]).append('\'');
 				sql.addParam(vs[0]);
 			}
 			else {
