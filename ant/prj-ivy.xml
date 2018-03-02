@@ -11,7 +11,7 @@
 			<fileset dir="lib/jdbc"/>
 			<fileset dir="lib/tool"/>
 		</delete>
-		<ivy:retrieve conf="api,run,gae,jdbc,tool" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+		<ivy:retrieve conf="api,run,gae,jdbc,tool" pattern="lib/[conf]/[artifact](-[classifier]).[ext]" symlink="true"/>
 	</target>
 
 	<target name="ivy-report" description="ivy generates a report of dependencies">

@@ -28,16 +28,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	</target>
 
 	<!-- ivy -->
-	<target name="ivy-resolve" description="ivy --> retreive dependencies">
-		<delete includeEmptyDirs="true" failonerror="false">
-			<fileset dir="lib/tool"/>
-		</delete>
-		<ivy:retrieve conf="tool" pattern="lib/tool/[artifact](-[classifier]).[ext]"/>
-	</target>
-
-	<target name="ivy-clean" description="ivy --> clean the cache">
-		<ivy:cleancache />
-	</target>
+	<import file="../ant/prj-ivy.xml"/>
 
 	<!-- common target -->
 	<target name="minjs">
