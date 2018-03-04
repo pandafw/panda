@@ -84,9 +84,9 @@ public class XmlRpcClient {
 		String xbody = XmlRpcs.toXml(xreq, true, log.isDebugEnabled());
 
 		HttpRequest hreq = HttpRequest.post(url);
-		hreq.getHeader().setDefault().setContentType(MimeTypes.TEXT_XML);
+		hreq.setDefault().setContentType(MimeTypes.TEXT_XML);
 		if (Strings.isNotEmpty(userAgent)) {
-			hreq.getHeader().setUserAgent(userAgent);
+			hreq.setUserAgent(userAgent);
 		}
 		hreq.setBody(xbody);
 		

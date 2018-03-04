@@ -85,7 +85,7 @@ public class HttpClientTest {
 	@Test
 	public void testGetHttpsTrust() throws Exception {
 		HttpRequest hr = HttpRequest.get("https://github.com");
-		hr.getHeader().asWindowsChrome();
+		hr.asWindowsChrome();
 		
 		HttpClient hc = new HttpClient(hr);
 		hc.setValidateSslCert(false);

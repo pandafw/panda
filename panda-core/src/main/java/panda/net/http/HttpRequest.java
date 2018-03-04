@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.Panda;
 import panda.codec.binary.Base64;
 import panda.io.FileNames;
 import panda.io.MimeTypes;
@@ -33,6 +34,13 @@ import panda.net.Mimes;
 import panda.net.URLBuilder;
 
 public class HttpRequest {
+	// -------------------------------------------------------------
+	public static final String DEFAULT_USERAGENT = HttpClient.class.getName() + '/' + Panda.VERSION;
+	public static final String USER_AGENT_WINDOWS_CHROME = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+	public static final String USER_AGENT_ANDROID_CHROME = "Mozilla/5.0 (Linux; Android 7.0; SM-G920F Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36";
+	public static final String USER_AGENT_IPHONE_SAFARI = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1";
+	public static final String USER_AGENT_IPAD_SAFARI = "Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1";
+
 	private static final int TOSTRING_BODY_LIMIT = 1024;
 
 	public static HttpRequest get(String url) {
@@ -236,6 +244,46 @@ public class HttpRequest {
 		getHeader().setUserAgent(agent);
 		return this;
 	}
+	
+	public HttpRequest setDefault() {
+		setDefaultHeaders();
+		setUserAgent(DEFAULT_USERAGENT);
+		return this;
+	}
+
+	protected HttpRequest setDefaultHeaders() {
+		getHeader().setAccept("text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
+		getHeader().setAcceptEncoding("gzip,deflate");
+		getHeader().setAcceptLanguage("en-US,en,ja,zh,zh-CN,zh-TW");
+		getHeader().setAcceptCharset("ISO-8859-1,*,utf-8");
+		getHeader().setKeepAlive(true);
+		return this;
+	}
+
+	public HttpRequest asWindowsChrome() {
+		setDefaultHeaders();
+		setUserAgent(USER_AGENT_WINDOWS_CHROME);
+		return this;
+	}
+
+	public HttpRequest asAndroidChrome() {
+		setDefaultHeaders();
+		setUserAgent(USER_AGENT_ANDROID_CHROME);
+		return this;
+	}
+
+	public HttpRequest asIPhoneSafari() {
+		setDefaultHeaders();
+		setUserAgent(USER_AGENT_IPHONE_SAFARI);
+		return this;
+	}
+
+	public HttpRequest asIPadSafari() {
+		setDefaultHeaders();
+		setUserAgent(USER_AGENT_IPAD_SAFARI);
+		return this;
+	}
+	
 	
 	public Map<String, Cookie> getCookieMap() {
 		Map<String, Cookie> cs = new HashMap<String, Cookie>();

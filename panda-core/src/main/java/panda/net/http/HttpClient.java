@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import panda.Panda;
 import panda.io.Files;
 import panda.io.MimeTypes;
 import panda.io.Streams;
@@ -27,8 +26,6 @@ import panda.net.URLHelper;
  */
 public class HttpClient {
 	protected static Log log = Logs.getLog(HttpClient.class);
-
-	public static final String DEFAULT_USERAGENT = HttpClient.class.getName() + '/' + Panda.VERSION;
 
 	public static HttpResponse get(String url) throws IOException {
 		return send(url, HttpMethod.GET, null);
@@ -60,7 +57,7 @@ public class HttpClient {
 	
 	public static HttpResponse send(String url, String method, Map<String, Object> params, byte[] body, int timeout) throws IOException {
 		HttpRequest hr = HttpRequest.create(url, method, params);
-		hr.getHeader().asWindowsChrome();
+		hr.asWindowsChrome();
 		hr.setBody(body);
 		
 		HttpClient hc = new HttpClient(hr);
