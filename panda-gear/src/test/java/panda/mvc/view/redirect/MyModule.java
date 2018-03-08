@@ -20,6 +20,6 @@ public class MyModule {
 	@At("/login")
 	@To("redirect:/jsp/user/${params.name}")
 	public boolean login(@Param("name") String name, @Param("password") String password) {
-		return "wendal".equals(name) && "123456".equals(password);
+		return "panda".equals(name) && "123456".equals(password);
 	}
 }

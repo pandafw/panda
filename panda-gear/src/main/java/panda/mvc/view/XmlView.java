@@ -16,10 +16,7 @@ import panda.mvc.ActionContext;
  */
 @IocBean(singleton=false)
 public class XmlView extends AbstractBindView {
-
-	protected static final Log log = Logs.getLog(XmlView.class);
-
-	public static final XmlView DEFAULT = new XmlView();
+	private static final Log log = Logs.getLog(XmlView.class);
 
 	private String rootName = "result";
 	

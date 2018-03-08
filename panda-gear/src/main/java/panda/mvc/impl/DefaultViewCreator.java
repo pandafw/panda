@@ -22,12 +22,12 @@ import panda.mvc.View;
 import panda.mvc.ViewCreator;
 import panda.mvc.view.AltView;
 import panda.mvc.view.CsvView;
+import panda.mvc.view.DataView;
 import panda.mvc.view.ForwardView;
 import panda.mvc.view.FreemarkerView;
 import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
-import panda.mvc.view.RawView;
 import panda.mvc.view.RedirectView;
 import panda.mvc.view.ServletErrorView;
 import panda.mvc.view.SitemeshFreemarkerView;
@@ -57,6 +57,7 @@ public class DefaultViewCreator implements ViewCreator {
 			aliass = new HashMap<String, String>();
 		}
 		
+		addView(View.SC, HttpStatusView.class);
 		addView(View.ERR, ServletErrorView.class);
 
 		addView(View.CSV, CsvView.class);
@@ -70,12 +71,11 @@ public class DefaultViewCreator implements ViewCreator {
 		addView(View.SJSP, SitemeshJspView.class);
 		addView(View.REDIRECT, RedirectView.class);
 		addView(View.REDIRECT2, RedirectView.class);
-		addView(View.HTTP, HttpStatusView.class);
 		addView(View.FTL, FreemarkerView.class);
 		addView(View.SFTL, SitemeshFreemarkerView.class);
 		addView(View.FORWARD, ForwardView.class);
 		addView(View.FORWARD2, ForwardView.class);
-		addView(View.RAW, RawView.class);
+		addView(View.RAW, DataView.class);
 
 		addView(View.ALT, AltView.class);
 		addView(View.ALT2, AltView.class);
@@ -98,7 +98,7 @@ public class DefaultViewCreator implements ViewCreator {
 		}
 
 		String alias, params;
-		int i = viewer.indexOf(':');
+		int i = viewer.indexOf(View.SEP);
 		if (i > 0) {
 			alias = Strings.stripToNull(viewer.substring(0, i).toLowerCase());
 			params = Strings.stripToNull(viewer.substring(i + 1));

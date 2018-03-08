@@ -13,11 +13,9 @@ import panda.mvc.view.util.CsvExporter;
 
 
 @IocBean(singleton=false)
-public class CsvView extends AbstractDataView {
+public class CsvView extends DataView {
 	public static final CsvView DEFAULT = new CsvView();
 
-	private Object result;
-	
 	/**
 	 * Constructor.
 	 */
@@ -27,34 +25,11 @@ public class CsvView extends AbstractDataView {
 	}
 
 	/**
-	 * @return the result
-	 */
-	public Object getResult() {
-		return result;
-	}
-
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(Object result) {
-		this.result = result;
-	}
-
-	@Override
-	public void render(ActionContext ac) {
-		if (result == null) {
-			writeResult(ac, ac.getResult());
-		}
-		else {
-			writeResult(ac, result);
-		}
-	}
-	
-	/**
 	 * write result
 	 * @param ac action context
 	 * @param result result object
 	 */
+	@Override
 	protected void writeResult(ActionContext ac, Object result) {
 		try {
 			writeHeader(ac);

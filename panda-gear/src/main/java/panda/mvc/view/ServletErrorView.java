@@ -8,7 +8,6 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
-import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.net.http.HttpException;
 import panda.net.http.HttpStatus;
@@ -62,7 +61,7 @@ public class ServletErrorView implements View {
 		
 		res.setStatus(code);
 
-		View view = Mvcs.createView(ac, viewer);
+		View view = Views.createView(ac, viewer);
 		if (view == null) {
 			log.error("Failed to create view: " + viewer);
 		}

@@ -60,12 +60,12 @@ import panda.mvc.validator.URLValidator;
 import panda.mvc.validator.VisitValidator;
 import panda.mvc.view.AltView;
 import panda.mvc.view.CsvView;
+import panda.mvc.view.DataView;
 import panda.mvc.view.ForwardView;
 import panda.mvc.view.FreemarkerView;
 import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
-import panda.mvc.view.RawView;
 import panda.mvc.view.RedirectView;
 import panda.mvc.view.ServletErrorView;
 import panda.mvc.view.SitemeshFreemarkerView;
@@ -127,6 +127,8 @@ import panda.mvc.view.tag.ui.ViewField;
 import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
 import panda.mvc.view.taglib.TagLibraryManager;
 import panda.mvc.view.util.CsvExporter;
+import panda.mvc.view.util.HttpRangeDownloader;
+import panda.mvc.view.util.TsvExporter;
 import panda.mvc.view.util.XlsExporter;
 import panda.mvc.view.util.XlsxExporter;
 
@@ -242,7 +244,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			HttpStatusView.class,
 			JsonView.class,
 			JspView.class,
-			RawView.class,
+			DataView.class,
 			RedirectView.class,
 			ServletErrorView.class,
 			SitemeshFreemarkerView.class,
@@ -258,8 +260,10 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 
 			// View Utils
 			CsvExporter.class,
+			TsvExporter.class,
 			XlsExporter.class,
 			XlsxExporter.class,
+			HttpRangeDownloader.class,
 			
 			// Taglibs
 			TagLibraryManager.class,

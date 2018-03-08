@@ -102,10 +102,10 @@ public class ViewTestModule {
 	}
 
 	@At("raw5")
-	@To("raw:json")
+	@To("raw:5.json")
 	public String raw5() {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("name", "wendal");
+		map.put("name", "panda");
 		return Jsons.toJson(map);
 	}
 }

@@ -844,11 +844,11 @@ public class HttpServlets {
 			HttpServletResponse response, 
 			Map<?, ?> params) throws IOException {
 
-		HttpServletSupport hss = Castors.scast(params, HttpServletSupport.class);
+		HttpServletResponser hss = Castors.scast(params, HttpServletResponser.class);
 		hss.setRequest(request);
 		hss.setResponse(response);
 		
-		hss.writeResponseHeader();
+		hss.writeHeader();
 	}
 
 	/**
@@ -936,11 +936,11 @@ public class HttpServlets {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static void writeRedirect(HttpServletResponse res, String url, boolean encode) throws IOException {
-		HttpServletSupport hss = new HttpServletSupport(res);
+		HttpServletResponser hss = new HttpServletResponser(res);
 		hss.setCharset(Charsets.UTF_8);
 		hss.setContentType(MimeTypes.TEXT_HTML);
 		hss.setMaxAge(0);
-		hss.writeResponseHeader();
+		hss.writeHeader();
 		
 		PrintWriter pw = res.getWriter();
 		pw.write("<html><head><meta http-equiv=\"refresh\" content=\"0; url=");

@@ -7,6 +7,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.ParamAdaptor;
 import panda.mvc.View;
 import panda.mvc.adaptor.multipart.FileSizeLimitExceededException;
+import panda.mvc.view.Views;
 
 @IocBean
 public class AdaptProcessor extends AbstractProcessor {
@@ -17,8 +18,7 @@ public class AdaptProcessor extends AbstractProcessor {
 	
 	@Override
 	public void process(ActionContext ac) {
-		View view = Mvcs.createView(ac, ac.getConfig().getErrorView());
-
+		View view = Views.createView(ac, ac.getConfig().getErrorView());
 		if (view == null) {
 			adapt(ac);
 			doNext(ac);

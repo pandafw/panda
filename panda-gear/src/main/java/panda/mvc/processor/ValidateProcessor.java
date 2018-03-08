@@ -14,6 +14,7 @@ import panda.mvc.View;
 import panda.mvc.adaptor.DefaultParamAdaptor;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 @IocBean
 public class ValidateProcessor extends AbstractProcessor {
@@ -76,7 +77,7 @@ public class ValidateProcessor extends AbstractProcessor {
 	}
 
 	protected void doErrorView(ActionContext ac) {
-		View view = Mvcs.createView(ac, ac.getConfig().getErrorView());
+		View view = Views.createView(ac, ac.getConfig().getErrorView());
 		if (view == null) {
 			StringBuilder sb = new StringBuilder();
 			

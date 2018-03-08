@@ -1,20 +1,16 @@
 package panda.app.action.base;
 
-import java.io.InputStream;
-
 import panda.app.action.AbstractAction;
 import panda.image.ImageWrapper;
 import panda.image.Images;
-import panda.io.Streams;
 import panda.ioc.annotation.IocInject;
 import panda.lang.time.DateTimes;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.view.HttpStatusView;
-import panda.mvc.view.VoidView;
-import panda.servlet.HttpServletSupport;
+import panda.mvc.view.Views;
+import panda.servlet.HttpServletResponser;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
 
@@ -79,33 +75,23 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
+	@To(View.RAW)
 	public Object download(@Param("id") Long id) throws Exception {
 		if (id == null) {
-			return HttpStatusView.NOT_FOUND;
+			return Views.notFound(context);
 		}
 
 		FileItem file = filePool.findFile(id);
 		if (file == null || !file.isExists()) {
-			return HttpStatusView.NOT_FOUND;
+			return Views.notFound(context);
 		}
 
-		String filename = file.getName();
-		InputStream fis = file.getInputStream();
-		
-		try {
-			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
-			hss.setContentLength(file.getSize());
-			hss.setContentType(file.getContentType());
-			hss.setFileName(filename);
-			hss.setMaxAge(cache ? DateTimes.SEC_WEEK : 0);
+		HttpServletResponser hss = new HttpServletResponser(getRequest(), getResponse());
+		hss.setFile(file);
+		hss.setMaxAge(cache ? DateTimes.SEC_WEEK : 0);
+		hss.setBufferSize(bufferSize);
 	
-			hss.writeResponseHeader();
-			hss.writeResponseData(fis, bufferSize);
-		}
-		finally {
-			Streams.safeClose(fis);
-		}
-		return VoidView.INSTANCE;
+		return hss;
 	}
 
 	/**

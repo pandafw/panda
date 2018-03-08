@@ -1908,6 +1908,31 @@ public class Streams {
 	}
 
 	/**
+	 * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
+	 * <p>
+	 * This method buffers the input internally, so there is no need to use a
+	 * <code>BufferedReader</code>.
+	 * <p>
+	 * Large streams (over 2GB) will return a chars copied value of <code>-1</code> after the copy
+	 * has completed since the correct number of chars cannot be returned as an int. For large
+	 * streams use the <code>copyLarge(Reader, Writer)</code> method.
+	 * 
+	 * @param input the <code>Reader</code> to read from
+	 * @param output the <code>Writer</code> to write to
+	 * @param bufferSize the bufferSize used to copy from the input to the output
+	 * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
+	 * @throws NullPointerException if the input or output is null
+	 * @throws IOException if an I/O error occurs
+	 */
+	public static int copy(final Reader input, final Appendable output, final int bufferSize) throws IOException {
+		final long count = copyLarge(input, output, new char[bufferSize]);
+		if (count > Integer.MAX_VALUE) {
+			return -1;
+		}
+		return (int)count;
+	}
+
+	/**
 	 * Copy chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
 	 * <p>
 	 * This method buffers the input internally, so there is no need to use a

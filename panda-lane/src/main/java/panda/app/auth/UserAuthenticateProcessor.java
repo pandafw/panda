@@ -10,6 +10,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.processor.AbstractProcessor;
 import panda.mvc.util.TextProvider;
+import panda.mvc.view.Views;
 import panda.net.URLBuilder;
 import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
@@ -42,7 +43,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 	
 
 	protected void doView(ActionContext ac, String type) {
-		View view = Mvcs.createView(ac, type);
+		View view = Views.createView(ac, type);
 		if (view != null) {
 			view.render(ac);
 		}

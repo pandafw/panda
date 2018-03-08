@@ -19,8 +19,6 @@ import panda.mvc.view.ftl.FreemarkerHelper;
  */
 @IocBean(singleton=false)
 public class FreemarkerView extends AbstractView {
-	public static final FreemarkerView DEFAULT = new FreemarkerView();
-
 	public FreemarkerView() {
 	}
 	

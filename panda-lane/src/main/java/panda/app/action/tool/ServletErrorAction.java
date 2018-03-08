@@ -4,9 +4,8 @@ import panda.app.action.AbstractAction;
 import panda.io.FileNames;
 import panda.lang.Numbers;
 import panda.mvc.annotation.At;
-import panda.mvc.view.FreemarkerView;
 import panda.mvc.view.ServletErrorView;
-import panda.mvc.view.SitemeshFreemarkerView;
+import panda.mvc.view.Views;
 import panda.servlet.HttpServlets;
 
 @At("/servlet-error")
@@ -26,8 +25,9 @@ public class ServletErrorAction extends AbstractAction {
 
 		String ext = FileNames.getExtension(error);
 		if ("sftl".equalsIgnoreCase(ext)) {
-			return new SitemeshFreemarkerView(TPL);
+			return Views.sftl(context, TPL);
 		}
-		return new FreemarkerView(TPL);
+
+		return Views.ftl(context, TPL);
 	}
 }

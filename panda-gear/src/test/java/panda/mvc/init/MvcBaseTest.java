@@ -24,7 +24,7 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 	@Test
 	public void testRequestParms() throws Throwable {
 		request.setRequestURI("/two/login");
-		request.addParameter("username", "wendal");
+		request.addParameter("username", "panda");
 		request.addParameter("password", "123456");
 		request.addParameter("authCode", "236475");
 		servlet.service(request, response);

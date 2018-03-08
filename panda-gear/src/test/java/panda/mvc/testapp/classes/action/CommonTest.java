@@ -11,6 +11,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.testapp.BaseWebappTest;
 import panda.mvc.testapp.classes.bean.UserT;
+import panda.mvc.view.Views;
 
 @At("/common")
 @To(View.RAW)
@@ -72,7 +73,7 @@ public class CommonTest extends BaseWebappTest {
 
 	// Test 测试获取Servlet的对象
 	@At("servlet_obj")
-	@To("http:200")
+	@To(Views.SC_OK)
 	public void test_servlet_obj(HttpServletRequest req, HttpServletResponse resp, ServletContext context,
 			HttpSession session) throws Throwable {
 		req.getInputStream();

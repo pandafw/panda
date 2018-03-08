@@ -22,8 +22,6 @@ import panda.mvc.view.sitemesh.Sitemesher;
  */
 @IocBean(singleton=false)
 public class SitemeshFreemarkerView extends FreemarkerView {
-	public static final SitemeshFreemarkerView DEFAULT = new SitemeshFreemarkerView();
-
 	public SitemeshFreemarkerView() {
 	}
 	

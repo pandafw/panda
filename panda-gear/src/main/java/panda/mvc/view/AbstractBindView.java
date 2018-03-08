@@ -36,7 +36,7 @@ import panda.vfs.dao.DaoFileItem;
 import panda.vfs.local.LocalFileItem;
 
 
-public abstract class AbstractBindView extends AbstractDataView {
+public abstract class AbstractBindView extends DataView {
 	protected static final String SEPERATOR = ", ";
 
 	protected static final String DATE_FORMAT_LONG = "long";
@@ -56,6 +56,8 @@ public abstract class AbstractBindView extends AbstractDataView {
 	protected Boolean ignoreTransient = true;
 
 	protected Boolean prettyPrint = false;
+
+	protected String fields;
 	
 	/**
 	 * Constructor.
@@ -134,6 +136,20 @@ public abstract class AbstractBindView extends AbstractDataView {
 		this.prettyPrint = prettyPrint;
 	}
 
+	/**
+	 * @return the fields
+	 */
+	public String getFields() {
+		return fields;
+	}
+
+	/**
+	 * @param fields the fields to set
+	 */
+	public void setFields(String fields) {
+		this.fields = fields;
+	}
+
 	@SuppressWarnings("unchecked")
 	public void render(ActionContext ac) {
 		Object o = ac.getError();
@@ -187,11 +203,11 @@ public abstract class AbstractBindView extends AbstractDataView {
 		result.put("params", ac.getReqParams());
 		result.put("result", ac.getResult());
 
-		if (Strings.isNotEmpty(argument)) {
+		if (Strings.isNotEmpty(fields)) {
 			@SuppressWarnings("rawtypes")
 			BeanHandler acb = Mvcs.getBeans().getBeanHandler(ac.getClass());
 
-			List<String> pnl = toList(argument);
+			List<String> pnl = toList(fields);
 			for (String pn : pnl) {
 				Object value = acb.getBeanValue(ac, pn);
 				if (value != null) {

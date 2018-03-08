@@ -30,13 +30,10 @@ import panda.mvc.bean.QueryerEx;
 import panda.mvc.bean.Sorter;
 import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.util.StateProvider;
-import panda.mvc.view.CsvView;
-import panda.mvc.view.TsvView;
-import panda.mvc.view.VoidView;
-import panda.mvc.view.XlsView;
-import panda.mvc.view.XlsxView;
+import panda.mvc.view.Views;
 import panda.mvc.view.util.CsvExporter;
 import panda.mvc.view.util.ListColumn;
+import panda.mvc.view.util.TsvExporter;
 import panda.mvc.view.util.XlsExporter;
 import panda.mvc.view.util.XlsxExporter;
 import panda.net.URLHelper;
@@ -368,7 +365,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			Map params = URLHelper.parseQueryString(qs);
 			removeRedundantParams(params);
 			if (Collections.isNotEmpty(params)) {
-				String url = MvcURLBuilder.buildURL(context, params);
+				String url = MvcURLBuilder.buildURL(getContext(), params);
 				HttpServlets.sendRedirect(getResponse(), url);
 				return null;
 			}
@@ -396,7 +393,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected String getListParametersString(Queryer qr) {
 		Map<String, Object> params = getListParameters(qr);
-		return MvcURLBuilder.buildQueryString(context, params);
+		return MvcURLBuilder.buildQueryString(getContext(), params);
 	}
 	
 	/**
@@ -449,7 +446,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		if (isNeedLoadListParameters(qr)) {
 			qr = loadListParameters(qr);
 			if (qr == null) {
-				return VoidView.INSTANCE;
+				return Views.none(getContext());
 			}
 		}
 
@@ -495,13 +492,10 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
 		csv.setList((List)rv);
 		csv.setColumns(columns);
-		
-		CsvView cv = new CsvView();
-		cv.setResult(csv);
-		cv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".csv");
-		cv.setAttachment(true);
-		
-		return cv;
+
+		getContext().setResult(csv);
+
+		return Views.csv(getContext(), getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".csv");
 	}
 	
 
@@ -522,17 +516,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			return rv;
 		}
 		
-		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
-		csv.setSeparator('\t');
-		csv.setList((List)rv);
-		csv.setColumns(columns);
+		TsvExporter tsv = getContext().getIoc().get(TsvExporter.class);
+		tsv.setList((List)rv);
+		tsv.setColumns(columns);
+
+		getContext().setResult(tsv);
 		
-		TsvView tv = new TsvView();
-		tv.setResult(csv);
-		tv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".tsv");
-		tv.setAttachment(true);
-		
-		return tv;
+		return Views.tsv(getContext(), getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".tsv");
 	}
 
 
@@ -556,13 +546,10 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		XlsExporter xls = getContext().getIoc().get(XlsExporter.class);
 		xls.setList((List)rv);
 		xls.setColumns(columns);
+
+		getContext().setResult(xls);
 		
-		XlsView xv = new XlsView();
-		xv.setResult(xls);
-		xv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xls");
-		xv.setAttachment(true);
-		
-		return xv;
+		return Views.xls(getContext(), getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xls");
 	}
 
 
@@ -583,16 +570,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			return rv;
 		}
 		
-		XlsxExporter xls = getContext().getIoc().get(XlsxExporter.class);
-		xls.setList((List)rv);
-		xls.setColumns(columns);
+		XlsxExporter xlsx = getContext().getIoc().get(XlsxExporter.class);
+		xlsx.setList((List)rv);
+		xlsx.setColumns(columns);
+
+		getContext().setResult(xlsx);
 		
-		XlsxView xv = new XlsxView();
-		xv.setResult(xls);
-		xv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xlsx");
-		xv.setAttachment(true);
-		
-		return xv;
+		return Views.xlsx(getContext(), getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xlsx");
 	}
 
 	/**

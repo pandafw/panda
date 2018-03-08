@@ -24,7 +24,6 @@ import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.impl.DefaultValidateHandler;
-import panda.mvc.impl.DefaultViewCreator;
 import panda.mvc.util.TextProvider;
 
 /**
@@ -567,38 +566,6 @@ public abstract class Mvcs {
 	public static boolean validate(ActionContext context, Object value, String name) {
 		ValidateHandler vh = getValidateHandler(context);
 		return vh.validate(context, name, value);
-	}
-
-	/**
-	 * get view creator
-	 * @param ioc IOC
-	 * @return ViewCreator
-	 */
-	public static ViewCreator getViewCreator(Ioc ioc) {
-		ViewCreator maker = ioc.getIfExists(ViewCreator.class);
-		if (maker == null) {
-			maker = new DefaultViewCreator();
-		}
-		return maker;
-	}
-
-	/**
-	 * create a view
-	 * @param ac action context
-	 * @param viewer view description
-	 * @return View
-	 */
-	public static View createView(ActionContext ac, String viewer) {
-		if (Strings.isEmpty(viewer)) {
-			return null;
-		}
-
-		View view = getViewCreator(ac.getIoc()).create(ac, viewer);
-		if (view != null) {
-			return view;
-		}
-
-		throw new IllegalArgumentException("Can not create view '" + viewer + "'");
 	}
 }
 

@@ -1,6 +1,7 @@
 package panda.mvc.view;
 
 import panda.ioc.annotation.IocBean;
+import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.util.MvcURLBuilder;
 import panda.servlet.HttpServlets;
@@ -16,10 +17,10 @@ import panda.servlet.HttpServlets;
  * new RedirectView("/pet/list.do");
  * 
  * <p>
- * &#64;To("//anotherContext/some") -> redirect to: /anotherContext/some
- * &#64;To("//some") -> redirect to: /thisContext/some
- * &#64;To("+/some") -> redirect to: /thisContext + context.getPath() + /some
- * &#64;To("~/some") -> redirect to: /thisContext + context.getPath() + /../some
+ * &#64;To(">>://anotherContext/some") -> redirect to: /anotherContext/some
+ * &#64;To(">>:/some") -> redirect to: /thisContext/some
+ * &#64;To(">>:+/some") -> redirect to: /thisContext + context.getPath() + /some
+ * &#64;To(">>:~/some") -> redirect to: /thisContext + context.getPath() + /../some
  */
 @IocBean(singleton=false)
 public class RedirectView extends AbstractView {
@@ -32,8 +33,19 @@ public class RedirectView extends AbstractView {
 	}
 
 	public void render(ActionContext ac) {
-		String url = MvcURLBuilder.buildPath(ac, argument);
-		
+		String a = argument;
+		if (Strings.isEmpty(a)) {
+			Object r = ac.getResult();
+			if (r instanceof CharSequence) {
+				a = r.toString();
+			}
+		}
+
+		if (Strings.isEmpty(a)) {
+			a = "/";
+		}
+
+		String url = MvcURLBuilder.buildPath(ac, a);
 		HttpServlets.sendRedirect(ac.getResponse(), url);
 	}
 }

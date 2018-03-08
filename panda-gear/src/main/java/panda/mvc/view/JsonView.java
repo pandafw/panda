@@ -19,8 +19,6 @@ import panda.mvc.ActionContext;
 public class JsonView extends AbstractBindView {
 	private static final Log log = Logs.getLog(JsonView.class);
 
-	public static final JsonView DEFAULT = new JsonView();
-	
 	public JsonView() {
 		setContentType(MimeTypes.TEXT_JAVASCRIPT);
 	}

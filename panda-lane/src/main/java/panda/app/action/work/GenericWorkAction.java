@@ -14,7 +14,7 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpHeader;
-import panda.servlet.HttpServletSupport;
+import panda.servlet.HttpServletResponser;
 
 
 public abstract class GenericWorkAction extends AbstractAction {
@@ -116,14 +116,14 @@ public abstract class GenericWorkAction extends AbstractAction {
 			events = es;
 		}
 		if (!silent) {
-			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
+			HttpServletResponser hss = new HttpServletResponser(getRequest(), getResponse());
 			hss.setMaxAge(0);
 			hss.setCharset(Charsets.UTF_8);
 			hss.setContentType(MimeTypes.TEXT_HTML);
 
 			try {
 				getResponse().addHeader(HttpHeader.X_ACCEL_BUFFERING, "off");
-				hss.writeResponseHeader();
+				hss.writeHeader();
 			}
 			catch (Exception e) {
 				throw Exceptions.wrapThrow(e);

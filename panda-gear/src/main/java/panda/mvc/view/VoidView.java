@@ -6,8 +6,6 @@ import panda.mvc.View;
 
 @IocBean
 public class VoidView implements View {
-	public static final VoidView INSTANCE = new VoidView();
-
 	@Override
 	public void setArgument(String arg) {
 	}

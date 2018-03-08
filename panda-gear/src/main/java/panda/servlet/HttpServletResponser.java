@@ -1,14 +1,18 @@
 package panda.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.io.FileNames;
+import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Chars;
 import panda.lang.Charsets;
@@ -16,11 +20,13 @@ import panda.lang.Strings;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.UserAgent;
+import panda.vfs.FileItem;
 
 
 /**
+ * Http Servlet Response Support class
  */
-public class HttpServletSupport {
+public class HttpServletResponser {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
@@ -33,18 +39,18 @@ public class HttpServletSupport {
 	private int maxAge = -1;
 	private String cacheControl = HttpHeader.CACHE_CONTROL_PUBLIC;
 	private Date lastModified;
-	
-	private byte[] data;
-	private InputStream stream;
+	private int bufferSize = 4096;
 
-	public HttpServletSupport() {
+	private Object body;
+
+	public HttpServletResponser() {
 	}
 
-	public HttpServletSupport(HttpServletResponse res) {
+	public HttpServletResponser(HttpServletResponse res) {
 		response = res;
 	}
 
-	public HttpServletSupport(HttpServletRequest req, HttpServletResponse res) {
+	public HttpServletResponser(HttpServletRequest req, HttpServletResponse res) {
 		request = req;
 		response = res;
 	}
@@ -204,38 +210,51 @@ public class HttpServletSupport {
 	}
 
 	/**
-	 * @return the data
+	 * @return the bufferSize
 	 */
-	public byte[] getData() {
-		return data;
+	public int getBufferSize() {
+		return bufferSize;
 	}
 
 	/**
-	 * @param data the data to set
+	 * @param bufferSize the bufferSize to set
 	 */
-	public void setData(byte[] data) {
-		this.data = data;
+	public void setBufferSize(int bufferSize) {
+		this.bufferSize = bufferSize;
 	}
 
 	/**
-	 * @return the stream
+	 * @return the body
 	 */
-	public InputStream getStream() {
-		return stream;
+	public Object getBody() {
+		return body;
 	}
 
 	/**
-	 * @param stream the stream to set
+	 * @param body the body to set
 	 */
-	public void setStream(InputStream stream) {
-		this.stream = stream;
+	public void setBody(Object body) {
+		this.body = body;
+	}
+
+	public void setFile(File file) {
+		setFileName(file.getName());
+		setContentLength((int)file.length());
+		setBody(file);
+	}
+
+	public void setFile(FileItem file) {
+		setFileName(file.getName());
+		setContentLength(file.getSize());
+		setContentType(file.getContentType());
+		setBody(file);
 	}
 	
 	/**
 	 * write response header
 	 * @throws IOException if an I/O error occurs
 	 */
-	public void writeResponseHeader() throws IOException {
+	public void writeHeader() throws IOException {
 		if (Strings.isNotEmpty(charset)) {
 			response.setCharacterEncoding(charset);
 		}
@@ -262,9 +281,11 @@ public class HttpServletSupport {
 		
 		boolean noFileCache = true;
 		if (Strings.isNotEmpty(fileName)) {
-			String fn = HttpServlets.EncodeFileName(request, charset, fileName);
-			response.setHeader(HttpHeader.CONTENT_DISPOSITION, 
-					(Boolean.TRUE.equals(attachment) ? "attachment" : "inline") + "; " + fn);
+			if (!response.containsHeader(HttpHeader.CONTENT_DISPOSITION)) {
+				String fn = HttpServlets.EncodeFileName(request, charset, fileName);
+				response.setHeader(HttpHeader.CONTENT_DISPOSITION, 
+						(Boolean.TRUE.equals(attachment) ? "attachment" : "inline") + "; " + fn);
+			}
 			
 			if (request != null) {
 				UserAgent b = HttpServlets.getUserAgent(request);
@@ -280,32 +301,94 @@ public class HttpServletSupport {
 		}
 
 		if (Boolean.TRUE.equals(bom) && Charsets.isUnicodeCharset(charset)) {
-			writeResponseBom();
+			writeBom();
 		}
 	}
 
-	public void writeResponseBom() throws IOException {
+	public void writeBody() throws IOException {
+		if (body == null) {
+			return;
+		}
+		
+		if (body instanceof CharSequence) {
+			writeText(((CharSequence)body).toString());
+		}
+		else if (body instanceof char[]) {
+			writeText((char[])body);
+		}
+		else if (body instanceof byte[]) {
+			writeBytes((byte[])body);
+		}
+		else if (body instanceof File) {
+			writeFile((File)body);
+		}
+		else if (body instanceof FileItem) {
+			writeFile((FileItem)body);
+		}
+		else if (body instanceof Reader) {
+			writeReader((Reader)body);
+		}
+		else if (body instanceof InputStream) {
+			writeStream((InputStream)body);
+		}
+	}
+
+	public void writeBom() throws IOException {
 		response.getWriter().write(Chars.BOM);
 	}
 
-	public void writeResponseText(String text) throws IOException {
+	public void writeText(String text) throws IOException {
 		response.getWriter().write(text);
 	}
 
-	public void writeResponseData(byte[] data) throws IOException {
+	public void writeText(char[] text) throws IOException {
+		response.getWriter().write(text);
+	}
+
+	public void writeBytes(byte[] data) throws IOException {
 		OutputStream os = response.getOutputStream();
 		os.write(data);
 		os.flush();
 	}
 
-	public void writeResponseData(InputStream is) throws IOException {
-		writeResponseData(is, 4096);
+	public void writeFile(File file) throws IOException {
+		OutputStream os = response.getOutputStream();
+		Files.copyFile(file, os);
+		os.flush();
+	}
+
+	public void writeFile(FileItem file) throws IOException {
+		writeStream(file.getInputStream());
+	}
+
+	public void writeReader(Reader r) throws IOException {
+		writeReader(r, bufferSize);
+	}
+
+	public void writeReader(Reader r, int bufferSize) throws IOException {
+		try {
+			Writer w = response.getWriter();
+			Streams.copy(r, w, bufferSize);
+			w.flush();
+		}
+		finally {
+			Streams.safeClose(r);
+		}
+	}
+
+	public void writeStream(InputStream is) throws IOException {
+		writeStream(is, bufferSize);
 	}
 	
-	public void writeResponseData(InputStream is, int bufferSize) throws IOException {
-		OutputStream os = response.getOutputStream();
-		Streams.copy(is, os, bufferSize);
-		os.flush();
+	public void writeStream(InputStream is, int bufferSize) throws IOException {
+		try {
+			OutputStream os = response.getOutputStream();
+			Streams.copy(is, os, bufferSize);
+			os.flush();
+		}
+		finally {
+			Streams.safeClose(is);
+		}
 	}
 	
 	public void flush() throws IOException {

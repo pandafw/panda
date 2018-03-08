@@ -9,7 +9,6 @@ import panda.lang.Strings;
 import panda.mvc.ActionConfig;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionMapping;
-import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.ViewCreator;
 
@@ -79,7 +78,7 @@ public class AltView extends AbstractView {
 				}
 			}
 
-			ViewCreator vc = Mvcs.getViewCreator(ac.getIoc());
+			ViewCreator vc = Views.getViewCreator(ac.getIoc());
 			View view = vc.create(ac, sv);
 			if (view != null) {
 				view.render(ac);

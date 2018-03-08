@@ -1,11 +1,9 @@
 package panda.app.action.base;
 
-import javax.servlet.http.HttpServletResponse;
-
 import panda.app.action.AbstractAction;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
-import panda.mvc.view.VoidView;
+import panda.mvc.view.Views;
 
 public abstract class BaseFreemarkerAction extends AbstractAction {
 	@At("(.*)\\.ftl$")
@@ -13,8 +11,7 @@ public abstract class BaseFreemarkerAction extends AbstractAction {
 	public Object ftl(String path) throws Exception {
 		String location = "/" + path + ".ftl";
 		if (!assist().hasTemplate(location)) {
-			getResponse().sendError(HttpServletResponse.SC_NOT_FOUND, location);
-			return VoidView.INSTANCE;
+			return Views.notFound(context);
 		}
 		return location;
 	}

@@ -5,7 +5,7 @@ import java.io.Writer;
 
 import panda.ioc.annotation.IocBean;
 import panda.mvc.MvcException;
-import panda.servlet.HttpServletSupport;
+import panda.servlet.HttpServletResponser;
 
 
 /**
@@ -39,7 +39,7 @@ import panda.servlet.HttpServletSupport;
  */
 @IocBean(singleton=false)
 public class Head extends TagBean {
-	protected HttpServletSupport hss = new HttpServletSupport();
+	protected HttpServletResponser hss = new HttpServletResponser();
 	
 	/**
 	 * Callback for the end tag of this component. Should the body be evaluated again?
@@ -56,7 +56,7 @@ public class Head extends TagBean {
 		try {
 			hss.setRequest(context.getRequest());
 			hss.setResponse(context.getResponse());
-			hss.writeResponseHeader();
+			hss.writeHeader();
 		}
 		catch (IOException e) {
 			throw new MvcException("Failed to write out Head tag", e);

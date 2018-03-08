@@ -24,10 +24,10 @@ public class ServerRedirectViewTest extends AbstractMvcTestCase {
 	@Test
 	public void testP_in_path() throws Throwable {
 		request.setRequestURI("/login");
-		request.addParameter("name", "wendal");
+		request.addParameter("name", "panda");
 		request.addParameter("password", "123456");
 		servlet.service(request, response);
 		System.out.println(response.getHeader("Location"));
-		assertTrue(response.getHeader("Location").endsWith("/jsp/user/wendal"));
+		assertTrue(response.getHeader("Location").endsWith("/jsp/user/panda"));
 	}
 }

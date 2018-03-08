@@ -11,7 +11,7 @@ import panda.mvc.view.util.XlsExporter;
 
 
 @IocBean(singleton=false)
-public class XlsView extends AbstractDataView {
+public class XlsView extends DataView {
 	public static final XlsView DEFAULT = new XlsView();
 
 	private Object result;

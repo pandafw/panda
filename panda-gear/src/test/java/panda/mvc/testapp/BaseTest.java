@@ -12,10 +12,10 @@ public class BaseTest extends BaseWebappTest {
 
 	@Test
 	public void test_json_adaptor() throws IOException {
-		post("/adaptor/json/pet/array", "{pets:[{name:'zzh'},{name:'wendal'}]}", MimeTypes.APP_JSON);
+		post("/adaptor/json/pet/array", "{pets:[{name:'zzh'},{name:'panda'}]}", MimeTypes.APP_JSON);
 		assertEquals("pets(2) array", resp.getContentText());
 
-		post("/adaptor/json/pet/list", "{pets:[{name:'zzh'},{name:'wendal'}]}", MimeTypes.APP_JSON);
+		post("/adaptor/json/pet/list", "{pets:[{name:'zzh'},{name:'panda'}]}", MimeTypes.APP_JSON);
 		assertEquals("pets(2) list", resp.getContentText());
 	}
 
@@ -40,11 +40,11 @@ public class BaseTest extends BaseWebappTest {
 		get("/common/pathArgs32/puZ");
 		assertEquals("puZ&Z", resp.getContentText());
 
-		get("/common/pathArgs4/zzz?name=wendal");
-		assertEquals("zzz&wendal", resp.getContentText());
+		get("/common/pathArgs4/zzz?name=panda");
+		assertEquals("zzz&panda", resp.getContentText());
 
-		get("/common/pathArgs5/yyy?user.name=wendal&user2.name=zozoh");
-		assertEquals("yyy&wendal&zozoh", resp.getContentText());
+		get("/common/pathArgs5/yyy?user.name=panda&user2.name=zozoh");
+		assertEquals("yyy&panda&zozoh", resp.getContentText());
 	}
 
 	@Test

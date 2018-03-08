@@ -19,13 +19,6 @@ import panda.net.http.HttpStatus;
  */
 @IocBean(singleton=false)
 public class HttpStatusView implements View {
-
-	public static final View BAD_REQUEST = new HttpStatusView(HttpStatus.SC_BAD_REQUEST);
-	public static final View FORBIDDEN = new HttpStatusView(HttpStatus.SC_FORBIDDEN);
-	public static final View NOT_FOUND = new HttpStatusView(HttpStatus.SC_NOT_FOUND);
-	public static final View SERVER_ERROR = new HttpStatusView(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-	public static final View BAD_GATEWAY = new HttpStatusView(HttpStatus.SC_BAD_GATEWAY);
-
 	private int statusCode;
 
 	public HttpStatusView() {

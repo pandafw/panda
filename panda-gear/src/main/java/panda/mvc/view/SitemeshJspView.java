@@ -7,7 +7,14 @@ import panda.servlet.HttpServletResponseBlocker;
 
 @IocBean(singleton=false)
 public class SitemeshJspView extends JspView {
-	public static final SitemeshJspView DEFAULT = new SitemeshJspView();
+	
+	public SitemeshJspView() {
+		super();
+	}
+
+	public SitemeshJspView(String location) {
+		super(location);
+	}
 
 	@Override
 	protected void forward(ActionContext ac, String path) {

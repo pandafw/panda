@@ -16,6 +16,7 @@ import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.mvc.View;
 import panda.mvc.view.SitemeshFreemarkerView;
+import panda.mvc.view.Views;
 
 
 /**
@@ -266,7 +267,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @return the view
 	 */
 	protected View newScenarioView(String sn) {
-		return new SitemeshFreemarkerView(SitemeshFreemarkerView.ALT_PREFIX + sn);
+		return Views.sftl(context, SitemeshFreemarkerView.ALT_PREFIX + sn);
 	}
 
 	/**

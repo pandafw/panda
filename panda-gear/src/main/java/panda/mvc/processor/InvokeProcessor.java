@@ -6,9 +6,9 @@ import java.lang.reflect.Method;
 import panda.ioc.annotation.IocBean;
 import panda.lang.reflect.Methods;
 import panda.mvc.ActionContext;
-import panda.mvc.Mvcs;
 import panda.mvc.ValidateException;
 import panda.mvc.View;
+import panda.mvc.view.Views;
 
 @IocBean
 public class InvokeProcessor extends AbstractProcessor {
@@ -24,7 +24,7 @@ public class InvokeProcessor extends AbstractProcessor {
 		catch (InvocationTargetException e) {
 			Throwable ex = e.getTargetException();
 			if (ex instanceof ValidateException) {
-				r = Mvcs.createView(ac, ac.getConfig().getErrorView());
+				r = Views.createView(ac, ac.getConfig().getErrorView());
 				if (r == null) {
 					throw (ValidateException)ex;
 				}
