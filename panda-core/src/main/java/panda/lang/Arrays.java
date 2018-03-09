@@ -8632,12 +8632,12 @@ public abstract class Arrays {
 	 * @return a list
 	 */
 	@SafeVarargs
-	public static <T> List<T> toList(T... a) {
+	public static <T> ArrayList<T> toList(T... a) {
 		if (a == null) {
 			return null;
 		}
 
-		List<T> list = new ArrayList<T>(a.length);
+		ArrayList<T> list = new ArrayList<T>(a.length);
 		for (T e : a) {
 			list.add(e);
 		}
@@ -8651,12 +8651,12 @@ public abstract class Arrays {
 	 * @return a set
 	 */
 	@SafeVarargs
-	public static <T> Set<T> toSet(T... a) {
+	public static <T> HashSet<T> toSet(T... a) {
 		if (a == null) {
 			return null;
 		}
 
-		Set<T> set = new HashSet<T>(a.length);
+		HashSet<T> set = new HashSet<T>(a.length);
 		for (T e : a) {
 			set.add(e);
 		}
@@ -8670,12 +8670,12 @@ public abstract class Arrays {
 	 * @return a set
 	 */
 	@SafeVarargs
-	public static <T> Set<T> toLinkedSet(T... a) {
+	public static <T> LinkedHashSet<T> toLinkedSet(T... a) {
 		if (a == null) {
 			return null;
 		}
 
-		Set<T> set = new LinkedHashSet<T>(a.length);
+		LinkedHashSet<T> set = new LinkedHashSet<T>(a.length);
 		for (T e : a) {
 			set.add(e);
 		}
@@ -8709,7 +8709,7 @@ public abstract class Arrays {
 	 * @return a map
 	 */
 	@SafeVarargs
-	public static <T> Map<T, T> toMap(T... a) {
+	public static <T> HashMap<T, T> toMap(T... a) {
 		if (a == null) {
 			return null;
 		}
@@ -8718,7 +8718,7 @@ public abstract class Arrays {
 			throw new IllegalArgumentException("The length is incorrect: " + a.length);
 		}
 
-		Map<T, T> map = new HashMap<T, T>(a.length / 2);
+		HashMap<T, T> map = new HashMap<T, T>(a.length / 2);
 		for (int i = 0; i < a.length; i += 2) {
 			map.put(a[i], a[i + 1]);
 		}
