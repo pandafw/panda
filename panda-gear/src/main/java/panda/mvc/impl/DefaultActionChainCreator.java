@@ -1,5 +1,6 @@
 package panda.mvc.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,28 +29,32 @@ import panda.mvc.processor.ViewProcessor;
 @IocBean(type=ActionChainCreator.class, create="initialize")
 public class DefaultActionChainCreator implements ActionChainCreator {
 
-	private static final String DEFAULT_CHAIN = "default";
+	protected static final String DEFAULT_CHAIN = "default";
 	
 	@IocInject(value=MvcConstants.MVC_CHAINS, required=false)
 	protected Map<String, List<String>> map;
 
+	protected ArrayList<String> defaultChain() {
+		return Arrays.toList(
+			IocValue.TYPE_REF + FatalProcessor.class.getName(),
+			IocValue.TYPE_REF + RedirectProcessor.class.getName(),
+			IocValue.TYPE_REF + LocaleProcessor.class.getName(),
+			IocValue.TYPE_REF + LayoutProcessor.class.getName(),
+			IocValue.TYPE_REF + AdaptProcessor.class.getName(),
+			IocValue.TYPE_REF + PrepareProcessor.class.getName(),
+			IocValue.TYPE_REF + ValidateProcessor.class.getName(),
+			IocValue.TYPE_REF + InvokeProcessor.class.getName(),
+			IocValue.TYPE_REF + ViewProcessor.class.getName()
+		);
+	}
+	
 	public void initialize() {
 		if (Collections.isEmpty(map)) {
 			map = new HashMap<String, List<String>>();
 		}
 		if (!map.containsKey(DEFAULT_CHAIN)) {
-			List<String> defs = Arrays.toList(
-				IocValue.TYPE_REF + FatalProcessor.class.getName(),
-				IocValue.TYPE_REF + RedirectProcessor.class.getName(),
-				IocValue.TYPE_REF + LocaleProcessor.class.getName(),
-				IocValue.TYPE_REF + LayoutProcessor.class.getName(),
-				IocValue.TYPE_REF + AdaptProcessor.class.getName(),
-				IocValue.TYPE_REF + PrepareProcessor.class.getName(),
-				IocValue.TYPE_REF + ValidateProcessor.class.getName(),
-				IocValue.TYPE_REF + InvokeProcessor.class.getName(),
-				IocValue.TYPE_REF + ViewProcessor.class.getName()
-			);
-			map.put(DEFAULT_CHAIN, defs);
+			List<String> chain = defaultChain();
+			map.put(DEFAULT_CHAIN, chain);
 		}
 	}
 

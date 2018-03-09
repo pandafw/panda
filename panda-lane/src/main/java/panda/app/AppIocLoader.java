@@ -43,6 +43,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 				MvcDaoFilePool.class,
 				AppAuthenticator.class,
 				UserAuthenticateProcessor.class,
+				AppActionChainCreator.class,
 				AppActionAssist.class,
 				AppActionConsts.class,
 				AppResourceBundleLoader.class,

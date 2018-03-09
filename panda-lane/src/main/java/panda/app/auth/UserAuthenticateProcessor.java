@@ -5,6 +5,7 @@ import panda.app.constant.RES;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
+import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
 import panda.mvc.View;
@@ -16,7 +17,7 @@ import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 
-@IocBean
+@IocBean(create="initialize")
 public class UserAuthenticateProcessor extends AbstractProcessor {
 	@IocInject(value=MVC.AUTH_UNLOGIN_VIEW, required=false)
 	private String unloginView;
@@ -29,6 +30,15 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 	
 	@IocInject(value=MVC.AUTH_UNSECURE_URL, required=false)
 	private String unsecureUrl;
+
+	@IocInject(required=false)
+	private UserAuthenticator authenticator;
+
+	public void initialize() {
+		if (authenticator == null) {
+			Logs.getLog(getClass()).info("User authentication is disabled for undefined UserAuthenticator.");
+		}
+	}
 	
 	/**
 	 * add error to action
@@ -64,8 +74,12 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 	
 	@Override
 	public void process(ActionContext ac) {
-		UserAuthenticator aa = ac.getIoc().get(UserAuthenticator.class);
-		int r = aa.authenticate(ac);
+		if (authenticator == null) {
+			doNext(ac);
+			return;
+		}
+		
+		int r = authenticator.authenticate(ac);
 		if (r <= UserAuthenticator.OK) {
 			doNext(ac);
 			return;
