@@ -8,16 +8,16 @@ import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
 import panda.dao.entity.annotation.Indexes;
 import panda.lang.Objects;
-import panda.mvc.Validators;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
+import panda.mvc.validator.Validators;
 
 @Indexes({
 	@Index(name="CLCN", fields={ "clazz", "language", "country", "name" }, unique=true)
 })
 public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -919113096L;
+	private static final long serialVersionUID = -790322476L;
 
 	/**
 	 * Constructor

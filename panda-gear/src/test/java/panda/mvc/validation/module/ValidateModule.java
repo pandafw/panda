@@ -1,6 +1,5 @@
 package panda.mvc.validation.module;
 
-import panda.mvc.Validators;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.IocBy;
@@ -10,6 +9,7 @@ import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.ioc.provider.ComboIocProvider;
+import panda.mvc.validator.Validators;
 
 @At
 @To(value=View.RAW, error=View.JSON, fatal=View.JSON)

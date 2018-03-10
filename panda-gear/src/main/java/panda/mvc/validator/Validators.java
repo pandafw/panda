@@ -1,6 +1,10 @@
-package panda.mvc;
+package panda.mvc.validator;
 
-public interface Validators {
+import panda.mvc.ActionContext;
+import panda.mvc.ValidateHandler;
+import panda.mvc.impl.DefaultValidateHandler;
+
+public class Validators {
 	// -------------------------------------------------------
 	// validator name
 	//
@@ -71,4 +75,39 @@ public interface Validators {
 	public static final String MSGID_PASSWORD_NOT_SAME = "validation-password-notsame";
 	public static final String MSGID_PASSWORD_INCORRECT = "validation-password-incorrect";
 	
+
+	/**
+	 * create validate handler
+	 * @param context action context
+	 * @return validate handler instance
+	 */
+	public static ValidateHandler getValidateHandler(ActionContext context) {
+		ValidateHandler vh = context.getIoc().getIfExists(ValidateHandler.class);
+		if (vh == null) {
+			vh = new DefaultValidateHandler();
+		}
+		return vh;
+	}
+
+	/**
+	 * Use validators to validate object
+	 * @param context action context
+	 * @param value validate value
+	 * @return true if no validation error
+	 */
+	public static boolean validate(ActionContext context, Object value) {
+		return validate(context, value, "");
+	}
+
+	/**
+	 * Use validate handler to validate object
+	 * @param context action context
+	 * @param value validate value
+	 * @param name object name
+	 * @return true if no validation error
+	 */
+	public static boolean validate(ActionContext context, Object value, String name) {
+		ValidateHandler vh = getValidateHandler(context);
+		return vh.validate(context, name, value);
+	}
 }

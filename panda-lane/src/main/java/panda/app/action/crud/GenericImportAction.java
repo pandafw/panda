@@ -39,6 +39,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
+import panda.mvc.validator.Validators;
 import panda.mvc.view.util.Escapes;
 import panda.vfs.FileItem;
 
@@ -575,7 +576,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 */
 	protected void validateData(T data) {
-		if (Mvcs.validate(getContext(), data)) {
+		if (Validators.validate(getContext(), data)) {
 			return;
 		}
 

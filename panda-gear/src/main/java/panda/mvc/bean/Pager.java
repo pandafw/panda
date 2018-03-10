@@ -3,9 +3,9 @@ package panda.mvc.bean;
 import java.io.Serializable;
 
 import panda.lang.Objects;
-import panda.mvc.Validators;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
+import panda.mvc.validator.Validators;
 
 /**
  * Pager bean object

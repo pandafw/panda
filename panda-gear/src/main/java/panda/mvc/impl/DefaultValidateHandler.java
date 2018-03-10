@@ -7,8 +7,8 @@ import panda.mvc.ActionContext;
 import panda.mvc.ValidateHandler;
 import panda.mvc.Validator;
 import panda.mvc.ValidatorCreator;
-import panda.mvc.Validators;
 import panda.mvc.annotation.Validate;
+import panda.mvc.validator.Validators;
 
 @IocBean(type=ValidateHandler.class)
 public class DefaultValidateHandler implements ValidateHandler {

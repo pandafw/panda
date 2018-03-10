@@ -5,9 +5,9 @@ import java.io.Serializable;
 import panda.lang.Objects;
 import panda.lang.Order;
 import panda.lang.Strings;
-import panda.mvc.Validators;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
+import panda.mvc.validator.Validators;
 
 
 /**

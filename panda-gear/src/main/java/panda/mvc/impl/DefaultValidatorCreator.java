@@ -20,7 +20,6 @@ import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
 import panda.mvc.Validator;
 import panda.mvc.ValidatorCreator;
-import panda.mvc.Validators;
 import panda.mvc.annotation.Validate;
 import panda.mvc.validator.BinaryValidator;
 import panda.mvc.validator.CIDRValidator;
@@ -42,10 +41,11 @@ import panda.mvc.validator.RegexValidator;
 import panda.mvc.validator.RequiredValidator;
 import panda.mvc.validator.StringValidator;
 import panda.mvc.validator.URLValidator;
+import panda.mvc.validator.Validators;
 import panda.mvc.validator.VisitValidator;
 
 @IocBean(type=ValidatorCreator.class, create="initialize")
-public class DefaultValidatorCreator implements ValidatorCreator, Validators {
+public class DefaultValidatorCreator implements ValidatorCreator {
 	// -------------------------------------------------------
 	@IocInject
 	private Ioc ioc;
@@ -67,27 +67,27 @@ public class DefaultValidatorCreator implements ValidatorCreator, Validators {
 			aliass = new HashMap<String, String>();
 		}
 		
-		addValidator(CAST, CastErrorValidator.class);
-		addValidator(REQUIRED, RequiredValidator.class);
-		addValidator(EMPTY, EmptyValidator.class);
-		addValidator(EL, ElValidator.class);
-		addValidator(REGEX, RegexValidator.class);
-		addValidator(EMAIL, EmailValidator.class);
-		addValidator(IMAIL, ImailValidator.class);
-		addValidator(FILENAME, FilenameValidator.class);
-		addValidator(CREDITCARDNO, CreditCardNoValidator.class);
-		addValidator(BINARY, BinaryValidator.class);
-		addValidator(CIDR, CIDRValidator.class);
-		addValidator(DATE, DateValidator.class);
-		addValidator(NUMBER, NumberValidator.class);
-		addValidator(STRING, StringValidator.class);
-		addValidator(DECIMAL, DecimalValidator.class);
-		addValidator(FILE, FileValidator.class);
-		addValidator(IMAGE, ImageValidator.class);
-		addValidator(CONSTANT, ConstantValidator.class);
-		addValidator(PROHIBITED, ProhibitedValidator.class);
-		addValidator(URL, URLValidator.class);
-		addValidator(VISIT, VisitValidator.class);
+		addValidator(Validators.CAST, CastErrorValidator.class);
+		addValidator(Validators.REQUIRED, RequiredValidator.class);
+		addValidator(Validators.EMPTY, EmptyValidator.class);
+		addValidator(Validators.EL, ElValidator.class);
+		addValidator(Validators.REGEX, RegexValidator.class);
+		addValidator(Validators.EMAIL, EmailValidator.class);
+		addValidator(Validators.IMAIL, ImailValidator.class);
+		addValidator(Validators.FILENAME, FilenameValidator.class);
+		addValidator(Validators.CREDITCARDNO, CreditCardNoValidator.class);
+		addValidator(Validators.BINARY, BinaryValidator.class);
+		addValidator(Validators.CIDR, CIDRValidator.class);
+		addValidator(Validators.DATE, DateValidator.class);
+		addValidator(Validators.NUMBER, NumberValidator.class);
+		addValidator(Validators.STRING, StringValidator.class);
+		addValidator(Validators.DECIMAL, DecimalValidator.class);
+		addValidator(Validators.FILE, FileValidator.class);
+		addValidator(Validators.IMAGE, ImageValidator.class);
+		addValidator(Validators.CONSTANT, ConstantValidator.class);
+		addValidator(Validators.PROHIBITED, ProhibitedValidator.class);
+		addValidator(Validators.URL, URLValidator.class);
+		addValidator(Validators.VISIT, VisitValidator.class);
 
 		// check validators
 		for (String a : aliass.values()) {

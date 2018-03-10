@@ -7,20 +7,20 @@ import panda.bind.json.Jsons;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Arrays;
 import panda.mvc.ActionContext;
-import panda.mvc.Mvcs;
 import panda.mvc.ValidateException;
 import panda.mvc.ValidateHandler;
 import panda.mvc.View;
 import panda.mvc.adaptor.DefaultParamAdaptor;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 
 @IocBean
 public class ValidateProcessor extends AbstractProcessor {
 	@Override
 	public void process(ActionContext ac) {
-		ValidateHandler vh = Mvcs.getValidateHandler(ac);
+		ValidateHandler vh = Validators.getValidateHandler(ac);
 
 		if (validate(ac, vh)) {
 			doNext(ac);

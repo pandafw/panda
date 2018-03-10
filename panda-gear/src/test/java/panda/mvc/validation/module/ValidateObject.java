@@ -2,9 +2,9 @@ package panda.mvc.validation.module;
 
 import java.util.Date;
 
-import panda.mvc.Validators;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
+import panda.mvc.validator.Validators;
 
 public class ValidateObject {
 	@Validates(@Validate(value=Validators.BINARY, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"))

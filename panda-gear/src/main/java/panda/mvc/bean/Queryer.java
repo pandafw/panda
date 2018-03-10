@@ -6,9 +6,9 @@ import java.util.Map;
 
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.mvc.Validators;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
+import panda.mvc.validator.Validators;
 
 /**
  * Query bean object

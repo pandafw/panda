@@ -4,13 +4,13 @@ import panda.app.action.crud.GenericEditAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.entity.Resource;
-import panda.mvc.Validators;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.validator.Validators;
 
 @At("${super_path}/resource")
 @Auth(AUTH.SUPER)

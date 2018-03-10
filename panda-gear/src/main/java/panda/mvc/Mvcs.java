@@ -23,11 +23,10 @@ import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.mvc.impl.DefaultValidateHandler;
 import panda.mvc.util.TextProvider;
 
 /**
- * Mvc helper methods
+ * Mvc helper class
  */
 public abstract class Mvcs {
 	public static final String PANDA_CDN = "//pandafw.github.io/repos";
@@ -531,41 +530,6 @@ public abstract class Mvcs {
 			v = cm.get(k.toString());
 		}
 		return (v == null ? Strings.EMPTY : v.toString());
-	}
-
-	/**
-	 * create validate handler
-	 * @param context action context
-	 * @return validate handler instance
-	 */
-	public static ValidateHandler getValidateHandler(ActionContext context) {
-		ValidateHandler vh = context.getIoc().getIfExists(ValidateHandler.class);
-		if (vh == null) {
-			vh = new DefaultValidateHandler();
-		}
-		return vh;
-	}
-
-	/**
-	 * Use validators to validate object
-	 * @param context action context
-	 * @param value validate value
-	 * @return true if no validation error
-	 */
-	public static boolean validate(ActionContext context, Object value) {
-		return validate(context, value, "");
-	}
-
-	/**
-	 * Use validate handler to validate object
-	 * @param context action context
-	 * @param value validate value
-	 * @param name object name
-	 * @return true if no validation error
-	 */
-	public static boolean validate(ActionContext context, Object value, String name) {
-		ValidateHandler vh = getValidateHandler(context);
-		return vh.validate(context, name, value);
 	}
 }
 
