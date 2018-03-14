@@ -148,13 +148,23 @@ uploader-text-download=Download
 #-----------------------------------------------------------------------------
 # servlet error
 #-----------------------------------------------------------------------------
-servlet-error-title-404=Page Not Found.
-servlet-error-title-403=Page Forbiddened.
-servlet-error-title-500=Internal Server Error.
-servlet-error-title-503=Service Unavailable.
+servlet-error-title-400=Bad Request
+servlet-error-title-401=Unauthorized
+servlet-error-title-403=Page Forbidden
+servlet-error-title-404=Page Not Found
+servlet-error-title-405=Method Not Allowed
+servlet-error-title-500=Internal Server Error
+servlet-error-title-501=Not Implemented
+servlet-error-title-502=Bad Gateway
+servlet-error-title-503=Service Unavailable
+servlet-error-message-400=The request is not valid.
+servlet-error-message-401=Access is denied due to invalid credentials.
+servlet-error-message-403=Access is denied due to invalid permission.
 servlet-error-message-404=The server has not found anything matching the Request-URI.
-servlet-error-message-403=The Request-URI is not allowed to access.
-servlet-error-message-500=The server encountered an unexpected condition which prevented it from fulfilling the request.
+servlet-error-message-405=The requested method is not allowed.
+servlet-error-message-500=The server encountered an internal error and was unable to complete your request.
+servlet-error-message-501=The server does not support the requested action.
+servlet-error-message-502=The proxy server received an invalid response from an upstream server.
 servlet-error-message-503=The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.
 servlet-error-request-url=Request: <span class="request-url">${top}</span>
 servlet-error-exception=Exception:

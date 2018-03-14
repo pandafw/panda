@@ -74,15 +74,25 @@ uploader-text-download=ダウンロード
 #-----------------------------------------------------------------------------
 # servlet error
 #-----------------------------------------------------------------------------
+servlet-error-title-400=不正リクエスト
+servlet-error-title-401=資格がありません
+servlet-error-title-403=権限がありません
 servlet-error-title-404=ページ表示エラー
-servlet-error-title-403=ページアクセスエラー
-servlet-error-title-500=サーバー内部処理エラー
-servlet-error-title-503=サーバー過負荷
+servlet-error-title-405=許可されていないメソッド
+servlet-error-title-500=サーバー内部エラー
+servlet-error-title-501=未実装
+servlet-error-title-502=ゲートウェイ不正
+servlet-error-title-503=サービス利用不可
+servlet-error-message-400=送信したリクエストが正しくありません。
+servlet-error-message-401=資格情報が無効であるため、アクセスが拒否されました。
+servlet-error-message-403=権限がないため、アクセスが拒否されました。
 servlet-error-message-404=該当ページが存在していません。
-servlet-error-message-403=該当ページにアクセスする権限がありません。
-servlet-error-message-500=サーバー内部処理エラーが発生しているため、該当ページが表示できません。
-servlet-error-message-503=サーバー過負荷のため、該当ページが表示できません。\n\
-しばらくお待ちしてから、再度アクセスしてください。
+servlet-error-message-405=要求したメソッドは、許可されていません。
+servlet-error-message-500=サーバ内部で障害が発生し、 リクエストに応えることができませんでした。
+servlet-error-message-501=要求したアクションは、サポートしていません。
+servlet-error-message-502=プロクシサーバは上流サーバから不正な応答を受信しました。
+servlet-error-message-503=メンテナンスで停止中か、サーバの処理能力の問題のため、現在リクエストに応じることができません。\n\
+後ほど再度お試し下さい。
 servlet-error-request-url=リクエスト: <span class="request-url">${top}</span>
 servlet-error-exception=例外情報:
 

@@ -67,13 +67,21 @@ uploader-text-download=下载
 #-----------------------------------------------------------------------------
 # servlet error
 #-----------------------------------------------------------------------------
-servlet-error-title-404=网页不存在
+servlet-error-title-401=未认证
 servlet-error-title-403=禁止访问
+servlet-error-title-404=网页不存在
+servlet-error-title-405=请求方法无效
 servlet-error-title-500=服务器内部错误发生,网页无法显示。
+servlet-error-title-501=不支持
+servlet-error-title-502=网关错误
 servlet-error-title-503=服务器超负荷,网页无法显示。
-servlet-error-message-404=指定的网页不存在。
+servlet-error-message-401=用户没有认证所以无法访问指定的网页。
 servlet-error-message-403=没有权限访问指定的网页。
+servlet-error-message-404=指定的网页不存在。
+servlet-error-message-405=服务器不支持当前请求的方法。
 servlet-error-message-500=服务器内部错误，无法显示指定的网页。
+servlet-error-message-501=服务器不支持当前请求所需要的某个功能。
+servlet-error-message-502=网关或者代理服务器尝试执行请求时，从上游服务器接收到无效的响应。
 servlet-error-message-503=服务器超负荷，无法显示指定的网页。\n\
 请稍稍等待片刻之后重新访问网站。
 servlet-error-request-url=请求网页: <span class="request-url">${top}</span>
