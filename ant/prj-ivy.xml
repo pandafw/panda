@@ -2,6 +2,12 @@
 <project name="prj-ivy" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<property name="repo.local" location="${prj.repo}"/>
 
+	<!-- usage -->
+	<property name="usage-ivy" value="
+&#10;ivy-resolve      --&gt; Retrieve dependencies
+&#10;ivy-report       --&gt; Generates a report of dependencies
+"/>
+
 	<!-- ivy -->
 	<target name="ivy-resolve" description="ivy resolve dependencies">
 		<delete includeEmptyDirs="true" failonerror="false">

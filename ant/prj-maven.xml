@@ -2,6 +2,14 @@
 <project name="prj-maven" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<property name="out.dir" value="out"/>
 
+	<!-- usage -->
+	<property name="usage-mvn" value="
+&#10;mvn-pom          --&gt; Generate pom.xml
+&#10;mvn-local-deploy --&gt; Deploy release version to local maven repository
+&#10;mvn-oss-deploy   --&gt; Deploy snapshot version to maven snapshot repository
+&#10;mvn-oss-stage    --&gt; Deploy release version to maven staging repository
+"/>
+
 	<!-- set project property -->
 	<property name="prj.type" value="jar"/>
 	<property name="prj.license" value="Apache 2.0"/>

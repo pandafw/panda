@@ -4,6 +4,19 @@
 	<property name="out.dir" value="out"/>
 	<property name="javac.debug" value="true"/>
 
+	<!-- usage -->
+	<property name="usage-test" value="
+&#10;test             --&gt; Test the project (test-build, test-run, test-report)
+&#10;test-build       --&gt; Build the test suite of project (test-clean, test-rescp, test-emma, test-javac)
+&#10;test-clean       --&gt; Delete test output files in the output directory
+&#10;test-emma        --&gt; EMMA instruments main classes
+&#10;test-javac       --&gt; Compile test java source files
+&#10;test-javadoc     --&gt; Generate test java documents
+&#10;test-report      --&gt; Build the test report
+&#10;test-rescp       --&gt; Copy test resource to the test classes directory
+&#10;test-run         --&gt; Run all junit test case
+"/>
+
 	<target name="test"
 		depends="test-build, test-emma, test-run, test-report"
 		description="Test the project (test-build, test-emma, test-run, test-report)"/>

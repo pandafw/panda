@@ -3,15 +3,12 @@
 	<!-- version -->
 	<import file="panda-version.xml"/>
 
-	<!-- usage -->
-	<import file="prj-usage.xml"/>
-
 	<!-- ivy -->
 	<import file="prj-ivy.xml"/>
 
 	<!-- build -->
 	<import file="prj-build.xml"/>
-	<target name="build" depends="clean, cp-res, n2a, javac, javadoc" description="Build the project"/>
+	<target name="build" depends="clean, cpres, n2a, javac, javadoc" description="Build the project"/>
 	<target name="dist" depends="jardoc, jarsrc, jar" description="Distribute project to jar files"/>
 
 	<!-- test -->
@@ -19,6 +16,14 @@
 
 	<!-- maven -->
 	<import file="prj-maven.xml"/>
+
+	<!-- usage -->
+	<property name="usage-main" value="
+&#10;build            --&gt; Build the project (clean, cpres, n2a, javac, javadoc)
+&#10;dist             --&gt; Distribute project to jar files (jardoc, jarsrc, jar)
+&#10;release          --&gt; Release the project (ivy-resolve, build, dist, mvn-local-deploy)
+"/>
+	<import file="prj-usage.xml"/>
 
 	<!-- release -->
 	<target name="release" description="Release the project">

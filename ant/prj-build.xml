@@ -33,12 +33,24 @@
 		</fileset>
 	</path>
 
+	<!-- usage -->
+	<property name="usage-build" value="
+&#10;clean            --&gt; Delete everything in the output directory
+&#10;n2a              --&gt; Convert native properties to ascii properties
+&#10;cpres            --&gt; Copy resource files to the classes directory
+&#10;javac            --&gt; Compile java source files
+&#10;javadoc          --&gt; Generate java documents
+&#10;jardoc           --&gt; Compress java documents to a jar file
+&#10;jarsrc           --&gt; Compress source files to a jar file
+&#10;jar              --&gt; Compress compiled output files to a jar file
+"/>
+
 	<!-- build -->
 	<target name="clean" description="Delete everything in the output directory">
 		<delete dir="${out.dir}"/>
 	</target>
 
-	<target name="cp-res" description="Copy resource files to the classes directory">
+	<target name="cpres" description="Copy resource files to the classes directory">
 		<mkdir dir="${out.dir}/classes"/>
 		<delete>
 			<fileset dir="${out.dir}/classes">

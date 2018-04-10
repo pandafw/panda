@@ -23,11 +23,12 @@
 
 	<!-- usage -->
 	<property name="usage-codegen" value="
-&#10;gen-all           --&gt; Generate all source files (gen-clean, gen-java, gen-ftl, gen-res)
-&#10;gen-clean         --&gt; Delete all generated files
-&#10;gen-ftl           --&gt; Generate freemarker source files
-&#10;gen-java          --&gt; Generate java source files
-&#10;gen-res           --&gt; Generate resource bundle source files"/>
+&#10;gen-all          --&gt; Generate all source files (gen-clean, gen-java, gen-ftl, gen-res)
+&#10;gen-clean        --&gt; Delete all generated files
+&#10;gen-ftl          --&gt; Generate freemarker source files
+&#10;gen-java         --&gt; Generate java source files
+&#10;gen-res          --&gt; Generate resource bundle source files
+&#10;"/>
 
 	<!-- code generate -->
 	<target name="gen-clean" description="Delete all generated files">
