@@ -1,12 +1,15 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>com.github.pandafw</groupId>
 	<artifactId>panda-gear</artifactId>
-	<packaging>jar</packaging>
-	<name>Panda Gear Web Framework</name>
 	<version>1.2.0</version>
+	<packaging>jar</packaging>
+
+	<name>Panda Gear Web Framework</name>
 	<description>Panda Gear for Web Application Development</description>
 	<url>https://github.com/pandafw/panda/tree/master/panda-gear</url>
+
 	<licenses>
 		<license>
 			<name>Apache 2.0</name>
@@ -14,11 +17,13 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
 	<scm>
 		<connection>scm:git:git@github.com:pandafw/panda.git</connection>
 		<developerConnection>scm:git:git@github.com:pandafw/panda.git</developerConnection>
 		<url>git@github.com:pandafw/panda.git</url>
 	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.github.pandafw</groupId>
@@ -26,6 +31,7 @@
 			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
+
 	<developers>
 		<developer>
 			<id>yf.frank.wang</id>
@@ -33,6 +39,7 @@
 			<email>yf.frank.wang@outlook.com</email>
 		</developer>
 	</developers>
+
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>

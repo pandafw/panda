@@ -1,12 +1,15 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>com.github.pandafw</groupId>
 	<artifactId>panda-tool</artifactId>
-	<packaging>jar</packaging>
-	<name>Panda Java Tools</name>
 	<version>1.2.0</version>
+	<packaging>jar</packaging>
+
+	<name>Panda Java Tools</name>
 	<description>Panda Java Tools</description>
 	<url>https://github.com/pandafw/panda/tree/master/panda-tool</url>
+
 	<licenses>
 		<license>
 			<name>Apache 2.0</name>
@@ -14,11 +17,13 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
 	<scm>
 		<connection>scm:git:git@github.com:pandafw/panda.git</connection>
 		<developerConnection>scm:git:git@github.com:pandafw/panda.git</developerConnection>
 		<url>git@github.com:pandafw/panda.git</url>
 	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.github.pandafw</groupId>
@@ -31,6 +36,7 @@
 			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
+
 	<developers>
 		<developer>
 			<id>yf.frank.wang</id>
@@ -38,6 +44,7 @@
 			<email>yf.frank.wang@outlook.com</email>
 		</developer>
 	</developers>
+
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
