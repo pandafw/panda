@@ -60,6 +60,10 @@ public class MimeTypes {
 		aliases.put("jpeg", IMG_JPEG);
 		aliases.put("png", IMG_PNG);
 		aliases.put("webp", IMG_WEBP);
+		aliases.put("csv", TEXT_CSV);
+		aliases.put("tsv", TEXT_TSV);
+		aliases.put("xls", APP_XLS);
+		aliases.put("xlsx", APP_XLSX);
 	}
 
 	/**
