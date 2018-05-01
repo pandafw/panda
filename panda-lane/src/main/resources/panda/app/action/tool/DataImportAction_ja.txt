@@ -4,8 +4,8 @@ p.target=インポート先
 p.file=データファイル
 deleteAll=既存データを削除する
 
-success-import=テーブル[${top.target}]に${top.count}件のデータをインポートしました。
+success-import=${top.target}: ${top.count}件のデータをインポートしました。
 
-error-value=[${top.target}]データ不正(${top.row}, ${top.col}): ${top.value} - ${top.error}
+error-value=${top.target}: データ不正(${top.row}, ${top.col}): ${top.value} - ${top.error}
 
 error-file-format=CSV, TSV, XLSまたはXLSXファイルを指定してください。

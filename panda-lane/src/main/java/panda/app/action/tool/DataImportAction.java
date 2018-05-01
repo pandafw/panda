@@ -6,11 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -24,8 +24,9 @@ import panda.app.constant.AUTH;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.Jsons;
-import panda.cast.Castors;
 import panda.dao.Dao;
+import panda.dao.entity.Entity;
+import panda.dao.entity.EntityField;
 import panda.io.FileNames;
 import panda.io.FileTypes;
 import panda.io.Streams;
@@ -39,6 +40,7 @@ import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.reflect.Types;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.View;
@@ -53,22 +55,6 @@ import panda.vfs.FileItem;
 @Auth(AUTH.SUPER)
 @To(View.SFTL)
 public class DataImportAction extends AbstractAction {
-	protected static class DataType {
-		String type;
-		String format;
-		
-		public DataType(String type) {
-			int i = type.indexOf(':');
-			if (i >= 0) {
-				this.type = type.substring(0, i);
-				this.format = type.substring(i + 1);
-			}
-			else {
-				this.type = type;
-			}
-		}
-	}
-	
 	public static class Arg {
 		public boolean deleteAll = false;
 		public String target;
@@ -76,6 +62,7 @@ public class DataImportAction extends AbstractAction {
 		public FileItem file;
 		public int commitSize = 1000;
 		public int count;
+
 		public String getEncoding() {
 			return encoding;
 		}
@@ -85,20 +72,20 @@ public class DataImportAction extends AbstractAction {
 	}
 
 	protected Arg arg;
-	protected Set<String> targetSet;
+	protected Set<String> targets;
 	protected List tableList = new ArrayList();
 	
 	/**
 	 * @return the targetSet
 	 */
-	public Set<String> getTargetSet() {
-		if (targetSet == null) {
-			targetSet = new TreeSet<String>();
+	public Set<String> getTargets() {
+		if (targets == null) {
+			targets = new TreeSet<String>();
 			for (Class<?> c : getDaoClient().getEntities().keySet()) {
-				targetSet.add(c.getName());
+				targets.add(c.getName());
 			}
 		}
-		return targetSet;
+		return targets;
 	}
 
 	/**
@@ -167,28 +154,6 @@ public class DataImportAction extends AbstractAction {
 			}
 		}
 		return tableList;
-	}
-
-	protected Object getCellValue(Object v, int c, List<DataType> types) throws Exception {
-		if (v == null) {
-			return v;
-		}
-
-		Object cv = null;
-		String type = types.get(c).type;
-		if ("list".equalsIgnoreCase(type)) {
-			cv = Jsons.fromJson(v.toString(), ArrayList.class);
-		}
-		else if ("set".equalsIgnoreCase(type)) {
-			cv = Jsons.fromJson(v.toString(), LinkedHashSet.class);
-		}
-		else if ("map".equalsIgnoreCase(type)) {
-			cv = Jsons.fromJson(v.toString(), LinkedHashMap.class);
-		}
-		else {
-			cv = v;
-		}
-		return cv;
 	}
 
 	protected void logException(String method, Throwable e) {
@@ -264,11 +229,35 @@ public class DataImportAction extends AbstractAction {
 		return values;
 	}
 	
+	protected Entity<?> resolveTargetEntity(String target) {
+		for (Entry<Class<?>, Entity<?>> en : getDaoClient().getEntities().entrySet()) {
+			if (en.getKey().getName().equalsIgnoreCase(target)) {
+				return en.getValue();
+			}
+		}
+
+		for (Entry<Class<?>, Entity<?>> en : getDaoClient().getEntities().entrySet()) {
+			if (en.getKey().getSimpleName().equalsIgnoreCase(target)) {
+				return en.getValue();
+			}
+		}
+
+		Class<?> cls = Classes.findClass(target);
+		if (cls != null) {
+			Entity<?> en = getDaoClient().getEntity(cls);
+			if (en != null) {
+				return en;
+			}
+		}
+
+		throw new IllegalArgumentException("Invalid target type: " + target);
+	}
+
 	protected Class<?> resolveTargetType(String target) {
 		Class<?> cls = Classes.findClass(target);
 		if (cls == null) {
 			for (Class<?> c : getDaoClient().getEntities().keySet()) {
-				if (c.getSimpleName().equalsIgnoreCase(target)) {
+				if (c.getName().equalsIgnoreCase(target) || c.getSimpleName().equalsIgnoreCase(target) ) {
 					return c;
 				}
 			}
@@ -300,7 +289,8 @@ public class DataImportAction extends AbstractAction {
 		final List table = new ArrayList();
 		
 		table.add(arg.target);
-		final Class<?> targetType = resolveTargetType(arg.target);
+
+		final Entity<?> en = resolveTargetEntity(arg.target);
 
 		final List<?> columns = sheet.readList();
 		if (columns == null || columns.isEmpty()) {
@@ -308,23 +298,11 @@ public class DataImportAction extends AbstractAction {
 		}
 		table.add(columns);
 
-		checkColumns(targetType, columns);
+		checkColumns(en.getType(), columns);
 		
-		List<?> row2 = sheet.readList();
-		if (row2 == null || row2.size() != columns.size()) {
-			throw new Exception("[" + arg.file.getName() + "] - the column types is incorrect!");
-		}
-		table.add(row2);
-		
-		final List<DataType> types = new ArrayList<DataType>();
-		for (Object v : row2) {
-			String c = v == null ? "" : v.toString();
-			types.add(new DataType(c));
-		}
-
 		final Dao dao = getDaoClient().getDao();
 		if (arg.deleteAll) {
-			dao.deletes(targetType);
+			dao.deletes(en);
 		}
 
 		dao.exec(new Runnable() {
@@ -332,7 +310,7 @@ public class DataImportAction extends AbstractAction {
 			public void run() {
 				int cnt = 0;
 				for (int i = 3; ; i++) {
-					Map<String, Object> values = getRowValues(sheet, i, columns, types, table);
+					Map<String, Object> values = getRowValues(en, sheet, i, columns, table);
 					if (values == null) {
 						break;
 					}
@@ -340,7 +318,11 @@ public class DataImportAction extends AbstractAction {
 						continue;
 					}
 
-					saveRow(dao, targetType, values);
+					Object data = castData(values, en.getType());
+					
+					trimData(data);
+
+					saveData(dao, data);
 
 					cnt++;
 					if (cnt % arg.commitSize == 0) {
@@ -361,8 +343,7 @@ public class DataImportAction extends AbstractAction {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Map<String, Object> getRowValues(ListReader<?> sheet, int r,
-			List<?> columns, List<DataType> types, List uploadData) {
+	protected Map<String, Object> getRowValues(Entity<?> entity, ListReader<?> sheet, int r, List<?> columns, List uploadData) {
 		try {
 			List row = sheet.readList();
 			if (row == null) {
@@ -378,10 +359,15 @@ public class DataImportAction extends AbstractAction {
 				}
 				if (v != null) {
 					try {
-						Object cv = getCellValue(v, c, types);
+						Object o = v;
 						Object ch = columns.get(c);
-						String sh = ch == null ? null : ch.toString();
-						values.put(sh, cv);
+						String sh = Strings.defaultString(ch);
+
+						EntityField ef = entity.getField(sh);
+						if (Collection.class.isAssignableFrom(Types.getRawType(ef.getType()))) {
+							o = Jsons.fromJson(v.toString());
+						}
+						values.put(sh, o);
 					}
 					catch (Exception e) {
 						String msg = getError(arg.target, r, c + 1, v, e);
@@ -390,7 +376,7 @@ public class DataImportAction extends AbstractAction {
 					
 					// convert to string for view
 					if (!(v instanceof CharSequence)) {
-						String sv = Castors.scast(v, String.class);
+						String sv = Mvcs.castString(getContext(), v);
 						row.set(c, sv);
 					}
 				}
@@ -427,13 +413,15 @@ public class DataImportAction extends AbstractAction {
 		return new CsvReader(new InputStreamReader(bis, cs), separator);
 	}
 
+	protected Object castData(Object values, Class<?> type) {
+		return Mvcs.castValue(context, values, type);
+	}
+
 	protected void trimData(Object data) {
 		assist().initCommonFields(data);
 	}
 
-	protected void saveRow(Dao dao, Class targetType, Object row) {
-		Object data = Mvcs.castValue(context, row, targetType);
-		trimData(data);
+	protected void saveData(Dao dao, Object data) {
 		if (arg.deleteAll) {
 			dao.insert(data);
 		}

@@ -6,8 +6,8 @@ p.target=Target
 p.file=File
 deleteAll=Delete data before import
 
-success-import=The data (${top.count} items) is successfully imported to [${top.target}].
+success-import=${top.target}: ${top.count} items successfully imported.
 
-error-value=[${top.target}] Incorrect data(${top.row}, ${top.col}): ${top.value} - ${top.error}
+error-value=${top.target}: Incorrect data(${top.row}, ${top.col}): ${top.value} - ${top.error}
 
 error-file-format=Please select a CSV, TSV, XLS or XLSX file.

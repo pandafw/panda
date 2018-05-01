@@ -12,7 +12,7 @@
 	<#include "/action-alert.ftl"/>
 
 	<@p.form id="dataimp" method="post" enctype="multipart/form-data" theme="bs3h">
-		<@p.select key="target" list="%{action.targetSet}"/>
+		<@p.select key="target" list="%{action.targets}"/>
 		<@p.file
 			key="file"
 			value=""
@@ -42,21 +42,17 @@
 	<hr/>
 	<#list result as t>
 	<div class="panel panel-success">
-		<div class="panel-heading">&lt;&lt;${t[0]}&gt;&gt; (${(t?size - 3)?c})</div>
+		<div class="panel-heading">&lt;&lt;${t[0]}&gt;&gt; (${(t?size - 2)?c})</div>
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-nowrap">
-				<#list t as row>
-					<#if row_index == 0>
-					<#elseif row_index < 3>
-						<#if row_index == 1><thead></#if>
-						<tr><th>##</th><#list row as _h><th>${assist.escapePhtml(_h!"")}</th></#list></tr>
-						<#if row_index == 2></thead></#if>
-					<#else>
-						<#if row_index == 3><tbody></#if>
-						<tr><th>${(row_index - 2)?c}</th><#list row as _v><td>${assist.escapePhtml(_v!"")}</td></#list></tr>
-						<#if !row_has_next></tbody></#if>
-					</#if>
-				</#list>
+			<thead>
+				<tr><th>##</th><#list t[1] as h><th>${assist.escapePhtml(h!"")}</th></#list></tr>
+			</thead>
+			<tbody>
+			<#list t as r><#if r_index gt 1>
+				<tr><th>${(r_index - 1)?c}</th><#list r as v><td>${assist.escapePhtml(v!"")}</td></#list></tr>
+			</#if></#list>
+			<tbody>
 			</table>
 		</div>
 	</div>

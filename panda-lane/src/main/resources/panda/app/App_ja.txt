@@ -54,6 +54,7 @@ navi-super-property=プロパティ
 navi-super-resource=リソース
 navi-super-template=テンプレート
 navi-super-crons=Cronジョブ
+navi-super-dataexp=データエクスポート
 navi-super-dataimp=データインポート
 navi-super-html2pdf=HTML⇒PDF出力
 navi-super-filepool=ファイルプール
