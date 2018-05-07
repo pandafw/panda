@@ -606,6 +606,14 @@ public interface Dao {
 	/**
 	 * delete all records.
 	 * 
+	 * @param entity entity
+	 * @return deleted count
+	 */
+	int deletes(Entity<?> entity);
+
+	/**
+	 * delete all records.
+	 * 
 	 * @param table table name
 	 * @return deleted count
 	 */

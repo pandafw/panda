@@ -1174,6 +1174,17 @@ public abstract class AbstractDao implements Dao {
 	/**
 	 * delete all records.
 	 * 
+	 * @param entity entity
+	 * @return deleted count
+	 */
+	@Override
+	public int deletes(Entity<?> entity) {
+		return deletesByQuery(createQuery(entity));
+	}
+
+	/**
+	 * delete all records.
+	 * 
 	 * @param table table name
 	 * @return deleted count
 	 */
