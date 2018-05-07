@@ -207,6 +207,17 @@ public class JsonDeserializer extends AbstractDeserializer {
 		return tokener.syntaxError(message);
 	}
 
+	@Override
+	protected <T> T convertValue(Object value, Type toType) {
+		try {
+			return super.convertValue(value, toType);
+		}
+		catch (Exception e) {
+			throw new JsonException("Failed convert value " + tokener.toString(), e);
+		}
+	}
+	
+	
 	private <T> T parseJsonObject(Type type) {
 		if (Object.class.equals(type)) {
 			type = defaultJsonObjectType;

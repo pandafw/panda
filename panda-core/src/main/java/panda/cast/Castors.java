@@ -24,6 +24,8 @@ import panda.cast.castor.FileItemCastor;
 import panda.cast.castor.IterableCastor;
 import panda.cast.castor.IteratorCastor;
 import panda.cast.castor.JavaBeanCastor;
+import panda.cast.castor.JsonArrayCastor;
+import panda.cast.castor.JsonObjectCastor;
 import panda.cast.castor.LocaleCastor;
 import panda.cast.castor.MapCastor;
 import panda.cast.castor.NumberTypeCastor;
@@ -154,6 +156,10 @@ public class Castors {
 		
 		register(new FileCastor());
 		register(new FileItemCastor());
+
+		register(new JsonArrayCastor());
+		register(new JsonObjectCastor());
+
 		register(new EmailAddressCastor());
 	}
 	

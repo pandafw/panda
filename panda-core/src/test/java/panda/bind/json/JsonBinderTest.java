@@ -209,7 +209,7 @@ public class JsonBinderTest {
 	}
 	
 	@Test
-	public void testMapList() {
+	public void testListMap() {
 		Map<String, List<Number>> m = new LinkedHashMap<String, List<Number>>();
 		List<Number> l0 = new ArrayList<Number>();
 		m.put("0", l0);
@@ -231,6 +231,31 @@ public class JsonBinderTest {
 			s, new TypeToken<Map<String, List<Number>>>() {}.getType());
 		
 		Assert.assertTrue(Objects.equals(m, m2));
+	}
+	
+	@Test
+	public void testMapList() {
+		List<Map<String, Number>> l = new ArrayList<Map<String, Number>>();
+		Map<String, Number> m0 = new LinkedHashMap<String, Number>();
+		l.add(m0);
+
+		Map<String, Number> m1 = new LinkedHashMap<String, Number>();
+		m1.put("e1", 11);
+		m1.put("e2", 12);
+		l.add(m1);
+
+		Map<String, Number> m2 = new LinkedHashMap<String, Number>();
+		m2.put("a1", 21);
+		m2.put("a2", 22);
+		l.add(m2);
+		
+		String s = Jsons.toJson(l, true);
+		//System.out.println(s);
+		
+		List<Map<String, Number>> l2 = Jsons.fromJson(
+			s, new TypeToken<List<Map<String, Number>>>() {}.getType());
+		
+		Assert.assertTrue(Objects.equals(l, l2));
 	}
 
 	@Test

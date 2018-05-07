@@ -9,6 +9,9 @@ import java.sql.Clob;
 import java.util.Calendar;
 import java.util.Date;
 
+import panda.bind.json.JsonArray;
+import panda.bind.json.JsonObject;
+import panda.bind.json.Jsons;
 import panda.cast.CastContext;
 import panda.cast.CastException;
 import panda.cast.castor.DateTypeCastor.DateCastor;
@@ -37,6 +40,13 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			if (value instanceof Class) {
 				a.append(((Class)value).getName().toString());
 			}
+			else if (value instanceof byte[]) {
+				InputStream bis = new ByteArrayInputStream((byte[])value);
+				Streams.copy(bis, a, cc.getEncoding());
+			}
+			else if (value instanceof char[]) {
+				a.append(new String((char[])value));
+			}
 			else if (value instanceof Character) {
 				a.append((Character)value);
 			}
@@ -56,8 +66,8 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof Calendar) {
 				a.append(dateCastor.getDateFormat(cc.getFormat(), cc.getLocale()).format(((Calendar)value).getTime()));
 			}
-			else if (value instanceof char[]) {
-				a.append(new String((char[])value));
+			else if (value instanceof JsonObject || value instanceof JsonArray) {
+				Jsons.toJson(value, a);
 			}
 			else if (value instanceof Reader) {
 				Streams.copy((Reader)value, a);
@@ -65,15 +75,8 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof Clob) {
 				Streams.copy(((Clob)value).getCharacterStream(), a);
 			}
-			else if (value instanceof byte[]) {
-				InputStream bis = new ByteArrayInputStream((byte[])value);
-				Streams.copy(bis, a, cc.getEncoding());
-			}
 			else if (value instanceof File) {
 				a.append(value.toString());
-			}
-			else if (value instanceof InputStream) {
-				Streams.copy((InputStream)value, a, cc.getEncoding());
 			}
 			else if (value instanceof FileItem) {
 				FileItem fi = (FileItem)value;
@@ -83,6 +86,9 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 				else if (fi.getName() != null) {
 					a.append(fi.getName());
 				}
+			}
+			else if (value instanceof InputStream) {
+				Streams.copy((InputStream)value, a, cc.getEncoding());
 			}
 			else if (value instanceof EmailAddress) {
 				a.append(value.toString());

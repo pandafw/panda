@@ -12,21 +12,22 @@ public class EmailAddressCastor extends AnySingleCastor<EmailAddress> {
 	}
 
 	@Override
-	protected EmailAddress castValue(Object value, CastContext context) {
+	protected EmailAddress castValue(Object value, CastContext cc) {
 		if (value instanceof CharSequence) {
 			String s = value.toString();
 			if (Strings.isEmpty(s)) {
 				return defaultValue();
 			}
+			
 			try {
 				return EmailAddress.parse(s);
 			}
 			catch (EmailException e) {
-				return castError(value, context, e);
+				return castError(value, cc, e);
 			}
 		}
 		
-		JavaBeanCastor<EmailAddress> jbc = new JavaBeanCastor<EmailAddress>(EmailAddress.class, context.getCastors().getBeans());
-		return jbc.cast(value, context);
+		JavaBeanCastor<EmailAddress> jbc = new JavaBeanCastor<EmailAddress>(EmailAddress.class, cc.getCastors().getBeans());
+		return jbc.cast(value, cc);
 	}
 }
