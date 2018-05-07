@@ -14,6 +14,10 @@ public class XlsxWriter extends XlsWriter {
 		super(os);
 	}
 
+	public XlsxWriter(OutputStream os, String sheetname) throws IOException {
+		super(os, sheetname);
+	}
+
 	/**
 	 * create workbook
 	 * @return workbook

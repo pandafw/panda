@@ -20,6 +20,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import panda.lang.Arrays;
 import panda.lang.Collections;
+import panda.lang.Strings;
+import panda.lang.time.DateTimes;
 
 /**
  * XLS writer
@@ -35,9 +37,14 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	private boolean allString;
 	
 	public XlsWriter(OutputStream os) throws IOException {
+		this(os, null);
+	}
+	
+	public XlsWriter(OutputStream os, String sheetName) throws IOException {
 		writer = os;
 		workbook = create();
-		init();
+		newSheet(sheetName);
+		setDateFormat(DateTimes.ISO_DATETIME_NO_T_FORMAT);
 	}
 
 	/**
@@ -73,15 +80,6 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	}
 
 	/**
-	 * initialize workbook
-	 * @throws IOException
-	 */
-	protected void init() throws IOException {
-		newSheet();
-		setDateFormat("yyyy-MM-dd HH:mm:ss");
-	}
-
-	/**
 	 * Get the number of spreadsheets in the workbook
 	 * 
 	 * @return the number of sheets
@@ -99,13 +97,19 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 		return sheet.getSheetName();
 	}
 
+	/**
+	 * Create a new sheet
+	 */
 	public void newSheet() {
-		sheet = workbook.createSheet();
-		rowidx = 0;
+		newSheet(null);
 	}
 
-	public void newSheet(String name) {
-		sheet = workbook.createSheet(name);
+	/**
+	 * Create a new sheet with specified name
+	 * @param sheetname sheet name
+	 */
+	public void newSheet(String sheetname) {
+		sheet = Strings.isEmpty(sheetname) ? workbook.createSheet() : workbook.createSheet(sheetname);
 		rowidx = 0;
 	}
 
