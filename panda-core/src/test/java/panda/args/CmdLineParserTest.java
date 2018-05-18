@@ -94,6 +94,7 @@ public class CmdLineParserTest {
 		Assert.assertEquals("sa", s);
 		Assert.assertEquals("aa0", a0);
 		Assert.assertEquals("aa1", a1);
+		Assert.assertNull(as);
 		Assert.assertEquals(true, b1);
 	}
 	
@@ -104,6 +105,7 @@ public class CmdLineParserTest {
 		Assert.assertEquals("sa", s);
 		Assert.assertEquals("aa0", a0);
 		Assert.assertEquals("aa1", a1);
+		Assert.assertNull(as);
 		Assert.assertEquals(true, b1);
 	}
 	
@@ -114,6 +116,7 @@ public class CmdLineParserTest {
 		Assert.assertEquals("sa", s);
 		Assert.assertEquals("aa0", a0);
 		Assert.assertEquals("aa1", a1);
+		Assert.assertNull(as);
 		Assert.assertEquals(true, b1);
 		Assert.assertEquals(true, b2);
 	}

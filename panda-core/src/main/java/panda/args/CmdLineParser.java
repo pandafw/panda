@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,7 @@ import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Injector;
 import panda.lang.Strings;
+import panda.lang.collection.KeyValue;
 import panda.lang.reflect.FieldInjector;
 import panda.lang.reflect.Fields;
 import panda.lang.reflect.MethodInjector;
@@ -53,42 +55,66 @@ public class CmdLineParser {
 	}
 	
 	private void initArguments() {
-		arguments = new HashMap<Argument, Injector>();
-		argValues = new HashMap<Argument, Object>();
+		List<KeyValue<Argument, Injector>> args = new ArrayList<KeyValue<Argument, Injector>>();
 
 		Collection<Field> fields = Fields.getAnnotationFields(bean.getClass(), Argument.class);
 		for (Field field : fields) {
 			Argument a = field.getAnnotation(Argument.class);
-			arguments.put(a, new FieldInjector(field));
+			args.add(new KeyValue<Argument, Injector>(a, new FieldInjector(field)));
 		}
 
 		Collection<Method> methods = Methods.getAnnotationMethods(bean.getClass(), Argument.class);
 		for (Method method : methods) {
 			Argument a = method.getAnnotation(Argument.class);
-			arguments.put(a, new MethodInjector(method));
+			args.add(new KeyValue<Argument, Injector>(a, new MethodInjector(method)));
 		}
+		
+		// sort
+		Collections.sort(args, new Comparator<KeyValue<Argument, Injector>>() {
+			@Override
+			public int compare(KeyValue<Argument, Injector> e1, KeyValue<Argument, Injector> e2) {
+				Argument a1 = e1.getKey();
+				Argument a2 = e2.getKey();
+				if (a1.index() == a2.index()) {
+					return 0;
+				}
+				if (a1.index() < 0) {
+					return 1;
+				}
+				if (a2.index() < 0) {
+					return -1;
+				}
+				return a1.index() - a2.index();
+			}
+		});
+
+		arguments = new LinkedHashMap<Argument, Injector>();
+		for (KeyValue<Argument, Injector> e : args) {
+			arguments.put(e.getKey(), e.getValue());
+		}
+		argValues = new HashMap<Argument, Object>();
 	}
 
 	private void initOptions() {
-		options = new HashMap<Option, Injector>();
-		optValues = new HashMap<Option, Object>();
-
+		List<KeyValue<Option, Injector>> opts = new ArrayList<KeyValue<Option, Injector>>();
+		
 		Collection<Field> fields = Fields.getAnnotationFields(bean.getClass(), Option.class);
 		for (Field field : fields) {
 			Option o = field.getAnnotation(Option.class);
-			options.put(o, new FieldInjector(field));
+			opts.add(new KeyValue<Option, Injector>(o, new FieldInjector(field)));
 		}
 
 		Collection<Method> methods = Methods.getAnnotationMethods(bean.getClass(), Option.class);
 		for (Method method : methods) {
 			Option o = method.getAnnotation(Option.class);
-			options.put(o, new MethodInjector(method));
+			opts.add(new KeyValue<Option, Injector>(o, new MethodInjector(method)));
 		}
 
 		// check duplicated
 		Set<Character> flags = new HashSet<Character>();
 		Set<String> longs = new HashSet<String>();
-		for (Option o : options.keySet()) {
+		for (KeyValue<Option, Injector> en : opts) {
+			Option o = en.getKey();
 			if (o.opt() != ' ' && !flags.add(o.opt())) {
 				throw new IllegalArgumentException("Duplicated option -" + o.opt());
 			}
@@ -96,6 +122,33 @@ public class CmdLineParser {
 				throw new IllegalArgumentException("Duplicated option --" + o.option());
 			}
 		}
+
+		// sort
+		Collections.sort(opts, new Comparator<KeyValue<Option, Injector>>() {
+			@Override
+			public int compare(KeyValue<Option, Injector> e1, KeyValue<Option, Injector> e2) {
+				Option o1 = e1.getKey();
+				Option o2 = e2.getKey();
+				
+				if (o1.opt() == ' ') {
+					if (o2.opt() == ' ') {
+						return o1.option().compareTo(o2.option());
+					}
+					return o1.option().compareTo(String.valueOf(o2.opt()));
+				}
+
+				if (o2.opt() == ' ') {
+					return String.valueOf(o1.opt()).compareTo(o2.option());
+				}
+				return o1.opt() - o2.opt();
+			}
+		});
+
+		options = new LinkedHashMap<Option, Injector>();
+		for (KeyValue<Option, Injector> e : opts) {
+			options.put(e.getKey(), e.getValue());
+		}
+		optValues = new HashMap<Option, Object>();
 	}
 
 	protected Option findOption(String name, String a) throws CmdLineException {
@@ -196,12 +249,12 @@ public class CmdLineParser {
 					
 					// handle -abcd
 					inject(it, opt, a, null);
-
 					for (int i = 2; i < a.length(); i++) {
 						c = a.charAt(i);
 						opt = findOption(c, a);
 						inject(null, opt, a, null);
 					}
+					continue;
 				}
 			}
 
@@ -240,10 +293,10 @@ public class CmdLineParser {
 		int idx = -1;
 		for (Argument a : arguments.keySet()) {
 			int i = a.index();
-			if (i >= as.size()) {
+			if (a.required() && i >= as.size()) {
 				throw new CmdLineException("The argument <" + a.name() + "> is required");
 			}
-			if (i >= 0) {
+			if (i >= 0 && i < as.size()) {
 				inject(a, as.get(i));
 			}
 			if (i > idx) {
@@ -253,7 +306,7 @@ public class CmdLineParser {
 		
 		if (++idx < as.size()) {
 			// remained no-index arguments
-			String[] ss = Arrays.copyOfRange(as.toArray(new String[0]), idx, as.size());
+			String[] ss = as.subList(idx, as.size()).toArray(new String[0]);
 			for (Argument a : arguments.keySet()) {
 				if (a.index() < 0) {
 					inject(a, ss);
@@ -311,8 +364,8 @@ public class CmdLineParser {
 	}
 
 	public String usage() {
-		List<Option> opts = getUsageOptions();
-		List<Argument> args = getUsageArguments();
+		List<Option> opts = getDisplayOptions();
+		List<Argument> args = getDisplayArguments();
 
 		StringBuilder sb = new StringBuilder();
 
@@ -386,7 +439,7 @@ public class CmdLineParser {
 		return sb.toString();
 	}
 
-	private List<Option> getUsageOptions() {
+	private List<Option> getDisplayOptions() {
 		List<Option> opts = new ArrayList<Option>();
 		
 		// add display option
@@ -396,28 +449,10 @@ public class CmdLineParser {
 			}
 		}
 
-		// sort
-		Collections.sort(opts, new Comparator<Option>() {
-			@Override
-			public int compare(Option o1, Option o2) {
-				if (o1.opt() == ' ') {
-					if (o2.opt() == ' ') {
-						return o1.option().compareTo(o2.option());
-					}
-					return o1.option().compareTo(String.valueOf(o2.opt()));
-				}
-
-				if (o2.opt() == ' ') {
-					return String.valueOf(o1.opt()).compareTo(o2.option());
-				}
-				return o1.opt() - o2.opt();
-			}
-		});
-
 		return opts;
 	}
 
-	private List<Argument> getUsageArguments() {
+	private List<Argument> getDisplayArguments() {
 		List<Argument> args = new ArrayList<Argument>();
 		
 		// add display option
@@ -427,23 +462,6 @@ public class CmdLineParser {
 			}
 		}
 
-		// sort
-		Collections.sort(args, new Comparator<Argument>() {
-			@Override
-			public int compare(Argument o1, Argument o2) {
-				if (o1.index() == o2.index()) {
-					return 0;
-				}
-				if (o1.index() < 0) {
-					return 1;
-				}
-				if (o2.index() < 0) {
-					return -1;
-				}
-				return o1.index() - o2.index();
-			}
-		});
-		
 		return args;
 	}
 }
