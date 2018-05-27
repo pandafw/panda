@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,9 +23,8 @@ import panda.lang.reflect.Fields;
 import panda.lang.reflect.Methods;
 import panda.lang.reflect.Types;
 
-@SuppressWarnings("rawtypes")
 public class Beans {
-	private static Map<Class<?>, Map<String, PropertyAccessor>> accessors = new HashMap<Class<?>, Map<String, PropertyAccessor>>();
+	private static Map<Class<?>, Map<String, PropertyAccessor>> accessors = new ConcurrentHashMap<Class<?>, Map<String, PropertyAccessor>>();
 	
 	/**
 	 * instance
@@ -272,26 +270,34 @@ public class Beans {
 		}
 
 		BeanHandler<T> handler = handlers.get(type);
-		if (handler == null) {
-			if (Types.isArrayType(type)) {
-				handler = new ArrayBeanHandler(this, type);
-			}
-			else if (Types.isAssignable(type, Map.class)) {
-				handler = new MapBeanHandler(this, type);
-			}
-			else if (Types.isAssignable(type, List.class)) {
-				handler = new ListBeanHandler(this, type);
-			}
-			else if (Types.isAssignable(type, Collection.class)) {
-				handler = new CollectionBeanHandler(this, type);
-			}
-			else if (Types.isAssignable(type, Iterable.class)) {
-				handler = new IterableBeanHandler(this, type);
-			}
-			else if (Types.isImmutableType(type)) {
-				throw new IllegalArgumentException("Illegal bean type: " + type);
-			}
-			else {
+		if (handler != null) {
+			return handler;
+		}
+		
+		if (Types.isArrayType(type)) {
+			handler = new ArrayBeanHandler(this, type);
+		}
+		else if (Types.isAssignable(type, Map.class)) {
+			handler = new MapBeanHandler(this, type);
+		}
+		else if (Types.isAssignable(type, List.class)) {
+			handler = new ListBeanHandler(this, type);
+		}
+		else if (Types.isAssignable(type, Collection.class)) {
+			handler = new CollectionBeanHandler(this, type);
+		}
+		else if (Types.isAssignable(type, Iterable.class)) {
+			handler = new IterableBeanHandler(this, type);
+		}
+		else if (Types.isImmutableType(type)) {
+			throw new IllegalArgumentException("Illegal bean type: " + type);
+		}
+		else {
+			synchronized(handlers) {
+				handler = handlers.get(type);
+				if (handler != null) {
+					return handler;
+				}
 				handler = createJavaBeanHandler(type);
 				register(type, handler);
 			}
