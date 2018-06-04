@@ -164,7 +164,7 @@ public class SimpleDataSource implements DataSource {
 
 	private JdbcConf jdbc = new JdbcConf();
 	private PoolConf pool = new PoolConf();
-	private Properties driver = new Properties();
+	private Properties props = new Properties();
 
 	//--------------------------------------------------------------------------------------
 	// FIELDS LOCKED BY POOL_LOCK
@@ -239,11 +239,14 @@ public class SimpleDataSource implements DataSource {
 			throw new RuntimeException("Failed to initialize jdbc driver: " + jdbc.driver, e);
 		}
 
-		driver.put("user", jdbc.username);
-		driver.put("password", jdbc.password);
+		if (jdbc.username != null) {
+			props.put("user", jdbc.username);
+		}
+		if (jdbc.password != null) {
+			props.put("password", jdbc.password);
+		}
 
-		expectedConnectionTypeCode = assembleConnectionTypeCode(
-				jdbc.url, jdbc.username, jdbc.password);
+		expectedConnectionTypeCode = assembleConnectionTypeCode(jdbc.url, jdbc.username, jdbc.password);
 
 		if (pool.pingEnabled && Strings.isEmpty(pool.pingQuery)) {
 			throw new RuntimeException("SimpleDataSource: property 'pool.pingEnabled' is true, but property 'pool.pingQuery' is not set correctly.");
@@ -327,15 +330,15 @@ public class SimpleDataSource implements DataSource {
 	/**
 	 * @return the driver
 	 */
-	public Properties getDriver() {
-		return driver;
+	public Properties getProps() {
+		return props;
 	}
 
 	/**
 	 * @param driver the driver to set
 	 */
-	public void setDriver(Properties driver) {
-		this.driver = driver;
+	public void setProps(Properties driver) {
+		this.props = driver;
 	}
 
 	private int getExpectedConnectionTypeCode() {
@@ -568,7 +571,7 @@ public class SimpleDataSource implements DataSource {
 					// Pool does not have available connection
 					if (activeConnections.size() < pool.maximumActiveConnections) {
 						// create new connection
-						conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, driver), this);
+						conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, props), this);
 						Connection realConn = conn.getRealConnection();
 						if (realConn.getAutoCommit() != jdbc.autoCommit) {
 							realConn.setAutoCommit(jdbc.autoCommit);

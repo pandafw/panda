@@ -88,12 +88,14 @@ public class AppDaoClientFactory {
 			}
 		}
 
+		Exception ex = null;
 		if (JDBC.equalsIgnoreCase(dstype)) {
 			String[] dss = Strings.split(settings.getProperty(SET.DATA_JDBC), ", ");
 			
 			if (Arrays.isEmpty(dss)) {
 				dss = new String[] { "" };
 			}
+			
 			for (String dst : dss) {
 				String dsn = SET.DATA + (Strings.isEmpty(dst) ? "." : "." + dst);
 				try {
@@ -103,12 +105,19 @@ public class AppDaoClientFactory {
 					return sqlDaoClient;
 				}
 				catch (Exception e) {
+					ex = e;
 					log.warn("Failed to create data source - " + dsn + " : " + e.getMessage());
 				}
 			}
 		}
 
-		throw new RuntimeException("Failed to create data source [" + dstype + "].");
+		String msg = "Failed to create data source [" + dstype + "].";
+		RuntimeException re = new RuntimeException(msg);
+		if (ex != null) {
+			log.error(msg, ex);
+			re.initCause(ex);
+		}
+		throw re;
 	}
 
 	private DataSource createSimpleDataSource(String prefix) {
@@ -129,8 +138,8 @@ public class AppDaoClientFactory {
 			}
 			log.info("  " + en.getKey() + ": " + en.getValue());
 		}
+
 		DataSource ds = new SimpleDataSource(dps);
-		
 		return ds;
 	}
 }
