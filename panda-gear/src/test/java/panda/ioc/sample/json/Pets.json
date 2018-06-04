@@ -1,0 +1,17 @@
+{
+	// By default, you only need is declaring the value of each field, Panda.Ioc will convert it's type for you
+	tom: {
+		name: 'Tom',
+		birthday: '2009-10-25 15:23:40'
+	},
+
+	jerry: {
+		type: 'panda.ioc.sample.json.Pet', // type
+		singleton: false, // singleton or not
+		args: [ 'Jerry' ], // constructor parameters
+		fields: {
+			birthday : '2009-11-3 08:02:14',
+			friend : '#tom'	   // refer to another object in the container
+		}
+	}
+}

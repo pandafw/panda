@@ -9,7 +9,7 @@ XML配置文件示例：
 		<birthday>2009-10-25 15:23:40</birthday>
 	</tom>
 	<jerry>
-		<type>panda.demo.ioc.json.Pet</type>
+		<type>panda.ioc.sample.json.Pet</type>
 		<singleton>false</singleton>
 		<args>
 			<i>Jerry</i>
@@ -23,7 +23,7 @@ XML配置文件示例：
 	<john>
 		<name>John</name>
 		<friend>
-			<type>panda.demo.ioc.json.Pet</type>
+			<type>panda.ioc.sample.json.Pet</type>
 			<args>
 				<i>anonymous</i>
 			</args>
@@ -40,7 +40,7 @@ XML配置文件示例：
 		birthday: '2009-10-25 15:23:40'
 	},
 	jerry: {
-		type: 'panda.demo.ioc.json.Pet',
+		type: 'panda.ioc.sample.json.Pet',
 		singleton: false,
 		args: [ 'Jerry', 'Alice' ],
 		fields: {
@@ -51,7 +51,7 @@ XML配置文件示例：
 	john: {
 		name: 'John',
 		friend: {
-			type: 'panda.demo.ioc.json.Pet',
+			type: 'panda.ioc.sample.json.Pet',
 			args: [ 'anonymous' ],
 		}
 	},

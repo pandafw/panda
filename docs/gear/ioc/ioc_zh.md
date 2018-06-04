@@ -13,10 +13,10 @@ Panda.Ioc 支持Json/XML/@Annotation形式的依赖关系配置。当然，你�
 在这个例子中，你需要一个POJO，以及一个JSON配置文件。
 
 #### POJO源代码
-panda/demo/ioc/json/Pet.java
+panda/ioc/sample/json/Pet.java
 
 ```Java
-package panda.demo.ioc.json;
+package panda.ioc.sample.json;
 
 import java.util.Date;
 
@@ -67,7 +67,7 @@ public class Pet {
 
 #### Json 配置文件
 
-panda/demo/ioc/json/Pets.json
+panda/ioc/sample/json/Pets.json
 
 ```JavaScript
 {
@@ -78,7 +78,7 @@ panda/demo/ioc/json/Pets.json
 	},
 
 	jerry: {
-		type: 'panda.demo.ioc.json.Pet', // 类型
+		type: 'panda.ioc.sample.json.Pet', // 类型
 		singleton: false, // 是否为单例
 		args: [ 'Jerry' ], // 构造函数参数
 		fields: {
@@ -91,10 +91,10 @@ panda/demo/ioc/json/Pets.json
 
 #### 调用代码
 
-panda/demo/ioc/json/HelloWorld.java
+panda/ioc/sample/json/HelloWorld.java
 
 ```Java
-package panda.demo.ioc.json;
+package panda.ioc.sample.json;
 
 import panda.ioc.Ioc;
 import panda.ioc.impl.DefaultIoc;
@@ -102,7 +102,7 @@ import panda.ioc.loader.JsonIocLoader;
 
 public class HelloWorld {
 	public static void main(String[] args) {
-		Ioc ioc = new DefaultIoc(new JsonIocLoader("panda/demo/ioc/json/Pets.json"));
+		Ioc ioc = new DefaultIoc(new JsonIocLoader("panda/ioc/sample/json/Pets.json"));
 		Pet tom = ioc.get(Pet.class, "tom");
 		System.out.println(tom);
 		

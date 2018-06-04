@@ -13,10 +13,10 @@ I will use a JSON configuration file as a Hello World example as below.
 In this example, you need a POJO java class, and a JSON configuration file.
 
 #### POJO source code
-panda/demo/ioc/json/Pet.java
+panda/ioc/sample/json/Pet.java
 
 ```Java
-package panda.demo.ioc.json;
+package panda.ioc.sample.json;
 
 import java.util.Date;
 
@@ -78,7 +78,7 @@ panda/demo/ioc/json/Pets.json
 	},
 
 	jerry: {
-		type: 'panda.demo.ioc.json.Pet', // type
+		type: 'panda.ioc.sample.json.Pet', // type
 		singleton: false, // singleton or not
 		args: [ 'Jerry' ], // constructor parameters
 		fields: {
@@ -91,10 +91,10 @@ panda/demo/ioc/json/Pets.json
 
 #### Calling source code
 
-panda/demo/ioc/json/HelloWorld.java
+panda/ioc/sample/json/HelloWorld.java
 
 ```Java
-package panda.demo.ioc.json;
+package panda.ioc.sample.json;
 
 import panda.ioc.Ioc;
 import panda.ioc.impl.DefaultIoc;
@@ -110,7 +110,7 @@ public class HelloWorld {
 		Pet jerry = (Pet)ioc.get(null, "jerry");
 		System.out.println(jerry);
 		
-		// by declaring singleton: false, every time you fetch it, a new instance is generated
+		// by declaring singleton: false, every time you fetch it, a new instance is created
 		Pet jerry2 = (Pet)ioc.get(null, "jerry");
 		System.out.println("jerry == jerry2: " + (jerry == jerry2));
 		

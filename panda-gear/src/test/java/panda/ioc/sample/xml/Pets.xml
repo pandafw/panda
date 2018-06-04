@@ -1,0 +1,28 @@
+<ioc>
+	<jerry>
+		<type>panda.ioc.sample.xml.Pet</type>
+		<args>
+			<i>Jerry</i>
+		</args>
+	</jerry>
+	<tom>
+		<name>Tom</name>
+		<birthday>2010-10-25 15:23:40</birthday>
+		<dead>true</dead>
+		<age>24</age>
+		<favorites>
+			<i>banana</i>
+			<i>bug</i>
+		</favorites>
+		<friend>
+			<name>John</name>
+		</friend>
+		<ioc>#$ioc</ioc>
+		<ctx>#$ctx</ctx>
+		<beanName>#$name</beanName>
+		<elsp>${'panda.lang.Systems'@IS_OS_WINDOWS}</elsp>
+		<elsm>${'panda.lang.time.DateTimes'@getDate()}</elsm>
+		<elbo>${jerry}</elbo>
+		<elbp>${jerry.name}</elbp>
+	</tom>
+</ioc>
