@@ -4,8 +4,14 @@ import panda.mvc.MvcConstants;
 
 public interface MVC extends MvcConstants {
 	//------------------------------------------------
-	// runtime reloadable settings
+	// runtime settings
 	//
+	/** The system properties settings */
+	public static final String SETTINGS_SYSTEM = "panda.settings.system";
+
+	/** The environment variable settings */
+	public static final String SETTINGS_ENVIRONMENT = "panda.settings.environment";
+
 	/** The runtime reloadable settings path */
 	public static final String SETTINGS_RUNTIME_PATH = "panda.settings.runtime.path";
 

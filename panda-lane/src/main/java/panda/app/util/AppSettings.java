@@ -23,6 +23,12 @@ public class AppSettings extends ReloadableSettings {
 	@IocInject(required=false)
 	protected ServletContext servlet;
 
+	@IocInject(value=MVC.SETTINGS_SYSTEM, required=false)
+	protected boolean system = true;
+
+	@IocInject(value=MVC.SETTINGS_ENVIRONMENT, required=false)
+	protected boolean environment = true;
+
 	@IocInject(value=MVC.SETTINGS_RUNTIME_PATH, required=false)
 	protected String runtime;
 
@@ -32,8 +38,6 @@ public class AppSettings extends ReloadableSettings {
 	}
 
 	public AppSettings() throws IOException {
-		putAll(System.getProperties());
-
 		load("app.properties");
 		
 		if (Systems.IS_OS_APPENGINE) {
@@ -45,19 +49,23 @@ public class AppSettings extends ReloadableSettings {
 			}
 		}
 
-		if ("true".equals(System.getenv("panda.env"))) {
+		if (environment) {
 			putAll(System.getenv());
 		}
-		
+		if (system) {
+			putAll(System.getProperties());
+		}
+
+		if (Strings.isNotEmpty(runtime)) {
+			load(new File(runtime));
+		}
+
 		try {
 			load("test.properties");
 		}
 		catch (IOException e) {
 		}
 
-		if (Strings.isNotEmpty(runtime)) {
-			load(new File(runtime));
-		}
 		log.info("Version: " + getAppVersion());
 	}
 	
