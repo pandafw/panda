@@ -105,8 +105,14 @@ public class AppDaoClientFactory {
 		Map<String, String> dps = Collections.subMap(settings, prefix);
 		String web = servlet != null ? servlet.getRealPath("/") : "web";
 		for (Entry<String, String> en : dps.entrySet()) {
-			if (en.getValue().contains("${web}")) {
-				String v = en.getValue().replace("${web}", web);
+			String v = en.getValue();
+			if (Strings.contains(v, "${web}")) {
+				v = v.replace("${web}", web);
+				en.setValue(v);
+			}
+			else if (Strings.startsWith(v, "${") && Strings.endsWith(v, "}")) {
+				String k = v.substring(2, v.length() - 1);
+				v = settings.getProperty(k, v);
 				en.setValue(v);
 			}
 			log.info("  " + en.getKey() + ": " + en.getValue());
