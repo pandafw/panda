@@ -28,7 +28,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + client.getTableName(entity) + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + escapeTable(client.getTableName(entity)) + " (");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;
@@ -97,11 +97,11 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	}
 
 	public String identityInsertOn(Entity<?> entity) {
-		return "SET IDENTITY_INSERT " + client.getTableName(entity) + " ON";
+		return "SET IDENTITY_INSERT " + escapeTable(client.getTableName(entity)) + " ON";
 	}
 	
 	public String identityInsertOff(Entity<?> entity) {
-		return "SET IDENTITY_INSERT " + client.getTableName(entity) + " OFF";
+		return "SET IDENTITY_INSERT " + escapeTable(client.getTableName(entity)) + " OFF";
 	}
 	
 	/**

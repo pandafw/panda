@@ -33,7 +33,7 @@ public class H2SqlExpert extends SqlExpert {
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 		
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + client.getTableName(entity) + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + escapeTable(client.getTableName(entity)) + " (");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;
