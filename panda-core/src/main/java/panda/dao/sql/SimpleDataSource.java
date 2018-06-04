@@ -164,7 +164,7 @@ public class SimpleDataSource implements DataSource {
 
 	private JdbcConf jdbc = new JdbcConf();
 	private PoolConf pool = new PoolConf();
-	private Properties driver;
+	private Properties driver = new Properties();
 
 	//--------------------------------------------------------------------------------------
 	// FIELDS LOCKED BY POOL_LOCK
@@ -231,8 +231,6 @@ public class SimpleDataSource implements DataSource {
 	public void initialize() {
 		Asserts.notEmpty(jdbc.driver, "The jdbc.driver property is empty.");
 		Asserts.notEmpty(jdbc.url, "The jdbc.url property is empty.");
-		Asserts.notNull(jdbc.username, "The jdbc.username property is null.");
-		Asserts.notNull(jdbc.password, "The jdbc.password property is null.");
 
 		try {
 			Class.forName(jdbc.driver);
@@ -241,16 +239,14 @@ public class SimpleDataSource implements DataSource {
 			throw new RuntimeException("Failed to initialize jdbc driver: " + jdbc.driver, e);
 		}
 
-		if (driver != null) {
-			driver.put("user", jdbc.username);
-			driver.put("password", jdbc.password);
+		driver.put("user", jdbc.username);
+		driver.put("password", jdbc.password);
 
-			expectedConnectionTypeCode = assembleConnectionTypeCode(
-					jdbc.url, jdbc.username, jdbc.password);
+		expectedConnectionTypeCode = assembleConnectionTypeCode(
+				jdbc.url, jdbc.username, jdbc.password);
 
-			if (pool.pingEnabled && Strings.isEmpty(pool.pingQuery)) {
-				throw new RuntimeException("SimpleDataSource: property 'pool.pingEnabled' is true, but property 'pool.pingQuery' is not set correctly.");
-			}
+		if (pool.pingEnabled && Strings.isEmpty(pool.pingQuery)) {
+			throw new RuntimeException("SimpleDataSource: property 'pool.pingEnabled' is true, but property 'pool.pingQuery' is not set correctly.");
 		}
 	}
 
@@ -571,15 +567,8 @@ public class SimpleDataSource implements DataSource {
 				else {
 					// Pool does not have available connection
 					if (activeConnections.size() < pool.maximumActiveConnections) {
-						// Can create new connection
-						if (driver != null) {
-							conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url,
-								driver), this);
-						}
-						else {
-							conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url,
-								jdbc.username, jdbc.password), this);
-						}
+						// create new connection
+						conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, driver), this);
 						Connection realConn = conn.getRealConnection();
 						if (realConn.getAutoCommit() != jdbc.autoCommit) {
 							realConn.setAutoCommit(jdbc.autoCommit);

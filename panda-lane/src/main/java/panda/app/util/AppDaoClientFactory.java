@@ -16,6 +16,7 @@ import panda.dao.sql.Sqls;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.log.Log;
@@ -88,19 +89,30 @@ public class AppDaoClientFactory {
 		}
 
 		if (JDBC.equalsIgnoreCase(dstype)) {
-			String dst = settings.getProperty(SET.DATA_JDBC);
-			String pre = SET.DATA + (Strings.isEmpty(dst) ? "." : "." + dst + ".");
-			DataSource ds = createSimpleDataSource(pre);
-			SqlDaoClient sqlDaoClient = new SqlDaoClient();
-			sqlDaoClient.setDataSource(ds);
-			return sqlDaoClient;
+			String[] dss = Strings.split(settings.getProperty(SET.DATA_JDBC), ", ");
+			
+			if (Arrays.isEmpty(dss)) {
+				dss = new String[] { "" };
+			}
+			for (String dst : dss) {
+				String dsn = SET.DATA + (Strings.isEmpty(dst) ? "." : "." + dst);
+				try {
+					DataSource ds = createSimpleDataSource(dsn + ".");
+					SqlDaoClient sqlDaoClient = new SqlDaoClient();
+					sqlDaoClient.setDataSource(ds);
+					return sqlDaoClient;
+				}
+				catch (Exception e) {
+					log.warn("Failed to create data source - " + dsn + " : " + e.getMessage());
+				}
+			}
 		}
 
-		throw new IllegalArgumentException("The data source type [" + dstype + "] is invalid.");
+		throw new RuntimeException("Failed to create data source [" + dstype + "].");
 	}
 
 	private DataSource createSimpleDataSource(String prefix) {
-		log.info("Create Simple JDBC DataSource");
+		log.info("Create Simple JDBC DataSource: " + prefix);
 
 		Map<String, String> dps = Collections.subMap(settings, prefix);
 		String web = servlet != null ? servlet.getRealPath("/") : "web";
