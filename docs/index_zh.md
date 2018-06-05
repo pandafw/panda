@@ -1,11 +1,44 @@
  Panda Framework
 =================
 
-Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应用。
+## 概要
+Panda Framework是一个小而全，可扩展的开发框架，主要用于建立企业级的Java Web应用。
+该框架旨在简化整个开发周期（设计，建设，部署，以及维护应用），降低开发费用，提高产品质量。
 对比Spring/Struts2/Hibernate这些流行的Java应用框架，Panda的特点是小而全，上手简单，开发容易。
 
+## 特点和优点
+1. 自动生成大量源代码
+使用Panda Framework的代码生成器，可以自动生成大量的源代码(Action/Dao/Bean/View)，极大幅度的削减开发费用。
 
-Panda Framework由以下几个部分组成。
+2. 不需要编写SQL（※复杂的SQL除外）
+根据数据结构定义XML文件，可以自动生成关于表创建的SQL，数据存储的SQL和JAVA源代码。利用这些自动生成的代码，可以轻松的创建数据库。
+
+3. HTML画面⇒PDF报表转换功能
+不需要使用商用的PDF报表制作工具专门制作报表画面。使用Nuts的HTML⇒PDF转换功能， 可以直接把HTML画面转换为PDF报表，大幅削减开发费用。
+
+4. 业务逻辑的开发简单
+开发人员利用Panda Framework的各种功能，可以集中精力开发业务逻辑。「检索、列表、显示、追加、变更、删除」这样的基本功能都已经被模板化，利用这些模板可以很轻松的制作业务逻辑。
+
+5. 提高工作效率和程序质量
+在自动生成的源代码的基础上进行开发，可以最大化的提高工作效率，提高程序代码质量。
+
+6. 易投入、易使用
+大量丰富的文档及样本使得框架的初期投入费用大为减少。
+
+
+
+## Panda Framework的开发效果
+使用Panda Framework，可以大幅提高项目开发及维护效率。
+![开发效果](pandafw-apply-effect_zh.jpg)
+
+
+## 使用Panda Framework的系统构成图
+![系统构成](pandafw-app-structure.jpg)
+
+
+## Panda Framework的构成
+
+Panda Framework由以下模块构成。
 
  | 模块                           | 说明                                                                      |
  |--------------------------------|---------------------------------------------------------------------------|
@@ -16,6 +49,86 @@ Panda Framework由以下几个部分组成。
  | [panda-lane](lane/index_zh.md) | 扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。|
  | [panda-tool](tool/index_zh.md) | 源代码生成器。可以自动生成Entity类, Query类, Dao类, Action类, View的Freemarker(HTML)模板文件。 |
  | [panda-tube](tube/index_zh.md) | Web Service API的客户端（WordPress XMP-RPC, Google Vision API）。                           |
+
+
+## 代码生成器的介绍
+
+### 代码生成器的概要
+代码生成器根据画面和数据定义XML文件以及模板文件自动生成数据浏览，修改变更的WEB应用程序代码。
+输入/表示项目、数据的类型・长度・格式都可以根据客户的要求进行设置及调整。
+
+业务逻辑的具体处理、更新時的排他验证以及追加時的重复验证等的功能，都会提供相关的模板给开发人员进行参考。
+在自动生成的源代码的基础上进行开发，可以最大化的提高工作效率，提高程序代码质量。
+
+![代码生成器概要](imgs/codegen-summary_zh.jpg)
+
+
+### 使用代码生成器的效果
+![代码生成器效果](imgs/codegen-effect_zh.jpg)
+
+
+### 代码生成器可以生成的业务功能
+如表所示，代码生成器可以生成以下的业务功能。
+并且，以这些业务功能为模板可以制定符合客户需要的特定业务功能。
+
+ | No. | 业务功能名称            | 说明 |
+ |-----|------------------------|-------------|
+ | 1   | 检索功能                | 数据检索。                |
+ | 2   | 列表显示功能            | 检索结果以列表方式显示，支持排序和分页。  |
+ | 3   | 列表印刷显示功能        | 数据列表用于印刷的显示功能。 |
+ | 4   | 详细显示功能            | 数据的详细内容的显示功能。          |
+ | 5   | 细印刷显示功能          | 数据的详细内容用于印刷的显示功能。   |
+ | 6   | 数据追加功能            | 数据的追加功能。                  |
+ | 7   | 数据拷贝功能            | 数据的拷贝功能。           |
+ | 8   | 数据变更功能            | 数据的变更功能。                |
+ | 9   | 数据删除功能            | 数据的删除功能。                |
+ | 10  | 数据导出功能            | 以CSV/XLS格式导出数据的功能。      |
+ | 11  | 数据导入功能            | 从CSV/XLS文件中导入数据的功能。     |
+ | 12  | 批处理功能              | 多条数据的批处理功能。            |
+
+
+### 代码生成器生成的WEB画面迁移图
+![WEB画面迁移图](imgs/codegen-screen-transition_zh.jpg)
+
+
+### 代码生成器生成的WEB画面截图
+
+#### 检索列表画面
+![检索列表画面](imgs/codegen-s-list.jpg)
+
+#### 详细显示画面
+![详细显示画面](imgs/codegen-s-view.jpg)
+
+#### 追加输入画面
+![追加输入画面](imgs/codegen-s-add.jpg)
+
+#### 追加确认画面
+![追加确认画面](imgs/codegen-s-add-confirm.jpg)
+
+#### 追加完成画面
+![追加完成画面](imgs/codegen-s-add-success.jpg)
+
+#### 変更输入画面
+![変更输入画面](imgs/codegen-s-edit.jpg)
+
+#### 変更确认画面
+![変更确认画面](imgs/codegen-s-edit-confirm.jpg)
+
+#### 変更完成画面
+![変更完成画面](imgs/codegen-s-edit-success.jpg)
+
+#### 削除确认画面
+![削除确认画面](imgs/codegen-s-delete-confirm.jpg)
+
+#### 削除完成画面
+![削除完成画面](imgs/codegen-s-delete-success.jpg)
+
+#### 批处理削除确认画面
+![批处理削除确认画面](imgs/codegen-s-bdelete-confirm.jpg)
+
+#### 批处理削除完成画面
+![批处理削除完成画面](imgs/codegen-s-bdelete-success.jpg)
+
 
 
 
