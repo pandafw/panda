@@ -9,7 +9,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.util.ActionTextProvider;
 
 @At("/task/resource/load")
-@Auth({ AUTH.LOCAL, AUTH.SUPER })
+@Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
 public class ResourceLoadAction extends BaseLoadAction {
 	@IocInject
 	protected AppResourceBundleLoader arbLoader;

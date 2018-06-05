@@ -3,7 +3,11 @@ package panda.app.task;
 import java.util.HashMap;
 import java.util.Map;
 
+import panda.app.auth.UserAuthenticator;
+import panda.app.constant.MVC;
 import panda.io.Streams;
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
@@ -13,37 +17,23 @@ import panda.net.http.HttpMethod;
 import panda.net.http.HttpRequest;
 import panda.net.http.HttpResponse;
 
+@IocBean(singleton=false)
 public class ActionTask implements Runnable {
 	private static Log log = Logs.getLog(ActionTask.class);
-	
+
+	@IocInject(required=false)
+	private UserAuthenticator authenticator;
+
+	@IocInject(value=MVC.TASK_ERROR_LIMIT, required=false)
+	private int errorLimit = 3;
+
 	private String url;
 	private String method = HttpMethod.GET;
 	private Map<String, String> headers;
 	private Map<String, String> params;
-	private int errorLimit = 3;
+	private boolean token;
 
 	private int errors;
-	
-	public ActionTask(String url) {
-		this.url = url;
-	}
-
-	
-	/**
-	 * @return the errorLimit
-	 */
-	public int getErrorLimit() {
-		return errorLimit;
-	}
-
-
-	/**
-	 * @param errorLimit the errorLimit to set
-	 */
-	public void setErrorLimit(int errorLimit) {
-		this.errorLimit = errorLimit;
-	}
-
 
 	/**
 	 * @return the url
@@ -106,7 +96,35 @@ public class ActionTask implements Runnable {
 	public void setParams(Map<String, String> params) {
 		this.params = params;
 	}
-	
+
+	/**
+	 * @return the token
+	 */
+	public boolean isToken() {
+		return token;
+	}
+
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(boolean token) {
+		this.token = token;
+	}
+
+	/**
+	 * @return the errorLimit
+	 */
+	public int getErrorLimit() {
+		return errorLimit;
+	}
+
+	/**
+	 * @param errorLimit the errorLimit to set
+	 */
+	public void setErrorLimit(int errorLimit) {
+		this.errorLimit = errorLimit;
+	}
+
 	@Override
 	public void run() {
 		if (log.isInfoEnabled()) {
@@ -124,6 +142,9 @@ public class ActionTask implements Runnable {
 			}
 			if (headers != null) {
 				hreq.getHeader().putAll(headers);
+			}
+			if (token && authenticator != null) {
+				hreq.setParam(authenticator.getTokenName(), authenticator.getTokenValue());
 			}
 			hc.setRequest(hreq);
 			

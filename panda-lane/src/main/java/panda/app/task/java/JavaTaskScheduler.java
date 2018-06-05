@@ -9,12 +9,14 @@ import panda.app.constant.SET;
 import panda.app.task.ActionTask;
 import panda.app.task.CronEntry;
 import panda.app.util.AppSettings;
+import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.Mvcs;
 import panda.task.CronTrigger;
 import panda.task.TaskScheduler;
 import panda.task.ThreadPoolTaskScheduler;
@@ -23,7 +25,8 @@ import panda.task.ThreadPoolTaskScheduler;
 public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	private static final Log log = Logs.getLog(JavaTaskScheduler.class);
 
-	private static final int DEFAULT_ERROR_LIMIT = 3;
+	@IocInject(required=false)
+	protected Ioc ioc;
 	
 	@IocInject(required=false)
 	protected ServletContext servlet;
@@ -72,11 +75,10 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 		}
 		
 		for (CronEntry ce : crons) {
-			ActionTask at = newActionTask(ce.getUrl());
+			ActionTask at = newActionTask(ce);
 
 			if (Strings.isNotEmpty(ce.getCron())) {
 				log.info("Add cron task (" + ce.getCron() + "): " + at.getUrl());
-				at.setErrorLimit(ce.getErrorLimit() > 0 ? ce.getErrorLimit() : DEFAULT_ERROR_LIMIT);
 				CronTrigger ct = new CronTrigger(ce.getCron());
 				schedule(at, ct);
 				continue;
@@ -84,14 +86,12 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 
 			if (ce.getFixedDelay() > 0) {
 				log.info("Add fixedDelay task (" + ce.getInitialDelay() + ", " + ce.getFixedDelay() + "): " + at.getUrl());
-				at.setErrorLimit(ce.getErrorLimit() > 0 ? ce.getErrorLimit() : DEFAULT_ERROR_LIMIT);
 				scheduleWithFixedDelay(at, ce.getInitialDelay(), ce.getFixedDelay());
 				continue;
 			}
 
 			if (ce.getFixedRate() > 0) {
 				log.info("Add fixedRate task (" + ce.getInitialDelay() + ", " + ce.getFixedRate() + "): " + at.getUrl());
-				at.setErrorLimit(ce.getErrorLimit() > 0 ? ce.getErrorLimit() : DEFAULT_ERROR_LIMIT);
 				scheduleAtFixedRate(at, ce.getInitialDelay(), ce.getFixedRate());
 				continue;
 			}
@@ -104,11 +104,21 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 		}
 	}
 
-	private ActionTask newActionTask(String url) {
-		if (url.startsWith("/")) {
+	private ActionTask newActionTask(CronEntry ce) {
+		String url = ce.getUrl();
+		if (servlet != null && url.startsWith("/")) {
 			url = scheme + servlet.getContextPath() + url;
 		}
-		return new ActionTask(url);
+		
+		ActionTask at = Mvcs.born(ioc, ActionTask.class);
+
+		at.setUrl(url);
+		at.setToken(ce.isToken());
+		if (ce.getErrorLimit() != null) {
+			at.setErrorLimit(ce.getErrorLimit());
+		}
+
+		return at;
 	}
 
 }

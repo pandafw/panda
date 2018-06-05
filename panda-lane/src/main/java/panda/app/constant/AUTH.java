@@ -34,6 +34,11 @@ public interface AUTH {
 	// special authentication
 	//
 	/**
+	 * token parameter
+	 */
+	public static final String TOKEN = "_token_";
+	
+	/**
 	 * Remote Address is local network address
 	 */
 	public static final String LOCAL = "_local_";
@@ -52,4 +57,10 @@ public interface AUTH {
 	 * AND SECURE
 	 */
 	public static final String ASECURE = "+_secure_";
+
+	/**
+	 * AND TOKEN
+	 */
+	public static final String ATOKEN = "+_token_";
+	
 }

@@ -56,6 +56,9 @@ public interface MVC extends MvcConstants {
 	/** The task action scheme */
 	public static final String TASK_ACTION_SCHEME = "panda.task.action.scheme";
 	
+	/** The task error limit */
+	public static final String TASK_ERROR_LIMIT = "panda.task.error.limit";
+	
 	/** The load task keys */
 	public static final String TASK_LOAD_KEYS = "panda.task.load.keys";
 
@@ -92,6 +95,10 @@ public interface MVC extends MvcConstants {
 	public static final String AUTH_TICKET_COOKIE_PATH = "panda.auth.ticket.cookie.path";
 
 	public static final String AUTH_TICKET_COOKIE_AGE = "panda.auth.ticket.cookie.age";
+
+	public static final String AUTH_TOKEN_NAME = "panda.auth.token.name";
+
+	public static final String AUTH_TOKEN_LIFE = "panda.auth.token.life";
 
 	//------------------------------------------------
 	// The lucene settings

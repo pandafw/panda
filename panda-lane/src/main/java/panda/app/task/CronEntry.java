@@ -10,7 +10,8 @@ public class CronEntry {
 	private long fixedDelay;
 	private long fixedRate;
 	private String cron;
-	private int errorLimit;
+	private boolean token;
+	private Integer errorLimit;
 
 	/**
 	 * @return the url
@@ -111,16 +112,30 @@ public class CronEntry {
 	}
 
 	/**
+	 * @return the token
+	 */
+	public boolean isToken() {
+		return token;
+	}
+
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(boolean token) {
+		this.token = token;
+	}
+
+	/**
 	 * @return the errorLimit
 	 */
-	public int getErrorLimit() {
+	public Integer getErrorLimit() {
 		return errorLimit;
 	}
 
 	/**
 	 * @param errorLimit the errorLimit to set
 	 */
-	public void setErrorLimit(int errorLimit) {
+	public void setErrorLimit(Integer errorLimit) {
 		this.errorLimit = errorLimit;
 	}
 
@@ -133,6 +148,7 @@ public class CronEntry {
 				.append("initialDelay", initialDelay)
 				.append("fixedDelay", fixedDelay)
 				.append("cron", cron)
+				.append("token", token)
 				.append("errorLimit", errorLimit)
 				.toString();
 	}

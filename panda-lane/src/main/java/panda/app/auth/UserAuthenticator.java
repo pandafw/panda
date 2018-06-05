@@ -14,9 +14,10 @@ import panda.app.constant.SES;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
+import panda.lang.Randoms;
 import panda.lang.Strings;
-import panda.mvc.ActionContext;
 import panda.mvc.ActionConfig;
+import panda.mvc.ActionContext;
 import panda.mvc.ActionMapping;
 import panda.net.IPs;
 import panda.servlet.HttpServlets;
@@ -38,6 +39,16 @@ public class UserAuthenticator {
 	 */
 	@IocInject(value=MVC.AUTH_ALLOW_UNKNOWN_URL, required=false)
 	protected boolean allowUnknownUri = true;
+
+	@IocInject(value=MVC.AUTH_TOKEN_NAME, required=false)
+	private String tokenName = "__token";
+
+	@IocInject(value=MVC.AUTH_TOKEN_LIFE, required=false)
+	private long tokenLife = 60000;
+
+	private String tokenValue;
+	
+	private long tokenTime;
 
 	@IocInject
 	protected ActionMapping urlmapping;
@@ -62,6 +73,30 @@ public class UserAuthenticator {
 	public boolean canAccess(ActionContext ac, String action) {
 		int r= authenticate(ac, action, false);
 		return r <= OK || r == UNSECURE;
+	}
+
+	protected boolean isValidToken() {
+		return Strings.isNotEmpty(tokenValue) && tokenTime + tokenLife > System.currentTimeMillis();
+	}
+
+	/**
+	 * @return token parameter name
+	 */
+	public String getTokenName() {
+		return tokenName;
+	}
+
+	/**
+	 * get the exists valid token. if the token is invalid, a new token will be generated.
+	 * 
+	 * @return a valid token
+	 */
+	public String getTokenValue() {
+		if (!isValidToken()) {
+			tokenValue = Randoms.randUUID32();
+			tokenTime = System.currentTimeMillis();
+		}
+		return tokenValue;
 	}
 
 	//----------------------------------------------------
@@ -178,9 +213,21 @@ public class UserAuthenticator {
 			HttpServletRequest req = ac.getRequest();
 			return IPs.isPrivateIP(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
 		}
+
+		if (AUTH.TOKEN.equals(define)) {
+			if (Strings.isEmpty(tokenName) || !isValidToken()) {
+				return DENIED;
+			}
+
+			HttpServletRequest req = ac.getRequest();
+			String token = req.getParameter(tokenName);
+			return tokenValue.equals(token) ? OK : DENIED;
+		}
+
 		if (AUTH.SECURE.equals(define)) {
 			return isSecureAuthenticatedUser(su) ? OK : UNSECURE;
 		}
+
 		return Collections.contains(uperms, define) ? OK : (su == null ? UNLOGIN : DENIED);
 	}
 

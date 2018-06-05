@@ -9,7 +9,7 @@ import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 
 @At("/task/template/load")
-@Auth({ AUTH.LOCAL, AUTH.SUPER })
+@Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
 public class TemplateLoadAction extends BaseLoadAction {
 	@IocInject
 	protected AppFreemarkerTemplateLoader aftLoader;
