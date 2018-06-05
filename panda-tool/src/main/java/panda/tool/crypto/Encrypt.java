@@ -24,8 +24,8 @@ public class Encrypt extends AbstractCommandTool {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	private String key = Ciphers.AES;
-	private String algorithm = "== Panda Java ==";
+	private String algorithm = Ciphers.AES;
+	private String key = "== Panda Java ==";
 	private boolean decrypt = false;
 	private String[] args;
 	
