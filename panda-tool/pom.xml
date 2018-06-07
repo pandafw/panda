@@ -1,53 +1,56 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+							 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.pandafw</groupId>
+	<parent>
+		<groupId>com.github.pandafw</groupId>
+		<artifactId>panda</artifactId>
+		<version>1.3.0</version>
+	</parent>
+
 	<artifactId>panda-tool</artifactId>
-	<version>1.2.0</version>
 	<packaging>jar</packaging>
 
-	<name>Panda Java Tools</name>
-	<description>Panda Java Tools</description>
-	<url>https://github.com/pandafw/panda/tree/master/panda-tool</url>
+	<name>Panda Framework (Tool)</name>
+	<description>Panda Tool contains some commonly used tools and source code generator for Panda Mvc. Can generate Entity/Query/Dao/Action class, Freemarker (HTML) template file.</description>
 
-	<licenses>
-		<license>
-			<name>Apache 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
-	<scm>
-		<connection>scm:git:git@github.com:pandafw/panda.git</connection>
-		<developerConnection>scm:git:git@github.com:pandafw/panda.git</developerConnection>
-		<url>git@github.com:pandafw/panda.git</url>
-	</scm>
 
 	<dependencies>
+		<!-- Panda -->
 		<dependency>
 			<groupId>com.github.pandafw</groupId>
 			<artifactId>panda-core</artifactId>
-			<version>1.2.0</version>
+			<version>${project.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.github.pandafw</groupId>
 			<artifactId>panda-gear</artifactId>
-			<version>1.2.0</version>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- POI -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.10.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.10.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.10.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>2.4.0</version>
 		</dependency>
 	</dependencies>
 
-	<developers>
-		<developer>
-			<id>yf.frank.wang</id>
-			<name>Frank Wang</name>
-			<email>yf.frank.wang@outlook.com</email>
-		</developer>
-	</developers>
-
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
 </project>

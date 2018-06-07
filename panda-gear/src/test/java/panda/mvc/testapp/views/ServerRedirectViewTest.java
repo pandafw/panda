@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import panda.lang.Strings;
 import panda.mvc.testapp.BaseWebappTest;
 import panda.net.http.HttpHeader;
 
@@ -30,6 +31,10 @@ public class ServerRedirectViewTest extends BaseWebappTest {
 	public void test_toslash() throws IOException {
 		get("/views", false);
 		assertEquals(302, resp.getStatusCode());
-		assertEquals("/mvctest/views/", resp.getHeader().getString(HttpHeader.LOCATION));
+		
+		String red = resp.getHeader().getString(HttpHeader.LOCATION);
+		red = Strings.removeStart(red, getServerURL());
+		red = Strings.removeStart(red, getContextPath());
+		assertEquals("/views/", red);
 	}
 }
