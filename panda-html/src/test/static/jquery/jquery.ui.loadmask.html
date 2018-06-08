@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<link href="../../../main/static/jquery/css/jquery.ui.loadmask.css" rel="stylesheet" type="text/css"/>
+<link href="../../../main/static/panda/css/ui.loadmask.css" rel="stylesheet" type="text/css"/>
+<link href="../../../main/static/bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+<link href="../../../main/static/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../../main/static/bootstrap3/css/bootstrap-plugins.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body style="padding: 20px;">
+
+<div style="text-align: center; padding: 20px 50px;">
+	<button id="loadmask">loadmask</button> 
+	<button id="loadmaskm">loadmask with text</button> 
+	<button id="loadmaskm2">loadmask with 2 text</button> 
+	<button id="unloadmask">unloadmask</button> 
+</div>
+
+<hr>
+<center>
+<div id="d" style="width: 400px; height: 400px; border: solid 1px #999;">
+</div>
+</center>
+
+<script src="../../../main/static/jquery/js/jquery-1.12.4.js" type="text/javascript"></script>
+<script src="../../../main/static/jquery/js/jquery.browser.js" type="text/javascript"></script>
+<script src="../../../main/static/jquery/js/jquery.ui.center.js" type="text/javascript"></script>
+<script src="../../../main/static/jquery/js/jquery.ui.loadmask.js" type="text/javascript"></script>
+<script src="../../../main/static/bootstrap3/js/bootstrap.js" type="text/javascript"></script>
+<script src="../../../main/static/bootstrap3/js/bootstrap-plugins.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$('#loadmask').click(function() {
+			$('#d').loadmask();
+		});
+		$('#loadmaskm').click(function() {
+			$('#d').loadmask('Loading...');
+		});
+		$('#loadmaskm2').click(function() {
+			$('#d').loadmask({ cssClass: 'ui-loadmask-big', label: 'Loading...<br>Loading...'});
+		});
+		$('#unloadmask').click(function() {
+			$('#d').unloadmask();
+		});
+	});
+</script>
+</body>
+</html>

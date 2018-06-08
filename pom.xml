@@ -21,6 +21,7 @@
 
 	<modules>
 		<module>panda-core</module>
+		<module>panda-html</module>
 		<module>panda-gear</module>
 		<module>panda-glue</module>
 		<module>panda-lane</module>

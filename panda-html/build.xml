@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="panda-html" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-	<property file="build.properties" />
-	
-	<!-- version -->
-	<import file="../ant/panda-version.xml"/>
-
+<project name="panda-html" default="usage" basedir=".">
 	<target name="usage">
 		<echo><![CDATA[
-${prj.name}-${VERSION} build file
+${maven.project.artifactId}-${maven.project.version} build file
 -----------------------------------
 
 Available targets are:
@@ -15,323 +10,259 @@ Available targets are:
 build             --> Build the project (build-js, build-css)
 build-css         --> Merge & minify css files
 build-js          --> Merge & minify javascript files
-dist              --> Distribute project (jar, ghp)
-ghp               --> Copy sources to gh-pages location
-jar               --> Make the project as a jar file
-release           --> Release the project
-mvn-pom           --> Generate pom.xml
-mvn-local-deploy  --> Deploy release version to local maven repository
-mvn-oss-deploy    --> Deploy snapshot version to maven snapshot repository
-mvn-oss-stage     --> Deploy release version to maven staging repository
 ]]>
 		</echo>
 	</target>
 
-	<!-- ivy -->
-	<import file="../ant/prj-ivy.xml"/>
+	<property name="dir.s" value="src/main/static"/>
+	<property name="dir.bs2" value="${dir.s}/bootstrap2"/>
+	<property name="dir.bs3" value="${dir.s}/bootstrap3"/>
+	<property name="dir.jq" value="${dir.s}/jquery"/>
+	<property name="dir.ex" value="${dir.s}/extras"/>
+	<property name="dir.p" value="${dir.s}/panda"/>
 
-	<!-- common target -->
 	<target name="minjs">
-		<echo>minify ${src}</echo>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="${src}"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="${out}"/>
+		<echo>MinJS: ${src}</echo>
+		<java jar="${maven.dependency.com.yahoo.platform.yui.yuicompressor.jar.path}" fork="true" failonerror="true">
+			<arg value="${src}.js" />
+			<arg value="--charset" />
+			<arg value="UTF-8" />
+			<arg value="--type" />
+			<arg value="js" />
+			<arg value="-o" />
+			<arg value="${src}.min.js" />
 		</java>
 	</target>
 
 	<target name="mincss">
-		<echo>minify ${src}</echo>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="${src}"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="${out}"/>
+		<echo>MinCSS: ${src}</echo>
+		<java jar="${maven.dependency.com.yahoo.platform.yui.yuicompressor.jar.path}" fork="true" failonerror="true">
+			<arg value="${src}.css" />
+			<arg value="--charset" />
+			<arg value="UTF-8" />
+			<arg value="--type" />
+			<arg value="css" />
+			<arg value="-o" />
+			<arg value="${src}.min.css" />
 		</java>
 	</target>
 
 	<!-- build -->
 	<target name="build-js" description="Merge &amp; minify javascript files">
 		<!-- bootstrap2 -->
-		<concat destfile="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js" binary="true">
-			<fileset dir="src/main/bootstrap2/js/i18n">
-				<include name="*.js"/>
+		<concat
+			destfile="${dir.bs2}/js/bootstrap-datetimepicker-i18n.js"
+			binary="true">
+			<fileset dir="${dir.bs2}/js/i18n">
+				<include name="*.js" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js"/>
-			<param name="out" value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.min.js"/>
+			<param name="src" value="${dir.bs2}/js/bootstrap-datetimepicker-i18n" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="src/main/bootstrap2/js/bootstrap-datetimepicker.js"/>
-			<param name="out" value="src/main/bootstrap2/js/bootstrap-datetimepicker.min.js"/>
+			<param name="src" value="${dir.bs2}/js/bootstrap-datetimepicker" />
 		</antcall>
 
 		<!-- bootstrap3 -->
 		<antcall target="minjs">
-			<param name="src" value="src/main/bootstrap3/js/bootstrap-datetimepicker.js"/>
-			<param name="out" value="src/main/bootstrap3/js/bootstrap-datetimepicker.min.js"/>
+			<param name="src" value="${dir.bs3}/js/bootstrap-datetimepicker" />
 		</antcall>
-			<antcall target="minjs">
-			<param name="src" value="src/main/bootstrap3/js/bootstrap-patch.js"/>
-			<param name="out" value="src/main/bootstrap3/js/bootstrap-patch.min.js"/>
+		<antcall target="minjs">
+			<param name="src" value="${dir.bs3}/js/bootstrap-patch" />
 		</antcall>
 
 		<!-- bootstrap3 plugins -->
-		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins.js" binary="true">
-			<fileset dir="src/main/bootstrap3/js">
-				<include name="bootstrap-*.js"/>
-				<exclude name="bootstrap-plugins*.js"/>
-				<exclude name="bootstrap-*.min.js"/>
-				<exclude name="bootstrap-*-i18n.*js"/>
+		<concat destfile="${dir.bs3}/js/bootstrap-plugins.js"
+			binary="true">
+			<fileset dir="${dir.bs3}/js">
+				<include name="bootstrap-*.js" />
+				<exclude name="bootstrap-plugins*.js" />
+				<exclude name="bootstrap-*.min.js" />
+				<exclude name="bootstrap-*-i18n.*js" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/bootstrap3/js/bootstrap-plugins.js"/>
-			<param name="out" value="src/main/bootstrap3/js/bootstrap-plugins.min.js"/>
+			<param name="src" value="${dir.bs3}/js/bootstrap-plugins" />
 		</antcall>
 
 		<!-- boostrap i18n -->
-		<concat destfile="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" binary="true">
-			<fileset dir="src/main/bootstrap3/js/i18n">
-				<include name="bootstrap-datetimepicker.*.js"/>
+		<concat
+			destfile="${dir.bs3}/js/bootstrap-datetimepicker-i18n.js"
+			binary="true">
+			<fileset dir="${dir.bs3}/js/i18n">
+				<include name="bootstrap-datetimepicker.*.js" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js"/>
-			<param name="out" value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js"/>
+			<param name="src" value="${dir.bs3}/js/bootstrap-datetimepicker-i18n" />
 		</antcall>
-		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins-i18n.js" binary="true">
-			<fileset dir="src/main/bootstrap3/js">
-				<include name="bootstrap-*-i18n.js"/>
-				<exclude name="bootstrap-plugins-i18n.js"/>
+		<concat destfile="${dir.bs3}/js/bootstrap-plugins-i18n.js"
+			binary="true">
+			<fileset dir="${dir.bs3}/js">
+				<include name="bootstrap-*-i18n.js" />
+				<exclude name="bootstrap-plugins-i18n.js" />
 			</fileset>
 		</concat>
-		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins-i18n.min.js" binary="true">
-			<fileset dir="src/main/bootstrap3/js">
-				<include name="bootstrap-*-i18n.min.js"/>
-				<exclude name="bootstrap-plugins-i18n.min.js"/>
+		<concat destfile="${dir.bs3}/js/bootstrap-plugins-i18n.min.js"
+			binary="true">
+			<fileset dir="${dir.bs3}/js">
+				<include name="bootstrap-*-i18n.min.js" />
+				<exclude name="bootstrap-plugins-i18n.min.js" />
 			</fileset>
 		</concat>
 
 		<!-- jquery plugins -->
-		<concat destfile="src/main/jquery/js/jquery-plugins.js" binary="true">
-			<fileset dir="src/main/jquery/js" includes="jquery.*.js"/>
+		<concat destfile="${dir.jq}/js/jquery-plugins.js" binary="true">
+			<fileset dir="${dir.jq}/js" includes="jquery.*.js" />
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/jquery/js/jquery-plugins.js"/>
-			<param name="out" value="src/main/jquery/js/jquery-plugins.min.js"/>
+			<param name="src" value="${dir.jq}/js/jquery-plugins" />
 		</antcall>
 
 		<!-- extras -->
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/bootstrap-switch.js"/>
-			<param name="out" value="src/main/extras/js/bootstrap-switch.min.js"/>
+			<param name="src" value="${dir.ex}/js/bootstrap-switch" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/jquery.ui.hammer.js"/>
-			<param name="out" value="src/main/extras/js/jquery.ui.hammer.min.js"/>
+			<param name="src" value="${dir.ex}/js/jquery.ui.hammer" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/jquery.ui.lightbox.js"/>
-			<param name="out" value="src/main/extras/js/jquery.ui.lightbox.min.js"/>
+			<param name="src" value="${dir.ex}/js/jquery.ui.lightbox" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/jquery.ui.meio.mask.js"/>
-			<param name="out" value="src/main/extras/js/jquery.ui.meio.mask.min.js"/>
+			<param name="src" value="${dir.ex}/js/jquery.ui.meio.mask" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/jquery.ui.mousewheel.js"/>
-			<param name="out" value="src/main/extras/js/jquery.ui.mousewheel.min.js"/>
+			<param name="src" value="${dir.ex}/js/jquery.ui.mousewheel" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/jquery.ui.tablesorter.js"/>
-			<param name="out" value="src/main/extras/js/jquery.ui.tablesorter.min.js"/>
+			<param name="src" value="${dir.ex}/js/jquery.ui.tablesorter" />
 		</antcall>
 
-		<concat destfile="src/main/extras/js/extras.js" binary="true">
-			<fileset dir="src/main/extras/js">
-				<include name="jquery.*.js"/>
-				<include name="bootstrap-*.js"/>
-				<exclude name="*.min.js"/>
+		<concat destfile="${dir.ex}/js/extras.js" binary="true">
+			<fileset dir="${dir.ex}/js">
+				<include name="jquery.*.js" />
+				<include name="bootstrap-*.js" />
+				<exclude name="*.min.js" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/extras.js"/>
-			<param name="out" value="src/main/extras/js/extras.min.js"/>
+			<param name="src" value="${dir.ex}/js/extras" />
 		</antcall>
 
-		<concat destfile="src/main/extras/js/i18n/extras.ja.js" binary="true">
-			<fileset dir="src/main/extras/js/i18n">
-				<include name="*.ja.js"/>
-				<exclude name="extras.*"/>
+		<concat destfile="${dir.ex}/js/i18n/extras.ja.js"
+			binary="true">
+			<fileset dir="${dir.ex}/js/i18n">
+				<include name="*.ja.js" />
+				<exclude name="extras.*" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/i18n/extras.ja.js"/>
-			<param name="out" value="src/main/extras/js/i18n/extras.ja.min.js"/>
+			<param name="src" value="${dir.ex}/js/i18n/extras.ja" />
 		</antcall>
 
-		<concat destfile="src/main/extras/js/i18n/extras.zh_CN.js" binary="true">
-			<fileset dir="src/main/extras/js/i18n">
-				<include name="*.zh_CN.js"/>
-				<exclude name="extras.*"/>
+		<concat destfile="${dir.ex}/js/i18n/extras.zh_CN.js"
+			binary="true">
+			<fileset dir="${dir.ex}/js/i18n">
+				<include name="*.zh_CN.js" />
+				<exclude name="extras.*" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/i18n/extras.zh_CN.js"/>
-			<param name="out" value="src/main/extras/js/i18n/extras.zh_CN.min.js"/>
+			<param name="src" value="${dir.ex}/js/i18n/extras.zh_CN" />
 		</antcall>
 
-		<concat destfile="src/main/extras/js/i18n/extras.zh_TW.js" binary="true">
-			<fileset dir="src/main/extras/js/i18n">
-				<include name="*.zh_TW.js"/>
-				<exclude name="extras.*"/>
+		<concat destfile="${dir.ex}/js/i18n/extras.zh_TW.js"
+			binary="true">
+			<fileset dir="${dir.ex}/js/i18n">
+				<include name="*.zh_TW.js" />
+				<exclude name="extras.*" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/extras/js/i18n/extras.zh_TW.js"/>
-			<param name="out" value="src/main/extras/js/i18n/extras.zh_TW.min.js"/>
+			<param name="src" value="${dir.ex}/js/i18n/extras.zh_TW" />
 		</antcall>
 
 		<!-- others -->
 		<antcall target="minjs">
-			<param name="src" value="src/main/respondjs/respond.js"/>
-			<param name="out" value="src/main/respondjs/respond.min.js"/>
+			<param name="src" value="${dir.s}/respondjs/respond" />
 		</antcall>
 
 		<!-- panda -->
-		<concat destfile="src/main/panda/js/panda.js" binary="true">
-			<fileset dir="src/main/panda/js">
-				<include name="core.*.js"/>
-				<include name="ui.*.js"/>
+		<concat destfile="${dir.p}/js/panda.js" binary="true">
+			<fileset dir="${dir.p}/js">
+				<include name="core.*.js" />
+				<include name="ui.*.js" />
 			</fileset>
 		</concat>
 		<antcall target="minjs">
-			<param name="src" value="src/main/panda/js/panda.js"/>
-			<param name="out" value="src/main/panda/js/panda.min.js"/>
+			<param name="src" value="${dir.p}/js/panda" />
 		</antcall>
 	</target>
 
 	<target name="build-css" description="Merge &amp; minify css files">
 		<!-- bootstrap2 -->
 		<antcall target="mincss">
-			<param name="src" value="src/main/bootstrap2/css/bootstrap-datetimepicker.css"/>
-			<param name="out" value="src/main/bootstrap2/css/bootstrap-datetimepicker.min.css"/>
+			<param name="src" value="${dir.bs2}/css/bootstrap-datetimepicker" />
 		</antcall>
 
 		<!-- bootstrap3 -->
 		<antcall target="mincss">
-			<param name="src" value="src/main/bootstrap3/css/bootstrap-datetimepicker.css"/>
-			<param name="out" value="src/main/bootstrap3/css/bootstrap-datetimepicker.min.css"/>
+			<param name="src" value="${dir.bs3}/css/bootstrap-datetimepicker" />
 		</antcall>
-		
+
 		<!-- bootstrap3 plugins -->
-		<concat destfile="src/main/bootstrap3/css/bootstrap-plugins.css" binary="true">
-			<fileset dir="src/main/bootstrap3/css">
-				<include name="bootstrap-*.css"/>
-				<exclude name="bootstrap-theme*.css"/>
-				<exclude name="bootstrap-plugins*.css"/>
-				<exclude name="bootstrap-*.min.css"/>
+		<concat destfile="${dir.bs3}/css/bootstrap-plugins.css"
+			binary="true">
+			<fileset dir="${dir.bs3}/css">
+				<include name="bootstrap-*.css" />
+				<exclude name="bootstrap-theme*.css" />
+				<exclude name="bootstrap-plugins*.css" />
+				<exclude name="bootstrap-*.min.css" />
 			</fileset>
 		</concat>
 		<antcall target="mincss">
-			<param name="src" value="src/main/bootstrap3/css/bootstrap-plugins.css"/>
-			<param name="out" value="src/main/bootstrap3/css/bootstrap-plugins.min.css"/>
+			<param name="src" value="${dir.bs3}/css/bootstrap-plugins" />
 		</antcall>
 
 		<!-- jquery plugins -->
-		<concat destfile="src/main/jquery/css/jquery-plugins.css" binary="true">
-			<fileset dir="src/main/jquery/css" includes="jquery.*.css"/>
+		<concat destfile="${dir.jq}/css/jquery-plugins.css" binary="true">
+			<fileset dir="${dir.jq}/css" includes="jquery.*.css" />
 		</concat>
 		<antcall target="mincss">
-			<param name="src" value="src/main/jquery/css/jquery-plugins.css"/>
-			<param name="out" value="src/main/jquery/css/jquery-plugins.min.css"/>
+			<param name="src" value="${dir.jq}/css/jquery-plugins" />
 		</antcall>
 
 		<!-- extras -->
 		<antcall target="mincss">
-			<param name="src" value="src/main/extras/css/bootstrap-switch.css"/>
-			<param name="out" value="src/main/extras/css/bootstrap-switch.min.css"/>
+			<param name="src" value="${dir.ex}/css/bootstrap-switch" />
 		</antcall>
 		<antcall target="mincss">
-			<param name="src" value="src/main/extras/css/jquery.ui.lightbox.css"/>
-			<param name="out" value="src/main/extras/css/jquery.ui.lightbox.min.css"/>
+			<param name="src" value="${dir.ex}/css/jquery.ui.lightbox" />
 		</antcall>
 		<antcall target="mincss">
-			<param name="src" value="src/main/extras/css/jquery.ui.tablesort.css"/>
-			<param name="out" value="src/main/extras/css/jquery.ui.tablesort.min.css"/>
+			<param name="src" value="${dir.ex}/css/jquery.ui.tablesort" />
 		</antcall>
 
-		<concat destfile="src/main/extras/css/extras.css" binary="true">
-			<fileset dir="src/main/extras/css">
-				<include name="jquery.*.css"/>
-				<include name="bootstrap-*.css"/>
+		<concat destfile="${dir.ex}/css/extras.css" binary="true">
+			<fileset dir="${dir.ex}/css">
+				<include name="jquery.*.css" />
+				<include name="bootstrap-*.css" />
 			</fileset>
 		</concat>
 		<antcall target="mincss">
-			<param name="src" value="src/main/extras/css/extras.css"/>
-			<param name="out" value="src/main/extras/css/extras.min.css"/>
+			<param name="src" value="${dir.ex}/css/extras" />
 		</antcall>
 
 		<!-- panda -->
-		<concat destfile="src/main/panda/css/panda.css" binary="true">
-			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
+		<concat destfile="${dir.p}/css/panda.css" binary="true">
+			<fileset dir="${dir.p}/css" includes="ui.*.css" />
 		</concat>
 		<antcall target="mincss">
-			<param name="src" value="src/main/panda/css/panda.css"/>
-			<param name="out" value="src/main/panda/css/panda.min.css"/>
+			<param name="src" value="${dir.p}/css/panda" />
 		</antcall>
 	</target>
 
-	<target name="build" depends="build-js, build-css" description="Build the project"/>
-
-	<target name="jar" description="Make project as a jar file">
-		<delete dir="out"/>
-		<jar destfile="out/${prj.name}-${VERSION}.jar">
-			<manifest>
-				<attribute name="Created-By" value="${prj.org}"/>
-				<attribute name="Built-By" value="${prj.org}"/>
-				<attribute name="Built-Date" value="${TODAY}"/>
-				<attribute name="Implementation-Title" value="${prj.title}"/>
-				<attribute name="Implementation-Version" value="${VERSION}"/> 
-				<attribute name="Implementation-Vendor" value="${prj.url}"/>
-			</manifest>
-			<fileset dir="src/main">
-				<include name="**"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	<target name="ghp" description="Copy sources to gh-pages location">
-		<mkdir dir="${prj.repo}/docs/${prj.version}"/>
-		<delete dir="${prj.repo}/docs/${prj.version}" includeemptydirs="true">
-			<exclude name="*.xsd"/>
-		</delete>
-		<copy todir="${prj.repo}/docs/${prj.version}" preservelastmodified="true" overwrite="true" force="true">
-			<fileset dir="src/main">
-				<include name="**"/>
-			</fileset>
-		</copy>
-	</target>
-
-	<target name="dist" depends="jar, ghp" description="Distribute project as a jar file"/>
-
-	<!-- maven -->
-	<import file="../ant/prj-maven.xml"/>
-	
-	<!-- release -->
-	<target name="release" description="Release the project">
-		<antcall target="ivy-resolve"/>
-		<antcall target="build"/>
-		<antcall target="dist"/>
-		<antcall target="mvn-local-deploy"/>
-	</target>
+	<target name="build" depends="build-js, build-css" />
 </project>
