@@ -12,7 +12,7 @@
 	<artifactId>panda-lane</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Framework (Lane)</name>
+	<name>Panda Lane</name>
 	<description>Panda Lane is a extension module of the Panda development framework for web applications. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
 
 	<build>
@@ -51,21 +51,61 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- ant build -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>codegen</id>
+						<configuration>
+							<target>
+								<property name="maven.project.artifactId" value="${project.artifactId}"/>
+								<ant antfile="build.xml">
+									<target name="gen-all" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>build</id>
+						<configuration>
+							<target>
+								<property name="maven.project.artifactId" value="${project.artifactId}"/>
+								<ant antfile="build.xml">
+									<target name="${ant.target}" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
 		<!-- Panda -->
 		<dependency>
-			<groupId>com.github.pandafw</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>com.github.pandafw</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-gear</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>panda-tool</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Servlet -->

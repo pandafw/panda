@@ -12,20 +12,29 @@
 	<artifactId>panda-tool</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Framework (Tool)</name>
+	<name>Panda Tool</name>
 	<description>Panda Tool contains some commonly used tools and source code generator for Panda Mvc. Can generate Entity/Query/Dao/Action class, Freemarker (HTML) template file.</description>
 
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/templates</directory>
+			</resource>
+		</resources>
+	</build>
 
 	<dependencies>
 		<!-- Panda -->
 		<dependency>
-			<groupId>com.github.pandafw</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>com.github.pandafw</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-gear</artifactId>
 			<version>${project.version}</version>
 		</dependency>

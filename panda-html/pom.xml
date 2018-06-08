@@ -22,29 +22,18 @@
 			</resource>
 		</resources>
 		<plugins>
+			<!-- build js & css -->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.8</version>
 				<executions>
 					<execution>
-						<id>build-css</id>
+						<id>compile</id>
 						<configuration>
 							<target>
+								<property name="maven.project.artifactId" value="${project.artifactId}"/>
 								<ant antfile="build.xml">
-									<target name="build-css" />
-								</ant>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>build-js</id>
-						<configuration>
-							<target>
-								<ant antfile="build.xml">
-									<target name="build-js" />
+									<target name="build" />
 								</ant>
 							</target>
 						</configuration>
@@ -56,8 +45,9 @@
 						<id>build</id>
 						<configuration>
 							<target>
+								<property name="maven.project.artifactId" value="${project.artifactId}"/>
 								<ant antfile="build.xml">
-									<target name="build" />
+									<target name="${ant.target}" />
 								</ant>
 							</target>
 						</configuration>
@@ -66,21 +56,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>maven</executable>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
