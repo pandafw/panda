@@ -15,6 +15,16 @@
 	<name>Panda Gear</name>
 	<description>Panda Gear is a module of the Panda development framework for web applications (Servlet), similar to Spring-MVC, Struts2, contains some commonly used Taglib.</description>
 
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/templates</directory>
+			</resource>
+		</resources>
+	</build>
 
 	<dependencies>
 		<!-- Panda -->
