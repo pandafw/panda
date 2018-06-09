@@ -1,6 +1,7 @@
 package panda.app.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -12,7 +13,6 @@ import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
-import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -40,13 +40,11 @@ public class AppSettings extends ReloadableSettings {
 	public AppSettings() throws IOException {
 		load("app.properties");
 		
-		if (Systems.IS_OS_APPENGINE) {
-			try {
-				load("gae.properties");
-			}
-			catch (IOException e) {
-				log.warn(e.getMessage());
-			}
+		try {
+			load("env.properties");
+		}
+		catch (FileNotFoundException e) {
+			log.warn(e.getMessage());
 		}
 
 		if (environment) {
