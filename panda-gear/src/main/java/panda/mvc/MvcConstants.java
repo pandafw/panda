@@ -62,8 +62,8 @@ public interface MvcConstants extends IocConstants {
 	/** The defaults of datetimepicker */
 	public static final String UI_DATETIMEPICKER_DEFAULTS = "panda.ui.datetimepicker.defaults";
 
-	/** The static base url */
-	public static final String UI_STATIC_BASE = "panda.ui.static.base";
+	/** The static path */
+	public static final String STATIC_PATH = "static_path";
 
 	/** The default UI template theme */
 	public static final String UI_THEME = "panda.ui.theme";

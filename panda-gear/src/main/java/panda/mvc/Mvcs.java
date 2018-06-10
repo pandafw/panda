@@ -152,7 +152,7 @@ public abstract class Mvcs {
 	 * @param sb the string
 	 * @return the static base path
 	 */
-	public static String getStaticBase(ActionContext ac, String sb) {
+	public static String getStaticPath(ActionContext ac, String sb) {
 		if (Strings.isEmpty(sb)) {
 			Settings ss = ac.getSettings();
 			if (ss.getPropertyAsBoolean(SiteConstants.SITE_CDN)) {
@@ -161,7 +161,7 @@ public abstract class Mvcs {
 		}
 
 		if (Strings.isEmpty(sb)) {
-			sb = ac.getIoc().getIfExists(String.class, MvcConstants.UI_STATIC_BASE);
+			sb = ac.getIoc().getIfExists(String.class, MvcConstants.STATIC_PATH);
 		}
 		
 		if (Strings.isEmpty(sb)) {

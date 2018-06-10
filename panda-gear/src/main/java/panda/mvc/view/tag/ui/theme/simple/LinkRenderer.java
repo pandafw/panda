@@ -328,7 +328,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private String sbase;
 	protected String suri(String uri, String version) {
 		if (sbase == null) {
-			sbase = Mvcs.getStaticBase(context, ((Link)tag).getStatics());
+			sbase = Mvcs.getStaticPath(context, ((Link)tag).getStatics());
 		}
 		
 		StringBuilder s = new StringBuilder();

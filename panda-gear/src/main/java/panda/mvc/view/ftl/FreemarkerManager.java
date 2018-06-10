@@ -88,7 +88,7 @@ public class FreemarkerManager {
 		}
 
 		if (statics == null) {
-			statics = Mvcs.getStaticBase(ac, null);
+			statics = Mvcs.getStaticPath(ac, null);
 		}
 		model.put(KEY_STATICS, statics);
 
