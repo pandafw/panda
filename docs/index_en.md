@@ -28,11 +28,11 @@ We provide a rich set of documents and samples to reduce initial cost from intro
 
 ## Panda Framework Applying Effect 
 By applying Panda Framework, effective development and operation maintenance can be achieved. 
-![Applying Effect](pandafw-apply-effect_en.jpg)
+![Applying Effect](imgs/pandafw-apply-effect_en.jpg)
 
 
 ## System Architecture
-![System Architecture](pandafw-app-structure.jpg)
+![System Architecture](imgs/pandafw-app-structure.jpg)
 
 
 ## Modules

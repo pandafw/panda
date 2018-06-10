@@ -58,7 +58,7 @@ The following java type variable are supported.
  | <        |  2              | 6        | Less      |
  | &&       |  2              | 11       | Logical And |
  | \|\|     |  2              | 12       | Logical Or    |
- | A\|\|\|B |  2              | 12       | Return A if A is empty or false, else return B |
+ | A\|\|\|B |  2              | 12       | Return B if A is empty or false, else return A |
  | ?:       |  2              | 13       | Ternary   |
  | &        |  2              | 8        | Bit AND  |
  | ~        |  2              | 2        | Bit NOT  |

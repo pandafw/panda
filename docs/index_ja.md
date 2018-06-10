@@ -31,11 +31,11 @@ Panda Frameworkのコードジェネレータを使用し、Action/Dao/Bean/View
 
 ## Panda Frameworkの適用効果イメージ
 Panda Frameworkを適用することにより、効果的な開発と運用保守が図れます。
-![適用効果](pandafw-apply-effect_ja.jpg)
+![適用効果](imgs/pandafw-apply-effect_ja.jpg)
 
 
 ## Panda Frameworkを適用するシステム構成図
-![システム構成図](pandafw-app-structure.jpg)
+![システム構成図](imgs/pandafw-app-structure.jpg)
 
 
 ## Panda Frameworkの構成

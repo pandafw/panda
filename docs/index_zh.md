@@ -29,11 +29,11 @@ Panda Framework是一个小而全，可扩展的开发框架，主要用于建�
 
 ## Panda Framework的开发效果
 使用Panda Framework，可以大幅提高项目开发及维护效率。
-![开发效果](pandafw-apply-effect_zh.jpg)
+![开发效果](imgs/pandafw-apply-effect_zh.jpg)
 
 
 ## 使用Panda Framework的系统构成图
-![系统构成](pandafw-app-structure.jpg)
+![系统构成](imgs/pandafw-app-structure.jpg)
 
 
 ## Panda Framework的构成
