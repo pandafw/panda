@@ -29,6 +29,8 @@ import panda.mvc.util.TextProvider;
  * Mvc helper class
  */
 public abstract class Mvcs {
+	public static final String STATIC_PATH = "/static";
+	
 	public static final String PANDA_CDN = "//pandafw.github.io/repos";
 
 	private static Beans beans = Beans.i();
@@ -165,7 +167,7 @@ public abstract class Mvcs {
 		}
 		
 		if (Strings.isEmpty(sb)) {
-			sb = ac.getServlet().getContextPath() + "/static";
+			sb = ac.getServlet().getContextPath() + STATIC_PATH;
 		}
 		else if (sb.charAt(0) == '~') {
 			sb = ac.getRequest().getContextPath() + sb.substring(1);

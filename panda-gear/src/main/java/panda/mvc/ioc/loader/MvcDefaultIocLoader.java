@@ -37,6 +37,7 @@ import panda.mvc.util.MvcCryptor;
 import panda.mvc.util.MvcResourceLoader;
 import panda.mvc.util.MvcSettings;
 import panda.mvc.util.MvcURLBuilder;
+import panda.mvc.util.StaticAction;
 import panda.mvc.validator.BinaryValidator;
 import panda.mvc.validator.CIDRValidator;
 import panda.mvc.validator.CastErrorValidator;
@@ -171,7 +172,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			// file pool used by Upload
 			MvcLocalFilePool.class,
 			
-			// utility
+			// utilities
 			ActionAssist.class,
 			ActionConsts.class,
 			CookieStateProvider.class,
@@ -180,6 +181,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			MvcSettings.class,
 			MvcCryptor.class,
 			MvcURLBuilder.class,
+			StaticAction.class,
 	
 			// processor
 			AdaptProcessor.class,
