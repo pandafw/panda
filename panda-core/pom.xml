@@ -13,7 +13,7 @@
 	<artifactId>panda-core</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Framework (Core)</name>
+	<name>Panda Core</name>
 	<description>Panda Core is the core module of Panda Framework, it contains commonly used utility classes similar to apache-commons.</description>
 
 	<dependencies>

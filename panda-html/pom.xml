@@ -12,7 +12,7 @@
 	<artifactId>panda-html</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda-HTML</name>
+	<name>Panda HTML</name>
 	<description>Panda HTML contains jQuery, Bootstrap, and the css/javascript required by panda-gear's taglib.</description>
 
 	<build>
