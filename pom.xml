@@ -27,6 +27,7 @@
 		<module>panda-lane</module>
 		<module>panda-tube</module>
 		<module>panda-tool</module>
+		<module>panda-roid</module>
 	</modules>
 
 	<properties>
