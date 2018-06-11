@@ -141,12 +141,6 @@
 			<version>3.13</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.xmlbeans</groupId>
-			<artifactId>xmlbeans</artifactId>
-			<version>2.4.0</version>
-			<scope>provided</scope>
-		</dependency>
 
 		<!-- LUCENE -->
 		<dependency>
