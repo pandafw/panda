@@ -1,6 +1,6 @@
 package panda.app;
 
-import java.util.Set;
+import java.util.Collection;
 
 import panda.app.auth.AppAuthenticator;
 import panda.app.auth.UserAuthenticateProcessor;
@@ -37,7 +37,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 
 		@Override
 		@SuppressWarnings("unchecked")
-		protected void addDefaults(Set<Object> ss) {
+		protected void addDefaults(Collection<Object> ss) {
 			super.addDefaults(ss);
 			
 			Collections.addAll(ss, 

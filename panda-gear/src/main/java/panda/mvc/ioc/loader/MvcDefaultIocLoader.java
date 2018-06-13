@@ -1,7 +1,8 @@
 package panda.mvc.ioc.loader;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import panda.lang.Collections;
 import panda.mvc.MvcConfig;
@@ -37,7 +38,6 @@ import panda.mvc.util.MvcCryptor;
 import panda.mvc.util.MvcResourceLoader;
 import panda.mvc.util.MvcSettings;
 import panda.mvc.util.MvcURLBuilder;
-import panda.mvc.util.StaticAction;
 import panda.mvc.validator.BinaryValidator;
 import panda.mvc.validator.CIDRValidator;
 import panda.mvc.validator.CastErrorValidator;
@@ -134,37 +134,47 @@ import panda.mvc.view.util.XlsExporter;
 import panda.mvc.view.util.XlsxExporter;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
-	protected void addModules(MvcConfig config, Set<Object> pkgs) {
-		Class<?> mm = config.getMainModule();
-		pkgs.add(mm);
-		
-		Modules ms = mm.getAnnotation(Modules.class);
-		if (ms != null) {
-			if (ms.scan()) {
-				pkgs.remove(mm);
-				pkgs.add(mm.getPackage().getName());
-			}
-			
-			for (String pkg : ms.packages()) {
-				pkgs.add(pkg);
-			}
-			
-			for (Class<?> cls : ms.value()) {
-				pkgs.add(cls);
-			}
-		}
+	
+	public MvcDefaultIocLoader(MvcConfig config) {
+		super();
+		init(getDefaults(config));
 	}
 	
-	protected Set<Object> getDefaults(MvcConfig config) {
-		Set<Object> ss = new LinkedHashSet<Object>();
+	protected List<Object> getDefaults(MvcConfig config) {
+		List<Object> ss = new ArrayList<Object>();
 		
 		addDefaults(ss);
 		addModules(config, ss);
 		return ss;
 	}
+
+	protected void addModules(MvcConfig config, List<Object> pkgs) {
+		Class<?> mm = config.getMainModule();
+
+		Modules ms = mm.getAnnotation(Modules.class);
+		if (ms == null) {
+			pkgs.add(mm);
+			return;
+		}
+		
+		for (int i = ms.packages().length - 1; i >= 0; i--) {
+			pkgs.add(ms.packages()[i]);
+		}
+		
+		for (int i = ms.value().length - 1; i >= 0; i--) {
+			pkgs.add(ms.value()[i]);
+		}
+
+		if (ms.scan()) {
+			pkgs.add(mm.getPackage().getName());
+		}
+		else {
+			pkgs.add(mm);
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
-	protected void addDefaults(Set<Object> ss) {
+	protected void addDefaults(Collection<Object> ss) {
 		Collections.addAll(ss,
 			RegexActionMapping.class,
 			DefaultActionChainCreator.class,
@@ -181,7 +191,6 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			MvcSettings.class,
 			MvcCryptor.class,
 			MvcURLBuilder.class,
-			StaticAction.class,
 	
 			// processor
 			AdaptProcessor.class,
@@ -328,9 +337,4 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			FreemarkerSitemesher.class
 		);
 	};
-	
-	public MvcDefaultIocLoader(MvcConfig config) {
-		super();
-		init(getDefaults(config));
-	}
 }

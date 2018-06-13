@@ -28,8 +28,8 @@ import panda.mvc.ActionConfig;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionMapping;
 import panda.mvc.IocProvider;
-import panda.mvc.MvcLoader;
 import panda.mvc.MvcConfig;
+import panda.mvc.MvcLoader;
 import panda.mvc.Mvcs;
 import panda.mvc.Setup;
 import panda.mvc.ViewCreator;
@@ -266,32 +266,38 @@ public class DefaultMvcLoader implements MvcLoader {
 			return actions;
 		}
 
-		// scan packages
-		Set<String> packages = new LinkedHashSet<String>();
+		// add classes
+		for (Class<?> action : ann.value()) {
+			addAction(actions, action, true);
+		}
 
+		Set<String> packages = new LinkedHashSet<String>();
 		if (ann.scan()) {
 			// add default main package
 			packages.add(mainModule.getPackage().getName());
 		}
 
 		if (Arrays.isNotEmpty(ann.packages())) {
-			packages.addAll(Arrays.asList(ann.packages()));
+			// add annotation packages
+			for (String pkg : ann.packages()) {
+				if (Strings.isNotEmpty(pkg)) {
+					packages.add(pkg);
+				}
+			}
 		}
 
+		// scan packages
 		if (Collections.isNotEmpty(packages)) {
-			if (log.isDebugEnabled()) {
-				log.debug(" > scan " + Arrays.toString(packages));
-			}
-			
-			List<Class<?>> subs = Classes.scan(packages);
-			for (Class<?> sub : subs) {
-				addAction(actions, sub, false);
-			}
-		}
+			for (String pkg : packages) {
+				if (log.isDebugEnabled()) {
+					log.debug(" > scan " + pkg);
+				}
 
-		// add classes
-		for (Class<?> action : ann.value()) {
-			addAction(actions, action, true);
+				List<Class<?>> clss = Classes.scan(pkg);
+				for (Class<?> cls : clss) {
+					addAction(actions, cls, true);
+				}
+			}
 		}
 
 		return actions;
