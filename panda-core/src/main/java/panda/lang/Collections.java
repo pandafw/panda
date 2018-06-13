@@ -411,25 +411,6 @@ public abstract class Collections {
 	}
 
 	// -----------------------------------------------------------------------
-	/**
-	 * Reverses the order of the given array.
-	 * 
-	 * @param array the array to reverse
-	 */
-	public static void reverseArray(Object[] array) {
-		int i = 0;
-		int j = array.length - 1;
-		Object tmp;
-
-		while (j > i) {
-			tmp = array[j];
-			array[j] = array[i];
-			array[i] = tmp;
-			j--;
-			i++;
-		}
-	}
-
 	private static final int getFreq(final Object obj, final Map freqMap) {
 		Integer count = (Integer)freqMap.get(obj);
 		if (count != null) {
