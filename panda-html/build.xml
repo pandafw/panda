@@ -14,7 +14,7 @@ build-js          --> Merge & minify javascript files
 		</echo>
 	</target>
 
-	<property name="dir.s" value="src/main/static"/>
+	<property name="dir.s" value="src/html/panda/html"/>
 	<property name="dir.bs2" value="${dir.s}/bootstrap2"/>
 	<property name="dir.bs3" value="${dir.s}/bootstrap3"/>
 	<property name="dir.jq" value="${dir.s}/jquery"/>

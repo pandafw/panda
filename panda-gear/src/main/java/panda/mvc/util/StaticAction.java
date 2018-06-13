@@ -19,7 +19,6 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.MvcConstants;
-import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
@@ -31,9 +30,8 @@ import panda.servlet.HttpServlets;
 @At
 public class StaticAction extends ActionSupport {
 	private static final Log log = Logs.getLog(StaticAction.class);
-	
-	@IocInject(value = MvcConstants.STATIC_PATH, required = false)
-	private String base = Mvcs.STATIC_PATH;
+
+	private static final String BASE = "panda/html/";
 	
 	@IocInject(value = MvcConstants.STATIC_BROWSER_CACHE, required = false)
 	private boolean cache = true;
@@ -137,7 +135,7 @@ public class StaticAction extends ActionSupport {
 	}
 	
 	private URL findResource(String name) {
-		String path = base + '/' + name;
+		String path = BASE + name;
 		
 		URL url = findFile(path);
 		if (url != null) {
@@ -146,7 +144,7 @@ public class StaticAction extends ActionSupport {
 		
 		String npath = null;
 		if (Strings.isNotEmpty(version) && Strings.startsWith(name, version)) {
-			npath = base + '/' + Strings.removeStart(name, version);
+			npath = BASE + Strings.removeStart(name, version);
 		}
 
 		if (npath != null) {
