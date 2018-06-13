@@ -27,20 +27,20 @@ import panda.net.http.HttpHeader;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 
-@At
 public class StaticAction extends ActionSupport {
 	private static final Log log = Logs.getLog(StaticAction.class);
 
-	private static final String BASE = "panda/html/";
+	protected static final String BASE = "panda/html/";
+	protected static final String VERSION = Panda.VERSION + '/';
 	
 	@IocInject(value = MvcConstants.STATIC_BROWSER_CACHE, required = false)
-	private boolean cache = true;
+	protected boolean cache = true;
 	
-	private String version = Panda.VERSION;
+	protected String version = VERSION;
 
-	private long expires = DateTimes.MS_MONTH;
+	protected long expires = DateTimes.MS_MONTH;
 
-	private String charset = Charsets.UTF_8;
+	protected String charset = Charsets.UTF_8;
 	
 	/**
 	 * @param version the version to set
@@ -48,6 +48,9 @@ public class StaticAction extends ActionSupport {
 	@IocInject(value = MvcConstants.STATIC_VERSION, required = false)
 	public void setVersion(String version) {
 		this.version = Strings.stripToNull(version);
+		if (!Strings.endsWithChar(this.version, '/')) {
+			this.version += '/';
+		}
 	}
 
 	/**
@@ -121,7 +124,7 @@ public class StaticAction extends ActionSupport {
 		}
 	}
 	
-	private URL findFile(String path) {
+	protected URL findFile(String path) {
 		try {
 			String rpath = getServlet().getRealPath(path);
 			File file = new File(rpath);
@@ -134,7 +137,7 @@ public class StaticAction extends ActionSupport {
 		return null;
 	}
 	
-	private URL findResource(String name) {
+	protected URL findResource(String name) {
 		String path = BASE + name;
 		
 		URL url = findFile(path);
@@ -144,7 +147,7 @@ public class StaticAction extends ActionSupport {
 		
 		String npath = null;
 		if (Strings.isNotEmpty(version) && Strings.startsWith(name, version)) {
-			npath = BASE + Strings.removeStart(name, version);
+			npath = BASE + Strings.substring(name, version.length());
 		}
 
 		if (npath != null) {
