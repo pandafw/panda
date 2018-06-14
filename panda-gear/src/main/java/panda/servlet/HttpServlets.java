@@ -956,6 +956,18 @@ public class HttpServlets {
 	 * @param res response 
 	 * @param sc status code
 	 */
+	public static void safeSendError(HttpServletResponse res, int sc) {
+		try {
+			res.sendError(sc);
+		}
+		catch (Throwable e) {
+		}
+	}
+
+	/**
+	 * @param res response 
+	 * @param sc status code
+	 */
 	public static void sendError(HttpServletResponse res, int sc) {
 		try {
 			res.sendError(sc);

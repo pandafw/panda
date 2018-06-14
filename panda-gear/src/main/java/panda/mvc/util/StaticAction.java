@@ -66,11 +66,10 @@ public class StaticAction extends ActionSupport {
 	public void execute(String path) {
 		URL url = findResource(path);
 		if (url == null) {
-			try {
-				getResponse().sendError(HttpStatus.SC_NOT_FOUND);
+			if (log.isDebugEnabled()) {
+				log.warn("[NOT FOUND]: " + path);
 			}
-			catch (Exception e) {
-			}
+			HttpServlets.safeSendError(getResponse(), HttpStatus.SC_NOT_FOUND);
 			return;
 		}
 
@@ -140,6 +139,9 @@ public class StaticAction extends ActionSupport {
 	protected URL findResource(String name) {
 		String path = BASE + name;
 		
+		if (log.isDebugEnabled()) {
+			log.debug("Find File: " + path);
+		}
 		URL url = findFile(path);
 		if (url != null) {
 			return url;
@@ -151,18 +153,27 @@ public class StaticAction extends ActionSupport {
 		}
 
 		if (npath != null) {
+			if (log.isDebugEnabled()) {
+				log.debug("Find File: " + npath);
+			}
 			url = findFile(npath);
 			if (url != null) {
 				return url;
 			}
 		}
 		
+		if (log.isDebugEnabled()) {
+			log.debug("Find Resource: " + path);
+		}
 		url = ClassLoaders.getResourceAsURL(path);
 		if (url != null) {
 			return url;
 		}
 		
 		if (npath != null) {
+			if (log.isDebugEnabled()) {
+				log.debug("Find Resource: " + npath);
+			}
 			url = ClassLoaders.getResourceAsURL(npath);
 			if (url != null) {
 				return url;
