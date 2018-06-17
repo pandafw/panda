@@ -71,8 +71,8 @@ public class AppIocLoader extends MvcComboIocLoader {
 		}
 	}
 	
-	public AppIocLoader(MvcConfig config, String... packages) {
-		super(config, packages);
+	public AppIocLoader(MvcConfig config, String... args) {
+		super(config, args);
 	}
 	
 	@Override
