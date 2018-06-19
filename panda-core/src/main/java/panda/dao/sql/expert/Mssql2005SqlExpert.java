@@ -84,6 +84,8 @@ public class Mssql2005SqlExpert extends SqlExpert {
 		case Types.TIME:
 		case Types.TIMESTAMP:
 			return "DATETIME";
+		case Types.VARCHAR:
+			return "NVARCHAR(" + ef.getSize() + ")";
 		case Types.LONGVARBINARY:
 		case Types.BLOB:
 			return "IMAGE";
