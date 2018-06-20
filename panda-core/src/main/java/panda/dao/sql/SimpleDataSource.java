@@ -18,6 +18,7 @@ import javax.sql.DataSource;
 import panda.cast.Castors;
 import panda.lang.Asserts;
 import panda.lang.Strings;
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -40,13 +41,12 @@ import panda.log.Logs;
  * <ul>
  * <li>pool.maximumActiveConnections - default: 10</li>
  * <li>pool.maximumIdleConnections - default: 5</li>
- * <li>pool.maximumCheckoutTime - default: 20000</li>
- * <li>pool.pingEnabled - default false</li>
+ * <li>pool.maximumCheckoutTime - default: 1 week (seconds)</li>
  * <li>pool.pingQuery</li>
- * <li>pool.pingTimeout - default: 1000</li>
- * <li>pool.pingConnectionsOlderThan - default: 0</li>
- * <li>pool.pingConnectionsNotUsedFor - default: 600000</li>
- * <li>pool.timeToWait - default: 20000</li>
+ * <li>pool.pingTimeout - default: 1 second</li>
+ * <li>pool.pingConnectionsOlderThan - default: 0 (milliseconds)</li>
+ * <li>pool.pingConnectionsNotUsedFor - default: 600000 (milliseconds)</li>
+ * <li>pool.timeToWait - default: 20000 (milliseconds)</li>
  * </ul>
  * <p/>
  * 
@@ -98,13 +98,12 @@ public class SimpleDataSource implements DataSource {
 	public static class PoolConf {
 		private int maximumActiveConnections = 10;
 		private int maximumIdleConnections = 5;
-		private int maximumCheckoutTime = 20000;
-		private boolean pingEnabled = false;
-		private String pingQuery;
-		private int pingTimeout = 1000;
-		private int pingConnectionsOlderThan;
-		private int pingConnectionsNotUsedFor = 600000;
-		private int timeToWait = 20000;
+		private long maximumCheckoutTime = DateTimes.MS_WEEK;
+		private String pingQuery = "";
+		private int pingTimeout = 1;
+		private long pingConnectionsOlderThan;
+		private long pingConnectionsNotUsedFor = 600000;
+		private long timeToWait = 20000;
 
 		public int getMaximumActiveConnections() {
 			return maximumActiveConnections;
@@ -119,22 +118,16 @@ public class SimpleDataSource implements DataSource {
 			this.maximumIdleConnections = maximumIdleConnections;
 		}
 		public int getMaximumCheckoutTime() {
-			return maximumCheckoutTime;
+			return (int)maximumCheckoutTime / 1000;
 		}
 		public void setMaximumCheckoutTime(int maximumCheckoutTime) {
-			this.maximumCheckoutTime = maximumCheckoutTime;
-		}
-		public boolean isPingEnabled() {
-			return pingEnabled;
-		}
-		public void setPingEnabled(boolean pingEnabled) {
-			this.pingEnabled = pingEnabled;
+			this.maximumCheckoutTime = maximumCheckoutTime * 1000L;
 		}
 		public String getPingQuery() {
 			return pingQuery;
 		}
 		public void setPingQuery(String pingQuery) {
-			this.pingQuery = pingQuery;
+			this.pingQuery = Strings.stripToEmpty(pingQuery);
 		}
 		public int getPingTimeout() {
 			return pingTimeout;
@@ -142,22 +135,22 @@ public class SimpleDataSource implements DataSource {
 		public void setPingTimeout(int pingTimeout) {
 			this.pingTimeout = pingTimeout;
 		}
-		public int getPingConnectionsOlderThan() {
+		public long getPingConnectionsOlderThan() {
 			return pingConnectionsOlderThan;
 		}
-		public void setPingConnectionsOlderThan(int pingConnectionsOlderThan) {
+		public void setPingConnectionsOlderThan(long pingConnectionsOlderThan) {
 			this.pingConnectionsOlderThan = pingConnectionsOlderThan;
 		}
-		public int getPingConnectionsNotUsedFor() {
+		public long getPingConnectionsNotUsedFor() {
 			return pingConnectionsNotUsedFor;
 		}
-		public void setPingConnectionsNotUsedFor(int pingConnectionsNotUsedFor) {
+		public void setPingConnectionsNotUsedFor(long pingConnectionsNotUsedFor) {
 			this.pingConnectionsNotUsedFor = pingConnectionsNotUsedFor;
 		}
-		public int getTimeToWait() {
+		public long getTimeToWait() {
 			return timeToWait;
 		}
-		public void setTimeToWait(int timeToWait) {
+		public void setTimeToWait(long timeToWait) {
 			this.timeToWait = timeToWait;
 		}
 	}
@@ -171,9 +164,9 @@ public class SimpleDataSource implements DataSource {
 	//--------------------------------------------------------------------------------------
 	private final Object POOL_LOCK = new Object();
 
-	private List<Connection> idleConnections = new ArrayList<Connection>();
+	private List<SimplePooledConnection> idles = new ArrayList<SimplePooledConnection>();
 
-	private List<Connection> activeConnections = new ArrayList<Connection>();
+	private List<SimplePooledConnection> actives = new ArrayList<SimplePooledConnection>();
 
 	private long requestCount = 0;
 
@@ -247,10 +240,6 @@ public class SimpleDataSource implements DataSource {
 		}
 
 		expectedConnectionTypeCode = assembleConnectionTypeCode(jdbc.url, jdbc.username, jdbc.password);
-
-		if (pool.pingEnabled && Strings.isEmpty(pool.pingQuery)) {
-			throw new RuntimeException("SimpleDataSource: property 'pool.pingEnabled' is true, but property 'pool.pingQuery' is not set correctly.");
-		}
 	}
 
 	private int assembleConnectionTypeCode(String url, String username, String password) {
@@ -421,8 +410,8 @@ public class SimpleDataSource implements DataSource {
 	/**
 	 * @return The count of active connections
 	 */
-	public int getActiveConnections() {
-		return activeConnections.size();
+	public int getActives() {
+		return actives.size();
 	}
 
 	/**
@@ -441,16 +430,15 @@ public class SimpleDataSource implements DataSource {
 		sb.append("\n jdbc.autoCommit                 ").append(jdbc.autoCommit);
 		sb.append("\n pool.maxActiveConnections       ").append(pool.maximumActiveConnections);
 		sb.append("\n pool.maxIdleConnections         ").append(pool.maximumIdleConnections);
-		sb.append("\n pool.maxCheckoutTime            ").append(pool.maximumCheckoutTime);
-		sb.append("\n pool.pingEnabled                ").append(pool.pingEnabled);
+		sb.append("\n pool.maxCheckoutTime            ").append(pool.maximumCheckoutTime / 1000);
 		sb.append("\n pool.pingQuery                  ").append(pool.pingQuery);
 		sb.append("\n pool.pingTimeout                ").append(pool.pingTimeout);
 		sb.append("\n pool.pingConnectionsOlderThan   ").append(pool.pingConnectionsOlderThan);
 		sb.append("\n pool.pingConnectionsNotUsedFor  ").append(pool.pingConnectionsNotUsedFor);
 		sb.append("\n pool.timeToWait                 ").append(pool.timeToWait);
 		sb.append("\n --------------------------------------------------------------");
-		sb.append("\n activeConnections              ").append(activeConnections.size());
-		sb.append("\n idleConnections                ").append(idleConnections.size());
+		sb.append("\n activeConnections              ").append(actives.size());
+		sb.append("\n idleConnections                ").append(idles.size());
 		sb.append("\n requestCount                   ").append(getRequestCount());
 		sb.append("\n averageRequestTime             ").append(getAverageRequestTime());
 		sb.append("\n averageCheckoutTime            ").append(getAverageCheckoutTime());
@@ -465,43 +453,43 @@ public class SimpleDataSource implements DataSource {
 	}
 
 	/**
+	 * close connection and remove from pool
+	 * @param conns connection list
+	 */
+	private void close(List<SimplePooledConnection> conns) {
+		for (int i = conns.size(); i > 0; i--) {
+			try {
+				SimplePooledConnection conn = conns.remove(i - 1);
+				conn.invalidate();
+
+				Connection rcon = conn.getRealConnection();
+				try {
+					if (!rcon.getAutoCommit()) {
+						rcon.rollback();
+					}
+				}
+				catch (SQLException e) {
+					// ignore
+				}
+				finally {
+					Sqls.safeClose(rcon);
+				}
+			}
+			catch (Exception e) {
+				// ignore
+			}
+		}
+	}
+
+	/**
 	 * Closes all of the connections in the pool
 	 */
 	public void close() {
 		synchronized (POOL_LOCK) {
-			for (int i = activeConnections.size(); i > 0; i--) {
-				try {
-					SimplePooledConnection conn = (SimplePooledConnection) activeConnections
-							.remove(i - 1);
-					conn.invalidate();
-
-					Connection realConn = conn.getRealConnection();
-					if (!realConn.getAutoCommit()) {
-						realConn.rollback();
-					}
-					realConn.close();
-				}
-				catch (Exception e) {
-					// ignore
-				}
-			}
-			for (int i = idleConnections.size(); i > 0; i--) {
-				try {
-					SimplePooledConnection conn = (SimplePooledConnection) idleConnections
-							.remove(i - 1);
-					conn.invalidate();
-
-					Connection realConn = conn.getRealConnection();
-					if (!realConn.getAutoCommit()) {
-						realConn.rollback();
-					}
-					realConn.close();
-				}
-				catch (Exception e) {
-					// ignore
-				}
-			}
+			close(actives);
+			close(idles);
 		}
+
 		if (log.isDebugEnabled()) {
 			log.debug("SimpleDataSource forcefully closed/removed all connections.");
 		}
@@ -509,72 +497,82 @@ public class SimpleDataSource implements DataSource {
 
 	protected void pushConnection(SimplePooledConnection conn) throws SQLException {
 		synchronized (POOL_LOCK) {
-			activeConnections.remove(conn);
-			if (conn.isValid()) {
-				if (idleConnections.size() < pool.maximumIdleConnections
-						&& conn.getConnectionTypeCode() == getExpectedConnectionTypeCode()) {
-					accumulatedCheckoutTime += conn.getCheckoutTime();
-					if (!conn.getRealConnection().getAutoCommit()) {
-						conn.getRealConnection().rollback();
-					}
-					SimplePooledConnection newConn = new SimplePooledConnection(
-						conn.getRealConnection(), this);
-					idleConnections.add(newConn);
-					newConn.setCreatedTimestamp(conn.getCreatedTimestamp());
-					newConn.setLastUsedTimestamp(conn.getLastUsedTimestamp());
-					conn.invalidate();
-					if (log.isDebugEnabled()) {
-						log.debug("Returned connection " + newConn.getRealHashCode() + " to pool.");
-					}
-					POOL_LOCK.notifyAll();
-				}
-				else {
-					accumulatedCheckoutTime += conn.getCheckoutTime();
-					if (!conn.getRealConnection().getAutoCommit()) {
-						conn.getRealConnection().rollback();
-					}
-					conn.getRealConnection().close();
-					if (log.isDebugEnabled()) {
-						log.debug("Closed connection " + conn.getRealHashCode() + ".");
-					}
-					conn.invalidate();
-				}
-			}
-			else {
+			actives.remove(conn);
+			if (!conn.isValid()) {
 				if (log.isDebugEnabled()) {
 					log.debug("A bad connection (" + conn.getRealHashCode()
 							+ ") attempted to return to the pool, discarding connection.");
 				}
 				badConnectionCount++;
+				return;
+			}
+			
+			accumulatedCheckoutTime += conn.getCheckoutTime();
+
+			boolean valid = true;
+			Connection rcon = conn.getRealConnection();
+			try {
+				if (!rcon.getAutoCommit()) {
+					rcon.rollback();
+				}
+			}
+			catch (SQLException e) {
+				if (log.isDebugEnabled()) {
+					log.debug("Failed to rollback returned connection " + conn.getRealHashCode() + ": " + e.getMessage());
+				}
+				valid = false;
+			}
+			
+			if (valid 
+					&& idles.size() < pool.maximumIdleConnections
+					&& conn.getConnectionTypeCode() == getExpectedConnectionTypeCode()) {
+
+				SimplePooledConnection newConn = new SimplePooledConnection(rcon, this);
+				newConn.setCreatedTimestamp(conn.getCreatedTimestamp());
+				newConn.setLastUsedTimestamp(conn.getLastUsedTimestamp());
+				idles.add(newConn);
+
+				conn.invalidate();
+				if (log.isDebugEnabled()) {
+					log.debug("Returned connection " + newConn.getRealHashCode() + " to pool.");
+				}
+				POOL_LOCK.notifyAll();
+			}
+			else {
+				Sqls.safeClose(rcon);
+
+				conn.invalidate();
+
+				if (log.isDebugEnabled()) {
+					log.debug("Closed connection " + conn.getRealHashCode() + ".");
+				}
 			}
 		}
 	}
 
-	private SimplePooledConnection popConnection(String username, String password)
-			throws SQLException {
+	private SimplePooledConnection popConnection(String username, String password) throws SQLException {
 		boolean countedWait = false;
 		SimplePooledConnection conn = null;
 		long t = System.currentTimeMillis();
 		int localBadConnectionCount = 0;
 
-		while (conn == null) {
-			synchronized (POOL_LOCK) {
-				if (idleConnections.size() > 0) {
+		synchronized (POOL_LOCK) {
+			while (conn == null) {
+				if (idles.size() > 0) {
 					// Pool has available connection
-					conn = (SimplePooledConnection) idleConnections.remove(0);
+					conn = (SimplePooledConnection) idles.remove(0);
 					if (log.isDebugEnabled()) {
-						log.debug("Checked out connection " + conn.getRealHashCode()
-								+ " from pool.");
+						log.debug("Checked out connection " + conn.getRealHashCode() + " from pool.");
 					}
 				}
 				else {
 					// Pool does not have available connection
-					if (activeConnections.size() < pool.maximumActiveConnections) {
+					if (actives.size() < pool.maximumActiveConnections) {
 						// create new connection
 						conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, props), this);
-						Connection realConn = conn.getRealConnection();
-						if (realConn.getAutoCommit() != jdbc.autoCommit) {
-							realConn.setAutoCommit(jdbc.autoCommit);
+						Connection rcon = conn.getRealConnection();
+						if (rcon.getAutoCommit() != jdbc.autoCommit) {
+							rcon.setAutoCommit(jdbc.autoCommit);
 						}
 						if (log.isDebugEnabled()) {
 							log.debug("Created connection " + conn.getRealHashCode() + ".");
@@ -582,24 +580,18 @@ public class SimpleDataSource implements DataSource {
 					}
 					else {
 						// Cannot create new connection
-						SimplePooledConnection oldestActiveConnection = 
-							(SimplePooledConnection) activeConnections.get(0);
-						long longestCheckoutTime = oldestActiveConnection.getCheckoutTime();
+						SimplePooledConnection oldest = (SimplePooledConnection)actives.get(0);
+						long longestCheckoutTime = oldest.getCheckoutTime();
 						if (longestCheckoutTime > pool.maximumCheckoutTime) {
 							// Can claim overdue connection
 							claimedOverdueConnectionCount++;
 							accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
 							accumulatedCheckoutTime += longestCheckoutTime;
-							activeConnections.remove(oldestActiveConnection);
-							if (!oldestActiveConnection.getRealConnection().getAutoCommit()) {
-								oldestActiveConnection.getRealConnection().rollback();
-							}
-							conn = new SimplePooledConnection(oldestActiveConnection
-									.getRealConnection(), this);
-							oldestActiveConnection.invalidate();
+							actives.remove(oldest);
+							conn = new SimplePooledConnection(oldest.getRealConnection(), this);
+							oldest.invalidate();
 							if (log.isDebugEnabled()) {
-								log.debug("Claimed overdue connection " + conn.getRealHashCode()
-										+ ".");
+								log.debug("Claimed overdue connection " + conn.getRealHashCode() + ".");
 							}
 						}
 						else {
@@ -610,9 +602,10 @@ public class SimpleDataSource implements DataSource {
 									countedWait = true;
 								}
 								if (log.isDebugEnabled()) {
-									log.debug("Waiting as long as " + pool.timeToWait
-											+ " milliseconds for connection.");
+									log.debug(
+										"Waiting as long as " + pool.timeToWait + " milliseconds for connection.");
 								}
+
 								long wt = System.currentTimeMillis();
 								POOL_LOCK.wait(pool.timeToWait);
 								accumulatedWaitTime += System.currentTimeMillis() - wt;
@@ -623,16 +616,13 @@ public class SimpleDataSource implements DataSource {
 						}
 					}
 				}
+
 				if (conn != null) {
-					if (conn.isValid()) {
-						if (!conn.getRealConnection().getAutoCommit()) {
-							conn.getRealConnection().rollback();
-						}
-						conn.setConnectionTypeCode(assembleConnectionTypeCode(jdbc.url, username,
-							password));
+					if (conn.testValid()) {
+						conn.setConnectionTypeCode(assembleConnectionTypeCode(jdbc.url, username, password));
 						conn.setCheckoutTimestamp(System.currentTimeMillis());
 						conn.setLastUsedTimestamp(System.currentTimeMillis());
-						activeConnections.add(conn);
+						actives.add(conn);
 						requestCount++;
 						accumulatedRequestTime += System.currentTimeMillis() - t;
 					}
@@ -653,7 +643,6 @@ public class SimpleDataSource implements DataSource {
 					}
 				}
 			}
-
 		}
 
 		if (conn == null) {
@@ -684,40 +673,38 @@ public class SimpleDataSource implements DataSource {
 			}
 		}
 
-		if (!closed && pool.pingEnabled) {
-			if ((pool.pingConnectionsOlderThan > 0 && conn.getAge() > pool.pingConnectionsOlderThan)
-					|| (pool.pingConnectionsNotUsedFor > 0 && conn.getTimeElapsedSinceLastUse() > pool.pingConnectionsNotUsedFor)) {
-				try {
-					if (log.isDebugEnabled()) {
-						log.debug("Testing connection " + conn.getRealHashCode() + " ...");
-					}
-					Connection realConn = conn.getRealConnection();
-					Statement statement = realConn.createStatement();
-					statement.setQueryTimeout(pool.pingTimeout);
-					ResultSet rs = statement.executeQuery(pool.pingQuery);
-					rs.close();
-					statement.close();
-					if (!realConn.getAutoCommit()) {
-						realConn.rollback();
-					}
-					closed = false;
-					if (log.isDebugEnabled()) {
-						log.debug("Connection " + conn.getRealHashCode() + " is GOOD!");
-					}
+		if (!closed && Strings.isNotEmpty(pool.pingQuery)
+				&& ((pool.pingConnectionsOlderThan > 0 && conn.getAge() > pool.pingConnectionsOlderThan)
+					|| (pool.pingConnectionsNotUsedFor > 0 && conn.getTimeElapsedSinceLastUse() > pool.pingConnectionsNotUsedFor))) {
+
+			if (log.isDebugEnabled()) {
+				log.debug("Testing connection " + conn.getRealHashCode() + " ...");
+			}
+
+			Connection rcon = conn.getRealConnection();
+			try {
+				Statement statement = rcon.createStatement();
+				statement.setQueryTimeout(pool.pingTimeout);
+				ResultSet rs = statement.executeQuery(pool.pingQuery);
+				rs.close();
+				statement.close();
+
+				if (!rcon.getAutoCommit()) {
+					rcon.rollback();
 				}
-				catch (Exception e) {
-					log.warn("Execution of ping query '" + pool.pingQuery + "' failed: "
-							+ e.getMessage());
-					try {
-						conn.getRealConnection().close();
-					}
-					catch (Exception e2) {
-						// ignore
-					}
-					if (log.isDebugEnabled()) {
-						log.debug("Connection " + conn.getRealHashCode() + " is BAD: "
-								+ e.getMessage());
-					}
+				closed = false;
+
+				if (log.isDebugEnabled()) {
+					log.debug("Connection " + conn.getRealHashCode() + " is GOOD!");
+				}
+			}
+			catch (Exception e) {
+				log.warn("Execution of ping query '" + pool.pingQuery + "' failed: " + e.getMessage());
+
+				Sqls.safeClose(rcon);
+
+				if (log.isDebugEnabled()) {
+					log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
 				}
 			}
 		}

@@ -66,7 +66,7 @@ public class SimpleDataSourceTest extends TestCase {
 			catch (InterruptedException e) {
 			}
 		} 
-		while (simpleDataSource.getActiveConnections() > 0);
+		while (simpleDataSource.getActives() > 0);
 	}
 
 	/**

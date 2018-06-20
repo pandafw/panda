@@ -72,7 +72,16 @@ public class SimplePooledConnection implements Connection {
 	 * @return True if the connection is usable
 	 */
 	public boolean isValid() {
-		return valid && realConnection != null && dataSource.pingConnection(this);
+		return valid && realConnection != null;
+	}
+
+	/**
+	 * Method to see if the connection is usable, run ping query if pingQuery is setted
+	 * 
+	 * @return True if the connection is usable
+	 */
+	public boolean testValid() {
+		return isValid() && dataSource.pingConnection(this);
 	}
 
 	/**
@@ -199,8 +208,7 @@ public class SimplePooledConnection implements Connection {
 
 	private Connection getValidConnection() {
 		if (!valid) {
-			throw new RuntimeException(
-					"Error accessing SimplePooledConnection. Connection is invalid.");
+			throw new RuntimeException("Error accessing SimplePooledConnection. Connection is invalid.");
 		}
 		return realConnection;
 	}
