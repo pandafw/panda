@@ -14,6 +14,7 @@ import java.util.Set;
 import panda.io.Files;
 import panda.io.MimeTypes;
 import panda.io.Streams;
+import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Strings;
 import panda.lang.Systems;
@@ -84,7 +85,7 @@ public class HttpClient {
 
 	protected boolean autoRedirect = false;
 	protected boolean validateSslCert = true;
-	protected boolean disableSSLv3 = false;
+	protected String[] enabledSslProtocols;
 	
 	static {
 		if (Systems.IS_JAVA_1_6) {
@@ -162,17 +163,17 @@ public class HttpClient {
 	}
 
 	/**
-	 * @return the disableSSLv3
+	 * @return the enabledSslProtocols
 	 */
-	public boolean isDisableSSLv3() {
-		return disableSSLv3;
+	public String[] getEnabledSslProtocols() {
+		return enabledSslProtocols;
 	}
 
 	/**
-	 * @param disableSSLv3 the disableSSLv3 to set
+	 * @param enabledSslProtocols the enabledSslProtocols to set
 	 */
-	public void setDisableSSLv3(boolean disableSSLv3) {
-		this.disableSSLv3 = disableSSLv3;
+	public void setEnabledSslProtocols(String[] enabledSslProtocols) {
+		this.enabledSslProtocols = enabledSslProtocols;
 	}
 
 	/**
@@ -349,8 +350,8 @@ public class HttpClient {
 		if (!validateSslCert) {
 			Https.ignoreValidateCertification(httpconn);
 		}
-		if (disableSSLv3) {
-			Https.disableSSLv3Protocols(httpconn);
+		if (Arrays.isNotEmpty(enabledSslProtocols)) {
+			Https.setEnabledProtocals(httpconn, enabledSslProtocols);
 		}
 		httpconn.setConnectTimeout(connTimeout);
 		httpconn.setReadTimeout(readTimeout);

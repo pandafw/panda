@@ -19,12 +19,12 @@ import panda.net.ssl.TrustManagers;
  * panda.log use this class, so do not use log
  */
 public class Https {
-	public static void disableSSLv3Protocols(HttpURLConnection conn) {
+	public static void setEnabledProtocals(HttpURLConnection conn, String ... protocols) {
 		try {
 			if (conn instanceof HttpsURLConnection) {
 				HttpsURLConnection sconn = (HttpsURLConnection)conn;
 				SSLSocketFactory sslsf = sconn.getSSLSocketFactory();
-				SSLSocketFactoryEx sslsfe = new SSLSocketFactoryEx(sslsf, "TLSv1", "TLSv1.1", "TLSv1.2");
+				SSLSocketFactoryEx sslsfe = new SSLSocketFactoryEx(sslsf, protocols);
 				sconn.setSSLSocketFactory(sslsfe);
 			}
 		}
@@ -32,7 +32,7 @@ public class Https {
 			throw Exceptions.wrapThrow(e);
 		}
 	}
-
+	
 	public static void ignoreValidateCertification(HttpURLConnection conn) {
 		try {
 			if (conn instanceof HttpsURLConnection) {

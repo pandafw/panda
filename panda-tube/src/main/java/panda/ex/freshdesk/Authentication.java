@@ -4,6 +4,7 @@ import java.net.Proxy;
 
 import panda.lang.Strings;
 import panda.net.http.HttpClient;
+import panda.net.ssl.SSLProtocols;
 
 public class Authentication {
 	private boolean validateSslCert = true;
@@ -134,7 +135,7 @@ public class Authentication {
 	 * @param uri http uri
 	 */
 	public void authenticateRequest(HttpClient hc, String uri) {
-		hc.setDisableSSLv3(true);
+		hc.setEnabledSslProtocols(SSLProtocols.TLS_ONLY);
 		hc.setValidateSslCert(validateSslCert);
 		hc.setProxy(proxy);
 		hc.getRequest().setUrl(domain + uri);
