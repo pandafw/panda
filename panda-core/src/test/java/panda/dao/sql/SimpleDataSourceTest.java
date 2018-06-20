@@ -75,8 +75,8 @@ public class SimpleDataSourceTest extends TestCase {
 	public void test01() {
 		log.debug("+++++++++++++test01+++++++++++++++");
 		try {
-			for (int i = 0; i < simpleDataSource.getPool().getMaximumActiveConnections() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaximumCheckoutTime() - 500)).start();
+			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
+				(new TestThread(simpleDataSource.getPool().getMaxCheckoutTime() - 500)).start();
 			}
 			printStatus();
 		}
@@ -92,8 +92,8 @@ public class SimpleDataSourceTest extends TestCase {
 	public void test02() {
 		log.debug("+++++++++++++test02+++++++++++++++");
 		try {
-			for (int i = 0; i < simpleDataSource.getPool().getMaximumActiveConnections() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaximumCheckoutTime() + 500)).start();
+			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
+				(new TestThread(simpleDataSource.getPool().getMaxCheckoutTime() + 500)).start();
 			}
 			printStatus();
 		}

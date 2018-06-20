@@ -39,13 +39,13 @@ import panda.log.Logs;
  * 
  * ---- POOLING PROPERTIES ----
  * <ul>
- * <li>pool.maximumActiveConnections - default: 10</li>
- * <li>pool.maximumIdleConnections - default: 5</li>
- * <li>pool.maximumCheckoutTime - default: 1 week (seconds)</li>
+ * <li>pool.maxActive - default: 10</li>
+ * <li>pool.maxIdle - default: 5</li>
+ * <li>pool.maxCheckoutTime - default: 1 week (seconds)</li>
  * <li>pool.pingQuery</li>
  * <li>pool.pingTimeout - default: 1 second</li>
- * <li>pool.pingConnectionsOlderThan - default: 0 (milliseconds)</li>
- * <li>pool.pingConnectionsNotUsedFor - default: 600000 (milliseconds)</li>
+ * <li>pool.pingOlderThan - default: 0 (milliseconds)</li>
+ * <li>pool.pingNotUsedFor - default: 600000 (milliseconds)</li>
  * <li>pool.timeToWait - default: 20000 (milliseconds)</li>
  * </ul>
  * <p/>
@@ -96,32 +96,32 @@ public class SimpleDataSource implements DataSource {
 	}
 
 	public static class PoolConf {
-		private int maximumActiveConnections = 10;
-		private int maximumIdleConnections = 5;
-		private long maximumCheckoutTime = DateTimes.MS_WEEK;
+		private int maxActive = 10;
+		private int maxIdle = 5;
+		private long maxCheckoutTime = DateTimes.MS_WEEK;
 		private String pingQuery = "";
 		private int pingTimeout = 1;
-		private long pingConnectionsOlderThan;
-		private long pingConnectionsNotUsedFor = 600000;
+		private long pingOlderThan;
+		private long pingNotUsedFor = 600000;
 		private long timeToWait = 20000;
 
-		public int getMaximumActiveConnections() {
-			return maximumActiveConnections;
+		public int getMaxActive() {
+			return maxActive;
 		}
-		public void setMaximumActiveConnections(int maximumActiveConnections) {
-			this.maximumActiveConnections = maximumActiveConnections;
+		public void setMaxActive(int maxActive) {
+			this.maxActive = maxActive;
 		}
-		public int getMaximumIdleConnections() {
-			return maximumIdleConnections;
+		public int getMaxIdle() {
+			return maxIdle;
 		}
-		public void setMaximumIdleConnections(int maximumIdleConnections) {
-			this.maximumIdleConnections = maximumIdleConnections;
+		public void setMaxIdle(int maxIdle) {
+			this.maxIdle = maxIdle;
 		}
-		public int getMaximumCheckoutTime() {
-			return (int)maximumCheckoutTime / 1000;
+		public int getMaxCheckoutTime() {
+			return (int)maxCheckoutTime / 1000;
 		}
-		public void setMaximumCheckoutTime(int maximumCheckoutTime) {
-			this.maximumCheckoutTime = maximumCheckoutTime * 1000L;
+		public void setMaxCheckoutTime(int maxCheckoutTime) {
+			this.maxCheckoutTime = maxCheckoutTime * 1000L;
 		}
 		public String getPingQuery() {
 			return pingQuery;
@@ -135,17 +135,17 @@ public class SimpleDataSource implements DataSource {
 		public void setPingTimeout(int pingTimeout) {
 			this.pingTimeout = pingTimeout;
 		}
-		public long getPingConnectionsOlderThan() {
-			return pingConnectionsOlderThan;
+		public long getPingOlderThan() {
+			return pingOlderThan;
 		}
-		public void setPingConnectionsOlderThan(long pingConnectionsOlderThan) {
-			this.pingConnectionsOlderThan = pingConnectionsOlderThan;
+		public void setPingOlderThan(long pingOlderThan) {
+			this.pingOlderThan = pingOlderThan;
 		}
-		public long getPingConnectionsNotUsedFor() {
-			return pingConnectionsNotUsedFor;
+		public long getPingNotUsedFor() {
+			return pingNotUsedFor;
 		}
-		public void setPingConnectionsNotUsedFor(long pingConnectionsNotUsedFor) {
-			this.pingConnectionsNotUsedFor = pingConnectionsNotUsedFor;
+		public void setPingNotUsedFor(long pingNotUsedFor) {
+			this.pingNotUsedFor = pingNotUsedFor;
 		}
 		public long getTimeToWait() {
 			return timeToWait;
@@ -428,13 +428,13 @@ public class SimpleDataSource implements DataSource {
 		sb.append("\n jdbc.username                   ").append(jdbc.username);
 		sb.append("\n jdbc.password                   ").append(jdbc.password);
 		sb.append("\n jdbc.autoCommit                 ").append(jdbc.autoCommit);
-		sb.append("\n pool.maxActiveConnections       ").append(pool.maximumActiveConnections);
-		sb.append("\n pool.maxIdleConnections         ").append(pool.maximumIdleConnections);
-		sb.append("\n pool.maxCheckoutTime            ").append(pool.maximumCheckoutTime / 1000);
+		sb.append("\n pool.maxActive                  ").append(pool.maxActive);
+		sb.append("\n pool.maxIdle                    ").append(pool.maxIdle);
+		sb.append("\n pool.maxCheckoutTime            ").append(pool.maxCheckoutTime / 1000);
 		sb.append("\n pool.pingQuery                  ").append(pool.pingQuery);
 		sb.append("\n pool.pingTimeout                ").append(pool.pingTimeout);
-		sb.append("\n pool.pingConnectionsOlderThan   ").append(pool.pingConnectionsOlderThan);
-		sb.append("\n pool.pingConnectionsNotUsedFor  ").append(pool.pingConnectionsNotUsedFor);
+		sb.append("\n pool.pingOlderThan              ").append(pool.pingOlderThan);
+		sb.append("\n pool.pingNotUsedFor             ").append(pool.pingNotUsedFor);
 		sb.append("\n pool.timeToWait                 ").append(pool.timeToWait);
 		sb.append("\n --------------------------------------------------------------");
 		sb.append("\n activeConnections              ").append(actives.size());
@@ -524,7 +524,7 @@ public class SimpleDataSource implements DataSource {
 			}
 			
 			if (valid 
-					&& idles.size() < pool.maximumIdleConnections
+					&& idles.size() < pool.maxIdle
 					&& conn.getConnectionTypeCode() == getExpectedConnectionTypeCode()) {
 
 				SimplePooledConnection newConn = new SimplePooledConnection(rcon, this);
@@ -567,7 +567,7 @@ public class SimpleDataSource implements DataSource {
 				}
 				else {
 					// Pool does not have available connection
-					if (actives.size() < pool.maximumActiveConnections) {
+					if (actives.size() < pool.maxActive) {
 						// create new connection
 						conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, props), this);
 						Connection rcon = conn.getRealConnection();
@@ -582,7 +582,7 @@ public class SimpleDataSource implements DataSource {
 						// Cannot create new connection
 						SimplePooledConnection oldest = (SimplePooledConnection)actives.get(0);
 						long longestCheckoutTime = oldest.getCheckoutTime();
-						if (longestCheckoutTime > pool.maximumCheckoutTime) {
+						if (longestCheckoutTime > pool.maxCheckoutTime) {
 							// Can claim overdue connection
 							claimedOverdueConnectionCount++;
 							accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
@@ -634,7 +634,7 @@ public class SimpleDataSource implements DataSource {
 						badConnectionCount++;
 						localBadConnectionCount++;
 						conn = null;
-						if (localBadConnectionCount > (pool.maximumIdleConnections + 3)) {
+						if (localBadConnectionCount > (pool.maxIdle + 3)) {
 							if (log.isDebugEnabled()) {
 								log.debug("SimpleDataSource: Could not get a good connection to the database.");
 							}
@@ -674,8 +674,8 @@ public class SimpleDataSource implements DataSource {
 		}
 
 		if (!closed && Strings.isNotEmpty(pool.pingQuery)
-				&& ((pool.pingConnectionsOlderThan > 0 && conn.getAge() > pool.pingConnectionsOlderThan)
-					|| (pool.pingConnectionsNotUsedFor > 0 && conn.getTimeElapsedSinceLastUse() > pool.pingConnectionsNotUsedFor))) {
+				&& ((pool.pingOlderThan > 0 && conn.getAge() > pool.pingOlderThan)
+					|| (pool.pingNotUsedFor > 0 && conn.getTimeElapsedSinceLastUse() > pool.pingNotUsedFor))) {
 
 			if (log.isDebugEnabled()) {
 				log.debug("Testing connection " + conn.getRealHashCode() + " ...");
