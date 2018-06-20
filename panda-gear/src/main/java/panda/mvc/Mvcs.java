@@ -151,29 +151,32 @@ public abstract class Mvcs {
 	
 	/**
 	 * @param ac the action context
-	 * @param sb the string
+	 * @param sp the static path string
 	 * @return the static base path
 	 */
-	public static String getStaticPath(ActionContext ac, String sb) {
-		if (Strings.isEmpty(sb)) {
+	public static String getStaticPath(ActionContext ac, String sp) {
+		if (Strings.isEmpty(sp)) {
 			Settings ss = ac.getSettings();
 			if (ss.getPropertyAsBoolean(SiteConstants.SITE_CDN)) {
-				sb = PANDA_CDN;
+				sp = PANDA_CDN;
 			}
 		}
 
-		if (Strings.isEmpty(sb)) {
-			sb = ac.getIoc().getIfExists(String.class, MvcConstants.STATIC_PATH);
+		if (Strings.isEmpty(sp)) {
+			sp = ac.getIoc().getIfExists(String.class, MvcConstants.STATIC_PATH);
 		}
 		
-		if (Strings.isEmpty(sb)) {
-			sb = ac.getServlet().getContextPath() + STATIC_PATH;
+		if (Strings.isEmpty(sp)) {
+			sp = ac.getServlet().getContextPath() + STATIC_PATH;
 		}
-		else if (sb.charAt(0) == '~') {
-			sb = ac.getRequest().getContextPath() + sb.substring(1);
+		else if (sp.startsWith("//")) {
+			sp = sp.substring(1);
+		}
+		else if (sp.charAt(0) == '/') {
+			sp = ac.getRequest().getContextPath() + '/' + sp.substring(1);
 		}
 		
-		return sb + '/' + Panda.VERSION;
+		return sp + '/' + Panda.VERSION;
 	}
 
 	/**
