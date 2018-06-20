@@ -349,9 +349,9 @@ public class HttpRequest {
 		return this;
 	}
 
-	public HttpRequest setBasicAuthentication(String username, String password) {
+	public HttpRequest setBasicAuthentication(String username, String password, String separator) {
 		try {
-			byte[] b = (username + ':' + password).getBytes(encoding);
+			byte[] b = (username + separator + password).getBytes(encoding);
 			String v = "Basic " + Base64.encodeBase64String(b);
 			getHeader().set(HttpHeader.AUTHORIZATION, v);
 			return this;
@@ -359,6 +359,10 @@ public class HttpRequest {
 		catch (UnsupportedEncodingException e) {
 			throw Exceptions.wrapThrow(e);
 		}
+	}
+
+	public HttpRequest setBasicAuthentication(String username, String password) {
+		return setBasicAuthentication(username, password, ":");
 	}
 
 	//------------------------------------------------------------
