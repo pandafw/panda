@@ -73,6 +73,22 @@ public class ActionConfig {
 	}
 
 	/**
+	 * normalize paths
+	 */
+	public void normalizePaths() {
+		for (int i = 0; i < paths.length; i++) {
+			String path = paths[i];
+			if (Strings.isEmpty(path)) {
+				paths[i] = "/";
+			}
+			else {
+				paths[i] = '/' + Strings.stripStart(path, '/');
+			}
+		}
+
+	}
+
+	/**
 	 * @return true if some atMethod exists
 	 */
 	public boolean hasAtMethod() {

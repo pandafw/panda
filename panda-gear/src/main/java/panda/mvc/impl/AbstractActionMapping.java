@@ -39,20 +39,13 @@ public abstract class AbstractActionMapping implements ActionMapping {
 			throw new IllegalArgumentException(mn + " is already mapped.");
 		}
 		
+		// normalize paths
+		acfg.normalizePaths();
+
 		// check path
 		String[] paths = acfg.getPaths();
 		if (Arrays.isEmpty(paths)) {
 			throw new IllegalArgumentException(String.format("Empty @At of %s.%s", acfg.getActionType().getName(), acfg.getActionMethod().getName()));
-		}
-
-		for (int i = 0; i < paths.length; i++) {
-			String path = paths[i];
-			if (Strings.isEmpty(path)) {
-				paths[i] = "/";
-			}
-			else if (path.charAt(0) != '/') {
-				paths[i] = '/' + path;
-			}
 		}
 
 		ActionChain chain = acc.create(mcfg, acfg);
