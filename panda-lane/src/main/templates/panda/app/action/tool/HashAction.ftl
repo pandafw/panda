@@ -40,7 +40,6 @@
 		</div>
 	</div>
 
-
 <#if result??>
 	<hr/>
 	<div class="panel panel-success">
@@ -57,7 +56,6 @@
 			</div>
 		</div>
 	</div>
-	<br/>
 </#if>
 </div>
 
