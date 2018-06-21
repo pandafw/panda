@@ -17,7 +17,7 @@ public abstract class AbstractAction extends ActionSupport implements AccessHand
 	/**
 	 * @return the daoClient
 	 */
-	protected DaoClient getDaoClient() {
+	public DaoClient getDaoClient() {
 		return daoClient;
 	}
 
