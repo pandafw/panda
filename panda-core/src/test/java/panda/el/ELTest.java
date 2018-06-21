@@ -237,6 +237,7 @@ public class ELTest {
 		Map context = new HashMap();
 		context.put("a", new abc());
 		assertEquals("jk", EL.eval("a.name", context));
+		assertEquals("jk", EL.eval("a['name']", context));
 		assertEquals(new Long(1900), EL.eval("a.date.getTime()", context));
 		
 		assertFalse((Boolean)EL.eval("'java.lang.Boolean'@FALSE"));
