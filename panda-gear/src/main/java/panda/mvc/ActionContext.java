@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import panda.bean.Beans;
 import panda.io.Settings;
 import panda.ioc.Ioc;
+import panda.ioc.bean.IocProxy;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.mvc.alert.ActionAlert;
@@ -91,6 +92,13 @@ public class ActionContext {
 	public ActionContext getCxt() {
 		return this;
 	}
+
+	/**
+	 * @param ioc the ioc to set
+	 */
+	protected void setIoc(Ioc ioc) {
+		this.ioc = ioc;
+	}
 	
 	/**
 	 * @return the ioc
@@ -100,12 +108,12 @@ public class ActionContext {
 	}
 
 	/**
-	 * @param ioc the ioc to set
+	 * @return IocProxy
 	 */
-	protected void setIoc(Ioc ioc) {
-		this.ioc = ioc;
+	public IocProxy getBeans() {
+		return new IocProxy(ioc);
 	}
-
+	
 	/**
 	 * @return the info
 	 */
