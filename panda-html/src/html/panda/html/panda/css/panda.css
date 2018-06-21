@@ -265,6 +265,7 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
  * section
 --------------------------------------------------*/
 .p-section {
+	margin: 0 0 30px 0;
 }
 .p-header {
 	margin: 0 0 20px 0;
