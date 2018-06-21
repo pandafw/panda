@@ -29,9 +29,9 @@ public class SimpleDataSourceTest extends TestCase {
 	}
 	
 	class TestThread extends Thread {
-		int timeout;
+		long timeout;
 		
-		TestThread(int timeout) {
+		TestThread(long timeout) {
 			this.timeout = timeout;
 		}
 		

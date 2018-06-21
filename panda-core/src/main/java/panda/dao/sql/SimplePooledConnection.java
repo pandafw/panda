@@ -39,8 +39,6 @@ public class SimplePooledConnection implements Connection {
 
 	private long lastUsedTimestamp;
 
-	private int connectionTypeCode;
-
 	private boolean valid;
 
 	/**
@@ -105,24 +103,6 @@ public class SimplePooledConnection implements Connection {
 		else {
 			return realConnection.hashCode();
 		}
-	}
-
-	/**
-	 * Getter for the connection type (based on url + user + password)
-	 * 
-	 * @return The connection type
-	 */
-	public int getConnectionTypeCode() {
-		return connectionTypeCode;
-	}
-
-	/**
-	 * Setter for the connection type
-	 * 
-	 * @param connectionTypeCode - the connection type
-	 */
-	public void setConnectionTypeCode(int connectionTypeCode) {
-		this.connectionTypeCode = connectionTypeCode;
 	}
 
 	/**
