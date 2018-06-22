@@ -653,53 +653,54 @@ public class SimpleDataSource implements DataSource {
 	 * @return True if the connection is still usable
 	 */
 	protected boolean pingConnection(SimplePooledConnection conn) {
-		boolean closed = true;
-
+		Connection rcon = conn.getRealConnection();
 		try {
-			closed = conn.getRealConnection().isClosed();
+			if (rcon.isClosed()) {
+				return false;
+			}
 		}
 		catch (Exception e) {
 			if (log.isDebugEnabled()) {
 				log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
 			}
+			return false;
 		}
 
-		if (!closed && Strings.isNotEmpty(pool.pingQuery)
-				&& ((pool.pingOlderThan > 0 && conn.getAge() > pool.pingOlderThan)
-					|| (pool.pingNotUsedFor > 0 && conn.getTimeElapsedSinceLastUse() > pool.pingNotUsedFor))) {
+		if (Strings.isEmpty(pool.pingQuery)
+				|| ((pool.pingOlderThan <= 0 || conn.getAge() <= pool.pingOlderThan)
+					&& (pool.pingNotUsedFor <= 0 || conn.getTimeElapsedSinceLastUse() <= pool.pingNotUsedFor))) {
+			return true;
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Testing connection " + conn.getRealHashCode() + " ...");
+		}
+
+		try {
+			Statement statement = rcon.createStatement();
+			statement.setQueryTimeout(pool.pingTimeout);
+			ResultSet rs = statement.executeQuery(pool.pingQuery);
+			rs.close();
+			statement.close();
 
 			if (log.isDebugEnabled()) {
-				log.debug("Testing connection " + conn.getRealHashCode() + " ...");
+				log.debug("Connection " + conn.getRealHashCode() + " is GOOD!");
 			}
-
-			Connection rcon = conn.getRealConnection();
-			try {
-				Statement statement = rcon.createStatement();
-				statement.setQueryTimeout(pool.pingTimeout);
-				ResultSet rs = statement.executeQuery(pool.pingQuery);
-				rs.close();
-				statement.close();
-
-				if (!rcon.getAutoCommit()) {
-					rcon.rollback();
-				}
-				closed = false;
-
-				if (log.isDebugEnabled()) {
-					log.debug("Connection " + conn.getRealHashCode() + " is GOOD!");
-				}
-			}
-			catch (Exception e) {
-				log.warn("Execution of ping query '" + pool.pingQuery + "' failed: " + e.getMessage());
-
-				Sqls.safeClose(rcon);
-
-				if (log.isDebugEnabled()) {
-					log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
-				}
-			}
+			return true;
 		}
-		return !closed;
+		catch (Exception e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Execution of ping query '" + pool.pingQuery + "' failed: " + e.getMessage());
+			}
+			
+			Sqls.safeClose(rcon);
+
+			if (log.isDebugEnabled()) {
+				log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
+			}
+			
+			return false;
+		}
 	}
 
 	/**
