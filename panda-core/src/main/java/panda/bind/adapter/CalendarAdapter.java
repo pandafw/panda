@@ -3,14 +3,13 @@ package panda.bind.adapter;
 import java.text.Format;
 import java.util.Calendar;
 
-import panda.bind.SourceAdapter;
 import panda.lang.time.FastDateFormat;
 
 /**
  * Convert Date to Milliseconds (Long), 
  * or setDateFormat("yyyy-MM-dd") to use DateFormat to convert Date to formatted string.
  */
-public class CalendarAdapter implements SourceAdapter<Calendar> {
+public class CalendarAdapter extends AbstractSerializeAdapter<Calendar> {
 	public static final DateAdapter toMillis = new DateAdapter();
 
 	private Format dateFormat;
@@ -38,16 +37,17 @@ public class CalendarAdapter implements SourceAdapter<Calendar> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Object apply(Calendar value) {
-		if (value == null) {
+	@Override
+	public Object adaptSource(Calendar src) {
+		if (src == null) {
 			return null;
 		}
 
 		if (dateFormat != null){
-			return dateFormat.format(value);
+			return dateFormat.format(src);
 		}
 		
-		return value.getTime();
+		return src.getTime();
 	}
 }
 

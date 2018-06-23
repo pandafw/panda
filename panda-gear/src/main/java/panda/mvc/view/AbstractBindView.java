@@ -24,16 +24,13 @@ import panda.mvc.alert.ParamAlert;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
-import panda.mvc.bean.QueryerEx;
 import panda.mvc.bean.Sorter;
-import panda.mvc.bind.filter.FileItemPropertyFilter;
-import panda.mvc.bind.filter.FilterPropertyFilter;
-import panda.mvc.bind.filter.PagerPropertyFilter;
-import panda.mvc.bind.filter.QueryerPropertyFilter;
-import panda.mvc.bind.filter.SorterPropertyFilter;
+import panda.mvc.bind.adapter.FileItemAdapter;
+import panda.mvc.bind.adapter.FilterAdapter;
+import panda.mvc.bind.adapter.PagerAdapter;
+import panda.mvc.bind.adapter.QueryerAdapter;
+import panda.mvc.bind.adapter.SorterAdapter;
 import panda.vfs.FileItem;
-import panda.vfs.dao.DaoFileItem;
-import panda.vfs.local.LocalFileItem;
 
 
 public abstract class AbstractBindView extends DataView {
@@ -270,20 +267,15 @@ public abstract class AbstractBindView extends DataView {
 			as.setDateToMillis(true);
 		}
 		else {
-			as.registerSourceAdapter(Date.class, new DateAdapter(dateFormat));
-			as.registerSourceAdapter(Calendar.class, new CalendarAdapter(dateFormat));
+			as.registerAdapter(Date.class, new DateAdapter(dateFormat));
+			as.registerAdapter(Calendar.class, new CalendarAdapter(dateFormat));
 		}
 
-		as.registerPropertyFilter(Filter.class, new FilterPropertyFilter(shortName));
-		as.registerPropertyFilter(Pager.class, new PagerPropertyFilter(shortName));
-		as.registerPropertyFilter(Queryer.class, new QueryerPropertyFilter(shortName));
-		as.registerPropertyFilter(QueryerEx.class, new QueryerPropertyFilter(shortName));
-		as.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(shortName));
-
-		FileItemPropertyFilter fipf = new FileItemPropertyFilter();
-		as.registerPropertyFilter(FileItem.class, fipf);
-		as.registerPropertyFilter(LocalFileItem.class, fipf);
-		as.registerPropertyFilter(DaoFileItem.class, fipf);
+		as.registerAdapter(Filter.class, new FilterAdapter(shortName));
+		as.registerAdapter(Pager.class, new PagerAdapter(shortName));
+		as.registerAdapter(Queryer.class, new QueryerAdapter(shortName));
+		as.registerAdapter(Sorter.class, new SorterAdapter(shortName));
+		as.registerAdapter(FileItem.class, new FileItemAdapter());
 		
 		as.setPrettyPrint(prettyPrint);
 	}

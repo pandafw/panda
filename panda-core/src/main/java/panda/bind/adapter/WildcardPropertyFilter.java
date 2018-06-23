@@ -1,13 +1,13 @@
-package panda.bind.filter;
+package panda.bind.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.bind.PropertyFilter;
+import org.apache.poi.ss.formula.functions.T;
+
 import panda.io.FileNames;
 
-public class WildcardPropertyFilter implements PropertyFilter {
-
+public class WildcardPropertyFilter extends AbstractSerializeAdapter<T> {
 	private List<String> filterNames;
 	private List<String> filterTypes;
 	
@@ -54,28 +54,36 @@ public class WildcardPropertyFilter implements PropertyFilter {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean accept(Object source, String name, Object value) {
-		if (value == null) {
-			return false;
-		}
-		
+	@Override
+	public String acceptProperty(T src, String name) {
 		if (filterNames != null) {
 			for (String s : filterNames) {
 				if (FileNames.wildcardMatch(name, s)) {
-					return false;
+					return null;
 				}
 			}
+		}
+		
+		return name;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object filterProperty(T src, Object value) {
+		if (value == null) {
+			return null;
 		}
 		
 		if (filterTypes != null) {
 			for (String s : filterTypes) {
 				if (FileNames.wildcardMatch(value.getClass().getName(), s)) {
-					return false;
+					return null;
 				}
 			}
 		}
 
-		return true;
+		return super.filterProperty(src, value);
 	}
-	
 }

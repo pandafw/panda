@@ -1,12 +1,13 @@
-package panda.mvc.bind.filter;
+package panda.mvc.bind.adapter;
 
-import panda.bind.filter.IncludePropertyFilter;
+import panda.bind.adapter.IncludePropertyFilter;
+import panda.mvc.bean.Queryer;
 
-public class QueryerPropertyFilter extends IncludePropertyFilter {
+public class QueryerAdapter extends IncludePropertyFilter<Queryer> {
 	/**
 	 * Constructor
 	 */
-	public QueryerPropertyFilter() {
+	public QueryerAdapter() {
 		this(false);
 	}
 
@@ -14,7 +15,7 @@ public class QueryerPropertyFilter extends IncludePropertyFilter {
 	 * Constructor
 	 * @param shortName shortName
 	 */
-	public QueryerPropertyFilter(boolean shortName) {
+	public QueryerAdapter(boolean shortName) {
 		if (shortName) {
 			includes.add("n");
 			includes.add("m");

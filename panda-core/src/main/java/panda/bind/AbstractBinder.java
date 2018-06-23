@@ -2,9 +2,7 @@ package panda.bind;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import panda.bean.BeanHandler;
@@ -22,8 +20,6 @@ public abstract class AbstractBinder {
 	private Set<String> excludePropertyNames;
 	
 	private Set<Class<?>> excludePropertyTypes;
-
-	private Map<Type, PropertyFilter> propertyFilters = new HashMap<Type, PropertyFilter>();
 
 	/**
 	 * Constructor 
@@ -72,23 +68,6 @@ public abstract class AbstractBinder {
 	}
 	public void removeExcludeProperty(Class<?> exclude) {
 		getExcludePropertyTypes().remove(exclude);
-	}
-
-	//----------------------------------------------------------
-	public Map<Type, PropertyFilter> getPropertyFilters() {
-		return propertyFilters;
-	}
-	public PropertyFilter getPropertyFilter(Type type) {
-		return propertyFilters.get(type);
-	}
-	public void registerPropertyFilter(Type type, PropertyFilter propertyFilter) {
-		propertyFilters.put(type, propertyFilter);
-	}
-	public void removePropertyFilter(Type type) {
-		propertyFilters.remove(type);
-	}
-	public void clearPropertyFilters() {
-		propertyFilters.clear();
 	}
 
 	//----------------------------------------------------------

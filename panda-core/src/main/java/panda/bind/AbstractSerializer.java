@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.bind.adapter.AbstractSerializeAdapter;
 import panda.bind.adapter.CalendarAdapter;
 import panda.bind.adapter.DateAdapter;
 import panda.codec.binary.Base64;
@@ -30,6 +31,8 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	
 	public static final int DEFAULT_PRETTY_INDENT = 1;
 
+	protected static final SerializeAdapter SA_NONE = new AbstractSerializeAdapter();
+	
 	//-------------- settings --------------------- 
 	protected int cycleDetectStrategy = CycleDetectStrategy.CYCLE_DETECT_NOPROP;
 
@@ -39,8 +42,8 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	/** The number of spaces to add to each level of indentation. */
 	protected int indentFactor = 0;
 
-	/** source object adapters */
-	protected Map<Class, SourceAdapter> sourceAdapters = new HashMap<Class, SourceAdapter>();
+	/** serialize adapters */
+	protected Map<Class, SerializeAdapter> adapters = new HashMap<Class, SerializeAdapter>();
 
 	/** convert Date or Calendar object to milliseconds */
 	protected boolean dateToMillis = false;
@@ -128,48 +131,58 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	}
 
 	//----------------------------------------------------------
-	public Map<Class, SourceAdapter> getSourceAdapters() {
-		return sourceAdapters;
+	public Map<Class, SerializeAdapter> getAdapters() {
+		return adapters;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> SourceAdapter<T> getSourceAdapter(Class<T> type) {
+	public <T> SerializeAdapter<T> getDateAdapter(Class<T> type) {
 		if (dateToMillis) {
 			if (Date.class.isAssignableFrom(type)) {
-				return (SourceAdapter<T>)DateAdapter.toMillis;
+				return (SerializeAdapter<T>)DateAdapter.toMillis;
 			}
 			if (Calendar.class.isAssignableFrom(type)) {
-				return (SourceAdapter<T>)CalendarAdapter.toMillis;
+				return (SerializeAdapter<T>)CalendarAdapter.toMillis;
 			}
 		}
 		
-		if (Collections.isEmpty(sourceAdapters)) {
-			return null;
-		}
-		
-		SourceAdapter sa = sourceAdapters.get(type);
-		if (sa != null) {
-			return sa;
-		}
-		
-		for (Entry<Class, SourceAdapter> en : sourceAdapters.entrySet()) {
-			if (en.getKey().isAssignableFrom(type)) {
-				return en.getValue();
-			}
-		}
 		return null;
 	}
 	
-	public <T> void registerSourceAdapter(Class<T> type, SourceAdapter<T> sourceAdapter) {
-		sourceAdapters.put(type, sourceAdapter);
+	@SuppressWarnings("unchecked")
+	public <T> SerializeAdapter<T> getAdapter(Class<T> type) {
+		if (Collections.isEmpty(adapters)) {
+			return getDateAdapter(type);
+		}
+		
+		SerializeAdapter sa = adapters.get(type);
+		if (sa != null) {
+			return sa == SA_NONE ? null : sa;
+		}
+		
+		for (Entry<Class, SerializeAdapter> en : adapters.entrySet()) {
+			if (en.getKey().isAssignableFrom(type)) {
+				sa = en.getValue();
+				adapters.put(type, sa);
+				return sa;
+			}
+		}
+		
+		sa = getDateAdapter(type);
+		adapters.put(type, sa == null ? SA_NONE : sa);
+		return sa;
 	}
 	
-	public void removeSourceAdapter(Class type) {
-		sourceAdapters.remove(type);
+	public <T> void registerAdapter(Class<? extends T> type, SerializeAdapter<T> adapter) {
+		adapters.put(type, adapter);
 	}
 	
-	public void clearSourceAdapters() {
-		sourceAdapters.clear();
+	public void removeAdapter(Class type) {
+		adapters.remove(type);
+	}
+	
+	public void clearAdapters() {
+		adapters.clear();
 	}
 
 	//----------------------------------------------------------
@@ -214,11 +227,14 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 			return;
 		}
 
-		SourceAdapter sourceAdaptor = getSourceAdapter(src.getClass());
-		if (sourceAdaptor != null) {
-			src = sourceAdaptor.apply(src);
-			serializeSource(name, src);
-			return;
+		// adapt source
+		SerializeAdapter sa = getAdapter(src.getClass());
+		if (sa != null) {
+			Object v = sa.adaptSource(src);
+			if (v != src) {
+				serializeSource(name, v);
+				return;
+			}
 		}
 
 		cycleDetector.push(name, src);
@@ -234,7 +250,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 				serializeArray(name, type, src);
 			}
 			else if (src instanceof Map) {
-				serializeMap(name, type, (Map)src);
+				serializeMap(name, type, (Map)src, sa);
 			}
 			else if (src instanceof Iterable) {
 				serializeIterable(name, type, (Iterable)src);
@@ -267,7 +283,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 				writeImmutable(src);
 			}
 			else {
-				serializeBean(name, type, src);
+				serializeBean(name, type, src, sa);
 			}
 		}
 		finally {
@@ -278,6 +294,12 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	private void serializeArrayElement(String name, Object src, Object val, int idx) {
 		startArrayElement(name, val, idx);
 
+		// exclude type
+		if (val != null && isExcludeProperty(val.getClass())) {
+			val = null;
+		}
+
+		// cycle detect
 		if (cycleDetector.isCycled(val)) {
 			switch (cycleDetectStrategy) {
 			// always has array element
@@ -289,40 +311,53 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 				throw new BindException("Cycle object detected: " + Objects.identityToString(val));
 			}
 		}
-		if (val != null && isExcludeProperty(val.getClass())) {
-			val = null;
-		}
 
 		serializeSource(String.valueOf(idx), val);
 		endArrayElement(name, val, idx);
 	}
 
-	private boolean serializeObjectProperty(Object src, String key, Object val, int idx, PropertyFilter pf) {
-		if (val != null || !isIgnoreNullProperty()) {
-			if (pf == null || pf.accept(src, key, val)) {
-				if (cycleDetector.isCycled(val)) {
-					switch (cycleDetectStrategy) {
-					case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
-						return false;
-					case CycleDetectStrategy.CYCLE_DETECT_LENIENT:
-						val = null;
-						break;
-					default:
-						throw new BindException("Cycle object detected: " + Objects.identityToString(val));
-					}
-				}
+	@SuppressWarnings("unchecked")
+	private boolean serializeObjectProperty(Object src, String key, Object val, int idx, SerializeAdapter sa) {
+		// ignore null
+		if (val == null && isIgnoreNullProperty()) {
+			return false;
+		}
 
-				if (val != null && isExcludeProperty(val.getClass())) {
-					return false;
-				}
-
-				startObjectProperty(key, val, idx);
-				serializeSource(key, val);
-				endObjectProperty(key, val, idx);
-				return true;
+		// exclude type
+		if (val != null && isExcludeProperty(val.getClass())) {
+			return false;
+		}
+		
+		// acceptable ?
+		if (sa != null) {
+			key = sa.acceptProperty(src, key);
+			if (Strings.isEmpty(key)) {
+				return false;
+			}
+			
+			val = sa.filterProperty(src, val);
+			if (val == SerializeAdapter.FILTERED) {
+				return false;
 			}
 		}
-		return false;
+
+		// cycle detect
+		if (cycleDetector.isCycled(val)) {
+			switch (cycleDetectStrategy) {
+			case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
+				return false;
+			case CycleDetectStrategy.CYCLE_DETECT_LENIENT:
+				val = null;
+				break;
+			default:
+				throw new BindException("Cycle object detected: " + Objects.identityToString(val));
+			}
+		}
+
+		startObjectProperty(key, val, idx);
+		serializeSource(key, val);
+		endObjectProperty(key, val, idx);
+		return true;
 	}
 
 	protected void writeIndent(int indent) throws IOException {
@@ -361,16 +396,14 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		endArray(name, src, len);
 	}
 
-	protected void serializeMap(String name, Class<?> type, Map src) {
-		PropertyFilter pf = getPropertyFilter(type);
-
+	protected void serializeMap(String name, Class<?> type, Map src, SerializeAdapter sa) {
 		int len = 0;
 		startObject(name, src);
 		for (Object o : src.entrySet()) {
 			Entry en = (Entry)o;
 			String key = en.getKey().toString();
 			Object val = en.getValue();
-			if (serializeObjectProperty(src, key, val, len, pf)) {
+			if (serializeObjectProperty(src, key, val, len, sa)) {
 				len++;
 			}
 		}
@@ -397,9 +430,8 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void serializeBean(String name, Class<?> type, Object src) {
+	protected void serializeBean(String name, Class<?> type, Object src, SerializeAdapter sa) {
 		BeanHandler bh = getBeanHandler(type);
-		PropertyFilter pf = getPropertyFilter(type);
 
 		int len = 0;
 		startObject(name, src);
@@ -410,7 +442,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 			}
 			
 			Object val = bh.getPropertyValue(src, key);
-			if (serializeObjectProperty(src, key, val, len, pf)) {
+			if (serializeObjectProperty(src, key, val, len, sa)) {
 				len++;
 			}
 		}

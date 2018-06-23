@@ -1,14 +1,15 @@
-package panda.mvc.bind.filter;
+package panda.mvc.bind.adapter;
 
-import panda.bind.filter.IncludePropertyFilter;
+import panda.bind.adapter.IncludePropertyFilter;
+import panda.vfs.FileItem;
 
 /**
  */
-public class FileItemPropertyFilter extends IncludePropertyFilter {
+public class FileItemAdapter extends IncludePropertyFilter<FileItem> {
 	/**
 	 * Constructor
 	 */
-	public FileItemPropertyFilter() {
+	public FileItemAdapter() {
 		includes.add("id");
 		includes.add("name");
 		includes.add("size");

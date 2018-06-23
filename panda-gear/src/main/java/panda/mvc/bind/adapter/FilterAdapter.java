@@ -1,12 +1,13 @@
-package panda.mvc.bind.filter;
+package panda.mvc.bind.adapter;
 
-import panda.bind.filter.IncludePropertyFilter;
+import panda.bind.adapter.IncludePropertyFilter;
+import panda.mvc.bean.Filter;
 
-public class FilterPropertyFilter extends IncludePropertyFilter {
+public class FilterAdapter extends IncludePropertyFilter<Filter> {
 	/**
 	 * Constructor
 	 */
-	public FilterPropertyFilter() {
+	public FilterAdapter() {
 		this(false);
 	}
 	
@@ -15,7 +16,7 @@ public class FilterPropertyFilter extends IncludePropertyFilter {
 	 * @param shortName shortName
 	 * 
 	 */
-	public FilterPropertyFilter(boolean shortName) {
+	public FilterAdapter(boolean shortName) {
 		if (shortName) {
 			includes.add("n");
 			includes.add("c");

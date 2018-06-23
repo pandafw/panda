@@ -7,6 +7,7 @@ import panda.bind.xml.XmlSerializer;
 import panda.bind.xml.Xmls;
 import panda.io.MimeTypes;
 import panda.ioc.annotation.IocBean;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
@@ -18,7 +19,7 @@ import panda.mvc.ActionContext;
 public class XmlView extends AbstractBindView {
 	private static final Log log = Logs.getLog(XmlView.class);
 
-	private String rootName = "result";
+	private String rootName;
 	
 	/**
 	 * Constructor.
@@ -53,6 +54,9 @@ public class XmlView extends AbstractBindView {
 	protected void writeResult(ActionContext ac, PrintWriter writer, Object result) throws IOException {
 		if (result != null) {
 			XmlSerializer xs = Xmls.newXmlSerializer();
+			if (Strings.isNotEmpty(rootName)) {
+				xs.setRootName(rootName);
+			}
 			setSerializerOptions(xs);
 
 			if (log.isDebugEnabled()) {

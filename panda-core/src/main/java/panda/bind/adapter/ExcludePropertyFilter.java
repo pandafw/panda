@@ -1,11 +1,9 @@
-package panda.bind.filter;
+package panda.bind.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.bind.PropertyFilter;
-
-public class ExcludePropertyFilter implements PropertyFilter {
+public class ExcludePropertyFilter<T> extends AbstractSerializeAdapter<T> {
 
 	protected List<String> excludes;
 
@@ -30,19 +28,16 @@ public class ExcludePropertyFilter implements PropertyFilter {
 		this.excludes = excludes;
 	}
 
-
 	/**
-	 * @param source the owner of the property
-	 * @param name the name of the property
-	 * @param value the value of the property
-	 * @return adapter type
+	 * {@inheritDoc}
 	 */
-	public boolean accept(Object source, String name, Object value) {
+	@Override
+	public String acceptProperty(T src, String name) {
 		if (excludes != null) {
 			if (excludes.contains(name)) {
-				return false;
+				return null;
 			}
 		}
-		return true;
+		return name;
 	}
 }

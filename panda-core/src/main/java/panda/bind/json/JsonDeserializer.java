@@ -7,7 +7,6 @@ import java.util.List;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractDeserializer;
-import panda.bind.PropertyFilter;
 import panda.lang.Numbers;
 import panda.lang.reflect.Types;
 
@@ -233,11 +232,9 @@ public class JsonDeserializer extends AbstractDeserializer {
 		
 		T obj = null;
 		BeanHandler<T> bh = null;
-		PropertyFilter pf = null;
 		if (type != null) {
 			bh = getBeanHandler(type);
 			obj = bh.createObject();
-			pf = getPropertyFilter(type);
 		}
 
 		String key;
@@ -286,9 +283,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 					}
 					else {
 						Object val = nextValue(pt);
-						if (pf == null || pf.accept(obj, key, val)) {
-							bh.setPropertyValue(obj, key, val);
-						}
+						bh.setPropertyValue(obj, key, val);
 					}
 				}
 				else {

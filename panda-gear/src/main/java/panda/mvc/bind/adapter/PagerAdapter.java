@@ -1,12 +1,13 @@
-package panda.mvc.bind.filter;
+package panda.mvc.bind.adapter;
 
-import panda.bind.filter.IncludePropertyFilter;
+import panda.bind.adapter.IncludePropertyFilter;
+import panda.mvc.bean.Pager;
 
-public class PagerPropertyFilter extends IncludePropertyFilter {
+public class PagerAdapter extends IncludePropertyFilter<Pager> {
 	/**
 	 * Constructor
 	 */
-	public PagerPropertyFilter() {
+	public PagerAdapter() {
 		this(false);
 	}
 
@@ -14,7 +15,7 @@ public class PagerPropertyFilter extends IncludePropertyFilter {
 	 * Constructor
 	 * @param shortName shortName
 	 */
-	public PagerPropertyFilter(boolean shortName) {
+	public PagerAdapter(boolean shortName) {
 		if (shortName) {
 			includes.add("s");
 			includes.add("l");

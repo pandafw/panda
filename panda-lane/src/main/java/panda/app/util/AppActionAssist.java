@@ -27,7 +27,7 @@ import panda.lang.Systems;
 import panda.lang.time.DateTimes;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
-import panda.mvc.bind.filter.SorterPropertyFilter;
+import panda.mvc.bind.adapter.SorterAdapter;
 import panda.mvc.util.AccessHandler;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.MvcURLBuilder;
@@ -335,7 +335,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 */
 	public void saveSorterParams(Sorter sorter) {
 		JsonSerializer js = Jsons.newJsonSerializer();
-		js.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(true));
+		js.registerAdapter(Sorter.class, new SorterAdapter(true));
 
 		String ss = js.serialize(sorter);
 		getState().saveState("sorter", ss);
