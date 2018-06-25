@@ -1,7 +1,8 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
+import panda.bind.json.Jsons;
 
-public class Term extends BaseBean {
+public class Term {
 	public String term_id;
 	public String name;
 	public String slug;
@@ -11,4 +12,12 @@ public class Term extends BaseBean {
 	public String description;
 	public String parent;
 	public Integer count;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

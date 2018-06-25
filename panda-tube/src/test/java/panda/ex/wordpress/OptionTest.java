@@ -5,8 +5,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.ex.wordpress.bean.Option;
-
 public class OptionTest extends AbstractWordpressTest {
 
 	@Test

@@ -1,8 +1,10 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
 import java.util.Date;
 
-public class MediaItem extends BaseBean {
+import panda.bind.json.Jsons;
+
+public class MediaItem {
 	public String attachment_id;
 	public Date date_created_gmt;
 	public Integer parent;
@@ -13,4 +15,12 @@ public class MediaItem extends BaseBean {
 	public MediaItemMetadata metadata;
 	public PostThumbnailImageMeta image_meta;
 	public String thumbnail;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

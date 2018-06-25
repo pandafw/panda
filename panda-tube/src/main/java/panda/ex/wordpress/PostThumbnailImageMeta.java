@@ -1,7 +1,8 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
+import panda.bind.json.Jsons;
 
-public class PostThumbnailImageMeta extends BaseBean {
+public class PostThumbnailImageMeta {
 	public Integer aperture;
 	public String credit;
 	public String camera;
@@ -12,4 +13,12 @@ public class PostThumbnailImageMeta extends BaseBean {
 	public Integer iso;
 	public Integer shutter_speed;
 	public String title;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

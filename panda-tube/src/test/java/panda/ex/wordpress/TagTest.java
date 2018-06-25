@@ -6,7 +6,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.ex.wordpress.bean.Tag;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 

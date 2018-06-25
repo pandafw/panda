@@ -1,15 +1,21 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
+import panda.bind.json.Jsons;
 import panda.lang.Objects;
 
 
-public class Option extends BaseBean {
+public class Option {
 	public String desc;
 
 	public String value;
 
 	public Boolean readonly;
 	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -27,5 +33,13 @@ public class Option extends BaseBean {
 				.append(value, rhs.value)
 				.append(readonly, rhs.readonly)
 				.isEquals();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
 	}
 }

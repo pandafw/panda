@@ -5,8 +5,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.ex.wordpress.bean.Blog;
-import panda.ex.wordpress.bean.User;
 import panda.lang.Arrays;
 import panda.lang.Randoms;
 

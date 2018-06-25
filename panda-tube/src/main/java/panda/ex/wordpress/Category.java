@@ -1,10 +1,11 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
+import panda.bind.json.Jsons;
 
 /**
  * Category object for a blog.
  */
-public class Category extends BaseBean {
+public class Category {
 	public String categoryId;
 
 	public String parentId;
@@ -50,5 +51,13 @@ public class Category extends BaseBean {
 	 */
 	public void setCategory_name(String categoryName) {
 		this.categoryName = categoryName;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
 	}
 }

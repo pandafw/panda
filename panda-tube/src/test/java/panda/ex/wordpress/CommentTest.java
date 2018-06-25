@@ -5,10 +5,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.ex.wordpress.bean.Comment;
-import panda.ex.wordpress.bean.CommentCount;
-import panda.ex.wordpress.bean.CommentStatusList;
-
 public class CommentTest extends AbstractWordpressTest {
 
 	@Test

@@ -1,11 +1,13 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
 import java.util.Date;
+
+import panda.bind.json.Jsons;
 
 /**
  * A WordPress Comment object
  */
-public class Comment extends BaseBean {
+public class Comment {
 	public String comment_id;
 	public String parent;
 	public String user_id;
@@ -49,4 +51,12 @@ public class Comment extends BaseBean {
 		this.dateCreated = date_created_gmt;
 	}
 	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

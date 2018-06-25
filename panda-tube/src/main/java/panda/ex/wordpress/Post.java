@@ -1,11 +1,13 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import panda.bind.json.Jsons;
 
-public class Post extends BaseBean {
+
+public class Post {
 	public static final String PING_STATUS_OPEN = "open";
 	public static final String PING_STATUS_CLOSED = "closed";
 
@@ -50,4 +52,12 @@ public class Post extends BaseBean {
 	public Map<String, List<String>> terms_names;
 	public List<PostCustomField> custom_fields;
 	public PostEnclosure enclosure;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

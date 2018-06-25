@@ -1,7 +1,7 @@
-package panda.ex.wordpress.bean;
+package panda.ex.wordpress;
 
 
-public class PostFilter extends BaseFilter {
+public class PostFilter extends Filter {
 
 	public String orderby;
 	public String order;

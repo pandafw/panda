@@ -8,9 +8,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.ex.wordpress.bean.Post;
-import panda.ex.wordpress.bean.PostType;
-import panda.ex.wordpress.bean.Taxonomy;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 
