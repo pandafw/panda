@@ -345,11 +345,13 @@ public class CmdLineParser {
 			}
 		}
 	}
-	
+
 	public void parse(String[] args) throws CmdLineException {
 		List<String> as = injectOptions(args);
 		injectArguments(as);
-		
+	}
+
+	public void validate() throws CmdLineException {
 		checkRequiredArguments();
 		checkRequiredOptions();
 	}

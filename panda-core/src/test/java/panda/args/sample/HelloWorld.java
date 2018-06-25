@@ -43,16 +43,18 @@ public class HelloWorld {
 		CmdLineParser clp = new CmdLineParser(hello);
 		try {
 			clp.parse(args);
+
+			if (hello.help) {
+				System.out.print(clp.usage());
+				return;
+			}
+
+			clp.validate();
 		}
 		catch (CmdLineException e) {
 			System.out.println("ERROR: " + e.getMessage());
 			System.out.println();
 			System.out.println(clp.usage());
-			return;
-		}
-		
-		if (hello.help) {
-			System.out.print(clp.usage());
 			return;
 		}
 		

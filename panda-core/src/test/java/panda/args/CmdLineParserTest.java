@@ -136,6 +136,7 @@ public class CmdLineParserTest {
 		CmdLineParser clp = new CmdLineParser(this);
 		try {
 			clp.parse(new String[] { "aa0", "aa1" });
+			clp.validate();
 			Assert.fail();
 		}
 		catch (CmdLineException e) {

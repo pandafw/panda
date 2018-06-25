@@ -66,10 +66,13 @@ public abstract class AbstractCommandTool {
 		CmdLineParser clp = new CmdLineParser(this);
 		try {
 			clp.parse(args);
+
 			if (isShowHelp()) {
 				System.out.println(clp.usage());
 				return exitCode;
 			}
+			
+			clp.validate();
 		}
 		catch (CmdLineException e) {
 			System.out.println("ERROR: " + e.getMessage());
