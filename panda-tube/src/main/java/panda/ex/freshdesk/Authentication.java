@@ -2,6 +2,7 @@ package panda.ex.freshdesk;
 
 import java.net.Proxy;
 
+import panda.bind.json.Jsons;
 import panda.lang.Strings;
 import panda.net.http.HttpClient;
 import panda.net.ssl.SSLProtocols;
@@ -147,5 +148,12 @@ public class Authentication {
 		}
 	}
 	
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

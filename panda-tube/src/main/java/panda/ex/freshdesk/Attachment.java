@@ -2,6 +2,8 @@ package panda.ex.freshdesk;
 
 import java.util.Date;
 
+import panda.bind.json.Jsons;
+
 public class Attachment {
 	private Long id;
 
@@ -115,5 +117,12 @@ public class Attachment {
 		this.updated_at = updated_at;
 	}
 	
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

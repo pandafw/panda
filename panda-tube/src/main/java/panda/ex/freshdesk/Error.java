@@ -1,5 +1,7 @@
 package panda.ex.freshdesk;
 
+import panda.bind.json.Jsons;
+
 public class Error {
 	private String field;
 	private String message;
@@ -45,5 +47,13 @@ public class Error {
 	 */
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
 	}
 }

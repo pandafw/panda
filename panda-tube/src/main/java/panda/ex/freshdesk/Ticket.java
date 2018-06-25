@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import panda.bind.json.Jsons;
+
 public class Ticket {
 	/** Unique ID of the ticket*/
 	private Integer id;
@@ -601,5 +603,12 @@ public class Ticket {
 		this.requester = requester;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 
 }

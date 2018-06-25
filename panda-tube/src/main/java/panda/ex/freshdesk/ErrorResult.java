@@ -2,6 +2,8 @@ package panda.ex.freshdesk;
 
 import java.util.List;
 
+import panda.bind.json.Jsons;
+
 public class ErrorResult {
 	private String description;
 	
@@ -35,4 +37,12 @@ public class ErrorResult {
 		this.errors = errors;
 	}
 	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import panda.bind.json.Jsons;
+
 public class Contact {
 	/** Set to true if the contact has been verified */
 	private Boolean active;
@@ -379,5 +381,12 @@ public class Contact {
 		this.updated_at = updated_at;
 	}
 	
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return Jsons.toJson(this, true);
+	}
 }
