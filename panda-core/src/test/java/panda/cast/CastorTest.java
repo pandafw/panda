@@ -1,20 +1,22 @@
 package panda.cast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import panda.lang.Arrays;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.lang.TimeZones;
 import panda.lang.reflect.TypeToken;
+import panda.lang.time.DateTimes;
 
-/**
- */
-public class CastorTest extends TestCase {
+public class CastorTest {
 	public static class A {
 		private boolean bol = false;
 		private String str = "A";
@@ -145,6 +147,7 @@ public class CastorTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testStringArrayToIntArray() throws Exception {
 		String[] ss = {
 			"1", "2", "-3", "0"
@@ -156,10 +159,11 @@ public class CastorTest extends TestCase {
 		
 		int[] iii = Castors.scast(ss, int[].class);
 
-		assertEquals(Strings.join(ii), Strings.join(iii));
-		assertTrue(Arrays.equals(ii, iii));
+		Assert.assertEquals(Strings.join(ii), Strings.join(iii));
+		Assert.assertTrue(Arrays.equals(ii, iii));
 	}
 
+	@Test
 	public void testStringArrayToIntList() throws Exception {
 		String[] ss = {
 			"1", "2", "-3", null
@@ -175,10 +179,11 @@ public class CastorTest extends TestCase {
 		List<Integer> il = Castors.scast(ss, new TypeToken<List<Integer>>(){}.getType());
 		Integer[] iii = il.toArray(new Integer[0]);
 		
-		assertEquals(Strings.join(ii), Strings.join(iii));
-		assertTrue(Arrays.equals(ii, iii));
+		Assert.assertEquals(Strings.join(ii), Strings.join(iii));
+		Assert.assertTrue(Arrays.equals(ii, iii));
 	}
 	
+	@Test
 	public void testStringListToIntList() throws Exception {
 		List<String> ss = Arrays.asList(new String[] {
 			"1", "2", "-3", null
@@ -194,10 +199,11 @@ public class CastorTest extends TestCase {
 		List<Integer> il = Castors.scast(ss, new TypeToken<List<Integer>>(){}.getType());
 		Integer[] iii = il.toArray(new Integer[0]);
 		
-		assertEquals(Strings.join(ii), Strings.join(iii));
-		assertTrue(Arrays.equals(ii, iii));
+		Assert.assertEquals(Strings.join(ii), Strings.join(iii));
+		Assert.assertTrue(Arrays.equals(ii, iii));
 	}
 	
+	@Test
 	public void testA2B() throws Exception {
 		A a = new A();
 		
@@ -210,14 +216,14 @@ public class CastorTest extends TestCase {
 		
 		try {
 			Castors.scast(a, B.class);
-			fail();
+			Assert.fail();
 		}
 		catch (CastException e) {
-			assertEquals("/: Failed to cast class panda.cast.CastorTest$A -> class panda.cast.CastorTest$B", e.getMessage());
+			Assert.assertEquals("/: Failed to cast class panda.cast.CastorTest$A -> class panda.cast.CastorTest$B", e.getMessage());
 		}
 	}
 
-	
+	@Test
 	public void testMap2A() throws Exception {
 		Map<String, Object> m = new HashMap<String, Object>();;
 		
@@ -227,12 +233,13 @@ public class CastorTest extends TestCase {
 		m.put("obj.dummy", true);
 		
 		A a = Castors.scast(m, A.class);
-		assertNotNull(a);
-		assertTrue(a.bol);
-		assertNotNull(a.obj);
-		assertTrue(a.obj.bol);
+		Assert.assertNotNull(a);
+		Assert.assertTrue(a.bol);
+		Assert.assertNotNull(a.obj);
+		Assert.assertTrue(a.obj.bol);
 	}
 
+	@Test
 	public void testA2Map() throws Exception {
 		Map<String, Object> e = new HashMap<String, Object>();;
 		
@@ -248,10 +255,11 @@ public class CastorTest extends TestCase {
 		
 		Map<String, Object> m = Castors.scast(a, Map.class);
 
-		assertNotNull(m);
-		assertEquals(e, m);
+		Assert.assertNotNull(m);
+		Assert.assertEquals(e, m);
 	}
 
+	@Test
 	public void testString2A() throws Exception {
 		Map<String, Object> m = new HashMap<String, Object>();;
 		
@@ -260,19 +268,27 @@ public class CastorTest extends TestCase {
 		
 		try {
 			Castors.scast(m, A.class);
-			fail();
+			Assert.fail();
 		}
 		catch (CastException e) {
 		}
 	}
 	
+	@Test
 	public void testCastToPrimitive() throws Exception {
 		try {
 			Integer i = 2;
 			Castors.scastTo("1", i);
-			fail();
+			Assert.fail();
 		}
 		catch (CastException e) {
 		}
+	}
+	
+	@Test
+	public void testDateCastWithTimeZone() throws Exception {
+		String exp = "2018-01-02T03:04:05Z";
+		Calendar act = Castors.scast(exp, Calendar.class);
+		Assert.assertEquals(exp, DateTimes.format(act, DateTimes.ISO_DATETIME_TIMEZONE_FORMAT, TimeZones.GMT));
 	}
 }

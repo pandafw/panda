@@ -21,6 +21,7 @@ import panda.lang.time.FastDateFormat;
  */
 public class DateTypeCastor {
 	public final static String NOW = "now";
+	public final static String ISODATEZ = "isodatenoz";
 	public final static String ISODATE = "isodate";
 	public final static String ISODATE_NOH = "isodatenoh";
 	public final static String TIMESTAMP = "timestamp";
@@ -35,6 +36,7 @@ public class DateTypeCastor {
 
 	public final static Map<Locale, Map<String, FastDateFormat>> LOCALE_DATE_FORMATS = new HashMap<Locale, Map<String, FastDateFormat>>();
 	static {
+		DATE_FORMATS.put(ISODATEZ, DateTimes.isoDatetimeTimeZoneFormat());
 		DATE_FORMATS.put(ISODATE, DateTimes.isoDatetimeFormat());
 		DATE_FORMATS.put(ISODATE_NOH, DateTimes.isoDatetimeNohFormat());
 		DATE_FORMATS.put(TIMESTAMP, DateTimes.timestampFormat());
