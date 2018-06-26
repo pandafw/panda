@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 import panda.bind.json.Jsons;
 import panda.cast.Castors;
+import panda.lang.Charsets;
 import panda.lang.Strings;
 
 
@@ -47,7 +49,7 @@ public class Settings implements Map<String, String> {
 	 */
 	public synchronized void load(InputStream is) throws IOException {
 		Properties ps = new Properties();
-		ps.load(is);
+		ps.load(new InputStreamReader(is, Charsets.UTF_8));
 		putAll(ps);
 	}
 
@@ -285,5 +287,13 @@ public class Settings implements Map<String, String> {
 		}
 
 		return map;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return props.toString();
 	}
 }
