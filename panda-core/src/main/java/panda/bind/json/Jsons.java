@@ -9,6 +9,16 @@ import panda.lang.Chars;
 import panda.lang.Charsets;
 
 public abstract class Jsons {
+	public static JsonDeserializer newJsonDeserializer() {
+		JsonDeserializer jd = new JsonDeserializer();
+		return jd;
+	}
+
+	public static JsonSerializer newJsonSerializer() {
+		JsonSerializer js = new JsonSerializer();
+		return js;
+	}
+	
 	public static Object fromJson(InputStream json, String encoding) {
 		return fromJson(json, encoding, Object.class);
 	}
@@ -27,7 +37,7 @@ public abstract class Jsons {
 		}
 
 		Reader r = Streams.toReader(json, encoding);
-		JsonDeserializer jd = new JsonDeserializer();
+		JsonDeserializer jd = newJsonDeserializer();
 		return jd.deserialize(r, type);
 	}
 
@@ -39,7 +49,7 @@ public abstract class Jsons {
 		if (json == null) {
 			return null;
 		}
-		JsonDeserializer jd = new JsonDeserializer();
+		JsonDeserializer jd = newJsonDeserializer();
 		return jd.deserialize(json, type);
 	}
 
@@ -47,15 +57,10 @@ public abstract class Jsons {
 		if (json == null) {
 			return null;
 		}
-		JsonDeserializer jd = new JsonDeserializer();
+		JsonDeserializer jd = newJsonDeserializer();
 		return jd.deserialize(json, type);
 	}
 
-	public static JsonSerializer newJsonSerializer() {
-		JsonSerializer js = new JsonSerializer();
-		return js;
-	}
-	
 	public static String toJson(Object value) {
 		JsonSerializer js = newJsonSerializer();
 		return js.serialize(value);
