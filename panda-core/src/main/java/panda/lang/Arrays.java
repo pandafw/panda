@@ -8748,6 +8748,30 @@ public abstract class Arrays {
 		return map;
 	}
 
+	public static <K, V> HashMap<K, V> toMap(K[] ks, V[] vs) {
+		if (ks == null) {
+			return null;
+		}
+
+		HashMap<K, V> map = new HashMap<K, V>(ks.length);
+		for (int i = 0; i < ks.length; i++) {
+			map.put(ks[i], i < vs.length ? vs[i] : null);
+		}
+		return map;
+	}
+
+	public static <K, V> LinkedHashMap<K, V> toLinkedMap(K[] ks, V[] vs) {
+		if (ks == null) {
+			return null;
+		}
+
+		LinkedHashMap<K, V> map = new LinkedHashMap<K, V>(ks.length);
+		for (int i = 0; i < ks.length; i++) {
+			map.put(ks[i], i < vs.length ? vs[i] : null);
+		}
+		return map;
+	}
+
 	/**
 	 * <p>
 	 * Outputs an array as a String, treating {@code null} as an empty array.
