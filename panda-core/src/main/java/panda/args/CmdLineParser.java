@@ -30,11 +30,13 @@ public class CmdLineParser {
 	private Castors castors;
 	private Object bean;
 	
-	private Map<Argument, Injector> arguments;
-	private Map<Option, Injector> options;
+	private Map<Argument, Injector> argInjectors;
+	private Map<Option, Injector> optInjectors;
 
-	private Map<Option, Object> optValues;
 	private Map<Argument, Object> argValues;
+	private Map<Option, Object> optValues;
+	
+	private List<String> cmdLineArgs;
 
 	/**
 	 * Creates a new command line owner that parses arguments/options and set them into the given
@@ -88,9 +90,9 @@ public class CmdLineParser {
 			}
 		});
 
-		arguments = new LinkedHashMap<Argument, Injector>();
+		argInjectors = new LinkedHashMap<Argument, Injector>();
 		for (KeyValue<Argument, Injector> e : args) {
-			arguments.put(e.getKey(), e.getValue());
+			argInjectors.put(e.getKey(), e.getValue());
 		}
 		argValues = new HashMap<Argument, Object>();
 	}
@@ -144,15 +146,15 @@ public class CmdLineParser {
 			}
 		});
 
-		options = new LinkedHashMap<Option, Injector>();
+		optInjectors = new LinkedHashMap<Option, Injector>();
 		for (KeyValue<Option, Injector> e : opts) {
-			options.put(e.getKey(), e.getValue());
+			optInjectors.put(e.getKey(), e.getValue());
 		}
 		optValues = new HashMap<Option, Object>();
 	}
 
 	protected Option findOption(String name, String a) throws CmdLineException {
-		for (Option o : options.keySet()) {
+		for (Option o : optInjectors.keySet()) {
 			if (o.option().equals(name)) {
 				return o;
 			}
@@ -161,7 +163,7 @@ public class CmdLineParser {
 	}
 	
 	protected Option findOption(char flag, String a) throws CmdLineException {
-		for (Option o : options.keySet()) {
+		for (Option o : optInjectors.keySet()) {
 			if (o.opt() != ' ' && o.opt() == flag) {
 				return o;
 			}
@@ -184,7 +186,7 @@ public class CmdLineParser {
 		}
 
 		try {
-			Injector inj = options.get(opt);
+			Injector inj = optInjectors.get(opt);
 			Object o = castors.cast(v, inj.type(bean));
 			optValues.put(opt, o);
 			inj.inject(bean, o);
@@ -267,7 +269,7 @@ public class CmdLineParser {
 
 	protected void inject(Argument a, Object v) throws CmdLineException {
 		try {
-			Injector inj = arguments.get(a);
+			Injector inj = argInjectors.get(a);
 			Object o = castors.cast(v, inj.type(bean));
 			argValues.put(a, o);
 			inj.inject(bean, o);
@@ -278,20 +280,13 @@ public class CmdLineParser {
 	}
 	
 	protected void injectArguments(List<String> as) throws CmdLineException {
-		if (Collections.isEmpty(as)) {
-			if (needArguments()) {
-				throw new CmdLineException("The arguments is required");
-			}
+		if (Collections.isEmpty(as) || !needArguments()) {
 			return;
-		}
-
-		if (!needArguments()) {
-			throw new CmdLineException("Invalid arguments - " + Strings.join(as, ' '));
 		}
 
 		// indexed arguments
 		int idx = -1;
-		for (Argument a : arguments.keySet()) {
+		for (Argument a : argInjectors.keySet()) {
 			int i = a.index();
 			if (a.required() && i >= as.size()) {
 				throw new CmdLineException("The argument <" + a.name() + "> is required");
@@ -307,7 +302,7 @@ public class CmdLineParser {
 		if (++idx < as.size()) {
 			// remained no-index arguments
 			String[] ss = as.subList(idx, as.size()).toArray(new String[0]);
-			for (Argument a : arguments.keySet()) {
+			for (Argument a : argInjectors.keySet()) {
 				if (a.index() < 0) {
 					inject(a, ss);
 				}
@@ -315,8 +310,8 @@ public class CmdLineParser {
 		}
 	}
 
-	protected void checkRequiredOptions() throws CmdLineException {
-		for (Option o : options.keySet()) {
+	protected void validateOptions() throws CmdLineException {
+		for (Option o : optInjectors.keySet()) {
 			if (o.required()) {
 				if (!optValues.containsKey(o)) {
 					StringBuilder sb = new StringBuilder();
@@ -325,39 +320,46 @@ public class CmdLineParser {
 						sb.append('-').append(o.opt()).append(',');
 					}
 					sb.append("--").append(o.option());
-					sb.append(" is required");
+					sb.append(" is required!");
 					throw new CmdLineException(sb.toString());
 				}
 			}
 		}
 	}
 
-	protected void checkRequiredArguments() throws CmdLineException {
-		for (Argument a : arguments.keySet()) {
-			if (a.required()) {
-				if (!argValues.containsKey(a)) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("The argument <");
-					sb.append(a.name());
-					sb.append("> is required");
-					throw new CmdLineException(sb.toString());
+	protected void validateArguments() throws CmdLineException {
+		if (needArguments()) {
+			for (Argument a : argInjectors.keySet()) {
+				if (a.required()) {
+					if (!argValues.containsKey(a)) {
+						StringBuilder sb = new StringBuilder();
+						sb.append("The argument <");
+						sb.append(a.name());
+						sb.append("> is required!");
+						throw new CmdLineException(sb.toString());
+					}
 				}
+			}
+		}
+		else {
+			if (Collections.isNotEmpty(cmdLineArgs)) {
+				throw new CmdLineException("Invalid arguments - " + Strings.join(cmdLineArgs, ' '));
 			}
 		}
 	}
 
 	public void parse(String[] args) throws CmdLineException {
-		List<String> as = injectOptions(args);
-		injectArguments(as);
+		cmdLineArgs = injectOptions(args);
+		injectArguments(cmdLineArgs);
 	}
 
 	public void validate() throws CmdLineException {
-		checkRequiredArguments();
-		checkRequiredOptions();
+		validateArguments();
+		validateOptions();
 	}
 
 	public boolean needArguments() {
-		for (Argument a : arguments.keySet()) {
+		for (Argument a : argInjectors.keySet()) {
 			if (a.required()) {
 				return true;
 			}
@@ -366,12 +368,16 @@ public class CmdLineParser {
 	}
 
 	public String usage() {
+		return usage("java " + bean.getClass().getName());
+	}
+	
+	public String usage(String cmd) {
 		List<Option> opts = getDisplayOptions();
 		List<Argument> args = getDisplayArguments();
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("Usage: java ").append(bean.getClass().getName());
+		sb.append("Usage: " + cmd);
 		if (Collections.isNotEmpty(opts)) {
 			sb.append(" [OPTIONS]");
 		}
@@ -445,7 +451,7 @@ public class CmdLineParser {
 		List<Option> opts = new ArrayList<Option>();
 		
 		// add display option
-		for (Option o : options.keySet()) {
+		for (Option o : optInjectors.keySet()) {
 			if (!o.hidden()) {
 				opts.add(o);
 			}
@@ -458,7 +464,7 @@ public class CmdLineParser {
 		List<Argument> args = new ArrayList<Argument>();
 		
 		// add display option
-		for (Argument a : arguments.keySet()) {
+		for (Argument a : argInjectors.keySet()) {
 			if (!a.hidden()) {
 				args.add(a);
 			}
