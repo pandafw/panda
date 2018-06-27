@@ -36,7 +36,7 @@ public class WkHtml2Pdf extends Html2Pdf {
 	protected String path = "wkhtmltopdf";
 	
 	@IocInject(value=MVC.WKHTML2PDF_TIMEOUT, required=false)
-	protected int timeout = 300;
+	protected int timeout = 120;
 
 	public String getPath() {
 		return path;
@@ -71,7 +71,9 @@ public class WkHtml2Pdf extends Html2Pdf {
 
 		List<String> cmds = new ArrayList<String>();
 		cmds.add(path);
-		cmds.add("-q"); // quiet
+		if (!log.isDebugEnabled()) {
+			cmds.add("-q"); // quiet
+		}
 		if (Strings.isNotEmpty(charset)) {
 			cmds.add("--encoding");
 			cmds.add(charset);
