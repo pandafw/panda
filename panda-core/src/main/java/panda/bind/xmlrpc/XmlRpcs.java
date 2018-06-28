@@ -55,14 +55,22 @@ public abstract class XmlRpcs {
 		xs.serialize(value, writer);
 	}
 
-	public static void toXml(Object value, Appendable writer, boolean pretty) {
+	public static void toXml(Object value, Appendable writer, boolean isMethodCall) {
 		XmlRpcSerializer xs = newXmlSerializer();
+		xs.setMethodCall(isMethodCall);
+		xs.serialize(value, writer);
+	}
+
+	public static void toXml(Object value, Appendable writer, boolean isMethodCall, boolean pretty) {
+		XmlRpcSerializer xs = newXmlSerializer();
+		xs.setMethodCall(isMethodCall);
 		xs.setPrettyPrint(pretty);
 		xs.serialize(value, writer);
 	}
 
-	public static void toXml(Object value, Appendable writer, int indent) {
+	public static void toXml(Object value, Appendable writer, boolean isMethodCall, int indent) {
 		XmlRpcSerializer xs = newXmlSerializer();
+		xs.setMethodCall(isMethodCall);
 		xs.setIndentFactor(indent);
 		xs.serialize(value, writer);
 	}
