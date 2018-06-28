@@ -2,7 +2,6 @@ package panda.ex.wordpress;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,28 +15,77 @@ import panda.net.xmlrpc.XmlRpcFaultException;
 
 
 
-
 /**
  * The utility class that links xmlrpc calls to Java functions.
  */
-public class Wordpress {
-
-	private String username;
-
-	private String password;
+public class WordPress {
 
 	private XmlRpcClient client;
+	private int blogId;
+	private String username;
+	private String password;
 
 	/**
 	 * @param username User name
 	 * @param password Password
 	 * @param xmlRpcUrl xmlrpc communication point, usually blogurl/xmlrpc.php
-	 * @throws MalformedURLException If the URL is faulty
 	 */
-	public Wordpress(String username, String password, String xmlRpcUrl) throws MalformedURLException {
+	public WordPress(String xmlRpcUrl, String username, String password) {
+		this(xmlRpcUrl, username, password, 0);
+	}
+
+	/**
+	 * @param blogId the blog id
+	 * @param username User name
+	 * @param password Password
+	 * @param xmlRpcUrl xmlrpc communication point, usually blogurl/xmlrpc.php
+	 */
+	public WordPress(String xmlRpcUrl, String username, String password, int blogId) {
+		this.client = new XmlRpcClient(xmlRpcUrl);
 		this.username = username;
 		this.password = password;
-		this.client = new XmlRpcClient(xmlRpcUrl);
+	}
+
+	/**
+	 * @return the blogId
+	 */
+	public int getBlogId() {
+		return blogId;
+	}
+
+	/**
+	 * @param blogId the blogId to set
+	 */
+	public void setBlogId(int blogId) {
+		this.blogId = blogId;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	/**
@@ -89,7 +137,7 @@ public class Wordpress {
 	// Posts
 	//
 	public Post getPost(int post_id) throws XmlRpcFaultException, IOException {
-		return getPost(0, post_id);
+		return getPost(blogId, post_id);
 	}
 
 	public Post getPost(int blogid, int post_id) throws XmlRpcFaultException, IOException {
@@ -97,11 +145,11 @@ public class Wordpress {
 	}
 
 	public List<Post> getPosts() throws XmlRpcFaultException, IOException {
-		return getPosts(0, null);
+		return getPosts(blogId, null);
 	}
 
 	public List<Post> getPosts(PostFilter filter) throws XmlRpcFaultException, IOException {
-		return getPosts(0, filter);
+		return getPosts(blogId, filter);
 	}
 
 	public List<Post> getPosts(int blogid, PostFilter filter) throws XmlRpcFaultException, IOException {
@@ -109,7 +157,7 @@ public class Wordpress {
 	}
 
 	public String newPost(Post post) throws XmlRpcFaultException, IOException {
-		return newPost(0, post);
+		return newPost(blogId, post);
 	}
 	
 	public String newPost(int blogid, Post post) throws XmlRpcFaultException, IOException {
@@ -132,7 +180,7 @@ public class Wordpress {
 
 
 	public boolean editPost(Post post) throws XmlRpcFaultException, IOException {
-		return editPost(0, post);
+		return editPost(blogId, post);
 	}
 	
 	public boolean editPost(int blogid, Post post) throws XmlRpcFaultException, IOException {
@@ -154,7 +202,7 @@ public class Wordpress {
 	}
 
 	public boolean deletePost(String post_id) throws XmlRpcFaultException, IOException {
-		return deletePost(0, post_id);
+		return deletePost(blogId, post_id);
 	}
 	
 	public boolean deletePost(int blogid, String post_id) throws XmlRpcFaultException, IOException {
@@ -162,7 +210,7 @@ public class Wordpress {
 	}
 
 	public PostType getPostType(String post_type_name) throws XmlRpcFaultException, IOException {
-		return getPostType(0, post_type_name);
+		return getPostType(blogId, post_type_name);
 	}
 
 	public PostType getPostType(int blogid, String post_type_name) throws XmlRpcFaultException, IOException {
@@ -170,7 +218,7 @@ public class Wordpress {
 	}
 
 	public Map<String, PostType> getPostTypes() throws XmlRpcFaultException, IOException {
-		return getPostTypes(0);
+		return getPostTypes(blogId);
 	}
 
 	public Map<String, PostType> getPostTypes(int blogid) throws XmlRpcFaultException, IOException {
@@ -178,7 +226,7 @@ public class Wordpress {
 	}
 
 	public Map<String, String> getPostFormats() throws XmlRpcFaultException, IOException {
-		return getPostFormats(0);
+		return getPostFormats(blogId);
 	}
 
 	public Map<String, String> getPostFormats(int blogid) throws XmlRpcFaultException, IOException {
@@ -186,7 +234,7 @@ public class Wordpress {
 	}
 
 	public Map<String, String> getPostStatusList() throws XmlRpcFaultException, IOException {
-		return getPostStatusList(0);
+		return getPostStatusList(blogId);
 	}
 
 	public Map<String, String> getPostStatusList(int blogid) throws XmlRpcFaultException, IOException {
@@ -196,7 +244,7 @@ public class Wordpress {
 	// Taxonomies
 	//
 	public Taxonomy getTaxonomy(String taxonomy) throws XmlRpcFaultException, IOException {
-		return getTaxonomy(0, taxonomy);
+		return getTaxonomy(blogId, taxonomy);
 	}
 
 	public Taxonomy getTaxonomy(int blogid, String taxonomy) throws XmlRpcFaultException, IOException {
@@ -204,7 +252,7 @@ public class Wordpress {
 	}
 
 	public List<Taxonomy> getTaxonomies() throws XmlRpcFaultException, IOException {
-		return getTaxonomies(0);
+		return getTaxonomies(blogId);
 	}
 
 	public List<Taxonomy> getTaxonomies(int blogid) throws XmlRpcFaultException, IOException {
@@ -212,7 +260,7 @@ public class Wordpress {
 	}
 
 	public Term getTerm(String taxonomy, int term_id) throws XmlRpcFaultException, IOException {
-		return getTerm(0, taxonomy, term_id);
+		return getTerm(blogId, taxonomy, term_id);
 	}
 
 	public Term getTerm(int blogid, String taxonomy, int term_id) throws XmlRpcFaultException, IOException {
@@ -220,11 +268,15 @@ public class Wordpress {
 	}
 
 	public List<Term> getTerms(String taxonomy) throws XmlRpcFaultException, IOException {
-		return getTerms(0, taxonomy);
+		return getTerms(blogId, taxonomy);
+	}
+
+	public List<Term> getTerms(String taxonomy, TermFilter filter) throws XmlRpcFaultException, IOException {
+		return getTerms(blogId, taxonomy, filter);
 	}
 
 	public List<Term> getTerms(int blogid, String taxonomy) throws XmlRpcFaultException, IOException {
-		return getTerms(0, taxonomy, null);
+		return getTerms(blogId, taxonomy, null);
 	}
 
 	public List<Term> getTerms(int blogid, String taxonomy, TermFilter filter) throws XmlRpcFaultException, IOException {
@@ -232,7 +284,7 @@ public class Wordpress {
 	}
 
 	public String newTerm(Term term) throws XmlRpcFaultException, IOException {
-		return newTerm(0, term);
+		return newTerm(blogId, term);
 	}
 	
 	public String newTerm(int blogid, Term term) throws XmlRpcFaultException, IOException {
@@ -248,7 +300,7 @@ public class Wordpress {
 	}
 
 	public boolean editTerm(Term term) throws XmlRpcFaultException, IOException {
-		return editTerm(0, term);
+		return editTerm(blogId, term);
 	}
 	
 	public boolean editTerm(int blogid, Term term) throws XmlRpcFaultException, IOException {
@@ -260,7 +312,7 @@ public class Wordpress {
 	}
 
 	public boolean deleteTerm(String taxonomy, String term_id) throws XmlRpcFaultException, IOException {
-		return deleteTerm(0, taxonomy, term_id);
+		return deleteTerm(blogId, taxonomy, term_id);
 	}
 
 	public boolean deleteTerm(int blogid, String taxonomy, String term_id) throws XmlRpcFaultException, IOException {
@@ -271,7 +323,7 @@ public class Wordpress {
 	// Media
 	//
 	public MediaItem getMediaItem(int attachment_id) throws XmlRpcFaultException, IOException {
-		return getMediaItem(0, attachment_id);
+		return getMediaItem(blogId, attachment_id);
 	}
 
 	public MediaItem getMediaItem(int blogid, int attachment_id) throws XmlRpcFaultException, IOException {
@@ -279,11 +331,11 @@ public class Wordpress {
 	}
 
 	public List<MediaItem> getMediaLibrary() throws XmlRpcFaultException, IOException {
-		return getMediaLibrary(0, null);
+		return getMediaLibrary(blogId, null);
 	}
 
 	public List<MediaItem> getMediaLibrary(MediaFilter filter) throws XmlRpcFaultException, IOException {
-		return getMediaLibrary(0, filter);
+		return getMediaLibrary(blogId, filter);
 	}
 
 	public List<MediaItem> getMediaLibrary(int blogid, MediaFilter filter) throws XmlRpcFaultException, IOException {
@@ -291,7 +343,7 @@ public class Wordpress {
 	}
 
 	public MediaObject uploadFile(MediaFile file) throws XmlRpcFaultException, IOException {
-		return uploadFile(0, file);
+		return uploadFile(blogId, file);
 	}
 
 	public MediaObject uploadFile(int blogid, MediaFile file) throws XmlRpcFaultException, IOException {
@@ -302,7 +354,7 @@ public class Wordpress {
 	// Comments
 	//
 	public CommentCount getCommentCount(String post_id) throws XmlRpcFaultException, IOException {
-		return getCommentCount(0, post_id);
+		return getCommentCount(blogId, post_id);
 	}
 	
 	public CommentCount getCommentCount(int blogid, String post_id) throws XmlRpcFaultException, IOException {
@@ -310,7 +362,7 @@ public class Wordpress {
 	}
 	
 	public Comment getComment(int comment_id) throws XmlRpcFaultException, IOException {
-		return getComment(0, comment_id);
+		return getComment(blogId, comment_id);
 	}
 
 	public Comment getComment(int blogid, int comment_id) throws XmlRpcFaultException, IOException {
@@ -322,7 +374,7 @@ public class Wordpress {
 	}
 
 	public List<Comment> getComments(CommentFilter filter) throws XmlRpcFaultException, IOException {
-		return getComments(0, filter);
+		return getComments(blogId, filter);
 	}
 
 	public List<Comment> getComments(int blogid, CommentFilter filter) throws XmlRpcFaultException, IOException {
@@ -330,7 +382,7 @@ public class Wordpress {
 	}
 
 	public int newComment(int post_id, Comment comment) throws XmlRpcFaultException, IOException {
-		return newComment(0, post_id, comment);
+		return newComment(blogId, post_id, comment);
 	}
 	
 	public int newComment(int blogid, int post_id, Comment comment) throws XmlRpcFaultException, IOException {
@@ -346,7 +398,7 @@ public class Wordpress {
 	}
 
 	public boolean editComment(Comment comment) throws XmlRpcFaultException, IOException {
-		return editComment(0, comment);
+		return editComment(blogId, comment);
 	}
 	
 	public boolean editComment(int blogid, Comment comment) throws XmlRpcFaultException, IOException {
@@ -358,7 +410,7 @@ public class Wordpress {
 	}
 
 	public boolean deleteComment(int comment_id) throws XmlRpcFaultException, IOException {
-		return deleteComment(0, comment_id);
+		return deleteComment(blogId, comment_id);
 	}
 
 	public boolean deleteComment(int blogid, int comment_id) throws XmlRpcFaultException, IOException {
@@ -366,7 +418,7 @@ public class Wordpress {
 	}
 
 	public CommentStatusList getCommentStatusList() throws XmlRpcFaultException, IOException {
-		return getCommentStatusList(0);
+		return getCommentStatusList(blogId);
 	}
 
 	public CommentStatusList getCommentStatusList(int blogid) throws XmlRpcFaultException, IOException {
@@ -377,7 +429,7 @@ public class Wordpress {
 	// Options
 	//
 	public Map<String, Option> getOptions(String... options) throws XmlRpcFaultException, IOException {
-		return getOptions(0, options);
+		return getOptions(blogId, options);
 	}
 
 	public Map<String, Option> getOptions(int blogid, String... options) throws XmlRpcFaultException, IOException {
@@ -385,7 +437,7 @@ public class Wordpress {
 	}
 	
 	public Map<String, Option> setOptions(Map<String, Option> options) throws XmlRpcFaultException, IOException {
-		return setOptions(0, options);
+		return setOptions(blogId, options);
 	}
 	
 	public Map<String, Option> setOptions(int blogid, Map<String, Option> options) throws XmlRpcFaultException, IOException {
@@ -400,7 +452,7 @@ public class Wordpress {
 	}
 
 	public User getUser(int user_id) throws XmlRpcFaultException, IOException {
-		return getUser(0, user_id);
+		return getUser(blogId, user_id);
 	}
 	
 	public User getUser(int blogid, int user_id) throws XmlRpcFaultException, IOException {
@@ -408,7 +460,7 @@ public class Wordpress {
 	}
 
 	public List<User> getUsers() throws XmlRpcFaultException, IOException {
-		return getUsers(0);
+		return getUsers(blogId);
 	}
 	
 	public List<User> getUsers(int blogid) throws XmlRpcFaultException, IOException {
@@ -416,7 +468,7 @@ public class Wordpress {
 	}
 
 	public User getProfile() throws XmlRpcFaultException, IOException {
-		return getProfile(0);
+		return getProfile(blogId);
 	}
 	
 	public User getProfile(int blogid) throws XmlRpcFaultException, IOException {
@@ -424,7 +476,7 @@ public class Wordpress {
 	}
 
 	public boolean editProfile(Profile profile) throws XmlRpcFaultException, IOException {
-		return editProfile(0, profile);
+		return editProfile(blogId, profile);
 	}
 	
 	public boolean editProfile(int blogid, Profile profile) throws XmlRpcFaultException, IOException {
@@ -432,7 +484,7 @@ public class Wordpress {
 	}
 	
 	public List<User> getAuthors() throws XmlRpcFaultException, IOException {
-		return getAuthors(0);
+		return getAuthors(blogId);
 	}
 	
 	public List<User> getAuthors(int blogid) throws XmlRpcFaultException, IOException {
@@ -447,7 +499,7 @@ public class Wordpress {
 	// Categories
 	//
 	public List<Category> getCategories() throws XmlRpcFaultException, IOException {
-		return getCategories(0);
+		return getCategories(blogId);
 	}
 
 	public List<Category> getCategories(int blogid) throws XmlRpcFaultException, IOException {
@@ -455,7 +507,7 @@ public class Wordpress {
 	}
 
 	public List<Category> suggestCategories(String prefix) throws XmlRpcFaultException, IOException {
-		return suggestCategories(0, prefix, Integer.MAX_VALUE);
+		return suggestCategories(blogId, prefix, Integer.MAX_VALUE);
 	}
 
 	public List<Category> suggestCategories(int blogid, String prefix, int max_results) throws XmlRpcFaultException, IOException {
@@ -463,7 +515,7 @@ public class Wordpress {
 	}
 
 	public int newCategory(Category category) throws XmlRpcFaultException, IOException {
-		return newCategory(0, category);
+		return newCategory(blogId, category);
 	}
 	
 	public int newCategory(int blogid, Category category) throws XmlRpcFaultException, IOException {
@@ -480,7 +532,7 @@ public class Wordpress {
 	}
 
 	public boolean deleteCategory(int category_id) throws XmlRpcFaultException, IOException {
-		return deleteCategory(0, category_id);
+		return deleteCategory(blogId, category_id);
 	}
 	
 	public boolean deleteCategory(int blogid, int category_id) throws XmlRpcFaultException, IOException {
@@ -492,7 +544,7 @@ public class Wordpress {
 	// Tags
 	//
 	public List<Tag> getTags() throws XmlRpcFaultException, IOException {
-		return getTags(0);
+		return getTags(blogId);
 	}
 
 	public List<Tag> getTags(int blogid) throws XmlRpcFaultException, IOException {

@@ -7,6 +7,12 @@ public class Filter {
 	public Integer number;
 	public Integer offset;
 
+	public Filter offset(Integer offset, Integer number) {
+		this.offset = offset;
+		this.number = number;
+		return this;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
