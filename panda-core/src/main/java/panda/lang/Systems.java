@@ -70,7 +70,7 @@ public class Systems {
 	 * value will be out of sync with that System property.
 	 * </p>
 	 */
-	public static final String AWT_TOOLKIT = getSystemProperty("awt.toolkit");
+	public static final String AWT_TOOLKIT = getProperty("awt.toolkit");
 
 	/**
 	 * <p>
@@ -92,7 +92,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String FILE_ENCODING = getSystemProperty("file.encoding");
+	public static final String FILE_ENCODING = getProperty("file.encoding");
 
 	/**
 	 * <p>
@@ -112,7 +112,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String FILE_SEPARATOR = getSystemProperty("file.separator");
+	public static final String FILE_SEPARATOR = getProperty("file.separator");
 
 	/**
 	 * <p>
@@ -130,7 +130,7 @@ public class Systems {
 	 * </p>
 	 * 
 	 */
-	public static final String JAVA_AWT_FONTS = getSystemProperty("java.awt.fonts");
+	public static final String JAVA_AWT_FONTS = getProperty("java.awt.fonts");
 
 	/**
 	 * <p>
@@ -148,7 +148,7 @@ public class Systems {
 	 * </p>
 	 * 
 	 */
-	public static final String JAVA_AWT_GRAPHICSENV = getSystemProperty("java.awt.graphicsenv");
+	public static final String JAVA_AWT_GRAPHICSENV = getProperty("java.awt.graphicsenv");
 
 	/**
 	 * <p>
@@ -169,7 +169,7 @@ public class Systems {
 	 * @see #isJavaAwtHeadless()
 	 * @since Java 1.4
 	 */
-	public static final String JAVA_AWT_HEADLESS = getSystemProperty("java.awt.headless");
+	public static final String JAVA_AWT_HEADLESS = getProperty("java.awt.headless");
 
 	/**
 	 * <p>
@@ -186,7 +186,7 @@ public class Systems {
 	 * value will be out of sync with that System property.
 	 * </p>
 	 */
-	public static final String JAVA_AWT_PRINTERJOB = getSystemProperty("java.awt.printerjob");
+	public static final String JAVA_AWT_PRINTERJOB = getProperty("java.awt.printerjob");
 
 	/**
 	 * <p>
@@ -205,7 +205,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String JAVA_CLASS_PATH = getSystemProperty("java.class.path");
+	public static final String JAVA_CLASS_PATH = getProperty("java.class.path");
 
 	/**
 	 * <p>
@@ -224,7 +224,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String JAVA_CLASS_VERSION = getSystemProperty("java.class.version");
+	public static final String JAVA_CLASS_VERSION = getProperty("java.class.version");
 
 	/**
 	 * <p>
@@ -244,7 +244,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2. Not used in Sun versions after 1.2.
 	 */
-	public static final String JAVA_COMPILER = getSystemProperty("java.compiler");
+	public static final String JAVA_COMPILER = getProperty("java.compiler");
 
 	/**
 	 * <p>
@@ -263,7 +263,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.4
 	 */
-	public static final String JAVA_ENDORSED_DIRS = getSystemProperty("java.endorsed.dirs");
+	public static final String JAVA_ENDORSED_DIRS = getProperty("java.endorsed.dirs");
 
 	/**
 	 * <p>
@@ -282,7 +282,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.3
 	 */
-	public static final String JAVA_EXT_DIRS = getSystemProperty("java.ext.dirs");
+	public static final String JAVA_EXT_DIRS = getProperty("java.ext.dirs");
 
 	/**
 	 * <p>
@@ -301,7 +301,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String JAVA_HOME = getSystemProperty(JAVA_HOME_KEY);
+	public static final String JAVA_HOME = getProperty(JAVA_HOME_KEY);
 
 	/**
 	 * <p>
@@ -320,7 +320,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_IO_TMPDIR = getSystemProperty(JAVA_IO_TMPDIR_KEY);
+	public static final String JAVA_IO_TMPDIR = getProperty(JAVA_IO_TMPDIR_KEY);
 
 	/**
 	 * <p>
@@ -340,7 +340,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_LIBRARY_PATH = getSystemProperty("java.library.path");
+	public static final String JAVA_LIBRARY_PATH = getProperty("java.library.path");
 
 	/**
 	 * <p>
@@ -359,7 +359,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.3
 	 */
-	public static final String JAVA_RUNTIME_NAME = getSystemProperty("java.runtime.name");
+	public static final String JAVA_RUNTIME_NAME = getProperty("java.runtime.name");
 
 	/**
 	 * <p>
@@ -378,7 +378,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.3
 	 */
-	public static final String JAVA_RUNTIME_VERSION = getSystemProperty("java.runtime.version");
+	public static final String JAVA_RUNTIME_VERSION = getProperty("java.runtime.version");
 
 	/**
 	 * <p>
@@ -398,7 +398,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_SPECIFICATION_NAME = getSystemProperty("java.specification.name");
+	public static final String JAVA_SPECIFICATION_NAME = getProperty("java.specification.name");
 
 	/**
 	 * <p>
@@ -418,7 +418,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_SPECIFICATION_VENDOR = getSystemProperty("java.specification.vendor");
+	public static final String JAVA_SPECIFICATION_VENDOR = getProperty("java.specification.vendor");
 
 	/**
 	 * <p>
@@ -436,7 +436,7 @@ public class Systems {
 	 * value will be out of sync with that System property.
 	 * </p>
 	 */
-	public static final String JAVA_SPECIFICATION_VERSION = getSystemProperty("java.specification.version");
+	public static final String JAVA_SPECIFICATION_VERSION = getProperty("java.specification.version");
 
 	/**
 	 * <p>
@@ -455,7 +455,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.4
 	 */
-	public static final String JAVA_UTIL_PREFS_PREFERENCES_FACTORY = getSystemProperty("java.util.prefs.PreferencesFactory");
+	public static final String JAVA_UTIL_PREFS_PREFERENCES_FACTORY = getProperty("java.util.prefs.PreferencesFactory");
 
 	/**
 	 * <p>
@@ -474,7 +474,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String JAVA_VENDOR = getSystemProperty("java.vendor");
+	public static final String JAVA_VENDOR = getProperty("java.vendor");
 
 	/**
 	 * <p>
@@ -493,7 +493,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String JAVA_VENDOR_URL = getSystemProperty("java.vendor.url");
+	public static final String JAVA_VENDOR_URL = getProperty("java.vendor.url");
 
 	/**
 	 * <p>
@@ -512,7 +512,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String JAVA_VERSION = getSystemProperty("java.version");
+	public static final String JAVA_VERSION = getProperty("java.version");
 
 	/**
 	 * <p>
@@ -531,7 +531,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_VM_INFO = getSystemProperty("java.vm.info");
+	public static final String JAVA_VM_INFO = getProperty("java.vm.info");
 
 	/**
 	 * <p>
@@ -550,7 +550,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_VM_NAME = getSystemProperty("java.vm.name");
+	public static final String JAVA_VM_NAME = getProperty("java.vm.name");
 
 	/**
 	 * <p>
@@ -570,7 +570,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_VM_SPECIFICATION_NAME = getSystemProperty("java.vm.specification.name");
+	public static final String JAVA_VM_SPECIFICATION_NAME = getProperty("java.vm.specification.name");
 
 	/**
 	 * <p>
@@ -590,7 +590,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_VM_SPECIFICATION_VENDOR = getSystemProperty("java.vm.specification.vendor");
+	public static final String JAVA_VM_SPECIFICATION_VENDOR = getProperty("java.vm.specification.vendor");
 
 	/**
 	 * <p>
@@ -610,7 +610,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_VM_SPECIFICATION_VERSION = getSystemProperty("java.vm.specification.version");
+	public static final String JAVA_VM_SPECIFICATION_VERSION = getProperty("java.vm.specification.version");
 
 	/**
 	 * <p>
@@ -629,7 +629,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_VM_VENDOR = getSystemProperty("java.vm.vendor");
+	public static final String JAVA_VM_VENDOR = getProperty("java.vm.vendor");
 
 	/**
 	 * <p>
@@ -648,7 +648,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String JAVA_VM_VERSION = getSystemProperty("java.vm.version");
+	public static final String JAVA_VM_VERSION = getProperty("java.vm.version");
 
 	/**
 	 * <p>
@@ -671,7 +671,7 @@ public class Systems {
 	public static final String LINE_SEPARATOR = getSystemLineSeparator();
 
 	private static String getSystemLineSeparator() {
-		String ls = getSystemProperty("line.separator");
+		String ls = getProperty("line.separator");
 		if (ls == null) {
 			// avoid security issues
 			StringBuilderWriter buf = new StringBuilderWriter(4);
@@ -701,7 +701,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String OS_ARCH = getSystemProperty("os.arch");
+	public static final String OS_ARCH = getProperty("os.arch");
 
 	/**
 	 * is 32bit OS
@@ -730,7 +730,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String OS_NAME = getSystemProperty("os.name");
+	public static final String OS_NAME = getProperty("os.name");
 
 	/**
 	 * <p>
@@ -749,7 +749,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String OS_VERSION = getSystemProperty("os.version");
+	public static final String OS_VERSION = getProperty("os.version");
 
 	/**
 	 * <p>
@@ -770,7 +770,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String USER_COUNTRY = getSystemProperty("user.country") == null ? getSystemProperty("user.region") : getSystemProperty("user.country");
+	public static final String USER_COUNTRY = getProperty("user.country") == null ? getProperty("user.region") : getProperty("user.country");
 
 	/**
 	 * <p>
@@ -789,7 +789,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String USER_DIR = getSystemProperty(USER_DIR_KEY);
+	public static final String USER_DIR = getProperty(USER_DIR_KEY);
 
 	/**
 	 * <p>
@@ -808,7 +808,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String USER_HOME = getSystemProperty(USER_HOME_KEY);
+	public static final String USER_HOME = getProperty(USER_HOME_KEY);
 
 	/**
 	 * <p>
@@ -827,7 +827,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.2
 	 */
-	public static final String USER_LANGUAGE = getSystemProperty("user.language");
+	public static final String USER_LANGUAGE = getProperty("user.language");
 
 	/**
 	 * <p>
@@ -846,7 +846,7 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String USER_NAME = getSystemProperty("user.name");
+	public static final String USER_NAME = getProperty("user.name");
 
 	/**
 	 * <p>
@@ -864,7 +864,7 @@ public class Systems {
 	 * </p>
 	 * 
 	 */
-	public static final String USER_TIMEZONE = getSystemProperty("user.timezone");
+	public static final String USER_TIMEZONE = getProperty("user.timezone");
 
 	// Java version checks
 	// -----------------------------------------------------------------------
@@ -989,7 +989,7 @@ public class Systems {
 	 * </p>
 	 * 
 	 */
-	public static final boolean IS_OS_APPENGINE = Strings.isNotEmpty(getSystemProperty("com.google.appengine.application.id"));
+	public static final boolean IS_OS_APPENGINE = Strings.isNotEmpty(getProperty("com.google.appengine.application.id"));
 
 	/**
 	 * <p>
@@ -1512,18 +1512,88 @@ public class Systems {
 	 * written to {@code System.err}.
 	 * </p>
 	 * 
-	 * @param property the system property name
+	 * @param name the system property name
 	 * @return the system property value or {@code null} if a security problem occurs
 	 */
-	public static String getSystemProperty(final String property) {
+	public static String getProperty(final String name) {
 		try {
-			return System.getProperty(property);
+			return System.getProperty(name);
 		}
 		catch (final SecurityException ex) {
 			// we are not allowed to look at this property
-			System.err.println("Caught a SecurityException reading the system property '"
-					+ property + "'; the System property value will default to null.");
+			System.err.println("Caught a SecurityException reading the system property '" + name + "'.");
 			return null;
+		}
+	}
+
+	/**
+	 * Gets the system property indicated by the specified key.
+	 * If a {@code SecurityException} is caught, the default value is returned and a message is
+	 * written to {@code System.err}.
+	 * </p>
+	 *
+	 * @param name the system property name
+	 * @param defv   a default value.
+	 * 
+	 * @return the system property value or the default if a security problem occurs
+	 */
+	public static String getProperty(final String name, final String defv) {
+		try {
+			return System.getProperty(name, defv);
+		}
+		catch (final SecurityException ex) {
+			// we are not allowed to look at this property
+			System.err.println("Caught a SecurityException reading the system property '" + name + "'.");
+			return defv;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Gets a environment variable, defaulting to {@code null} if the variable cannot be read.
+	 * </p>
+	 * <p>
+	 * If a {@code SecurityException} is caught, the return value is {@code null} and a message is
+	 * written to {@code System.err}.
+	 * </p>
+	 * 
+	 * @param name the environment variable name
+	 * @return the environment variable value or {@code null} if a security problem occurs
+	 */
+	public static String getenv(final String name) {
+		try {
+			return System.getenv(name);
+		}
+		catch (final SecurityException ex) {
+			// we are not allowed to look at this variable
+			System.err.println("Caught a SecurityException reading the environment variable '" + name + "'.");
+			return null;
+		}
+	}
+
+
+	/**
+	 * <p>
+	 * Gets a environment variable, defaulting to {@code null} if the variable cannot be read.
+	 * </p>
+	 * <p>
+	 * If a {@code SecurityException} is caught, the default value is returned and a message is
+	 * written to {@code System.err}.
+	 * </p>
+	 * 
+	 * @param name the environment variable name
+     * @param defv a default value.
+	 * @return the environment variable value or the default value if a security problem occurs
+	 */
+	public static String getenv(final String name, final String defv) {
+		try {
+			String v = System.getenv(name);
+			return v == null ? defv : v;
+		}
+		catch (final SecurityException ex) {
+			// we are not allowed to look at this variable
+			System.err.println("Caught a SecurityException reading the environment variable '" + name + "'.");
+			return defv;
 		}
 	}
 
