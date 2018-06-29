@@ -10,7 +10,7 @@ import panda.lang.time.FastDateFormat;
  * or setDateFormat("yyyy-MM-dd") to use DateFormat to convert Date to formatted string.
  */
 public class CalendarAdapter extends AbstractSerializeAdapter<Calendar> {
-	public static final DateAdapter toMillis = new DateAdapter();
+	public static final CalendarAdapter toMillis = new CalendarAdapter();
 
 	private Format dateFormat;
 
@@ -47,7 +47,7 @@ public class CalendarAdapter extends AbstractSerializeAdapter<Calendar> {
 			return dateFormat.format(src);
 		}
 		
-		return src.getTime();
+		return src.getTime().getTime();
 	}
 }
 
