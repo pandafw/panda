@@ -74,7 +74,7 @@ public class AppCacheFactory {
 		if (EHCACHE.equalsIgnoreCase(provider)) {
 			log.info("Build EHCache");
 
-			InputStream is = Streams.getStream(EHCACHE_CONFIG);
+			InputStream is = Streams.openInputStream(EHCACHE_CONFIG);
 			if (is == null) {
 				throw new IllegalArgumentException("Failed to config ehcache, missing " + EHCACHE_CONFIG);
 			}

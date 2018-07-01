@@ -100,60 +100,6 @@ public class Streams {
 	private static byte[] SKIP_BYTE_BUFFER;
 
 	/**
-	 * Copy the contents of the given input File to the given output File.
-	 * 
-	 * @param in the file to copy from
-	 * @param os the output stream to copy to
-	 * @return the number of bytes copied
-	 * @throws IOException in case of I/O errors
-	 */
-	public static int copy(File in, OutputStream os) throws IOException {
-		InputStream is = null;
-
-		try {
-			is = new FileInputStream(in);
-			return copy(is, os);
-		}
-		finally {
-			safeClose(is);
-		}
-	}
-
-	/**
-	 * Returns a copy of the specified stream. If the specified stream supports marking, it will be
-	 * reset after the copy.
-	 * 
-	 * @param sourceStream the stream to copy
-	 * @return a copy of the stream
-	 * @throws IOException if an IO error occurred
-	 */
-	public static InputStream copy(InputStream sourceStream) throws IOException {
-		if (sourceStream.markSupported())
-			sourceStream.mark(Integer.MAX_VALUE);
-		byte[] sourceData = toByteArray(sourceStream);
-		if (sourceStream.markSupported())
-			sourceStream.reset();
-		return new ByteArrayInputStream(sourceData);
-	}
-
-	/**
-	 * Returns a copy of the specified reader. If the specified reader supports marking, it will be
-	 * reset after the copy.
-	 * 
-	 * @param sourceReader the stream to reader
-	 * @return a copy of the reader
-	 * @throws IOException if an IO error occurred
-	 */
-	public static Reader copy(Reader sourceReader) throws IOException {
-		if (sourceReader.markSupported())
-			sourceReader.mark(Integer.MAX_VALUE);
-		String sourceData = toString(sourceReader);
-		if (sourceReader.markSupported())
-			sourceReader.reset();
-		return new StringReader(sourceData);
-	}
-
-	/**
 	 * Write the contents of the given byte array to the given output File.
 	 * 
 	 * @param in the byte array to copy from
@@ -442,7 +388,7 @@ public class Streams {
 	 * @throws IOException in case of I/O errors
 	 */
 	public static byte[] toByteArray(File file) throws FileNotFoundException, IOException {
-		FileInputStream fis = new FileInputStream(file);
+		FileInputStream fis = openInputStream(file);
 		try {
 			byte[] b = toByteArray(fis);
 			return b;
@@ -904,12 +850,12 @@ public class Streams {
 	 * @throws IOException if an I/O exception occurs.
 	 */
 	public static String toString(final URL url, final Charset encoding) throws IOException {
-		final InputStream inputStream = url.openStream();
+		final InputStream in = url.openStream();
 		try {
-			return toString(inputStream, encoding);
+			return toString(in, encoding);
 		}
 		finally {
-			inputStream.close();
+			in.close();
 		}
 	}
 
@@ -923,6 +869,56 @@ public class Streams {
 	 */
 	public static String toString(final URL url, final String encoding) throws IOException {
 		return toString(url, Charsets.toCharset(encoding));
+	}
+
+	/**
+	 * Reads the contents of a file into a String using the default encoding for the VM. The file is
+	 * always closed.
+	 * 
+	 * @param file the file to read, must not be {@code null}
+	 * @return the file contents, never {@code null}
+	 * @throws IOException in case of an I/O error
+	 */
+	public static String toString(File file) throws IOException {
+		BOMInputStream in = null;
+		try {
+			in = new BOMInputStream(openInputStream(file));
+			Charset cs = in.hasBOM() ? in.getBOMCharset() : Charset.defaultCharset();
+			return toString(in, cs);
+		}
+		finally {
+			Streams.safeClose(in);
+		}
+	}
+
+	/**
+	 * Gets the contents at the given file.
+	 * 
+	 * @param file The source file.
+	 * @param encoding The encoding name for the file contents.
+	 * @return The contents of the file as a String.
+	 * @throws IOException if an I/O exception occurs.
+	 */
+	public static String toString(final File file, final String encoding) throws IOException {
+		return toString(file, Charsets.toCharset(encoding));
+	}
+
+	/**
+	 * Gets the contents at the given file.
+	 * 
+	 * @param file The source file.
+	 * @param encoding The encoding name for the file contents.
+	 * @return The contents of the file as a String.
+	 * @throws IOException if an I/O exception occurs.
+	 */
+	public static String toString(final File file, final Charset encoding) throws IOException {
+		final InputStream in = openInputStream(file);
+		try {
+			return toString(in, encoding);
+		}
+		finally {
+			in.close();
+		}
 	}
 
 	/**
@@ -1190,7 +1186,7 @@ public class Streams {
      *                   or for some other reason cannot be opened for
      *                   reading.
 	 */
-	public static InputStream getStream(final String path) throws FileNotFoundException {
+	public static InputStream openInputStream(final String path) throws FileNotFoundException {
 		InputStream is = null;
 		if (Files.isFile(path)) {
 			is = new FileInputStream(path);
@@ -1202,6 +1198,99 @@ public class Streams {
 			throw new FileNotFoundException("Failed to find file: " + path);
 		}
 		return is;
+	}
+	
+	/**
+	 * Opens a {@link FileInputStream} for the specified file, providing better error messages than
+	 * simply calling <code>new FileInputStream(file)</code>.
+	 * <p>
+	 * At the end of the method either the stream will be successfully opened, or an exception will
+	 * have been thrown.
+	 * <p>
+	 * An exception is thrown if the file does not exist. An exception is thrown if the file object
+	 * exists but is a directory. An exception is thrown if the file exists but cannot be read.
+	 * 
+	 * @param file the file to open for input, must not be {@code null}
+	 * @return a new {@link FileInputStream} for the specified file
+	 * @throws FileNotFoundException if the file does not exist
+	 * @throws IOException if the file object is a directory
+	 * @throws IOException if the file cannot be read
+	 */
+	public static FileInputStream openInputStream(final File file) throws IOException {
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				throw new IOException("File '" + file + "' exists but is a directory");
+			}
+			if (file.canRead() == false) {
+				throw new IOException("File '" + file + "' cannot be read");
+			}
+		}
+		else {
+			throw new FileNotFoundException("File '" + file + "' does not exist");
+		}
+		return new FileInputStream(file);
+	}
+
+	/**
+	 * Opens a {@link FileOutputStream} for the specified file, checking and creating the parent
+	 * directory if it does not exist.
+	 * <p>
+	 * At the end of the method either the stream will be successfully opened, or an exception will
+	 * have been thrown.
+	 * <p>
+	 * The parent directory will be created if it does not exist. The file will be created if it
+	 * does not exist. An exception is thrown if the file object exists but is a directory. An
+	 * exception is thrown if the file exists but cannot be written to. An exception is thrown if
+	 * the parent directory cannot be created.
+	 * 
+	 * @param file the file to open for output, must not be {@code null}
+	 * @return a new {@link FileOutputStream} for the specified file
+	 * @throws IOException if the file object is a directory
+	 * @throws IOException if the file cannot be written to
+	 * @throws IOException if a parent directory needs creating but that fails
+	 */
+	public static FileOutputStream openOutputStream(final File file) throws IOException {
+		return openOutputStream(file, false);
+	}
+
+	/**
+	 * Opens a {@link FileOutputStream} for the specified file, checking and creating the parent
+	 * directory if it does not exist.
+	 * <p>
+	 * At the end of the method either the stream will be successfully opened, or an exception will
+	 * have been thrown.
+	 * <p>
+	 * The parent directory will be created if it does not exist. The file will be created if it
+	 * does not exist. An exception is thrown if the file object exists but is a directory. An
+	 * exception is thrown if the file exists but cannot be written to. An exception is thrown if
+	 * the parent directory cannot be created.
+	 * 
+	 * @param file the file to open for output, must not be {@code null}
+	 * @param append if {@code true}, then bytes will be added to the end of the file rather than
+	 *            overwriting
+	 * @return a new {@link FileOutputStream} for the specified file
+	 * @throws IOException if the file object is a directory
+	 * @throws IOException if the file cannot be written to
+	 * @throws IOException if a parent directory needs creating but that fails
+	 */
+	public static FileOutputStream openOutputStream(final File file, final boolean append) throws IOException {
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				throw new IOException("File '" + file + "' exists but is a directory");
+			}
+			if (file.canWrite() == false) {
+				throw new IOException("File '" + file + "' cannot be written to");
+			}
+		}
+		else {
+			final File parent = file.getParentFile();
+			if (parent != null) {
+				if (!parent.mkdirs() && !parent.isDirectory()) {
+					throw new IOException("Directory '" + parent + "' could not be created");
+				}
+			}
+		}
+		return new FileOutputStream(file, append);
 	}
 
 	// -----------------------------------------------------------------------
@@ -1627,8 +1716,84 @@ public class Streams {
 		}
 	}
 
+	// -----------------------------------------------------------------------
+
+	/**
+	 * Returns a copy of the specified stream. If the specified stream supports marking, it will be
+	 * reset after the copy.
+	 * 
+	 * @param sourceStream the stream to copy
+	 * @return a copy of the stream
+	 * @throws IOException if an IO error occurred
+	 */
+	public static InputStream copy(InputStream sourceStream) throws IOException {
+		if (sourceStream.markSupported())
+			sourceStream.mark(Integer.MAX_VALUE);
+		byte[] sourceData = toByteArray(sourceStream);
+		if (sourceStream.markSupported())
+			sourceStream.reset();
+		return new ByteArrayInputStream(sourceData);
+	}
+
+	/**
+	 * Returns a copy of the specified reader. If the specified reader supports marking, it will be
+	 * reset after the copy.
+	 * 
+	 * @param sourceReader the stream to reader
+	 * @return a copy of the reader
+	 * @throws IOException if an IO error occurred
+	 */
+	public static Reader copy(Reader sourceReader) throws IOException {
+		if (sourceReader.markSupported())
+			sourceReader.mark(Integer.MAX_VALUE);
+		String sourceData = toString(sourceReader);
+		if (sourceReader.markSupported())
+			sourceReader.reset();
+		return new StringReader(sourceData);
+	}
+
 	// copy from InputStream
 	// -----------------------------------------------------------------------
+	/**
+	 * Copy the contents of the given input File to the given output File.
+	 * 
+	 * @param in the file to copy from
+	 * @param os the output stream to copy to
+	 * @return the number of bytes copied
+	 * @throws IOException in case of I/O errors
+	 */
+	public static int copy(File in, OutputStream os) throws IOException {
+		InputStream is = null;
+
+		try {
+			is = new FileInputStream(in);
+			return copy(is, os);
+		}
+		finally {
+			safeClose(is);
+		}
+	}
+
+	/**
+	 * Copy the contents of the given input File to the given output File.
+	 * 
+	 * @param in the input stream to copy from
+	 * @param out the file to write
+	 * @return the number of bytes copied
+	 * @throws IOException in case of I/O errors
+	 */
+	public static int copy(InputStream in, File out) throws IOException {
+		OutputStream os = null;
+
+		try {
+			os = openOutputStream(out);
+			return copy(in, os);
+		}
+		finally {
+			Streams.safeClose(os);
+		}
+	}
+
 	/**
 	 * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
 	 * <p>

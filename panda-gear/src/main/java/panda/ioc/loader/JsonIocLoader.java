@@ -55,7 +55,7 @@ public class JsonIocLoader extends MapIocLoader {
 			}
 		}
 		else {
-			InputStream is = Streams.getStream(path);
+			InputStream is = Streams.openInputStream(path);
 			loadFromStream(is);
 		}
 	}

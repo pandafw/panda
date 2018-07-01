@@ -290,101 +290,6 @@ public class Files {
 	}
 
 	// -----------------------------------------------------------------------
-	/**
-	 * Opens a {@link FileInputStream} for the specified file, providing better error messages than
-	 * simply calling <code>new FileInputStream(file)</code>.
-	 * <p>
-	 * At the end of the method either the stream will be successfully opened, or an exception will
-	 * have been thrown.
-	 * <p>
-	 * An exception is thrown if the file does not exist. An exception is thrown if the file object
-	 * exists but is a directory. An exception is thrown if the file exists but cannot be read.
-	 * 
-	 * @param file the file to open for input, must not be {@code null}
-	 * @return a new {@link FileInputStream} for the specified file
-	 * @throws FileNotFoundException if the file does not exist
-	 * @throws IOException if the file object is a directory
-	 * @throws IOException if the file cannot be read
-	 */
-	public static FileInputStream openInputStream(final File file) throws IOException {
-		if (file.exists()) {
-			if (file.isDirectory()) {
-				throw new IOException("File '" + file + "' exists but is a directory");
-			}
-			if (file.canRead() == false) {
-				throw new IOException("File '" + file + "' cannot be read");
-			}
-		}
-		else {
-			throw new FileNotFoundException("File '" + file + "' does not exist");
-		}
-		return new FileInputStream(file);
-	}
-
-	// -----------------------------------------------------------------------
-	/**
-	 * Opens a {@link FileOutputStream} for the specified file, checking and creating the parent
-	 * directory if it does not exist.
-	 * <p>
-	 * At the end of the method either the stream will be successfully opened, or an exception will
-	 * have been thrown.
-	 * <p>
-	 * The parent directory will be created if it does not exist. The file will be created if it
-	 * does not exist. An exception is thrown if the file object exists but is a directory. An
-	 * exception is thrown if the file exists but cannot be written to. An exception is thrown if
-	 * the parent directory cannot be created.
-	 * 
-	 * @param file the file to open for output, must not be {@code null}
-	 * @return a new {@link FileOutputStream} for the specified file
-	 * @throws IOException if the file object is a directory
-	 * @throws IOException if the file cannot be written to
-	 * @throws IOException if a parent directory needs creating but that fails
-	 */
-	public static FileOutputStream openOutputStream(final File file) throws IOException {
-		return openOutputStream(file, false);
-	}
-
-	/**
-	 * Opens a {@link FileOutputStream} for the specified file, checking and creating the parent
-	 * directory if it does not exist.
-	 * <p>
-	 * At the end of the method either the stream will be successfully opened, or an exception will
-	 * have been thrown.
-	 * <p>
-	 * The parent directory will be created if it does not exist. The file will be created if it
-	 * does not exist. An exception is thrown if the file object exists but is a directory. An
-	 * exception is thrown if the file exists but cannot be written to. An exception is thrown if
-	 * the parent directory cannot be created.
-	 * 
-	 * @param file the file to open for output, must not be {@code null}
-	 * @param append if {@code true}, then bytes will be added to the end of the file rather than
-	 *            overwriting
-	 * @return a new {@link FileOutputStream} for the specified file
-	 * @throws IOException if the file object is a directory
-	 * @throws IOException if the file cannot be written to
-	 * @throws IOException if a parent directory needs creating but that fails
-	 */
-	public static FileOutputStream openOutputStream(final File file, final boolean append) throws IOException {
-		if (file.exists()) {
-			if (file.isDirectory()) {
-				throw new IOException("File '" + file + "' exists but is a directory");
-			}
-			if (file.canWrite() == false) {
-				throw new IOException("File '" + file + "' cannot be written to");
-			}
-		}
-		else {
-			final File parent = file.getParentFile();
-			if (parent != null) {
-				if (!parent.mkdirs() && !parent.isDirectory()) {
-					throw new IOException("Directory '" + parent + "' could not be created");
-				}
-			}
-		}
-		return new FileOutputStream(file, append);
-	}
-
-	// -----------------------------------------------------------------------
 	private static String formatSize(final double size) {
 		return Numbers.cutFormat(size, 2);
 	}
@@ -625,7 +530,7 @@ public class Files {
 	 */
 	public static void touch(final File file) throws IOException {
 		if (!file.exists()) {
-			final OutputStream out = openOutputStream(file);
+			final OutputStream out = Streams.openOutputStream(file);
 			Streams.safeClose(out);
 		}
 		final boolean success = file.setLastModified(System.currentTimeMillis());
@@ -1199,7 +1104,7 @@ public class Files {
 		if (destFile == null) {
 			throw new NullPointerException("Destination must not be null");
 		}
-		if (srcFile.exists() == false) {
+		if (!srcFile.exists()) {
 			throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
 		}
 		if (srcFile.isDirectory()) {
@@ -1576,7 +1481,7 @@ public class Files {
 	 * @throws IOException if an IO error occurs during copying
 	 */
 	public static void copyURLToFile(final URL source, final File destination) throws IOException {
-		copyInputStreamToFile(source.openStream(), destination);
+		Streams.copy(source.openStream(), destination);
 	}
 
 	/**
@@ -1602,36 +1507,7 @@ public class Files {
 		final URLConnection connection = source.openConnection();
 		connection.setConnectTimeout(connectionTimeout);
 		connection.setReadTimeout(readTimeout);
-		copyInputStreamToFile(connection.getInputStream(), destination);
-	}
-
-	/**
-	 * Copies bytes from an {@link InputStream} <code>source</code> to a file
-	 * <code>destination</code>. The directories up to <code>destination</code> will be created if
-	 * they don't already exist. <code>destination</code> will be overwritten if it already exists.
-	 * 
-	 * @param source the <code>InputStream</code> to copy bytes from, must not be {@code null}
-	 * @param destination the non-directory <code>File</code> to write bytes to (possibly
-	 *            overwriting), must not be {@code null}
-	 * @throws IOException if <code>destination</code> is a directory
-	 * @throws IOException if <code>destination</code> cannot be written
-	 * @throws IOException if <code>destination</code> needs creating but can't be
-	 * @throws IOException if an IO error occurs during copying
-	 */
-	public static void copyInputStreamToFile(final InputStream source, final File destination) throws IOException {
-		try {
-			FileOutputStream output = openOutputStream(destination);
-			try {
-				Streams.copy(source, output);
-				output.close(); // don't swallow close Exception if copy completes normally
-			}
-			finally {
-				Streams.safeClose(output);
-			}
-		}
-		finally {
-			Streams.safeClose(source);
-		}
+		Streams.copy(connection.getInputStream(), destination);
 	}
 
 	// -----------------------------------------------------------------------
@@ -1811,76 +1687,6 @@ public class Files {
 
 	// -----------------------------------------------------------------------
 	/**
-	 * Reads the contents of a file into a String. The file is always closed.
-	 * 
-	 * @param file the file to read, must not be {@code null}
-	 * @param encoding the encoding to use, {@code null} means platform default
-	 * @return the file contents, never {@code null}
-	 * @throws IOException in case of an I/O error
-	 */
-	public static String readFileToString(final File file, final Charset encoding) throws IOException {
-		InputStream in = null;
-		try {
-			in = openInputStream(file);
-			return Streams.toString(in, encoding);
-		}
-		finally {
-			Streams.safeClose(in);
-		}
-	}
-
-	/**
-	 * Reads the contents of a file into a String. The file is always closed.
-	 * 
-	 * @param file the file to read, must not be {@code null}
-	 * @param encoding the encoding to use, {@code null} means platform default
-	 * @return the file contents, never {@code null}
-	 * @throws IOException in case of an I/O error
-	 * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} 
-	 */
-	public static String readFileToString(final File file, final String encoding) throws IOException {
-		return readFileToString(file, Charsets.toCharset(encoding));
-	}
-
-	/**
-	 * Reads the contents of a file into a String using the default encoding for the VM. The file is
-	 * always closed.
-	 * 
-	 * @param file the file to read, must not be {@code null}
-	 * @return the file contents, never {@code null}
-	 * @throws IOException in case of an I/O error
-	 */
-	public static String readFileToString(File file) throws IOException {
-		BOMInputStream in = null;
-		try {
-			in = new BOMInputStream(openInputStream(file));
-			Charset cs = in.hasBOM() ? in.getBOMCharset() : Charset.defaultCharset();
-			return Streams.toString(in, cs);
-		}
-		finally {
-			Streams.safeClose(in);
-		}
-	}
-
-	/**
-	 * Reads the contents of a file into a byte array. The file is always closed.
-	 * 
-	 * @param file the file to read, must not be {@code null}
-	 * @return the file contents, never {@code null}
-	 * @throws IOException in case of an I/O error
-	 */
-	public static byte[] readFileToByteArray(final File file) throws IOException {
-		InputStream in = null;
-		try {
-			in = openInputStream(file);
-			return Streams.toByteArray(in, file.length());
-		}
-		finally {
-			Streams.safeClose(in);
-		}
-	}
-
-	/**
 	 * Reads the contents of a file line by line to a List of Strings. The file is always closed.
 	 * 
 	 * @param file the file to read, must not be {@code null}
@@ -1891,7 +1697,7 @@ public class Files {
 	public static List<String> readLines(final File file, final Charset encoding) throws IOException {
 		InputStream in = null;
 		try {
-			in = openInputStream(file);
+			in = Streams.openInputStream(file);
 			return Streams.readLines(in, encoding);
 		}
 		finally {
@@ -1923,7 +1729,7 @@ public class Files {
 	public static List<String> readLines(final File file) throws IOException {
 		BOMInputStream in = null;
 		try {
-			in = new BOMInputStream(openInputStream(file));
+			in = new BOMInputStream(Streams.openInputStream(file));
 			Charset cs = in.hasBOM() ? in.getBOMCharset() : Charset.defaultCharset();
 			return Streams.readLines(in, cs);
 		}
@@ -1964,7 +1770,7 @@ public class Files {
 	public static LineIterator lineIterator(final File file, final String encoding) throws IOException {
 		InputStream in = null;
 		try {
-			in = openInputStream(file);
+			in = Streams.openInputStream(file);
 			return Streams.lineIterator(in, encoding);
 		}
 		catch (IOException ex) {
@@ -2056,7 +1862,7 @@ public class Files {
 			throws IOException {
 		OutputStream out = null;
 		try {
-			out = openOutputStream(file, append);
+			out = Streams.openOutputStream(file, append);
 			Streams.write(data, out, encoding);
 			out.close(); // don't swallow close Exception if copy completes normally
 		}
@@ -2139,7 +1945,7 @@ public class Files {
 			final boolean append) throws IOException {
 		OutputStream out = null;
 		try {
-			out = openOutputStream(file, append);
+			out = Streams.openOutputStream(file, append);
 			out.write(data, off, len);
 			out.close(); // don't swallow close Exception if copy completes normally
 		}
@@ -2171,7 +1977,7 @@ public class Files {
 	public static void write(final File file, final InputStream stream, final boolean append) throws IOException {
 		OutputStream out = null;
 		try {
-			out = openOutputStream(file, append);
+			out = Streams.openOutputStream(file, append);
 			Streams.copy(stream, out);
 			out.close(); // don't swallow close Exception if copy completes normally
 		}
@@ -2280,7 +2086,7 @@ public class Files {
 			final String lineEnding, final boolean append) throws IOException {
 		FileOutputStream out = null;
 		try {
-			out = openOutputStream(file, append);
+			out = Streams.openOutputStream(file, append);
 			final BufferedOutputStream buffer = new BufferedOutputStream(out);
 			Streams.writeLines(lines, lineEnding, buffer, encoding);
 			buffer.flush();

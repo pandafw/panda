@@ -6,7 +6,7 @@ import java.io.IOException;
 import panda.args.Argument;
 import panda.args.Option;
 import panda.io.FileNames;
-import panda.io.Files;
+import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
@@ -153,7 +153,7 @@ public class SendMail extends AbstractCommandTool {
 	 */
 	@Option(opt='M', option="file", arg="FILE", usage="Mail message file")
 	public void setMessageFile(String file) throws IOException {
-		String msg = Files.readFileToString(new File(file), Charsets.CS_UTF_8);
+		String msg = Streams.toString(new File(file), Charsets.CS_UTF_8);
 		email.setMessage(msg);
 	}
 

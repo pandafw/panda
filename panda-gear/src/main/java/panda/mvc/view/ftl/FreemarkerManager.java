@@ -156,7 +156,7 @@ public class FreemarkerManager {
 		InputStream in = null;
 
 		try {
-			in = Streams.getStream(settings);
+			in = Streams.openInputStream(settings);
 
 			if (in != null) {
 				Properties p = new Properties();

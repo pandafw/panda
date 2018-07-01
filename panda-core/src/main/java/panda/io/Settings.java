@@ -75,7 +75,7 @@ public class Settings implements Map<String, String> {
 	public synchronized void load(String file) throws IOException {
 		InputStream is = null;
 		try {
-			is = Streams.getStream(file);
+			is = Streams.openInputStream(file);
 			load(is);
 		}
 		finally {

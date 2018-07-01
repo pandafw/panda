@@ -29,7 +29,7 @@ public class XmlAopConfigration extends AbstractAopConfigration {
 			Document document;
 			List<AopConfigrationItem> aopList = new ArrayList<AopConfigrationItem>();
 			for (String file : files) {
-				is = Streams.getStream(file);
+				is = Streams.openInputStream(file);
 				document = builder.parse(is);
 				document.normalizeDocument();
 				NodeList nodeListZ = ((Element)document.getDocumentElement()).getElementsByTagName("class");
