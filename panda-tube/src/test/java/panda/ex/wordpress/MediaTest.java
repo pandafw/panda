@@ -1,5 +1,6 @@
 package panda.ex.wordpress;
 
+import java.io.File;
 import java.util.List;
 
 import org.junit.Assert;
@@ -52,5 +53,13 @@ public class MediaTest extends AbstractWordpressTest {
 		Assert.assertEquals(HttpStatus.SC_OK, hres.getStatusCode());
 		
 		Assert.assertEquals(Base64.encodeBase64String(bin), Base64.encodeBase64String(hres.getContent()));
+	}
+
+	public static void main(String[] args) throws Exception {
+		MediaFile file = MediaFile.fromFile(new File(args[0]));
+
+		MediaObject r = WP.uploadFile(file);
+	
+		System.out.println(r);
 	}
 }

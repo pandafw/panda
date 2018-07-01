@@ -1,6 +1,12 @@
 package panda.ex.wordpress;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import panda.bind.json.Jsons;
+import panda.io.FileNames;
+import panda.io.Streams;
 
 public class MediaFile {
 	public String name;
@@ -13,6 +19,15 @@ public class MediaFile {
 	
 	public String post_id;
 
+	public static MediaFile fromFile(File file) throws FileNotFoundException, IOException {
+		MediaFile mf = new MediaFile();
+		
+		mf.name = file.getName();
+		mf.bits = Streams.toByteArray(file);
+		mf.type = FileNames.getContentTypeFor(file.getName());
+		
+		return mf;
+	}
 
 	/**
 	 * {@inheritDoc}
