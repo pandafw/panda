@@ -29,9 +29,9 @@ public class SimpleDataSourceTest extends TestCase {
 	}
 	
 	class TestThread extends Thread {
-		int timeout;
+		long timeout;
 		
-		TestThread(int timeout) {
+		TestThread(long timeout) {
 			this.timeout = timeout;
 		}
 		
@@ -66,7 +66,7 @@ public class SimpleDataSourceTest extends TestCase {
 			catch (InterruptedException e) {
 			}
 		} 
-		while (simpleDataSource.getActiveConnections() > 0);
+		while (simpleDataSource.getActives() > 0);
 	}
 
 	/**
@@ -75,8 +75,8 @@ public class SimpleDataSourceTest extends TestCase {
 	public void test01() {
 		log.debug("+++++++++++++test01+++++++++++++++");
 		try {
-			for (int i = 0; i < simpleDataSource.getPool().getMaximumActiveConnections() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaximumCheckoutTime() - 500)).start();
+			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
+				(new TestThread(simpleDataSource.getPool().getMaxCheckoutTime() - 500)).start();
 			}
 			printStatus();
 		}
@@ -92,8 +92,8 @@ public class SimpleDataSourceTest extends TestCase {
 	public void test02() {
 		log.debug("+++++++++++++test02+++++++++++++++");
 		try {
-			for (int i = 0; i < simpleDataSource.getPool().getMaximumActiveConnections() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaximumCheckoutTime() + 500)).start();
+			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
+				(new TestThread(simpleDataSource.getPool().getMaxCheckoutTime() + 500)).start();
 			}
 			printStatus();
 		}
