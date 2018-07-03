@@ -48,4 +48,18 @@ public class Threads {
 		catch (InterruptedException e) {
 		}
 	}
+	
+	
+	/**
+	 * wait, do not throw exception
+	 * @param obj the wait object
+	 * @param ms milliseconds
+	 */
+	public static void safeWait(Object obj, long ms) {
+		try {
+			obj.wait(ms);
+		}
+		catch (InterruptedException e) {
+		}
+	}
 }
