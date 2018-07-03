@@ -215,36 +215,35 @@ public class DataView implements View {
 			}
 		
 			if (result instanceof HttpServletResponser) {
-				writeResponser((HttpServletResponser)result);
+				HttpServletResponser hsr = (HttpServletResponser)result;
+				hsr.writeHeader();
+				hsr.writeBody();
+				hsr.flush();
 				return;
 			}
 			
 			if (result instanceof byte[]) {
 				setBom(false);
 				setContentLength(((byte[])result).length);
-				HttpServletResponser hsr = new HttpServletResponser(ac.getRequest(), ac.getResponse());
-				hsr.setBody(result);
-				writeResponser(hsr);
+				writeResponse(ac, result);
 				return;
 			}
 			
 			if (result instanceof char[] || result instanceof Reader || result instanceof InputStream) {
-				HttpServletResponser hsr = new HttpServletResponser(ac.getRequest(), ac.getResponse());
-				hsr.setBody(result);
-				writeResponser(hsr);
+				writeResponse(ac, result);
 				return;
 			}
 
-			HttpServletResponser hsr = new HttpServletResponser(ac.getRequest(), ac.getResponse());
-			hsr.setBody(String.valueOf(result));
-			writeResponser(hsr);
+			writeResponse(ac, String.valueOf(result));
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);
 		}
 	}
 
-	protected void writeResponser(HttpServletResponser hsr) throws IOException {
+	protected void writeResponse(ActionContext ac, Object body) throws IOException {
+		HttpServletResponser hsr = new HttpServletResponser(ac.getRequest(), ac.getResponse());
+		hsr.setBody(body);
 		writeHeader(hsr);
 		hsr.writeBody();
 		hsr.flush();
@@ -266,12 +265,8 @@ public class DataView implements View {
 		long fileSize = file.length();
 		if (!rangeDownload || fileSize == 0
 				|| (range == null || !range.startsWith("bytes=") || range.length() < "bytes=1".length())) {
-
-			HttpServletResponser hsr = new HttpServletResponser(ac.getRequest(), ac.getResponse());
 			setContentLength((int)fileSize);
-			writeResponser(hsr);
-			hsr.setBody(file);
-			writeResponser(hsr);
+			writeResponse(ac, file);
 			return;
 		}
 		
