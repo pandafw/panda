@@ -12,7 +12,7 @@
 	<!-- usage -->
 	<target name="usage">
 		<echo><![CDATA[
-${maven.project.artifactId} build file
+${project.artifactId} build file
 -----------------------------------
 
 Available targets are:

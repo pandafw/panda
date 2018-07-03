@@ -59,7 +59,6 @@
 						<id>codegen</id>
 						<configuration>
 							<target>
-								<property name="maven.project.artifactId" value="${project.artifactId}"/>
 								<ant antfile="build.xml">
 									<target name="gen-all" />
 								</ant>
@@ -73,7 +72,6 @@
 						<id>build</id>
 						<configuration>
 							<target>
-								<property name="maven.project.artifactId" value="${project.artifactId}"/>
 								<ant antfile="build.xml">
 									<target name="${ant.target}" />
 								</ant>
