@@ -38,7 +38,7 @@ import panda.servlet.ServletRequestHeaderMap;
  *
  * &lt;filter&gt;
  *  &lt;filter-name&gt;dump-filter&lt;/filter-name&gt;
- *  &lt;filter-class&gt;panda.servlet.filters.RequestDumpFilter&lt;/filter-class&gt;
+ *  &lt;filter-class&gt;panda.servlet.filter.RequestDumpFilter&lt;/filter-class&gt;
  *  &lt;init-param&gt;            
  *    &lt;param-name&gt;dumpRequest&lt;/param-name&gt;            
  *    &lt;param-value&gt;true&lt;/param-value&gt;        
@@ -68,8 +68,9 @@ public class RequestDumpFilter implements Filter {
 	private boolean dumpResponse;
 	
 	/**
-	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void init(FilterConfig config) throws ServletException {
 		String dumpFolder = config.getInitParameter("dumpPath");
 		if (Strings.isEmpty(dumpFolder)) {
@@ -107,8 +108,9 @@ public class RequestDumpFilter implements Filter {
 	}
 
 	/**
-	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 
@@ -219,8 +221,9 @@ public class RequestDumpFilter implements Filter {
 	}
 
 	/**
-	 * @see javax.servlet.Filter#destroy()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void destroy() {
 	}
 }

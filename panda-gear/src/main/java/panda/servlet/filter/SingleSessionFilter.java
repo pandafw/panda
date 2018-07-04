@@ -51,8 +51,9 @@ public class SingleSessionFilter implements Filter {
 	}
 
 	/**
-	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 		throws IOException, ServletException {
 
@@ -95,8 +96,9 @@ public class SingleSessionFilter implements Filter {
 	}
 
 	/**
-	 * @see javax.servlet.Filter#destroy()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void destroy() {
 	}
 

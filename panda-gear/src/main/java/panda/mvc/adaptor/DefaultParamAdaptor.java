@@ -44,9 +44,6 @@ import panda.net.http.HttpMethod;
 import panda.servlet.ServletRequestHeaderMap;
 
 
-/**
- * 将整个 HTTP 请求作为名值对来处理
- */
 @IocBean(type=ParamAdaptor.class)
 public class DefaultParamAdaptor implements ParamAdaptor {
 	private static Log log = Logs.getLog(DefaultParamAdaptor.class);
