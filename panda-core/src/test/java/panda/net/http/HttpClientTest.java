@@ -53,20 +53,23 @@ public class HttpClientTest {
 		assertTrue(response.length() > 0);
 		
 		JsonObject jo = JsonObject.fromJson(response);
-		assertEquals(Jsons.toJson(params), jo.getJsonObject("params").toString());
+		JsonObject ps = jo.getJsonObject("params");
+		assertEquals(Jsons.toJson(params.get("class")), Jsons.toJson(ps.get("class")));
+		assertEquals(Jsons.toJson(params.get("version")), Jsons.toJson(ps.get("version")));
 	}
 
 	@Test
 	public void testPostByGzip() throws Exception {
 		Map<String, Object> params = new LinkedHashMap<String, Object>();
 		params.put("class", HttpClientTest.class.getName());
-		params.put("random", Randoms.randString(1024));
+		params.put("random", Randoms.randString(2048));
 
 		HttpClient hc = new HttpClient();
 		hc.getRequest().setDefault();
 		hc.getRequest().setContentEncoding(HttpHeader.CONTENT_ENCODING_GZIP);
 		hc.getRequest().setParams(params);
-		hc.getRequest().setUrl("http://panda-demo.appspot.com/debug/json");
+		hc.getRequest().setUrl("http://panda-demo.azurewebsites.net/debug/json");
+//		hc.getRequest().setUrl("http://panda-demo.appspot.com/debug/json");
 //		hc.getRequest().setUrl("http://localhost:8080/debug/json");
 		String response = hc.doPost().getContentText();
 		
@@ -74,7 +77,9 @@ public class HttpClientTest {
 		assertTrue(response.length() > 0);
 		
 		JsonObject jo = JsonObject.fromJson(response);
-		assertEquals(Jsons.toJson(params), jo.getJsonObject("params").toString());
+		JsonObject ps = jo.getJsonObject("params");
+		assertEquals(Jsons.toJson(params.get("class")), Jsons.toJson(ps.get("class")));
+		assertEquals(Jsons.toJson(params.get("random")), Jsons.toJson(ps.get("random")));
 	}
 
 	@Test

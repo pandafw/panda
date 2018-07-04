@@ -412,21 +412,25 @@ public class HttpRequest {
 	}
 
 	public void writeBody(OutputStream os) throws IOException {
-		os = Streams.buffer(os);
-		if (isGzipEncoding()) {
-			os = Streams.gzip(os);
-		}
-		else if (isDeflateEncoding()) {
-			os = Streams.inflater(os);
-		}
+		try {
+			os = Streams.buffer(os);
+			if (isGzipEncoding()) {
+				os = Streams.gzip(os);
+			}
+			else if (isDeflateEncoding()) {
+				os = Streams.inflater(os);
+			}
 
-		if (body != null) {
-			Streams.copy(body, os);
-			os.flush();
-			return;
+			if (body == null) {
+				writeBodyParams(os, -1);
+			}
+			else {
+				Streams.copy(body, os);
+			}
 		}
-		
-		writeBodyParams(os, -1);
+		finally {
+			Streams.safeClose(os);
+		}
 	}
 	
 	protected boolean writeBodyParams(OutputStream os, int limit) throws IOException {

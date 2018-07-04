@@ -285,15 +285,8 @@ public class HttpClient {
 			setupRequestHeader();
 			setupDoInputOutputFlag();
 
-			OutputStream os = null;
-			try {
-				os = httpconn.getOutputStream();
-				request.writeBody(os);
-				os.flush();
-			}
-			finally {
-				Streams.safeClose(os);
-			}
+			OutputStream os = httpconn.getOutputStream();
+			request.writeBody(os);
 		}
 		else {
 			openConnection();
