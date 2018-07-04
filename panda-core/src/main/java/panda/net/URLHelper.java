@@ -360,7 +360,7 @@ public class URLHelper {
 				if (cv instanceof String) {
 					List<String> ss = new ArrayList<String>();
 					ss.add((String)cv);
-					ss.add(k);
+					ss.add(v);
 					qparams.put(k, ss);
 				}
 				else {
