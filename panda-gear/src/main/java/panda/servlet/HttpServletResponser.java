@@ -283,8 +283,8 @@ public class HttpServletResponser {
 		if (Strings.isNotEmpty(fileName)) {
 			if (!response.containsHeader(HttpHeader.CONTENT_DISPOSITION)) {
 				String fn = HttpServlets.EncodeFileName(request, charset, fileName);
-				response.setHeader(HttpHeader.CONTENT_DISPOSITION, 
-						(Boolean.TRUE.equals(attachment) ? "attachment" : "inline") + "; " + fn);
+				String cd = Boolean.TRUE.equals(attachment) ? HttpHeader.CONTENT_DISPOSITION_ATTACHMENT : HttpHeader.CONTENT_DISPOSITION_INLINE;
+				response.setHeader(HttpHeader.CONTENT_DISPOSITION, cd + "; " + fn);
 			}
 			
 			if (request != null) {

@@ -58,7 +58,7 @@ public class HttpClient {
 	
 	public static HttpResponse send(String url, String method, Map<String, Object> params, byte[] body, int timeout) throws IOException {
 		HttpRequest hr = HttpRequest.create(url, method, params);
-		hr.asWindowsChrome();
+		hr.setDefault();
 		hr.setBody(body);
 		
 		HttpClient hc = new HttpClient(hr);
@@ -172,7 +172,7 @@ public class HttpClient {
 	/**
 	 * @param enabledSslProtocols the enabledSslProtocols to set
 	 */
-	public void setEnabledSslProtocols(String[] enabledSslProtocols) {
+	public void setEnabledSslProtocols(String ... enabledSslProtocols) {
 		this.enabledSslProtocols = enabledSslProtocols;
 	}
 

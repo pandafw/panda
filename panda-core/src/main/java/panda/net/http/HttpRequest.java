@@ -30,12 +30,13 @@ import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Randoms;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.net.Mimes;
 import panda.net.URLBuilder;
 
 public class HttpRequest {
 	// -------------------------------------------------------------
-	public static final String DEFAULT_USERAGENT = HttpClient.class.getName() + '/' + Panda.VERSION;
+	public static final String DEFAULT_USERAGENT = "Panda/" + Panda.VERSION + " (Java " + Systems.JAVA_VERSION + ")";
 
 	private static final int TOSTRING_BODY_LIMIT = 1024;
 
@@ -223,6 +224,15 @@ public class HttpRequest {
 		return this;
 	}
 
+	public String getContentEncoding() {
+		return getHeader().getContentEncoding();
+	}
+
+	public HttpRequest setContentEncoding(String encoding) {
+		getHeader().setContentEncoding(encoding);
+		return this;
+	}
+
 	public String getContentType() {
 		return getHeader().getContentType();
 	}
@@ -394,13 +404,20 @@ public class HttpRequest {
 	}
 
 	public boolean isGzipEncoding() {
-		return "gzip".equalsIgnoreCase(getHeader().getString(HttpHeader.CONTENT_ENCODING));
+		return HttpHeader.CONTENT_ENCODING_GZIP.equalsIgnoreCase(getContentEncoding());
+	}
+
+	public boolean isDeflateEncoding() {
+		return HttpHeader.CONTENT_ENCODING_DEFLATE.equalsIgnoreCase(getContentEncoding());
 	}
 
 	public void writeBody(OutputStream os) throws IOException {
 		os = Streams.buffer(os);
 		if (isGzipEncoding()) {
 			os = Streams.gzip(os);
+		}
+		else if (isDeflateEncoding()) {
+			os = Streams.inflater(os);
 		}
 
 		if (body != null) {

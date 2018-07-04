@@ -36,6 +36,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.InflaterOutputStream;
 import java.util.zip.ZipInputStream;
 
 import panda.io.stream.BOMInputStream;
@@ -323,58 +325,90 @@ public class Streams {
 
 	// -----------------------------------------------------------------------
 	/**
+	 * Returns the given OutputStream if it is already a {@link InflaterOutputStream}, otherwise
+	 * creates a InflaterOutputStream from the given OutputStream.
+	 * 
+	 * @param os the OutputStream to wrap or return (not null)
+	 * @return the given OutputStream or a new {@link InflaterOutputStream} for the given
+	 *         OutputStream
+	 * @throws IOException If an I/O error has occurred
+	 * @throws NullPointerException if the input parameter is null
+	 */
+	public static InflaterOutputStream inflater(final OutputStream os) throws IOException {
+		// reject null early on rather than waiting for IO operation to fail
+		if (os == null) {
+			throw new NullPointerException();
+		}
+		return os instanceof InflaterOutputStream ? (InflaterOutputStream)os : new InflaterOutputStream(os);
+	}
+
+	/**
+	 * Returns the given InputStream if it is already a {@link InflaterInputStream}, otherwise
+	 * creates a InflaterInputStream from the given InputStream.
+	 * 
+	 * @param is the InputStream to wrap or return (not null)
+	 * @return the given InputStream or a new {@link InflaterInputStream} for the given InputStream
+	 * @throws IOException If an I/O error has occurred
+	 * @throws NullPointerException if the input parameter is null
+	 */
+	public static InflaterInputStream inflater(final InputStream is) throws IOException {
+		// reject null early on rather than waiting for IO operation to fail
+		if (is == null) {
+			throw new NullPointerException();
+		}
+		return is instanceof InflaterInputStream ? (InflaterInputStream)is : new InflaterInputStream(is);
+	}
+
+	/**
 	 * Returns the given OutputStream if it is already a {@link GZIPOutputStream}, otherwise
 	 * creates a GZIPOutputStream from the given OutputStream.
 	 * 
-	 * @param outputStream the OutputStream to wrap or return (not null)
+	 * @param os the OutputStream to wrap or return (not null)
 	 * @return the given OutputStream or a new {@link GZIPOutputStream} for the given
 	 *         OutputStream
 	 * @throws IOException If an I/O error has occurred
 	 * @throws NullPointerException if the input parameter is null
 	 */
-	public static GZIPOutputStream gzip(final OutputStream outputStream) throws IOException {
+	public static GZIPOutputStream gzip(final OutputStream os) throws IOException {
 		// reject null early on rather than waiting for IO operation to fail
-		if (outputStream == null) {
+		if (os == null) {
 			throw new NullPointerException();
 		}
-		return outputStream instanceof GZIPOutputStream ? (GZIPOutputStream)outputStream : new GZIPOutputStream(
-			outputStream);
+		return os instanceof GZIPOutputStream ? (GZIPOutputStream)os : new GZIPOutputStream(os);
 	}
 
 	/**
 	 * Returns the given InputStream if it is already a {@link GZIPInputStream}, otherwise
 	 * creates a GZIPInputStream from the given InputStream.
 	 * 
-	 * @param inputStream the InputStream to wrap or return (not null)
+	 * @param is the InputStream to wrap or return (not null)
 	 * @return the given InputStream or a new {@link GZIPInputStream} for the given InputStream
 	 * @throws IOException If an I/O error has occurred
 	 * @throws NullPointerException if the input parameter is null
 	 */
-	public static GZIPInputStream gzip(final InputStream inputStream) throws IOException {
+	public static GZIPInputStream gzip(final InputStream is) throws IOException {
 		// reject null early on rather than waiting for IO operation to fail
-		if (inputStream == null) {
+		if (is == null) {
 			throw new NullPointerException();
 		}
-		return inputStream instanceof GZIPInputStream ? (GZIPInputStream)inputStream : new GZIPInputStream(
-			inputStream);
+		return is instanceof GZIPInputStream ? (GZIPInputStream)is : new GZIPInputStream(is);
 	}
 
 	/**
 	 * Returns the given InputStream if it is already a {@link ZipInputStream}, otherwise
 	 * creates a ZipInputStream from the given InputStream.
 	 * 
-	 * @param inputStream the InputStream to wrap or return (not null)
+	 * @param is the InputStream to wrap or return (not null)
 	 * @return the given InputStream or a new {@link ZipInputStream} for the given InputStream
 	 * @throws IOException If an I/O error has occurred
 	 * @throws NullPointerException if the input parameter is null
 	 */
-	public static ZipInputStream zip(final InputStream inputStream) throws IOException {
+	public static ZipInputStream zip(final InputStream is) throws IOException {
 		// reject null early on rather than waiting for IO operation to fail
-		if (inputStream == null) {
+		if (is == null) {
 			throw new NullPointerException();
 		}
-		return inputStream instanceof ZipInputStream ? (ZipInputStream)inputStream : new ZipInputStream(
-			inputStream);
+		return is instanceof ZipInputStream ? (ZipInputStream)is : new ZipInputStream(is);
 	}
 
 	// read toByteArray

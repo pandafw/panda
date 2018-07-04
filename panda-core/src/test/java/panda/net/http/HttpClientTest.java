@@ -13,6 +13,8 @@ import org.junit.Test;
 import panda.Panda;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
+import panda.lang.Randoms;
+import panda.net.ssl.SSLProtocols;
 
 public class HttpClientTest {
 
@@ -42,16 +44,37 @@ public class HttpClientTest {
 
 	@Test
 	public void testPost() throws Exception {
-		Map<String, Object> parms = new LinkedHashMap<String, Object>();
-		parms.put("class", new Object[] { HttpClientTest.class.getName() });
-		parms.put("version", new Object[] { Panda.VERSION });
-		String response = HttpClient.post("http://panda-demo.appspot.com/debug/json", parms).getContentText();
+		Map<String, Object> params = new LinkedHashMap<String, Object>();
+		params.put("class", new String[] { "a", "b"} );
+		params.put("version", Panda.VERSION);
+		String response = HttpClient.post("http://panda-demo.appspot.com/debug/json", params).getContentText();
 		
 		assertNotNull(response);
 		assertTrue(response.length() > 0);
 		
 		JsonObject jo = JsonObject.fromJson(response);
-		assertEquals(Jsons.toJson(parms), jo.getJsonObject("params").toString());
+		assertEquals(Jsons.toJson(params), jo.getJsonObject("params").toString());
+	}
+
+	@Test
+	public void testPostByGzip() throws Exception {
+		Map<String, Object> params = new LinkedHashMap<String, Object>();
+		params.put("class", HttpClientTest.class.getName());
+		params.put("random", Randoms.randString(1024));
+
+		HttpClient hc = new HttpClient();
+		hc.getRequest().setDefault();
+		hc.getRequest().setContentEncoding(HttpHeader.CONTENT_ENCODING_GZIP);
+		hc.getRequest().setParams(params);
+		hc.getRequest().setUrl("http://panda-demo.appspot.com/debug/json");
+//		hc.getRequest().setUrl("http://localhost:8080/debug/json");
+		String response = hc.doPost().getContentText();
+		
+		assertNotNull(response);
+		assertTrue(response.length() > 0);
+		
+		JsonObject jo = JsonObject.fromJson(response);
+		assertEquals(Jsons.toJson(params), jo.getJsonObject("params").toString());
 	}
 
 	@Test
@@ -77,19 +100,21 @@ public class HttpClientTest {
 
 	@Test
 	public void testGetHttps() throws Exception {
-		HttpResponse response = HttpClient.get("https://github.com");
+		HttpClient hc = new HttpClient();
+		hc.setEnabledSslProtocols(SSLProtocols.TLSv1_2);
+		hc.getRequest().setUrl("https://github.com");
+		HttpResponse response = hc.doGet();
 		assertTrue(response.getStatusCode() == 200);
 		assertTrue(response.getContentText().indexOf("github.com") >= 0);
 	}
 
 	@Test
 	public void testGetHttpsTrust() throws Exception {
-		HttpRequest hr = HttpRequest.get("https://github.com");
-		hr.asWindowsChrome();
-		
-		HttpClient hc = new HttpClient(hr);
+		HttpClient hc = new HttpClient();
+		hc.setEnabledSslProtocols(SSLProtocols.TLSv1_2);
 		hc.setValidateSslCert(false);
-		HttpResponse response = hc.send();
+		hc.getRequest().setUrl("https://github.com");
+		HttpResponse response = hc.doGet();
 
 		assertTrue(response.getStatusCode() == 200);
 		assertTrue(response.getContentText().indexOf("github.com") >= 0);

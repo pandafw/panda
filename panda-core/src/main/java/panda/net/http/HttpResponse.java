@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.InflaterInputStream;
 
 import panda.io.Files;
 import panda.io.Streams;
@@ -132,7 +131,7 @@ public class HttpResponse implements Closeable {
 	 * @return encoding
 	 */
 	public String getContentEncoding() {
-		return header.getString(HttpHeader.CONTENT_ENCODING);
+		return header.getContentEncoding();
 	}
 
 	/**
@@ -148,8 +147,8 @@ public class HttpResponse implements Closeable {
 	 * @return content type
 	 */
 	public String getContentType() {
-		String contentType = header.getString(HttpHeader.CONTENT_TYPE);
-		return Strings.substringBefore(contentType, ';');
+		String ct = header.getContentType();
+		return Strings.substringBefore(ct, ';');
 	}
 	
 	/**
@@ -157,8 +156,8 @@ public class HttpResponse implements Closeable {
 	 * @return charset name
 	 */
 	public String getContentCharset() {
-		String contentType = header.getString(HttpHeader.CONTENT_TYPE);
-		return Streams.getCharsetFromContentTypeString(contentType);
+		String ct = header.getContentType();
+		return Streams.getCharsetFromContentTypeString(ct);
 	}
 
 	/**
@@ -217,24 +216,22 @@ public class HttpResponse implements Closeable {
 	}
 	
 	public InputStream getStream() throws IOException {
-		if (content != null) {
-			stream = new ByteArrayInputStream(content);
-		}
-		else if (stream == null) {
-			if (rawStream != null) {
-				String encoding = getContentEncoding();
-				if (encoding != null && encoding.contains("gzip")) {
-					stream = Streams.gzip(rawStream);
-				}
-				else if (encoding != null && encoding.contains("deflate")) {
-					stream = new InflaterInputStream(rawStream);
-				}
-				else {
-					stream = rawStream;
-				}
+		if (stream == null) {
+			if (rawStream == null) {
+				stream = Streams.closedInputStream();
 			}
 			else {
-				stream = Streams.closedInputStream();
+				stream = rawStream;
+
+				String encoding = getContentEncoding();
+				if (encoding != null) {
+					if (Strings.containsIgnoreCase(encoding, HttpHeader.CONTENT_ENCODING_GZIP)) {
+						stream = Streams.gzip(stream);
+					}
+					else if (Strings.containsIgnoreCase(encoding, HttpHeader.CONTENT_ENCODING_DEFLATE)) {
+						stream = Streams.inflater(stream);
+					}
+				}
 			}
 		}
 		return stream;
@@ -245,18 +242,26 @@ public class HttpResponse implements Closeable {
 	}
 
 	public Reader getReader(String charset) throws IOException {
+		return getReader(getStream(), charset);
+	}
+
+	private Reader getReader(InputStream in, String charset) throws IOException {
 		if (Strings.isEmpty(charset)) {
 			charset = detectContentCharset();
 		}
-		return new InputStreamReader(getStream(), charset);
+		return new InputStreamReader(in, charset);
 	}
 
 	public byte[] getContent() throws IOException {
 		if (content == null) {
 			try {
 				StopWatch sw = new StopWatch();
-				InputStream is = getStream();
-				content = Streams.toByteArray(is);
+
+				content = Streams.toByteArray(getStream());
+				
+				// reset stream to byte array stream
+				stream = new ByteArrayInputStream(content);
+
 				sw.stop();
 
 				if (log.isDebugEnabled()) {
@@ -266,7 +271,7 @@ public class HttpResponse implements Closeable {
 				}
 			}
 			finally {
-				close();
+				Streams.safeClose(rawStream);
 			}
 		}
 		return content;
@@ -285,22 +290,28 @@ public class HttpResponse implements Closeable {
 	}
 
 	public String getContentText(String charset, int limit) throws IOException {
-		// call this for save content byte array 
-		getContent();
-		
 		StringBuilder sb = new StringBuilder();
-		Reader rd = getReader(charset);
-		int c = rd.read();
-		if (c != Streams.EOF) {
-			if (c != Chars.BOM) {
-				sb.append((char)c);
+
+		// save content to byte array 
+		InputStream in = new ByteArrayInputStream(getContent());
+		
+		Reader rd = getReader(in, charset);
+		try {
+			int c = rd.read();
+			if (c != Streams.EOF) {
+				if (c != Chars.BOM) {
+					sb.append((char)c);
+				}
+				if (limit > 0) {
+					Streams.copyLarge(rd, sb, 0, limit);
+				}
+				else {
+					Streams.copy(rd, sb);
+				}
 			}
-			if (limit > 0) {
-				Streams.copyLarge(rd, sb, 0, limit);
-			}
-			else {
-				Streams.copy(rd, sb);
-			}
+		}
+		finally {
+			Streams.safeClose(rd);
 		}
 		return sb.toString();
 	}

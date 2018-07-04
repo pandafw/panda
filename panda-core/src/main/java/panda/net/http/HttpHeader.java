@@ -68,6 +68,12 @@ public class HttpHeader extends InternetHeader implements Cloneable, Serializabl
 	public static final String SET_COOKIE = "Set-Cookie";
 
 	// -------------------------------------------------------------
+	public static final String CONTENT_ENCODING_GZIP            = "gzip";
+	public static final String CONTENT_ENCODING_DEFLATE         = "deflate";
+	public static final String CONTENT_DISPOSITION_ATTACHMENT   = "attachment";
+	public static final String CONTENT_DISPOSITION_INLINE       = "inline";
+
+	// -------------------------------------------------------------
 	public static final String X_REAL_IP = "X-Real-IP";
 	public static final String X_FORWARDED_PORT = "X-Forwarded-Port";
 	public static final String X_FORWARDED_PROTO = "X-Forwarded-Proto";
@@ -123,6 +129,14 @@ public class HttpHeader extends InternetHeader implements Cloneable, Serializabl
 
 	public HttpHeader setAcceptCharset(String acceptCharset) {
 		return (HttpHeader)set(ACCEPT_CHARSET, acceptCharset);
+	}
+
+	public String getContentEncoding() {
+		return getString(CONTENT_ENCODING);
+	}
+	
+	public HttpHeader setContentEncoding(String encoding) {
+		return (HttpHeader)set(CONTENT_ENCODING, encoding);
 	}
 
 	public String getContentType() {
