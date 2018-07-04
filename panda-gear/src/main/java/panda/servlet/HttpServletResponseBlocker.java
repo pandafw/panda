@@ -12,7 +12,7 @@ import panda.io.Streams;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
 
-public class HttpServletResponseBlocker extends DelegateHttpServletResponseWrapper {
+public class HttpServletResponseBlocker extends FilteredHttpServletResponseWrapper {
 	private ByteArrayOutputStream body;
 
 	public HttpServletResponseBlocker(HttpServletResponse res) throws IOException {
@@ -51,13 +51,9 @@ public class HttpServletResponseBlocker extends DelegateHttpServletResponseWrapp
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
 		if (stream == null) {
-			stream = delegateServletOutputStream();
+			stream = new DelegateServletOutputStream(body);
 		}
 		return stream;
-	}
-
-	private ServletOutputStream delegateServletOutputStream() throws IOException {
-		return new DelegateServletOutputStream(body);
 	}
 
 	@Override

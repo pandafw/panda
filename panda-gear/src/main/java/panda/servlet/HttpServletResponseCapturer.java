@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
 
-public class HttpServletResponseCapturer extends DelegateHttpServletResponseWrapper {
+public class HttpServletResponseCapturer extends FilteredHttpServletResponseWrapper {
 	private ByteArrayOutputStream body;
 
 	public HttpServletResponseCapturer(HttpServletResponse res) throws IOException {

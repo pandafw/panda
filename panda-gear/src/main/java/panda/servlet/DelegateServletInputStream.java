@@ -7,49 +7,42 @@ import javax.servlet.ServletInputStream;
 
 import panda.lang.Asserts;
 import panda.lang.Exceptions;
-import panda.servlet.mock.MockHttpServletRequest;
 
 /**
  * Delegating implementation of {@link javax.servlet.ServletInputStream}.
- *
- * <p>Used by {@link MockHttpServletRequest}; typically not directly
- * used for testing application controllers.
- *
- * @see MockHttpServletRequest
  */
 public class DelegateServletInputStream extends ServletInputStream {
 
-	private final InputStream sourceStream;
-
+	private final InputStream source;
 
 	/**
 	 * Create a DelegatingServletInputStream for the given source stream.
-	 * @param sourceStream the source stream (never <code>null</code>)
+	 * @param source the source stream (never <code>null</code>)
 	 */
-	public DelegateServletInputStream(InputStream sourceStream) {
-		Asserts.notNull(sourceStream, "Source InputStream must not be null");
-		this.sourceStream = sourceStream;
+	public DelegateServletInputStream(InputStream source) {
+		Asserts.notNull(source, "Source InputStream must not be null");
+		this.source = source;
 	}
 
 	/**
 	 * @return the underlying source stream (never <code>null</code>).
 	 */
 	public final InputStream getSourceStream() {
-		return this.sourceStream;
+		return this.source;
 	}
 
 
 	public int read() throws IOException {
-		return this.sourceStream.read();
+		return this.source.read();
 	}
 
 	public void close() throws IOException {
-		this.sourceStream.close();
+		this.source.close();
 	}
 
 	public boolean isFinished() {
 		try {
-			return sourceStream.available() > 0;
+			return source.available() > 0;
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);

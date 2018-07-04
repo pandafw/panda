@@ -68,8 +68,8 @@ public class HttpClientTest {
 		hc.getRequest().setDefault();
 		hc.getRequest().setContentEncoding(HttpHeader.CONTENT_ENCODING_GZIP);
 		hc.getRequest().setParams(params);
-		hc.getRequest().setUrl("http://panda-demo.azurewebsites.net/debug/json");
-//		hc.getRequest().setUrl("http://panda-demo.appspot.com/debug/json");
+//		hc.getRequest().setUrl("http://panda-demo.azurewebsites.net/debug/json");
+		hc.getRequest().setUrl("http://panda-demo.appspot.com/debug/json");
 //		hc.getRequest().setUrl("http://localhost:8080/debug/json");
 		String response = hc.doPost().getContentText();
 		

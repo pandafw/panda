@@ -1,86 +1,34 @@
 package panda.servlet;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import panda.io.Streams;
 import panda.io.stream.ByteArrayOutputStream;
-import panda.lang.Charsets;
-import panda.net.URLBuilder;
 
-public class HttpServletRequestCapturer extends HttpServletRequestWrapper {
+public class HttpServletRequestCapturer extends FilteredHttpServletRequestWrapper {
 	private ByteArrayOutputStream body;
-	private BufferedReader reader;
-	private ServletInputStream stream;
+	private InputStream source;
 
-	public HttpServletRequestCapturer(HttpServletRequest req) throws IOException {
+	public HttpServletRequestCapturer(HttpServletRequest req) {
 		super(req);
 	}
 
+	@Override
+	protected InputStream getSource() throws IOException {
+		if (source == null) {
+			source = super.getSource();
+			body = new ByteArrayOutputStream();
+			Streams.copy(source, body);
+			source = body.toInputStream();
+		}
+		return source;
+	}
+	
 	public InputStream getBodyStream() throws IOException {
-		if (body != null) {
-			return body.toInputStream();
-		}
-
-		if (HttpServlets.isFormUrlEncoded(this)) {
-			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
-			String ps = URLBuilder.buildQueryString(getParameterMap(), cs);
-			
-			return Streams.toInputStream(ps, cs);
-		}
-		else {
-			getInputStream();
-			return body.toInputStream();
-		}
-	}
-
-	//------------------------------------------------------
-	@Override
-	public BufferedReader getReader() throws IOException {
-		String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
-		if (body == null) {
-			Reader r = super.getReader();
-			body = new ByteArrayOutputStream();
-			Streams.copy(r, body, cs);
-		}
-
-		if (stream != null) {
-			throw new IllegalStateException("the getInputStream() method has been called on this request");
-		}
-		if (reader != null) {
-			return reader;
-		}
-		
-		InputStream is = body.toInputStream();
-		Reader r = new InputStreamReader(is, cs);
-		reader = new BufferedReader(r);
-		return reader;
-	}
-
-	@Override
-	public ServletInputStream getInputStream() throws IOException {
-		if (body == null) {
-			InputStream is = super.getInputStream();
-			body = new ByteArrayOutputStream();
-			Streams.copy(is, body);
-		}
-
-		if (reader != null) {
-			throw new IllegalStateException("the getReader() method has been called on this request");
-		}
-		if (stream != null) {
-			return stream;
-		}
-		
-		InputStream is = body.toInputStream();
-		stream = new DelegateServletInputStream(is);
-		return stream;
+		getSource();
+		return body.toInputStream();
 	}
 }

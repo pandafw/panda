@@ -28,7 +28,8 @@ import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.ioc.IocSessionListener;
 import panda.mvc.ioc.RequestIocContext;
 import panda.mvc.ioc.SessionIocContext;
-import panda.servlet.DelegateHttpServletResponseWrapper;
+import panda.servlet.FilteredHttpServletRequestWrapper;
+import panda.servlet.FilteredHttpServletResponseWrapper;
 import panda.servlet.HttpServlets;
 
 public class ActionHandler {
@@ -175,8 +176,8 @@ public class ActionHandler {
 
 		ac.setIoc(ioc);
 		ac.setServlet(config.getServletContext());
-		ac.setRequest(req);
-		ac.setResponse(new DelegateHttpServletResponseWrapper(res));
+		ac.setRequest(new FilteredHttpServletRequestWrapper(req));
+		ac.setResponse(new FilteredHttpServletResponseWrapper(res));
 
 		// save action context to request
 		Mvcs.setActionContext(req, ac);
