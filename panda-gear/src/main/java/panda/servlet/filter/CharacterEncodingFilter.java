@@ -10,14 +10,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
- * RequestEncodingFilter
- *
  * <pre>
  * Set request's character encoding from filter init parameter.
  *
  * &lt;filter&gt;
  *  &lt;filter-name&gt;encoding-filter&lt;/filter-name&gt;
- *  &lt;filter-class&gt;panda.servlet.filters.RequestEncodingFilter&lt;/filter-class&gt;
+ *  &lt;filter-class&gt;panda.servlet.filter.CharacterEncodingFilter&lt;/filter-class&gt;
  *  &lt;init-param&gt;            
  *    &lt;param-name&gt;encoding&lt;/param-name&gt;            
  *    &lt;param-value&gt;UTF-8&lt;/param-value&gt;        
@@ -31,22 +29,23 @@ import javax.servlet.ServletResponse;
  * </pre>
  * 
  */
-public class RequestEncodingFilter implements Filter {
+public class CharacterEncodingFilter implements Filter {
 	private String encoding;
 	private boolean force = false;
 
 	/**
-	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void init(FilterConfig config) throws ServletException {
 		encoding = config.getInitParameter("encoding");
-		force = Boolean.TRUE.equals(config.getInitParameter("force"));
+		force = "true".equalsIgnoreCase(config.getInitParameter("force"));
 	}
 
 	/**
-	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
-	 *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
 		if (encoding != null && (force || req.getCharacterEncoding() == null)) {
@@ -57,8 +56,9 @@ public class RequestEncodingFilter implements Filter {
 	}
 
 	/**
-	 * @see javax.servlet.Filter#destroy()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void destroy() {
 	}
 }
