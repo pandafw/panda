@@ -21,17 +21,21 @@ import panda.servlet.HttpServlets;
 
 
 /**
- * RequestLoggingFilter
+ * AccessLoggingFilter
  * 
  * <pre>
  * Log request information
  *
  * &lt;filter&gt;
  *  &lt;filter-name&gt;logging-filter&lt;/filter-name&gt;
- *  &lt;filter-class&gt;panda.servlet.filter.RequestLoggingFilter&lt;/filter-class&gt;
+ *  &lt;filter-class&gt;panda.servlet.filter.AccessLoggingFilter&lt;/filter-class&gt;
  *  &lt;init-param&gt;            
- *    &lt;param-name&gt;accessLogName&lt;/param-name&gt;            
+ *    &lt;param-name&gt;logger&lt;/param-name&gt;            
  *    &lt;param-value&gt;access&lt;/param-value&gt;        
+ *  &lt;/init-param&gt;
+ *  &lt;init-param&gt;            
+ *    &lt;param-name&gt;format&lt;/param-name&gt;            
+ *    &lt;param-value&gt;%t %a %h %p %m %s %A %V %P %S %T %I %u&lt;/param-value&gt;        
  *  &lt;/init-param&gt;
  * &lt;/filter&gt;
  * &lt;filter-mapping&gt;
@@ -60,16 +64,16 @@ import panda.servlet.HttpServlets;
  * </ul> 
  * 
  */
-public class RequestLoggingFilter implements Filter {
-	private static Log log = Logs.getLog(RequestLoggingFilter.class);
+public class AccessLoggingFilter implements Filter {
+	private static Log log = Logs.getLog(AccessLoggingFilter.class);
 
 	/**
 	 * REQUEST_TIME = "panda.servlet.request.time";
 	 */
 	public static final String REQUEST_TIME = "panda.servlet.request.time";
 
-	private Log accessLog;
-	private String[] accessFormat;
+	private Log logger;
+	private String[] format;
 
 	private static class FilterResponseWrapper extends HttpServletResponseWrapper {
 		private int status = SC_OK;
@@ -109,21 +113,21 @@ public class RequestLoggingFilter implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig config) throws ServletException {
-		String accessLogName = config.getInitParameter("accessLogName");
-		if (Strings.isNotEmpty(accessLogName)) {
-			accessLog = Logs.getLog(accessLogName);
-			if (!accessLog.isInfoEnabled()) {
-				accessLog = null;
+		String logName = config.getInitParameter("logger");
+		if (Strings.isNotEmpty(logName)) {
+			logger = Logs.getLog(logName);
+			if (!logger.isInfoEnabled()) {
+				logger = null;
 			}
 		}
 
-		if (accessLog != null) {
-			String accessFormat = config.getInitParameter("accessLogFormat");
-			if (Strings.isEmpty(accessFormat)) {
-				accessFormat = "%t %a %h %p %m %s %A %V %P %S %T %I %u";
+		if (logger != null) {
+			String logFormat = config.getInitParameter("format");
+			if (Strings.isEmpty(logFormat)) {
+				logFormat = "%t %a %h %p %m %s %A %V %P %S %T %I %u";
 			}
-			accessFormat = Strings.remove(accessFormat, '%');
-			this.accessFormat = Strings.split(accessFormat);
+			logFormat = Strings.remove(logFormat, '%');
+			this.format = Strings.split(logFormat);
 		}
 	}
 
@@ -137,7 +141,7 @@ public class RequestLoggingFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse)res;
 
 		FilterResponseWrapper frw = null;
-		if (accessLog != null) {
+		if (logger != null) {
 			frw = new FilterResponseWrapper(response);
 		}
 
@@ -176,7 +180,7 @@ public class RequestLoggingFilter implements Filter {
 			}
 		}
 		finally {
-			if (accessLog != null) {
+			if (logger != null) {
 				logAccess(request, frw, sw);
 			}
 		}
@@ -210,7 +214,7 @@ public class RequestLoggingFilter implements Filter {
 	}
 	
 	private void logAccess(HttpServletRequest request, FilterResponseWrapper response, StopWatch sw) {
-		if (accessLog == null) {
+		if (logger == null) {
 			return;
 		}
 		
@@ -219,7 +223,7 @@ public class RequestLoggingFilter implements Filter {
 
 			StringBuilder msg = new StringBuilder();
 			
-			for (String s : accessFormat) {
+			for (String s : format) {
 				char f = s.charAt(0);
 				switch (f) {
 				case 't': // Date and time, in Common Log Format
@@ -271,7 +275,7 @@ public class RequestLoggingFilter implements Filter {
 				msg.append('\t');
 			}
 			
-			accessLog.info(msg.toString());
+			logger.info(msg.toString());
 		}
 		catch (Throwable e) {
 			//pass

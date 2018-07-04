@@ -22,9 +22,9 @@
 	</filter>
 	<filter>
 		<filter-name>logging-filter</filter-name>
-		<filter-class>panda.servlet.filter.RequestLoggingFilter</filter-class>
+		<filter-class>panda.servlet.filter.AccessLoggingFilter</filter-class>
 		<init-param>
-			<param-name>accessLogName</param-name>
+			<param-name>logger</param-name>
 			<param-value>access</param-value>
 		</init-param>
 	</filter>
