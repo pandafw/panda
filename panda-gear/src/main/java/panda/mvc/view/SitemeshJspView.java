@@ -3,7 +3,7 @@ package panda.mvc.view;
 import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
 import panda.mvc.view.sitemesh.Sitemesher;
-import panda.servlet.HttpServletResponseBlocker;
+import panda.servlet.HttpServletResponseCapturer;
 
 @IocBean(singleton=false)
 public class SitemeshJspView extends JspView {
@@ -25,10 +25,10 @@ public class SitemeshJspView extends JspView {
 		}
 		
 		try {
-			HttpServletResponseBlocker res = new HttpServletResponseBlocker(ac.getResponse());
-			forward(ac.getRequest(), res, path);
+			HttpServletResponseCapturer hsrc = new HttpServletResponseCapturer(ac.getResponse(), true);
+			forward(ac.getRequest(), hsrc, path);
 
-			String body = res.getBodyContent();
+			String body = hsrc.getBodyContent();
 			sm.meshup(ac.getResponse().getWriter(), body);
 		}
 		catch (Exception e) {

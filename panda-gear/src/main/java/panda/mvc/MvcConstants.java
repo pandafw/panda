@@ -41,6 +41,12 @@ public interface MvcConstants extends IocConstants {
 	/** Cache model instances at BeanWrapper level */
 	public static final String FREEMARKER_BEANWRAPPER_CACHE = "panda.freemarker.beanwrapper.cache";
 
+	/** Access log name */
+	public static final String ACCESS_LOG_NAME = "panda.access.log.name";
+
+	/** Access log format */
+	public static final String ACCESS_LOG_FORMAT = "panda.access.log.format";
+
 	/** Request encoding */
 	public static final String REQUEST_ENCODING = "panda.request.encoding";
 

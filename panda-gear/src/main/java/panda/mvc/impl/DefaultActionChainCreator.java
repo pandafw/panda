@@ -17,10 +17,13 @@ import panda.mvc.ActionConfig;
 import panda.mvc.MvcConfig;
 import panda.mvc.MvcConstants;
 import panda.mvc.processor.AdaptProcessor;
+import panda.mvc.processor.DecodingProcessor;
 import panda.mvc.processor.FatalProcessor;
+import panda.mvc.processor.HttpDumpProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
+import panda.mvc.processor.LoggingProcessor;
 import panda.mvc.processor.PrepareProcessor;
 import panda.mvc.processor.RedirectProcessor;
 import panda.mvc.processor.ValidateProcessor;
@@ -36,6 +39,9 @@ public class DefaultActionChainCreator implements ActionChainCreator {
 
 	protected ArrayList<String> defaultChain() {
 		return Arrays.toList(
+			IocValue.TYPE_REF + HttpDumpProcessor.class.getName(),
+			IocValue.TYPE_REF + DecodingProcessor.class.getName(),
+			IocValue.TYPE_REF + LoggingProcessor.class.getName(),
 			IocValue.TYPE_REF + FatalProcessor.class.getName(),
 			IocValue.TYPE_REF + RedirectProcessor.class.getName(),
 			IocValue.TYPE_REF + LocaleProcessor.class.getName(),

@@ -102,7 +102,7 @@ public class HttpServlets {
 	public static boolean isFormUrlEncoded(HttpServletRequest request) {
 		String ct = request.getContentType();
 		if (HttpMethod.POST.equalsIgnoreCase(request.getMethod()) 
-				&& Strings.startsWithCharsIgnoreCase(ct, MimeTypes.X_WWW_FORM_URLECODED)) {
+				&& Strings.startsWithIgnoreCase(ct, MimeTypes.X_WWW_FORM_URLECODED)) {
 			return true;
 		}
 		return false;

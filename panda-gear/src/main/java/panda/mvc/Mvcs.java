@@ -29,6 +29,11 @@ import panda.mvc.util.TextProvider;
  * Mvc helper class
  */
 public abstract class Mvcs {
+	/**
+	 * REQUEST_TIME = "panda.mvc.request.time";
+	 */
+	public static final String REQUEST_TIME = "panda.mvc.request.time";
+
 	public static final String STATIC_PATH = "/static";
 	
 	public static final String PANDA_CDN = "//pandafw.github.io/repos";

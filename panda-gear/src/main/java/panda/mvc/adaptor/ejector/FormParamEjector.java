@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
-import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.MvcConstants;
@@ -21,9 +20,6 @@ import panda.mvc.MvcConstants;
  */
 @IocBean(singleton=false)
 public class FormParamEjector extends AbstractParamEjector {
-	@IocInject(value=MvcConstants.REQUEST_ENCODING, required=false)
-	private String encoding = Charsets.UTF_8;
-	
 	@IocInject(value=MvcConstants.REQUEST_EMPTY_PARAMS, required=false)
 	private boolean emptyParams = true;
 	

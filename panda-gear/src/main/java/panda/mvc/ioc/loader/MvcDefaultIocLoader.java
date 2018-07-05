@@ -22,10 +22,13 @@ import panda.mvc.impl.DefaultValidatorCreator;
 import panda.mvc.impl.DefaultViewCreator;
 import panda.mvc.impl.RegexActionMapping;
 import panda.mvc.processor.AdaptProcessor;
+import panda.mvc.processor.DecodingProcessor;
 import panda.mvc.processor.FatalProcessor;
+import panda.mvc.processor.HttpDumpProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
+import panda.mvc.processor.LoggingProcessor;
 import panda.mvc.processor.PrepareProcessor;
 import panda.mvc.processor.RedirectProcessor;
 import panda.mvc.processor.ValidateProcessor;
@@ -194,10 +197,13 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 	
 			// processor
 			AdaptProcessor.class,
+			DecodingProcessor.class,
+			HttpDumpProcessor.class,
 			FatalProcessor.class,
 			InvokeProcessor.class,
 			LayoutProcessor.class,
 			LocaleProcessor.class,
+			LoggingProcessor.class,
 			PrepareProcessor.class,
 			RedirectProcessor.class,
 			ValidateProcessor.class,

@@ -52,6 +52,7 @@ public class RedirectProcessor extends AbstractProcessor {
 	@IocInject(value=MvcConstants.REDIRECT_QUERY_NAME, required=false)
 	protected String queryName = DEFAULT_QUERY;
 
+	@Override
 	public void process(ActionContext ac) {
 		if (redirectByParameter(ac)) {
 			return;

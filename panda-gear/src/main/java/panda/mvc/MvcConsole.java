@@ -105,10 +105,8 @@ public class MvcConsole {
 	}
 	
 	public MockHttpServletRequest initRequest(String uri, String method, Map<String, Object> params) {
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		request.setRequestURI(uri);
+		MockHttpServletRequest request = new MockHttpServletRequest(method, uri);
 		request.setServletPath(uri);
-		request.setMethod(method);
 		if (params != null) {
 			request.addParameters(params);
 		}

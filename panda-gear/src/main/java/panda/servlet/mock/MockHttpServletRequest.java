@@ -3,9 +3,7 @@ package panda.servlet.mock;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.Collection;
@@ -35,9 +33,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import panda.io.MimeTypes;
+import panda.io.Streams;
 import panda.lang.Asserts;
+import panda.lang.Charsets;
 import panda.lang.Collections;
+import panda.lang.Strings;
+import panda.net.URLBuilder;
 import panda.net.http.HttpHeader;
+import panda.net.http.HttpMethod;
 import panda.servlet.DelegateServletInputStream;
 
 /**
@@ -79,7 +83,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 */
 	public static final String DEFAULT_REMOTE_HOST = "localhost";
 
-	private static final String CONTENT_TYPE_HEADER = "Content-Type";
+	private static final String CONTENT_TYPE_HEADER = HttpHeader.CONTENT_TYPE;
 	
 	private static final String CHARSET_PREFIX = "charset=";
 
@@ -93,11 +97,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 
-	private String characterEncoding;
-
 	private byte[] content;
 
-	private String contentType;
+	private String characterEncoding;
+
+	private String contentType = MimeTypes.X_WWW_FORM_URLECODED;
 
 	private final Map<String, String[]> parameters = new LinkedHashMap<String, String[]>(16);
 
@@ -167,20 +171,13 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	private boolean requestedSessionIdFromURL = false;
 
+	private ServletInputStream stream;
 
+	private BufferedReader reader;
+	
 	// ---------------------------------------------------------------------
 	// Constructors
 	// ---------------------------------------------------------------------
-
-	/**
-	 * Create a new MockHttpServletRequest with a default
-	 * {@link MockServletContext}.
-	 * @see MockServletContext
-	 */
-	public MockHttpServletRequest() {
-		this(null, "", "");
-	}
-
 	/**
 	 * Create a new MockHttpServletRequest with a default
 	 * {@link MockServletContext}.
@@ -201,7 +198,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @see MockServletContext
 	 */
 	public MockHttpServletRequest(MockServletContext servletContext) {
-		this(servletContext, "", "");
+		this(servletContext, HttpMethod.GET, "");
 	}
 
 	/**
@@ -219,6 +216,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 		this.method = method;
 		this.requestURI = requestURI;
 		this.locales.add(Locale.ENGLISH);
+		setCharacterEncoding(Charsets.UTF_8);
 	}
 
 
@@ -334,13 +332,28 @@ public class MockHttpServletRequest implements HttpServletRequest {
 		return this.contentType;
 	}
 
+	public BufferedReader getReader() throws UnsupportedEncodingException {
+		if (reader == null) {
+			reader = new BufferedReader(new InputStreamReader(getInputStream(), characterEncoding));
+		}
+		return reader;
+	}
+
 	public ServletInputStream getInputStream() {
-		if (this.content != null) {
-			return new DelegateServletInputStream(new ByteArrayInputStream(this.content));
+		if (stream == null) {
+			if (content != null) {
+				stream = new DelegateServletInputStream(new ByteArrayInputStream(content));
+			}
+			else if (Collections.isNotEmpty(parameters)) {
+				String ps = URLBuilder.buildQueryString(parameters, characterEncoding);
+				content = Strings.getBytes(ps, characterEncoding);
+				stream = new DelegateServletInputStream(new ByteArrayInputStream(content));
+			}
+			else {
+				stream = new DelegateServletInputStream(Streams.closedInputStream());
+			}
 		}
-		else {
-			return null;
-		}
+		return stream;
 	}
 
 	/**
@@ -523,18 +536,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	public int getServerPort() {
 		return this.serverPort;
-	}
-
-	public BufferedReader getReader() throws UnsupportedEncodingException {
-		if (this.content != null) {
-			InputStream sourceStream = new ByteArrayInputStream(this.content);
-			Reader sourceReader = (this.characterEncoding != null) ? new InputStreamReader(sourceStream,
-				this.characterEncoding) : new InputStreamReader(sourceStream);
-			return new BufferedReader(sourceReader);
-		}
-		else {
-			return null;
-		}
 	}
 
 	public void setRemoteAddr(String remoteAddr) {
@@ -750,12 +751,14 @@ public class MockHttpServletRequest implements HttpServletRequest {
 		return this.contextPath;
 	}
 
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
-	}
-
 	public String getQueryString() {
-		return this.queryString;
+		if (queryString == null) {
+			queryString = "";
+			if (HttpMethod.GET.equals(method) && Collections.isNotEmpty(parameters)) {
+				queryString = URLBuilder.buildQueryString(parameters, characterEncoding);
+			}
+		}
+		return queryString;
 	}
 
 	public void setRemoteUser(String remoteUser) {
@@ -800,10 +803,13 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	}
 
 	public StringBuffer getRequestURL() {
-		StringBuffer url = new StringBuffer(this.scheme);
-		url.append("://").append(this.serverName).append(':').append(this.serverPort);
-		url.append(getRequestURI());
-		return url;
+		URLBuilder ub = new URLBuilder();
+		ub.setScheme(scheme);
+		ub.setHost(serverName);
+		ub.setPort(serverPort);
+		ub.setPath(requestURI);
+		ub.setQuery(getQueryString());
+		return new StringBuffer(ub.build());
 	}
 
 	public void setServletPath(String servletPath) {

@@ -7,6 +7,7 @@ import panda.mvc.view.Views;
 
 @IocBean
 public class ViewProcessor extends AbstractProcessor {
+	@Override
 	public void process(ActionContext ac) {
 		View view = ac.getView();
 		if (view == null) {

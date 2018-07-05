@@ -12,6 +12,8 @@ import panda.mvc.view.Views;
 
 @IocBean
 public class InvokeProcessor extends AbstractProcessor {
+
+	@Override
 	public void process(ActionContext ac) {
 		Object action = ac.getAction();
 		Method method = ac.getMethod();

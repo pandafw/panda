@@ -8,15 +8,25 @@ import java.io.PrintWriter;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.io.Streams;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
 
 public class HttpServletResponseCapturer extends FilteredHttpServletResponseWrapper {
+	/** body content */
 	private ByteArrayOutputStream body;
+	
+	/** output to http response? */
+	private boolean block;
 
-	public HttpServletResponseCapturer(HttpServletResponse res) throws IOException {
+	public HttpServletResponseCapturer(HttpServletResponse res) {
+		this(res, false);
+	}
+
+	public HttpServletResponseCapturer(HttpServletResponse res, boolean block) {
 		super(res);
 		body = new ByteArrayOutputStream();
+		this.block = block;
 	}
 
 	/**
@@ -28,23 +38,27 @@ public class HttpServletResponseCapturer extends FilteredHttpServletResponseWrap
 		return body.toInputStream();
 	}
 
+	/**
+	 * @return the body
+	 * @throws IOException if an IO error occurred
+	 */
+	public String getBodyContent() throws IOException {
+		InputStream is = getBodyStream();
+		String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
+		return Streams.toString(is, cs);
+	}
+
 	@Override
 	public PrintWriter getWriter() throws IOException {
-		if (stream != null) {
-			throw new IllegalStateException("the getOutputStream() method has already been called on this response");
-		}
 		if (writer == null) {
 			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
-			writer = new PrintWriter(new OutputStreamWriter(delegateServletOutputStream(), cs));
+			writer = new PrintWriter(new OutputStreamWriter(getOutputStream(), cs));
 		}
 		return writer;
 	}
 	
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
-		if (writer != null) {
-			throw new IllegalStateException("the getWriter() method has already been called on this response");
-		}
 		if (stream == null) {
 			stream = delegateServletOutputStream();
 		}
@@ -52,6 +66,9 @@ public class HttpServletResponseCapturer extends FilteredHttpServletResponseWrap
 	}
 
 	private ServletOutputStream delegateServletOutputStream() throws IOException {
+		if (block) {
+			return new DelegateServletOutputStream(body);
+		}
 		return new DelegateServletOutputStream(body, super.getOutputStream());
 	}
 

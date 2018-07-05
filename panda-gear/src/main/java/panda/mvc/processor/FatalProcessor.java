@@ -12,6 +12,7 @@ import panda.servlet.HttpServlets;
 public class FatalProcessor extends AbstractProcessor {
 	private static final Log log = Logs.getLog(FatalProcessor.class);
 
+	@Override
 	public void process(ActionContext ac) {
 		try {
 			doNext(ac);

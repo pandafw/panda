@@ -19,7 +19,8 @@ public class HttpServletRequestCapturer extends FilteredHttpServletRequestWrappe
 	@Override
 	protected InputStream getSource() throws IOException {
 		if (source == null) {
-			source = super.getSource();
+			HttpServletRequest req = (HttpServletRequest)getRequest();
+			source = req.getInputStream();
 			body = new ByteArrayOutputStream();
 			Streams.copy(source, body);
 			source = body.toInputStream();

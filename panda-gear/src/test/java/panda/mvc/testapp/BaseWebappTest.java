@@ -54,8 +54,8 @@ public abstract class BaseWebappTest {
 						webapp.runner.launch.Main.main(new String[] { 
 								"--port", "9999", 
 								"--path", CONTEXT, 
-								"--temp-directory", "out/tomcat"
-								,war });
+								"--temp-directory", "out/tomcat",
+								war });
 					}
 					catch (Exception e) {
 						error = e;

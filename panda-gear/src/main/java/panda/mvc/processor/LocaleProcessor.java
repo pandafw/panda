@@ -76,6 +76,7 @@ public class LocaleProcessor extends AbstractProcessor {
 	public LocaleProcessor() {
 	}
 
+	@Override
 	public void process(ActionContext ac) {
 		boolean saveToSession = this.saveToSession;
 		boolean saveToCookie = this.saveToCookie;

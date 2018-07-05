@@ -27,7 +27,6 @@ import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.net.http.UserAgent;
 import panda.servlet.HttpServlets;
-import panda.servlet.filter.AccessLoggingFilter;
 
 
 @IocBean(scope=Scope.REQUEST)
@@ -130,7 +129,7 @@ public class ActionAssist extends ActionSupport {
 	 */
 	public String getRequestElapsedTime() {
 		HttpServletRequest req = getRequest();
-		Long start = (Long)req.getAttribute(AccessLoggingFilter.REQUEST_TIME);
+		Long start = (Long)req.getAttribute(Mvcs.REQUEST_TIME);
 		if (start != null) {
 			long end = System.currentTimeMillis();
 			long elapse = end - start;

@@ -13,22 +13,6 @@
 
 	<!-- filter -->
 	<filter>
-		<filter-name>encoding-filter</filter-name>
-		<filter-class>panda.servlet.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF-8</param-value>
-		</init-param>
-	</filter>
-	<filter>
-		<filter-name>logging-filter</filter-name>
-		<filter-class>panda.servlet.filter.AccessLoggingFilter</filter-class>
-		<init-param>
-			<param-name>logger</param-name>
-			<param-value>access</param-value>
-		</init-param>
-	</filter>
-	<filter>
 		<filter-name>mvc</filter-name>
 		<filter-class>panda.mvc.MvcFilter</filter-class>
 		<init-param>
@@ -37,14 +21,6 @@
 		</init-param>
 	</filter>
 
-	<filter-mapping>
-		<filter-name>encoding-filter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>logging-filter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
 	<filter-mapping>
 		<filter-name>mvc</filter-name>
 		<url-pattern>/*</url-pattern>

@@ -1,49 +1,22 @@
-package panda.servlet.filter;
+package panda.mvc.processor;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
+import panda.servlet.FilteredHttpServletResponseWrapper;
 import panda.servlet.HttpServlets;
 
-
 /**
- * AccessLoggingFilter
  * 
- * <pre>
- * Log request information
- *
- * &lt;filter&gt;
- *  &lt;filter-name&gt;logging-filter&lt;/filter-name&gt;
- *  &lt;filter-class&gt;panda.servlet.filter.AccessLoggingFilter&lt;/filter-class&gt;
- *  &lt;init-param&gt;            
- *    &lt;param-name&gt;logger&lt;/param-name&gt;            
- *    &lt;param-value&gt;access&lt;/param-value&gt;        
- *  &lt;/init-param&gt;
- *  &lt;init-param&gt;            
- *    &lt;param-name&gt;format&lt;/param-name&gt;            
- *    &lt;param-value&gt;%t %a %h %p %m %s %A %V %P %S %T %I %u&lt;/param-value&gt;        
- *  &lt;/init-param&gt;
- * &lt;/filter&gt;
- * &lt;filter-mapping&gt;
- *  &lt;filter-name&gt;logging-filter&lt;/filter-name&gt;
- *  &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
- * &lt;/filter-mapping&gt;
- * </pre>
- *
  * Access Log Format:
  * <ul>
  *     <li><b>%t</b> - Date and time, in Common Log Format</li>
@@ -62,97 +35,58 @@ import panda.servlet.HttpServlets;
  *     <li><b>%I</b> - current request thread name (can compare later with stacktraces)</li>
  *     <li><b>%u</b> - Requested URL path</li>
  * </ul> 
- * 
+ *
  */
-public class AccessLoggingFilter implements Filter {
-	private static Log log = Logs.getLog(AccessLoggingFilter.class);
+@IocBean
+public class LoggingProcessor extends AbstractProcessor {
+	private static final String DEFAULT_LOGGER = "access";
 
-	/**
-	 * REQUEST_TIME = "panda.servlet.request.time";
-	 */
-	public static final String REQUEST_TIME = "panda.servlet.request.time";
+	private static final String DEFAULT_FORMAT = "%t %a %h %p %m %s %A %V %P %S %T %I %u";
+
+	private static Log log = Logs.getLog(LoggingProcessor.class);
 
 	private Log logger;
+
 	private String[] format;
 
-	private static class FilterResponseWrapper extends HttpServletResponseWrapper {
-		private int status = SC_OK;
-		
-		public FilterResponseWrapper(HttpServletResponse res) throws IOException {
-			super(res);
-		}
-
-		@Override
-		public void sendError(int sc, String msg) throws IOException {
-			status = sc;
-			super.sendError(sc, msg);
-		}
-
-		@Override
-		public void sendError(int sc) throws IOException {
-			status = sc;
-			super.sendError(sc);
-		}
-
-		@Override
-		public void setStatus(int sc) {
-			status = sc;
-			super.setStatus(sc);
-		}
-
-		@Override
-		@SuppressWarnings("deprecation")
-		public void setStatus(int sc, String sm) {
-			status = sc;
-			super.setStatus(sc, sm);
-		}
-	}
-	
 	/**
-	 * {@inheritDoc}
+	 * @param name the log name to set
 	 */
-	@Override
-	public void init(FilterConfig config) throws ServletException {
-		String logName = config.getInitParameter("logger");
-		if (Strings.isNotEmpty(logName)) {
-			logger = Logs.getLog(logName);
+	@IocInject(value=MvcConstants.ACCESS_LOG_NAME, required=false)
+	public void setLogger(String name) {
+		if (Strings.isNotEmpty(name)) {
+			logger = Logs.getLog(name);
 			if (!logger.isInfoEnabled()) {
 				logger = null;
 			}
 		}
-
-		if (logger != null) {
-			String logFormat = config.getInitParameter("format");
-			if (Strings.isEmpty(logFormat)) {
-				logFormat = "%t %a %h %p %m %s %A %V %P %S %T %I %u";
-			}
-			logFormat = Strings.remove(logFormat, '%');
-			this.format = Strings.split(logFormat);
-		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * @param format the format to set
 	 */
+	@IocInject(value=MvcConstants.ACCESS_LOG_FORMAT, required=false)
+	public void setFormat(String format) {
+		this.format = parseFormat(format);
+	}
+
+	protected String[] parseFormat(String format) {
+		return Strings.split(Strings.remove(format, '%'));
+	}
+
+	public LoggingProcessor() {
+		setLogger(DEFAULT_LOGGER);
+		setFormat(DEFAULT_FORMAT);
+	}
+	
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-
-		HttpServletRequest request = (HttpServletRequest)req;
-		HttpServletResponse response = (HttpServletResponse)res;
-
-		FilterResponseWrapper frw = null;
-		if (logger != null) {
-			frw = new FilterResponseWrapper(response);
-		}
-
+	public void process(ActionContext ac) {
 		StopWatch sw = new StopWatch();
 
-		request.setAttribute(REQUEST_TIME, sw.getStartTime());
+		logRequest(ac.getRequest());
 
-		logRequest(request);
-		
 		try {
-			chain.doFilter(req, frw == null ? res : frw);
+			doNext(ac);
 		}
 		catch (Throwable e) {
 			try {
@@ -160,18 +94,18 @@ public class AccessLoggingFilter implements Filter {
 				Log elog = Logs.getLog(e.getClass());
 				if (HttpServlets.isClientAbortError(e)) {
 					if (elog.isWarnEnabled()) {
-						String s = HttpServlets.dumpException(request, e, false);
+						String s = HttpServlets.dumpException(ac.getRequest(), e, false);
 						elog.warn(s);
 					}
 					return;
 				}
 
 				if (elog.isErrorEnabled()) {
-					String s = HttpServlets.dumpException(request, e, true);
+					String s = HttpServlets.dumpException(ac.getRequest(), e, true);
 					elog.error(s, e);
 				}
 
-				HttpServlets.sendError(frw == null ? response : frw, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				HttpServlets.sendError(ac.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
 			catch (Throwable e2) {
 				if (log.isWarnEnabled()) {
@@ -181,7 +115,7 @@ public class AccessLoggingFilter implements Filter {
 		}
 		finally {
 			if (logger != null) {
-				logAccess(request, frw, sw);
+				logAccess(ac.getRequest(), ac.getResponse(), sw);
 			}
 		}
 	}
@@ -213,7 +147,7 @@ public class AccessLoggingFilter implements Filter {
 		msg.append(Strings.isEmpty(value) ? defv : value);
 	}
 	
-	private void logAccess(HttpServletRequest request, FilterResponseWrapper response, StopWatch sw) {
+	private void logAccess(HttpServletRequest request, HttpServletResponse response, StopWatch sw) {
 		if (logger == null) {
 			return;
 		}
@@ -257,7 +191,12 @@ public class AccessLoggingFilter implements Filter {
 					msg.append(request.getLocalPort());
 					break;
 				case 'S': // HTTP status code of the response
-					msg.append(response.status);
+					if (response instanceof FilteredHttpServletResponseWrapper) {
+						msg.append(((FilteredHttpServletResponseWrapper)response).getStatus());
+					}
+					else {
+						msg.append('-');
+					}
 					break;
 				case 'T': // Time taken to process the request, in milliseconds
 					msg.append(sw.getTime());
@@ -281,12 +220,4 @@ public class AccessLoggingFilter implements Filter {
 			//pass
 		}
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void destroy() {
-	}
 }
-

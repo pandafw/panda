@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import panda.io.Streams;
+import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Strings;
@@ -28,8 +29,11 @@ import panda.net.http.HttpMethod;
 public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	private static final Log log = Logs.getLog(FilteredHttpServletRequestWrapper.class);
 
-	private static final String KEY = FilteredHttpServletRequestWrapper.class.getName();
+	private static final String CONTENT_ENCODING_FILTERED = "filtered";
+	
+	private String defaultEncoding = Charsets.UTF_8;
 
+	private boolean decompress;
 	private InputStream source;
 	private BufferedReader reader;
 	private ServletInputStream stream;
@@ -39,22 +43,37 @@ public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper
 		super(req);
 	}
 
+	
+	/**
+	 * @return the defaultEncoding
+	 */
+	public String getDefaultEncoding() {
+		return defaultEncoding;
+	}
+
+	/**
+	 * @param defaultEncoding the defaultEncoding to set
+	 */
+	public void setDefaultEncoding(String defaultEncoding) {
+		this.defaultEncoding = defaultEncoding;
+	}
+
+	//--------------------------------------------------------------------
 	protected InputStream getSource() throws IOException {
 		if (source == null) {
 			HttpServletRequest req = (HttpServletRequest)getRequest();
 
 			source = req.getInputStream();
-			if (!Boolean.TRUE.equals(req.getAttribute(KEY))) {
-				req.setAttribute(KEY, true);
-				if (HttpMethod.POST.equalsIgnoreCase(req.getMethod())) {
-					String encoding = req.getHeader(HttpHeader.CONTENT_ENCODING);
-					if (encoding != null) {
-						if (Strings.containsIgnoreCase(encoding, HttpHeader.CONTENT_ENCODING_GZIP)) {
-							source = Streams.gzip(source);
-						}
-						else if (Strings.containsIgnoreCase(encoding, HttpHeader.CONTENT_ENCODING_DEFLATE)) {
-							source = Streams.inflater(source);
-						}
+			if (HttpMethod.POST.equalsIgnoreCase(req.getMethod())) {
+				String encoding = req.getHeader(HttpHeader.CONTENT_ENCODING);
+				if (encoding != null) {
+					if (Strings.containsIgnoreCase(encoding, HttpHeader.CONTENT_ENCODING_GZIP)) {
+						source = Streams.gzip(source);
+						decompress = true;
+					}
+					else if (Strings.containsIgnoreCase(encoding, HttpHeader.CONTENT_ENCODING_DEFLATE)) {
+						source = Streams.inflater(source);
+						decompress = true;
 					}
 				}
 			}
@@ -68,7 +87,7 @@ public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper
 
 			params = new HashMap<String, String[]>();
 
-			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
+			String cs = Charsets.defaultEncoding(getCharacterEncoding(), defaultEncoding);
 			Map<String, Object> ps = URLHelper.parseQueryString(req.getQueryString(), cs, false);
 			addParams(ps);
 			
@@ -86,7 +105,7 @@ public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper
 		
 		return params;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected void addParams(Map<String, Object> ps) {
 		for (Entry<String, Object> en : ps.entrySet()) {
@@ -128,6 +147,29 @@ public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper
 		
 		stream = new DelegateServletInputStream(getSource());
 		return stream;
+	}
+
+	//------------------------------------------------------
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getHeader(String name) {
+		if (decompress && HttpHeader.CONTENT_ENCODING.equalsIgnoreCase(name)) {
+			return CONTENT_ENCODING_FILTERED;
+		}
+		return super.getHeader(name);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Enumeration<String> getHeaders(String name) {
+		if (decompress && HttpHeader.CONTENT_ENCODING.equalsIgnoreCase(name)) {
+			return Collections.enumeration(Arrays.asList(CONTENT_ENCODING_FILTERED));
+		}
+		return super.getHeaders(name);
 	}
 
 	//------------------------------------------------------
