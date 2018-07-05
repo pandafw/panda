@@ -1387,6 +1387,15 @@ public class Streams {
 		}
 	}
 
+	public static Writer toWriter(final OutputStream output, final String encoding) {
+		try {
+			return new OutputStreamWriter(output, encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
 	// write byte[]
 	// -----------------------------------------------------------------------
 	/**
