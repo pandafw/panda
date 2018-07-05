@@ -4,24 +4,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
-
 import panda.app.constant.MVC;
 import panda.app.constant.SET;
-import panda.io.ReloadableSettings;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.util.MvcSettings;
 
 @IocBean(type=Settings.class)
-public class AppSettings extends ReloadableSettings {
+public class AppSettings extends MvcSettings {
 	private static final Log log = Logs.getLog(AppSettings.class);
-
-	@IocInject(required=false)
-	protected ServletContext servlet;
 
 	@IocInject(value=MVC.SETTINGS_SYSTEM, required=false)
 	protected boolean system = true;
@@ -77,20 +72,5 @@ public class AppSettings extends ReloadableSettings {
 			}
 		}
 		return av;
-	}
-	
-	public String getPropertyAsPath(String name) {
-		return getPropertyAsPath(name, null);
-	}
-
-	public String getPropertyAsPath(String name, String defv) {
-		String dir = getProperty(name, defv);
-		if (dir != null && dir.startsWith("web://")) {
-			if (servlet == null) {
-				throw new IllegalStateException("Null servlet!");
-			}
-			dir = servlet.getRealPath(dir.substring(6));
-		}
-		return dir;
 	}
 }
