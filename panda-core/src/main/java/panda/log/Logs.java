@@ -41,6 +41,11 @@ public final class Logs {
 			Set<String> gs = ss.length > 1 ? Arrays.toSet(Arrays.subarray(ss, 1, ss.length)) : null;
 			return new LogConfig(ll, gs);
 		}
+		
+		@Override
+		public String toString() {
+			return level + ": " + loggers;
+		}
 	}
 
 	private static LogConfig rootlc = new LogConfig(LogLevel.INFO, null);
