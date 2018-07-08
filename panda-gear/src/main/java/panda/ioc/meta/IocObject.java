@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
 
@@ -144,7 +145,9 @@ public class IocObject implements Cloneable {
 	}
 
 	public void setValue(Object value) {
+		Asserts.notNull(value, "IocObject null value");
 		this.value = value;
+		singleton = true;
 	}
 
 	@Override

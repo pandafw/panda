@@ -35,93 +35,110 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 	private static final Log log = Logs.getLog(DefaultObjectMaker.class);
 
-	public ObjectProxy make(IocMaking ing, IocObject iobj) {
+	public ObjectProxy make(IocMaking imak, IocObject iobj) {
 		// 获取 Mirror， AOP 将在这个方法中进行
-		Class<?> mirror = ing.getMirrors().getMirror(ing.getIoc(), iobj.getType(), ing.getName());
+		Class<?> mirror = imak.getMirrors().getMirror(imak.getIoc(), iobj.getType(), imak.getName());
 
-		// 建立对象代理，并保存在上下文环境中 只有对象为 singleton
-		// 并且有一个非 null 的名称的时候才会保存
-		// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
-		DefaultObjectProxy op = new DefaultObjectProxy();
-		if (iobj.isSingleton() && ing.getName() != null) {
-			if (!ing.getIoc().getContext().save(iobj.getScope(), ing.getName(), op)) {
-				throw new IocException("Failed to save '" + ing.getName() + "' to " + iobj.getScope() + " IocContext");
-			}
-		}
-
-		// 为对象代理设置触发事件
-		if (iobj.getEvents() != null) {
-			op.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
-			op.setDepose(createTrigger(mirror, iobj.getEvents().getDepose()));
-		}
-
-		if (iobj.getValue() != null) {
-			op.setObject(iobj.getValue());
-		}
-		else {
-			try {
-				ObjectWeaver ow = null;
-				if (ing.getName() == null) {
-					ow = createWeaver(mirror, ing, iobj);
-				}
-				else {
-					ow = ing.getWeavers().get(ing.getName());
-					if (ow == null) {
-						synchronized (ing.getWeavers()) {
-							ow = ing.getWeavers().get(ing.getName());
-							if (ow == null) {
-								ow = createWeaver(mirror, ing, iobj);
-								ing.getWeavers().put(ing.getName(), ow);
-							}
-						}
+		try {
+			if (iobj.isSingleton()) {
+				SingletonObjectProxy sop = new SingletonObjectProxy();
+				
+				// 建立对象代理，并保存在上下文环境中 只有对象为 singleton
+				// 并且有一个非 null 的名称的时候才会保存
+				// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
+				if (imak.getName() != null) {
+					if (!imak.getIoc().getContext().save(iobj.getScope(), imak.getName(), sop)) {
+						throw new IocException("Failed to save '" + imak.getName() + "' to " + iobj.getScope() + " IocContext");
 					}
 				}
 	
-				// set weaver to object proxy
-				op.setWeaver(ow);
+				// 为对象代理设置触发事件
+				if (iobj.getEvents() != null) {
+					sop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
+					sop.setDepose(createTrigger(mirror, iobj.getEvents().getDepose()));
+				}
 	
-				// 如果这个对象是容器中的单例，那么就可以生成实例了
-				if (iobj.isSingleton()) {
-					createObject(op, ow, ing);
+				if (iobj.getValue() != null) {
+					sop.setObject(iobj.getValue());
+					return sop;
 				}
-			}
-			catch (Throwable e) {
-				if (log.isWarnEnabled()) {
-					log.warn("Error occurred for IocObject: " + iobj);
-				}
+
+				ObjectWeaver ow = makeWeaver(mirror, imak, iobj);
+
+				// create singleton object
+				Object obj = ow.born(imak);
+
+				// set obj to proxy
+				// 这一步非常重要，它解除了字段互相引用的问题
+				sop.setObject(obj);
+
+				// inject
+				ow.fill(imak, obj);
 				
-				// 当异常发生，从 context 里移除 ObjectProxy
-				if (iobj.isSingleton() && ing.getName() != null) {
-					ing.getIoc().getContext().remove(iobj.getScope(), ing.getName());
+				// 对象创建完毕，如果有 create 事件，调用它
+				ow.onCreate(obj);
+				
+				return sop;
+			}
+			else {
+				ObjectWeaver ow = makeWeaver(mirror, imak, iobj);
+
+				DynamicObjectProxy dop = new DynamicObjectProxy(ow);
+				
+				// 为对象代理设置触发事件
+				if (iobj.getEvents() != null) {
+					dop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
 				}
-				throw new IocException("Failed to create ioc bean: " + ing.getName(), e);
+	
+				return dop;
 			}
 		}
-		return op;
+		catch (IocException e) {
+			throw e;
+		}
+		catch (Throwable e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Error occurred for IocObject: " + iobj);
+			}
+			
+			// 当异常发生，从 context 里移除 ObjectProxy
+			if (iobj.isSingleton() && imak.getName() != null) {
+				imak.getIoc().getContext().remove(iobj.getScope(), imak.getName());
+			}
+			throw new IocException("Failed to create ioc bean: " + imak.getName(), e);
+		}
+	}
+	
+	public ObjectWeaver makeWeaver(Class<?> mirror, IocMaking imak, IocObject iobj) {
+		ObjectWeaver ow;
+
+		if (imak.getName() == null) {
+			ow = createWeaver(mirror, imak, iobj);
+		}
+		else {
+			ow = imak.getWeavers().get(imak.getName());
+			if (ow == null) {
+				synchronized (imak.getWeavers()) {
+					ow = imak.getWeavers().get(imak.getName());
+					if (ow == null) {
+						ow = createWeaver(mirror, imak, iobj);
+						imak.getWeavers().put(imak.getName(), ow);
+					}
+				}
+			}
+		}
+		return ow;
 	}
 
-	private void createObject(DefaultObjectProxy op, ObjectWeaver ow, IocMaking ing) {
-		Object obj = ow.born(ing);
-
-		// set obj to proxy
-		// 这一步非常重要，它解除了字段互相引用的问题
-		op.setObject(obj);
-		
-		ow.fill(ing, obj);
-		
-		// 对象创建完毕，如果有 create 事件，调用它
-		ow.onCreate(obj);
-	}
-
-	private ObjectWeaver createWeaver(Class<?> mirror, IocMaking ing, IocObject iobj) {
+	private ObjectWeaver createWeaver(Class<?> mirror, IocMaking imak, IocObject iobj) {
 		// 准备对象的编织方式
 		DefaultObjectWeaver dw = new DefaultObjectWeaver();
 
 		// 构造函数参数
-		setWeaverCreator(dw, mirror, ing, iobj);
+		setWeaverCreator(dw, mirror, imak, iobj);
 
 		// 获得每个字段的注入方式
-		setWeaverFields(dw, mirror, ing, iobj);
+		setWeaverFields(dw, mirror, imak, iobj);
 		
 		return dw;
 	}
