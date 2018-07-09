@@ -54,6 +54,7 @@
 
 	<build>
 		<directory>${project.basedir}/out</directory>
+
 		<pluginManagement>
 			<plugins>
 				<!-- set JDK compiler level -->
@@ -121,21 +122,25 @@
 					<version>3.0.0</version>
 				</plugin>
 
-				<!-- set web resources -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>3.2.2</version>
-				</plugin>
-
 				<!-- git commit id -->
 				<plugin>
 					<groupId>pl.project13.maven</groupId>
 					<artifactId>git-commit-id-plugin</artifactId>
 					<version>2.2.4</version>
-					<configuration>
-						<failOnNoGitDirectory>false</failOnNoGitDirectory>
-					</configuration>
+				</plugin>
+
+				<!-- jar -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+
+				<!-- war -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>3.2.2</version>
 				</plugin>
 
 				<!-- antrun -->
