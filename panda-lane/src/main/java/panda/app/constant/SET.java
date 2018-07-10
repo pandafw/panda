@@ -38,6 +38,8 @@ public interface SET extends SiteConstants {
 
 	public static final String EXECUTOR_ENABLE = "executor.enable";
 
+	public static final String TASK_ACTION_SCHEME = "task.action.scheme";
+
 	//------------------------------------------------
 	// html to pdf
 	//

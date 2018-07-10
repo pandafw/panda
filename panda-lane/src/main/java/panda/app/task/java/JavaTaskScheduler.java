@@ -63,6 +63,8 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 		if (enable) {
 			log.info("Starting " + getClass().getName() + " ...");
 			
+			scheme = settings.getProperty(SET.TASK_ACTION_SCHEME, scheme);
+
 			super.initialize();
 			
 			addCronTask();
