@@ -83,6 +83,8 @@ public class ReloadableSettings extends Settings {
 		this.checkpoint = System.currentTimeMillis() + delay;
 
 		if (file.exists()) {
+			log.info("Loading reloadable setting file: " + file);
+
 			try {
 				load(file);
 			}

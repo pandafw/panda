@@ -18,6 +18,10 @@ import panda.mvc.util.MvcSettings;
 public class AppSettings extends MvcSettings {
 	private static final Log log = Logs.getLog(AppSettings.class);
 
+	private static final String APP_PROPERTIES = "app.properties";
+	private static final String ENV_PROPERTIES = "env.properties";
+	private static final String TEST_PROPERTIES = "test.properties";
+	
 	@IocInject(value=MVC.SETTINGS_SYSTEM, required=false)
 	protected boolean system = true;
 
@@ -36,19 +40,23 @@ public class AppSettings extends MvcSettings {
 	}
 	
 	public void initialize() throws IOException {
-		load("app.properties");
+		log.info("Loading " + APP_PROPERTIES);
+		load(APP_PROPERTIES);
 		
 		try {
-			load("env.properties");
+			log.info("Loading " + ENV_PROPERTIES);
+			load(ENV_PROPERTIES);
 		}
 		catch (FileNotFoundException e) {
-			log.warn(e.getMessage());
+			log.warn("Failed to load " + ENV_PROPERTIES + ": " + e.getMessage());
 		}
 
 		if (environment) {
+			log.info("Add environment variables to settings");
 			putAll(System.getenv());
 		}
 		if (system) {
+			log.info("Add system properties to settings");
 			putAll(System.getProperties());
 		}
 
@@ -57,7 +65,8 @@ public class AppSettings extends MvcSettings {
 		}
 
 		try {
-			load("test.properties");
+			load(TEST_PROPERTIES);
+			log.warn(TEST_PROPERTIES + " Loaded!");
 		}
 		catch (IOException e) {
 		}
