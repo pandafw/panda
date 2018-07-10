@@ -204,8 +204,7 @@ public class UserAuthenticator {
 	}
 
 	protected int authenticatePermission(ActionContext ac, Object su, Collection<String> uperms, String define) {
-		// @Auth("") means login check only
-		if (AUTH.TICKET.equals(define)) {
+		if (AUTH.SIGNIN.equals(define)) {
 			return su == null ? UNLOGIN : OK;
 		}
 

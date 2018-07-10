@@ -21,9 +21,9 @@ public interface AUTH {
 	public static final String NONE = "-";
 
 	/**
-	 * Ticket (Sign in)
+	 * Sign in
 	 */
-	public static final String TICKET = "~";
+	public static final String SIGNIN = "~";
 
 	/**
 	 * Admin
