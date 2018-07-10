@@ -14,7 +14,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.util.MvcSettings;
 
-@IocBean(type=Settings.class)
+@IocBean(type=Settings.class, create="initialize")
 public class AppSettings extends MvcSettings {
 	private static final Log log = Logs.getLog(AppSettings.class);
 
@@ -32,7 +32,10 @@ public class AppSettings extends MvcSettings {
 		super.setDelay(delay);
 	}
 
-	public AppSettings() throws IOException {
+	public AppSettings() {
+	}
+	
+	public void initialize() throws IOException {
 		load("app.properties");
 		
 		try {
