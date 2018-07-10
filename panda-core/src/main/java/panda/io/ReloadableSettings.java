@@ -59,25 +59,40 @@ public class ReloadableSettings extends Settings {
 				
 				long lm = file.lastModified();
 				if (lm != loaded) {
-					try {
-						load(file);
+					if (file.exists()) {
+						log.info("Reloading modified setting file: " + file);
+
+						try {
+							load(file);
+						}
+						catch (IOException e) {
+							log.error("Failed to reload setting file: " + file);
+						}
 					}
-					catch (IOException e) {
-						log.error("Failed to reload " + file.getAbsolutePath());
+					else {
+						log.warn("Missing setting file: " + file);
 					}
 				}
 			}
 		}
 	}
 	
-	
-	//-------------------------------------------------------
-	@Override
-	public synchronized void load(File file) throws IOException {
-		super.load(file);
+	public synchronized void setReloadable(File file) {
 		this.file = file;
 		this.loaded = file.lastModified();
 		this.checkpoint = System.currentTimeMillis() + delay;
+
+		if (file.exists()) {
+			try {
+				load(file);
+			}
+			catch (IOException e) {
+				log.error("Failed to load setting file: " + file);
+			}
+		}
+		else {
+			log.warn("Missing setting file: " + file);
+		}
 	}
 
 	//-------------------------------------------------------

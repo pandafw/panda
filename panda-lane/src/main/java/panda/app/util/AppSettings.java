@@ -50,7 +50,7 @@ public class AppSettings extends MvcSettings {
 		}
 
 		if (Strings.isNotEmpty(runtime)) {
-			load(new File(runtime));
+			setReloadable(new File(runtime));
 		}
 
 		try {
