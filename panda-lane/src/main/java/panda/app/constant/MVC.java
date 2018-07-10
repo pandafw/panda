@@ -19,6 +19,11 @@ public interface MVC extends MvcConstants {
 	public static final String SETTINGS_RUNTIME_DELAY = "panda.settings.runtime.delay";
 
 	//------------------------------------------------
+	// data
+	//
+	public static final String DATA_QUERY_TIMEOUT = "panda.data.query.timeout";
+	
+	//------------------------------------------------
 	// cache
 	//
 	/** The cache ioc bean name */

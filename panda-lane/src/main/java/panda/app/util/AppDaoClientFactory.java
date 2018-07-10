@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.dao.DaoClient;
 import panda.dao.gae.GaeDaoClient;
@@ -37,6 +38,9 @@ public class AppDaoClientFactory {
 	@IocInject
 	protected Settings settings;
 
+	@IocInject(value=MVC.DATA_QUERY_TIMEOUT, required=false)
+	protected int timeout;
+	
 	protected DaoClient daoClient;
 	
 
@@ -54,6 +58,9 @@ public class AppDaoClientFactory {
 		if (Strings.isNotEmpty(prefix)) {
 			daoClient.setPrefix(prefix);
 		}
+		
+		timeout = settings.getPropertyAsInt(SET.DATA_QUERY_TIMEOUT, timeout);
+		daoClient.setTimeout(timeout);
 	}
 	
 	protected DaoClient buildDaoClient() throws Exception {
@@ -67,9 +74,9 @@ public class AppDaoClientFactory {
 			String url = settings.getProperty(SET.DATA_MONGO_URL);
 
 			log.info("MONGO - " +  url);
-			MongoDaoClient daoClient = new MongoDaoClient(url);
+			MongoDaoClient mdc = new MongoDaoClient(url);
 			
-			return daoClient;
+			return mdc;
 		}
 
 		if (JNDI.equalsIgnoreCase(dstype)) {

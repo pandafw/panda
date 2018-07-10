@@ -28,6 +28,8 @@ public interface SET extends SiteConstants {
 
 	public static final String DATA_JDBC = "data.jdbc";
 
+	public static final String DATA_QUERY_TIMEOUT = "data.query.timeout";
+
 	//--------------------------------------------------------
 	public static final String LUCENE_LOCATION = "lucene.location";
 
