@@ -41,11 +41,22 @@ public class SqlDao extends AbstractDao {
 	
 	private Connection connection;
 	private JdbcSqlExecutor executor;
-	
+
 	public SqlDao(SqlDaoClient daoClient) {
 		super(daoClient);
 	}
 
+	//-------------------------------------------------------------------------
+	/**
+	 * @param timeout the timeout (seconds) to set
+	 */
+	@Override
+	public void setTimeout(int timeout) {
+		super.setTimeout(timeout);
+		if (executor != null) {
+			executor.setTimeout(timeout);
+		}
+	}
 
 	//-------------------------------------------------------------------------
 	/**
@@ -98,6 +109,7 @@ public class SqlDao extends AbstractDao {
 			else {
 				executor.reset();
 			}
+			executor.setTimeout(timeout);
 			executor.setConnection(connection);
 		}
 		autoCount++;

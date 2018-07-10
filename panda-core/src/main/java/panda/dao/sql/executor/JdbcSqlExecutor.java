@@ -25,8 +25,6 @@ import panda.log.Log;
 import panda.log.Logs;
 
 
-/**
- */
 public class JdbcSqlExecutor implements SqlExecutor {
 	private static final Log log = Logs.getLog(JdbcSqlExecutor.class);
 
@@ -46,7 +44,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * Connection
 	 */
 	protected Connection connection;
-	
+
 	/**
 	 * resultSetType - one of the following ResultSet constants: ResultSet.TYPE_FORWARD_ONLY,
 	 * ResultSet.TYPE_SCROLL_INSENSITIVE, or ResultSet.TYPE_SCROLL_SENSITIVE
@@ -64,7 +62,15 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * ResultSet.HOLD_CURSORS_OVER_COMMIT or ResultSet.CLOSE_CURSORS_AT_COMMIT
 	 */
 	protected int resultSetHoldability;
+	
+	/**
+	 * query timeout (seconds)
+	 */
+	protected int timeout;
 
+	/**
+	 * SQL Manager
+	 */
 	protected final SqlManager sqlManager;
 
 	/**
@@ -166,6 +172,20 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 */
 	public void setResultSetHoldability(int resultSetHoldability) {
 		this.resultSetHoldability = resultSetHoldability;
+	}
+
+	/**
+	 * @return the timeout
+	 */
+	public int getTimeout() {
+		return timeout;
+	}
+
+	/**
+	 * @param timeout the timeout to set
+	 */
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 	//------------------------------------------------------------------
@@ -277,6 +297,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 		else {
 			s = connection.createStatement(resultSetType, resultSetConcurrency);
 		}
+		s.setQueryTimeout(timeout);
 		return s;
 	}
 
@@ -310,6 +331,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 			else {
 				cs = connection.prepareCall(sql, resultSetType, resultSetConcurrency);
 			}
+			cs.setQueryTimeout(timeout);
 			return cs;
 		}
 		else {
@@ -323,6 +345,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 			else {
 				ps = connection.prepareStatement(sql, resultSetType, resultSetConcurrency);
 			}
+			ps.setQueryTimeout(timeout);
 			return ps;
 		}
 	}
@@ -459,7 +482,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @param sqlParams sql parameters
 	 * @throws SQLException if a SQL error occurs
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	protected void retrieveOutputParameters(PreparedStatement ps, Object parameter, List<JdbcSqlParameter> sqlParams) throws SQLException {
 		if (ps instanceof CallableStatement) {
 			CallableStatement cs = (CallableStatement)ps;
@@ -492,6 +515,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 		resultSetType = ResultSet.TYPE_FORWARD_ONLY;
 		resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
 		resultSetHoldability = 0;
+		timeout = 0;
 	}
 
 	//------------------------------------------------------------------------------

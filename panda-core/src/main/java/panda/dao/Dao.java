@@ -812,4 +812,14 @@ public interface Dao {
 	 * @return true if id != null && id != 0
 	 */
 	boolean isValidIdentity(Object id);
+
+	/**
+	 * @return the timeout (seconds)
+	 */
+	int getTimeout();
+
+	/**
+	 * @param timeout the timeout (seconds) to set
+	 */
+	void setTimeout(int timeout);
 }

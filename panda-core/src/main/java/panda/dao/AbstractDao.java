@@ -29,6 +29,8 @@ import panda.lang.Objects;
  */
 public abstract class AbstractDao implements Dao {
 	protected final DaoClient daoClient;
+
+	protected int timeout;
 	
 	public AbstractDao(DaoClient daoClient) {
 		this.daoClient = daoClient;
@@ -48,6 +50,22 @@ public abstract class AbstractDao implements Dao {
 	@Override
 	public DatabaseMeta meta() {
 		return daoClient.getDatabaseMeta();
+	}
+
+	/**
+	 * @return the timeout (seconds)
+	 */
+	@Override
+	public int getTimeout() {
+		return timeout;
+	}
+
+	/**
+	 * @param timeout the timeout (seconds) to set
+	 */
+	@Override
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 	//---------------------------------------------------------------------------------

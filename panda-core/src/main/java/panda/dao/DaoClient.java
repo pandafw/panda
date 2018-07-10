@@ -15,11 +15,13 @@ import panda.lang.Strings;
  * !! thread-safe !!
  */
 public abstract class DaoClient {
-	protected Entities entities;
-	protected String name;
-	protected String prefix;
 	protected Beans beans;
 	protected Castors castors;
+	protected Entities entities;
+
+	protected String name;
+	protected String prefix;
+	protected int timeout;
 
 	public DaoClient() {
 		entities = Entities.i();
@@ -46,6 +48,20 @@ public abstract class DaoClient {
 	 */
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
+	}
+
+	/**
+	 * @return the timeout (seconds)
+	 */
+	public int getTimeout() {
+		return timeout;
+	}
+
+	/**
+	 * @param timeout the timeout (seconds) to set
+	 */
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 	/**
