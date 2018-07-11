@@ -318,11 +318,11 @@ public class MailClient {
 					break;
 				}
 				catch (IOException e) {
-					if (i >= hosts.size() - 1) {
-						throw new EmailException(errmsg(host, port, e.getMessage()));
-					}
 					if (log != null && log.isDebugEnabled()) {
 						log.debug("Failed to connect SMTP server " + host + ":" + port, e);
+					}
+					if (i >= hosts.size() - 1) {
+						throw new EmailException(errmsg(host, port, e.getMessage()));
 					}
 					close(client);
 				}
