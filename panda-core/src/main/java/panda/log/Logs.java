@@ -1,6 +1,5 @@
 package panda.log;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +19,7 @@ import panda.log.impl.ConsoleLog;
 import panda.log.impl.ConsoleLogAdapter;
 
 public final class Logs {
+	public static final String SYSPROP = "panda.logging";
 	public static final String CONFIG = "panda-logging.properties";
 
 	private static class LogConfig {
@@ -74,16 +74,14 @@ public final class Logs {
 	
 	private static void init() {
 		Settings props = new Settings();
-		
-		// load properties
+
+		String file = Systems.getProperty(SYSPROP, CONFIG);
 		try {
-			props.load(CONFIG);
-		}
-		catch (FileNotFoundException e) {
-			// skip
+			// load settings
+			props.load(file);
 		}
 		catch (Throwable e) {
-			LogLog.error("Failed to load log config: " + CONFIG, e);
+			LogLog.error("Failed to load log config: " + file, e);
 		}
 		
 		// create logs
