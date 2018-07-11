@@ -51,6 +51,7 @@ public abstract class BaseWebappTest {
 					String war = path.substring(0, path.length() - xml.length());
 					war = Strings.removeStart(war, "file:");
 					try {
+						System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow", "|{}&");
 						webapp.runner.launch.Main.main(new String[] { 
 								"--port", "9999", 
 								"--path", CONTEXT, 
