@@ -62,7 +62,7 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 		if (Strings.isNotEmpty(tag.getLabel())) {
 			writeLeftRequired();
 
-			write(html(tag.getLabel()));
+			write(phtml(tag.getLabel()));
 
 			if (tag.isReadonly() && "right".equals(tag.getRequiredPosition())) {
 				writeRequired();
