@@ -10,6 +10,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
+import panda.net.URLHelper;
 import panda.net.http.UserAgent;
 import panda.servlet.HttpServlets;
 
@@ -39,6 +40,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeBootstrapPlugins();
 			writeExtras();
 			writePanda();
+			writeStyleSheets();
 		}
 
 		js = tag.isJs();
@@ -258,10 +260,18 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 	
+	private void writeStyleSheets() throws IOException {
+		if (js && Collections.isNotEmpty(tag.getStylesheets())) {
+			for (String css : tag.getStylesheets()) {
+				writeCss(css + vquery());
+			}
+		}
+	}
+	
 	private void writeJscripts() throws IOException {
 		if (js && Collections.isNotEmpty(tag.getJscripts())) {
 			for (String js : tag.getJscripts()) {
-				writeJs(js);
+				writeJs(js + vquery());
 			}
 		}
 	}
@@ -315,27 +325,32 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	
 	protected void writeStaticJs(String jsl, boolean debug) throws IOException {
 		if (js) {
-			writeJs(suri(jsl + (debug ? debug() : "") + ".js", tag.getVersion()));
+			writeJs(suri(jsl + (debug ? debug() : "") + ".js"));
 		}
 	}
 
 	protected void writeStaticCss(String cssl) throws IOException {
 		if (css) {
-			writeCss(suri(cssl + debug() + ".css", tag.getVersion()));
+			writeCss(suri(cssl + debug() + ".css"));
 		}
 	}
-	
+
+	private String vquery() {
+		if (Strings.isEmpty(tag.getVersion())) {
+			return Strings.EMPTY;
+		}
+		
+		return "?v=" + URLHelper.encodeURL(tag.getVersion());
+	}
+
 	private String sbase;
-	protected String suri(String uri, String version) {
+	private String suri(String uri) {
 		if (sbase == null) {
 			sbase = Mvcs.getStaticPath(context, ((Link)tag).getStatics());
 		}
 		
 		StringBuilder s = new StringBuilder();
-		s.append(sbase).append(uri);
-		if (Strings.isNotEmpty(version)) {
-			s.append("?v=").append(version);
-		}
+		s.append(sbase).append(uri).append(vquery());
 
 		return s.toString();
 	}

@@ -223,7 +223,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	
 	protected void writeCss(String css, String cls) throws IOException {
 		write("<link");
-		if (cls != null) {
+		if (Strings.isNotEmpty(cls)) {
 			write(" class=\"");
 			write(cls);
 			write("\"");

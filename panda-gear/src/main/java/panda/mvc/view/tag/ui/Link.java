@@ -33,6 +33,7 @@ import panda.mvc.SiteConstants;
  *    <li>mousewheel</li>
  *    <li>tablesorter</li>
  *    <li>respondjs</li>
+ *    <li>stylesheets</li>
  *    <li>jscripts</li>
  * </ul>
  *
@@ -75,6 +76,7 @@ public class Link extends UIBean {
 	protected boolean mousewheel;
 	protected boolean tablesorter;
 	protected boolean respondjs;
+	protected List<String> stylesheets;
 	protected List<String> jscripts;
 
 	/**
@@ -432,6 +434,20 @@ public class Link extends UIBean {
 	 */
 	public void setRespondjs(boolean respondjs) {
 		this.respondjs = respondjs;
+	}
+
+	/**
+	 * @return the stylesheets
+	 */
+	public List<String> getStylesheets() {
+		return stylesheets;
+	}
+
+	/**
+	 * @param stylesheets the stylesheets to set
+	 */
+	public void setStylesheets(List<String> stylesheets) {
+		this.stylesheets = stylesheets;
 	}
 
 	/**
