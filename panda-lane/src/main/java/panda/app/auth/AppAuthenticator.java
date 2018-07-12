@@ -279,7 +279,10 @@ public class AppAuthenticator extends UserAuthenticator {
 			return u;
 		}
 		catch (Throwable e) {
-			log.warn("Invalid AUTH Cookie " + n + ": " + ticket, e);
+			log.warn("Invalid AUTH Cookie " + n + ": " + ticket + " - " + e.getMessage());
+			if (log.isDebugEnabled()) {
+				log.debug("Failed to decrypt AUTH Cookie", e);
+			}
 		}
 		return null;
 	}
@@ -320,7 +323,10 @@ public class AppAuthenticator extends UserAuthenticator {
 			return u;
 		}
 		catch (Exception e) {
-			log.warn("Invalid AUTH Parameter " + paramName + ": " + ticket, e);
+			log.warn("Invalid AUTH Parameter " + paramName + ": " + ticket + " - " + e.getMessage());
+			if (log.isDebugEnabled()) {
+				log.debug("Failed to decrypt AUTH parameter", e);
+			}
 		}
 		return null;
 	}
