@@ -11,8 +11,8 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.io.FileNames;
 import panda.io.Files;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Chars;
 import panda.lang.Charsets;
@@ -261,7 +261,7 @@ public class HttpServletResponser {
 
 		if (Strings.isEmpty(contentType)
 				&& Strings.isNotEmpty(fileName)) {
-			contentType = FileNames.getContentTypeFor(fileName);
+			contentType = MimeTypes.getMimeType(fileName);
 		}
 
 		if (Strings.isNotEmpty(contentType)) {

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import panda.io.FileNames;
+import panda.io.MimeTypes;
 
 /**
  */
@@ -72,7 +72,7 @@ public class NullFileItem implements FileItem {
 	 */
 	@Override
 	public String getContentType() {
-		return FileNames.getContentTypeFor(name);
+		return MimeTypes.getMimeType(name);
 	}
 
 	/**

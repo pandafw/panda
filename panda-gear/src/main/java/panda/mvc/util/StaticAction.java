@@ -9,7 +9,7 @@ import java.net.URL;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.Panda;
-import panda.io.FileNames;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
@@ -94,13 +94,11 @@ public class StaticAction extends ActionSupport {
 		}
 
 		// set the content-type header
-		String contentType = FileNames.getContentTypeFor(path);
-		if (Strings.isNotEmpty(contentType)) {
-			if (Strings.isNotEmpty(charset)) {
-				contentType += "; charset=" + charset;
-			}
-			getResponse().setContentType(contentType);
+		String contentType = MimeTypes.getMimeType(path);
+		if (Strings.isNotEmpty(charset)) {
+			contentType += "; charset=" + charset;
 		}
+		getResponse().setContentType(contentType);
 
 		if (cache) {
 			getResponse().setHeader(HttpHeader.LAST_MODIFIED, HttpDates.format(now));

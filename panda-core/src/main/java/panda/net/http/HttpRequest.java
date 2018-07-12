@@ -20,7 +20,6 @@ import java.util.Map.Entry;
 
 import panda.Panda;
 import panda.codec.binary.Base64;
-import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.io.stream.WriterOutputStream;
@@ -464,7 +463,7 @@ public class HttpRequest {
 
 					dos.writeBytes(HttpHeader.CONTENT_TYPE);
 					dos.writeBytes(": ");
-					dos.writeBytes(FileNames.getContentTypeFor(f.getName(), MimeTypes.APP_STREAM));
+					dos.writeBytes(MimeTypes.getMimeType(f));
 
 					dos.writeBytes(Strings.CRLF);
 					dos.writeBytes(Strings.CRLF);

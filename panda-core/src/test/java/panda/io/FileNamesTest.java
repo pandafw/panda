@@ -965,17 +965,6 @@ public class FileNamesTest extends FileBasedTestCase {
 	}
 
 	/**
-	 * test method: GetContentTypeForName
-	 */
-	public void testGetContentTypeForName() {
-		assertEquals(MimeTypes.IMG_GIF, FileNames.getContentTypeFor("/a/s1.gif"));
-		assertEquals(MimeTypes.IMG_PNG, FileNames.getContentTypeFor("a.png"));
-		assertEquals(MimeTypes.IMG_JPEG, FileNames.getContentTypeFor("a.jpg"));
-		assertEquals(null, FileNames.getContentTypeFor("a.js"));
-		assertEquals(null, FileNames.getContentTypeFor("a.css"));
-	}
-
-	/**
 	 * test method: isAbsolutePath
 	 */
 	public void testIsAbsolutePath() {

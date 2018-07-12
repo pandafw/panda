@@ -133,7 +133,7 @@ public class DataExportAction extends AbstractAction {
 			HttpServletResponser hss = new HttpServletResponser(getRequest(), getResponse());
 
 			hss.setCharset(Charsets.UTF_8);
-			hss.setContentType(MimeTypes.getMimeType(arg.format));
+			hss.setContentType(MimeTypes.getMimeType('.' + arg.format));
 			hss.setFileName(arg.target + '-' + DateTimes.datetimeLogFormat().format(DateTimes.getDate()) + '.' + Strings.lowerCase(arg.format));
 			hss.writeHeader();
 			

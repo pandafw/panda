@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import panda.bind.json.Jsons;
-import panda.io.FileNames;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 
 public class MediaFile {
@@ -24,7 +24,7 @@ public class MediaFile {
 		
 		mf.name = file.getName();
 		mf.bits = Streams.toByteArray(file);
-		mf.type = FileNames.getContentTypeFor(file.getName());
+		mf.type = MimeTypes.getMimeType(file.getName());
 		
 		return mf;
 	}

@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import panda.codec.binary.Base64;
-import panda.io.FileNames;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpResponse;
@@ -41,7 +41,7 @@ public class MediaTest extends AbstractWordpressTest {
 		file.name = "test.png";
 		byte[] bin = Streams.toByteArray(getClass().getResourceAsStream("test.png"));
 		file.bits = bin;
-		file.type = FileNames.getContentTypeFor("test.png");
+		file.type = MimeTypes.getMimeType("test.png");
 		file.overwrite = false;
 
 		MediaObject r = WP.uploadFile(file);

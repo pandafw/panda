@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import panda.io.FileNames;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 
 /**
@@ -69,7 +69,7 @@ public class ProxyFileItem implements FileItem {
 	 */
 	@Override
 	public String getContentType() {
-		return contentType == null ? FileNames.getContentTypeFor(name) : contentType;
+		return contentType == null ? MimeTypes.getMimeType(name) : contentType;
 	}
 
 	/**

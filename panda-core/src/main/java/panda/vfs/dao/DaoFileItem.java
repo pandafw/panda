@@ -9,7 +9,7 @@ import java.util.Date;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Table;
-import panda.io.FileNames;
+import panda.io.MimeTypes;
 import panda.lang.Objects;
 import panda.vfs.FileItem;
 
@@ -148,7 +148,7 @@ public class DaoFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public String getContentType() {
-		return FileNames.getContentTypeFor(name);
+		return MimeTypes.getMimeType(name);
 	}
 
 	/**

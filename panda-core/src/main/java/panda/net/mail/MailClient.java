@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 
 import panda.codec.binary.Base64;
 import panda.codec.binary.Base64OutputStream;
-import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.io.stream.StringBuilderWriter;
@@ -547,7 +546,7 @@ public class MailClient {
 		}
 		
 		for (EmailAttachment ea : email.getAttachments()) {
-			final String mimeType = FileNames.getContentTypeFor(ea.getName());
+			final String mimeType = MimeTypes.getMimeType(ea.getName());
 			
 			out.write("--");
 			out.write(boundary);

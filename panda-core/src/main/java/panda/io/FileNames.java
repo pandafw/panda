@@ -2,7 +2,6 @@ package panda.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
@@ -1963,32 +1962,6 @@ public abstract class FileNames {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Gets the MIME type for the specified file name.
-	 * If the MIME type is not found, the [def] will be returned.
-	 * 
-	 * @param filename the specified file name
-	 * @param def the default type
-	 * @return a String indicating the MIME type for the specified file name.
-	 */
-	public static String getContentTypeFor(String filename, String def) {
-		if (Strings.isEmpty(filename)) {
-			return def == null ? filename : def;
-		}
-		String t = URLConnection.getFileNameMap().getContentTypeFor(filename);
-		return Strings.isEmpty(t) ? def : t;
-	}
-
-	/**
-	 * Gets the MIME type for the specified file name.
-	 * 
-	 * @param filename the specified file name
-	 * @return a String indicating the MIME type for the specified file name.
-	 */
-	public static String getContentTypeFor(String filename) {
-		return getContentTypeFor(filename, null);
 	}
 
 	public static boolean isAbsolutePath(String path) {

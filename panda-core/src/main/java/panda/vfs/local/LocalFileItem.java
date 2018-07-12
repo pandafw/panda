@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 
-import panda.io.FileNames;
 import panda.io.Files;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Objects;
 import panda.vfs.FileItem;
@@ -79,7 +79,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public String getContentType() {
-		return FileNames.getContentTypeFor(getName());
+		return MimeTypes.getMimeType(getName());
 	}
 
 	/**
