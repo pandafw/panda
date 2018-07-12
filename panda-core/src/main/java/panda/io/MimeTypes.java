@@ -1,13 +1,17 @@
 package panda.io;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 import panda.lang.Strings;
+import panda.lang.Systems;
+import panda.log.Logs;
 
 
 
 public class MimeTypes {
+	public static final String SYSPROP = "panda.mimetypes";
+	public static final String CONFIG = MimeTypes.class.getPackage().getName().replace('.', '/') + "/mimetypes.properties";
+
 	public static final String MULTIPART_PREFIX = "multipart/";
 	
 	/**
@@ -36,41 +40,48 @@ public class MimeTypes {
 
 	public static final String TEXT_CSS = "text/css";
 	public static final String TEXT_CSV = "text/comma-separated-values";
+	public static final String TEXT_TSV = "text/tab-separated-values";
 	public static final String TEXT_JAVASCRIPT = "text/javascript";
 	public static final String TEXT_HTML = "text/html";
 	public static final String TEXT_PLAIN = "text/plain";
-	public static final String TEXT_TSV = "text/tab-separated-values";
 	public static final String TEXT_XML = "text/xml";
 	
 	/** not standard */
 	public static final String TEXT_JSON = "text/json";
 
-	
-	private static final Map<String, String> aliases = new HashMap<String, String>();
+	/** mime type mapping */
+	private static Settings mimetypes;
 
 	static {
-		aliases.put("text", TEXT_PLAIN);
-		aliases.put("xml", TEXT_XML);
-		aliases.put("html", TEXT_HTML);
-		aliases.put("htm", TEXT_HTML);
-		aliases.put("stream", APP_STREAM);
-		aliases.put("js", TEXT_JAVASCRIPT);
-		aliases.put("json", APP_JSON);
-		aliases.put("jpg", IMG_JPEG);
-		aliases.put("jpeg", IMG_JPEG);
-		aliases.put("png", IMG_PNG);
-		aliases.put("webp", IMG_WEBP);
-		aliases.put("csv", TEXT_CSV);
-		aliases.put("tsv", TEXT_TSV);
-		aliases.put("xls", APP_XLS);
-		aliases.put("xlsx", APP_XLSX);
+		loadMimeTypes();
+	}
+
+	private static void loadMimeTypes() {
+		mimetypes = new Settings();
+
+		String file = Systems.getProperty(SYSPROP, CONFIG);
+		try {
+			// load settings
+			mimetypes.load(file);
+		}
+		catch (Throwable e) {
+			Logs.getLog(MimeTypes.class).warn("Failed to load mime types: " + file, e);
+		}
+	}
+	
+	/**
+	 * @param filename file name
+	 * @return mime type by file extension
+	 */
+	public static String getMimeType(String filename) {
+		return Strings.defaultString(mimetypes.get(Strings.lowerCase(FileNames.getExtension(filename))), APP_STREAM);
 	}
 
 	/**
-	 * @param alias alias
-	 * @return mime type from alias
+	 * @param file file
+	 * @return mime type by file extension
 	 */
-	public static String getMimeType(String alias) {
-		return Strings.defaultString(aliases.get(Strings.lowerCase(alias)), alias);
+	public static String getMimeType(File file) {
+		return Strings.defaultString(mimetypes.get(Strings.lowerCase(FileNames.getExtension(file))), APP_STREAM);
 	}
 }
