@@ -907,33 +907,39 @@ tbody.p-lv-tbody > tr > td:first-child {
 	                                not supported by any browser */
 }
 
-.p-totop {
-	border-radius: 23px;
-	background-color: #ddd;
-	color: #aaa;
+.p-corner {
+	border: solid 1px #eee;
+	border-radius: 20px;
+	color: #bbb;
 	cursor: pointer;
 	position: fixed;
 	text-align: center;
-	opacity: 0.3;
-	padding: 10px;
-	width: 46px;
-	height: 46px;
+	width: 40px;
+	height: 40px;
 }
-.p-totop:hover {
-	background-color: #f0f8ff;
-	color: #6495ed;
-	opacity: 1;
+.p-corner:hover {
+	background-color: #4c87bb;
+	color: #fff;
 }
-.p-totop > * {
-	font-size: 22px;
+.p-corner > * {
+	font-size: 20px;
+	line-height: 40px;
 }
-.p-totop-lb {
+.p-corner-tl {
+	top: 5px;
 	left: 5px;
-	bottom: 5px;
 }
-.p-totop-rb {
+.p-corner-tr {
+	top: 5px;
 	right: 5px;
+}
+.p-corner-bl {
 	bottom: 5px;
+	left: 5px;
+}
+.p-corner-br {
+	bottom: 5px;
+	right: 5px;
 }
 
 .p-trigger {
