@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import panda.app.auth.AppAuthenticator;
 import panda.app.auth.IUser;
 import panda.app.constant.RES;
+import panda.app.constant.SET;
 import panda.app.constant.VAL;
 import panda.app.entity.ICreate;
 import panda.app.entity.IStatus;
@@ -136,6 +137,13 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 */
 	@Override
 	public boolean isDebugEnabled() {
+		String dbg = settings.getProperty(SET.APP_DEBUG);
+		if ("true".equalsIgnoreCase(dbg)) {
+			return true;
+		}
+		if ("false".equalsIgnoreCase(dbg)) {
+			return false;
+		}
 		return isLoopbackIP() || isSuperUser();
 	}
 

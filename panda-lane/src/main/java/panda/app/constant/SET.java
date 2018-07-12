@@ -7,6 +7,11 @@ import panda.mvc.SiteConstants;
  */
 public interface SET extends SiteConstants {
 	//--------------------------------------------------------
+	// debug
+	//
+	public static final String APP_DEBUG = "app.debug";
+
+	//--------------------------------------------------------
 	// project/app version
 	//
 	public static final String APP_VERSION = "app.version";
