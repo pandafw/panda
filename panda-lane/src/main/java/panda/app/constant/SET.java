@@ -1,16 +1,11 @@
 package panda.app.constant;
 
-import panda.mvc.SiteConstants;
+import panda.mvc.SetConstants;
 
 /**
  * Settings Constants
  */
-public interface SET extends SiteConstants {
-	//--------------------------------------------------------
-	// debug
-	//
-	public static final String APP_DEBUG = "app.debug";
-
+public interface SET extends SetConstants {
 	//--------------------------------------------------------
 	// project/app version
 	//

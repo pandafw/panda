@@ -162,7 +162,7 @@ public abstract class Mvcs {
 	public static String getStaticPath(ActionContext ac, String sp) {
 		if (Strings.isEmpty(sp)) {
 			Settings ss = ac.getSettings();
-			if (ss.getPropertyAsBoolean(SiteConstants.SITE_CDN)) {
+			if (ss.getPropertyAsBoolean(SetConstants.LINK_CDN)) {
 				sp = PANDA_CDN;
 			}
 		}

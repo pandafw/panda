@@ -6,7 +6,7 @@ import java.util.Locale;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.mvc.SiteConstants;
+import panda.mvc.SetConstants;
 
 
 /**
@@ -120,10 +120,10 @@ public class Link extends UIBean {
 		}
 		
 		if (cdn == null) {
-			cdn = settings.getPropertyAsBoolean(SiteConstants.SITE_CDN);
+			cdn = settings.getPropertyAsBoolean(SetConstants.LINK_CDN);
 		}
 		if (debug == null) {
-			debug = settings.getPropertyAsBoolean(SiteConstants.SITE_DEBUG);
+			debug = settings.getPropertyAsBoolean(SetConstants.APP_DEBUG);
 		}
 	}
 

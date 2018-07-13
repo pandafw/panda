@@ -26,6 +26,7 @@ import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.lang.time.DateTimes;
+import panda.mvc.MvcConstants;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
 import panda.mvc.bind.adapter.SorterAdapter;
@@ -55,6 +56,9 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	@IocInject
 	protected AppAuthenticator authenticator;
 
+	@IocInject(value=MvcConstants.APP_DEBUG, required=false)
+	protected Boolean appDebug;
+	
 	//--------------------------------------------------------------------------	
 	/**
 	 * hasTemplate
@@ -137,14 +141,19 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 */
 	@Override
 	public boolean isDebugEnabled() {
-		String dbg = settings.getProperty(SET.APP_DEBUG);
-		if ("true".equalsIgnoreCase(dbg)) {
-			return true;
+		if (appDebug == null) {
+			String dbg = settings.getProperty(SET.APP_DEBUG);
+			if ("true".equalsIgnoreCase(dbg)) {
+				appDebug = true;
+			}
+			else if ("false".equalsIgnoreCase(dbg)) {
+				appDebug = false;
+			}
+			else {
+				appDebug = isLoopbackIP() || isSuperUser();
+			}
 		}
-		if ("false".equalsIgnoreCase(dbg)) {
-			return false;
-		}
-		return isLoopbackIP() || isSuperUser();
+		return appDebug;
 	}
 
 	/**

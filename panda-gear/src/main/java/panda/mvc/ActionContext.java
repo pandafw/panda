@@ -68,10 +68,13 @@ public class ActionContext {
 	private FilePool filePool;
 	private TextProvider text;
 	private StateProvider state;
-
 	private ParamAlert paramAlert;
 	private ActionAlert actionAlert;
 	
+	//--------------------------
+	// statics path
+	//
+	private String statics;
 
 	/**
 	 * Constructor
@@ -496,6 +499,16 @@ public class ActionContext {
 		return servlet.getContextPath();
 	}
 
+	/**
+	 * @return the static base path
+	 */
+	public String getStatics() {
+		if (statics == null) {
+			statics = Mvcs.getStaticPath(this, null);
+		}
+		return statics;
+	}
+	
 	//----------------------------------------------------
 	// top stack
 	//
