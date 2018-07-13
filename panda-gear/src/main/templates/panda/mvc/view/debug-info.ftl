@@ -10,6 +10,7 @@
 			word-break: break-all;
 		}
 	</style>
+
 	<div class="panel panel-success">
 		<div class="panel-heading">REQUEST HTTP HEADER:</div>
 		<table class="table table-striped">
@@ -19,6 +20,21 @@
 		<tbody>
 <#list reqHeader?keys as k> 
 			<tr><td>${k?html}</td><td><#list reqHeader[k] as v>${v?html}<br/></#list></td></tr>
+</#list>
+		</tbody>
+		</table>
+	</div>
+	<br/>
+
+	<div class="panel panel-success">
+		<div class="panel-heading">REQUEST PARAMETERS:</div>
+		<table class="table table-striped">
+		<thead>
+			<tr><th width="200">Name</th><th>Values</th></tr>
+		</thead>
+		<tbody>
+<#list reqParams?keys as k>
+			<tr><td>${k?html}</td><td>${reqParams[k].toString()?html}</td></tr>
 </#list>
 		</tbody>
 		</table>
@@ -114,21 +130,6 @@
 	<br/>
 
 	<div class="panel panel-success">
-		<div class="panel-heading">REQUEST PARAMETERS:</div>
-		<table class="table table-striped">
-		<thead>
-			<tr><th width="200">Name</th><th>Values</th></tr>
-		</thead>
-		<tbody>
-<#list reqParams?keys as k>
-			<tr><td>${k?html}</td><td>${reqParams[k].toString()?html}</td></tr>
-</#list>
-		</tbody>
-		</table>
-	</div>
-	<br/>
-
-	<div class="panel panel-success">
 		<div class="panel-heading">REQUEST ATTRIBUTES:</div>
 		<table class="table table-striped">
 		<thead>
@@ -140,7 +141,7 @@
 		<tbody>
 <#list req?keys as k>
 			<tr><td>${k?html}</td>
-				<td><#if req[k]??>${req[k].class.name?html}<br/>
+				<td><#if req[k]??><i>${req[k].class.name?html}</i><br/>
 					${assist.escapePhtml(req[k].toString())}
 				</#if></td>
 			</tr>
@@ -162,7 +163,7 @@
 		<tbody>
 <#list ses?keys as k>
 			<tr><td>${k?html}</td>
-				<td><#if ses[k]??>${ses[k].class.name?html}<br/>
+				<td><#if ses[k]??><i>${ses[k].class.name?html}</i><br/>
 					${assist.escapePhtml(ses[k].toString())}
 				</#if></td>
 			</tr>
@@ -190,7 +191,7 @@
 		<tbody>
 <#list app?keys as k>
 			<tr><td>${k?html}</td>
-				<td><#if app[k]??>${app[k].class.name?html}<br/></#if>
+				<td><#if app[k]??><i>${app[k].class.name?html}</i><br/></#if>
 					${assist.escapePhtml(app[k].toString())}
 				</td>
 			</tr>
