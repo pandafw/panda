@@ -16,11 +16,27 @@ import panda.mvc.ActionContext;
  * serialize json object to output
  */
 @IocBean(singleton=false)
-public class JsonView extends AbstractBindView {
+public class JsonView extends BindView {
 	private static final Log log = Logs.getLog(JsonView.class);
 
+	protected String jsonp;
+	
 	public JsonView() {
 		setContentType(MimeTypes.TEXT_JAVASCRIPT);
+	}
+
+	/**
+	 * @return the jsonp
+	 */
+	public String getJsonp() {
+		return jsonp;
+	}
+
+	/**
+	 * @param jsonp the jsonp to set
+	 */
+	public void setJsonp(String jsonp) {
+		this.jsonp = jsonp;
 	}
 
 	/**
@@ -32,7 +48,10 @@ public class JsonView extends AbstractBindView {
 	 */
 	@Override
 	protected void writeResult(ActionContext ac, PrintWriter writer, Object result) throws IOException {
-		String jsonp = ac.getRequest().getParameter("jsonp");
+		if (Strings.isEmpty(jsonp)) {
+			jsonp = ac.getRequest().getParameter("jsonp");
+		}
+
 		if (Strings.isNotEmpty(jsonp)) {
 			writer.write(jsonp);
 			writer.write('(');

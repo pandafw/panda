@@ -31,7 +31,9 @@ import panda.mvc.view.JspView;
 import panda.mvc.view.RedirectView;
 import panda.mvc.view.ServletErrorView;
 import panda.mvc.view.SitemeshFreemarkerView;
+import panda.mvc.view.SitemeshJsonView;
 import panda.mvc.view.SitemeshJspView;
+import panda.mvc.view.SitemeshXmlView;
 import panda.mvc.view.TsvView;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XlsView;
@@ -64,8 +66,11 @@ public class DefaultViewCreator implements ViewCreator {
 		addView(View.TSV, TsvView.class);
 		addView(View.XLS, XlsView.class);
 		addView(View.XLSX, XlsxView.class);
+
 		addView(View.JSON, JsonView.class);
 		addView(View.XML, XmlView.class);
+		addView(View.SJSON, SitemeshJsonView.class);
+		addView(View.SXML, SitemeshXmlView.class);
 		
 		addView(View.JSP, JspView.class);
 		addView(View.SJSP, SitemeshJspView.class);

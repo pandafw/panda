@@ -16,7 +16,7 @@ import panda.mvc.ActionContext;
  * serialize XML object to output
  */
 @IocBean(singleton=false)
-public class XmlView extends AbstractBindView {
+public class XmlView extends BindView {
 	private static final Log log = Logs.getLog(XmlView.class);
 
 	private String rootName;

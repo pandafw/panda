@@ -73,7 +73,9 @@ import panda.mvc.view.JspView;
 import panda.mvc.view.RedirectView;
 import panda.mvc.view.ServletErrorView;
 import panda.mvc.view.SitemeshFreemarkerView;
+import panda.mvc.view.SitemeshJsonView;
 import panda.mvc.view.SitemeshJspView;
+import panda.mvc.view.SitemeshXmlView;
 import panda.mvc.view.TsvView;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XlsView;
@@ -258,18 +260,20 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			CsvView.class,
 			ForwardView.class,
 			FreemarkerView.class,
+			SitemeshFreemarkerView.class,
 			HttpStatusView.class,
 			JsonView.class,
+			SitemeshJsonView.class,
 			JspView.class,
+			SitemeshJspView.class,
 			DataView.class,
 			RedirectView.class,
 			ServletErrorView.class,
-			SitemeshFreemarkerView.class,
-			SitemeshJspView.class,
 			TsvView.class,
 			XlsView.class,
 			XlsxView.class,
 			XmlView.class,
+			SitemeshXmlView.class,
 			VoidView.class,
 			
 			// View Theme

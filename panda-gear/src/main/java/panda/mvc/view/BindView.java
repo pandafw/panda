@@ -33,7 +33,7 @@ import panda.mvc.bind.adapter.SorterAdapter;
 import panda.vfs.FileItem;
 
 
-public abstract class AbstractBindView extends DataView {
+public abstract class BindView extends DataView {
 	protected static final String SEPERATOR = ", ";
 
 	protected static final String DATE_FORMAT_LONG = "long";
@@ -48,18 +48,20 @@ public abstract class AbstractBindView extends DataView {
 
 	protected String cycleDetect = CYCLE_DETECT_NOPROP;
 
-	protected Boolean shortName = false;
+	protected boolean shortName = false;
 	
-	protected Boolean ignoreTransient = true;
+	protected boolean ignoreTransient = true;
 
-	protected Boolean prettyPrint = false;
+	protected boolean prettyPrint = false;
+
+	protected boolean sitemesh = false;
 
 	protected String fields;
 	
 	/**
 	 * Constructor.
 	 */
-	public AbstractBindView() {
+	public BindView() {
 		setBom(true);
 	}
 
@@ -80,14 +82,14 @@ public abstract class AbstractBindView extends DataView {
 	/**
 	 * @return the ignoreTransient
 	 */
-	public Boolean getIgnoreTransient() {
+	public boolean isIgnoreTransient() {
 		return ignoreTransient;
 	}
 
 	/**
 	 * @param ignoreTransient the ignoreTransient to set
 	 */
-	public void setIgnoreTransient(Boolean ignoreTransient) {
+	public void setIgnoreTransient(boolean ignoreTransient) {
 		this.ignoreTransient = ignoreTransient;
 	}
 
@@ -108,29 +110,43 @@ public abstract class AbstractBindView extends DataView {
 	/**
 	 * @return the shortName
 	 */
-	public Boolean getShortName() {
+	public boolean isShortName() {
 		return shortName;
 	}
 
 	/**
 	 * @param shortName the shortName to set
 	 */
-	public void setShortName(Boolean shortName) {
+	public void setShortName(boolean shortName) {
 		this.shortName = shortName;
 	}
 
 	/**
 	 * @return the prettyPrint
 	 */
-	public Boolean getPrettyPrint() {
+	public boolean isPrettyPrint() {
 		return prettyPrint;
 	}
 
 	/**
 	 * @param prettyPrint the prettyPrint to set
 	 */
-	public void setPrettyPrint(Boolean prettyPrint) {
+	public void setPrettyPrint(boolean prettyPrint) {
 		this.prettyPrint = prettyPrint;
+	}
+
+	/**
+	 * @return the sitemesh
+	 */
+	public boolean isSitemesh() {
+		return sitemesh;
+	}
+
+	/**
+	 * @param sitemesh the sitemesh to set
+	 */
+	public void setSitemesh(boolean sitemesh) {
+		this.sitemesh = sitemesh;
 	}
 
 	/**
@@ -147,31 +163,36 @@ public abstract class AbstractBindView extends DataView {
 		this.fields = fields;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
 	public void render(ActionContext ac) {
-		Object o = ac.getError();
-		if (o == null || !(o instanceof Throwable)) {
-			o = ac.getRequest().getAttribute("exception");
-		}
-
-		if (o != null && o instanceof Throwable) {
-			Throwable e = (Throwable)o;
-
-			Map<String, Object> result = new LinkedHashMap<String, Object>();
-			result.put("success", false);
-
-			Map<String, Object> em = new HashMap<String, Object>();
-			em.put("message", e.getMessage());
-			if (ac.getAssist().isDebugEnabled()) {
-				em.put("stackTrace", Exceptions.getStackTrace(e));
-			}
-			
-			result.put("exception", em);
-
-			writeResult(ac, result);
+		Throwable ex = ac.getError();
+		if (ex != null) {
+			writeError(ac, ex);
 			return;
 		}
 
+		Object result = sitemesh ? sitemeshResult(ac)  : ac.getResult();
+
+		writeResult(ac, result);
+	}
+
+	protected void writeError(ActionContext ac, Throwable ex) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		result.put("success", false);
+
+		Map<String, Object> em = new HashMap<String, Object>();
+		em.put("message", ex.getMessage());
+		if (ac.getAssist().isDebugEnabled()) {
+			em.put("stackTrace", Exceptions.getStackTrace(ex));
+		}
+		
+		result.put("exception", em);
+
+		writeResult(ac, result);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Object sitemeshResult(ActionContext ac) {
 		Boolean success = true;
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		Map<String, Object> alerts = new LinkedHashMap<String, Object>();
@@ -212,10 +233,9 @@ public abstract class AbstractBindView extends DataView {
 				}
 			}
 		}
-
-		writeResult(ac, result);
+		return result;
 	}
-
+	
 	/**
 	 * write result
 	 * @param ac action context

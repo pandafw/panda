@@ -116,6 +116,14 @@ public class Views {
 	public static View xml(ActionContext ac) {
 		return createView(ac, View.XML);
 	}
+
+	public static View sjson(ActionContext ac) {
+		return createView(ac, View.SJSON);
+	}
+
+	public static View sxml(ActionContext ac) {
+		return createView(ac, View.SXML);
+	}
 	
 	public static View csv(ActionContext ac) {
 		return createView(ac, View.CSV);
