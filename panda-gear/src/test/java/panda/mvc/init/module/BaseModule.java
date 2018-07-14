@@ -5,7 +5,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 
 @At("/base")
-@To(View.JSON)
+@To(View.SJSON)
 public class BaseModule {
 
 	private String nameX;

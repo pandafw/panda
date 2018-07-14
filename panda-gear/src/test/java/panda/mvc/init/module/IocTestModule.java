@@ -9,7 +9,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 
 @At("/ioc")
-@To(value=View.RAW, fatal=View.JSON)
+@To(value=View.RAW, fatal=View.SJSON)
 public class IocTestModule {
 
 	@IocInject 

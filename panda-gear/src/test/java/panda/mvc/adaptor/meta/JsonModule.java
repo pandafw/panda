@@ -10,7 +10,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 
 @At("/json")
-@To(all=View.JSON)
+@To(all=View.SJSON)
 public class JsonModule {
 
 	@At("hello")

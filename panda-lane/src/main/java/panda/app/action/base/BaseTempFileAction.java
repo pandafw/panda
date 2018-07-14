@@ -102,7 +102,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	@To(all=View.JSON)
+	@To(all=View.SJSON)
 	public FileItem upload(@Param("file") FileItem file) throws Exception {
 		return file;
 	}
@@ -115,7 +115,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	@To(all=View.JSON)
+	@To(all=View.SJSON)
 	public FileItem[] uploads(@Param("files") FileItem[] files) throws Exception {
 		return files;
 	}
@@ -132,7 +132,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	@To(all=View.JSON)
+	@To(all=View.SJSON)
 	public FileItem iupload(@Param("file") FileItem file, @Param("width") int width, @Param("height") int height, @Param("scale") int scale) throws Exception {
 		if (file != null && file.isExists()) {
 			if (width > 0 && height > 0) {

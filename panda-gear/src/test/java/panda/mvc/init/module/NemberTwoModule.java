@@ -16,7 +16,7 @@ public class NemberTwoModule {
 	}
 
 	@At
-	@To(value=View.RAW, fatal=View.JSON)
+	@To(value=View.RAW, fatal=View.SJSON)
 	public boolean login(@Param("username") String userName, @Param("password") String password,
 			@Param("authCode") Long authCode) {
 		return !(userName == null || password == null || authCode == null);

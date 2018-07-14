@@ -9,7 +9,7 @@ import panda.mvc.annotation.To;
 class NotPublicClass {
 
 	@At("/here")
-	@To(View.JSON)
+	@To(View.SJSON)
 	public String here() {
 		return "asfdasdf";
 	}

@@ -6,7 +6,7 @@ import panda.mvc.annotation.To;
 import panda.net.http.HttpMethod;
 
 @At
-@To(value=View.RAW, fatal=View.JSON)
+@To(value=View.RAW, fatal=View.SJSON)
 public class RestModule {
 
 	@At(value="/abc", method=HttpMethod.GET)

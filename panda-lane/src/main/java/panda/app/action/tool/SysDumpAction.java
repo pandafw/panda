@@ -19,12 +19,12 @@ public class SysDumpAction extends AbstractAction {
 	}
 
 	@At
-	@To(value=View.JSON, error=View.JSON)
+	@To(value=View.SJSON, error=View.SJSON)
 	public void json(@Param Map m) {
 	}
 
 	@At
-	@To(value=View.XML, error=View.XML)
+	@To(value=View.SXML, error=View.SXML)
 	public void xml(@Param Map m) {
 	}
 }

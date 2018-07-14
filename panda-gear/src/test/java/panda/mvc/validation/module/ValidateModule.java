@@ -12,7 +12,7 @@ import panda.mvc.ioc.provider.ComboIocProvider;
 import panda.mvc.validator.Validators;
 
 @At
-@To(value=View.RAW, error=View.JSON, fatal=View.JSON)
+@To(value=View.RAW, error=View.SJSON, fatal=View.SJSON)
 @IocBy(type=ComboIocProvider.class, args={ "*json","panda/mvc/validation/module/test.js", "*default" })
 @Modules(scan = true)
 public class ValidateModule {

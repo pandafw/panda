@@ -76,7 +76,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 
 	@At
-	@To(View.JSON)
+	@To(View.SJSON)
 	@Override
 	public Object stop() {
 		GenericSyncWorkAction aswa = getSelf();
@@ -99,7 +99,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 	
 	@At
-	@To(View.JSON)
+	@To(View.SJSON)
 	@Override
 	public Object status() {
 		GenericSyncWorkAction aswa = getSelf();

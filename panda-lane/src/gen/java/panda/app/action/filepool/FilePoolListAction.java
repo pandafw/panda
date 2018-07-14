@@ -55,7 +55,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * @return result or view
 	 */
 	@At
-	@To(all=View.JSON)
+	@To(all=View.SJSON)
 	public Object list_json(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -66,7 +66,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * @return result or view
 	 */
 	@At
-	@To(all=View.XML)
+	@To(all=View.SXML)
 	public Object list_xml(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
 	}
