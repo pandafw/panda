@@ -77,7 +77,7 @@ public class ValidateProcessor extends AbstractProcessor {
 	}
 
 	protected void doErrorView(ActionContext ac) {
-		View view = Views.createView(ac, ac.getConfig().getErrorView());
+		View view = Views.createErrorView(ac);
 		if (view == null) {
 			StringBuilder sb = new StringBuilder();
 			

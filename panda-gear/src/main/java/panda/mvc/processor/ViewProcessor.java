@@ -11,7 +11,7 @@ public class ViewProcessor extends AbstractProcessor {
 	public void process(ActionContext ac) {
 		View view = ac.getView();
 		if (view == null) {
-			view = Views.createView(ac, ac.getConfig().getOkView());
+			view = Views.createDefaultView(ac);
 		}
 
 		if (view != null) {

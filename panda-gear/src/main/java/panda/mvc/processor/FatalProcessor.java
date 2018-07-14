@@ -35,8 +35,8 @@ public class FatalProcessor extends AbstractProcessor {
 				elog.error(s, e);
 			}
 
-			// process error view
-			View view = Views.createView(ac, ac.getConfig().getFatalView());
+			// process fatal view
+			View view = Views.createFatalView(ac);
 			if (view != null) {
 				try {
 					HttpServlets.safeReset(ac.getResponse());

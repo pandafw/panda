@@ -53,6 +53,21 @@ public class Views {
 		throw new IllegalArgumentException("Can not create view '" + viewer + "'");
 	}
 
+	public static View createDefaultView(ActionContext ac) {
+		return createView(ac, ac.getConfig().getDefaultView());
+	}
+
+	public static View createErrorView(ActionContext ac) {
+		if (Strings.isEmpty(ac.getConfig().getErrorView())) {
+			return createView(ac, ac.getConfig().getDefaultView());
+		}
+		return createView(ac, ac.getConfig().getErrorView());
+	}
+
+	public static View createFatalView(ActionContext ac) {
+		return createView(ac, ac.getConfig().getFatalView());
+	}
+
 	public static View none(ActionContext ac) {
 		return createView(ac, View.NONE);
 	}

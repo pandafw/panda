@@ -18,19 +18,17 @@ public class AdaptProcessor extends AbstractProcessor {
 	
 	@Override
 	public void process(ActionContext ac) {
-		View view = Views.createView(ac, ac.getConfig().getErrorView());
-		if (view == null) {
-			adapt(ac);
-			doNext(ac);
-			return;
-		}
-		
 		try {
 			adapt(ac);
 		}
 		catch (RuntimeException e) {
 			Throwable c = e.getCause();
 			if (c instanceof FileSizeLimitExceededException) {
+				View view = Views.createErrorView(ac);
+				if (view == null) {
+					throw e;
+				}
+
 				String msg = ac.getText().getText(MULTIPART_FILE_SIZE_EXCEEDED_MSGID, MULTIPART_FILE_SIZE_EXCEEDED_DEFAULT, c);
 				ac.getParamAlert().addError(((FileSizeLimitExceededException)c).getFieldName(), msg);
 				view.render(ac);
@@ -38,6 +36,11 @@ public class AdaptProcessor extends AbstractProcessor {
 			}
 			
 			if (c instanceof SizeLimitExceededException) {
+				View view = Views.createErrorView(ac);
+				if (view == null) {
+					throw e;
+				}
+
 				String msg = ac.getText().getText(MULTIPART_BODY_SIZE_EXCEEDED_MSGID, MULTIPART_BODY_SIZE_EXCEEDED_DEFAULT, c);
 				ac.getActionAlert().addError(msg);
 				view.render(ac);

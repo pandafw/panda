@@ -26,7 +26,7 @@ public class InvokeProcessor extends AbstractProcessor {
 		catch (InvocationTargetException e) {
 			Throwable ex = e.getTargetException();
 			if (ex instanceof ValidateException) {
-				r = Views.createView(ac, ac.getConfig().getErrorView());
+				r = Views.createErrorView(ac);
 				if (r == null) {
 					throw (ValidateException)ex;
 				}
