@@ -55,7 +55,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 	 * @return result or view
 	 */
 	@At
-	@To(all=View.SJSON)
+	@To(View.SJSON)
 	public Object list_json(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -66,7 +66,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 	 * @return result or view
 	 */
 	@At
-	@To(all=View.SXML)
+	@To(View.SXML)
 	public Object list_xml(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
 	}

@@ -202,7 +202,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
-	@To(all=View.S${ui.template?keep_after('_')?upper_case})
+	@To(View.S${ui.template?keep_after('_')?upper_case})
 	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
 		return super.${ui.template}(qr);
 	}

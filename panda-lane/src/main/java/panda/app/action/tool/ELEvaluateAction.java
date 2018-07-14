@@ -20,13 +20,13 @@ public class ELEvaluateAction extends AbstractAction {
 	}
 
 	@At
-	@To(all=View.SJSON)
+	@To(View.SJSON)
 	public Object json(@Param("expr") String expr) {
 		return exec(expr);
 	}
 	
 	@At
-	@To(all=View.SXML)
+	@To(View.SXML)
 	public Object xml(@Param("expr") String expr) {
 		return exec(expr);
 	}

@@ -6,7 +6,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 
 @At
-@To(all=View.SJSON)
+@To(View.SJSON)
 public class PingAction extends AbstractAction {
 	@At
 	public String ping() {

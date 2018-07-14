@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface To {
 
-	/** success view */
+	/** default view */
 	public String value() default "";
 
 	/** validation error view */
@@ -19,7 +19,4 @@ public @interface To {
 	
 	/** fatal view */
 	public String fatal() default "";
-	
-	/** all view */
-	public String all() default "";
 }

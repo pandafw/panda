@@ -66,13 +66,13 @@ public class CommandAction extends AbstractAction {
 	}
 
 	@At
-	@To(all=View.SJSON)
+	@To(View.SJSON)
 	public Object json(@Param("cmd") String cmd, @Param("wait") int wait) {
 		return exec(cmd, wait);
 	}
 	
 	@At
-	@To(all=View.SXML)
+	@To(View.SXML)
 	public Object xml(@Param("cmd") String cmd, @Param("wait") int wait) {
 		return exec(cmd, wait);
 	}
