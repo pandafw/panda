@@ -93,17 +93,18 @@ public class DefaultObjectMaker implements ObjectMaker {
 				return dop;
 			}
 		}
-		catch (IocException e) {
-			throw e;
-		}
 		catch (Throwable e) {
 			if (log.isWarnEnabled()) {
 				log.warn("Error occurred for IocObject: " + iobj);
 			}
 			
-			// 当异常发生，从 context 里移除 ObjectProxy
+			//remove ObjectProxy from context
 			if (iobj.isSingleton() && imak.getName() != null) {
 				imak.getIoc().getContext().remove(iobj.getScope(), imak.getName());
+			}
+			
+			if (e instanceof IocException) {
+				throw (IocException)e;
 			}
 			throw new IocException("Failed to create ioc bean: " + imak.getName(), e);
 		}

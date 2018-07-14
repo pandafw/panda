@@ -201,7 +201,6 @@ public class DefaultIoc implements Ioc, Cloneable {
 						// 根据对象定义，创建对象，maker 会自动的缓存对象到 context 中
 						op = objMaker.make(imk, iobj);
 					}
-					// 处理异常
 					catch (IocException e) {
 						throw e;
 					}
