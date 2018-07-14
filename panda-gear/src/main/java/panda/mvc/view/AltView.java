@@ -62,7 +62,7 @@ public class AltView extends AbstractView {
 		}
 
 		if (acfg != null) {
-			String sv = acfg.getOkView();
+			String sv = acfg.getDefaultView();
 			if (Strings.isNotEmpty(type)) {
 				if ("ok".equals(type)) {
 				}

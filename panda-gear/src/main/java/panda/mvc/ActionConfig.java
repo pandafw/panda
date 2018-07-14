@@ -16,7 +16,7 @@ public class ActionConfig {
 
 	private Class<? extends ParamAdaptor> adaptor;
 
-	private String okView;
+	private String defaultView;
 	private String errorView;
 	private String fatalView;
 
@@ -64,7 +64,7 @@ public class ActionConfig {
 
 		// set defaults
 		adaptor = null == adaptor ? parent.adaptor : adaptor;
-		okView = null == okView ? parent.okView : okView;
+		defaultView = null == defaultView ? parent.defaultView : defaultView;
 		errorView = null == errorView ? parent.errorView : errorView;
 		fatalView = null == fatalView ? parent.fatalView : fatalView;
 		actionType = null == actionType ? parent.actionType : actionType;
@@ -130,12 +130,12 @@ public class ActionConfig {
 		this.chainName = chainName;
 	}
 
-	public String getOkView() {
-		return okView;
+	public String getDefaultView() {
+		return defaultView;
 	}
 
-	public void setOkView(String okView) {
-		this.okView = okView;
+	public void setDefaultView(String defaultView) {
+		this.defaultView = defaultView;
 	}
 
 	public String getErrorView() {
@@ -192,11 +192,8 @@ public class ActionConfig {
 	
 	private String getViewInfo() {
 		StringBuilder sb = new StringBuilder();
-		if (Strings.isNotEmpty(okView)) {
-			if (sb.length() > 0) {
-				sb.append(", ");
-			}
-			sb.append("ok=").append(okView);
+		if (Strings.isNotEmpty(defaultView)) {
+			sb.append(defaultView);
 		}
 		if (Strings.isNotEmpty(errorView)) {
 			if (sb.length() > 0) {

@@ -99,7 +99,7 @@ public class DefaultMvcLoader implements MvcLoader {
 
 	}
 
-	protected ActionMapping evalActionMapping(AbstractMvcConfig mcfg) throws Exception {
+	protected ActionMapping evalActionMapping(AbstractMvcConfig mcfg) {
 		ActionMapping mapping = createActionMapping(mcfg);
 		if (log.isInfoEnabled()) {
 			log.infof("Build " + ActionMapping.class.getName() + " by %s ...", mapping.getClass().getName());
@@ -107,9 +107,9 @@ public class DefaultMvcLoader implements MvcLoader {
 
 		Class<?> mainModule = mcfg.getMainModule();
 		
-		createViewMaker(mcfg);
+		createViewCreator(mcfg);
 
-		ActionChainCreator acc = createChainMaker(mcfg);
+		ActionChainCreator acc = createChainCreator(mcfg);
 
 		// create action info for mail module
 		ActionConfig mainCfg = createActionConfig(mcfg.getIoc(), mainModule);
@@ -125,15 +125,19 @@ public class DefaultMvcLoader implements MvcLoader {
 
 		int atMethods = 0;
 		for (Class<?> action : actions) {
+			// merge with main module
 			ActionConfig clsCfg = createActionConfig(mcfg.getIoc(), action).mergeWith(mainCfg);
+
 			for (Method method : action.getMethods()) {
 				// public & not synthetic/bridge (ignore generic type method for super class) & @At is declared
 				if (Modifier.isPublic(method.getModifiers()) 
 						&& !method.isSynthetic() 
 						&& !method.isBridge()
 						&& method.isAnnotationPresent(At.class)) {
-					// add to mapping
+					// merge with action
 					ActionConfig acfg = createActionConfig(mcfg.getIoc(), method).mergeWith(clsCfg);
+
+					// add to mapping
 					mapping.add(acc, acfg, mcfg);
 					atMethods++;
 				}
@@ -142,7 +146,7 @@ public class DefaultMvcLoader implements MvcLoader {
 
 		if (atMethods == 0) {
 			if (log.isWarnEnabled()) {
-				log.warn("None @At found in any modules class!!");
+				log.warn("None @At found in any module class!!");
 			}
 		}
 		else {
@@ -155,7 +159,7 @@ public class DefaultMvcLoader implements MvcLoader {
 		return mapping;
 	}
 
-	protected ActionMapping createActionMapping(MvcConfig config) throws Exception {
+	protected ActionMapping createActionMapping(MvcConfig config) {
 		ActionMapping um = config.getIoc().getIfExists(ActionMapping.class);
 		if (um == null) {
 			um = new RegexActionMapping();
@@ -167,7 +171,7 @@ public class DefaultMvcLoader implements MvcLoader {
 		return um;
 	}
 
-	protected ActionChainCreator createChainMaker(MvcConfig mcfg) {
+	protected ActionChainCreator createChainCreator(MvcConfig mcfg) {
 		ActionChainCreator acc = mcfg.getIoc().get(ActionChainCreator.class);
 
 		if (log.isDebugEnabled()) {
@@ -176,7 +180,7 @@ public class DefaultMvcLoader implements MvcLoader {
 		return acc;
 	}
 	
-	protected ViewCreator createViewMaker(MvcConfig config) {
+	protected ViewCreator createViewCreator(MvcConfig config) {
 		ViewCreator vc = config.getIoc().get(ViewCreator.class);
 
 		if (log.isDebugEnabled()) {
@@ -376,13 +380,8 @@ public class DefaultMvcLoader implements MvcLoader {
 		if (vm == null) {
 			return;
 		}
-		if (Strings.isNotEmpty(vm.all())) {
-			am.setOkView(vm.all());
-			am.setErrorView(vm.all());
-			am.setFatalView(vm.all());
-		}
 		if (Strings.isNotEmpty(vm.value())) {
-			am.setOkView(vm.value());
+			am.setDefaultView(vm.value());
 		}
 		if (Strings.isNotEmpty(vm.error())) {
 			am.setErrorView(vm.error());
