@@ -36,7 +36,12 @@ public class ServletErrorView implements View {
 
 	@Override
 	public void setArgument(String arg) {
-		statusCode = Integer.parseInt(arg);
+		try {
+			statusCode = Integer.parseInt(arg);
+		}
+		catch (NumberFormatException e) {
+			log.warn("Invalid status code: " + arg);
+		}
 	}
 	
 	@Override
