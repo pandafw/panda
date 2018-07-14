@@ -10,15 +10,15 @@ import panda.lang.Processors;
 import panda.lang.Processors.Waiter;
 import panda.lang.Strings;
 import panda.lang.time.StopWatch;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 
 @Auth(AUTH.SUPER)
 @At("${super_path}/cmd")
-@To(View.SFTL)
+@To(Views.SFTL)
 public class CommandAction extends AbstractAction {
 	public static class Result {
 		private String command;
@@ -61,18 +61,18 @@ public class CommandAction extends AbstractAction {
 	}
 
 	@At("")
-	@To(View.SFTL)
+	@To(Views.SFTL)
 	public void input() {
 	}
 
 	@At
-	@To(View.SJSON)
+	@To(Views.SJSON)
 	public Object json(@Param("cmd") String cmd, @Param("wait") int wait) {
 		return exec(cmd, wait);
 	}
 	
 	@At
-	@To(View.SXML)
+	@To(Views.SXML)
 	public Object xml(@Param("cmd") String cmd, @Param("wait") int wait) {
 		return exec(cmd, wait);
 	}

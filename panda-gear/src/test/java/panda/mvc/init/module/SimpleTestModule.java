@@ -3,13 +3,13 @@ package panda.mvc.init.module;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 @At("/simple")
-@To(View.SJSON)
+@To(Views.SJSON)
 public class SimpleTestModule {
 
 	@At

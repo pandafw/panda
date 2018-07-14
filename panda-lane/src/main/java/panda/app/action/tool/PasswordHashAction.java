@@ -8,15 +8,15 @@ import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 import panda.util.crypto.Digests;
 
 @At("${super_path}/pwdhash")
 @Auth(AUTH.SUPER)
-@To(View.SFTL)
+@To(Views.SFTL)
 public class PasswordHashAction extends AbstractAction {
 
 	@At("")

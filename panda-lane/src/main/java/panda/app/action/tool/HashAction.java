@@ -11,17 +11,17 @@ import panda.app.constant.AUTH;
 import panda.codec.binary.Hex;
 import panda.io.Streams;
 import panda.lang.Strings;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 import panda.util.crypto.Digests;
 import panda.vfs.FileItem;
 
 
 @At("${super_path}/hash")
 @Auth(AUTH.SUPER)
-@To(View.SFTL)
+@To(Views.SFTL)
 public class HashAction extends AbstractAction {
 	/**
 	 * execute

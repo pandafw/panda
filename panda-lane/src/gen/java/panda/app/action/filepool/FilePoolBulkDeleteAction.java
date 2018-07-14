@@ -2,10 +2,10 @@ package panda.app.action.filepool;
 
 import java.util.Map;
 import panda.app.action.crud.GenericBulkAction;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 import panda.vfs.dao.DaoFileItem;
 
 public abstract class FilePoolBulkDeleteAction extends GenericBulkAction<DaoFileItem> {
@@ -28,7 +28,7 @@ public abstract class FilePoolBulkDeleteAction extends GenericBulkAction<DaoFile
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object bdelete(@Param Map<String, String[]> args) {
 		return super.bdelete(args);
 	}
@@ -39,7 +39,7 @@ public abstract class FilePoolBulkDeleteAction extends GenericBulkAction<DaoFile
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~bdelete")
+	@To(value=Views.SFTL, error="sftl:~bdelete")
 	public Object bdelete_execute(@Param Map<String, String[]> args) {
 		return super.bdelete_execute(args);
 	}

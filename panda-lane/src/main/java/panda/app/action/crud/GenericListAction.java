@@ -14,7 +14,6 @@ import panda.dao.query.DataQuery;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.mvc.View;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
@@ -476,7 +475,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_save(false);
 
 		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof View) {
+		if (rv instanceof Views) {
 			return rv;
 		}
 		
@@ -503,7 +502,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_save(false);
 
 		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof View) {
+		if (rv instanceof Views) {
 			return rv;
 		}
 		
@@ -530,7 +529,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_save(false);
 
 		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof View) {
+		if (rv instanceof Views) {
 			return rv;
 		}
 		
@@ -557,7 +556,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_save(false);
 
 		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof View) {
+		if (rv instanceof Views) {
 			return rv;
 		}
 		

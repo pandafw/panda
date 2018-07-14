@@ -33,7 +33,6 @@ import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.view.Views;
@@ -41,7 +40,7 @@ import panda.servlet.HttpServletResponser;
 
 @At("${super_path}/dataexp")
 @Auth(AUTH.SUPER)
-@To(View.SFTL)
+@To(Views.SFTL)
 public class DataExportAction extends AbstractAction {
 	protected static class DataType {
 		String type;

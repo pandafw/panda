@@ -4,10 +4,10 @@ import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Threads;
 import panda.lang.time.StopWatch;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 
 public abstract class GenericSyncWorkAction extends GenericWorkAction {
@@ -71,12 +71,12 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 	
 	@At("")
-	@To(View.SFTL)
+	@To(Views.SFTL)
 	public void input() {
 	}
 
 	@At
-	@To(View.SJSON)
+	@To(Views.SJSON)
 	@Override
 	public Object stop() {
 		GenericSyncWorkAction aswa = getSelf();
@@ -99,7 +99,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 	
 	@At
-	@To(View.SJSON)
+	@To(Views.SJSON)
 	@Override
 	public Object status() {
 		GenericSyncWorkAction aswa = getSelf();
@@ -110,7 +110,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 
 	@At
-	@To(View.VOID)
+	@To(Views.VOID)
 	public Object start(@Param("e.*") Events es) {
 		init(es);
 

@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import panda.lang.Strings;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.view.Views;
 
 
 public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
@@ -83,7 +83,7 @@ public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
 	}
 
 	@At("")
-	@To(View.SFTL)
+	@To(Views.SFTL)
 	public void input() {
 		findKey();
 		findKey();

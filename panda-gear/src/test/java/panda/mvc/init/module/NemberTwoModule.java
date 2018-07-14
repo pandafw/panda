@@ -1,35 +1,35 @@
 package panda.mvc.init.module;
 
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 @At("/two")
 public class NemberTwoModule {
 
 	@At("abc")
-	@To(View.RAW)
+	@To(Views.RAW)
 	public String say() {
 		System.out.println("java");
 		return "haha";
 	}
 
 	@At
-	@To(value=View.RAW, fatal=View.SJSON)
+	@To(value=Views.RAW, fatal=Views.SJSON)
 	public boolean login(@Param("username") String userName, @Param("password") String password,
 			@Param("authCode") Long authCode) {
 		return !(userName == null || password == null || authCode == null);
 	}
 
 	@At("pathme/(.*)$")
-	@To(View.RAW)
+	@To(Views.RAW)
 	public String pathme(String abc) {
 		return abc;
 	}
 
 	@At("pathtwo/(.+?)/(.*)$")
-	@To(View.RAW)
+	@To(Views.RAW)
 	public String pathtwo(int abc, long xyz) {
 		return abc + "+" + xyz;
 	}

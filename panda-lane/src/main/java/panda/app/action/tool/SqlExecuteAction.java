@@ -19,15 +19,15 @@ import panda.dao.sql.Sqls;
 import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 
 @At("${super_path}/sql")
 @Auth(AUTH.SUPER)
-@To(View.SFTL)
+@To(Views.SFTL)
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
 		protected boolean autoCommit = true;

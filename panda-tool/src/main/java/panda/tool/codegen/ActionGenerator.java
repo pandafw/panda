@@ -12,7 +12,6 @@ import panda.dao.query.DataQuery;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.Validate;
@@ -21,6 +20,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.QueryerEx;
 import panda.mvc.validator.Validators;
+import panda.mvc.view.Views;
 import panda.mvc.view.util.ListColumn;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
@@ -169,7 +169,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 				}
 			}
 		}
-		imports.add(View.class.getName());
+		imports.add(Views.class.getName());
 		if (Strings.isNotEmpty(action.getAuth())) {
 			imports.add("panda.app.auth.Auth");
 			imports.add("panda.app.constant.AUTH");

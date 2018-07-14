@@ -11,14 +11,14 @@ import panda.app.util.AppFreemarkerTemplateLoader;
 import panda.app.util.AppResourceBundleLoader;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.view.Views;
 
 
 @At("${super_path}/loadtask")
 @Auth(AUTH.SUPER)
-@To(View.SFTL)
+@To(Views.SFTL)
 public class LoadTaskAction extends AbstractAction {
 	protected final static String CKEY_RESOURCE = "resource";
 	

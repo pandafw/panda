@@ -9,7 +9,6 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 import panda.io.Streams;
-import panda.mvc.View;
 import panda.mvc.adaptor.meta.Pet;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
@@ -18,7 +17,7 @@ import panda.mvc.testapp.BaseWebappTest;
 import panda.mvc.view.Views;
 
 @At("/adaptor")
-@To(value=View.RAW, fatal=Views.SC_INTERNAL_ERROR)
+@To(value=Views.RAW, fatal=Views.SC_INTERNAL_ERROR)
 public class AdaptorTestModule extends BaseWebappTest {
 
 	@At("edate")

@@ -17,7 +17,6 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
@@ -94,7 +93,7 @@ public class Html2PdfAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
-	@To(View.RAW)
+	@To(Views.RAW)
 	public Object execute(@Param Arg arg) throws Exception {
 		if (Strings.isEmpty(arg.url)) {
 			arg.url = getText("url-default", "http://www.google.com");

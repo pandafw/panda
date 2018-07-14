@@ -5,28 +5,28 @@ import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.el.EL;
 import panda.lang.Strings;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 @At("${super_path}/el")
 @Auth(AUTH.SUPER)
 public class ELEvaluateAction extends AbstractAction {
 
 	@At("")
-	@To(View.SFTL)
+	@To(Views.SFTL)
 	public void input() {
 	}
 
 	@At
-	@To(View.SJSON)
+	@To(Views.SJSON)
 	public Object json(@Param("expr") String expr) {
 		return exec(expr);
 	}
 	
 	@At
-	@To(View.SXML)
+	@To(Views.SXML)
 	public Object xml(@Param("expr") String expr) {
 		return exec(expr);
 	}

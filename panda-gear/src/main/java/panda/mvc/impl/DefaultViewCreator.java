@@ -54,35 +54,35 @@ public class DefaultViewCreator implements ViewCreator {
 			aliass = new HashMap<String, String>();
 		}
 		
-		addView(View.SC, HttpStatusView.class);
-		addView(View.ERR, ServletErrorView.class);
+		addView(Views.SC, HttpStatusView.class);
+		addView(Views.ERR, ServletErrorView.class);
 
-		addView(View.CSV, CsvView.class);
-		addView(View.TSV, TsvView.class);
-		addView(View.XLS, XlsView.class);
-		addView(View.XLSX, XlsxView.class);
+		addView(Views.CSV, CsvView.class);
+		addView(Views.TSV, TsvView.class);
+		addView(Views.XLS, XlsView.class);
+		addView(Views.XLSX, XlsxView.class);
 
-		addView(View.JSON, JsonView.class);
-		addView(View.SJSON, SitemeshJsonView.class);
-		addView(View.XML, XmlView.class);
-		addView(View.SXML, SitemeshXmlView.class);
+		addView(Views.JSON, JsonView.class);
+		addView(Views.SJSON, SitemeshJsonView.class);
+		addView(Views.XML, XmlView.class);
+		addView(Views.SXML, SitemeshXmlView.class);
 		
-		addView(View.JSP, JspView.class);
-		addView(View.SJSP, SitemeshJspView.class);
-		addView(View.REDIRECT, RedirectView.class);
-		addView(View.REDIRECT2, RedirectView.class);
-		addView(View.FTL, FreemarkerView.class);
-		addView(View.SFTL, SitemeshFreemarkerView.class);
-		addView(View.FORWARD, ForwardView.class);
-		addView(View.FORWARD2, ForwardView.class);
-		addView(View.RAW, DataView.class);
+		addView(Views.JSP, JspView.class);
+		addView(Views.SJSP, SitemeshJspView.class);
+		addView(Views.REDIRECT, RedirectView.class);
+		addView(Views.REDIRECT2, RedirectView.class);
+		addView(Views.FTL, FreemarkerView.class);
+		addView(Views.SFTL, SitemeshFreemarkerView.class);
+		addView(Views.FORWARD, ForwardView.class);
+		addView(Views.FORWARD2, ForwardView.class);
+		addView(Views.RAW, DataView.class);
 
-		addView(View.ALT, AltView.class);
-		addView(View.ALT2, AltView.class);
+		addView(Views.ALT, AltView.class);
+		addView(Views.ALT2, AltView.class);
 
-		addView(View.VOID, VoidView.class);
-		addView(View.NONE, VoidView.class);
-		addView(View.NULL, VoidView.class);
+		addView(Views.VOID, VoidView.class);
+		addView(Views.NONE, VoidView.class);
+		addView(Views.NULL, VoidView.class);
 
 		// check view
 		for (String a : aliass.values()) {
@@ -104,7 +104,7 @@ public class DefaultViewCreator implements ViewCreator {
 		}
 
 		String alias, params;
-		int i = viewer.indexOf(View.SEP);
+		int i = viewer.indexOf(Views.SEP);
 		if (i > 0) {
 			alias = Strings.stripToNull(viewer.substring(0, i).toLowerCase());
 			params = Strings.stripToNull(viewer.substring(i + 1));
@@ -205,8 +205,8 @@ public class DefaultViewCreator implements ViewCreator {
 		}
 		
 		String dv = ac.getConfig().getDefaultView();
-		if (dv.startsWith(View.JSON) || dv.startsWith(View.SJSON)
-				|| dv.startsWith(View.XML) || dv.startsWith(View.SXML)) {
+		if (dv.startsWith(Views.JSON) || dv.startsWith(Views.SJSON)
+				|| dv.startsWith(Views.XML) || dv.startsWith(Views.SXML)) {
 			return create(ac, dv);
 		}
 

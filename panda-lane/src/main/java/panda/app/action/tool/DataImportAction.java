@@ -43,17 +43,17 @@ import panda.lang.Strings;
 import panda.lang.reflect.Types;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.validator.Validators;
+import panda.mvc.view.Views;
 import panda.vfs.FileItem;
 
 @At("${super_path}/dataimp")
 @Auth(AUTH.SUPER)
-@To(View.SFTL)
+@To(Views.SFTL)
 public class DataImportAction extends AbstractAction {
 	public static class Arg {
 		public boolean deleteAll = false;

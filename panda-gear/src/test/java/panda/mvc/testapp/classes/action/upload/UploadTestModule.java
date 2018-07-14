@@ -1,14 +1,14 @@
 package panda.mvc.testapp.classes.action.upload;
 
 import panda.io.FileNames;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 import panda.vfs.FileItem;
 
 @At
-@To(View.RAW)
+@To(Views.RAW)
 public class UploadTestModule {
 
 	@At("/upload/(.*)$")

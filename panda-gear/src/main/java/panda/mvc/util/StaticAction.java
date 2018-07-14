@@ -19,9 +19,9 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.MvcConstants;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.view.Views;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.servlet.HttpServlets;
@@ -61,7 +61,7 @@ public class StaticAction extends ActionSupport {
 	}
 
 	@At("${!!static_path|||'/static'}/(.*)$")
-	@To(View.NONE)
+	@To(Views.NONE)
 	public void execute(String path) {
 		URL url = findResource(path);
 		if (url == null) {

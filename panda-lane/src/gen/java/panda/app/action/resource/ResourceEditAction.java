@@ -4,13 +4,13 @@ import panda.app.action.crud.GenericEditAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.entity.Resource;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.validator.Validators;
+import panda.mvc.view.Views;
 
 @At("${super_path}/resource")
 @Auth(AUTH.SUPER)
@@ -34,7 +34,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object view(@Param Resource key) {
 		return super.view(key);
 	}
@@ -56,7 +56,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object print(@Param Resource key) {
 		return super.print(key);
 	}
@@ -77,7 +77,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object add() {
 		return super.add();
 	}
@@ -99,7 +99,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~add")
+	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_confirm(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -113,7 +113,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~add")
+	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_execute(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -127,7 +127,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object copy(@Param Resource key) {
 		return super.copy(key);
 	}
@@ -149,7 +149,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~copy")
+	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_confirm(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -163,7 +163,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~copy")
+	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_execute(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -177,7 +177,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object edit(@Param Resource key) {
 		return super.edit(key);
 	}
@@ -199,7 +199,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~edit")
+	@To(value=Views.SFTL, error="sftl:~edit")
 	public Object edit_confirm(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -213,7 +213,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~edit")
+	@To(value=Views.SFTL, error="sftl:~edit")
 	public Object edit_execute(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -227,7 +227,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object delete(@Param Resource key) {
 		return super.delete(key);
 	}
@@ -238,7 +238,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~delete")
+	@To(value=Views.SFTL, error="sftl:~delete")
 	public Object delete_execute(@Param Resource key) {
 		return super.delete_execute(key);
 	}

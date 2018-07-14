@@ -1,10 +1,10 @@
 package panda.app.action.filepool;
 
 import panda.app.action.crud.GenericEditAction;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 import panda.vfs.dao.DaoFileItem;
 
 public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> {
@@ -27,7 +27,7 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object view(@Param DaoFileItem key) {
 		return super.view(key);
 	}
@@ -49,7 +49,7 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object print(@Param DaoFileItem key) {
 		return super.print(key);
 	}
@@ -71,7 +71,7 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object delete(@Param DaoFileItem key) {
 		return super.delete(key);
 	}
@@ -82,7 +82,7 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~delete")
+	@To(value=Views.SFTL, error="sftl:~delete")
 	public Object delete_execute(@Param DaoFileItem key) {
 		return super.delete_execute(key);
 	}

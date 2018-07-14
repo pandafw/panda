@@ -5,10 +5,10 @@ import panda.app.action.crud.GenericBulkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.entity.Property;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.Views;
 
 @At("${super_path}/property")
 @Auth(AUTH.SUPER)
@@ -32,7 +32,7 @@ public class PropertyBulkAction extends GenericBulkAction<Property> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error=View.SFTL)
+	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object bdelete(@Param Map<String, String[]> args) {
 		return super.bdelete(args);
 	}
@@ -43,7 +43,7 @@ public class PropertyBulkAction extends GenericBulkAction<Property> {
 	 * @return result or view
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~bdelete")
+	@To(value=Views.SFTL, error="sftl:~bdelete")
 	public Object bdelete_execute(@Param Map<String, String[]> args) {
 		return super.bdelete_execute(args);
 	}

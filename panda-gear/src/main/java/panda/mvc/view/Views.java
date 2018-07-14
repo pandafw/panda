@@ -9,20 +9,62 @@ import panda.mvc.impl.DefaultViewCreator;
 import panda.net.http.HttpStatus;
 
 /**
- * Views
+ * View
  */
 public class Views {
+	public static final char SEP = ':';
+	
+	//-----------------------------------------------------------
+	public static final String ALT = "~>";
+	public static final String ALT2 = "alt";
+	
+	/** 
+	 * Servlet Error View
+	 */
+	public static final String ERR = "err";
+	
+	/** 
+	 * Http Status Code View
+	 */
+	public static final String SC = "sc";
+	
+	public static final String CSV = "csv";
+	public static final String TSV = "tsv";
+	public static final String XLS = "xls";
+	public static final String XLSX = "xlsx";
+
+	public static final String JSON = "json";
+	public static final String XML = "xml";
+	public static final String SJSON = "sjson";
+	public static final String SXML = "sxml";
+	
+	public static final String JSP = "jsp";
+	public static final String SJSP = "sjsp";
+	public static final String REDIRECT = ">>";
+	public static final String REDIRECT2 = "redirect";
+
+	public static final String FTL = "ftl";
+	public static final String SFTL = "sftl";
+	public static final String FORWARD = "->";
+	public static final String FORWARD2 = "forward";
+	public static final String RAW = "raw";
+
+	public static final String VOID = "void";
+	public static final String NONE = "none";
+	public static final String NULL = "null";
+
+	//-----------------------------------------------------------
 	public static final String ALT_INPUT = "alt:input";
 	public static final String FTL_INPUT = "ftl:~input";
 	public static final String SFTL_INPUT = "sftl:~input";
 
-	public static final String SC_FORBIDDEN = View.SC + View.SEP + HttpStatus.SC_FORBIDDEN;
-	public static final String SC_NOT_FOUND = View.SC + View.SEP + HttpStatus.SC_NOT_FOUND;
-	public static final String SC_INTERNAL_ERROR = View.SC + View.SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
+	public static final String SC_FORBIDDEN = SC + SEP + HttpStatus.SC_FORBIDDEN;
+	public static final String SC_NOT_FOUND = SC + SEP + HttpStatus.SC_NOT_FOUND;
+	public static final String SC_INTERNAL_ERROR = SC + SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
-	public static final String SE_FORBIDDEN = View.ERR + View.SEP + HttpStatus.SC_FORBIDDEN;
-	public static final String SE_NOT_FOUND = View.ERR + View.SEP + HttpStatus.SC_NOT_FOUND;
-	public static final String SE_INTERNAL_ERROR = View.ERR + View.SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
+	public static final String SE_FORBIDDEN = ERR + SEP + HttpStatus.SC_FORBIDDEN;
+	public static final String SE_NOT_FOUND = ERR + SEP + HttpStatus.SC_NOT_FOUND;
+	public static final String SE_INTERNAL_ERROR = ERR + SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
 	/**
 	 * get view creator
@@ -70,7 +112,7 @@ public class Views {
 
 	//----------------------------------------------------------
 	public static View none(ActionContext ac) {
-		return createView(ac, View.NONE);
+		return createView(ac, NONE);
 	}
 
 	public static View forbidden(ActionContext ac) {
@@ -86,19 +128,19 @@ public class Views {
 	}
 
 	public static View redirect(ActionContext ac) {
-		return createView(ac, View.REDIRECT);
+		return createView(ac, REDIRECT);
 	}
 
 	public static View redirect(ActionContext ac, String location) {
-		return createView(ac, View.REDIRECT + View.SEP + location);
+		return createView(ac, REDIRECT + SEP + location);
 	}
 	
 	public static View ftl(ActionContext ac) {
-		return createView(ac, View.FTL);
+		return createView(ac, FTL);
 	}
 	
 	public static View ftl(ActionContext ac, String location) {
-		return createView(ac, View.FTL + View.SEP + location);
+		return createView(ac, FTL + SEP + location);
 	}
 
 	public static View ftlInput(ActionContext ac) {
@@ -106,11 +148,11 @@ public class Views {
 	}
 	
 	public static View sftl(ActionContext ac) {
-		return createView(ac, View.SFTL);
+		return createView(ac, SFTL);
 	}
 	
 	public static View sftl(ActionContext ac, String location) {
-		return createView(ac, View.SFTL + View.SEP + location);
+		return createView(ac, SFTL + SEP + location);
 	}
 
 	public static View sftlInput(ActionContext ac) {
@@ -118,58 +160,58 @@ public class Views {
 	}
 
 	public static View jsp(ActionContext ac) {
-		return createView(ac, View.JSP);
+		return createView(ac, JSP);
 	}
 
 	public static View sjsp(ActionContext ac) {
-		return createView(ac, View.SJSP);
+		return createView(ac, SJSP);
 	}
 
 	public static View json(ActionContext ac) {
-		return createView(ac, View.JSON);
+		return createView(ac, JSON);
 	}
 
 	public static View xml(ActionContext ac) {
-		return createView(ac, View.XML);
+		return createView(ac, XML);
 	}
 
 	public static View sjson(ActionContext ac) {
-		return createView(ac, View.SJSON);
+		return createView(ac, SJSON);
 	}
 
 	public static View sxml(ActionContext ac) {
-		return createView(ac, View.SXML);
+		return createView(ac, SXML);
 	}
 	
 	public static View csv(ActionContext ac) {
-		return createView(ac, View.CSV);
+		return createView(ac, CSV);
 	}
 	
 	public static View csv(ActionContext ac, String filename) {
-		return createView(ac, View.CSV + View.SEP + filename);
+		return createView(ac, CSV + SEP + filename);
 	}
 	
 	public static View tsv(ActionContext ac) {
-		return createView(ac, View.TSV);
+		return createView(ac, TSV);
 	}
 
 	public static View tsv(ActionContext ac, String filename) {
-		return createView(ac, View.TSV + View.SEP + filename);
+		return createView(ac, TSV + SEP + filename);
 	}
 	
 	public static View xls(ActionContext ac) {
-		return createView(ac, View.XLS);
+		return createView(ac, XLS);
 	}
 
 	public static View xls(ActionContext ac, String filename) {
-		return createView(ac, View.XLS + View.SEP + filename);
+		return createView(ac, XLS + SEP + filename);
 	}
 
 	public static View xlsx(ActionContext ac) {
-		return createView(ac, View.XLSX);
+		return createView(ac, XLSX);
 	}
 
 	public static View xlsx(ActionContext ac, String filename) {
-		return createView(ac, View.XLSX + View.SEP + filename);
+		return createView(ac, XLSX + SEP + filename);
 	}
 }

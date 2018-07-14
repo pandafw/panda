@@ -8,9 +8,9 @@ import panda.app.constant.AUTH;
 import panda.app.constant.MVC;
 import panda.app.task.CronEntry;
 import panda.ioc.annotation.IocInject;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.view.Views;
 
 @At("${super_path}/crons")
 @Auth(AUTH.SUPER)
@@ -25,7 +25,7 @@ public class CronsAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
-	@To(View.SFTL)
+	@To(Views.SFTL)
 	public List<CronEntry> execute() throws Exception {
 		return crons;
 	}

@@ -7,7 +7,6 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Redirect;
 import panda.mvc.annotation.To;
@@ -15,6 +14,7 @@ import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.validator.Validators;
+import panda.mvc.view.Views;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
 import panda.net.mail.EmailClient;
@@ -22,7 +22,7 @@ import panda.net.mail.EmailClient;
 
 @At("${super_path}/sendmail")
 @Auth(AUTH.SUPER)
-@To(value=View.SFTL, error=View.SFTL)
+@To(value=Views.SFTL, error=Views.SFTL)
 public class SendMailAction extends AbstractAction {
 	private static final Log log = Logs.getLog(SendMailAction.class);
 	

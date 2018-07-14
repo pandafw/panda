@@ -5,15 +5,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.testapp.BaseWebappTest;
 import panda.mvc.testapp.classes.bean.UserT;
+import panda.mvc.view.Views;
 
 @At("/common")
-@To(View.RAW)
+@To(Views.RAW)
 public class CommonTest extends BaseWebappTest {
 
 	// 最最基本的测试

@@ -1,12 +1,12 @@
 package panda.app.action.tool;
 
 import panda.app.action.AbstractAction;
-import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.view.Views;
 
 @At
-@To(View.SJSON)
+@To(Views.SJSON)
 public class PingAction extends AbstractAction {
 	@At
 	public String ping() {
