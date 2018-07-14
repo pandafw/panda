@@ -24,7 +24,6 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
-import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 
 public class StaticAction extends ActionSupport {
@@ -62,14 +61,14 @@ public class StaticAction extends ActionSupport {
 	}
 
 	@At("${!!static_path|||'/static'}/(.*)$")
-	@To(all=View.NONE)
+	@To(View.NONE)
 	public void execute(String path) {
 		URL url = findResource(path);
 		if (url == null) {
 			if (log.isDebugEnabled()) {
 				log.warn("[NOT FOUND]: " + path);
 			}
-			HttpServlets.safeSendError(getResponse(), HttpStatus.SC_NOT_FOUND);
+			getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
