@@ -16,10 +16,13 @@ public class Views {
 	public static final String FTL_INPUT = "ftl:~input";
 	public static final String SFTL_INPUT = "sftl:~input";
 
-	public static final String SC_OK = View.SC + View.SEP + HttpStatus.SC_OK;
 	public static final String SC_FORBIDDEN = View.SC + View.SEP + HttpStatus.SC_FORBIDDEN;
 	public static final String SC_NOT_FOUND = View.SC + View.SEP + HttpStatus.SC_NOT_FOUND;
-	public static final String SC_SERVER_ERROR = View.SC + View.SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
+	public static final String SC_INTERNAL_ERROR = View.SC + View.SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
+
+	public static final String SE_FORBIDDEN = View.ERR + View.SEP + HttpStatus.SC_FORBIDDEN;
+	public static final String SE_NOT_FOUND = View.ERR + View.SEP + HttpStatus.SC_NOT_FOUND;
+	public static final String SE_INTERNAL_ERROR = View.ERR + View.SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
 	/**
 	 * get view creator
@@ -54,34 +57,32 @@ public class Views {
 	}
 
 	public static View createDefaultView(ActionContext ac) {
-		return createView(ac, ac.getConfig().getDefaultView());
+		return getViewCreator(ac.getIoc()).createDefaultView(ac);
 	}
 
 	public static View createErrorView(ActionContext ac) {
-		if (Strings.isEmpty(ac.getConfig().getErrorView())) {
-			return createView(ac, ac.getConfig().getDefaultView());
-		}
-		return createView(ac, ac.getConfig().getErrorView());
+		return getViewCreator(ac.getIoc()).createErrorView(ac);
 	}
 
 	public static View createFatalView(ActionContext ac) {
-		return createView(ac, ac.getConfig().getFatalView());
+		return getViewCreator(ac.getIoc()).createFatalView(ac);
 	}
 
+	//----------------------------------------------------------
 	public static View none(ActionContext ac) {
 		return createView(ac, View.NONE);
 	}
 
 	public static View forbidden(ActionContext ac) {
-		return createView(ac, SC_FORBIDDEN);
+		return createView(ac, SE_FORBIDDEN);
 	}
 	
 	public static View notFound(ActionContext ac) {
-		return createView(ac, SC_NOT_FOUND);
+		return createView(ac, SE_NOT_FOUND);
 	}
 	
-	public static View serverError(ActionContext ac) {
-		return createView(ac, SC_SERVER_ERROR);
+	public static View internalError(ActionContext ac) {
+		return createView(ac, SE_INTERNAL_ERROR);
 	}
 
 	public static View redirect(ActionContext ac) {

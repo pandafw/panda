@@ -18,7 +18,7 @@ import panda.mvc.testapp.BaseWebappTest;
 import panda.mvc.view.Views;
 
 @At("/adaptor")
-@To(value=View.RAW, fatal=Views.SC_SERVER_ERROR)
+@To(value=View.RAW, fatal=Views.SC_INTERNAL_ERROR)
 public class AdaptorTestModule extends BaseWebappTest {
 
 	@At("edate")

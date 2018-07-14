@@ -35,6 +35,7 @@ import panda.mvc.view.SitemeshJsonView;
 import panda.mvc.view.SitemeshJspView;
 import panda.mvc.view.SitemeshXmlView;
 import panda.mvc.view.TsvView;
+import panda.mvc.view.Views;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XlsView;
 import panda.mvc.view.XlsxView;
@@ -48,12 +49,6 @@ public class DefaultViewCreator implements ViewCreator {
 	@IocInject(value=MvcConstants.MVC_VIEWS, required=false)
 	private Map<String, String> aliass;
 
-	private void addView(String alias, Class<? extends View> type) {
-		if (!aliass.containsKey(alias)) {
-			aliass.put(alias, IocValue.TYPE_REF + type.getName());
-		}
-	}
-	
 	public void initialize() {
 		if (aliass == null) {
 			aliass = new HashMap<String, String>();
@@ -68,8 +63,8 @@ public class DefaultViewCreator implements ViewCreator {
 		addView(View.XLSX, XlsxView.class);
 
 		addView(View.JSON, JsonView.class);
-		addView(View.XML, XmlView.class);
 		addView(View.SJSON, SitemeshJsonView.class);
+		addView(View.XML, XmlView.class);
 		addView(View.SXML, SitemeshXmlView.class);
 		
 		addView(View.JSP, JspView.class);
@@ -95,6 +90,12 @@ public class DefaultViewCreator implements ViewCreator {
 		}
 	}
 
+	private void addView(String alias, Class<? extends View> type) {
+		if (!aliass.containsKey(alias)) {
+			aliass.put(alias, IocValue.TYPE_REF + type.getName());
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public View create(ActionContext ac, String viewer) {
@@ -182,5 +183,33 @@ public class DefaultViewCreator implements ViewCreator {
 		catch (Exception e) {
 			throw new IllegalArgumentException("Failed to create view(" + name + ")", e);
 		}
+	}
+
+	@Override
+	public View createDefaultView(ActionContext ac) {
+		return create(ac, ac.getConfig().getDefaultView());
+	}
+
+	@Override
+	public View createErrorView(ActionContext ac) {
+		if (Strings.isNotEmpty(ac.getConfig().getErrorView())) {
+			return create(ac, ac.getConfig().getErrorView());
+		}
+		return create(ac, ac.getConfig().getDefaultView());
+	}
+
+	@Override
+	public View createFatalView(ActionContext ac) {
+		if (Strings.isNotEmpty(ac.getConfig().getFatalView())) {
+			return create(ac, ac.getConfig().getFatalView());
+		}
+		
+		String dv = ac.getConfig().getDefaultView();
+		if (dv.startsWith(View.JSON) || dv.startsWith(View.SJSON)
+				|| dv.startsWith(View.XML) || dv.startsWith(View.SXML)) {
+			return create(ac, dv);
+		}
+
+		return create(ac, Views.SE_INTERNAL_ERROR);
 	}
 }
