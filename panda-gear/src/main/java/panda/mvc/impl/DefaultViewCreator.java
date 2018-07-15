@@ -205,11 +205,20 @@ public class DefaultViewCreator implements ViewCreator {
 		}
 		
 		String dv = ac.getConfig().getDefaultView();
-		if (dv.startsWith(Views.JSON) || dv.startsWith(Views.SJSON)
-				|| dv.startsWith(Views.XML) || dv.startsWith(Views.SXML)) {
+		if (isBindView(dv)) {
 			return create(ac, dv);
 		}
 
 		return create(ac, Views.SE_INTERNAL_ERROR);
+	}
+	
+	@Override
+	public boolean isBindView(String vw) {
+		if (Strings.isEmpty(vw)) {
+			return false;
+		}
+
+		return (vw.startsWith(Views.JSON) || vw.startsWith(Views.SJSON)
+				|| vw.startsWith(Views.XML) || vw.startsWith(Views.SXML));
 	}
 }

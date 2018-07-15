@@ -40,4 +40,10 @@ public interface ViewCreator {
 	 * @return View object
 	 */
 	View createFatalView(ActionContext ac);
+
+	/**
+	 * @param view view string
+	 * @return true if view is json/xml view or other unchangeable view
+	 */
+	boolean isBindView(String view);
 }

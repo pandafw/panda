@@ -110,6 +110,10 @@ public class Views {
 		return getViewCreator(ac.getIoc()).createFatalView(ac);
 	}
 
+	public static boolean isBindView(ActionContext ac, String vw) {
+		return getViewCreator(ac.getIoc()).isBindView(vw);
+	}
+
 	//----------------------------------------------------------
 	public static View none(ActionContext ac) {
 		return createView(ac, NONE);
