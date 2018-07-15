@@ -1,21 +1,16 @@
 package panda.mvc.view;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
 import panda.ioc.annotation.IocBean;
-import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.net.http.HttpException;
 import panda.net.http.HttpStatus;
 
 /**
- * 返回特定的响应码
- * <p/>
- * <b>注意,400或以上,会调用resp.sendError,而非resp.setStatus.这样做的原因是
- * errorPage的配置,只有resp.sendError会触发,且绝大多数情况下,只会配置400或以上</b>
+ * use response.setStatus(xx) to set http status code
+ * <p>
+ * NOTE: we don not use response.sendError() even if the status code >= 400
+ * </p>
  */
 @IocBean(singleton=false)
 public class HttpStatusView implements View {
@@ -36,30 +31,20 @@ public class HttpStatusView implements View {
 
 	@Override
 	public void render(ActionContext ac) {
-		HttpServletResponse res = ac.getResponse();
-
-		int code = this.statusCode;
-		Object obj = ac.getResult();
-		if (obj instanceof HttpException) {
-			code = ((HttpException)obj).getStatus();
-		}
+		int sc = statusCode;
 
 		Object err = ac.getError();
 		if (err instanceof HttpException) {
-			code = ((HttpException)err).getStatus();
-		}
-
-		if (code >= 400) {
-			try {
-				res.sendError(code);
-			}
-			catch (IOException e) {
-				throw Exceptions.wrapThrow(e);
-			}
+			sc = ((HttpException)err).getStatus();
 		}
 		else {
-			res.setStatus(code);
+			Object obj = ac.getResult();
+			if (obj instanceof HttpException) {
+				sc = ((HttpException)obj).getStatus();
+			}
 		}
+
+		ac.getResponse().setStatus(sc);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.mvc.view.Views;
+import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 
 @IocBean
@@ -19,6 +20,10 @@ public class FatalProcessor extends AbstractProcessor {
 		}
 		catch (Throwable e) {
 			ac.setError(e);
+			ac.getResponse().setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			
+			ac.getRequest().setAttribute(HttpServlets.SERVLET_ERROR_EXCEPTION, e);
+			ac.getRequest().setAttribute(HttpServlets.SERVLET_ERROR_STATUS_CODE, HttpStatus.SC_INTERNAL_SERVER_ERROR);
 
 			// log exception
 			Log elog = Logs.getLog(e.getClass());

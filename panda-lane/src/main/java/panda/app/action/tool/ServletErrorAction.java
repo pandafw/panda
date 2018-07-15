@@ -11,7 +11,7 @@ import panda.servlet.HttpServlets;
 @At("/servlet-error")
 public class ServletErrorAction extends AbstractAction {
 
-	private static final String TPL = ServletErrorView.TPL;
+	private static final String TPL = ServletErrorView.TPL_SERVLET_ERROR;
 	
 	@At("(.*)$")
 	public Object execute(String error) {
