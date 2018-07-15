@@ -367,7 +367,7 @@ public class HttpServlets {
 			if (Strings.isNotEmpty(ip)) {
 				writer.append('(').append(ip).append(')');
 			}
-			writer.append(" -> ");
+			writer.append(" -> ").append(request.getMethod()).append(' ');
 			writer.append(request.getRequestURL());
 			if (Strings.isNotEmpty(request.getQueryString())) {
 				writer.append('?').append(request.getQueryString());
