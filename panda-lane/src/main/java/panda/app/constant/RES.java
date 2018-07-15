@@ -177,9 +177,9 @@ public interface RES {
 	public final static String ERROR_UNSECURE = "error-unsecure";
 
 	/**
-	 * ERROR_NOPERMIT = "error-nopermit";
+	 * ERROR_FORBIDDEN = "error-forbidden";
 	 */
-	public final static String ERROR_NOPERMIT = "error-nopermit";
+	public final static String ERROR_FORBIDDEN = "error-forbidden";
 
 	/**
 	 * ERROR_SENDMAIL = "error-sendmail";

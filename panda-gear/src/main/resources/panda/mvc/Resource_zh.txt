@@ -220,7 +220,7 @@ error-file-notfound=该文件"${top}"不存在。
 #-----------------------------------------------------------------------------
 error-unlogin=用户未登录!
 error-unsecure=为了确保用户资料安全，请登陆。
-error-nopermit=用户没有权限!
+error-forbidden=用户没有权限!
 error-email-is-used=电子邮件地址已经被使用。
 error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址${top}是否正确。
 error-file-upload=文件上传失敗。

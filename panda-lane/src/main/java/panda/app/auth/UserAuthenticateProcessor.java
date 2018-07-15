@@ -2,15 +2,16 @@ package panda.app.auth;
 
 import panda.app.constant.MVC;
 import panda.app.constant.RES;
+import panda.app.constant.SET;
+import panda.app.util.AppSettings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.Mvcs;
 import panda.mvc.View;
+import panda.mvc.ViewCreator;
 import panda.mvc.processor.AbstractProcessor;
-import panda.mvc.util.TextProvider;
 import panda.mvc.view.Views;
 import panda.net.URLBuilder;
 import panda.net.URLHelper;
@@ -19,21 +20,24 @@ import panda.servlet.HttpServlets;
 
 @IocBean(create="initialize")
 public class UserAuthenticateProcessor extends AbstractProcessor {
-	@IocInject(value=MVC.AUTH_UNLOGIN_VIEW, required=false)
+	@IocInject(value=MVC.AUTH_VIEW_UNLOGIN, required=false)
 	private String unloginView;
 	
-	@IocInject(value=MVC.AUTH_UNSECURE_VIEW, required=false)
+	@IocInject(value=MVC.AUTH_VIEW_UNSECURE, required=false)
 	private String unsecureView;
 	
-	@IocInject(value=MVC.AUTH_UNLOGIN_URL, required=false)
-	private String unloginUrl;
-	
-	@IocInject(value=MVC.AUTH_UNSECURE_URL, required=false)
-	private String unsecureUrl;
+	@IocInject(value=MVC.AUTH_VIEW_FORBIDDEN, required=false)
+	private String forbiddenView = Views.SE_FORBIDDEN;
 
+	@IocInject
+	private AppSettings settings;
+
+	@IocInject
+	private ViewCreator vcreator;
+	
 	@IocInject(required=false)
 	private UserAuthenticator authenticator;
-
+	
 	public void initialize() {
 		if (authenticator == null) {
 			Logs.getLog(getClass()).info("User authentication is disabled for undefined UserAuthenticator.");
@@ -46,11 +50,9 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 	 * @param id msgId
 	 */
 	protected void addActionError(ActionContext ac, String id) {
-		TextProvider tp = ac.getText();
-		String msg = tp.getText(id, id);
+		String msg = ac.text(id, id);
 		ac.getActionAlert().addError(msg);
 	}
-	
 
 	protected void doView(ActionContext ac, String type) {
 		View view = Views.createView(ac, type);
@@ -72,6 +74,16 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 		return red;
 	}
 	
+	protected String getBindView(ActionContext ac) {
+		String ev = ac.getConfig().getErrorView();
+		if (Strings.isNotEmpty(ev)) {
+			return vcreator.isBindView(ev) ? ev : null;
+		}
+		
+		String dv = ac.getConfig().getDefaultView();
+		return vcreator.isBindView(dv) ? dv : null;
+	}
+
 	@Override
 	public void process(ActionContext ac) {
 		if (authenticator == null) {
@@ -84,34 +96,58 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 			doNext(ac);
 			return;
 		}
+		
+		ac.getResponse().setStatus(HttpStatus.SC_FORBIDDEN);
 
+		String bv = getBindView(ac);
+		
+		// unlogin view
 		if (r == UserAuthenticator.UNLOGIN) {
-			addActionError(ac, RES.ERROR_UNLOGIN);
-			if (Strings.isNotEmpty(unloginView)) {
-				doView(ac, unloginView);
+			if (Strings.isNotEmpty(bv)) {
+				addActionError(ac, RES.ERROR_UNLOGIN);
+				doView(ac, bv);
 				return;
 			}
-			if (Strings.isNotEmpty(unloginUrl)) {
-				String red = getRedirectURL(ac);
-				String url = Mvcs.translate(ac, unloginUrl, red);
-				HttpServlets.sendRedirect(ac.getResponse(), url);
-				return;
-			}
-		}
-		if (r == UserAuthenticator.UNSECURE) {
-			addActionError(ac, RES.ERROR_UNSECURE);
-			if (Strings.isNotEmpty(unsecureView)) {
-				doView(ac, unsecureView);
-				return;
-			}
-			if (Strings.isNotEmpty(unsecureUrl)) {
-				String red = getRedirectURL(ac);
-				String url = Mvcs.translate(ac, unsecureUrl, red);
-				HttpServlets.sendRedirect(ac.getResponse(), url);
+
+			String unlogin = settings.getProperty(SET.VIEW_UNLOGIN, unloginView);
+			if (Strings.isNotEmpty(unlogin)) {
+				addActionError(ac, RES.ERROR_UNLOGIN);
+				doView(ac, unlogin);
 				return;
 			}
 		}
 
-		HttpServlets.sendError(ac.getResponse(), HttpStatus.SC_FORBIDDEN);
+		// unsecure view
+		if (r == UserAuthenticator.UNSECURE) {
+			if (Strings.isNotEmpty(bv)) {
+				addActionError(ac, RES.ERROR_UNSECURE);
+				doView(ac, bv);
+				return;
+			}
+
+			String unsecure = settings.getProperty(SET.VIEW_UNLOGIN, unsecureView);
+			if (Strings.isEmpty(unsecure)) {
+				unsecure = settings.getProperty(SET.VIEW_UNLOGIN, unloginView);
+			}
+			if (Strings.isNotEmpty(unsecure)) {
+				addActionError(ac, RES.ERROR_UNSECURE);
+				doView(ac, unsecure);
+				return;
+			}
+		}
+
+		// forbidden view
+		if (Strings.isNotEmpty(bv)) {
+			addActionError(ac, RES.ERROR_FORBIDDEN);
+			doView(ac, bv);
+			return;
+		}
+
+		String forbidden = settings.getProperty(SET.VIEW_FORBIDDEN, forbiddenView);
+		if (Strings.isNotEmpty(forbidden)) {
+			addActionError(ac, RES.ERROR_FORBIDDEN);
+			doView(ac, forbidden);
+			return;
+		}
 	}
 }

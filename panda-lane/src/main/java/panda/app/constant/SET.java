@@ -52,6 +52,15 @@ public interface SET extends SetConstants {
 	public static final String WKHTML2PDF_TIMEOUT = "wkhtml2pdf.timeout";
 
 	//--------------------------------------------------------
+	// auth view
+	//
+	public static final String VIEW_FORBIDDEN = "view.forbidden";
+	
+	public static final String VIEW_UNLOGIN = "view.unlogin";
+	
+	public static final String VIEW_UNSECURE = "view.unsecure";
+
+	//--------------------------------------------------------
 	// mail properties
 	//
 	/**

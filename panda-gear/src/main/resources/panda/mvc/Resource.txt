@@ -299,7 +299,7 @@ error-file-notfound=The file "${top}" is not found.
 #-----------------------------------------------------------------------------
 error-unlogin=Please login.
 error-unsecure=Please login again for security reasion.
-error-nopermit=You have no permission.
+error-forbidden=You have no permission.
 error-email-is-used=The email address is already registered.
 error-sendmail=Failed to send email.\nPlease confirm the email address ${top} is correct.
 error-file-upload=Failed to upload file.

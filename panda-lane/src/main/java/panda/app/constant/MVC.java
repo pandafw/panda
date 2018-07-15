@@ -81,13 +81,11 @@ public interface MVC extends MvcConstants {
 	//
 	public static final String AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";
 	
-	public static final String AUTH_UNLOGIN_VIEW = "panda.auth.unlogin.view";
+	public static final String AUTH_VIEW_FORBIDDEN = "panda.auth.view.forbidden";
 	
-	public static final String AUTH_UNSECURE_VIEW = "panda.auth.unsecure.view";
+	public static final String AUTH_VIEW_UNLOGIN = "panda.auth.view.unlogin";
 	
-	public static final String AUTH_UNLOGIN_URL = "panda.auth.unlogin.url";
-	
-	public static final String AUTH_UNSECURE_URL = "panda.auth.unsecure.url";
+	public static final String AUTH_VIEW_UNSECURE = "panda.auth.view.unsecure";
 	
 	public static final String AUTH_SECURE_USER_AGE = "panda.auth.secure.session.age";
 	
