@@ -11,6 +11,8 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String MVC_IGNORES = "panda.mvc.ignores";
 
+	public static final String MVC_FILTERS = "panda.mvc.filters";
+
 	public static final String MVC_CHAINS = "panda.mvc.chains";
 
 	public static final String MVC_VALIDATORS = "panda.mvc.validators";

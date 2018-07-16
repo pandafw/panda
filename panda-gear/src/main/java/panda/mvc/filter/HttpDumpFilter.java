@@ -1,9 +1,12 @@
-package panda.mvc.processor;
+package panda.mvc.filter;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import panda.io.Files;
 import panda.io.Streams;
@@ -15,7 +18,8 @@ import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.ActionContext;
+import panda.mvc.ServletChain;
+import panda.mvc.ServletFilter;
 import panda.mvc.util.MvcSettings;
 import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletRequestCapturer;
@@ -24,27 +28,26 @@ import panda.servlet.HttpServlets;
 import panda.servlet.ServletRequestHeaderMap;
 
 @IocBean
-public class HttpDumpProcessor extends AbstractProcessor {
-	private final static Log log = Logs.getLog(HttpDumpProcessor.class);
+public class HttpDumpFilter implements ServletFilter {
+	private final static Log log = Logs.getLog(HttpDumpFilter.class);
 
 	private AtomicInteger serial;
 
 	@IocInject
 	private MvcSettings settings;
 	
-	public HttpDumpProcessor() {
+	public HttpDumpFilter() {
 		serial = new AtomicInteger();
 	}
 
 	@Override
-	public void process(ActionContext ac) {
+	public boolean doFilter(HttpServletRequest req, HttpServletResponse res, ServletChain sc) {
 		String path = settings.getPropertyAsPath("http.dump.path");
 		boolean dreq = settings.getPropertyAsBoolean("http.dump.request");
 		boolean dres = settings.getPropertyAsBoolean("http.dump.response");
 
 		if (Strings.isEmpty(path) || (!dreq && !dres)) {
-			doNext(ac);
-			return;
+			return sc.doNext(req, res);
 		}
 		
 		try {
@@ -52,34 +55,30 @@ public class HttpDumpProcessor extends AbstractProcessor {
 		}
 		catch (Throwable e) {
 			log.warn("Failed to create dump folder: " + e);
-			doNext(ac);
-			return;
+			return sc.doNext(req, res);
 		}
 
 		long time = System.currentTimeMillis();
 		int serial = this.serial.incrementAndGet();
 
 		if (dreq) {
-			HttpServletRequestCapturer creq = new HttpServletRequestCapturer(ac.getRequest());
-			ac.setRequest(creq);
-			dumpRequest(creq, path, time, serial);
+			req = new HttpServletRequestCapturer(req);
+			dumpRequest((HttpServletRequestCapturer)req, path, time, serial);
 		}
 
-		HttpServletResponseCapturer cres = null;
 		if (dres) {
-			cres = new HttpServletResponseCapturer(ac.getResponse());
-			ac.setResponse(cres);
+			res = new HttpServletResponseCapturer(res);
 		}
 
 		try {
-			doNext(ac);
+			return sc.doNext(req, res);
 		}
 		catch (Throwable e) {
 			throw Exceptions.wrapThrow(e);
 		}
 		finally {
 			if (dres) {
-				dumpResponse(ac, cres, path, time, serial);
+				dumpResponse(req, (HttpServletResponseCapturer)res, path, time, serial);
 			}
 		}
 	}
@@ -121,21 +120,21 @@ public class HttpDumpProcessor extends AbstractProcessor {
 		}
 	}
 	
-	private void dumpResponse(ActionContext ac, HttpServletResponseCapturer cres, String path, long time, int serial) {
+	private void dumpResponse(HttpServletRequest req, HttpServletResponseCapturer cres, String path, long time, int serial) {
 		File dir = new File(path, DateTimes.isoDateFormat().format(time));
 		File file = new File(dir, DateTimes.timestampLogFormat().format(time) + "." + serial + "-res.log");
 		
 		OutputStream fos = null;
 		try {
 			// flush wrapper
-			ac.getResponse().flushBuffer();
+			cres.flushBuffer();
 			
 			Files.makeDirs(dir);
 
 			fos = new FileOutputStream(file);
 			
 			StringBuilder sb = new StringBuilder();
-			sb.append(ac.getRequest().getProtocol()).append(' ')
+			sb.append(req.getProtocol()).append(' ')
 				.append(cres.getStatusCode()).append(' ')
 				.append(cres.getStatusMsg()).append('\n');
 			

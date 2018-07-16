@@ -16,19 +16,21 @@ import panda.mvc.alert.ActionAlertSupport;
 import panda.mvc.alert.ParamAlertSupport;
 import panda.mvc.annotation.Modules;
 import panda.mvc.filepool.MvcLocalFilePool;
+import panda.mvc.filter.DecodingFilter;
+import panda.mvc.filter.HttpDumpFilter;
+import panda.mvc.filter.InvokeFilter;
+import panda.mvc.filter.LoggingFilter;
 import panda.mvc.impl.DefaultActionChainCreator;
+import panda.mvc.impl.DefaultServletChain;
 import panda.mvc.impl.DefaultValidateHandler;
 import panda.mvc.impl.DefaultValidatorCreator;
 import panda.mvc.impl.DefaultViewCreator;
 import panda.mvc.impl.RegexActionMapping;
 import panda.mvc.processor.AdaptProcessor;
-import panda.mvc.processor.DecodingProcessor;
 import panda.mvc.processor.FatalProcessor;
-import panda.mvc.processor.HttpDumpProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
-import panda.mvc.processor.LoggingProcessor;
 import panda.mvc.processor.PrepareProcessor;
 import panda.mvc.processor.RedirectProcessor;
 import panda.mvc.processor.ValidateProcessor;
@@ -197,15 +199,19 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			MvcCryptor.class,
 			MvcURLBuilder.class,
 	
+			// filter
+			DefaultServletChain.class,
+			DecodingFilter.class,
+			HttpDumpFilter.class,
+			LoggingFilter.class,
+			InvokeFilter.class,
+
 			// processor
 			AdaptProcessor.class,
-			DecodingProcessor.class,
-			HttpDumpProcessor.class,
 			FatalProcessor.class,
 			InvokeProcessor.class,
 			LayoutProcessor.class,
 			LocaleProcessor.class,
-			LoggingProcessor.class,
 			PrepareProcessor.class,
 			RedirectProcessor.class,
 			ValidateProcessor.class,

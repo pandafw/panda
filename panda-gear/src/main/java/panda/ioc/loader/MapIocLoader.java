@@ -81,6 +81,14 @@ public class MapIocLoader extends AbstractIocLoader {
 			}
 			return map2iobj(m);
 		}
+		
+		if (obj instanceof Collection) {
+			return col2iobj((Collection)obj);
+		}
+		
+		if (obj.getClass().isArray()) {
+			return array2iobj((Object[])obj);
+		}
 
 		IocObject io = new IocObject();
 		io.setValue(obj);
@@ -202,6 +210,25 @@ public class MapIocLoader extends AbstractIocLoader {
 			for (Entry<String, Object> en : map.entrySet()) {
 				iobj.addField(en.getKey(), object2value(en.getValue()));
 			}
+		}
+		return iobj;
+	}
+
+	private IocObject array2iobj(Object[] array) {
+		final IocObject iobj = new IocObject();
+		for (int i = 0; i < array.length; i++) {
+			iobj.addField(String.valueOf(i), object2value(array[i]));
+		}
+		return iobj;
+	}
+
+	private IocObject col2iobj(Collection<?> list) {
+		final IocObject iobj = new IocObject();
+		int i = 0;
+		Iterator it = list.iterator();
+		while (it.hasNext()) {
+			iobj.addField(String.valueOf(i), object2value(it.next()));
+			i++;
 		}
 		return iobj;
 	}

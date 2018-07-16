@@ -112,7 +112,7 @@ public class ActionContext {
 	/**
 	 * @param ioc the ioc to set
 	 */
-	protected void setIoc(Ioc ioc) {
+	public void setIoc(Ioc ioc) {
 		this.ioc = ioc;
 	}
 	

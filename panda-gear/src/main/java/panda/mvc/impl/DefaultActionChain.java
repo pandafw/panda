@@ -36,7 +36,7 @@ public class DefaultActionChain implements ActionChain {
 
 		@Override
 		public void doChain(ActionContext ac) {
-			throw new IllegalStateException("Illegal call for ProxyActionChain.doChain()");
+			throw new IllegalStateException("Illegal call for " + getClass().getSimpleName() + ".doChain()");
 		}
 
 		@Override
@@ -79,17 +79,20 @@ public class DefaultActionChain implements ActionChain {
 	/**
 	 * @return the action config
 	 */
+	@Override
 	public ActionConfig getConfig() {
 		return config;
 	}
 
+	@Override
 	public void doChain(ActionContext ac) {
 		ac.setAction(ac.getIoc().get(config.getActionType()));
 		ac.setChain(new ProxyActionChain(config, procs));
 		ac.getChain().doNext(ac);
 	}
 
+	@Override
 	public void doNext(ActionContext ac) {
-		throw new IllegalStateException("Illegal call for DefaultActionChain.doNext()");
+		throw new IllegalStateException("Illegal call for " + getClass().getSimpleName() + ".doNext()");
 	}
 }

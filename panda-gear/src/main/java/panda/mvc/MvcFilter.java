@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -41,15 +42,27 @@ public class MvcFilter implements Filter {
 		}
 	}
 
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
-			ServletException {
-		HttpServletRequest request = (HttpServletRequest)req;
-		HttpServletResponse response = (HttpServletResponse)res;
+	public static class ChainFilter implements ServletFilter {
+		private FilterChain chain;
 
-		if (handler.handle(request, response)) {
-			return;
+		public ChainFilter(FilterChain chain) {
+			this.chain = chain;
 		}
 
-		chain.doFilter(req, res);
+		@Override
+		public boolean doFilter(HttpServletRequest req, HttpServletResponse res, ServletChain sc) {
+			try {
+				chain.doFilter(req, res);
+				return true;
+			}
+			catch (Throwable e) {
+				throw Exceptions.wrapThrow(e);
+			}
+		}
+	}
+
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
+			ServletException {
+		handler.handle((HttpServletRequest)req, (HttpServletResponse)res, new ChainFilter(chain));
 	}
 }
