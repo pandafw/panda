@@ -131,7 +131,7 @@ public class SimpleDataSource implements DataSource {
 			this.pingQuery = Strings.stripToEmpty(pingQuery);
 		}
 		public long getPingTimeout() {
-			return pingTimeout * 1000;
+			return pingTimeout * 1000L;
 		}
 		public void setPingTimeout(long pingTimeout) {
 			this.pingTimeout = (int)(pingTimeout / 1000);

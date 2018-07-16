@@ -56,19 +56,19 @@ public class DateTimes {
 	/**
 	 * Number of milliseconds in a standard second.
 	 */
-	public static final int MS_SECOND = 1000;
+	public static final long MS_SECOND = 1000;
 	/**
 	 * Number of milliseconds in a standard minute.
 	 */
-	public static final int MS_MINUTE = 60 * MS_SECOND;
+	public static final long MS_MINUTE = 60 * MS_SECOND;
 	/**
 	 * Number of milliseconds in a standard hour.
 	 */
-	public static final int MS_HOUR = 60 * MS_MINUTE;
+	public static final long MS_HOUR = 60 * MS_MINUTE;
 	/**
 	 * Number of milliseconds in a standard day.
 	 */
-	public static final int MS_DAY = 24 * MS_HOUR;
+	public static final long MS_DAY = 24 * MS_HOUR;
 	/**
 	 * Number of milliseconds in a standard week.
 	 */

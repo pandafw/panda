@@ -872,10 +872,12 @@ public class HttpServlets {
 		}
 		response.setHeader(HttpHeader.CACHE_CONTROL, cc);
 
-		String now = HttpDates.format(System.currentTimeMillis());
+		long tm = System.currentTimeMillis();
+		String now = HttpDates.format(tm);
 		response.setHeader(HttpHeader.DATE, now);
 		
-		String expires = HttpDates.format(System.currentTimeMillis() + (maxAge * 1000));
+		tm += (maxAge * 1000L);
+		String expires = HttpDates.format(tm);
 		response.setHeader(HttpHeader.EXPIRES, expires);
 		response.setHeader(HttpHeader.RETRY_AFTER, expires);
 	}

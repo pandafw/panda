@@ -58,7 +58,7 @@ public class LocalFilePool implements FilePool {
 	 * @param maxAge the maxAge to set
 	 */
 	public void setMaxAge(int maxAge) {
-		this.expires = maxAge * 1000;
+		this.expires = maxAge * 1000L;
 	}
 
 	protected LocalFileItem randFile(String name, boolean temporary) {

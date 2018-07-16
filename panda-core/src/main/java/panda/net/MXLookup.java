@@ -28,7 +28,7 @@ public class MXLookup {
 	/**
 	 * default expire time: 30m
 	 */
-	public static final int DEFAULT_CACHE_MAXAGE = DateTimes.MS_MINUTE * 30;
+	public static final long DEFAULT_CACHE_MAXAGE = DateTimes.MS_MINUTE * 30;
 	
 	/**
 	 * default cache limit: 100
@@ -40,10 +40,10 @@ public class MXLookup {
 	/**
 	 * init cache
 	 * @param limit limit count
-	 * @param maxAge max age (sec)
+	 * @param expire expire (millisecond)
 	 */
-	public static synchronized void initCache(int limit, int maxAge) {
-		ExpireMap<String, List<String>> em = new ExpireMap<String, List<String>>(new LRUMap<String, List<String>>(limit), maxAge);
+	public static synchronized void initCache(int limit, long expire) {
+		ExpireMap<String, List<String>> em = new ExpireMap<String, List<String>>(new LRUMap<String, List<String>>(limit), expire);
 		cache = Collections.synchronizedMap(em);
 	}
 

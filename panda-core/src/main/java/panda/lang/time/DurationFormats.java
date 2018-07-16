@@ -395,7 +395,7 @@ public class DurationFormats {
 			minutes = 0;
 		}
 		if (!Token.containsTokenWithValue(tokens, s)) {
-			milliseconds += 1000 * seconds;
+			milliseconds += 1000L * seconds;
 			seconds = 0;
 		}
 

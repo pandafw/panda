@@ -84,7 +84,7 @@ public class AppCacheFactory {
 		log.info("Build Internal Java Cache");
 		if (maxAge > 0) {
 			return Collections.synchronizedMap(new ExpireMap<String, String>(
-					new WeakHashMap<String, String>(), maxAge));
+					new WeakHashMap<String, String>(), maxAge * 1000L));
 		}
 
 		return Collections.synchronizedMap(new WeakHashMap<String, String>());

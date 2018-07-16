@@ -65,7 +65,7 @@ public class DaoFilePool implements FilePool {
 	 * @param maxage the maxage to set
 	 */
 	public void setMaxAge(int maxage) {
-		this.expires = maxage * 1000;
+		this.expires = maxage * 1000L;
 	}
 
 	protected FileItem saveFile(FileItem file, final InputStream body) throws IOException {

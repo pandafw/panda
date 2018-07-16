@@ -17,11 +17,11 @@ public class ExpireMap<K, V> implements Map<K, V> {
 
 	/**
 	 * @param map a map
-	 * @param maxAge validate time (second)
+	 * @param expire expire time (millisecond)
 	 */
-	public ExpireMap(Map<K, V> map, int maxAge) {
+	public ExpireMap(Map<K, V> map, long expire) {
 		this.map = map;
-		this.expire = maxAge * 1000;
+		this.expire = expire;
 		this.kts = new HashMap<K, Long>();
 	}
 
@@ -29,14 +29,14 @@ public class ExpireMap<K, V> implements Map<K, V> {
 	 * @return the maxAge
 	 */
 	public int getMaxAge() {
-		return (int)(expire / 1000);
+		return (int)(expire / 1000L);
 	}
 
 	/**
 	 * @param maxAge the maxAge to set
 	 */
 	public void setMaxAge(int maxAge) {
-		this.expire = maxAge * 1000;
+		this.expire = maxAge * 1000L;
 	}
 
 	public void clear() {
