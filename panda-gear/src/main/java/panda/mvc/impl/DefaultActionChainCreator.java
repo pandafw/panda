@@ -14,7 +14,6 @@ import panda.lang.Strings;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionChainCreator;
 import panda.mvc.ActionConfig;
-import panda.mvc.MvcConfig;
 import panda.mvc.MvcConstants;
 import panda.mvc.processor.AdaptProcessor;
 import panda.mvc.processor.DecodingProcessor;
@@ -73,7 +72,7 @@ public class DefaultActionChainCreator implements ActionChainCreator {
 	}
 	
 	@Override
-	public ActionChain create(MvcConfig mcfg, ActionConfig acfg) {
+	public ActionChain create(ActionConfig acfg) {
 		List<String> procs = getProcessors(acfg.getChainName());
 		if (procs == null) {
 			throw new IllegalArgumentException("Failed to find chain [" + acfg.getChainName() + "] for " + acfg.getActionType());

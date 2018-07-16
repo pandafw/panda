@@ -14,9 +14,8 @@ public interface ActionMapping {
 	 * 
 	 * @param acc action chain creator
 	 * @param acfg action config
-	 * @param mcfg MVC config
 	 */
-	void add(ActionChainCreator acc, ActionConfig acfg, MvcConfig mcfg);
+	void add(ActionChainCreator acc, ActionConfig acfg);
 
 	/**
 	 * get action invoker by path

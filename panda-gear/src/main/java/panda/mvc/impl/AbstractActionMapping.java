@@ -18,7 +18,6 @@ import panda.mvc.ActionChainCreator;
 import panda.mvc.ActionConfig;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionMapping;
-import panda.mvc.MvcConfig;
 import panda.servlet.HttpServlets;
 
 public abstract class AbstractActionMapping implements ActionMapping {
@@ -32,7 +31,7 @@ public abstract class AbstractActionMapping implements ActionMapping {
 	private Map<String, ActionConfig> acfgs = new HashMap<String, ActionConfig>();
 
 	@Override
-	public void add(ActionChainCreator acc, ActionConfig acfg, MvcConfig mcfg) {
+	public void add(ActionChainCreator acc, ActionConfig acfg) {
 		// add method
 		String mn = acfg.getActionType().getName() + '.' + acfg.getActionMethod().getName();
 		if (acfgs.put(mn, acfg) != null) {
@@ -48,7 +47,7 @@ public abstract class AbstractActionMapping implements ActionMapping {
 			throw new IllegalArgumentException(String.format("Empty @At of %s.%s", acfg.getActionType().getName(), acfg.getActionMethod().getName()));
 		}
 
-		ActionChain chain = acc.create(mcfg, acfg);
+		ActionChain chain = acc.create(acfg);
 
 		// mapping path
 		for (String path : paths) {

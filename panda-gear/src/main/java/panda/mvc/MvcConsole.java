@@ -15,7 +15,6 @@ import panda.ioc.Ioc;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.config.ServletMvcConfig;
 import panda.mvc.ioc.IocRequestListener;
 import panda.net.http.HttpMethod;
 import panda.net.http.HttpStatus;
@@ -30,7 +29,7 @@ public class MvcConsole {
 	
 	protected MockServletContext servlet;
 	protected MockServletConfig config;
-	protected ActionHandler handler;
+	protected MvcHandler handler;
 
 	public MvcConsole(Class<?> mainModule) {
 		this(mainModule, null);
@@ -40,9 +39,11 @@ public class MvcConsole {
 		servlet = new MockServletContext(base);
 		config = new MockServletConfig(servlet);
 		config.addInitParameter("modules", mainModule.getName());
-		
-		ServletMvcConfig smc = new ServletMvcConfig(config);
-		handler = new ActionHandler(smc);
+
+		MvcConfig mcfg = new MvcConfig(config.getServletContext(), config.getInitParameter("modules"));
+		MvcLoader loader = new MvcLoader(mcfg);
+		handler = loader.getActionHandler();
+		Mvcs.setActionHandler(mcfg.getServletContext(), handler);
 	}
 
 	public void destroy() {
@@ -52,7 +53,7 @@ public class MvcConsole {
 	}
 
 	public Ioc getIoc() {
-		return handler.getConfig().getIoc();
+		return handler.getIoc();
 	}
 	
 	public DaoClient getDaoClient() {

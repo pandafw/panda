@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.mvc.ActionContext;
-
 /**
  * MVC modules declare
  */
@@ -30,9 +28,4 @@ public @interface Modules {
 	 * weather to scan the package of the module
 	 */
 	boolean scan() default false;
-	
-	/**
-	 * ActionContext Type
-	 */
-	Class<? extends ActionContext> context() default ActionContext.class;
 }

@@ -1,60 +1,43 @@
 package panda.mvc;
 
-import java.util.List;
-
 import javax.servlet.ServletContext;
 
-import panda.ioc.Ioc;
+import panda.lang.Classes;
+import panda.lang.Exceptions;
+import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 
-/**
- * 这个接口是一个抽象封装
- * <p>
- * 如果是通过 Servlet 方式加载的 Mvc， 只需要根据 ServletConfig 来实现一下这个接口 同理， Filter 方式，甚至不是标准的 JSP/Servlet
- * 容器，只要实现了这个接口，都可以 正常的调用 Loading 接口
- */
-public interface MvcConfig {
+public class MvcConfig {
+	private static final Log log = Logs.getLog(MvcConfig.class);
 
-	/**
-	 * @return 当前应用的 IOC 容器实例
-	 */
-	Ioc getIoc();
+	private ServletContext servlet;
+	private Class<?> mainModule;
 
-	/**
-	 * @return 当前应用的名称
-	 */
-	String getAppName();
+	public MvcConfig(ServletContext servlet, String mainModule) {
+		this.servlet = servlet;
 
-	/**
-	 * 如果在非 JSP/SERVLET 容器内，这个函数不保证返回正确的结果
-	 * 
-	 * @return 当前应用的上下文对象
-	 */
-	ServletContext getServletContext();
+		String name = Strings.trim(mainModule);
+		if (Strings.isBlank(name)) {
+			throw new IllegalArgumentException(
+				"You need declare 'modules' parameter in your context configuration file or web.xml!");
+		}
 
-	/**
-	 * 获取配置的参数
-	 * 
-	 * @param name 参数名
-	 * @return 参数值
-	 */
-	String getInitParameter(String name);
+		try {
+			this.mainModule = Classes.getClass(mainModule);
+		}
+		catch (ClassNotFoundException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 
-	/**
-	 * 获取配置参数的名称列表
-	 * 
-	 * @return 配置参数的名称列表
-	 */
-	List<String> getInitParameterNames();
+		log.debugf("MainModule: <%s>", this.mainModule.getName());
+	}
 
-	/**
-	 * 获取配置的主模块，一般的说是存放在 initParameter 集合下的 "modules" 属性 值为一个 class 的全名
-	 * 
-	 * @return 配置的主模块，null - 如果没有定义这个参数
-	 */
-	Class<?> getMainModule();
-	
-	/**
-	 * @return ActionContext type
-	 */
-	Class<? extends ActionContext> getContextClass();
+	public ServletContext getServletContext() {
+		return servlet;
+	}
+
+	public Class<?> getMainModule() {
+		return mainModule;
+	}
 }

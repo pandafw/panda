@@ -11,19 +11,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.impl.SingletonObjectProxy;
 import panda.lang.Classes;
+import panda.lang.Exceptions;
 import panda.lang.Regexs;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.impl.ActionInvoker;
-import panda.mvc.impl.DefaultMvcLoader;
 import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.ioc.IocSessionListener;
 import panda.mvc.ioc.RequestIocContext;
@@ -32,16 +32,12 @@ import panda.mvc.ioc.ResponseObjectProxy;
 import panda.mvc.ioc.SessionIocContext;
 import panda.servlet.HttpServlets;
 
-public class ActionHandler {
-	private static final Log log = Logs.getLog(ActionHandler.class);
+public class MvcHandler {
+	private static final Log log = Logs.getLog(MvcHandler.class);
 
 	private boolean deposed;
-	
+
 	private MvcLoader loading;
-
-	private ActionMapping mapping;
-
-	private MvcConfig config;
 
 	/**
 	 * the regex patterns of the URI to exclude
@@ -54,6 +50,11 @@ public class ActionHandler {
 	private Set<String> ignorePaths;
 
 	/**
+	 * ActionContext class
+	 */
+	private Class<? extends ActionContext> acClass = ActionContext.class;
+	
+	/**
 	 * @return the loading
 	 */
 	public MvcLoader getLoading() {
@@ -61,29 +62,32 @@ public class ActionHandler {
 	}
 
 	/**
-	 * @return the mapping
+	 * @return the ioc
 	 */
-	public ActionMapping getMapping() {
-		return mapping;
+	public Ioc getIoc() {
+		return loading.getIoc();
 	}
-
+	
 	/**
-	 * @return the config
+	 * @param loading MvcLoader
+	 * @param ioc ioc
+	 * @param mapping action mapping
+	 * @throws ClassNotFoundException if action context class is not found
 	 */
-	public MvcConfig getConfig() {
-		return config;
-	}
+	@SuppressWarnings("unchecked")
+	public MvcHandler(MvcLoader loading) throws ClassNotFoundException {
+		this.loading = loading;
 
-	/**
-	 * init
-	 * @param config MvcConfig
-	 */
-	public ActionHandler(AbstractMvcConfig config) {
-		this.config = config;
-		this.loading = new DefaultMvcLoader();
-		this.mapping = loading.load(config);
-
-		String ignores = config.getInitParameter("ignores");
+		Settings settings = getIoc().get(Settings.class);
+		
+		String cls = getIoc().getIfExists(String.class, MvcConstants.MVC_ACTION_CONTEXT_TYPE);
+		cls = settings.getProperty(SetConstants.MVC_ACTION_CONTEXT_TYPE, cls);
+		if (Strings.isNotEmpty(cls)) {
+			acClass = (Class<? extends ActionContext>)Classes.getClass(cls);
+		}
+		
+		String ignores = getIoc().getIfExists(String.class, MvcConstants.MVC_IGNORES);
+		ignores = settings.getProperty(SetConstants.MVC_IGNORES, ignores);
 		if (ignores != null) {
 			String[] es = Strings.split(ignores);
 			Set<String> regex = new HashSet<String>();
@@ -132,21 +136,16 @@ public class ActionHandler {
 	}
 
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
-		if (log.isTraceEnabled()) {
-			log.trace(config.getAppName() + " handle:\n" + HttpServlets.dumpRequestProperties(req));
-		}
-		
 		String path = HttpServlets.getServletPath(req);
 		if (ignore(path)) {
 			return false;
 		}
 
 		req.setAttribute(Mvcs.REQUEST_TIME, System.currentTimeMillis());
-		
-		ActionContext ac = Classes.born(config.getContextClass());
+
+		Ioc ioc = loading.getIoc();
 		RequestIocContext ric = null;
 
-		Ioc ioc = config.getIoc();
 		if (ioc instanceof DefaultIoc) {
 			if (IocRequestListener.isRequestScopeEnable || IocSessionListener.isSessionScopeEnable) {
 				DefaultIoc di = ((DefaultIoc)ioc).clone();
@@ -154,16 +153,6 @@ public class ActionHandler {
 				ComboIocContext ctx = new ComboIocContext();
 				if (IocRequestListener.isRequestScopeEnable) {
 					ric = RequestIocContext.get(req);
-
-					RequestObjectProxy opReq = new RequestObjectProxy(ac);
-					ResponseObjectProxy opRes = new ResponseObjectProxy(ac);
-
-					ric.save(Scope.REQUEST, ActionContext.class.getName(), new SingletonObjectProxy(ac));
-					ric.save(Scope.REQUEST, ServletRequest.class.getName(), opReq);
-					ric.save(Scope.REQUEST, ServletResponse.class.getName(), opRes);
-					ric.save(Scope.REQUEST, HttpServletRequest.class.getName(), opReq);
-					ric.save(Scope.REQUEST, HttpServletResponse.class.getName(), opRes);
-					
 					ctx.addContext(ric);
 				}
 				
@@ -178,21 +167,39 @@ public class ActionHandler {
 				ioc = di;
 			}
 		}
-
-		ac.setIoc(ioc);
-		ac.setServlet(config.getServletContext());
-		ac.setRequest(req);
-		ac.setResponse(res);
-
-		// save action context to request
-		Mvcs.setActionContext(req, ac);
+		
 		try {
-			ActionInvoker invoker = mapping.getActionInvoker(ac);
+			ActionContext ac = acClass.newInstance();
+			
+			ac.setIoc(ioc);
+			ac.setServlet(loading.getMvcConfig().getServletContext());
+			ac.setRequest(req);
+			ac.setResponse(res);
+
+			if (ric != null) {
+				RequestObjectProxy opReq = new RequestObjectProxy(ac);
+				ResponseObjectProxy opRes = new ResponseObjectProxy(ac);
+
+				ric.save(Scope.REQUEST, ActionContext.class.getName(), new SingletonObjectProxy(ac));
+				ric.save(Scope.REQUEST, ServletRequest.class.getName(), opReq);
+				ric.save(Scope.REQUEST, ServletResponse.class.getName(), opRes);
+				ric.save(Scope.REQUEST, HttpServletRequest.class.getName(), opReq);
+				ric.save(Scope.REQUEST, HttpServletResponse.class.getName(), opRes);
+			}
+
+			// save action context to request
+			Mvcs.setActionContext(req, ac);
+
+			ActionInvoker invoker = loading.getActionMapping().getActionInvoker(ac);
 			if (invoker == null) {
 				return false;
 			}
 
 			return invoker.invoke(ac);
+		}
+		catch (Throwable e) {
+			log.error("Failed to handle " + path, e);
+			throw Exceptions.wrapThrow(e);
 		}
 		finally {
 			if (ric != null) {
@@ -206,7 +213,7 @@ public class ActionHandler {
 
 	public void depose() {
 		if (!deposed) {
-			loading.depose(config);
+			loading.depose();
 			deposed = true;
 		}
 	}

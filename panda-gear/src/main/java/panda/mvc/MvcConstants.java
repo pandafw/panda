@@ -7,6 +7,10 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String TAGLIB_NAME = "panda.taglib.name";
 
+	public static final String MVC_ACTION_CONTEXT_TYPE = "panda.action.context.type";
+
+	public static final String MVC_IGNORES = "panda.mvc.ignores";
+
 	public static final String MVC_CHAINS = "panda.mvc.chains";
 
 	public static final String MVC_VALIDATORS = "panda.mvc.validators";

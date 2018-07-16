@@ -99,8 +99,8 @@ public abstract class Mvcs {
 	 * @param sc servlet context
 	 * @return action handler
 	 */
-	public static ActionHandler getActionHandler(ServletContext sc) {
-		return (ActionHandler)sc.getAttribute(ActionHandler.class.getName());
+	public static MvcHandler getActionHandler(ServletContext sc) {
+		return (MvcHandler)sc.getAttribute(MvcHandler.class.getName());
 	}
 	
 	/**
@@ -108,12 +108,12 @@ public abstract class Mvcs {
 	 * @param sc servlet context
 	 * @param ah action handler
 	 */
-	public static void setActionHandler(ServletContext sc, ActionHandler ah) {
+	public static void setActionHandler(ServletContext sc, MvcHandler ah) {
 		if (ah == null) {
-			sc.removeAttribute(ActionHandler.class.getName());
+			sc.removeAttribute(MvcHandler.class.getName());
 		}
 		else {
-			sc.setAttribute(ActionHandler.class.getName(), ah);
+			sc.setAttribute(MvcHandler.class.getName(), ah);
 		}
 	}
 	
@@ -123,12 +123,12 @@ public abstract class Mvcs {
 	 * @return ioc
 	 */
 	public static Ioc getIoc(ServletContext sc) {
-		ActionHandler handler = getActionHandler(sc);
+		MvcHandler handler = getActionHandler(sc);
 		if (handler == null) {
 			return null;
 		}
 		
-		return handler.getConfig().getIoc();
+		return handler.getIoc();
 	}
 	
 	/**

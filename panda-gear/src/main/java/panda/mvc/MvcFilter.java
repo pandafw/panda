@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.config.FilterMvcConfig;
 
 /**
  * Filter Entry Point
@@ -22,15 +21,16 @@ public class MvcFilter implements Filter {
 
 	private static final Log log = Logs.getLog(MvcFilter.class);
 
-	protected ActionHandler handler;
+	protected MvcHandler handler;
 
 	public void init(FilterConfig conf) throws ServletException {
 		log.infof("MvcFilter[%s] starting ...", conf.getFilterName());
 
-		handler = (ActionHandler)conf.getServletContext().getAttribute(ActionHandler.class.getName());
+		handler = (MvcHandler)conf.getServletContext().getAttribute(MvcHandler.class.getName());
 		if (handler == null) {
-			FilterMvcConfig config = new FilterMvcConfig(conf);
-			handler = new ActionHandler(config);
+			MvcConfig mcfg = new MvcConfig(conf.getServletContext(), conf.getInitParameter("modules"));
+			MvcLoader loader = new MvcLoader(mcfg);
+			handler = loader.getActionHandler();
 			Mvcs.setActionHandler(conf.getServletContext(), handler);
 		}
 	}

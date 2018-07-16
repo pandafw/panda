@@ -33,18 +33,38 @@ import panda.servlet.ServletRequestParamMap;
 import panda.vfs.FilePool;
 
 public class ActionContext {
+	//----------------------------------------------------
+	// ioc object
+	//
 	private Ioc ioc;
 	
-	private String path;
-	private List<String> pathArgs;
-
 	private ServletContext servlet;
+
+	private ActionAssist assist;
+
+	private ActionConsts consts;
+	
+	private Settings settings;
+
+	private FilePool filePool;
+
+	private TextProvider text;
+
+	private StateProvider state;
+
+	private ParamAlert paramAlert;
+
+	private ActionAlert actionAlert;
+	
+	//-------------------------------------
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+
+	//--------------------------------------
 	private ActionChain chain;
-	
-	private ActionAssist assist;
-	private ActionConsts consts;
+
+	private String path;
+	private List<String> pathArgs;
 
 	private Locale locale;
 	private Object action;
@@ -62,16 +82,6 @@ public class ActionContext {
 	private Map<String, Object> castErrors;
 	
 	//--------------------------
-	// cached ioc bean
-	//
-	private Settings settings;
-	private FilePool filePool;
-	private TextProvider text;
-	private StateProvider state;
-	private ParamAlert paramAlert;
-	private ActionAlert actionAlert;
-	
-	//--------------------------
 	// statics path
 	//
 	private String statics;
@@ -82,6 +92,9 @@ public class ActionContext {
 	public ActionContext() {
 	}
 
+	//----------------------------------------------------
+	// ioc object
+	//
 	/**
 	 * @return self
 	 */
@@ -111,12 +124,56 @@ public class ActionContext {
 	}
 
 	/**
+	 * @return the servlet
+	 */
+	public ServletContext getServlet() {
+		return servlet;
+	}
+
+	/**
+	 * @param servlet the servlet to set
+	 */
+	public void setServlet(ServletContext servlet) {
+		this.servlet = servlet;
+	}
+
+	//--------------------------------------------
+	/**
+	 * @return the request
+	 */
+	public HttpServletRequest getRequest() {
+		return request;
+	}
+
+	/**
+	 * @param request the request to set
+	 */
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
+	}
+
+	/**
+	 * @return the response
+	 */
+	public HttpServletResponse getResponse() {
+		return response;
+	}
+
+	/**
+	 * @param response the response to set
+	 */
+	public void setResponse(HttpServletResponse response) {
+		this.response = response;
+	}
+
+	//--------------------------------------------
+	/**
 	 * @return IocProxy
 	 */
 	public IocProxy getBeans() {
 		return new IocProxy(ioc);
 	}
-	
+
 	/**
 	 * @return the info
 	 */
@@ -153,52 +210,10 @@ public class ActionContext {
 	}
 
 	/**
-	 * @return the request
-	 */
-	public HttpServletRequest getRequest() {
-		return request;
-	}
-
-	/**
-	 * @param request the request to set
-	 */
-	public void setRequest(HttpServletRequest request) {
-		this.request = request;
-	}
-
-	/**
-	 * @return the response
-	 */
-	public HttpServletResponse getResponse() {
-		return response;
-	}
-
-	/**
-	 * @param response the response to set
-	 */
-	public void setResponse(HttpServletResponse response) {
-		this.response = response;
-	}
-
-	/**
 	 * @return the session
 	 */
 	public HttpSession getSession() {
 		return request.getSession(false);
-	}
-
-	/**
-	 * @return the servlet
-	 */
-	public ServletContext getServlet() {
-		return servlet;
-	}
-
-	/**
-	 * @param servlet the servlet to set
-	 */
-	public void setServlet(ServletContext servlet) {
-		this.servlet = servlet;
 	}
 
 	/**
@@ -403,22 +418,6 @@ public class ActionContext {
 		return actionAlert;
 	}
 	
-	public Collection<String> getActionErrors() {
-		return getActionAlert().getErrors();
-	}
-	
-	public Collection<String> getActionWarnings() {
-		return getActionAlert().getWarnings();
-	}
-	
-	public Collection<String> getActionConfirms() {
-		return getActionAlert().getConfirms();
-	}
-	
-	public Collection<String> getActionMessages() {
-		return getActionAlert().getMessages();
-	}
-	
 	/**
 	 * @return parameter alert
 	 */
@@ -427,13 +426,6 @@ public class ActionContext {
 			paramAlert = ioc.get(ParamAlert.class);
 		}
 		return paramAlert;
-	}
-	
-	/**
-	 * @return parameter errors
-	 */
-	public Map<String, List<String>> getParamErrors() {
-		return getParamAlert().getErrors();
 	}
 
 	/**
@@ -454,6 +446,30 @@ public class ActionContext {
 			consts = getIoc().get(ActionConsts.class);
 		}
 		return consts;
+	}
+	
+	//----------------------------------------------------
+	public Collection<String> getActionErrors() {
+		return getActionAlert().getErrors();
+	}
+	
+	public Collection<String> getActionWarnings() {
+		return getActionAlert().getWarnings();
+	}
+	
+	public Collection<String> getActionConfirms() {
+		return getActionAlert().getConfirms();
+	}
+	
+	public Collection<String> getActionMessages() {
+		return getActionAlert().getMessages();
+	}
+	
+	/**
+	 * @return parameter errors
+	 */
+	public Map<String, List<String>> getParamErrors() {
+		return getParamAlert().getErrors();
 	}
 	
 	//----------------------------------------------------

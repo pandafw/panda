@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.config.ServletMvcConfig;
 import panda.net.http.HttpStatus;
 
 /**
@@ -21,16 +20,17 @@ public class MvcServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	protected ActionHandler handler;
+	protected MvcHandler handler;
 
 	@Override
 	public void init(ServletConfig conf) throws ServletException {
 		log.infof("MvcServlet[%s] starting ...", conf.getServletName());
 
-		handler = (ActionHandler)conf.getServletContext().getAttribute(ActionHandler.class.getName());
+		handler = (MvcHandler)conf.getServletContext().getAttribute(MvcHandler.class.getName());
 		if (handler == null) {
-			ServletMvcConfig config = new ServletMvcConfig(conf);
-			handler = new ActionHandler(config);
+			MvcConfig mcfg = new MvcConfig(conf.getServletContext(), conf.getInitParameter("modules"));
+			MvcLoader loader = new MvcLoader(mcfg);
+			handler = loader.getActionHandler();
 			Mvcs.setActionHandler(conf.getServletContext(), handler);
 		}
 	}
@@ -51,7 +51,7 @@ public class MvcServlet extends HttpServlet {
 	/**
 	 * @return the handler
 	 */
-	public ActionHandler getHandler() {
+	public MvcHandler getHandler() {
 		return handler;
 	}
 }
