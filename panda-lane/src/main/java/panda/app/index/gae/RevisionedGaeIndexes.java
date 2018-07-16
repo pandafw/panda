@@ -39,8 +39,13 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 	 * initialize
 	 * @throws IOException if an IO error occurs
 	 */
-	public void initialize() throws IOException {
-		cleanOldRevisionIndex();
+	public void initialize() {
+		try {
+			cleanOldRevisionIndex();
+		}
+		catch (Throwable e) {
+			log.warn("Failed to clean old revision index", e);
+		}
 	}
 
 	@Override
