@@ -20,6 +20,7 @@ import panda.lang.Chars;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.reflect.ArrayCreator;
 import panda.lang.reflect.ConstructorCreator;
 import panda.lang.reflect.Constructors;
 import panda.lang.reflect.MethodCreator;
@@ -214,15 +215,20 @@ public class DefaultObjectMaker implements ObjectMaker {
 			}
 		}
 		else {
-			Constructor<?> c = Constructors.getConstructor(cls, args);
-			if (c == null) {
-				c = Constructors.getConstructor(cls, args.length);
-				if (c == null) {
-					throw new IocException("Failed to find constructor of '" + ing.getName() + "': " + Arrays.toString(args));
-				}
+			if (cls.isArray()) {
+				dw.setCreator(new ArrayCreator(cls, iobj.getFields().size()));
 			}
-			dw.setArgTypes(c.getGenericParameterTypes());
-			dw.setCreator(new ConstructorCreator(c));
+			else {
+				Constructor<?> c = Constructors.getConstructor(cls, args);
+				if (c == null) {
+					c = Constructors.getConstructor(cls, args.length);
+					if (c == null) {
+						throw new IocException("Failed to find constructor of '" + ing.getName() + "': " + Arrays.toString(args));
+					}
+				}
+				dw.setArgTypes(c.getGenericParameterTypes());
+				dw.setCreator(new ConstructorCreator(c));
+			}
 		}
 	}
 

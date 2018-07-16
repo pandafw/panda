@@ -2,6 +2,7 @@ package panda.ioc.impl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
@@ -23,7 +24,7 @@ public class IocFieldInjector {
 
 		if (fi.injector == null) {
 			BeanHandler bh = Beans.i().getBeanHandler(mirror);
-			if (bh.canWriteProperty(fieldName)) {
+			if (mirror.isArray() || Collection.class.isAssignableFrom(mirror) || bh.canWriteProperty(fieldName)) {
 				fi.injector = new PropertyInjector(fieldName, bh);
 			}
 			else {
