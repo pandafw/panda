@@ -154,6 +154,19 @@ public class HttpServlets {
 		}
 		return ip;
 	}
+
+	/**
+	 * @param request servlet request
+	 * @return SERVLET_FORWARD_REQUEST_URI + ? + SERVLET_FORWARD_QUERY_STRING
+	 */
+	public static String getServletForwardRequestURL(HttpServletRequest request) {
+		String url = Strings.defaultString(request.getAttribute(SERVLET_FORWARD_REQUEST_URI));
+		String query = (String)request.getAttribute(SERVLET_FORWARD_QUERY_STRING);
+		if (Strings.isNotEmpty(query)) {
+			url += '?' + query;
+		}
+		return url;
+	}
 	
 	/**
 	 * @param request request
@@ -368,7 +381,11 @@ public class HttpServlets {
 				writer.append('(').append(ip).append(')');
 			}
 			writer.append(" -> ").append(request.getMethod()).append(' ');
-			writer.append(request.getRequestURL());
+			String fw = getServletForwardRequestURL(request);
+			if (Strings.isNotEmpty(fw)) {
+				writer.append(fw).append(" -> ");
+			}
+			writer.append(request.getRequestURI());
 			if (Strings.isNotEmpty(request.getQueryString())) {
 				writer.append('?').append(request.getQueryString());
 			}
@@ -384,7 +401,7 @@ public class HttpServlets {
 			writer.append(Streams.LINE_SEPARATOR);
 			dumpRequestHeaders(request, writer);
 			
-			if (!Arrays.isEmpty(request.getCookies())) {
+			if (Arrays.isNotEmpty(request.getCookies())) {
 				writer.append(Streams.LINE_SEPARATOR);
 				dumpRequestCookies(request, writer);
 			}
