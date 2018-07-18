@@ -13,30 +13,30 @@ import panda.lang.Strings;
  * Base main class
  */
 public abstract class AbstractCommandTool {
-	public static void checkExists(File param, String name) {
+	public static void checkExists(File param, String name) throws CmdLineException {
 		if (param == null) {
-			throw new IllegalArgumentException("parameter [" + name + "] is required.");
+			throw new CmdLineException("parameter [" + name + "] is required.");
 		}
 		if (!param.exists()) {
-			throw new IllegalArgumentException("file [" + name + "]: " + param.getPath() + " does not exists.");
+			throw new CmdLineException("file [" + name + "]: " + param.getPath() + " does not exists.");
 		}
 	}
 	
-	public static void checkRequired(Object param, String name) {
+	public static void checkRequired(Object param, String name) throws CmdLineException {
 		if (Objects.isEmpty(param)) {
-			throw new IllegalArgumentException("parameter [" + name + "] is required.");
+			throw new CmdLineException("parameter [" + name + "] is required.");
 		}
 	}
 	
-	public static void checkRequired(String param, String name) {
+	public static void checkRequired(String param, String name) throws CmdLineException {
 		if (Strings.isEmpty(param)) {
-			throw new IllegalArgumentException("parameter [" + name + "] is required.");
+			throw new CmdLineException("parameter [" + name + "] is required.");
 		}
 	}
 	
-	public static void checkRequired(Object[] param, String name) {
+	public static void checkRequired(Object[] param, String name) throws CmdLineException {
 		if (Arrays.isEmpty(param)) {
-			throw new IllegalArgumentException("parameter [" + name + "] is required.");
+			throw new CmdLineException("parameter [" + name + "] is required.");
 		}
 	}
 
@@ -73,6 +73,8 @@ public abstract class AbstractCommandTool {
 			}
 			
 			clp.validate();
+
+			execute();
 		}
 		catch (CmdLineException e) {
 			System.out.println("ERROR: " + e.getMessage());
@@ -81,8 +83,6 @@ public abstract class AbstractCommandTool {
 			exitCode = 1;
 			return exitCode;
 		}
-
-		execute();
 
 		return exitCode;
 	}

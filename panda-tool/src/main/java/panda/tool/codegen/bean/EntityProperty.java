@@ -46,6 +46,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;jdbcType&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;comment&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;column&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;property&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;setterTrim&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;getterTrim&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;setterCode&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -108,6 +109,8 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	@XmlAttribute
 	private String column;
 	@XmlAttribute
+	private Boolean property = true;
+	@XmlAttribute
 	private String getterTrim;
 	@XmlAttribute
 	private String setterTrim;
@@ -158,6 +161,7 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		this.jdbcType = property.jdbcType;
 		this.comment = property.comment;
 		this.column = property.column;
+		this.property = property.property;
 		this.setterTrim = property.setterTrim;
 		this.getterTrim = property.getterTrim;
 		this.setterCode = property.setterCode;
@@ -243,6 +247,9 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		}
 		if (src.column != null) {
 			me.column = src.column;
+		}
+		if (src.property != null) {
+			me.property = src.property;
 		}
 		if (src.setterTrim != null) {
 			me.setterTrim = src.setterTrim;
@@ -733,6 +740,20 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	}
 
 	/**
+	 * @return the property
+	 */
+	public Boolean getProperty() {
+		return property;
+	}
+
+	/**
+	 * @param property the property to set
+	 */
+	public void setProperty(Boolean property) {
+		this.property = property;
+	}
+
+	/**
 	 * @return the getterTrim
 	 */
 	public String getGetterTrim() {
@@ -920,7 +941,7 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	}
 
 	public boolean isDbColumn() {
-		return !("0".equals(column) || "false".equals(column)) && !isJoinColumn();
+		return !("0".equals(column) || "false".equals(column)) && !isJoinColumn() && property;
 	}
 
 	public boolean isJoinColumn() {

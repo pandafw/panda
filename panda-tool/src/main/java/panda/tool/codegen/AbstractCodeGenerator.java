@@ -99,12 +99,11 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 	}
 
 	/**
-	 * @param outdir the outdir to set
+	 * @param out the output directory to set
 	 */
-	@Option(opt='o', option="output", arg="DIR", usage="Output directory. (default is current directory.)")
-	public void setOut(File outdir) {
-		AbstractCommandTool.checkRequired(outdir, "out");
-		this.out = outdir;
+	@Option(opt='o', option="out", arg="DIR", usage="Output directory. (default is current directory.)")
+	public void setOut(File out) {
+		this.out = out;
 	}
 
 	/**
@@ -343,6 +342,7 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 
 	protected void checkParameters() throws Exception {
 		AbstractCommandTool.checkRequired(includes, "includes");
+		AbstractCommandTool.checkRequired(out, "out");
 
 		for (int i = 0; i < includes.length; i++) {
 			String s = includes[i];

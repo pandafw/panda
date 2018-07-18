@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pandafw.github.io/repos/1.2.0/panda-codegen-module.xsd">
+	<!-- entity -->
+	<entity name="cEntity" generate="false">
+		<property name="cusnm" property="false" type="String" joinName="CU" joinEntity="${entity.user}" joinField="name" joinKeys="cusid" joinRefs="id"/>
+	</entity>
+
+	<entity name="uEntity" generate="false">
+		<property name="uusnm" property="false" type="String" joinName="UU" joinEntity="${entity.user}" joinField="name" joinKeys="uusid" joinRefs="id"/>
+	</entity>
+
 	<!-- action -->
 	<action name="baseAction" trimString="${trim.stringNull}" dataFieldName="${action.dataFieldName}" dataListFieldName="${action.dataListFieldName}">
 		<list name="baseList">
@@ -30,10 +39,11 @@
 			</column>
 		</list>
 		<list name="cList" extend="baseList">
-			<column name="cusid" hidden="false" sortable="true" link="false" order="100200">
+			<column name="cusid" hidden="true" sortable="true" link="false" order="100200">
 				<filter type="number"/>
 			</column>
-			<column name="ctime" hidden="false" sortable="true" link="false" order="100300">
+			<column name="cuser" hidden="false" sortable="true" link="false" order="100300"/>
+			<column name="ctime" hidden="false" sortable="true" link="false" order="100400">
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
@@ -42,25 +52,26 @@
 			<column name="cusid" hidden="true" sortable="false" link="false" order="100200">
 				<filter type="number"/>
 			</column>
-			<column name="ctime" hidden="true" sortable="false" link="false" order="100300">
+			<column name="ctime" hidden="true" sortable="false" link="false" order="100400">
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
 		</list>
 		<list name="uList" extend="baseList">
-			<column name="uusid" hidden="false" sortable="true" link="false" order="100400">
+			<column name="uusid" hidden="true" sortable="true" link="false" order="100500">
 				<filter type="number"/>
 			</column>
-			<column name="utime" hidden="false" sortable="true" link="false" order="100500">
+			<column name="uuser" hidden="false" sortable="true" link="false" order="100600"/>
+			<column name="utime" hidden="false" sortable="true" link="false" order="100700">
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
 		</list>
 		<list name="uhList" extend="baseList">
-			<column name="uusid" hidden="true" sortable="false" link="false" order="100400">
+			<column name="uusid" hidden="true" sortable="false" link="false" order="100500">
 				<filter type="number"/>
 			</column>
-			<column name="utime" hidden="true" sortable="false" link="false" order="100500">
+			<column name="utime" hidden="true" sortable="false" link="false" order="100700">
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
@@ -113,9 +124,9 @@
 		</input>
 		<input name="cInput" extend="baseInput">
 			<field name="cusid" order="100200">
-				<editTag name="${tag.viewfield}"/>
+				<editTag name="${tag.hidden}"/>
 			</field>
-			<field name="cusnm" order="100300">
+			<field name="cuser" order="100300">
 				<editTag name="${tag.viewfield}"/>
 			</field>
 			<field name="ctime" order="100400">
@@ -139,9 +150,9 @@
 		</input>
 		<input name="uInput" extend="baseInput">
 			<field name="uusid" order="100500">
-				<editTag name="${tag.viewfield}"/>
+				<editTag name="${tag.hidden}"/>
 			</field>
-			<field name="uusnm" order="100600">
+			<field name="uuser" order="100600">
 				<editTag name="${tag.viewfield}"/>
 			</field>
 			<field name="utime" order="100700">

@@ -94,7 +94,8 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	/*----------------------------------------------------------------------*
 	 * Getter & Setter
 	 *----------------------------------------------------------------------*/
-<#list entity.propertyList as p>
+<#list entity.properties as p>
+<#if p.property>
 	/**
 	 * @return the ${p.name}
 	 */
@@ -157,6 +158,17 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	</#if>
 	}
 
+<#elseif p.joinColumn>
+	/**
+	 * @return the ${p.name}
+	 */
+	@Override
+	@JoinColumn(name="${p.joinName}", field="${p.joinField}")
+	public ${p.simpleJavaType} <#if p.simpleJavaType == 'boolean'>is<#else>get</#if>${p.name?cap_first}() {
+		return super.<#if p.simpleJavaType == 'boolean'>is<#else>get</#if>${p.name?cap_first}();
+	}
+
+</#if>
 </#list>
 
 	/**

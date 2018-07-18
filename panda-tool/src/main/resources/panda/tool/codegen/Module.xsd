@@ -39,8 +39,9 @@
 		<attribute name="baseBeanClass" type="string"></attribute>
 		<attribute name="baseInterface" type="string"></attribute>
 		<attribute name="baseQueryClass" type="string"></attribute>
-		<attribute name="generate" type="string" default="true"></attribute>
+		<attribute name="generate" type="string"></attribute>
 		<attribute name="comment" type="string"></attribute>
+		<attribute name="extend" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
 
@@ -98,6 +99,7 @@
 		<attribute name="jdbcType" type="string"></attribute>
 		<attribute name="comment" type="string"></attribute>
 		<attribute name="column" type="string"></attribute>
+		<attribute name="property" type="string"></attribute>
 		<attribute name="getterTrim" type="string"></attribute>
 		<attribute name="setterTrim" type="string"></attribute>
 		<attribute name="setterCode" type="string"></attribute>

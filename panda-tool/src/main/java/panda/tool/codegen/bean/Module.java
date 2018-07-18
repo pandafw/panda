@@ -84,10 +84,45 @@ public class Module {
 	 */
 	public void prepare() throws Exception {
 		boolean extend = true;
+		while (extend) {
+			extend = false;
+			for (Entity entity : getEntityList()) {
+				if (Arrays.isEmpty(entity.getExtends())) {
+					continue;
+				}
+				
+				Entity na = entity;
+				for (String et : entity.getExtends()) {
+//					System.out.println("Extend entity[" + et + "] of " + entity.getName());
 
+					Entity parent = null;
+					for (Entity a2 : getEntityList()) {
+						if (a2.getName().equals(et)) {
+							parent = a2;
+							break;
+						}
+					}
+					if (parent == null) {
+						throw new Exception("Can not find extend entity[" + et + "] of " + entity.getName());
+					}
+					if (parent == entity) {
+						throw new Exception("Can not extend self entity[" + et + "] of " + entity.getName());
+					}
+					
+					na = Entity.extend(entity, parent);
+				}
+
+				getEntityList().remove(entity);
+				getEntityList().add(na);
+				extend = true;
+				break;
+			}
+		}
 		for (Entity entity : getEntityList()) {
 			entity.prepare();
 		}
+
+		extend = true;
 		while (extend) {
 			extend = false;
 			for (Action action : getActionList()) {

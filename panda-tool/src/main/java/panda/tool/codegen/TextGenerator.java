@@ -259,7 +259,7 @@ public class TextGenerator extends AbstractCodeGenerator {
 			pwmbp = new PrintWriter(fmbp, charset);
 			saveGenerateInfo(pwmbp);
 
-			for (EntityProperty p : entity.getPropertyList()) {
+			for (EntityProperty p : entity.getProperties()) {
 				if (p.getLabel() != null) {
 					saveProperty(pwmbp, p.getName(), p.getLabel());
 				}

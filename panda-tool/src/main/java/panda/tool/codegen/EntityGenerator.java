@@ -72,7 +72,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 	@Override
 	protected void processModule(Module module) throws Exception {
 		for (Entity entity : module.getEntityList()) {
-			if (Boolean.TRUE.equals(entity.getGenerate())) {
+			if (!Boolean.FALSE.equals(entity.getGenerate())) {
 				print2("Processing entity - " + entity.getName());
 
 				if (entity.getPrimaryKeyList().size() < 1) {
@@ -131,7 +131,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		Set<String> imports = new TreeSet<String>();
 
 		Set<EntityProperty> ps = new HashSet<EntityProperty>();
-		for (EntityProperty p : entity.getPropertyList()) {
+		for (EntityProperty p : entity.getProperties()) {
 			if (p.isDbColumn() || p.isJoinColumn()) {
 				if (!"bin".equals(p.getFieldKind())) {
 					ps.add(p);
@@ -233,7 +233,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		imports.add(Objects.class.getName());
 
-		for (EntityProperty p : entity.getPropertyList()) {
+		for (EntityProperty p : entity.getProperties()) {
 			if (Collections.isNotEmpty(p.getValidatorList())
 					|| (p.isDbColumn() && !"String".equals(p.getType()))) {
 				imports.add(Validators.class.getName());

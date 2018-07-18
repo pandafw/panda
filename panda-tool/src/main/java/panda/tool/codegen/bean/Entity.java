@@ -41,6 +41,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;baseInterface&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseQueryClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;extend&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;comment&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
@@ -53,8 +54,10 @@ import panda.lang.Strings;
 public class Entity {
 
 	@XmlElement(name = "property")
-	private List<EntityProperty> propertyList;
+	private List<EntityProperty> properties;
 
+	@XmlAttribute
+	private String extend;
 	@XmlAttribute
 	private Boolean generate = true;
 	@XmlAttribute
@@ -82,6 +85,7 @@ public class Entity {
 	@XmlAttribute(required = true)
 	private String name;
 
+	private List<EntityProperty> propertyList;
 	private EntityProperty identityProperty;
 	private List<EntityProperty> primaryKeyList;
 	private Map<String, List<EntityProperty>> uniqueKeyMap;
@@ -101,26 +105,27 @@ public class Entity {
 	/**
 	 * Constructor - copy properties from source
 	 * 
-	 * @param model source model
+	 * @param entity source model
 	 */
-	public Entity(Entity model) {
-		this.identitySequence = model.identitySequence;
-		this.identityIncrement = model.identityIncrement;
-		this.identityStart = model.identityStart;
-		this.identity = model.identity;
-		this.table = model.table;
-		this.trimString = model.trimString;
-		this.trimList = model.trimList;
-		this.baseBeanClass = model.baseBeanClass;
-		this.baseInterface = model.baseInterface;
-		this.baseQueryClass = model.baseQueryClass;
-		this.generate = model.generate;
-		this.comment = model.comment;
-		this.name = model.name;
+	public Entity(Entity entity) {
+		this.identitySequence = entity.identitySequence;
+		this.identityIncrement = entity.identityIncrement;
+		this.identityStart = entity.identityStart;
+		this.identity = entity.identity;
+		this.table = entity.table;
+		this.trimString = entity.trimString;
+		this.trimList = entity.trimList;
+		this.baseBeanClass = entity.baseBeanClass;
+		this.baseInterface = entity.baseInterface;
+		this.baseQueryClass = entity.baseQueryClass;
+		this.generate = entity.generate;
+		this.comment = entity.comment;
+		this.extend = entity.extend;
+		this.name = entity.name;
 
-		propertyList = new ArrayList<EntityProperty>();
-		for (EntityProperty p : model.getPropertyList()) {
-			propertyList.add(new EntityProperty(p));
+		properties = new ArrayList<EntityProperty>();
+		for (EntityProperty p : entity.getProperties()) {
+			properties.add(new EntityProperty(p));
 		}
 	}
 
@@ -146,6 +151,7 @@ public class Entity {
 	 * @throws Exception if an error occurs
 	 */
 	public void prepare() throws Exception {
+		preparePropertyList();
 		prepareIdentityProperty();
 		preparePrimaryKeyList();
 		if (identityProperty != null) {
@@ -163,13 +169,83 @@ public class Entity {
 	}
 
 	/**
+	 * extend entity
+	 * 
+	 * @param src source entity
+	 * @param parent extend entity
+	 * @return entity
+	 */
+	public static Entity extend(Entity src, Entity parent) {
+		Entity me = new Entity(parent);
+
+		if (src.identitySequence != null) {
+			me.identitySequence = src.identitySequence;
+		}
+		if (src.identityIncrement != null) {
+			me.identityIncrement = src.identityIncrement;
+		}
+		if (src.identityStart != null) {
+			me.identityStart = src.identityStart;
+		}
+		if (src.identity != null) {
+			me.identity = src.identity;
+		}
+		if (src.table != null) {
+			me.table = src.table;
+		}
+		if (src.generate != null) {
+			me.generate = src.generate;
+		}
+		if (src.trimString != null) {
+			me.trimString = src.trimString;
+		}
+		if (src.trimList != null) {
+			me.trimList = src.trimList;
+		}
+		if (src.baseBeanClass != null) {
+			me.baseBeanClass = src.baseBeanClass;
+		}
+		if (src.baseInterface != null) {
+			me.baseInterface = src.baseInterface;
+		}
+		if (src.baseQueryClass != null) {
+			me.baseQueryClass = src.baseQueryClass;
+		}
+		if (src.comment != null) {
+			me.comment = src.comment;
+		}
+		if (src.name != null) {
+			me.name = src.name;
+		}
+
+		List<EntityProperty> mplist = me.getProperties();
+		List<EntityProperty> splist = src.getProperties();
+		for (EntityProperty sp : splist) {
+			boolean add = false;
+			for (EntityProperty mp : mplist) {
+				if (mp.getName().equals(sp.getName())) {
+					mplist.remove(mp);
+					mplist.add(EntityProperty.extend(sp, mp));
+					add = true;
+					break;
+				}
+			}
+			if (!add) {
+				mplist.add(new EntityProperty(sp));
+			}
+		}
+
+		return me;
+	}
+
+	/**
 	 * @return the propertyList
 	 */
-	public List<EntityProperty> getPropertyList() {
-		if (propertyList == null) {
-			propertyList = new ArrayList<EntityProperty>();
+	public List<EntityProperty> getProperties() {
+		if (properties == null) {
+			properties = new ArrayList<EntityProperty>();
 		}
-		return this.propertyList;
+		return this.properties;
 	}
 
 	/**
@@ -216,6 +292,24 @@ public class Entity {
 	 */
 	public void setGenerate(Boolean generate) {
 		this.generate = generate;
+	}
+
+	/**
+	 * @return the extend
+	 */
+	public String getExtend() {
+		return extend;
+	}
+
+	/**
+	 * @param extend the extend to set
+	 */
+	public void setExtend(String extend) {
+		this.extend = extend;
+	}
+
+	public String[] getExtends() {
+		return Strings.split(extend, ", ");
 	}
 
 	/**
@@ -392,7 +486,7 @@ public class Entity {
 	//-----------------------------------------------------------------------
 	private void prepareIdentityProperty() {
 		if (!Strings.isBlank(getIdentity())) {
-			for (EntityProperty p : getPropertyList()) {
+			for (EntityProperty p : getProperties()) {
 				if (p.getName().equals(getIdentity())) {
 					identityProperty = p;
 					return;
@@ -402,14 +496,23 @@ public class Entity {
 		}
 	}
 
+	private void preparePropertyList() {
+		propertyList = new ArrayList<EntityProperty>();
+		for (EntityProperty p : getProperties()) {
+			if (!Boolean.FALSE.equals(p.getProperty())) {
+				propertyList.add(p);
+			}
+		}
+	}
+
 	private void preparePrimaryKeyList() {
 		primaryKeyList = new ArrayList<EntityProperty>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (Boolean.TRUE.equals(p.getPrimaryKey())) {
 				primaryKeyList.add(p);
 			}
 		}
-		if (primaryKeyList.isEmpty()) {
+		if (primaryKeyList.isEmpty() && !Boolean.FALSE.equals(generate)) {
 			throw new IllegalArgumentException("Primary key not defined: " + name);
 		}
 	}
@@ -418,7 +521,7 @@ public class Entity {
 		uniqueKeyMap = new TreeMap<String, List<EntityProperty>>();
 
 		Set<String> us = new HashSet<String>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (p.getUniqueKeys() != null) {
 				for (String uk : p.getUniqueKeys()) {
 					us.add(uk);
@@ -428,7 +531,7 @@ public class Entity {
 
 		for (String u : us) {
 			List<EntityProperty> list = new ArrayList<EntityProperty>();
-			for (EntityProperty p : getPropertyList()) {
+			for (EntityProperty p : getProperties()) {
 				if (Arrays.contains(p.getUniqueKeys(), u)) {
 					list.add(p);
 				}
@@ -450,7 +553,7 @@ public class Entity {
 		int i = 0;
 		
 		foreignKeyMap = new TreeMap<String, List<EntityProperty>>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (Strings.isEmpty(p.getForeignKey()) && Strings.isEmpty(p.getForeignEntity())) {
 				continue;
 			}
@@ -559,7 +662,7 @@ public class Entity {
 	
 	private void prepareJoinMap() {
 		joinMap = new TreeMap<String, List<EntityProperty>>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (Strings.isEmpty(p.getJoinName())) {
 				continue;
 			}
@@ -575,7 +678,7 @@ public class Entity {
 
 	private void prepareNotNullList() {
 		notNullList = new ArrayList<EntityProperty>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (Boolean.TRUE.equals(p.getNotNull()) && !p.getName().equals(getIdentity())) {
 				notNullList.add(p);
 			}
@@ -584,7 +687,7 @@ public class Entity {
 
 	private void prepareColumnList() {
 		columnList = new ArrayList<EntityProperty>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (p.isDbColumn()) {
 				columnList.add(p);
 			}
@@ -593,7 +696,7 @@ public class Entity {
 
 	private void prepareJoinList() {
 		joinList = new ArrayList<EntityProperty>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (p.isJoinColumn()) {
 				joinList.add(p);
 			}
@@ -602,11 +705,18 @@ public class Entity {
 
 	private void prepareFieldList() {
 		fieldList = new ArrayList<EntityProperty>();
-		for (EntityProperty p : getPropertyList()) {
+		for (EntityProperty p : getProperties()) {
 			if (p.isDbColumn() || p.isJoinColumn()) {
 				fieldList.add(p);
 			}
 		}
+	}
+
+	/**
+	 * @return the propertyList
+	 */
+	public List<EntityProperty> getPropertyList() {
+		return propertyList;
 	}
 
 	/**
