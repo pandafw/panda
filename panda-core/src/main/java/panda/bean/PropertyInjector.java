@@ -30,6 +30,8 @@ public class PropertyInjector implements Injector {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void inject(Object obj, Object value) {
-		handler.setPropertyValue(obj, field, value);
+		if (!handler.setPropertyValue(obj, field, value)) {
+			throw new RuntimeException("Failed to inject " + field + " of " + obj.getClass() + " : " + value);
+		}
 	}
 }
