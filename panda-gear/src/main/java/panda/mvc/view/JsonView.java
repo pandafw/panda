@@ -6,11 +6,15 @@ import java.io.PrintWriter;
 import panda.bind.json.JsonSerializer;
 import panda.bind.json.Jsons;
 import panda.io.MimeTypes;
+import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
+import panda.mvc.SetConstants;
 
 /**
  * serialize json object to output
@@ -19,10 +23,21 @@ import panda.mvc.ActionContext;
 public class JsonView extends BindView {
 	private static final Log log = Logs.getLog(JsonView.class);
 
+	@IocInject
+	protected Settings settings;
+	
 	protected String jsonp;
 	
 	public JsonView() {
 		setContentType(MimeTypes.TEXT_JAVASCRIPT);
+	}
+
+	/**
+	 * @param prettyPrint the prettyPrint to set
+	 */
+	@IocInject(value=MvcConstants.JSON_VIEW_PRETTY_PRINT, required=false)
+	public void setPrettyPrint(boolean prettyPrint) {
+		super.setPrettyPrint(prettyPrint);
 	}
 
 	/**
@@ -58,19 +73,18 @@ public class JsonView extends BindView {
 		}
 		if (result != null) {
 			JsonSerializer js = Jsons.newJsonSerializer();
+
 			setSerializerOptions(js);
+			js.setPrettyPrint(settings.getPropertyAsBoolean(SetConstants.XML_VIEW_PRETTY_PRINT, prettyPrint));
 
 			if (log.isDebugEnabled()) {
-				if (js.isPrettyPrint()) {
-					log.debug(js.serialize(result));
-				}
-				else {
-					js.setPrettyPrint(true);
-					log.debug(js.serialize(result));
-					js.setPrettyPrint(false);
-				}
+				String json = js.serialize(result);
+				log.debug(json);
+				writer.write(json);
 			}
-			js.serialize(result, writer);
+			else {
+				js.serialize(result, writer);
+			}
 		}
 		if (Strings.isNotEmpty(jsonp)) {
 			writer.write(");");

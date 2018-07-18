@@ -26,4 +26,10 @@ public interface SetConstants {
 	 * use cdn for js/css
 	 */
 	public static final String LINK_CDN = "link.cdn";
+
+	/** JsonView Pretty Print */
+	public static final String JSON_VIEW_PRETTY_PRINT = "view.json.pretty";
+
+	/** XmlView Pretty Print */
+	public static final String XML_VIEW_PRETTY_PRINT = "view.xml.pretty";
 }

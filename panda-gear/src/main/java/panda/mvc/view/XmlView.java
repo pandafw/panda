@@ -6,11 +6,15 @@ import java.io.PrintWriter;
 import panda.bind.xml.XmlSerializer;
 import panda.bind.xml.Xmls;
 import panda.io.MimeTypes;
+import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
+import panda.mvc.SetConstants;
 
 /**
  * serialize XML object to output
@@ -19,13 +23,24 @@ import panda.mvc.ActionContext;
 public class XmlView extends BindView {
 	private static final Log log = Logs.getLog(XmlView.class);
 
-	private String rootName;
+	@IocInject
+	protected Settings settings;
+
+	protected String rootName;
 	
 	/**
 	 * Constructor.
 	 */
 	public XmlView() {
 		setContentType(MimeTypes.TEXT_XML);
+	}
+
+	/**
+	 * @param prettyPrint the prettyPrint to set
+	 */
+	@IocInject(value=MvcConstants.JSON_VIEW_PRETTY_PRINT, required=false)
+	public void setPrettyPrint(boolean prettyPrint) {
+		super.setPrettyPrint(prettyPrint);
 	}
 
 	/**
@@ -58,18 +73,16 @@ public class XmlView extends BindView {
 				xs.setRootName(rootName);
 			}
 			setSerializerOptions(xs);
+			xs.setPrettyPrint(settings.getPropertyAsBoolean(SetConstants.XML_VIEW_PRETTY_PRINT, prettyPrint));
 
 			if (log.isDebugEnabled()) {
-				if (xs.isPrettyPrint()) {
-					log.debug(xs.serialize(result));
-				}
-				else {
-					xs.setPrettyPrint(true);
-					log.debug(xs.serialize(result));
-					xs.setPrettyPrint(false);
-				}
+				String xml = xs.serialize(result);
+				log.debug(xml);
+				writer.write(xml);
 			}
-			xs.serialize(result, writer);
+			else {
+				xs.serialize(result, writer);
+			}
 		}
 	}
 }

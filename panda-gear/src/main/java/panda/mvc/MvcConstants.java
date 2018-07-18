@@ -83,19 +83,25 @@ public interface MvcConstants extends IocConstants {
 	public static final String STATIC_PATH = "static_path";
 
 	/** The static resource version */
-	public static final String STATIC_VERSION = "static.version";
+	public static final String STATIC_VERSION = "panda.static.version";
 
 	/** The static resource browser cache */
-	public static final String STATIC_BROWSER_CACHE = "static.browser.cache";
+	public static final String STATIC_BROWSER_CACHE = "panda.static.browser.cache";
 
 	/** The static resource expire days */
-	public static final String STATIC_EXPIRE_DAYS = "static.expire.days";
+	public static final String STATIC_EXPIRE_DAYS = "panda.static.expire.days";
 
 	/** The default UI template theme */
 	public static final String UI_THEME = "panda.ui.theme";
 
 	/** The custom themes */
 	public static final String UI_CUSTOM_THEMES = "panda.ui.themes";
+
+	/** JsonView Pretty Print */
+	public static final String JSON_VIEW_PRETTY_PRINT = "panda.view.json.pretty";
+
+	/** XmlView Pretty Print */
+	public static final String XML_VIEW_PRETTY_PRINT = "panda.view.xml.pretty";
 
 	/** Custom Servlet Error View */
 	public static final String SERVLET_ERROR_VIEW = "panda.view.servlet.error";
