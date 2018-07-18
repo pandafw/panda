@@ -2939,11 +2939,11 @@ public class Strings {
 	 * </pre>
 	 * 
 	 * @param str the String to parse, may be null
-	 * @param separatorChar the character used as the delimiter
+	 * @param sep the character used as the delimiter
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	public static String[] split(final String str, final char separatorChar) {
-		return splitWorker(str, separatorChar, false);
+	public static String[] split(final String str, final char sep) {
+		return splitWorker(str, sep, -1, false);
 	}
 
 	/**
@@ -2956,7 +2956,7 @@ public class Strings {
 	 * as one separator. For more control over the split use the StrTokenizer class.
 	 * </p>
 	 * <p>
-	 * A {@code null} input String returns {@code null}. A {@code null} separatorChars splits on
+	 * A {@code null} input String returns {@code null}. A {@code null} sepChars splits on
 	 * whitespace.
 	 * </p>
 	 * 
@@ -2970,12 +2970,12 @@ public class Strings {
 	 * </pre>
 	 * 
 	 * @param str the String to parse, may be null
-	 * @param separatorChars the characters used as the delimiters, {@code null} splits on
+	 * @param sepChars the characters used as the delimiters, {@code null} splits on
 	 *            whitespace
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	public static String[] split(final String str, final String separatorChars) {
-		return splitWorker(str, separatorChars, -1, false);
+	public static String[] split(final String str, final String sepChars) {
+		return splitWorker(str, sepChars, -1, false);
 	}
 
 	/**
@@ -2987,7 +2987,41 @@ public class Strings {
 	 * as one separator.
 	 * </p>
 	 * <p>
-	 * A {@code null} input String returns {@code null}. A {@code null} separatorChars splits on
+	 * A {@code null} input String returns {@code null}. 
+	 * </p>
+	 * <p>
+	 * If more than {@code max} delimited substrings are found, the last returned string includes
+	 * all characters after the first {@code max - 1} returned strings (including separator
+	 * characters).
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.split(null, *, *)            = null
+	 * Strings.split("", *, *)              = []
+	 * Strings.split("ab:cd:ef", ':', 0)    = ["ab", "cd", "ef"]
+	 * Strings.split("ab:cd:ef", ':', 2)    = ["ab", "cd:ef"]
+	 * </pre>
+	 * 
+	 * @param str the String to parse, may be null
+	 * @param sep the character used as the delimiter
+	 * @param max the maximum number of elements to include in the array. A zero or negative value
+	 *            implies no limit
+	 * @return an array of parsed Strings, {@code null} if null String input
+	 */
+	public static String[] split(final String str, final char sep, final int max) {
+		return splitWorker(str, sep, max, false);
+	}
+
+	/**
+	 * <p>
+	 * Splits the provided text into an array with a maximum length, separators specified.
+	 * </p>
+	 * <p>
+	 * The separator is not included in the returned String array. Adjacent separators are treated
+	 * as one separator.
+	 * </p>
+	 * <p>
+	 * A {@code null} input String returns {@code null}. A {@code null} sepChars splits on
 	 * whitespace.
 	 * </p>
 	 * <p>
@@ -3006,14 +3040,14 @@ public class Strings {
 	 * </pre>
 	 * 
 	 * @param str the String to parse, may be null
-	 * @param separatorChars the characters used as the delimiters, {@code null} splits on
+	 * @param sepChars the characters used as the delimiters, {@code null} splits on
 	 *            whitespace
 	 * @param max the maximum number of elements to include in the array. A zero or negative value
 	 *            implies no limit
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	public static String[] split(final String str, final String separatorChars, final int max) {
-		return splitWorker(str, separatorChars, max, false);
+	public static String[] split(final String str, final String sepChars, final int max) {
+		return splitWorker(str, sepChars, max, false);
 	}
 
 	/**
@@ -3290,11 +3324,11 @@ public class Strings {
 	 * </pre>
 	 * 
 	 * @param str the String to parse, may be {@code null}
-	 * @param separatorChar the character used as the delimiter, {@code null} splits on whitespace
+	 * @param sep the character used as the delimiter
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	public static String[] splitPreserveAllTokens(final String str, final char separatorChar) {
-		return splitWorker(str, separatorChar, true);
+	public static String[] splitPreserveAllTokens(final String str, final char sep) {
+		return splitWorker(str, sep, -1, true);
 	}
 
 	/**
@@ -3302,31 +3336,40 @@ public class Strings {
 	 * not return a maximum array length.
 	 * 
 	 * @param str the String to parse, may be {@code null}
-	 * @param separatorChar the separate character
+	 * @param sep the separate character
+	 * @param max the maximum number of elements to include in the array. A zero or negative value
+	 *            implies no limit.
 	 * @param preserveAllTokens if {@code true}, adjacent separators are treated as empty token
 	 *            separators; if {@code false}, adjacent separators are treated as one separator.
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	private static String[] splitWorker(final String str, final char separatorChar, final boolean preserveAllTokens) {
+	private static String[] splitWorker(final String str, final char sep, final int max, final boolean preserveAllTokens) {
 		// Performance tuned for 2.0 (JDK1.4)
 
 		if (str == null) {
 			return null;
 		}
+
 		final int len = str.length();
 		if (len == 0) {
 			return Arrays.EMPTY_STRING_ARRAY;
 		}
+
 		final List<String> list = new ArrayList<String>();
 		int i = 0, start = 0;
+		int sizePlus1 = 1;
 		boolean match = false;
 		boolean lastMatch = false;
 		while (i < len) {
-			if (str.charAt(i) == separatorChar) {
+			if (str.charAt(i) == sep) {
 				if (match || preserveAllTokens) {
+					lastMatch = true;
+					if (sizePlus1++ == max) {
+						i = len;
+						lastMatch = false;
+					}
 					list.add(str.substring(start, i));
 					match = false;
-					lastMatch = true;
 				}
 				start = ++i;
 				continue;
@@ -3352,7 +3395,7 @@ public class Strings {
 	 * as separators for empty tokens. For more control over the split use the StrTokenizer class.
 	 * </p>
 	 * <p>
-	 * A {@code null} input String returns {@code null}. A {@code null} separatorChars splits on
+	 * A {@code null} input String returns {@code null}. A {@code null} sepChars splits on
 	 * whitespace.
 	 * </p>
 	 * 
@@ -3372,12 +3415,12 @@ public class Strings {
 	 * </pre>
 	 * 
 	 * @param str the String to parse, may be {@code null}
-	 * @param separatorChars the characters used as the delimiters, {@code null} splits on
+	 * @param sepChars the characters used as the delimiters, {@code null} splits on
 	 *            whitespace
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	public static String[] splitPreserveAllTokens(final String str, final String separatorChars) {
-		return splitWorker(str, separatorChars, -1, true);
+	public static String[] splitPreserveAllTokens(final String str, final String sepChars) {
+		return splitWorker(str, sepChars, -1, true);
 	}
 
 	/**
@@ -3390,7 +3433,7 @@ public class Strings {
 	 * as separators for empty tokens. Adjacent separators are treated as one separator.
 	 * </p>
 	 * <p>
-	 * A {@code null} input String returns {@code null}. A {@code null} separatorChars splits on
+	 * A {@code null} input String returns {@code null}. A {@code null} sepChars splits on
 	 * whitespace.
 	 * </p>
 	 * <p>
@@ -3412,14 +3455,14 @@ public class Strings {
 	 * </pre>
 	 * 
 	 * @param str the String to parse, may be {@code null}
-	 * @param separatorChars the characters used as the delimiters, {@code null} splits on
+	 * @param sepChars the characters used as the delimiters, {@code null} splits on
 	 *            whitespace
 	 * @param max the maximum number of elements to include in the array. A zero or negative value
 	 *            implies no limit
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	public static String[] splitPreserveAllTokens(final String str, final String separatorChars, final int max) {
-		return splitWorker(str, separatorChars, max, true);
+	public static String[] splitPreserveAllTokens(final String str, final String sepChars, final int max) {
+		return splitWorker(str, sepChars, max, true);
 	}
 
 	/**
@@ -3427,14 +3470,14 @@ public class Strings {
 	 * return a maximum array length.
 	 * 
 	 * @param str the String to parse, may be {@code null}
-	 * @param separatorChars the separate character
+	 * @param sepChars the separate character
 	 * @param max the maximum number of elements to include in the array. A zero or negative value
 	 *            implies no limit.
 	 * @param preserveAllTokens if {@code true}, adjacent separators are treated as empty token
 	 *            separators; if {@code false}, adjacent separators are treated as one separator.
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	private static String[] splitWorker(final String str, final String separatorChars, final int max,
+	private static String[] splitWorker(final String str, final String sepChars, final int max,
 			final boolean preserveAllTokens) {
 		// Performance tuned for 2.0 (JDK1.4)
 		// Direct code is quicker than StringTokenizer.
@@ -3443,16 +3486,23 @@ public class Strings {
 		if (str == null) {
 			return null;
 		}
+
 		final int len = str.length();
 		if (len == 0) {
 			return Arrays.EMPTY_STRING_ARRAY;
 		}
+
+		if (sepChars != null && sepChars.length() == 1) {
+			// Optimize 1 character case
+			return splitWorker(str, sepChars.charAt(0), max, preserveAllTokens);
+		}
+		
 		final List<String> list = new ArrayList<String>();
 		int sizePlus1 = 1;
 		int i = 0, start = 0;
 		boolean match = false;
 		boolean lastMatch = false;
-		if (separatorChars == null) {
+		if (sepChars == null) {
 			// Null separator means use whitespace
 			while (i < len) {
 				if (Character.isWhitespace(str.charAt(i))) {
@@ -3473,32 +3523,10 @@ public class Strings {
 				i++;
 			}
 		}
-		else if (separatorChars.length() == 1) {
-			// Optimise 1 character case
-			final char sep = separatorChars.charAt(0);
-			while (i < len) {
-				if (str.charAt(i) == sep) {
-					if (match || preserveAllTokens) {
-						lastMatch = true;
-						if (sizePlus1++ == max) {
-							i = len;
-							lastMatch = false;
-						}
-						list.add(str.substring(start, i));
-						match = false;
-					}
-					start = ++i;
-					continue;
-				}
-				lastMatch = false;
-				match = true;
-				i++;
-			}
-		}
 		else {
 			// standard case
 			while (i < len) {
-				if (separatorChars.indexOf(str.charAt(i)) >= 0) {
+				if (sepChars.indexOf(str.charAt(i)) >= 0) {
 					if (match || preserveAllTokens) {
 						lastMatch = true;
 						if (sizePlus1++ == max) {
