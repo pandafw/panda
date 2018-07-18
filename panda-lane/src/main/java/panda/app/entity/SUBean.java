@@ -82,6 +82,14 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 		this.utime = utime;
 	}
 
+	/**
+	 * @return uusid:uusnmr
+	 */
+	@Override
+	public String getUuser() {
+		return uusid == null ? null : uusid + (uusnm == null ? "" : ':' + uusnm);
+	}
+
 	//----------------------------------------------------------------------
 	/**
 	 * copy properties from the specified object.

@@ -13,7 +13,7 @@ public abstract class CBean extends Bean implements ICreate {
 	
 	@Column(notNull=true)
 	protected Date ctime;
-	
+
 	/**
 	 * @return the cusid
 	 */
@@ -60,6 +60,14 @@ public abstract class CBean extends Bean implements ICreate {
 	@Override
 	public void setCtime(Date ctime) {
 		this.ctime = ctime;
+	}
+
+	/**
+	 * @return cusid:cusnmr
+	 */
+	@Override
+	public String getCuser() {
+		return cusid == null ? null : cusid + (cusnm == null ? "" : ':' + cusnm);
 	}
 
 	//----------------------------------------------------------------------

@@ -1,8 +1,10 @@
 id=ID
 status=ステータス
+cuser=作成者
 cusid=作成者ID
 cusnm=作成者名
 ctime=作成時間
+uuser=更新者
 uusid=更新者ID
 uusnm=更新者名
 utime=更新時間

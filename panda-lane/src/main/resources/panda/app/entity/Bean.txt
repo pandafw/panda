@@ -1,8 +1,10 @@
 id=ID
 status=Status
+cuser=Create User
 cusid=Create UID
 cusnm=Create User
 ctime=Create Date
+uuser=Update User
 uusid=Update UID
 uusnm=Update User
 utime=Update Date

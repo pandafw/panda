@@ -118,6 +118,22 @@ public class CUBean extends Bean implements ICreate, IUpdate {
 		this.utime = utime;
 	}
 
+	/**
+	 * @return cusid:cusnmr
+	 */
+	@Override
+	public String getCuser() {
+		return cusid == null ? null : cusid + (cusnm == null ? "" : ':' + cusnm);
+	}
+
+	/**
+	 * @return uusid:uusnmr
+	 */
+	@Override
+	public String getUuser() {
+		return uusid == null ? null : uusid + (uusnm == null ? "" : ':' + uusnm);
+	}
+
 	//----------------------------------------------------------------------
 	/**
 	 * copy properties from the specified object.
