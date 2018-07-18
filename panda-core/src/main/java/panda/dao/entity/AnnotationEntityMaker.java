@@ -342,7 +342,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 			}
 
 			mi.name = name;
-			mi.type = method.getGenericReturnType();
+			mi.type = method.getGenericParameterTypes().length == 0 ? method.getGenericReturnType() : method.getGenericParameterTypes()[0];
 			mi.annComment = method.getAnnotation(Comment.class);
 			mi.annReadonly = method.getAnnotation(Readonly.class);
 			mi.annPrep = method.getAnnotation(Prep.class);
