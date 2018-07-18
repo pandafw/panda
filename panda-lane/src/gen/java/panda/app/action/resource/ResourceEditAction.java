@@ -21,7 +21,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 */
 	public ResourceEditAction() {
 		setType(Resource.class);
-		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UUSID, Resource.UUSNM, Resource.UTIME);
+		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UUSID, Resource.UUSER, Resource.UTIME);
 	}
 
 

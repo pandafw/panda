@@ -3,7 +3,7 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="${entity.package}.Template" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
+	<entity name="${entity.package}.Template" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001" generate="true">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
 		<property name="name" type="String" size="100" notNull="true" uniqueKey="NLC" comment="file name">
 			<validator type="stringlength">

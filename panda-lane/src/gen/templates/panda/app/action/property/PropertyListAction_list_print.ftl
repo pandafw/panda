@@ -104,9 +104,17 @@
 			"value": false,
 			"header": a.getFieldLabel("uusid"),
 			"display": a.displayField("uusid"),
-			"hidden": false,
+			"hidden": true,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("uusid")
+		}, {
+			"name": "uuser",
+			"value": false,
+			"header": a.getFieldLabel("uuser"),
+			"display": a.displayField("uuser"),
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("uuser")
 		}, {
 			"name": "utime",
 			"value": false,

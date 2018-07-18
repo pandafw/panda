@@ -188,10 +188,18 @@
 			"filter": {
 				"type": "number"
 			},
-			"hidden": false,
+			"hidden": true,
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("uusid")
+		}, {
+			"name" : "uuser",
+			"header": a.getFieldLabel("uuser"),
+			"display": a.displayField("uuser"),
+			"hidden": false,
+			"link": false,
+			"sortable": true,
+			"tooltip": a.getFieldTooltip("uuser")
 		}, {
 			"name" : "utime",
 			"header": a.getFieldLabel("utime"),

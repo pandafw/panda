@@ -21,7 +21,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	 */
 	public PropertyEditAction() {
 		setType(Property.class);
-		addDisplayFields(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UUSID, Property.UUSNM, Property.UTIME);
+		addDisplayFields(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UUSID, Property.UUSER, Property.UTIME);
 	}
 
 

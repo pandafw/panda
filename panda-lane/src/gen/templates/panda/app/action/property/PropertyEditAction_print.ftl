@@ -74,15 +74,15 @@
 			/>
 	</#if>
 	<#if a.displayField("uusid")>
-			<@p.viewfield
-				key="uusid"
+			<@p.hidden
+				name="uusid"
 				value="%{r.uusid}"
 			/>
 	</#if>
-	<#if a.displayField("uusnm")>
+	<#if a.displayField("uuser")>
 			<@p.viewfield
-				key="uusnm"
-				value="%{r.uusnm}"
+				key="uuser"
+				value="%{r.uuser}"
 			/>
 	</#if>
 	<#if a.displayField("utime")>
