@@ -79,7 +79,10 @@ public class Beans {
 		else if (name.startsWith("set") && method.getParameterTypes().length == 1) {
 			name = Strings.uncapitalize(name.substring(3));
 		}
-		return null;
+		else {
+			name = null;
+		}
+		return name;
 	}
 
 	protected static void assertBeanAndName(Object bean, String name) {
