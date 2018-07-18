@@ -1,9 +1,11 @@
 package panda.ioc.val;
 
 import panda.ioc.Ioc;
+import panda.ioc.IocConstants;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.lang.Classes;
+import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
 
@@ -12,17 +14,32 @@ public class ReferValue implements ValueProxy {
 		public Object get(IocMaking ing) {
 			return ing.getIoc();
 		}
+
+		@Override
+		public String toString() {
+			return IocConstants.IOC_SELF;
+		}
 	};
 
 	public static ValueProxy IOC_BEAN_NAME = new ValueProxy() {
 		public Object get(IocMaking ing) {
 			return ing.getName();
 		}
+
+		@Override
+		public String toString() {
+			return IocConstants.IOC_BEAN_NAME;
+		}
 	};
 
 	public static ValueProxy IOC_CONTEXT = new ValueProxy() {
 		public Object get(IocMaking ing) {
 			return ing.getIoc().getContext();
+		}
+
+		@Override
+		public String toString() {
+			return IocConstants.IOC_CONTEXT;
 		}
 	};
 
@@ -64,6 +81,7 @@ public class ReferValue implements ValueProxy {
 		this.required = required;
 	}
 
+	@Override
 	public Object get(IocMaking ing) {
 		Ioc ioc = ing.getIoc();
 		if (required) {
@@ -77,4 +95,12 @@ public class ReferValue implements ValueProxy {
 		return UNDEFINED;
 	}
 
+	@Override
+	public String toString() {
+		return Objects.toStringBuilder()
+				.append("name", name)
+				.append("type", type)
+				.append("required", required)
+				.toString();
+	}
 }

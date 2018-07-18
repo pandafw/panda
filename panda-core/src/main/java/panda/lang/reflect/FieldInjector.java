@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 
 import panda.lang.Exceptions;
 import panda.lang.Injector;
+import panda.lang.Objects;
 
 public class FieldInjector implements Injector {
 	private Field field;
@@ -35,4 +36,10 @@ public class FieldInjector implements Injector {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return Objects.toStringBuilder()
+				.append("field", field)
+				.toString();
+	}
 }

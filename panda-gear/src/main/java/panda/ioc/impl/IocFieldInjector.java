@@ -12,6 +12,7 @@ import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.ioc.meta.IocValue;
 import panda.lang.Injector;
+import panda.lang.Objects;
 import panda.lang.reflect.FieldInjector;
 import panda.lang.reflect.Fields;
 
@@ -45,19 +46,27 @@ public class IocFieldInjector {
 		return fi;
 	}
 
-	private Injector injector;
 	private ValueProxy proxy;
+	private Injector injector;
 
 	private IocFieldInjector() {
 	}
 
 	public void inject(IocMaking ing, Object obj) {
-		Object value = proxy.get(ing);
-		if (value == ValueProxy.UNDEFINED) {
+		Object ov = proxy.get(ing);
+		if (ov == ValueProxy.UNDEFINED) {
 			return;
 		}
 		
-		value = Castors.i().cast(value, injector.type(obj));
-		injector.inject(obj, value);
+		Object cv = Castors.i().cast(ov, injector.type(obj));
+		injector.inject(obj, cv);
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringBuilder()
+				.append("proxy", proxy)
+				.append("injector", injector)
+				.toString();
 	}
 }

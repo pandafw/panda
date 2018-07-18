@@ -13,10 +13,15 @@ public class InnerValue implements ValueProxy {
 		this.iobj = iobj;
 	}
 
+	@Override
 	public Object get(IocMaking ing) {
 		IocMaking innering = ing.clone(null);
 		ObjectProxy op = ing.getMaker().make(innering, iobj);
 		return op.get(iobj.getType(), innering);
 	}
 
+	@Override
+	public String toString() {
+		return String.valueOf(iobj);
+	}
 }
