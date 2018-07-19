@@ -146,12 +146,12 @@
 		var elem = $(def.html);
 		findFields("html", elem, fields);
 		findFields("text", elem, fields);
+		findFields("attr", elem, fields);
 		def.fields = fields;
 	};
 
 	var insertCSS = function(cssText) {
-		var e, elem, error;
-		elem = createElem("style");
+		var elem = createElem("style");
 		elem.attr("type", 'text/css');
 		$("head").append(elem);
 		try {
@@ -163,14 +163,9 @@
 	};
 
 	var findFields = function(type, elem, fields) {
-		var attr;
-		if (type !== "html") {
-			type = "text";
-		}
-		attr = "data-notify-" + type;
+		var attr = "data-notify-" + type;
 		return find(elem, "[" + attr + "]").each(function() {
-			var name;
-			name = $(this).attr(attr);
+			var name = $(this).attr(attr);
 			if (!name) {
 				name = blankFieldName;
 			}
@@ -197,7 +192,7 @@
 		elementPosition: "bottom",
 		globalPosition: "top right",
 		style: "bootstrap",
-		className: "error",
+		className: "info",
 		showAnimation: "slideDown",
 		showDuration: 400,
 		hideAnimation: "slideUp",
@@ -485,45 +480,63 @@
 	};
 
 	Notification.prototype.run = function(data, options) {
-		var d, datas, name, type, value;
 		if ($.isPlainObject(options)) {
 			$.extend(this.options, options);
-		} else if ($.type(options) === "string") {
+		}
+		else if ($.type(options) === "string") {
 			this.options.className = options;
 		}
 		if (this.container && !data) {
 			this.show(false);
 			return;
-		} else if (!this.container && !data) {
+		}
+		if (!this.container && !data) {
 			return;
 		}
-		datas = {};
+		
+		var datas = {};
 		if ($.isPlainObject(data)) {
 			datas = data;
-		} else {
+		}
+		else {
 			datas[blankFieldName] = data;
 		}
-		for (name in datas) {
-			d = datas[name];
-			type = this.userFields[name];
-			if (!type) {
+		if (!datas['class']) {
+			datas['class'] = this.options.className;
+		}
+		
+		for (var name in datas) {
+			var d = datas[name];
+			var t = this.userFields[name];
+			if (!t) {
 				continue;
 			}
-			if (type === "text") {
+
+			var v = name === blankFieldName ? '' : '=' + name;
+			var $e = find(this.userContainer, "[data-notify-" + t + v + "]");
+			if (t === "attr") {
+				$e.attr(name, d);
+			}
+			else if (t === "text") {
 				d = encode(d);
 				if (this.options.breakNewLines) {
 					d = d.replace(/\n/g, '<br/>');
 				}
+				$e.html(d);
 			}
-			value = name === blankFieldName ? '' : '=' + name;
-			find(this.userContainer, "[data-notify-" + type + value + "]").html(d);
+			else {
+				$e.html(d);
+			}
 		}
+		
 		this.updateClasses();
 		if (this.elem) {
 			this.setElementPosition();
-		} else {
+		}
+		else {
 			this.setGlobalPosition();
 		}
+
 		this.show(true);
 		if (this.options.autoHide) {
 			clearTimeout(this.autohideTimer);
@@ -569,19 +582,18 @@
 
 	//always include the default bootstrap style
 	addStyle("bootstrap", {
-		html: "<div>\n<span data-notify-text></span>\n</div>",
+		html: '<div>\n<span data-notify-text></span>\n</div>',
 		classes: {
 			base: {
 				"font-weight": "bold",
-				"padding": "8px 15px 8px 14px",
+				"padding": "12px 20px 12px 42px",
 				"text-shadow": "0 1px 0 rgba(255, 255, 255, 0.5)",
 				"background-color": "#fcf8e3",
 				"border": "1px solid #fbeed5",
 				"border-radius": "4px",
 				"white-space": "nowrap",
-				"padding-left": "25px",
 				"background-repeat": "no-repeat",
-				"background-position": "3px 7px"
+				"background-position": "12px 12px"
 			},
 			error: {
 				"color": "#B94A48",
@@ -605,7 +617,7 @@
 				"color": "#C09853",
 				"background-color": "#FCF8E3",
 				"border-color": "#FBEED5",
-				"background-image": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAABJlBMVEXr6eb/2oD/wi7/xjr/0mP/ykf/tQD/vBj/3o7/uQ//vyL/twebhgD/4pzX1K3z8e349vK6tHCilCWbiQymn0jGworr6dXQza3HxcKkn1vWvV/5uRfk4dXZ1bD18+/52YebiAmyr5S9mhCzrWq5t6ufjRH54aLs0oS+qD751XqPhAybhwXsujG3sm+Zk0PTwG6Shg+PhhObhwOPgQL4zV2nlyrf27uLfgCPhRHu7OmLgAafkyiWkD3l49ibiAfTs0C+lgCniwD4sgDJxqOilzDWowWFfAH08uebig6qpFHBvH/aw26FfQTQzsvy8OyEfz20r3jAvaKbhgG9q0nc2LbZxXanoUu/u5WSggCtp1anpJKdmFz/zlX/1nGJiYmuq5Dx7+sAAADoPUZSAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfdBgUBGhh4aah5AAAAlklEQVQY02NgoBIIE8EUcwn1FkIXM1Tj5dDUQhPU502Mi7XXQxGz5uVIjGOJUUUW81HnYEyMi2HVcUOICQZzMMYmxrEyMylJwgUt5BljWRLjmJm4pI1hYp5SQLGYxDgmLnZOVxuooClIDKgXKMbN5ggV1ACLJcaBxNgcoiGCBiZwdWxOETBDrTyEFey0jYJ4eHjMGWgEAIpRFRCUt08qAAAAAElFTkSuQmCC)"
+				"background-image": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAAG4AAABuASPlPqcAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMjHxIGmVAAACE0lEQVQ4T62UzUsbQRjG7aVnb15Kz0L/gBATcJLNbhsbt+7G1GSziTuzaXroQRQvtQhSb6UgeqhgoLWFHHpRT5p66aEFRaRBkRTEY0H0llooKOR1Jml0N/NCoXXhBzPPzPPwzs5HFwDcKKj4P6BiJ4P54t0Aid/BxjpBxTb8u2VatJRnFAzjAYSiaklo2Nw2qNgmabHi9HMGP78V4HeVwcxYAsIRrYjNbYOKgiHH6X6cp6c/vhQAvrc4+2pDf0w9JYR0Yx4BKgrMjDP3dp41gz5/dGGtZAHUCrD8chBCRJvDPAJUTGacXvqEXvyqtiqbGGeQy+nN9vm2DQMD2kWQaL2YVxIEZpZtfCq7V0v1BooqN+cfQSiibWBeSTCyNCECGtyIBnIaOzkYHbkPYaIlOv2+TiqVus2PyeFB5bo6LFBUefDegL6oeniPe7wZvkDDopOvZlsb4eXdAoPXM8N+fceGF0/j/GzGJr0ZVw09U+hJ52n9ZMtj+kND4PkFTXj/ZMWEqKrVA4rSIwUmLWex/EauTrD+wYXyQloe41UuTT3kx0hdlALNLD0+4zdCMnFqmy7sruXksZoL9dUhsePHcqBFK/vr/s34K3sOVJd0fh3VihRoZFgwZTtH4u7OTstMPNN9TI3pMO7GoV+JHfUpSlAKbHb4S5JM08Cw7RAvpsUiYRIjEhEt0Pn6+AJvAlT8d6DrEoDfQUJHAQyyAAAAAElFTkSuQmCC)"
 			}
 		}
 	});
