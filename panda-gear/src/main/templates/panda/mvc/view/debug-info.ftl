@@ -191,9 +191,9 @@
 		<tbody>
 <#list app?keys as k>
 			<tr><td>${k?html}</td>
-				<td><#if app[k]??><i>${app[k].class.name?html}</i><br/></#if>
+				<td><#if app[k]??><i>${app[k].class.name?html}</i><br/>
 					${assist.escapePhtml(app[k].toString())}
-				</td>
+				</#if></td>
 			</tr>
 </#list>
 		</tbody>
