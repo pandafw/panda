@@ -74,7 +74,9 @@ public class JavaBeanCastor<T> extends AnyJsonCastor<T> {
 			try {
 				Type pt = tbh.getBeanType(bean, pn);
 				Object bv = context.getCastors().cast(pv, pt, context);
-				tbh.setBeanValue(bean, pn, bv);
+				if (!tbh.setBeanValue(bean, pn, bv)) {
+					context.addError(context.toName(), pv);
+				}
 			}
 			catch (Throwable e) {
 				castError(pv, context, e);
