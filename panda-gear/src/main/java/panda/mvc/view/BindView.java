@@ -30,6 +30,7 @@ import panda.mvc.bind.adapter.FilterAdapter;
 import panda.mvc.bind.adapter.PagerAdapter;
 import panda.mvc.bind.adapter.QueryerAdapter;
 import panda.mvc.bind.adapter.SorterAdapter;
+import panda.net.http.HttpStatus;
 import panda.vfs.FileItem;
 
 
@@ -188,6 +189,7 @@ public abstract class BindView extends DataView {
 		
 		result.put("exception", em);
 
+		ac.getResponse().setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		writeResult(ac, result);
 	}
 
