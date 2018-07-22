@@ -12,6 +12,7 @@ import panda.io.Files;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
+import panda.lang.Objects;
 import panda.lang.Order;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
@@ -230,57 +231,57 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
-	 * @param str string to escape
+	 * @param o the object to escape
 	 * @return escaped html string
 	 * @see StringEscapes#escapeHtml(CharSequence)
 	 */
-	public String escapeHtml(CharSequence str) {
-		return StringEscapes.escapeHtml(str);
+	public String escapeHtml(Object o) {
+		return StringEscapes.escapeHtml(Objects.toString(o));
 	}
 
 	/**
-	 * @param str string to escape
-	 * @return escaped phtml string
+	 * @param o the object to escape
+	 * @return escaped pre formatted html string
 	 * @see StringEscapes#escapePhtml(CharSequence)
 	 */
-	public String escapePhtml(CharSequence str) {
-		return StringEscapes.escapePhtml(str);
+	public String escapePhtml(Object o) {
+		return StringEscapes.escapePhtml(Objects.toString(o));
 	}
 
 	/**
-	 * @param str string to escape
+	 * @param o the object to escape
 	 * @return escaped java string
 	 * @see StringEscapes#escapeJava(CharSequence)
 	 */
-	public String escapeJava(CharSequence str) {
-		return StringEscapes.escapeJava(str);
+	public String escapeJava(Object o) {
+		return StringEscapes.escapeJava(Objects.toString(o));
 	}
 
 	/**
-	 * @param str string to escape
+	 * @param o the object to escape
 	 * @return escaped javascript string
 	 * @see StringEscapes#escapeJavaScript(CharSequence)
 	 */
-	public String escapeJavaScript(CharSequence str) {
-		return StringEscapes.escapeJavaScript(str);
+	public String escapeJavaScript(Object o) {
+		return StringEscapes.escapeJavaScript(Objects.toString(o));
 	}
 
 	/**
-	 * @param str string to escape
+	 * @param o the object to escape
 	 * @return escaped xml string
 	 * @see StringEscapes#escapeXml(CharSequence)
 	 */
-	public String escapeXml(CharSequence str) {
-		return StringEscapes.escapeXml(str);
+	public String escapeXml(Object o) {
+		return StringEscapes.escapeXml(Objects.toString(o));
 	}
 	
 	/**
-	 * @param str string to escape
+	 * @param o the object to escape
 	 * @return escaped csv string
 	 * @see StringEscapes#escapeCsv(CharSequence)
 	 */
-	public String escapeCsv(CharSequence str) {
-		return StringEscapes.escapeCsv(str);
+	public String escapeCsv(Object o) {
+		return StringEscapes.escapeCsv(Objects.toString(o));
 	}
 	
 	/**
