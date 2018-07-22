@@ -9,6 +9,10 @@
 		.a-debug td {
 			word-break: break-all;
 		}
+		.a-debug td>div {
+			max-height: 300px;
+			overflow-y: auto;
+		}
 	</style>
 
 	<div class="panel panel-success">
@@ -19,7 +23,7 @@
 		</thead>
 		<tbody>
 <#list reqHeader?keys as k> 
-			<tr><td>${k?html}</td><td><#list reqHeader[k] as v>${v?html}<br/></#list></td></tr>
+			<tr><td>${k!''?html}</td><td><#list reqHeader[k]![] as v>${v!''?html}<br/></#list></td></tr>
 </#list>
 		</tbody>
 		</table>
@@ -34,7 +38,7 @@
 		</thead>
 		<tbody>
 <#list reqParams?keys as k>
-			<tr><td>${k?html}</td><td>${reqParams[k].toString()?html}</td></tr>
+			<tr><td>${k!''?html}</td><td>${assist.escapePhtml(reqParams[k]!)}</td></tr>
 </#list>
 		</tbody>
 		</table>
@@ -58,13 +62,13 @@
 		<tbody>
 <#list request.cookies![] as _c>
 			<tr>
-				<td>${_c.name?default("")?html}</td>
-				<td>${_c.value?default("")?html}</td>
-				<td>${_c.domain?default("")?html}</td>
-				<td>${_c.path?default("")?html}</td>
-				<td>${_c.maxAge?default("")?html}</td>
-				<td>${_c.secure?string?html}</td>
-				<td>${_c.version?default("")?html}</td>
+				<td>${(_c.name)!''?html}</td>
+				<td>${(_c.value)!''?html}</td>
+				<td>${(_c.domain)!''?html}</td>
+				<td>${(_c.path)!''?html}</td>
+				<td>${(_c.maxAge)!''?html}</td>
+				<td>${(_c.secure)?string?html}</td>
+				<td>${(_c.version)!''?html}</td>
 			</tr>
 </#list>
 		</tbody>
@@ -97,33 +101,33 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr><td>AuthType</td><td>${request.authType?default("")?html}</td></tr>
-			<tr><td>CharacterEncoding</td><td>${request.characterEncoding?default("")?html}</td></tr>
-			<tr><td>ContentLength</td><td>${request.contentLength?html}</td></tr>
-			<tr><td>ContentType</td><td>${request.contentType?default("")?html}</td></tr>
-			<tr><td>ContextPath</td><td>${request.contextPath?default("")?html}</td></tr>
-			<tr><td>isSecure</td><td>${request.secure?string?html}</td></tr>
-			<tr><td>isRequestedSessionIdFromCookie</td><td>${request.requestedSessionIdFromCookie?string?html}</td></tr>
-			<tr><td>isRequestedSessionIdFromURL</td><td>${request.requestedSessionIdFromURL?string?html}</td></tr>
-			<tr><td>isRequestedSessionIdValid</td><td>${request.requestedSessionIdValid?string?html}</td></tr>
-			<tr><td>Locale</td><td>${request.locale?default("")?html}</td></tr>
-			<tr><td>LocalAddr</td><td>${request.localAddr?default("")?html}</td></tr>
-			<tr><td>LocalName</td><td>${request.localName?default("")?html}</td></tr>
-			<tr><td>LocalPort</td><td>${request.localPort?html}</td></tr>
-			<tr><td>Method</td><td>${request.method?default("")?html}</td></tr>
-			<tr><td>PathInfo</td><td>${request.pathInfo?default("")?html}</td></tr>
-			<tr><td>PathTranslated</td><td>${request.pathTranslated?default("")?html}</td></tr>
-			<tr><td>Protocol</td><td>${request.protocol?default("")?html}</td></tr>
-			<tr><td>QueryString</td><td>${request.queryString?default("")?html}</td></tr>
-			<tr><td>RemoteAddr</td><td>${request.remoteAddr?default("")?html}</td></tr>
-			<tr><td>RemotePort</td><td>${request.remotePort?html}</td></tr>
-			<tr><td>RequestedSessionId</td><td>${request.requestedSessionId?default("")?html}</td></tr>
-			<tr><td>RequestURI</td><td>${request.requestURI?default("")?html}</td></tr>
-			<tr><td>RequestURL</td><td>${request.requestURL?default("")?html}</td></tr>
-			<tr><td>Scheme</td><td>${request.scheme?default("")?html}</td></tr>
-			<tr><td>ServerName</td><td>${request.serverName?default("")?html}</td></tr>
-			<tr><td>ServerPort</td><td>${request.serverPort?html}</td></tr>
-			<tr><td>ServletPath</td><td>${request.servletPath?default("")?html}</td></tr>
+			<tr><td>AuthType</td><td>${(request.authType)!''?html}</td></tr>
+			<tr><td>CharacterEncoding</td><td>${(request.characterEncoding)!''?html}</td></tr>
+			<tr><td>ContentLength</td><td>${(request.contentLength)?html}</td></tr>
+			<tr><td>ContentType</td><td>${(request.contentType)!''?html}</td></tr>
+			<tr><td>ContextPath</td><td>${(request.contextPath)!''?html}</td></tr>
+			<tr><td>isSecure</td><td>${(request.secure?string)!''?html}</td></tr>
+			<tr><td>isRequestedSessionIdFromCookie</td><td>${(request.requestedSessionIdFromCookie?string)!''?html}</td></tr>
+			<tr><td>isRequestedSessionIdFromURL</td><td>${(request.requestedSessionIdFromURL?string)!''?html}</td></tr>
+			<tr><td>isRequestedSessionIdValid</td><td>${(request.requestedSessionIdValid?string)!''?html}</td></tr>
+			<tr><td>Locale</td><td>${(request.locale)!''?html}</td></tr>
+			<tr><td>LocalAddr</td><td>${(request.localAddr)!''?html}</td></tr>
+			<tr><td>LocalName</td><td>${(request.localName)!''?html}</td></tr>
+			<tr><td>LocalPort</td><td>${(request.localPort)?html}</td></tr>
+			<tr><td>Method</td><td>${(request.method)!''?html}</td></tr>
+			<tr><td>PathInfo</td><td>${(request.pathInfo)!''?html}</td></tr>
+			<tr><td>PathTranslated</td><td>${(request.pathTranslated)!''?html}</td></tr>
+			<tr><td>Protocol</td><td>${(request.protocol)!''?html}</td></tr>
+			<tr><td>QueryString</td><td>${(request.queryString)!''?html}</td></tr>
+			<tr><td>RemoteAddr</td><td>${(request.remoteAddr)!''?html}</td></tr>
+			<tr><td>RemotePort</td><td>${(request.remotePort)?html}</td></tr>
+			<tr><td>RequestedSessionId</td><td>${(request.requestedSessionId)!''?html}</td></tr>
+			<tr><td>RequestURI</td><td>${(request.requestURI)!''?html}</td></tr>
+			<tr><td>RequestURL</td><td>${(request.requestURL)!''?html}</td></tr>
+			<tr><td>Scheme</td><td>${(request.scheme)!''?html}</td></tr>
+			<tr><td>ServerName</td><td>${(request.serverName)!''?html}</td></tr>
+			<tr><td>ServerPort</td><td>${(request.serverPort?string)!''?html}</td></tr>
+			<tr><td>ServletPath</td><td>${(request.servletPath)!''?html}</td></tr>
 		</tbody>
 		</table>
 	</div>
@@ -140,9 +144,9 @@
 		</thead>
 		<tbody>
 <#list req?keys as k>
-			<tr><td>${k?html}</td>
-				<td><#if req[k]??><i>${req[k].class.name?html}</i><br/>
-					${assist.escapePhtml(req[k].toString())}
+			<tr><td>${k!''?html}</td>
+				<td><#if req[k]??><i>${(req[k].class.name)!''?html}</i>
+					<div>${assist.escapePhtml(req[k]!)}</div>
 				</#if></td>
 			</tr>
 </#list>
@@ -163,15 +167,15 @@
 		<tbody>
 <#list ses?keys as k>
 			<tr><td>${k?html}</td>
-				<td><#if ses[k]??><i>${ses[k].class.name?html}</i><br/>
-					${assist.escapePhtml(ses[k].toString())}
+				<td><#if ses[k]??><i>${(ses[k].class.name)!''?html}</i>
+					</div>${assist.escapePhtml(ses[k]!)}</div>
 				</#if></td>
 			</tr>
 </#list>
 <#assign _sic = assist.findValue("'panda.mvc.ioc.SessionIocContext'@dump(session)")/>
 <#if _sic??>
 			<tr><td>SessionIocContext</td>
-				<td>${_sic?html}</td>
+				<td><div>${_sic?html}<div></td>
 			</tr>
 </#if>
 		</tbody>
@@ -191,8 +195,8 @@
 		<tbody>
 <#list app?keys as k>
 			<tr><td>${k?html}</td>
-				<td><#if app[k]??><i>${app[k].class.name?html}</i><br/>
-					${assist.escapePhtml(app[k].toString())}
+				<td><#if app[k]??><i>${(app[k].class.name)!''?html}</i>
+					<div>${assist.escapePhtml(app[k]!)}</div>
 				</#if></td>
 			</tr>
 </#list>
@@ -214,8 +218,8 @@
 <#assign _sps = assist.findValue("'java.lang.System'@getProperties()")/>
 <#list _sps?keys as k>
 			<tr>
-				<td>${k?html}</td>
-				<td><#if _sps[k]??>${_sps[k].toString()?html}</#if></td>
+				<td>${k!''?html}</td>
+				<td><#if _sps[k]??><div>${(_sps[k]?string)!''?html}</div></#if></td>
 			</tr>
 </#list>
 		</tbody>
@@ -237,7 +241,7 @@
 <#list _ses?keys as k>
 			<tr>
 				<td>${k?html}</td>
-				<td><#if _ses[k]??>${_ses[k].toString()?html}</#if></td>
+				<td><#if _ses[k]??><div>${(_ses[k]?string)!''?html}</div></#if></td>
 			</tr>
 </#list>
 		</tbody>
