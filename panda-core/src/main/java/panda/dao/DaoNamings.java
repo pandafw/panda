@@ -113,11 +113,21 @@ public class DaoNamings {
 
 	/**
 	 * convert a java class name to table name
-	 * e.g.: 'HelloWorld' -> 'Hello_World'
+	 * e.g.: 'HelloWorld' -> 'hello_world'
 	 * @param javaName java style name
 	 * @return table name
 	 */
 	public static String javaName2TableName(String javaName) {
+		return Texts.uncamelWord(javaName, '_');
+	}
+
+	/**
+	 * convert a java property name to column name
+	 * e.g.: 'helloWorld' -> 'hello_world'
+	 * @param javaName java style name
+	 * @return column name
+	 */
+	public static String javaName2ColumnName(String javaName) {
 		return Texts.uncamelWord(javaName, '_');
 	}
 }

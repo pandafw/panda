@@ -55,7 +55,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private Entities entities;
 	
 	public AnnotationEntityMaker(Entities client) {
-		this.entities = client; 
+		this.entities = client;
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		// table name
 		Table annTable = Classes.getAnnotation(type, Table.class);
 		if (annTable == null) {
-			en.setTable(DaoNamings.javaName2TableName(type.getSimpleName()));
+			en.setTable(javaName2TableName(type.getSimpleName()));
 		}
 		else {
 			en.setTable(annTable.value());
@@ -404,7 +404,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 		else {
 			if (Strings.isBlank(ef.getColumn())) {
-				ef.setColumn(mi.name);
+				ef.setColumn(javaName2ColumnName(mi.name));
 			}
 		}
 		
@@ -438,6 +438,14 @@ public class AnnotationEntityMaker implements EntityMaker {
 		entity.addField(ef);
 	}
 
+	protected String javaName2TableName(String name) {
+		return DaoNamings.javaName2TableName(name);
+	}
+
+	protected String javaName2ColumnName(String name) {
+		return DaoNamings.javaName2ColumnName(name);
+	}
+	
 	private void addEntityField(Entity<?> entity, Field field, boolean useColumn) {
 		MappingInfo mi = MappingInfo.create(field, useColumn);
 		if (mi == null) {
