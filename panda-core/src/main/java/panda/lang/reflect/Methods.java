@@ -6,10 +6,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import panda.bean.Beans;
 import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Classes;
@@ -38,19 +41,9 @@ public class Methods {
 	/**
 	 * Gets all methods of the given class and its parents (if any).
 	 * @param cls the class
-	 * @return the method array
-	 */
-	public static Method[] getAllMethods(Class<?> cls) {
-		final List<Method> all = getAllMethodsList(cls);
-		return all.toArray(new Method[all.size()]);
-	}
-
-	/**
-	 * Gets all methods of the given class and its parents (if any).
-	 * @param cls the class
 	 * @return the method list
 	 */
-	public static List<Method> getAllMethodsList(Class<?> cls) {
+	public static List<Method> getAllMethods(Class<?> cls) {
 		List<Method> list = new ArrayList<Method>();
 		while (null != cls) {
 			Method[] ms = cls.getDeclaredMethods();
@@ -63,20 +56,11 @@ public class Methods {
 	}
 
 	/**
-	 * call getDeclaredMethods(xx, null)
-	 * @param cls the class
-	 * @return the method array
-	 */
-	public static Method[] getDeclaredMethods(Class<?> cls) {
-		return getDeclaredMethods(cls, null);
-	}
-
-	/**
 	 * call getDeclaredMethods(xx, Object.class)
 	 * @param cls the class
-	 * @return the method array
+	 * @return the method list
 	 */
-	public static Method[] getDeclaredMethodsWithoutTop(Class<?> cls) {
+	public static List<Method> getDeclaredMethods(Class<?> cls) {
 		return getDeclaredMethods(cls, Object.class);
 	}
 
@@ -85,41 +69,94 @@ public class Methods {
 	 * Discard duplicate method of parents.
 	 * @param cls the class
 	 * @param top the top base class
-	 * @return the method array
+	 * @return the method list
 	 */
-	public static Method[] getDeclaredMethods(Class<?> cls, Class<?> top) {
-		Map<MultiKey, Method> map = new LinkedHashMap<MultiKey, Method>();
+	public static List<Method> getDeclaredMethods(Class<?> cls, Class<?> top) {
+		return getDeclaredMethods(cls, top, null);
+	}
+
+	public static interface MethodFilter {
+		boolean accept(Method m);
+	}
+
+	/**
+	 * Gets declared methods of the given class and its parents until top class.
+	 * Discard duplicate method of parents.
+	 * @param cls the class
+	 * @param top the top base class
+	 * @param mf method filter
+	 * @return the method list
+	 */
+	public static List<Method> getDeclaredMethods(Class<?> cls, Class<?> top, MethodFilter mf) {
+		List<Method> dms = new ArrayList<Method>();
+		Set<MultiKey> set = new HashSet<MultiKey>();
 		List<Object> mi = new ArrayList<Object>();
 		while (cls != top && cls != null) {
 			Method[] ms = cls.getDeclaredMethods();
 			for (Method m : ms) {
+				if (mf != null && !mf.accept(m)) {
+					continue;
+				}
+				
 				mi.clear();
 				mi.add(m.getName());
 				Collections.addAll(mi, m.getParameterTypes());
 				
 				MultiKey key = new MultiKey(mi.toArray());
-				if (!map.containsKey(key)) {
-					map.put(key, m);
+				if (set.contains(key)) {
+					continue;
+				}
+				
+				set.add(key);
+				dms.add(m);
+			}
+			cls = cls.getSuperclass();
+		}
+		return dms;
+	}
+
+	public static Map<String, Method> getDeclaredGetterMethods(Class<?> cls) {
+		Map<String, Method> dms = new HashMap<String, Method>();
+		while (cls != Object.class && cls != null) {
+			Method[] ms = cls.getDeclaredMethods();
+			for (Method m : ms) {
+				String n = Beans.getGetterBeanName(m);
+				if (n != null && !dms.containsKey(n)) {
+					dms.put(n, m);
 				}
 			}
 			cls = cls.getSuperclass();
 		}
-		return map.values().toArray(new Method[map.size()]);
+		return dms;
 	}
 
+	public static Map<String, Method> getDeclaredSetterMethods(Class<?> cls) {
+		Map<String, Method> dms = new HashMap<String, Method>();
+		while (cls != Object.class && cls != null) {
+			Method[] ms = cls.getDeclaredMethods();
+			for (Method m : ms) {
+				String n = Beans.getSetterBeanName(m);
+				if (n != null && !dms.containsKey(n)) {
+					dms.put(n, m);
+				}
+			}
+			cls = cls.getSuperclass();
+		}
+		return dms;
+	}
+	
 	/**
 	 * @param cls the class
 	 * @param ann annotation
 	 * @return methods
 	 */
-	public static <A extends Annotation> List<Method> getAnnotationMethods(Class<?> cls, Class<A> ann) {
-		List<Method> methods = new ArrayList<Method>();
-		for (Method m : getDeclaredMethods(cls)) {
-			if (m.isAnnotationPresent(ann)) {
-				methods.add(m);
+	public static <A extends Annotation> List<Method> getAnnotationMethods(final Class<?> cls, final Class<A> ann) {
+		return getDeclaredMethods(cls, Object.class, new MethodFilter() {
+			@Override
+			public boolean accept(Method m) {
+				return m.isAnnotationPresent(ann);
 			}
-		}
-		return methods;
+		});
 	}
 
 	/**

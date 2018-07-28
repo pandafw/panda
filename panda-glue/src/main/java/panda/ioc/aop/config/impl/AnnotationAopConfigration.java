@@ -37,7 +37,7 @@ public class AnnotationAopConfigration implements AopConfigration {
 
 	private List<Method> getAopMethod(Class<?> cls) {
 		List<Method> aops = new LinkedList<Method>();
-		for (Method m : Methods.getDeclaredMethodsWithoutTop(cls)) {
+		for (Method m : Methods.getDeclaredMethods(cls)) {
 			if (null != m.getAnnotation(Aop.class)) {
 				int modify = m.getModifiers();
 				if (Modifier.isAbstract(modify) 

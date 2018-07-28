@@ -107,9 +107,8 @@ public abstract class AbstractClassAgent implements ClassAgent {
 	}
 
 	private <T> Pair2[] findMatchedMethod(Class<T> cls) {
-		Method[] all = Methods.getDeclaredMethodsWithoutTop(cls);
 		List<Pair2> p2 = new ArrayList<Pair2>();
-		for (Method m : all) {
+		for (Method m : Methods.getDeclaredMethods(cls)) {
 			int mod = m.getModifiers();
 			if (mod == 0 || Modifier.isStatic(mod) || Modifier.isPrivate(mod) || Modifier.isFinal(mod)
 					|| Modifier.isAbstract(mod))

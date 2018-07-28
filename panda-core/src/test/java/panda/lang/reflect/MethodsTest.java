@@ -120,7 +120,7 @@ public class MethodsTest {
 
 	@Test
 	public void testGetDeclaredMethods() throws Exception {
-		Methods.getDeclaredMethodsWithoutTop(Map.class);
+		Methods.getDeclaredMethods(Map.class);
 	}
 	
 	@Test
