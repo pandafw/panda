@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
-import panda.bean.Beans;
 import panda.bind.json.JsonObject;
 import panda.dao.DaoNamings;
 import panda.dao.DaoTypes;
@@ -126,7 +126,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		// Is @Column declared
 		boolean shouldUseColumn = false;
 		for (Field field : fields) {
-			if (null != field.getAnnotation(Column.class)) {
+			if (field.getAnnotation(Column.class) != null) {
 				shouldUseColumn = true;
 				break;
 			}
@@ -137,9 +137,14 @@ public class AnnotationEntityMaker implements EntityMaker {
 			addEntityField(en, field, shouldUseColumn);
 		}
 
-		// loop for methods
-		for (Method method : Methods.getAllMethodsList(en.getType())) {
-			addEntityField(en, method);
+		// loop for getter methods
+		for (Entry<String, Method> e : Methods.getDeclaredGetterMethods(en.getType()).entrySet()) {
+			addEntityField(en, e.getKey(), e.getValue());
+		}
+
+		// loop for setter methods
+		for (Entry<String, Method> e : Methods.getDeclaredSetterMethods(en.getType()).entrySet()) {
+			addEntityField(en, e.getKey(), e.getValue());
 		}
 
 		// check empty
@@ -321,7 +326,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 			return mi;
 		}
 
-		public static MappingInfo create(Method method) {
+		public static MappingInfo create(String name, Method method) {
 			MappingInfo mi = new MappingInfo();
 			mi.annId = method.getAnnotation(Id.class);
 			mi.annPk = method.getAnnotation(PK.class);
@@ -335,7 +340,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 				return null;
 			}
 
-			String name = Beans.getBeanName(method);
+//			String name = Beans.getBeanName(method);
 			if (Strings.isEmpty(name)) {
 				throw Exceptions.makeThrow("Method '%s'(%s) can not add '@Column', it MUST be a setter or getter!",
 					method.getName(), method.getDeclaringClass().getName());
@@ -455,8 +460,8 @@ public class AnnotationEntityMaker implements EntityMaker {
 		addEntityField(entity, mi);
 	}
 
-	private void addEntityField(Entity<?> entity, Method method) {
-		MappingInfo mi = MappingInfo.create(method);
+	private void addEntityField(Entity<?> entity, String name, Method method) {
+		MappingInfo mi = MappingInfo.create(name, method);
 		if (mi == null) {
 			return;
 		}

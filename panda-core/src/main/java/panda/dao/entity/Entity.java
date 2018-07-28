@@ -177,7 +177,10 @@ public class Entity<T> {
 	 */
 	protected void addField(EntityField field) {
 		field.setEntity(this);
-		fields.put(field.getName(), field);
+		EntityField oef = fields.put(field.getName(), field);
+		if (oef != null) {
+			columns.remove(oef.getColumn());
+		}
 		columns.put(field.getColumn(), field);
 	}
 
