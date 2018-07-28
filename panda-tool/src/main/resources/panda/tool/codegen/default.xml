@@ -9,6 +9,11 @@
 		<property name="uusnm" property="false" type="String" joinName="UU" joinEntity="${entity.user}" joinField="name" joinKeys="uusid" joinRefs="id"/>
 	</entity>
 
+	<entity name="cuEntity" generate="false">
+		<property name="cusnm" property="false" type="String" joinName="CU" joinEntity="${entity.user}" joinField="name" joinKeys="cusid" joinRefs="id"/>
+		<property name="uusnm" property="false" type="String" joinName="UU" joinEntity="${entity.user}" joinField="name" joinKeys="uusid" joinRefs="id"/>
+	</entity>
+
 	<!-- action -->
 	<action name="baseAction" trimString="${trim.stringNull}" dataFieldName="${action.dataFieldName}" dataListFieldName="${action.dataListFieldName}">
 		<list name="baseList">
@@ -76,6 +81,7 @@
 				<filter type="datetime"/>
 			</column>
 		</list>
+		<list name="cuList" extend="cList,uList"/>
 		<list name="scList" extend="sList,cList"/>
 		<list name="suList" extend="sList,uList"/>
 		<list name="scuList" extend="sList,cList,uList"/>
@@ -174,6 +180,7 @@
 				</editTag>
 			</field>
 		</input>
+		<input name="cuInput" extend="cInput,uInput"/>
 		<input name="scInput" extend="sInput,cInput"/>
 		<input name="suInput" extend="sInput,uInput"/>
 		<input name="scuInput" extend="sInput,cInput,uInput"/>
