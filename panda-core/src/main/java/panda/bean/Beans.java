@@ -66,7 +66,7 @@ public class Beans {
 	 * @param method method
 	 * @return bean name if the method is a getter or setter
 	 */
-	public static String getBeanName(Method method) {
+	public static String getGetterBeanName(Method method) {
 		String name = method.getName();
 
 		if (name.startsWith("get") && method.getParameterTypes().length == 0) {
@@ -76,12 +76,44 @@ public class Beans {
 				&& method.getParameterTypes().length == 0) {
 			name = Strings.uncapitalize(name.substring(2));
 		}
-		else if (name.startsWith("set") && method.getParameterTypes().length == 1) {
+		else {
+			name = null;
+		}
+		return name;
+	}
+	
+	/**
+	 * get bean name from method.
+	 * the method must like getXXX, setXXX, isXXX
+	 * 
+	 * @param method method
+	 * @return bean name if the method is a getter or setter
+	 */
+	public static String getSetterBeanName(Method method) {
+		String name = method.getName();
+
+		if (name.startsWith("set") && method.getParameterTypes().length == 1) {
 			name = Strings.uncapitalize(name.substring(3));
 		}
 		else {
 			name = null;
 		}
+		return name;
+	}
+	
+	/**
+	 * get bean name from method.
+	 * the method must like getXXX, setXXX, isXXX
+	 * 
+	 * @param method method
+	 * @return bean name if the method is a getter or setter
+	 */
+	public static String getBeanName(Method method) {
+		String name = getGetterBeanName(method);
+		if (name == null) {
+			name = getSetterBeanName(method);
+		}
+
 		return name;
 	}
 
