@@ -105,7 +105,7 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 
 		q.in("student", 1, 2)
 			.leftJoin(j, "st", "student = id")
-			.column("studentName", getSqlDaoClient().getSqlExpert().escapeColumn("st", "NAME"))
+			.column("studentName", getSqlDaoClient().getSqlExpert().escapeColumn("st", "STUDENT_NAME"))
 			.orderBy("score");
 		List<Score> actual = dao.select(q);
 		Assert.assertEquals(expect, actual);

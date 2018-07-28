@@ -12,9 +12,10 @@ import panda.lang.Objects;
 @Indexes({@Index(fields={"name"})})
 public class Student {
 	@Id(start=6)
+	@Column("student_id")
 	int id;
 	
-	@Column("NAME")
+	@Column("STUDENT_NAME")
 	String name;
 	
 	String dummy;

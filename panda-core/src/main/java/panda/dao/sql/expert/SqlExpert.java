@@ -388,12 +388,14 @@ public abstract class SqlExpert {
 			return;
 		}
 		
+		Entity<?> entity = query.getEntity();
 		for (Entry<String, Join> en : query.getJoins().entrySet()) {
 			String jalias = en.getKey();
 			Join join = en.getValue();
 			
 			sql.append(' ').append(join.getType()).append(" JOIN ");
 
+			// join table
 			Query<?> jq = join.getQuery();
 			if (jq.hasFilters()) {
 				sql.append('(');
@@ -404,25 +406,43 @@ public abstract class SqlExpert {
 				sql.append(escapeTable(client.getTableName(jq)));
 			}
 			asTableAlias(sql, jalias);
+			
+			// join condition
+			Entity<?> je = jq.getEntity();
 			sql.append(" ON (");
 			for (String s : join.getConditions()) {
-				
-				int d = s.indexOf('=');
 				int l = 1;
+				int d = s.indexOf('=');
 				if (d < 0) {
-					d = s.indexOf("<>");
 					l = 2;
+					d = s.indexOf("<>");
 				}
 				if (d < 0) {
 					throw new IllegalArgumentException("Invalid join condition: " + s);
 				}
 
 				// main table alias.column
-				sql.append(escapeColumn(talias, Strings.trim(s.substring(0, d))));
+				String lc = Strings.trim(s.substring(0, d));
+				if (entity != null) {
+					EntityField ef = entity.getField(lc);
+					if (ef != null) {
+						lc = ef.getColumn();
+					}
+				}
+				sql.append(escapeColumn(talias, lc));
+
 				// operator
 				sql.append(s.substring(d, d + l));
+				
 				// join table alias.column
-				sql.append(escapeColumn(jalias, Strings.trim(s.substring(d + l))));
+				String rc = Strings.trim(s.substring(d + l));
+				if (je != null) {
+					EntityField ef = je.getField(rc);
+					if (ef != null) {
+						rc = ef.getColumn();
+					}
+				}
+				sql.append(escapeColumn(jalias, rc));
 				
 				sql.append(" AND ");
 			}
