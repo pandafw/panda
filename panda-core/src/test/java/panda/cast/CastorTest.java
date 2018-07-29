@@ -2,6 +2,7 @@ package panda.cast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -290,5 +291,24 @@ public class CastorTest {
 		String exp = "2018-01-02T03:04:05Z";
 		Calendar act = Castors.scast(exp, Calendar.class);
 		Assert.assertEquals(exp, DateTimes.format(act, DateTimes.ISO_DATETIME_TIMEZONE_FORMAT, TimeZones.GMT));
+	}
+	
+	@Test
+	public void testDateToString() throws Exception {
+		Date d = DateTimes.isoDatetimeFormat().parse("2018-01-02T03:04:05");
+		CastContext cc = new CastContext(Castors.i());
+		cc.setFormat("yyyy-MM-dd_HH:mm:ss");
+		String a = Castors.i().cast(d, String.class, cc);
+		Assert.assertEquals("2018-01-02_03:04:05", a);
+	}
+	
+	@Test
+	public void testSqlDateToString() throws Exception {
+		Date d = DateTimes.isoDatetimeFormat().parse("2018-01-02T03:04:05");
+		java.sql.Date sd = new java.sql.Date(d.getTime());
+		CastContext cc = new CastContext(Castors.i());
+		cc.setFormat("yyyy-MM-dd_HH:mm:ss");
+		String a = Castors.i().cast(sd, String.class, cc);
+		Assert.assertEquals("2018-01-02_03:04:05", a);
 	}
 }
