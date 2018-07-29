@@ -23,18 +23,18 @@ import panda.servlet.HttpServlets;
 public abstract class AbstractActionMapping implements ActionMapping {
 	private static final Log log = Logs.getLog(AbstractActionMapping.class);
 
-	protected abstract void addInvoker(String path, ActionInvoker invoker);
+	protected abstract void addDispatcher(String path, ActionDispatcher dispatcher);
 	
-	protected abstract ActionInvoker getInvoker(String path, List<String> args);
+	protected abstract ActionDispatcher getDispatcher(String path, List<String> args);
 
-	private Map<String, ActionInvoker> ainks = new HashMap<String, ActionInvoker>();
-	private Map<String, ActionConfig> acfgs = new HashMap<String, ActionConfig>();
+	private Map<String, ActionDispatcher> dispatchers = new HashMap<String, ActionDispatcher>();
+	private Map<String, ActionConfig> configs = new HashMap<String, ActionConfig>();
 
 	@Override
 	public void add(ActionChainCreator acc, ActionConfig acfg) {
 		// add method
 		String mn = acfg.getActionType().getName() + '.' + acfg.getActionMethod().getName();
-		if (acfgs.put(mn, acfg) != null) {
+		if (configs.put(mn, acfg) != null) {
 			throw new IllegalArgumentException(mn + " is already mapped.");
 		}
 		
@@ -51,30 +51,30 @@ public abstract class AbstractActionMapping implements ActionMapping {
 
 		// mapping path
 		for (String path : paths) {
-			ActionInvoker invoker = ainks.get(path);
-			if (invoker == null) {
-				invoker = new ActionInvoker();
-				ainks.put(path, invoker);
+			ActionDispatcher dispatcher = dispatchers.get(path);
+			if (dispatcher == null) {
+				dispatcher = new ActionDispatcher();
+				dispatchers.put(path, dispatcher);
 			}
 			if (acfg.hasAtMethod()) {
 				for (String hm : acfg.getAtMethods()) {
-					if (invoker.hasChain(hm)) {
+					if (dispatcher.hasChain(hm)) {
 						throw new IllegalArgumentException(String.format("%s.%s @At(%s, %s) is already mapped for %s.%s().", 
 							acfg.getActionType().getName(), acfg.getActionMethod().getName(), path, hm, 
-							invoker.getChain(hm).getConfig().getActionType().getName(), invoker.getChain(hm).getConfig().getActionMethod().getName()));
+							dispatcher.getChain(hm).getConfig().getActionType().getName(), dispatcher.getChain(hm).getConfig().getActionMethod().getName()));
 					}
-					invoker.addChain(hm, chain);
+					dispatcher.addChain(hm, chain);
 				}
 			}
 			else {
-				if (invoker.getDefaultChain() != null) {
+				if (dispatcher.getDefaultChain() != null) {
 					throw new IllegalArgumentException(String.format("%s.%s @At(%s) is already mapped for %s.%s().", 
 						acfg.getActionType().getName(), acfg.getActionMethod().getName(), path, 
-						invoker.getDefaultChain().getConfig().getActionType().getName(), invoker.getDefaultChain().getConfig().getActionMethod().getName()));
+						dispatcher.getDefaultChain().getConfig().getActionType().getName(), dispatcher.getDefaultChain().getConfig().getActionMethod().getName()));
 				}
-				invoker.setDefaultChain(chain);
+				dispatcher.setDefaultChain(chain);
 			}
-			addInvoker(path, invoker);
+			addDispatcher(path, dispatcher);
 		}
 
 		if (log.isDebugEnabled()) {
@@ -83,20 +83,20 @@ public abstract class AbstractActionMapping implements ActionMapping {
 	}
 
 	@Override
-	public ActionInvoker getActionInvoker(ActionContext ac) {
+	public ActionDispatcher getActionDispatcher(ActionContext ac) {
 		String path = HttpServlets.getServletPath(ac.getRequest());
 
 		ac.setPath(path);
 		ac.setPathArgs(new ArrayList<String>());
 
-		ActionInvoker invoker = getInvoker(path, ac.getPathArgs());
-		if (invoker != null) {
-			ActionChain chain = invoker.getActionChain(ac);
+		ActionDispatcher dispatcher = getDispatcher(path, ac.getPathArgs());
+		if (dispatcher != null) {
+			ActionChain chain = dispatcher.getActionChain(ac);
 			if (chain != null) {
 				if (log.isDebugEnabled()) {
 					log.debugf("Found mapping for [%s] path=%s : %s", ac.getRequest().getMethod(), path, chain);
 				}
-				return invoker;
+				return dispatcher;
 			}
 		}
 		if (log.isDebugEnabled()) {
@@ -107,9 +107,9 @@ public abstract class AbstractActionMapping implements ActionMapping {
 
 	@Override
 	public ActionConfig getActionConfig(String path) {
-		ActionInvoker invoker = getInvoker(path, null);
-		if (invoker != null) {
-			ActionChain chain = invoker.getDefaultChain();
+		ActionDispatcher dispatcher = getDispatcher(path, null);
+		if (dispatcher != null) {
+			ActionChain chain = dispatcher.getDefaultChain();
 			if (chain != null) {
 				return chain.getConfig();
 			}
@@ -130,14 +130,14 @@ public abstract class AbstractActionMapping implements ActionMapping {
 	 */
 	@Override
 	public ActionConfig getActionConfig(Class clazz, Method method) {
-		return acfgs.get(clazz.getName() + '.' + method.getName());
+		return configs.get(clazz.getName() + '.' + method.getName());
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getClass());
-		for (Entry<String, ActionInvoker> en : (new TreeMap<String, ActionInvoker>(ainks)).entrySet()) {
+		for (Entry<String, ActionDispatcher> en : (new TreeMap<String, ActionDispatcher>(dispatchers)).entrySet()) {
 			sb.append(Streams.LINE_SEPARATOR)
 				.append(" - ")
 				.append(Strings.rightPad(en.getKey(), 50))

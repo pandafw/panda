@@ -2,7 +2,7 @@ package panda.mvc;
 
 import java.lang.reflect.Method;
 
-import panda.mvc.impl.ActionInvoker;
+import panda.mvc.impl.ActionDispatcher;
 
 /**
  * Action Mapping
@@ -18,12 +18,12 @@ public interface ActionMapping {
 	void add(ActionChainCreator acc, ActionConfig acfg);
 
 	/**
-	 * get action invoker by path
+	 * get action dispatcher by path
 	 * 
 	 * @param ac action context
-	 * @return action invoker
+	 * @return action dispatcher
 	 */
-	ActionInvoker getActionInvoker(ActionContext ac);
+	ActionDispatcher getActionDispatcher(ActionContext ac);
 
 	/**
 	 * find action config by path

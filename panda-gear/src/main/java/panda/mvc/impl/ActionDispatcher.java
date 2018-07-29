@@ -14,14 +14,14 @@ import panda.log.Logs;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionContext;
 
-public class ActionInvoker {
-	private static final Log log = Logs.getLog(ActionInvoker.class);
+public class ActionDispatcher {
+	private static final Log log = Logs.getLog(ActionDispatcher.class);
 
 	private ActionChain defaultChain;
 
 	private Map<String, ActionChain> chainMap;
 
-	public ActionInvoker() {
+	public ActionDispatcher() {
 	}
 
 	/**
@@ -78,12 +78,12 @@ public class ActionInvoker {
 	}
 
 	/**
-	 * invoke action
+	 * dispatch action
 	 * 
 	 * @param ac action context
 	 * @return true if a action is found and execute successfully
 	 */
-	public boolean invoke(ActionContext ac) {
+	public boolean dispatch(ActionContext ac) {
 		ActionChain chain = getActionChain(ac);
 		if (chain == null) {
 			if (log.isDebugEnabled()) {

@@ -18,7 +18,7 @@ import panda.mvc.annotation.Modules;
 import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.filter.DecodingFilter;
 import panda.mvc.filter.HttpDumpFilter;
-import panda.mvc.filter.InvokeFilter;
+import panda.mvc.filter.DispatchFilter;
 import panda.mvc.filter.LoggingFilter;
 import panda.mvc.impl.DefaultActionChainCreator;
 import panda.mvc.impl.DefaultServletChain;
@@ -204,7 +204,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			DecodingFilter.class,
 			HttpDumpFilter.class,
 			LoggingFilter.class,
-			InvokeFilter.class,
+			DispatchFilter.class,
 
 			// processor
 			AdaptProcessor.class,

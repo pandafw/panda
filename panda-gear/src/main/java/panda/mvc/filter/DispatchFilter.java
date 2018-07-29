@@ -33,7 +33,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.ServletChain;
 import panda.mvc.ServletFilter;
 import panda.mvc.SetConstants;
-import panda.mvc.impl.ActionInvoker;
+import panda.mvc.impl.ActionDispatcher;
 import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.ioc.IocSessionListener;
 import panda.mvc.ioc.RequestIocContext;
@@ -43,8 +43,8 @@ import panda.mvc.ioc.SessionIocContext;
 import panda.servlet.HttpServlets;
 
 @IocBean(create="initialize")
-public class InvokeFilter implements ServletFilter {
-	private static final Log log = Logs.getLog(InvokeFilter.class);
+public class DispatchFilter implements ServletFilter {
+	private static final Log log = Logs.getLog(DispatchFilter.class);
 
 	@IocInject
 	private Ioc ioc;
@@ -187,17 +187,17 @@ public class InvokeFilter implements ServletFilter {
 			// save action context to request
 			Mvcs.setActionContext(req, ac);
 
-			ActionInvoker invoker = mapping.getActionInvoker(ac);
-			if (invoker == null) {
+			ActionDispatcher dispatcher = mapping.getActionDispatcher(ac);
+			if (dispatcher == null) {
 				if (log.isDebugEnabled()) {
 					log.debug("SKIP: " + path);
 				}
 			}
 			else {
 				if (log.isDebugEnabled()) {
-					log.debug("INVOKE: " + path);
+					log.debug("Dispatch: " + path);
 				}
-				if (invoker.invoke(ac)) {
+				if (dispatcher.dispatch(ac)) {
 					return true;
 				}
 			}

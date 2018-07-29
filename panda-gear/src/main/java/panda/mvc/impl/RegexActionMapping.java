@@ -19,31 +19,31 @@ import panda.mvc.ActionMapping;
  */
 @IocBean(type=ActionMapping.class)
 public class RegexActionMapping extends AbstractActionMapping implements ActionMapping {
-	private Map<String, ActionInvoker> urlmap;
+	private Map<String, ActionDispatcher> urlmap;
 	private List<Pattern> patterns;
-	private List<ActionInvoker> actionis;
+	private List<ActionDispatcher> dispatchers;
 
 	public RegexActionMapping() {
-		urlmap = new HashMap<String, ActionInvoker>();
+		urlmap = new HashMap<String, ActionDispatcher>();
 		patterns = new ArrayList<Pattern>();
-		actionis = new ArrayList<ActionInvoker>();
+		dispatchers = new ArrayList<ActionDispatcher>();
 	}
 
 	@Override
-	protected void addInvoker(String path, ActionInvoker invoker) {
+	protected void addDispatcher(String path, ActionDispatcher dispatcher) {
 		if (Strings.endsWithChar(path, '$')) {
 			Pattern pattern = Pattern.compile(path);
 			patterns.add(pattern);
-			actionis.add(invoker);
+			dispatchers.add(dispatcher);
 		}
 		else {
-			urlmap.put(path, invoker);
+			urlmap.put(path, dispatcher);
 		}
 	}
 	
 	@Override
-	protected ActionInvoker getInvoker(String path, List<String> args) {
-		ActionInvoker ai = urlmap.get(path);
+	protected ActionDispatcher getDispatcher(String path, List<String> args) {
+		ActionDispatcher ai = urlmap.get(path);
 		if (ai != null) {
 			return ai;
 		}
@@ -60,7 +60,7 @@ public class RegexActionMapping extends AbstractActionMapping implements ActionM
 						}
 					}
 				}
-				return actionis.get(i);
+				return dispatchers.get(i);
 			}
 		}
 

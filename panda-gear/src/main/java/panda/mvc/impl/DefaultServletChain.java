@@ -14,7 +14,7 @@ import panda.mvc.ServletChain;
 import panda.mvc.ServletFilter;
 import panda.mvc.filter.DecodingFilter;
 import panda.mvc.filter.HttpDumpFilter;
-import panda.mvc.filter.InvokeFilter;
+import panda.mvc.filter.DispatchFilter;
 import panda.mvc.filter.LoggingFilter;
 
 @IocBean(type=ServletChain.class, singleton=false, create="initialize")
@@ -40,7 +40,7 @@ public class DefaultServletChain implements ServletChain {
 			filters.add(ioc.get(HttpDumpFilter.class));
 			filters.add(ioc.get(DecodingFilter.class));
 			filters.add(ioc.get(LoggingFilter.class));
-			filters.add(ioc.get(InvokeFilter.class));
+			filters.add(ioc.get(DispatchFilter.class));
 		}
 	}
 
