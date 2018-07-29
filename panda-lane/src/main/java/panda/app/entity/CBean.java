@@ -5,69 +5,70 @@ import java.util.Date;
 import panda.dao.entity.annotation.Column;
 import panda.lang.Objects;
 
-public abstract class CBean extends Bean implements ICreate {
+public abstract class CBean extends Bean implements ICreatedBy {
 	
 	@Column(notNull=true)
-	protected Long cusid;
-	protected String cusnm;
-	
+	protected Date createdAt;
+
 	@Column(notNull=true)
-	protected Date ctime;
+	protected Long createdBy;
+
+	protected String createdByName;
 
 	/**
-	 * @return the cusid
+	 * @return the createdAt
 	 */
 	@Override
-	public Long getCusid() {
-		return cusid;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
 	/**
-	 * @param cusid the cusid to set
+	 * @param createdAt the createdAt to set
 	 */
 	@Override
-	public void setCusid(Long cusid) {
-		this.cusid = cusid;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	
+	/**
+	 * @return the createdBy
+	 */
+	@Override
+	public Long getCreatedBy() {
+		return createdBy;
 	}
 
 	/**
-	 * @return the cusnm
+	 * @param createdBy the createdBy to set
 	 */
 	@Override
-	public String getCusnm() {
-		return cusnm;
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	/**
-	 * @param cusnm the cusnm to set
+	 * @return the createdByName
 	 */
 	@Override
-	public void setCusnm(String cusnm) {
-		this.cusnm = cusnm;
+	public String getCreatedByName() {
+		return createdByName;
 	}
 
 	/**
-	 * @return the ctime
+	 * @param createdByName the createdByName to set
 	 */
 	@Override
-	public Date getCtime() {
-		return ctime;
+	public void setCreatedByName(String createdByName) {
+		this.createdByName = createdByName;
 	}
 
 	/**
-	 * @param ctime the ctime to set
+	 * @return createdBy:cusnmr
 	 */
 	@Override
-	public void setCtime(Date ctime) {
-		this.ctime = ctime;
-	}
-
-	/**
-	 * @return cusid:cusnmr
-	 */
-	@Override
-	public String getCuser() {
-		return cusid == null ? null : cusid + (cusnm == null ? "" : ':' + cusnm);
+	public String getCreatedByUser() {
+		return createdBy == null ? null : createdBy + (createdByName == null ? "" : ':' + createdByName);
 	}
 
 	//----------------------------------------------------------------------
@@ -76,9 +77,9 @@ public abstract class CBean extends Bean implements ICreate {
 	 * @param src the source object to copy
 	 */
 	public void copy(CBean src) {
-		this.cusid = src.cusid;
-		this.cusnm = src.cusnm;
-		this.ctime = src.ctime;
+		this.createdAt = src.createdAt;
+		this.createdBy = src.createdBy;
+		this.createdByName = src.createdByName;
 	}
 
 	/**
@@ -87,9 +88,9 @@ public abstract class CBean extends Bean implements ICreate {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
-				.append(CUSID, cusid)
-				.append(CUSNM, cusnm)
-				.append(CTIME, ctime)
+				.append(CREATED_AT, createdAt)
+				.append(CREATED_BY, createdBy)
+				.append(CREATED_BY_NAME, createdByName)
 				.toString();
 	}
 }

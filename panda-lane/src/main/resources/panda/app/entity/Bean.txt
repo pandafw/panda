@@ -1,11 +1,11 @@
 id=ID
 status=Status
-cuser=Create User
-cusid=Create UID
-cusnm=Create User
-ctime=Create Date
-uuser=Update User
-uusid=Update UID
-uusnm=Update User
-utime=Update Date
+createdAt=Create Date
+createdBy=Create UID
+createdByName=Create User
+createdByUser=Create User
+updatedAt=Update Date
+updatedBy=Update UID
+updatedByName=Update User
+updatedByUser=Update User
 

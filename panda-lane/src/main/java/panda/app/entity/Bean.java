@@ -43,19 +43,19 @@ public abstract class Bean {
 	 * @param rhs right bean
 	 * @return true if lhs.utime != rhs.utime
 	 */
-	public static boolean isChanged(IUpdate lhs, IUpdate rhs) {
-		if (lhs.getUusid() == null 
-				|| lhs.getUtime() == null 
-				|| rhs.getUusid() == null 
-				|| rhs.getUtime() == null) {
+	public static boolean isChanged(IUpdatedBy lhs, IUpdatedBy rhs) {
+		if (lhs.getUpdatedBy() == null 
+				|| lhs.getUpdatedAt() == null 
+				|| rhs.getUpdatedBy() == null 
+				|| rhs.getUpdatedAt() == null) {
 			return false;
 		}
 		
-		if (!lhs.getUusid().equals(rhs.getUusid())) {
+		if (!lhs.getUpdatedBy().equals(rhs.getUpdatedBy())) {
 			return true;
 		}
 
-		return (lhs.getUtime().getTime() / 1000) != (rhs.getUtime().getTime() / 1000);
+		return (lhs.getUpdatedAt().getTime() / 1000) != (rhs.getUpdatedAt().getTime() / 1000);
 	}
 }
 

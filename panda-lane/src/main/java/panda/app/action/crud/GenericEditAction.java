@@ -7,7 +7,7 @@ import java.util.Set;
 import panda.app.BusinessRuntimeException;
 import panda.app.constant.RES;
 import panda.app.entity.Bean;
-import panda.app.entity.IUpdate;
+import panda.app.entity.IUpdatedBy;
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityHelper;
@@ -1092,14 +1092,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if check successfully
 	 */
 	protected boolean checkDataChanged(T data, T sdat, String msg) {
-		if (data instanceof IUpdate) {
-			IUpdate cb = (IUpdate)data;
-			IUpdate sb = (IUpdate)sdat;
+		if (data instanceof IUpdatedBy) {
+			IUpdatedBy cb = (IUpdatedBy)data;
+			IUpdatedBy sb = (IUpdatedBy)sdat;
 			if (Bean.isChanged(cb, sb)) {
-				cb.setUusid(sb.getUusid());
-				cb.setUtime(sb.getUtime());
+				cb.setUpdatedBy(sb.getUpdatedBy());
+				cb.setUpdatedAt(sb.getUpdatedAt());
 				
-				addActionWarning(getScenarioMessage(msg, DateTimes.isoDatetimeNotFormat().format(sb.getUtime())));
+				addActionWarning(getScenarioMessage(msg, DateTimes.isoDatetimeNotFormat().format(sb.getUpdatedAt())));
 				return false;
 			}
 		}

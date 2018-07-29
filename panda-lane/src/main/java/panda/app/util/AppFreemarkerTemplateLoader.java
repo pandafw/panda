@@ -48,7 +48,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 			etl.setCountryColumn(Template.COUNTRY);
 			//dtl.setVariantColumn("variant");
 			etl.setSourceColumn(Template.SOURCE);
-			etl.setTimestampColumn(Template.UTIME);
+			etl.setTimestampColumn(Template.UPDATED_AT);
 	
 			databaseTemplateLoader = etl;
 			

@@ -37,24 +37,24 @@ public class CQuery<T extends CBean, Q extends CQuery> extends EntityQuery<T, Q>
 	// field conditions
 	//----------------------------------------------------------------------
 	/**
-	 * @return condition of cusid
+	 * @return condition of createdAt
 	 */
-	public ComparableCondition<Q, Number> cusid() {
-		return new ComparableCondition(this, CBean.CUSID);
+	public ComparableCondition<Q, Date> createdAt() {
+		return new ComparableCondition(this, CBean.CREATED_AT);
 	}
 
 	/**
-	 * @return condition of cusnm
+	 * @return condition of createdBy
 	 */
-	public ComparableCondition<Q, String> cusnm() {
-		return new ComparableCondition(this, CBean.CUSNM);
+	public ComparableCondition<Q, Number> createdBy() {
+		return new ComparableCondition(this, CBean.CREATED_BY);
 	}
 
 	/**
-	 * @return condition of ctime
+	 * @return condition of createdByName
 	 */
-	public ComparableCondition<Q, Date> ctime() {
-		return new ComparableCondition(this, CBean.CTIME);
+	public ComparableCondition<Q, String> createdByName() {
+		return new ComparableCondition(this, CBean.CREATED_BY_NAME);
 	}
 }
 

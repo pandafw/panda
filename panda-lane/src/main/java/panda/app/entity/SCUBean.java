@@ -5,24 +5,26 @@ import java.util.Date;
 import panda.dao.entity.annotation.Column;
 import panda.lang.Objects;
 
-public class SCUBean extends Bean implements IStatus, ICreate, IUpdate {
+public class SCUBean extends Bean implements IStatus, ICreatedBy, IUpdatedBy {
 
 	@Column(notNull=true)
 	protected Character status;
 	
 	@Column(notNull=true)
-	protected Long cusid;
-	protected String cusnm;
+	protected Date createdAt;
 	
 	@Column(notNull=true)
-	protected Date ctime;
+	protected Long createdBy;
+
+	protected String createdByName;
 	
 	@Column(notNull=true)
-	protected Long uusid;
-	protected String uusnm;
+	protected Date updatedAt;
 	
 	@Column(notNull=true)
-	protected Date utime;
+	protected Long updatedBy;
+
+	protected String updatedByName;
 
 
 	/**
@@ -42,115 +44,115 @@ public class SCUBean extends Bean implements IStatus, ICreate, IUpdate {
 	}
 
 	/**
-	 * @return the cusid
+	 * @return the createdAt
 	 */
 	@Override
-	public Long getCusid() {
-		return cusid;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
 	/**
-	 * @param cusid the cusid to set
+	 * @param createdAt the createdAt to set
 	 */
 	@Override
-	public void setCusid(Long cusid) {
-		this.cusid = cusid;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	/**
-	 * @return the cusnm
+	 * @return the createdBy
 	 */
 	@Override
-	public String getCusnm() {
-		return cusnm;
+	public Long getCreatedBy() {
+		return createdBy;
 	}
 
 	/**
-	 * @param cusnm the cusnm to set
+	 * @param createdBy the createdBy to set
 	 */
 	@Override
-	public void setCusnm(String cusnm) {
-		this.cusnm = cusnm;
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	/**
-	 * @return the ctime
+	 * @return the createdByName
 	 */
 	@Override
-	public Date getCtime() {
-		return ctime;
+	public String getCreatedByName() {
+		return createdByName;
 	}
 
 	/**
-	 * @param ctime the ctime to set
+	 * @param createdByName the createdByName to set
 	 */
 	@Override
-	public void setCtime(Date ctime) {
-		this.ctime = ctime;
+	public void setCreatedByName(String createdByName) {
+		this.createdByName = createdByName;
 	}
 
 	/**
-	 * @return the uusid
+	 * @return createdBy:cusnmr
 	 */
 	@Override
-	public Long getUusid() {
-		return uusid;
+	public String getCreatedByUser() {
+		return createdBy == null ? null : createdBy + (createdByName == null ? "" : ':' + createdByName);
 	}
 
 	/**
-	 * @param uusid the uusid to set
+	 * @return the updatedAt
 	 */
 	@Override
-	public void setUusid(Long uusid) {
-		this.uusid = uusid;
+	public Date getUpdatedAt() {
+		return updatedAt;
 	}
 
 	/**
-	 * @return the uusnm
+	 * @param updatedAt the updatedAt to set
 	 */
 	@Override
-	public String getUusnm() {
-		return uusnm;
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	/**
-	 * @param uusnm the uusnm to set
+	 * @return the updatedBy
 	 */
 	@Override
-	public void setUusnm(String uusnm) {
-		this.uusnm = uusnm;
+	public Long getUpdatedBy() {
+		return updatedBy;
 	}
 
 	/**
-	 * @return the utime
+	 * @param updatedBy the updatedBy to set
 	 */
 	@Override
-	public Date getUtime() {
-		return utime;
+	public void setUpdatedBy(Long updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	/**
-	 * @param utime the utime to set
+	 * @return the updatedByName
 	 */
 	@Override
-	public void setUtime(Date utime) {
-		this.utime = utime;
+	public String getUpdatedByName() {
+		return updatedByName;
 	}
 
 	/**
-	 * @return cusid:cusnmr
+	 * @param updatedByName the updatedByName to set
 	 */
 	@Override
-	public String getCuser() {
-		return cusid == null ? null : cusid + (cusnm == null ? "" : ':' + cusnm);
+	public void setUpdatedByName(String updatedByName) {
+		this.updatedByName = updatedByName;
 	}
 
 	/**
-	 * @return uusid:uusnmr
+	 * @return updatedBy:uusnmr
 	 */
 	@Override
-	public String getUuser() {
-		return uusid == null ? null : uusid + (uusnm == null ? "" : ':' + uusnm);
+	public String getUpdatedByUser() {
+		return updatedBy == null ? null : updatedBy + (updatedByName == null ? "" : ':' + updatedByName);
 	}
 
 	//----------------------------------------------------------------------
@@ -160,12 +162,12 @@ public class SCUBean extends Bean implements IStatus, ICreate, IUpdate {
 	 */
 	public void copy(SCUBean src) {
 		this.status = src.status;
-		this.cusid = src.cusid;
-		this.cusnm = src.cusnm;
-		this.ctime = src.ctime;
-		this.uusid = src.uusid;
-		this.uusnm = src.uusnm;
-		this.utime = src.utime;
+		this.createdAt = src.createdAt;
+		this.createdBy = src.createdBy;
+		this.createdByName = src.createdByName;
+		this.updatedAt = src.updatedAt;
+		this.updatedBy = src.updatedBy;
+		this.updatedByName = src.updatedByName;
 	}
 
 	/**
@@ -175,12 +177,12 @@ public class SCUBean extends Bean implements IStatus, ICreate, IUpdate {
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append(STATUS, status)
-				.append(CUSID, cusid)
-				.append(CUSNM, cusnm)
-				.append(CTIME, ctime)
-				.append(UUSID, uusid)
-				.append(UUSNM, uusnm)
-				.append(UTIME, utime)
+				.append(CREATED_AT, createdAt)
+				.append(CREATED_BY, createdBy)
+				.append(CREATED_BY_NAME, createdByName)
+				.append(UPDATED_AT, updatedAt)
+				.append(UPDATED_BY, updatedBy)
+				.append(UPDATED_BY_NAME, updatedByName)
 				.toString();
 	}
 }

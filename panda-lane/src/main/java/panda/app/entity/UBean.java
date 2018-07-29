@@ -5,69 +5,70 @@ import java.util.Date;
 import panda.dao.entity.annotation.Column;
 import panda.lang.Objects;
 
-public class UBean extends Bean implements IUpdate {
+public class UBean extends Bean implements IUpdatedBy {
 	
 	@Column(notNull=true)
-	protected Long uusid;
-	protected String uusnm;
+	protected Date updatedAt;
 	
 	@Column(notNull=true)
-	protected Date utime;
+	protected Long updatedBy;
+
+	protected String updatedByName;
 
 	/**
-	 * @return the uusid
+	 * @return the updatedBy
 	 */
 	@Override
-	public Long getUusid() {
-		return uusid;
+	public Long getUpdatedBy() {
+		return updatedBy;
 	}
 
 	/**
-	 * @param uusid the uusid to set
+	 * @param updatedBy the updatedBy to set
 	 */
 	@Override
-	public void setUusid(Long uusid) {
-		this.uusid = uusid;
+	public void setUpdatedBy(Long updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	/**
-	 * @return the uusnm
+	 * @return the updatedByName
 	 */
 	@Override
-	public String getUusnm() {
-		return uusnm;
+	public String getUpdatedByName() {
+		return updatedByName;
 	}
 
 	/**
-	 * @param uusnm the uusnm to set
+	 * @param updatedByName the updatedByName to set
 	 */
 	@Override
-	public void setUusnm(String uusnm) {
-		this.uusnm = uusnm;
+	public void setUpdatedByName(String updatedByName) {
+		this.updatedByName = updatedByName;
 	}
 
 	/**
-	 * @return the utime
+	 * @return the updatedAt
 	 */
 	@Override
-	public Date getUtime() {
-		return utime;
+	public Date getUpdatedAt() {
+		return updatedAt;
 	}
 
 	/**
-	 * @param utime the utime to set
+	 * @param updatedAt the updatedAt to set
 	 */
 	@Override
-	public void setUtime(Date utime) {
-		this.utime = utime;
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	/**
-	 * @return uusid:uusnmr
+	 * @return updatedBy:uusnmr
 	 */
 	@Override
-	public String getUuser() {
-		return uusid == null ? null : uusid + (uusnm == null ? "" : ':' + uusnm);
+	public String getUpdatedByUser() {
+		return updatedBy == null ? null : updatedBy + (updatedByName == null ? "" : ':' + updatedByName);
 	}
 
 	//----------------------------------------------------------------------
@@ -76,9 +77,9 @@ public class UBean extends Bean implements IUpdate {
 	 * @param src the source object to copy
 	 */
 	public void copy(UBean src) {
-		this.uusid = src.uusid;
-		this.uusnm = src.uusnm;
-		this.utime = src.utime;
+		this.updatedAt = src.updatedAt;
+		this.updatedBy = src.updatedBy;
+		this.updatedByName = src.updatedByName;
 	}
 
 	/**
@@ -87,9 +88,9 @@ public class UBean extends Bean implements IUpdate {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
-				.append(UUSID, uusid)
-				.append(UUSNM, uusnm)
-				.append(UTIME, utime)
+				.append(UPDATED_AT, updatedAt)
+				.append(UPDATED_BY, updatedBy)
+				.append(UPDATED_BY_NAME, updatedByName)
 				.toString();
 	}
 }

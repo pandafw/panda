@@ -37,38 +37,45 @@ public class CUQuery<T extends CUBean, Q extends CUQuery> extends EntityQuery<T,
 	// field conditions
 	//----------------------------------------------------------------------
 	/**
-	 * @return condition of cusnm
+	 * @return condition of createdAt
 	 */
-	public ComparableCondition<Q, String> cusnm() {
-		return new ComparableCondition(this, CUBean.CUSNM);
+	public ComparableCondition<Q, Date> createdAt() {
+		return new ComparableCondition(this, CUBean.CREATED_AT);
 	}
 
 	/**
-	 * @return condition of ctime
+	 * @return condition of createdBy
 	 */
-	public ComparableCondition<Q, Date> ctime() {
-		return new ComparableCondition(this, CUBean.CTIME);
+	public ComparableCondition<Q, Number> createdBy() {
+		return new ComparableCondition(this, CUBean.CREATED_BY);
 	}
 
 	/**
-	 * @return condition of uusid
+	 * @return condition of createdByName
 	 */
-	public ComparableCondition<Q, Number> uusid() {
-		return new ComparableCondition(this, CUBean.UUSID);
+	public ComparableCondition<Q, String> createdByName() {
+		return new ComparableCondition(this, CUBean.CREATED_BY_NAME);
 	}
 
 	/**
-	 * @return condition of uusnm
+	 * @return condition of updatedAt
 	 */
-	public ComparableCondition<Q, String> uusnm() {
-		return new ComparableCondition(this, CUBean.UUSNM);
+	public ComparableCondition<Q, Date> updatedAt() {
+		return new ComparableCondition(this, CUBean.UPDATED_AT);
 	}
 
 	/**
-	 * @return condition of utime
+	 * @return condition of updatedBy
 	 */
-	public ComparableCondition<Q, Date> utime() {
-		return new ComparableCondition(this, CUBean.UTIME);
+	public ComparableCondition<Q, Number> updatedBy() {
+		return new ComparableCondition(this, CUBean.UPDATED_BY);
+	}
+
+	/**
+	 * @return condition of updatedByName
+	 */
+	public ComparableCondition<Q, String> updatedByName() {
+		return new ComparableCondition(this, CUBean.UPDATED_BY_NAME);
 	}
 }
 

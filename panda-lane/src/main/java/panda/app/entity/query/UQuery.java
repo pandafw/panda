@@ -37,24 +37,24 @@ public class UQuery<T extends UBean, Q extends UQuery> extends EntityQuery<T, Q>
 	// field conditions
 	//----------------------------------------------------------------------
 	/**
-	 * @return condition of uusid
+	 * @return condition of updatedAt
 	 */
-	public ComparableCondition<Q, Number> uusid() {
-		return new ComparableCondition(this, UBean.UUSID);
+	public ComparableCondition<Q, Date> updatedAt() {
+		return new ComparableCondition(this, UBean.UPDATED_AT);
 	}
 
 	/**
-	 * @return condition of uusnm
+	 * @return condition of updatedBy
 	 */
-	public ComparableCondition<Q, String> uusnm() {
-		return new ComparableCondition(this, UBean.UUSNM);
+	public ComparableCondition<Q, Number> updatedBy() {
+		return new ComparableCondition(this, UBean.UPDATED_BY);
 	}
 
 	/**
-	 * @return condition of utime
+	 * @return condition of updatedByName
 	 */
-	public ComparableCondition<Q, Date> utime() {
-		return new ComparableCondition(this, UBean.UTIME);
+	public ComparableCondition<Q, String> updatedByName() {
+		return new ComparableCondition(this, UBean.UPDATED_BY_NAME);
 	}
 }
 

@@ -5,17 +5,18 @@ import java.util.Date;
 import panda.dao.entity.annotation.Column;
 import panda.lang.Objects;
 
-public class SUBean extends Bean implements IStatus, IUpdate {
+public class SUBean extends Bean implements IStatus, IUpdatedBy {
 	
 	@Column(notNull=true)
 	protected Character status;
 	
 	@Column(notNull=true)
-	protected Long uusid;
-	protected String uusnm;
+	protected Date updatedAt;
 	
 	@Column(notNull=true)
-	protected Date utime;
+	protected Long updatedBy;
+
+	protected String updatedByName;
 
 
 	/**
@@ -35,59 +36,59 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 	}
 
 	/**
-	 * @return the uusid
+	 * @return the updatedAt
 	 */
 	@Override
-	public Long getUusid() {
-		return uusid;
+	public Date getUpdatedAt() {
+		return updatedAt;
 	}
 
 	/**
-	 * @param uusid the uusid to set
+	 * @param updatedAt the updatedAt to set
 	 */
 	@Override
-	public void setUusid(Long uusid) {
-		this.uusid = uusid;
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	/**
-	 * @return the uusnm
+	 * @return the updatedBy
 	 */
 	@Override
-	public String getUusnm() {
-		return uusnm;
+	public Long getUpdatedBy() {
+		return updatedBy;
 	}
 
 	/**
-	 * @param uusnm the uusnm to set
+	 * @param updatedBy the updatedBy to set
 	 */
 	@Override
-	public void setUusnm(String uusnm) {
-		this.uusnm = uusnm;
+	public void setUpdatedBy(Long updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	/**
-	 * @return the utime
+	 * @return the updatedByName
 	 */
 	@Override
-	public Date getUtime() {
-		return utime;
+	public String getUpdatedByName() {
+		return updatedByName;
 	}
 
 	/**
-	 * @param utime the utime to set
+	 * @param updatedByName the updatedByName to set
 	 */
 	@Override
-	public void setUtime(Date utime) {
-		this.utime = utime;
+	public void setUpdatedByName(String updatedByName) {
+		this.updatedByName = updatedByName;
 	}
 
 	/**
-	 * @return uusid:uusnmr
+	 * @return updatedBy:uusnmr
 	 */
 	@Override
-	public String getUuser() {
-		return uusid == null ? null : uusid + (uusnm == null ? "" : ':' + uusnm);
+	public String getUpdatedByUser() {
+		return updatedBy == null ? null : updatedBy + (updatedByName == null ? "" : ':' + updatedByName);
 	}
 
 	//----------------------------------------------------------------------
@@ -97,9 +98,9 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 	 */
 	public void copy(SUBean src) {
 		this.status = src.status;
-		this.uusid = src.uusid;
-		this.uusnm = src.uusnm;
-		this.utime = src.utime;
+		this.updatedAt = src.updatedAt;
+		this.updatedBy = src.updatedBy;
+		this.updatedByName = src.updatedByName;
 	}
 
 	/**
@@ -109,9 +110,9 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append(STATUS, status)
-				.append(UUSID, uusid)
-				.append(UUSNM, uusnm)
-				.append(UTIME, utime)
+				.append(UPDATED_AT, updatedAt)
+				.append(UPDATED_BY, updatedBy)
+				.append(UPDATED_BY_NAME, updatedByName)
 				.toString();
 	}
 }

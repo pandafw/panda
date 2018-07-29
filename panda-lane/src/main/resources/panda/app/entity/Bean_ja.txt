@@ -1,11 +1,11 @@
 id=ID
 status=ステータス
-cuser=作成者
-cusid=作成者ID
-cusnm=作成者名
-ctime=作成時間
-uuser=更新者
-uusid=更新者ID
-uusnm=更新者名
-utime=更新時間
+createdAt=作成時間
+createdBy=作成者ID
+createdByName=作成者名
+createdByUser=作成者
+updatedAt=更新時間
+updatedBy=更新者ID
+updatedByName=更新者名
+updatedByUser=更新者
 

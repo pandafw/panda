@@ -45,24 +45,24 @@ public class SUQuery<T extends SUBean, Q extends SUQuery> extends EntityQuery<T,
 	}
 
 	/**
-	 * @return condition of uusid
+	 * @return condition of updatedAt
 	 */
-	public ComparableCondition<Q, Number> uusid() {
-		return new ComparableCondition(this, SCUBean.UUSID);
+	public ComparableCondition<Q, Date> updatedAt() {
+		return new ComparableCondition(this, SCUBean.UPDATED_AT);
 	}
 
 	/**
-	 * @return condition of uusnm
+	 * @return condition of updatedBy
 	 */
-	public ComparableCondition<Q, String> uusnm() {
-		return new ComparableCondition(this, SCUBean.UUSNM);
+	public ComparableCondition<Q, Number> updatedBy() {
+		return new ComparableCondition(this, SCUBean.UPDATED_BY);
 	}
 
 	/**
-	 * @return condition of utime
+	 * @return condition of updatedByName
 	 */
-	public ComparableCondition<Q, Date> utime() {
-		return new ComparableCondition(this, SCUBean.UTIME);
+	public ComparableCondition<Q, String> updatedByName() {
+		return new ComparableCondition(this, SCUBean.UPDATED_BY_NAME);
 	}
 }
 

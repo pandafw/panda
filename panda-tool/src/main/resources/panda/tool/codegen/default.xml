@@ -2,16 +2,16 @@
 <module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pandafw.github.io/repos/1.2.0/panda-codegen-module.xsd">
 	<!-- entity -->
 	<entity name="cEntity" generate="false">
-		<property name="cusnm" property="false" type="String" joinName="CU" joinEntity="${entity.user}" joinField="name" joinKeys="cusid" joinRefs="id"/>
+		<property name="createdByName" property="false" type="String" joinName="CU" joinEntity="${entity.user}" joinField="name" joinKeys="createdBy" joinRefs="id"/>
 	</entity>
 
 	<entity name="uEntity" generate="false">
-		<property name="uusnm" property="false" type="String" joinName="UU" joinEntity="${entity.user}" joinField="name" joinKeys="uusid" joinRefs="id"/>
+		<property name="updatedByName" property="false" type="String" joinName="UU" joinEntity="${entity.user}" joinField="name" joinKeys="updatedBy" joinRefs="id"/>
 	</entity>
 
 	<entity name="cuEntity" generate="false">
-		<property name="cusnm" property="false" type="String" joinName="CU" joinEntity="${entity.user}" joinField="name" joinKeys="cusid" joinRefs="id"/>
-		<property name="uusnm" property="false" type="String" joinName="UU" joinEntity="${entity.user}" joinField="name" joinKeys="uusid" joinRefs="id"/>
+		<property name="createdByName" property="false" type="String" joinName="CU" joinEntity="${entity.user}" joinField="name" joinKeys="createdBy" joinRefs="id"/>
+		<property name="updatedByName" property="false" type="String" joinName="UU" joinEntity="${entity.user}" joinField="name" joinKeys="updatedBy" joinRefs="id"/>
 	</entity>
 
 	<!-- action -->
@@ -44,41 +44,41 @@
 			</column>
 		</list>
 		<list name="cList" extend="baseList">
-			<column name="cusid" hidden="true" sortable="true" link="false" order="100200">
-				<filter type="number"/>
-			</column>
-			<column name="cuser" hidden="false" sortable="true" link="false" order="100300"/>
-			<column name="ctime" hidden="false" sortable="true" link="false" order="100400">
+			<column name="createdAt" hidden="false" sortable="true" link="false" order="100200">
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
+			<column name="createdBy" hidden="true" sortable="true" link="false" order="100300">
+				<filter type="number"/>
+			</column>
+			<column name="createdByUser" hidden="false" sortable="true" link="false" order="100400"/>
 		</list>
 		<list name="chList" extend="baseList">
-			<column name="cusid" hidden="true" sortable="false" link="false" order="100200">
-				<filter type="number"/>
-			</column>
-			<column name="ctime" hidden="true" sortable="false" link="false" order="100400">
+			<column name="createdAt" hidden="true" sortable="false" link="false" order="100200">
 				<format type="datetime"/>
 				<filter type="datetime"/>
+			</column>
+			<column name="createdBy" hidden="true" sortable="false" link="false" order="100400">
+				<filter type="number"/>
 			</column>
 		</list>
 		<list name="uList" extend="baseList">
-			<column name="uusid" hidden="true" sortable="true" link="false" order="100500">
-				<filter type="number"/>
-			</column>
-			<column name="uuser" hidden="false" sortable="true" link="false" order="100600"/>
-			<column name="utime" hidden="false" sortable="true" link="false" order="100700">
+			<column name="updatedAt" hidden="false" sortable="true" link="false" order="100500">
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
+			<column name="updatedBy" hidden="true" sortable="true" link="false" order="100600">
+				<filter type="number"/>
+			</column>
+			<column name="updatedByUser" hidden="false" sortable="true" link="false" order="100700"/>
 		</list>
 		<list name="uhList" extend="baseList">
-			<column name="uusid" hidden="true" sortable="false" link="false" order="100500">
-				<filter type="number"/>
-			</column>
-			<column name="utime" hidden="true" sortable="false" link="false" order="100700">
+			<column name="updatedAt" hidden="true" sortable="false" link="false" order="100500">
 				<format type="datetime"/>
 				<filter type="datetime"/>
+			</column>
+			<column name="updatedBy" hidden="true" sortable="false" link="false" order="100700">
+				<filter type="number"/>
 			</column>
 		</list>
 		<list name="cuList" extend="cList,uList"/>
@@ -129,55 +129,55 @@
 			</field>
 		</input>
 		<input name="cInput" extend="baseInput">
-			<field name="cusid" order="100200">
-				<editTag name="${tag.hidden}"/>
-			</field>
-			<field name="cuser" order="100300">
-				<editTag name="${tag.viewfield}"/>
-			</field>
-			<field name="ctime" order="100400">
+			<field name="createdAt" order="100200">
 				<editTag name="${tag.viewfield}">
 					<param name="format" value="datetime"/>
 				</editTag>
+			</field>
+			<field name="createdBy" order="100300">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="createdByUser" order="100400">
+				<editTag name="${tag.viewfield}"/>
 			</field>
 		</input>
 		<input name="chInput" extend="baseInput">
-			<field name="cusid" order="100200">
-				<editTag name="${tag.hidden}"/>
-			</field>
-			<field name="cusnm" order="100300">
-				<editTag name="${tag.hidden}"/>
-			</field>
-			<field name="ctime" order="100400">
+			<field name="createdAt" order="100200">
 				<editTag name="${tag.hidden}">
 					<param name="format" value="datetime"/>
 				</editTag>
 			</field>
-		</input>
-		<input name="uInput" extend="baseInput">
-			<field name="uusid" order="100500">
+			<field name="createdBy" order="100300">
 				<editTag name="${tag.hidden}"/>
 			</field>
-			<field name="uuser" order="100600">
-				<editTag name="${tag.viewfield}"/>
+			<field name="createdByName" order="100400">
+				<editTag name="${tag.hidden}"/>
 			</field>
-			<field name="utime" order="100700">
+		</input>
+		<input name="uInput" extend="baseInput">
+			<field name="updatedAt" order="100500">
 				<editTag name="${tag.viewfield}">
 					<param name="format" value="datetime"/>
 				</editTag>
 			</field>
+			<field name="updatedBy" order="100600">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="updatedByUser" order="100700">
+				<editTag name="${tag.viewfield}"/>
+			</field>
 		</input>
 		<input name="uhInput" extend="baseInput">
-			<field name="uusid" order="100500">
-				<editTag name="${tag.hidden}"/>
-			</field>
-			<field name="uusnm" order="100600">
-				<editTag name="${tag.hidden}"/>
-			</field>
-			<field name="utime" order="100700">
+			<field name="updatedAt" order="100500">
 				<editTag name="${tag.hidden}">
 					<param name="format" value="datetime"/>
 				</editTag>
+			</field>
+			<field name="updatedBy" order="100600">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="updatedByName" order="100700">
+				<editTag name="${tag.hidden}"/>
 			</field>
 		</input>
 		<input name="cuInput" extend="cInput,uInput"/>

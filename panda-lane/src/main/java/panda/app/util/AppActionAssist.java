@@ -11,9 +11,9 @@ import panda.app.auth.IUser;
 import panda.app.constant.RES;
 import panda.app.constant.SET;
 import panda.app.constant.VAL;
-import panda.app.entity.ICreate;
+import panda.app.entity.ICreatedBy;
 import panda.app.entity.IStatus;
-import panda.app.entity.IUpdate;
+import panda.app.entity.IUpdatedBy;
 import panda.bind.json.JsonObject;
 import panda.bind.json.JsonSerializer;
 import panda.bind.json.Jsons;
@@ -253,17 +253,17 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		}
 		
 		Date now = DateTimes.getDate();
-		if (data instanceof ICreate) {
-			ICreate cb = (ICreate)data;
-			cb.setCusid(getLoginUserId());
-			cb.setCtime(now);
+		if (data instanceof ICreatedBy) {
+			ICreatedBy cb = (ICreatedBy)data;
+			cb.setCreatedBy(getLoginUserId());
+			cb.setCreatedAt(now);
 		}
 		
-		if (data instanceof IUpdate) {
-			IUpdate ub = (IUpdate)data;
+		if (data instanceof IUpdatedBy) {
+			IUpdatedBy ub = (IUpdatedBy)data;
 	
-			ub.setUusid(getLoginUserId());
-			ub.setUtime(now);
+			ub.setUpdatedBy(getLoginUserId());
+			ub.setUpdatedAt(now);
 		}
 	}
 
@@ -280,19 +280,19 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 			}
 		}
 		
-		if (data instanceof ICreate) {
-			ICreate cb = (ICreate)data;
-			ICreate sb = (ICreate)sdat;
+		if (data instanceof ICreatedBy) {
+			ICreatedBy cb = (ICreatedBy)data;
+			ICreatedBy sb = (ICreatedBy)sdat;
 	
-			cb.setCusid(sb.getCusid());
-			cb.setCtime(sb.getCtime());
+			cb.setCreatedBy(sb.getCreatedBy());
+			cb.setCreatedAt(sb.getCreatedAt());
 		}
 		
-		if (data instanceof IUpdate) {
-			IUpdate ub = (IUpdate)data;
+		if (data instanceof IUpdatedBy) {
+			IUpdatedBy ub = (IUpdatedBy)data;
 
-			ub.setUusid(getLoginUserId());
-			ub.setUtime(DateTimes.getDate());
+			ub.setUpdatedBy(getLoginUserId());
+			ub.setUpdatedAt(DateTimes.getDate());
 		}
 	}
 	
