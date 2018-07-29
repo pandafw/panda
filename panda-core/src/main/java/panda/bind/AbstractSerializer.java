@@ -401,6 +401,11 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		startObject(name, src);
 		for (Object o : src.entrySet()) {
 			Entry en = (Entry)o;
+			if (en.getKey() == null) {
+				// ignore null key
+				continue;
+			}
+			
 			String key = en.getKey().toString();
 			Object val = en.getValue();
 			if (serializeObjectProperty(src, key, val, len, sa)) {
