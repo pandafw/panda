@@ -79,23 +79,23 @@
 				list="%{consts.dataStatusMap}"
 			/>
 	</#if>
-	<#if a.displayField("uusid")>
-			<@p.hidden
-				name="uusid"
-				value="%{r.uusid}"
-			/>
-	</#if>
-	<#if a.displayField("uuser")>
+	<#if a.displayField("updatedAt")>
 			<@p.viewfield
-				key="uuser"
-				value="%{r.uuser}"
-			/>
-	</#if>
-	<#if a.displayField("utime")>
-			<@p.viewfield
-				key="utime"
-				value="%{r.utime}"
+				key="updatedAt"
+				value="%{r.updatedAt}"
 				format="datetime"
+			/>
+	</#if>
+	<#if a.displayField("updatedBy")>
+			<@p.hidden
+				name="updatedBy"
+				value="%{r.updatedBy}"
+			/>
+	</#if>
+	<#if a.displayField("updatedByUser")>
+			<@p.viewfield
+				key="updatedByUser"
+				value="%{r.updatedByUser}"
 			/>
 	</#if>
 			<#assign _buttons_ = [] />

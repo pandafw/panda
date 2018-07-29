@@ -20,7 +20,7 @@ public class TemplateListAction extends GenericListAction<Template> {
 	 */
 	public TemplateListAction() {
 		setType(Template.class);
-		addDisplayFields(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.STATUS, Template.UUSID, Template.UUSER, Template.UTIME);
+		addDisplayFields(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY, Template.UPDATED_BY_USER);
 	}
 
 

@@ -85,29 +85,29 @@
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("status")
 		}, {
-			"name": "uusid",
-			"header": a.getFieldLabel("uusid"),
-			"display": a.displayField("uusid"),
-			"hidden": true,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("uusid")
-		}, {
-			"name": "uuser",
-			"header": a.getFieldLabel("uuser"),
-			"display": a.displayField("uuser"),
-			"hidden": false,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("uuser")
-		}, {
-			"name": "utime",
-			"header": a.getFieldLabel("utime"),
-			"display": a.displayField("utime"),
+			"name": "updatedAt",
+			"header": a.getFieldLabel("updatedAt"),
+			"display": a.displayField("updatedAt"),
 			"format": {
 				"type": "datetime"
 			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("utime")
+			"tooltip": a.getFieldTooltip("updatedAt")
+		}, {
+			"name": "updatedBy",
+			"header": a.getFieldLabel("updatedBy"),
+			"display": a.displayField("updatedBy"),
+			"hidden": true,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("updatedBy")
+		}, {
+			"name": "updatedByUser",
+			"header": a.getFieldLabel("updatedByUser"),
+			"display": a.displayField("updatedByUser"),
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("updatedByUser")
 		}] />
 
 
