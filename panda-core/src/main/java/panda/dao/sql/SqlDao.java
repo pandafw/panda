@@ -74,6 +74,11 @@ public class SqlDao extends AbstractDao {
 	}
 
 	//-------------------------------------------------------------------------
+	public JdbcSqlExecutor getJdbcSqlExecutor() {
+		return executor;
+	}
+
+	//-------------------------------------------------------------------------
 	protected SqlDaoClient getSqlDaoClient() {
 		return (SqlDaoClient)getDaoClient();
 	}

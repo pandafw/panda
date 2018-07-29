@@ -138,6 +138,15 @@ public abstract class JdbcSqlExecutorTestCase extends SqlExecutorTestCase {
 	/**
 	 */
 	@Test
+	public void testQueryForString() {
+		String sql = "SELECT FSTR FROM TEST WHERE ID=?";
+		
+		testQueryForObject(sql, 1001, "NAME 1001");
+	}
+	
+	/**
+	 */
+	@Test
 	public void testQueryForInteger() {
 		String sql = "SELECT COUNT(*) FROM TEST WHERE ID=1001 or ID=1002";
 		
