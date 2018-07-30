@@ -6,10 +6,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import freemarker.template.TemplateException;
 import panda.app.auth.AppAuthenticator;
 import panda.app.auth.IUser;
 import panda.app.constant.RES;
-import panda.app.constant.SET;
 import panda.app.constant.VAL;
 import panda.app.entity.ICreatedBy;
 import panda.app.entity.IStatus;
@@ -26,7 +26,6 @@ import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.lang.time.DateTimes;
-import panda.mvc.MvcConstants;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
 import panda.mvc.bind.adapter.SorterAdapter;
@@ -35,8 +34,6 @@ import panda.mvc.util.ActionAssist;
 import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.util.StateProvider;
 import panda.mvc.view.ftl.FreemarkerHelper;
-
-import freemarker.template.TemplateException;
 
 
 @IocBean(type=ActionAssist.class, scope=Scope.REQUEST)
@@ -56,9 +53,6 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	@IocInject
 	protected AppAuthenticator authenticator;
 
-	@IocInject(value=MvcConstants.APP_DEBUG, required=false)
-	protected Boolean appDebug;
-	
 	//--------------------------------------------------------------------------	
 	/**
 	 * hasTemplate
@@ -142,15 +136,9 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	@Override
 	public boolean isDebugEnabled() {
 		if (appDebug == null) {
-			String dbg = settings.getProperty(SET.APP_DEBUG);
-			if ("true".equalsIgnoreCase(dbg)) {
-				appDebug = true;
-			}
-			else if ("false".equalsIgnoreCase(dbg)) {
-				appDebug = false;
-			}
-			else {
-				appDebug = isLoopbackIP() || isSuperUser();
+			appDebug = getAppDebug();
+			if (appDebug == null) {
+				appDebug = isSuperUser();
 			}
 		}
 		return appDebug;

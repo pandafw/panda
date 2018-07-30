@@ -6,6 +6,7 @@ import java.util.Locale;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.mvc.MvcConstants;
 import panda.mvc.SetConstants;
 
 
@@ -58,7 +59,10 @@ public class Link extends UIBean {
 	protected String statics;
 	protected String version;
 	protected Boolean cdn;
+
+	@IocInject(value=MvcConstants.APP_DEBUG, required=false)
 	protected Boolean debug;
+
 	protected boolean js;
 	protected boolean css;
 	protected Locale locale;

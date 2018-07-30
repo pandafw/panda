@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import panda.io.Files;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.lang.Objects;
 import panda.lang.Order;
@@ -21,9 +22,10 @@ import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
+import panda.mvc.SetConstants;
 import panda.mvc.processor.LayoutProcessor;
-import panda.net.IPs;
 import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.net.http.UserAgent;
@@ -34,6 +36,9 @@ import panda.servlet.HttpServlets;
 public class ActionAssist extends ActionSupport {
 	private UserAgent userAgent;
 
+	@IocInject(value=MvcConstants.APP_DEBUG, required=false)
+	protected Boolean appDebug;
+	
 	/**
 	 * @return log
 	 */
@@ -45,15 +50,26 @@ public class ActionAssist extends ActionSupport {
 	 * @return true if remote host is local network host
 	 */
 	public boolean isDebugEnabled() {
-		return isLoopbackIP();
+		if (appDebug == null) {
+			appDebug = getAppDebug();
+			if (appDebug == null) {
+				appDebug = false;
+			}
+		}
+		return appDebug;
 	}
 
-	
-	/**
-	 * @return true if remote host is localhost
-	 */
-	public boolean isLoopbackIP() {
-		return IPs.isLoopbackIP(HttpServlets.getRemoteAddr(getRequest()));
+	public Boolean getAppDebug() {
+		String dbg = context.getSettings().getProperty(SetConstants.APP_DEBUG);
+		if ("true".equalsIgnoreCase(dbg)) {
+			return true;
+		}
+		
+		if ("false".equalsIgnoreCase(dbg)) {
+			return false;
+		}
+		
+		return null;
 	}
 
 	public String getServletErrorReason(int sc) {
