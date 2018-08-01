@@ -105,6 +105,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 		if (r == UserAuthenticator.UNLOGIN) {
 			if (Strings.isNotEmpty(bv)) {
 				addActionError(ac, RES.ERROR_UNLOGIN);
+				ac.push(getRedirectURL(ac));
 				doView(ac, bv);
 				return;
 			}
@@ -112,6 +113,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 			String unlogin = settings.getProperty(SET.VIEW_UNLOGIN, unloginView);
 			if (Strings.isNotEmpty(unlogin)) {
 				addActionError(ac, RES.ERROR_UNLOGIN);
+				ac.push(getRedirectURL(ac));
 				doView(ac, unlogin);
 				return;
 			}
@@ -121,6 +123,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 		if (r == UserAuthenticator.UNSECURE) {
 			if (Strings.isNotEmpty(bv)) {
 				addActionError(ac, RES.ERROR_UNSECURE);
+				ac.push(getRedirectURL(ac));
 				doView(ac, bv);
 				return;
 			}
@@ -131,6 +134,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 			}
 			if (Strings.isNotEmpty(unsecure)) {
 				addActionError(ac, RES.ERROR_UNSECURE);
+				ac.push(getRedirectURL(ac));
 				doView(ac, unsecure);
 				return;
 			}
@@ -139,6 +143,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 		// forbidden view
 		if (Strings.isNotEmpty(bv)) {
 			addActionError(ac, RES.ERROR_FORBIDDEN);
+			ac.push(getRedirectURL(ac));
 			doView(ac, bv);
 			return;
 		}
@@ -146,6 +151,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 		String forbidden = settings.getProperty(SET.VIEW_FORBIDDEN, forbiddenView);
 		if (Strings.isNotEmpty(forbidden)) {
 			addActionError(ac, RES.ERROR_FORBIDDEN);
+			ac.push(getRedirectURL(ac));
 			doView(ac, forbidden);
 			return;
 		}
