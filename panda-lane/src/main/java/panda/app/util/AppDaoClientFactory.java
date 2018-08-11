@@ -104,7 +104,7 @@ public class AppDaoClientFactory {
 			}
 			
 			for (String dst : dss) {
-				String dsn = SET.DATA + (Strings.isEmpty(dst) ? "." : "." + dst);
+				String dsn = SET.DATA + (Strings.isEmpty(dst) ? "" : "." + dst);
 				try {
 					DataSource ds = createSimpleDataSource(dsn + ".");
 					SqlDaoClient sqlDaoClient = new SqlDaoClient();
