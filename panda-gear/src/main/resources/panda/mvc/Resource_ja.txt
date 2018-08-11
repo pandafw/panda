@@ -190,9 +190,9 @@ validation-password-notsame=パスワードが一致していません。
 validation-password-incorrect=パスワードが正しくありません。
 validation-passeddate=過去の日付を入力できません。
 validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
-validation-prohibited=${top.consts}中の値が入力不可です。
+validation-prohibited=${top.consts}中の値が入力できません。
 validation-regex=項目の値が正規表現式"${top.regex}"にマーチできません。
-validation-required=必須項目です。
+validation-required=未入力です。
 validation-requiredfile=ファイルを指定してください。
 validation-requiredimage=画像ファイルを指定してください。
 validation-string-length=${\
@@ -212,7 +212,7 @@ validation-zipcode=正しい郵便番号を入力してください。（例: 12
 #-----------------------------------------------------------------------------
 # error messages
 #-----------------------------------------------------------------------------
-error-input=未入力または正しく入力されていない項目があります。
+error-input=入力エラーがあります。
 error-input-detail=エラー詳細
 error-data-notfound=対象データが見つかりません。
 error-data-duplicate=該当データが既に登録されています。${top}
