@@ -28,13 +28,11 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 			return;
 		}
 		
-		Collection<String> fieldErrorFieldNames = tag.getFieldNames();
-
-		if (Collections.isEmpty(fieldErrorFieldNames)) {
-			fieldErrorFieldNames = errors.keySet();
+		Collection<String> fns = tag.getFieldNames();
+		if (Collections.isEmpty(fns)) {
+			fns = errors.keySet();
 		}
-
-		if (Collections.isEmpty(fieldErrorFieldNames)) {
+		if (Collections.isEmpty(fns)) {
 			return;
 		}
 
@@ -43,8 +41,8 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 		Attributes ula = new Attributes();
 
 		// iterate over field error names
-		for (String fieldErrorFieldName : fieldErrorFieldNames) {
-			List<String> fieldErrors = errors.get(fieldErrorFieldName);
+		for (String fn : fns) {
+			List<String> fieldErrors = errors.get(fn);
 			if (fieldErrors == null) {
 				continue;
 			}
@@ -54,10 +52,9 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 			boolean hidden = false;
 			String label = null;
 			if (tag.isShowLabel()) {
-				String key = "p." + fieldErrorFieldName;
-				label = getText(key, null);
+				label = getText("p." + fn, null);
 				if (Strings.isEmpty(label)) {
-					label = key;
+					label = fn;
 					if (tag.isHideEmptyLabel()) {
 						hidden = true;
 					}
@@ -70,7 +67,7 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 					if (!ul) {
 						// wrapping ul
 						ula.clear()
-							.add("errorFor", fieldErrorFieldName)
+							.add("errorFor", fn)
 							.cssClass(tag, UL_CLASS)
 							.cssStyle(tag);
 						stag("ul", ula);
