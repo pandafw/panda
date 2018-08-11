@@ -1988,8 +1988,13 @@ if (typeof String.formatSize != "function") {
 			else {
 				for (var n in m) {
 					var v = m[n];
-					for (var i = 0; i < v.length; i++) {
-						h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + v[i] + '</li>';
+					if ($.isArray(v)) {
+						for (var i = 0; i < v.length; i++) {
+							h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + n + ': ' + v[i] + '</li>';
+						}
+					}
+					else {
+						h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + n + ': ' + v + '</li>';
 					}
 				}
 			}
