@@ -2,6 +2,7 @@ package panda.mvc;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,13 +33,16 @@ import panda.mvc.annotation.To;
 import panda.mvc.ioc.provider.DefaultIocProvider;
 
 public class MvcLoader {
-
 	private static final Log log = Logs.getLog(MvcLoader.class);
+
+	private static final String DEFAULT_ACTION_METHOD_SEPARATORS = ".:";
 
 	private MvcConfig mvcConfig;
 	private Ioc ioc;
+	private IocProxy iocp;
 	private ActionMapping actionMapping;
 	private MvcHandler actionHandler;
+	private String separators;
 	
 	public MvcLoader(MvcConfig config) {
 		this.mvcConfig = config;
@@ -70,12 +74,18 @@ public class MvcLoader {
 		StopWatch sw = new StopWatch();
 		try {
 			ioc = createIoc(config);
+			iocp = new IocProxy(ioc);
 
-			actionMapping = evalActionMapping(ioc, config.getMainModule());
+			separators = ioc.getIfExists(String.class, MvcConstants.MVC_ACTION_METHOD_SEPARATORS);
+			if (separators == null) {
+				separators = DEFAULT_ACTION_METHOD_SEPARATORS;
+			}
+			
+			actionMapping = evalActionMapping(config.getMainModule());
 
 			actionHandler = new MvcHandler(this);
 
-			evalSetup(ioc, true);
+			evalSetup(true);
 		}
 		catch (Exception e) {
 			if (log.isErrorEnabled()) {
@@ -119,7 +129,7 @@ public class MvcLoader {
 	}
 
 
-	protected ActionMapping evalActionMapping(Ioc ioc, Class<?> mainModule) {
+	protected ActionMapping evalActionMapping(Class<?> mainModule) {
 		ActionMapping mapping = ioc.get(ActionMapping.class);
 		if (log.isInfoEnabled()) {
 			log.infof("Build " + ActionMapping.class.getName() + " by %s ...", mapping.getClass().getName());
@@ -128,7 +138,7 @@ public class MvcLoader {
 		ActionChainCreator acc = ioc.get(ActionChainCreator.class);
 
 		// create action info for mail module
-		ActionConfig mainCfg = createActionConfig(ioc, mainModule);
+		ActionConfig mainCfg = createActionConfig(mainModule);
 
 		// scan classes
 		Collection<Class<?>> actions = scanModules(mainModule);
@@ -142,7 +152,7 @@ public class MvcLoader {
 		int atMethods = 0;
 		for (Class<?> action : actions) {
 			// merge with main module
-			ActionConfig clsCfg = createActionConfig(ioc, action).mergeWith(mainCfg);
+			ActionConfig clsCfg = createActionConfig(action).mergeWith(mainCfg);
 
 			for (Method method : action.getMethods()) {
 				// public & not synthetic/bridge (ignore generic type method for super class) & @At is declared
@@ -151,7 +161,7 @@ public class MvcLoader {
 						&& !method.isBridge()
 						&& method.isAnnotationPresent(At.class)) {
 					// merge with action
-					ActionConfig acfg = createActionConfig(ioc, method).mergeWith(clsCfg);
+					ActionConfig acfg = createActionConfig(method).mergeWith(clsCfg);
 
 					// add to mapping
 					mapping.add(acc, acfg);
@@ -175,7 +185,7 @@ public class MvcLoader {
 		return mapping;
 	}
 
-	protected void evalSetup(Ioc ioc, boolean init) {
+	protected void evalSetup(boolean init) {
 		Setup setup = ioc.getIfExists(Setup.class);
 		if (setup != null) {
 			if (init) {
@@ -221,7 +231,7 @@ public class MvcLoader {
 
 		// Firstly, upload the user customized destroy
 		try {
-			evalSetup(ioc, false);
+			evalSetup(false);
 		}
 		finally {
 			ioc.depose();
@@ -294,21 +304,21 @@ public class MvcLoader {
 		}
 	}
 	
-	protected ActionConfig createActionConfig(Ioc ioc, Class<?> type) {
+	protected ActionConfig createActionConfig(Class<?> type) {
 		ActionConfig ac = new ActionConfig();
 		evalHttpAdaptor(ac, type.getAnnotation(AdaptBy.class));
 		evalViews(ac, type.getAnnotation(To.class));
-		evalAt(ioc, ac, type.getAnnotation(At.class), null);
+		evalAt(ac, type.getAnnotation(At.class), null);
 		evalActionChainMaker(ac, type.getAnnotation(Chain.class));
 		evalAction(ac, type);
 		return ac;
 	}
 
-	protected ActionConfig createActionConfig(Ioc ioc, Method method) {
+	protected ActionConfig createActionConfig(Method method) {
 		ActionConfig am = new ActionConfig();
 		evalHttpAdaptor(am, method.getAnnotation(AdaptBy.class));
 		evalViews(am, method.getAnnotation(To.class));
-		evalAt(ioc, am, method.getAnnotation(At.class), method);
+		evalAt(am, method.getAnnotation(At.class), method);
 		evalActionChainMaker(am, method.getAnnotation(Chain.class));
 		am.setActionMethod(method);
 		return am;
@@ -320,30 +330,31 @@ public class MvcLoader {
 		}
 	}
 
-	protected void evalAt(Ioc ioc, ActionConfig ac, At at, Method method) {
+	protected void evalAt(ActionConfig ac, At at, Method method) {
 		if (at == null) {
 			return;
 		}
 
 		if (Arrays.isNotEmpty(at.value())) {
-			IocProxy ip = new IocProxy(ioc);
 			String[] ps = new String[at.value().length];
 			for (int i = 0; i < ps.length; i++) {
 				String a = at.value()[i];
-				a = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
+				a = Strings.isEmpty(a) ? a : Mvcs.translate(a, iocp);
 				ps[i] = a.length() > 1 ? Strings.stripEnd(a, '/') : a;
 			}
 			ac.setPaths(ps);
 		}
 		else if (method != null) {
 			String mn = method.getName();
-			String ma = Strings.replaceChars(mn, '_', '.');
-			if (ma.equals(mn)) {
-				ac.setPaths(Arrays.toArray(ma));
+			List<String> ps = new ArrayList<String>();
+			ps.add(mn);
+			
+			if (Strings.isNotEmpty(separators) && Strings.contains(mn, '_')) {
+				for (int i = 0; i < separators.length(); i++) {
+					ps.add(Strings.replaceChars(mn, '_', separators.charAt(i)));
+				}
 			}
-			else {
-				ac.setPaths(Arrays.toArray(mn, ma));
-			}
+			ac.setPaths(ps.toArray(new String[ps.size()]));
 		}
 
 		if (Arrays.isNotEmpty(at.method())) {
