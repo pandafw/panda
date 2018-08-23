@@ -1283,6 +1283,52 @@ public class Streams {
 	 * @throws IOException if the file cannot be written to
 	 * @throws IOException if a parent directory needs creating but that fails
 	 */
+	public static FileOutputStream openOutputStream(final String file) throws IOException {
+		return openOutputStream(new File(file), false);
+	}
+
+	/**
+	 * Opens a {@link FileOutputStream} for the specified file, checking and creating the parent
+	 * directory if it does not exist.
+	 * <p>
+	 * At the end of the method either the stream will be successfully opened, or an exception will
+	 * have been thrown.
+	 * <p>
+	 * The parent directory will be created if it does not exist. The file will be created if it
+	 * does not exist. An exception is thrown if the file object exists but is a directory. An
+	 * exception is thrown if the file exists but cannot be written to. An exception is thrown if
+	 * the parent directory cannot be created.
+	 * 
+	 * @param file the file to open for output, must not be {@code null}
+	 * @param append if {@code true}, then bytes will be added to the end of the file rather than
+	 *            overwriting
+	 * @return a new {@link FileOutputStream} for the specified file
+	 * @throws IOException if the file object is a directory
+	 * @throws IOException if the file cannot be written to
+	 * @throws IOException if a parent directory needs creating but that fails
+	 */
+	public static FileOutputStream openOutputStream(final String file, final boolean append) throws IOException {
+		return openOutputStream(new File(file), append);
+	}
+	
+	/**
+	 * Opens a {@link FileOutputStream} for the specified file, checking and creating the parent
+	 * directory if it does not exist.
+	 * <p>
+	 * At the end of the method either the stream will be successfully opened, or an exception will
+	 * have been thrown.
+	 * <p>
+	 * The parent directory will be created if it does not exist. The file will be created if it
+	 * does not exist. An exception is thrown if the file object exists but is a directory. An
+	 * exception is thrown if the file exists but cannot be written to. An exception is thrown if
+	 * the parent directory cannot be created.
+	 * 
+	 * @param file the file to open for output, must not be {@code null}
+	 * @return a new {@link FileOutputStream} for the specified file
+	 * @throws IOException if the file object is a directory
+	 * @throws IOException if the file cannot be written to
+	 * @throws IOException if a parent directory needs creating but that fails
+	 */
 	public static FileOutputStream openOutputStream(final File file) throws IOException {
 		return openOutputStream(file, false);
 	}
