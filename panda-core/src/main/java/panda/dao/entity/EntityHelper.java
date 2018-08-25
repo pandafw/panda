@@ -133,13 +133,13 @@ public abstract class EntityHelper {
 
 			if (sdat != null) {
 				if (EntityHelper.isDifferent(ei.getFields(), data, sdat)) {
-					if (!checkUniqueIndex(dao, entity, data, ei)) {
+					if (findDuplicatedUniqueIndex(dao, entity, ei, data)) {
 						return ei;
 					}
 				}
 			}
 			else {
-				if (!checkUniqueIndex(dao, entity, data, ei)) {
+				if (findDuplicatedUniqueIndex(dao, entity, ei, data)) {
 					return ei;
 				}
 			}
@@ -147,32 +147,21 @@ public abstract class EntityHelper {
 		return null;
 	}
 
-	public static <T> boolean checkUniqueIndex(Dao dao, Entity<T> entity, T data, EntityIndex ei) {
+	public static <T> boolean findDuplicatedUniqueIndex(Dao dao, Entity<T> entity, EntityIndex ei, T data) {
 		if (!ei.isUnique()) {
-			return true;
+			return false;
 		}
-
-		boolean allNull = true;
 
 		DataQuery<T> q = new DataQuery<T>(entity);
 		for (EntityField ef : ei.getFields()) {
 			Object dv = ef.getValue(data);
 			if (dv == null) {
-				q.isNull(ef.getName());
-			}
-			else {
-				allNull = false;
-				q.equalTo(ef.getName(), dv);
-			}
-		}
-
-		if (!allNull) {
-			if (dao.count(q) > 0) {
 				return false;
 			}
+			q.equalTo(ef.getName(), dv);
 		}
-		
-		return true;
+
+		return dao.exists(q);
 	}
 
 	/**
