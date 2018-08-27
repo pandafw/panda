@@ -52,6 +52,7 @@ navi-super-property=配置
 navi-super-resource=资源
 navi-super-template=模板
 navi-super-crons=Cron任务
+navi-super-datacpy=数据转移
 navi-super-dataexp=数据导出
 navi-super-dataimp=数据导入
 navi-super-html2pdf=HTML⇒PDF打印

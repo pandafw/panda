@@ -98,6 +98,7 @@ navi-super-template=Template
 
 navi-super-cmdexec=CMD Tool
 navi-super-crons=Crons
+navi-super-datacpy=Data Transfer
 navi-super-dataexp=Data Export
 navi-super-dataimp=Data Import
 navi-super-eleval=EL Tool
@@ -115,6 +116,7 @@ icon-super-template=fa fa-file-code-o
 
 icon-super-cmdexec=fa fa-terminal
 icon-super-crons=fa fa-clock-o
+icon-super-datacpy=fa fa-random
 icon-super-dataexp=fa fa-cloud-download
 icon-super-dataimp=fa fa-cloud-upload
 icon-super-eleval=fa fa-keyboard-o

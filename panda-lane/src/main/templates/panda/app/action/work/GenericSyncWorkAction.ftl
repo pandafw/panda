@@ -40,6 +40,7 @@
 	<br/>
 
 	<script type="text/javascript">
+		var work_msg_cls = { 'd': 'bg-primary', 'i': 'bg-info', 'w': 'bg-warning', 'e': 'bg-danger', 's': 'bg-success' };
 		var work_msgs_limit = 10000;
 		var work_msgs = [];
 
@@ -164,8 +165,7 @@
 		}
 		
 		function work_status_cls(cls) {
-			var mcls = { 'i': 'alert-info', 'w': 'alert-warning', 'e': 'alert-danger', 's': 'alert-success' };
-			return mcls[cls || 'i'] || '';
+			return work_msg_cls[cls || 'i'] || '';
 		}
 
 		function work_print_status(time, level, msg, count, total) {

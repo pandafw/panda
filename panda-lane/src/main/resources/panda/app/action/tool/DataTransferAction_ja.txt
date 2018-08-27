@@ -1,0 +1,2 @@
+title=データ移行
+p.target=移行先
