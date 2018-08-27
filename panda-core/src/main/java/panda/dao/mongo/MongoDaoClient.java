@@ -9,8 +9,8 @@ import com.mongodb.MongoClientURI;
 
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.dao.DaoException;
 import panda.dao.DatabaseMeta;
-import panda.lang.Exceptions;
 
 public class MongoDaoClient extends DaoClient {
 	private MongoClient mongo;
@@ -32,7 +32,7 @@ public class MongoDaoClient extends DaoClient {
 			meta = new DatabaseMeta(panda.dao.DB.MONGO, "Mongo Java Driver", ver);
 		}
 		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
+			throw new DaoException("Failed to create MongoDaoClient for " + uri, e);
 		}
 		
 		mcs = new ConcurrentHashMap<Class<?>, MongoConverter>();
