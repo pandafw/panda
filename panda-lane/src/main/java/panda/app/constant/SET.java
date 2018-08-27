@@ -22,11 +22,9 @@ public interface SET extends SetConstants {
 
 	public static final String DATA_SOURCE = "data.source";
 
-	public static final String DATA_MONGO_URL = "data.mongo.url";
+	public static final String DATA_MONGO_URL = "data.%s.url";
 
-	public static final String DATA_JNDI_RESOURCE = "data.jndi.resource";
-
-	public static final String DATA_JDBC = "data.jdbc";
+	public static final String DATA_JNDI_RESOURCE = "data.%s.resource";
 
 	public static final String DATA_QUERY_TIMEOUT = "data.query.timeout";
 
