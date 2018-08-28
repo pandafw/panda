@@ -15,21 +15,21 @@
 		}
 	</style>
 
-	<div class="panel panel-success">
-		<div class="panel-heading">REQUEST HTTP HEADER:</div>
-		<table class="table table-striped">
-		<thead>
-			<tr><th width="200">Name</th><th>Value</th></tr>
-		</thead>
-		<tbody>
-<#list reqHeader?keys as k> 
-			<tr><td>${k!''?html}</td><td><#list reqHeader[k]![] as v>${v!''?html}<br/></#list></td></tr>
-</#list>
-		</tbody>
-		</table>
-	</div>
-	<br/>
+	<ul class="nav nav-pills">
+		<li class="active"><a href="#d_params" data-toggle="pill">Parameters</a></li>
+		<li><a href="#d_headers" data-toggle="pill">Headers</a></li>
+		<li><a href="#d_cookies" data-toggle="pill">Cookies</a></li>
+		<li><a href="#d_request" data-toggle="pill">Request</a></li>
+		<li><a href="#d_session" data-toggle="pill">Session</a></li>
+		<li><a href="#d_servlet" data-toggle="pill">Servlet</a></li>
+		<li><a href="#d_system" data-toggle="pill">System</a></li>
+		<li><a href="#d_enviroment" data-toggle="pill">Envrioment</a></li>
+		<li><a href="#d_settings" data-toggle="pill">Settings</a></li>
+	</ul>
+	<br>
 
+<div class="tab-content">
+<div id="d_params" class="tab-pane active">
 	<div class="panel panel-success">
 		<div class="panel-heading">REQUEST PARAMETERS:</div>
 		<table class="table table-striped">
@@ -37,14 +37,33 @@
 			<tr><th width="200">Name</th><th>Values</th></tr>
 		</thead>
 		<tbody>
-<#list reqParams?keys as k>
+<#list reqParams?keys?sort as k>
 			<tr><td>${k!''?html}</td><td>${assist.escapePhtml(reqParams[k]!)}</td></tr>
 </#list>
 		</tbody>
 		</table>
 	</div>
 	<br/>
+</div>
 
+<div id="d_headers" class="tab-pane">
+	<div class="panel panel-success">
+		<div class="panel-heading">REQUEST HTTP HEADER:</div>
+		<table class="table table-striped">
+		<thead>
+			<tr><th width="200">Name</th><th>Value</th></tr>
+		</thead>
+		<tbody>
+<#list reqHeader?keys?sort as k> 
+			<tr><td>${k!''?html}</td><td><#list reqHeader[k]![] as v>${v!''?html}<br/></#list></td></tr>
+</#list>
+		</tbody>
+		</table>
+	</div>
+	<br/>
+</div>
+
+<div id="d_cookies" class="tab-pane">
 	<div class="panel panel-success">
 		<div class="panel-heading">REQUEST HTTP COOKIES:</div>
 		<table class="table table-striped">
@@ -90,7 +109,9 @@
 		</table>
 	</div>
 	<br/>
+</div>
 
+<div id="d_request" class="tab-pane">
 	<div class="panel panel-success">
 		<div class="panel-heading">REQUEST INFORMATION:</div>
 		<table class="table table-striped">
@@ -143,7 +164,7 @@
 			</tr>
 		</thead>
 		<tbody>
-<#list req?keys as k>
+<#list req?keys?sort as k>
 			<tr><td>${k!''?html}</td>
 				<td><#if req[k]??><i>${(req[k].class.name)!''?html}</i>
 					<div>${assist.escapePhtml(req[k]!)}</div>
@@ -154,7 +175,9 @@
 		</table>
 	</div>
 	<br/>
+</div>
 
+<div id="d_session" class="tab-pane">
 	<div class="panel panel-success">
 		<div class="panel-heading">SESSION: [ <#if session??>${session.id}</#if> ]</div>
 		<table class="table table-striped">
@@ -165,7 +188,7 @@
 			</tr>
 		</thead>
 		<tbody>
-<#list ses?keys as k>
+<#list ses?keys?sort as k>
 			<tr><td>${k?html}</td>
 				<td><#if ses[k]??><i>${(ses[k].class.name)!''?html}</i>
 					</div>${assist.escapePhtml(ses[k]!)}</div>
@@ -182,7 +205,9 @@
 		</table>
 	</div>
 	<br/>
+</div>
 
+<div id="d_servlet" class="tab-pane">
 	<div class="panel panel-success">
 		<div class="panel-heading">APPLICATION: [ ${servlet.servletContextName?html} ] ( ${servlet.serverInfo?html} )</div>
 		<table class="table table-striped">
@@ -193,7 +218,7 @@
 			</tr>
 		</thead>
 		<tbody>
-<#list app?keys as k>
+<#list app?keys?sort as k>
 			<tr><td>${k?html}</td>
 				<td><#if app[k]??><i>${(app[k].class.name)!''?html}</i>
 					<div>${assist.escapePhtml(app[k]!)}</div>
@@ -204,7 +229,9 @@
 		</table>
 	</div>
 	<br/>
+</div>
 
+<div id="d_system" class="tab-pane">
 	<div class="panel panel-success">
 		<div class="panel-heading">System.Properties</div>
 		<table class="table table-striped">
@@ -216,9 +243,9 @@
 		</thead>
 		<tbody>
 <#assign _sps = assist.findValue("'java.lang.System'@getProperties()")/>
-<#list _sps?keys as k>
+<#list _sps?keys?sort as k>
 			<tr>
-				<td>${k!''?html}</td>
+				<td>${(k!'')?html}</td>
 				<td><#if _sps[k]??><div>${(_sps[k]?string)!''?html}</div></#if></td>
 			</tr>
 </#list>
@@ -226,7 +253,9 @@
 		</table>
 	</div>
 	<br/>
+</div>
 
+<div id="d_enviroment" class="tab-pane">
 	<div class="panel panel-success">
 		<div class="panel-heading">System.Environment</div>
 		<table class="table table-striped">
@@ -238,7 +267,7 @@
 		</thead>
 		<tbody>
 <#assign _ses = assist.findValue("'java.lang.System'@getenv()")/>
-<#list _ses?keys as k>
+<#list _ses?keys?sort as k>
 			<tr>
 				<td>${k?html}</td>
 				<td><#if _ses[k]??><div>${(_ses[k]?string)!''?html}</div></#if></td>
@@ -247,4 +276,30 @@
 		</tbody>
 		</table>
 	</div>
+</div>
+
+<div id="d_settings" class="tab-pane">
+	<div class="panel panel-success">
+		<div class="panel-heading">Settings</div>
+		<table class="table table-striped">
+		<thead>
+			<tr>
+				<th class="thn">Name</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+<#assign _ses = assist.findValue("'java.lang.System'@getenv()")/>
+<#list s?keys?sort as k>
+			<tr>
+				<td>${k?html}</td>
+				<td><#if s[k]??><div>${(s[k]?string)!''?html}</div></#if></td>
+			</tr>
+</#list>
+		</tbody>
+		</table>
+	</div>
+</div>
+
+</div>
 </div>
