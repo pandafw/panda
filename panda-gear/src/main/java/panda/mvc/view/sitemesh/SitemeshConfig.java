@@ -14,6 +14,7 @@ public class SitemeshConfig {
 		protected String paraName;
 		protected String paraValue;
 		protected Pattern path;
+		protected Pattern uri;
 		public String page;
 		
 		public void setHead(String head) {
@@ -30,6 +31,10 @@ public class SitemeshConfig {
 		
 		public void setPath(String path) {
 			this.path = Pattern.compile(path);
+		}
+		
+		public void setUri(String uri) {
+			this.uri = Pattern.compile(uri);
 		}
 	}
 	

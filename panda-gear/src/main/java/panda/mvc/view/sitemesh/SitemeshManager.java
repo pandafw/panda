@@ -15,6 +15,7 @@ import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
 import panda.mvc.SetConstants;
 import panda.mvc.view.sitemesh.SitemeshConfig.SitemeshDecorator;
+import panda.servlet.HttpServlets;
 
 @IocBean
 public class SitemeshManager {
@@ -69,6 +70,12 @@ public class SitemeshManager {
 			}
 			if (sd.path != null) {
 				if (sd.path.matcher(ac.getPath()).matches()) {
+					return sd;
+				}
+			}
+			if (sd.uri != null) {
+				String uri = HttpServlets.getRequestURI(ac.getRequest());
+				if (sd.uri.matcher(uri).matches()) {
 					return sd;
 				}
 			}
