@@ -1,2 +1,4 @@
 title=データ移行
+
+p.source=移行元
 p.target=移行先

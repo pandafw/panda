@@ -1,27 +1,32 @@
 package panda.app.action.tool;
 
 
+import java.util.Map;
+
 import panda.app.action.work.GenericSyncWorkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.MVC;
+import panda.app.constant.SET;
 import panda.app.util.AppDaoClientFactory;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
 import panda.dao.DaoIterator;
+import panda.io.Settings;
 import panda.io.Streams;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
-import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 
 @At("${super_path}/datacpy")
 @Auth(AUTH.SUPER)
 public class DataTransferAction extends GenericSyncWorkAction {
 	public static class Arg {
+		public String source;
 		public String target;
 	}
 
@@ -30,19 +35,38 @@ public class DataTransferAction extends GenericSyncWorkAction {
 	
 	@IocInject
 	protected AppDaoClientFactory dcfactory;
+
+	@IocInject
+	protected Settings settings;
 	
 	protected Arg arg;
-	
-	@At("")
-	@To(Views.SFTL)
-	public void input() {
-		getContext().setParams(getArguments());
-	}
 
+	protected Map<String, String> dataSettings;
+	
 	private Arg getArguments() {
 		Arg arg = new Arg();
 		arg.target = Strings.stripToNull(getRequest().getParameter("target"));
 		return arg;
+	}
+
+	public Map<String, String> getDataSettings() {
+		if (dataSettings == null) {
+			String prefix = SET.DATA + '.';
+			
+			Map<String, String> dps = Collections.subMap(settings, prefix, false);
+			dps.remove(SET.DATA_PREFIX);
+			dps.remove(SET.DATA_QUERY_TIMEOUT);
+			dps.remove(SET.DATA_SOURCE);
+			
+			dataSettings = dps;
+		}
+		
+		return dataSettings;
+	}
+	@At("")
+	@To(Views.SFTL)
+	public void input() {
+		getContext().setParams(getArguments());
 	}
 
 	@Override
@@ -51,12 +75,16 @@ public class DataTransferAction extends GenericSyncWorkAction {
 		
 		if (Strings.isEmpty(arg.target)) {
 			printError("Parameter [target] is required!");
-			addFieldError("target", getText(Validators.MSGID_REQUIRED));
 			return;
 		}
 		
-		final DaoClient ddc = dcfactory.buildDaoClient(arg.target);
-		final Dao sdao = getDaoClient().getDao();
+		DaoClient ddc = dcfactory.buildDaoClient(arg.target);
+		DaoClient sdc = getDaoClient();
+		if (Strings.isNotEmpty(arg.source)) {
+			sdc = dcfactory.buildDaoClient(arg.source);
+		}
+		
+		final Dao sdao = sdc.getDao();
 		final Dao ddao = ddc.getDao();
 		
 		status.total = ENTITIES.length;
