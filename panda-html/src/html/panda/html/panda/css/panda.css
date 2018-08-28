@@ -87,6 +87,8 @@ ul.p-field-errors i.fa-li {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	line-height: 20px;
+	position: relative;
+	display: block;
 }
 
 @media (min-width: 768px) {
