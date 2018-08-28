@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -2181,22 +2182,38 @@ public abstract class Collections {
 	}
 
 	/**
-	 * remove prefix of key
+	 * subtract a map which key starts with the prefix, and remove prefix of key
 	 * 
 	 * @param map the original map
 	 * @param prefix the key prefix
 	 * @return the subtracted map
 	 */
 	public static <T> Map<String, T> subMap(Map<String, T> map, String prefix) {
+		return subMap(map, prefix, true);
+	}
+	
+	/**
+	 * subtract a map which key starts with the prefix
+	 * 
+	 * @param map the original map
+	 * @param prefix the key prefix
+	 * @param remove remove prefix of key
+	 * @return the subtracted map
+	 */
+	public static <T> Map<String, T> subMap(Map<String, T> map, String prefix, boolean remove) {
 		if (isEmpty(map) || Strings.isEmpty(prefix)) {
 			return map;
 		}
 		
-		Map<String, T> nm = new HashMap<String, T>();
+		Map<String, T> nm = new LinkedHashMap<String, T>();
 		int len = prefix.length();
 		for (Entry<String, T> en : map.entrySet()) {
-			if (en.getKey() != null && en.getKey().startsWith(prefix)) {
-				nm.put(en.getKey().substring(len), en.getValue());
+			String k = en.getKey();
+			if (k != null && k.startsWith(prefix)) {
+				if (remove) {
+					k = k.substring(len);
+				}
+				nm.put(k, en.getValue());
 			}
 		}
 		return nm;
