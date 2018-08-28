@@ -26,8 +26,10 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 	
+	<@safeinclude path=(a.templatePrefix!('/' + a.class.name?replace('.', '/')) + "-wells.ftl") />
+
 	<@p.form cssClass="p-eform" id="syncw" focusme="false" method="get" theme="bs3h">
-		<@safeinclude path=('/' + a.class.name?replace('.', '/') + "-inputs.ftl") />
+		<@safeinclude path=(a.templatePrefix!('/' + a.class.name?replace('.', '/')) + "-inputs.ftl") />
 		<@p.div cssClass="p-buttons">
 			<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="return syncw_start();" label="#(btn-start)"/>
 			<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="return syncw_stop();" label="#(btn-stop)"/>
