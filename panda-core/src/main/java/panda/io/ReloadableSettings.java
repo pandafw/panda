@@ -3,7 +3,6 @@ package panda.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
 import panda.log.Log;
@@ -126,26 +125,6 @@ public class ReloadableSettings extends Settings {
 	public synchronized String get(Object key) {
 		reload();
 		return super.get(key);
-	}
-
-	@Override
-	public synchronized String put(String key, String value) {
-		return super.put(key, value);
-	}
-
-	@Override
-	public synchronized String remove(Object key) {
-		return super.remove(key);
-	}
-
-	@Override
-	public synchronized void putAll(Map<? extends String, ? extends String> m) {
-		super.putAll(m);
-	}
-
-	@Override
-	public synchronized void clear() {
-		super.clear();
 	}
 
 	@Override

@@ -3,8 +3,9 @@
 		.a-debug th {
 			white-space: nowrap;
 		}
-		.a-debug th.thn {
-			width: 200px;
+		.a-debug th.thn,
+		.a-debug th.thf {
+			min-width: 200px;
 		}
 		.a-debug td {
 			word-break: break-all;
@@ -286,14 +287,15 @@
 			<tr>
 				<th class="thn">Name</th>
 				<th>Value</th>
+				<th class="thf">From</th>
 			</tr>
 		</thead>
 		<tbody>
-<#assign _ses = assist.findValue("'java.lang.System'@getenv()")/>
 <#list s?keys?sort as k>
 			<tr>
 				<td>${k?html}</td>
-				<td><#if s[k]??><div>${(s[k]?string)!''?html}</div></#if></td>
+				<td><#if s[k]??><div>${s[k]!''?html}</div></#if></td>
+				<td>${s.getFrom(k)!''?html}</td>
 			</tr>
 </#list>
 		</tbody>

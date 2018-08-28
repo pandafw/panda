@@ -219,7 +219,7 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 			if (inc.startsWith("*")) {
 				inc = inc.substring(1);
 				if (inc.endsWith(".properties")) {
-					properties.load(getClass().getResourceAsStream(inc));
+					properties.load(getClass().getResourceAsStream(inc), inc);
 				}
 				else if (inc.endsWith(".xml")) {
 					Document idoc = loadDocument(inc, properties);
@@ -277,7 +277,7 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 	protected Module parseModule(File f) throws Exception {
 		Settings properties = new Settings();
 		
-		properties.load(getClass().getResourceAsStream("default.properties"));
+		properties.load(getClass().getResourceAsStream("default.properties"), "default.properties");
 
 		Document doc = loadDocument(f, properties);
 		translateProps(properties);

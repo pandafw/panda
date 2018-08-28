@@ -53,11 +53,11 @@ public class AppSettings extends MvcSettings {
 
 		if (environment) {
 			log.info("Add environment variables to settings");
-			putAll(System.getenv());
+			putAll(System.getenv(), "Enviroment");
 		}
 		if (system) {
 			log.info("Add system properties to settings");
-			putAll(System.getProperties());
+			putAll(System.getProperties(), "System.Properties");
 		}
 
 		if (Strings.isNotEmpty(runtime)) {

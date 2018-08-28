@@ -7,13 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bind.json.Jsons;
 import panda.cast.Castors;
@@ -22,7 +22,8 @@ import panda.lang.Strings;
 
 
 public class Settings implements Map<String, String> {
-	private Map<String, String> props = new HashMap<String, String>();
+	private Map<String, String> props = new ConcurrentHashMap<String, String>();
+	private Map<String, String> froms = new ConcurrentHashMap<String, String>();
 	
 	public Settings() {
 	}
@@ -37,7 +38,7 @@ public class Settings implements Map<String, String> {
 	 * @param paths properties files
 	 * @throws IOException if an IO error occurred
 	 */
-	public synchronized void load(String... paths) throws IOException {
+	public void load(String... paths) throws IOException {
 		for (String path : paths) {
 			load(path);
 		}
@@ -47,21 +48,21 @@ public class Settings implements Map<String, String> {
 	 * @param is input stream
 	 * @throws IOException if an IO error occurs
 	 */
-	public synchronized void load(InputStream is) throws IOException {
+	public void load(InputStream is, String from) throws IOException {
 		Properties ps = new Properties();
 		ps.load(new InputStreamReader(is, Charsets.UTF_8));
-		putAll(ps);
+		putAll(ps, from);
 	}
 
 	/**
 	 * @param file file
 	 * @throws IOException if an IO error occurs
 	 */
-	public synchronized void load(File file) throws IOException {
+	public void load(File file) throws IOException {
 		InputStream is = null;
 		try {
 			is = new FileInputStream(file);
-			load(is);
+			load(is, file.getAbsolutePath());
 		}
 		finally {
 			Streams.safeClose(is);
@@ -72,11 +73,11 @@ public class Settings implements Map<String, String> {
 	 * @param file file
 	 * @throws IOException if an IO error occurs
 	 */
-	public synchronized void load(String file) throws IOException {
+	public void load(String file) throws IOException {
 		InputStream is = null;
 		try {
 			is = Streams.openInputStream(file);
-			load(is);
+			load(is, file);
 		}
 		finally {
 			Streams.safeClose(is);
@@ -85,69 +86,90 @@ public class Settings implements Map<String, String> {
 	
 	//------------------------------------------------------------------------
 	@Override
-	public synchronized int size() {
+	public int size() {
 		return props.size();
 	}
 
 	@Override
-	public synchronized boolean isEmpty() {
+	public boolean isEmpty() {
 		return props.isEmpty();
 	}
 
 	@Override
-	public synchronized boolean containsKey(Object key) {
+	public boolean containsKey(Object key) {
 		return props.containsKey(key);
 	}
 
 	@Override
-	public synchronized boolean containsValue(Object value) {
+	public boolean containsValue(Object value) {
 		return props.containsValue(value);
 	}
 
 	@Override
-	public synchronized String get(Object key) {
+	public String get(Object key) {
 		return props.get(key);
 	}
 
+	public String getFrom(Object key) {
+		return froms.get(key);
+	}
+
 	@Override
-	public synchronized String put(String key, String value) {
+	public String put(String key, String value) {
+		return put(key, value, Strings.EMPTY);
+	}
+
+	public String put(String key, String value, String from) {
+		if (value == null) {
+			return remove(key);
+		}
+
+		froms.put(key, Strings.defaultString(from));
 		return props.put(key, value);
 	}
 
 	@Override
-	public synchronized String remove(Object key) {
+	public String remove(Object key) {
+		froms.remove(key);
 		return props.remove(key);
 	}
 
-	public synchronized void putAll(Properties ps) {
+	public void putAll(Properties ps, String from) {
 		for (Iterator<Entry<Object, Object>> i = ps.entrySet().iterator(); i.hasNext(); ) {
 			Entry<Object, Object> e = i.next();
-			props.put(e.getKey().toString(), e.getValue().toString());
+			put((String)e.getKey(), (String)e.getValue(), from);
+		}
+	}
+
+	public void putAll(Map<? extends String, ? extends String> map, String from) {
+		for (Entry<? extends String, ? extends String> en : map.entrySet()) {
+			put(en.getKey(), en.getValue(), from);
 		}
 	}
 
 	@Override
-	public synchronized void putAll(Map<? extends String, ? extends String> m) {
-		props.putAll(m);
+	public void putAll(Map<? extends String, ? extends String> map) {
+		putAll(map, Strings.EMPTY);
 	}
 
 	@Override
-	public synchronized void clear() {
+	public void clear() {
 		props.clear();
+		froms.clear();
 	}
 
 	@Override
-	public synchronized Set<String> keySet() {
+	public Set<String> keySet() {
 		return props.keySet();
 	}
 
 	@Override
-	public synchronized Collection<String> values() {
+	public Collection<String> values() {
 		return props.values();
 	}
 
 	@Override
-	public synchronized Set<Entry<String, String>> entrySet() {
+	public Set<Entry<String, String>> entrySet() {
 		return props.entrySet();
 	}
 	

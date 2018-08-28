@@ -37,7 +37,7 @@ public class Androids {
 		try {
 			is = am.open(Logs.CONFIG);
 			Settings ss = new Settings();
-			ss.load(is);
+			ss.load(is, Logs.CONFIG);
 			Logs.init(ss);
 		}
 		catch (IOException e) {
