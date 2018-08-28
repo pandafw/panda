@@ -1,6 +1,5 @@
 package panda.app.util;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -9,6 +8,7 @@ import panda.app.constant.SET;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -28,8 +28,8 @@ public class AppSettings extends MvcSettings {
 	@IocInject(value=MVC.SETTINGS_ENVIRONMENT, required=false)
 	protected boolean environment = true;
 
-	@IocInject(value=MVC.SETTINGS_RUNTIME_PATH, required=false)
-	protected String runtime;
+	@IocInject(value=MVC.SETTINGS_RUNTIME_FILES, required=false)
+	protected String[] runtimes;
 
 	@IocInject(value=MVC.SETTINGS_RUNTIME_DELAY, required=false)
 	public void setDelay(long delay) {
@@ -60,8 +60,8 @@ public class AppSettings extends MvcSettings {
 			putAll(System.getProperties(), "System.Properties");
 		}
 
-		if (Strings.isNotEmpty(runtime)) {
-			setReloadable(new File(runtime));
+		if (Arrays.isNotEmpty(runtimes)) {
+			loadRuntimes(runtimes);
 		}
 
 		try {

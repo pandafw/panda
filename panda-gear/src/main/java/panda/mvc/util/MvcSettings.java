@@ -2,13 +2,13 @@ package panda.mvc.util;
 
 import javax.servlet.ServletContext;
 
-import panda.io.ReloadableSettings;
+import panda.io.RuntimeSettings;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 
 @IocBean(type=Settings.class)
-public class MvcSettings extends ReloadableSettings {
+public class MvcSettings extends RuntimeSettings {
 
 	@IocInject(required=false)
 	private ServletContext servlet;

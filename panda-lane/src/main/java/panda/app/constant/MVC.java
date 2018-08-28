@@ -12,8 +12,8 @@ public interface MVC extends MvcConstants {
 	/** The environment variable settings */
 	public static final String SETTINGS_ENVIRONMENT = "panda.settings.environment";
 
-	/** The runtime reloadable settings path */
-	public static final String SETTINGS_RUNTIME_PATH = "panda.settings.runtime.path";
+	/** The runtime reloadable settings files */
+	public static final String SETTINGS_RUNTIME_FILES = "panda.settings.runtime.files";
 
 	/** The runtime reloadable settings check delay (ms) */
 	public static final String SETTINGS_RUNTIME_DELAY = "panda.settings.runtime.delay";
