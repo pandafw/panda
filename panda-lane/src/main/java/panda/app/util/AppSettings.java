@@ -2,6 +2,10 @@ package panda.app.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import panda.app.constant.MVC;
 import panda.app.constant.SET;
@@ -18,15 +22,13 @@ import panda.mvc.util.MvcSettings;
 public class AppSettings extends MvcSettings {
 	private static final Log log = Logs.getLog(AppSettings.class);
 
+	private static final String ENV = "$ENV";
+	private static final String SYS = "$SYS";
 	private static final String APP_PROPERTIES = "app.properties";
 	private static final String ENV_PROPERTIES = "env.properties";
-	private static final String TEST_PROPERTIES = "test.properties";
-	
-	@IocInject(value=MVC.SETTINGS_SYSTEM, required=false)
-	protected boolean system = true;
 
-	@IocInject(value=MVC.SETTINGS_ENVIRONMENT, required=false)
-	protected boolean environment = true;
+	@IocInject(value=MVC.SETTINGS, required=false)
+	protected List<String> settings = Arrays.asList(ENV, SYS, APP_PROPERTIES, ENV_PROPERTIES);
 
 	@IocInject(value=MVC.SETTINGS_RUNTIME_FILES, required=false)
 	protected String[] runtimes;
@@ -38,37 +40,46 @@ public class AppSettings extends MvcSettings {
 
 	public AppSettings() {
 	}
-	
+
+	public void putAll(Map<? extends String, ? extends String> map, String prefix, String from) {
+		for (Entry<? extends String, ? extends String> en : map.entrySet()) {
+			put(prefix + en.getKey(), en.getValue(), from);
+		}
+	}
+
+	public void putAll(Properties ps, String prefix, String from) {
+		for (Iterator<Entry<Object, Object>> i = ps.entrySet().iterator(); i.hasNext(); ) {
+			Entry<Object, Object> e = i.next();
+			put(prefix + e.getKey(), (String)e.getValue(), from);
+		}
+	}
+
+	@Override
 	public void initialize() throws IOException {
-		log.info("Loading " + APP_PROPERTIES);
-		load(APP_PROPERTIES);
+		super.initialize();
+
+		for (String s : settings) {
+			if (ENV.equalsIgnoreCase(s)) {
+				log.info("Add environment variables to settings");
+				putAll(System.getenv(), "env.", ENV);
+			}
+			else if (SYS.equalsIgnoreCase(s)) {
+				log.info("Add system properties to settings");
+				putAll(System.getProperties(), "sys.", SYS);
+			}
+			else {
+				try {
+					log.info("Loading " + s);
+					load(s);
+				}
+				catch (FileNotFoundException e) {
+					log.warn("Failed to load " + ENV_PROPERTIES + ": " + e.getMessage());
+				}
+			}
+		}
 		
-		try {
-			log.info("Loading " + ENV_PROPERTIES);
-			load(ENV_PROPERTIES);
-		}
-		catch (FileNotFoundException e) {
-			log.warn("Failed to load " + ENV_PROPERTIES + ": " + e.getMessage());
-		}
-
-		if (environment) {
-			log.info("Add environment variables to settings");
-			putAll(System.getenv(), "Enviroment");
-		}
-		if (system) {
-			log.info("Add system properties to settings");
-			putAll(System.getProperties(), "System.Properties");
-		}
-
 		if (Arrays.isNotEmpty(runtimes)) {
 			loadRuntimes(runtimes);
-		}
-
-		try {
-			load(TEST_PROPERTIES);
-			log.warn(TEST_PROPERTIES + " Loaded!");
-		}
-		catch (IOException e) {
 		}
 
 		log.info("Version: " + getAppVersion());

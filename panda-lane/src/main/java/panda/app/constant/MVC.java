@@ -6,11 +6,8 @@ public interface MVC extends MvcConstants {
 	//------------------------------------------------
 	// runtime settings
 	//
-	/** The system properties settings */
-	public static final String SETTINGS_SYSTEM = "panda.settings.system";
-
-	/** The environment variable settings */
-	public static final String SETTINGS_ENVIRONMENT = "panda.settings.environment";
+	/** The settings */
+	public static final String SETTINGS = "panda.settings";
 
 	/** The runtime reloadable settings files */
 	public static final String SETTINGS_RUNTIME_FILES = "panda.settings.runtime.files";
