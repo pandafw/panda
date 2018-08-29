@@ -164,12 +164,12 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			return;
 		}
 		
-		for (int i = ms.packages().length - 1; i >= 0; i--) {
-			pkgs.add(ms.packages()[i]);
+		for (String s : ms.packages()) {
+			pkgs.add(s);
 		}
 		
-		for (int i = ms.value().length - 1; i >= 0; i--) {
-			pkgs.add(ms.value()[i]);
+		for (Class<?> c : ms.value()) {
+			pkgs.add(c);
 		}
 
 		if (ms.scan()) {
