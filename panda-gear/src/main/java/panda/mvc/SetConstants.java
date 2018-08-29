@@ -8,6 +8,11 @@ public interface SetConstants {
 	public static final String APP_DEBUG = "app.debug";
 
 	/**
+	 * web directory
+	 */
+	public static final String WEB_DIR = "web.dir";
+
+	/**
 	 * mvc action context type
 	 */
 	public static final String MVC_ACTION_CONTEXT_TYPE = "mvc.action.context.type";

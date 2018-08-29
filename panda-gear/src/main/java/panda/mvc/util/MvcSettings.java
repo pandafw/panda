@@ -1,31 +1,30 @@
 package panda.mvc.util;
 
+import java.io.IOException;
+
 import javax.servlet.ServletContext;
 
 import panda.io.RuntimeSettings;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Strings;
+import panda.mvc.SetConstants;
 
-@IocBean(type=Settings.class)
+@IocBean(type=Settings.class, create="initialize")
 public class MvcSettings extends RuntimeSettings {
 
 	@IocInject(required=false)
 	private ServletContext servlet;
 
-	public String getPropertyAsPath(String name) {
-		return getPropertyAsPath(name, null);
-	}
-
-	public String getPropertyAsPath(String name, String defv) {
-		String dir = getProperty(name, defv);
-		if (dir != null && dir.startsWith("web://")) {
-			if (servlet == null) {
-				throw new IllegalStateException("Null servlet!");
+	public void initialize() throws IOException {
+		String dir = "";
+		if (servlet != null) {
+			dir = servlet.getRealPath("/");
+			if (Strings.endsWithChars(dir, "\\/")) {
+				dir = dir.substring(0, dir.length() - 1);
 			}
-			dir = servlet.getRealPath(dir.substring(6));
 		}
-		return dir;
+		super.put(SetConstants.WEB_DIR, dir, MvcSettings.class.getName());
 	}
-
 }

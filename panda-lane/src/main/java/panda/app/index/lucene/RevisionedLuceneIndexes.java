@@ -26,6 +26,8 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Classes;
 import panda.lang.Numbers;
+import panda.lang.Strings;
+import panda.lang.Texts;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -38,7 +40,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	protected AppSettings settings;
 	
 	@IocInject(value=MVC.LUCENE_LOCATION, required=false)
-	protected String location = "web://WEB-INF/_lucene";
+	protected String location = "${web.dir}/WEB-INF/_lucene";
 	
 	@IocInject(value=MVC.LUCENE_ANALYZER, required=false)
 	protected String analyzer = StandardAnalyzer.class.getName();
@@ -48,6 +50,15 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	 * @throws IOException if an IO error occurs
 	 */
 	public void initialize() throws IOException {
+		String path = settings.getProperty(SET.LUCENE_LOCATION);
+		if (Strings.isEmpty(path)) {
+			location = Texts.translate(location, settings);
+		}
+		else {
+			location = path;
+		}
+		Files.makeDirs(location);
+
 		cleanOldRevisionDirectory();
 	}
 
@@ -56,9 +67,8 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 		try {
 			long lv = getLatestRevision(name);
 
-			String root = getLuceneLocation();
 			String folder = name + "." + lv;
-			return FSDirectory.open(Paths.get(root, folder));
+			return FSDirectory.open(Paths.get(location, folder));
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to get lucene directory: " + name, e);
@@ -66,14 +76,8 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	}
 
 	//-----------------------------------------------
-	protected String getLuceneLocation() throws IOException {
-		String path = settings.getPropertyAsPath(SET.LUCENE_LOCATION, location);
-		Files.makeDirs(path);
-		return path;
-	}
-	
 	protected long getLatestRevision(String name) throws IOException {
-		File root = new File(getLuceneLocation());
+		File root = new File(location);
 		
 		long latest = 1;
 		for (String s : root.list()) {
@@ -111,7 +115,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	}
 	
 	private void cleanOldRevisionDirectory() throws IOException {
-		File root = new File(getLuceneLocation());
+		File root = new File(location);
 
 		Map<String, Long> vs = new HashMap<String, Long>();
 		for (String s : root.list()) {
@@ -156,7 +160,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 		try {
 			long v = getLatestRevision(name) + 1;
 
-			String root = getLuceneLocation();
+			String root = location;
 			String folder = name + '.' + v;
 			
 			Directory directory = FSDirectory.open(Paths.get(root, folder));

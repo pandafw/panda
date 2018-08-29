@@ -42,7 +42,7 @@ public class HttpDumpFilter implements ServletFilter {
 
 	@Override
 	public boolean doFilter(HttpServletRequest req, HttpServletResponse res, ServletChain sc) {
-		String path = settings.getPropertyAsPath("http.dump.path");
+		String path = settings.getProperty("http.dump.path");
 		boolean dreq = settings.getPropertyAsBoolean("http.dump.request");
 		boolean dres = settings.getPropertyAsBoolean("http.dump.response");
 

@@ -55,7 +55,7 @@ public class WkHtml2Pdf extends Html2Pdf {
 	}
 
 	public void initialize() {
-		path = settings.getPropertyAsPath(SET.WKHTML2PDF_PATH, path);
+		path = settings.getProperty(SET.WKHTML2PDF_PATH, path);
 		timeout = settings.getPropertyAsInt(SET.WKHTML2PDF_TIMEOUT, timeout);
 	}
 	
