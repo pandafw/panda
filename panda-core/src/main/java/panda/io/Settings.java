@@ -19,6 +19,7 @@ import panda.bind.json.Jsons;
 import panda.cast.Castors;
 import panda.lang.Charsets;
 import panda.lang.Strings;
+import panda.lang.Texts;
 
 
 public class Settings implements Map<String, String> {
@@ -46,6 +47,7 @@ public class Settings implements Map<String, String> {
 
 	/**
 	 * @param is input stream
+	 * @param from the name of the input stream
 	 * @throws IOException if an IO error occurs
 	 */
 	public void load(InputStream is, String from) throws IOException {
@@ -125,7 +127,9 @@ public class Settings implements Map<String, String> {
 		}
 
 		froms.put(key, Strings.defaultString(from));
-		return props.put(key, value);
+		
+		String val = Texts.translate(value, this);
+		return props.put(key, val);
 	}
 
 	@Override

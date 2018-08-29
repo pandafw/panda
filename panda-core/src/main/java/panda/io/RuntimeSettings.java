@@ -36,9 +36,14 @@ public class RuntimeSettings extends Settings {
 	}
 
 	private List<RuntimeFile> runtimes = new ArrayList<RuntimeFile>();
+
+	/**
+	 * reloading flag
+	 */
+	private boolean reloading;
 	
 	/**
-	 * last check time
+	 * next check time
 	 */
 	private long checkpoint = 0;
 	
@@ -69,7 +74,7 @@ public class RuntimeSettings extends Settings {
 	}
 
 	protected void reload() {
-		if (Collections.isEmpty(runtimes) || checkpoint <= 0) {
+		if (reloading || checkpoint <= 0 || Collections.isEmpty(runtimes)) {
 			return;
 		}
 		
@@ -82,14 +87,21 @@ public class RuntimeSettings extends Settings {
 			if (now < checkpoint) {
 				return;
 			}
-			checkpoint = now + delay;
-
-			for (RuntimeFile rf : runtimes) {
-				long lm = rf.file.lastModified();
-				if (lm != rf.load) {
-					log.info("Runtime setting file " + rf.file + " is modified at " + DateTimes.isoDatetimeFormat().format(lm));
-					loadRuntimeFile(rf);
+			
+			reloading = true;
+			try {
+				checkpoint = now + delay;
+	
+				for (RuntimeFile rf : runtimes) {
+					long lm = rf.file.lastModified();
+					if (lm != rf.load) {
+						log.info("Runtime setting file " + rf.file + " is modified at " + DateTimes.isoDatetimeFormat().format(lm));
+						loadRuntimeFile(rf);
+					}
 				}
+			}
+			finally {
+				reloading = false;
 			}
 		}
 	}
