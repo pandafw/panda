@@ -50,7 +50,7 @@ public class ActionTextProvider implements TextProvider {
 	 * 
 	 * @param resourceBundles the names of the bundle to set.
 	 */
-	@IocInject(value=MvcConstants.DEFAULT_RESOURCE_BUNDLES, required=false)
+	@IocInject(value=MvcConstants.MVC_RESOURCES, required=false)
 	public void setDefaultResourceBundle(List<String> resourceBundles) {
 		defaultResources = resourceBundles;
 
@@ -286,7 +286,8 @@ public class ActionTextProvider implements TextProvider {
 	 */
 	private String findDefaultText(Locale locale, String key) {
 		if (Collections.isNotEmpty(defaultResources)) {
-			for (String src : defaultResources) {
+			for (int i = defaultResources.size() - 1; i >= 0; i--) {
+				String src = defaultResources.get(i);
 				Resource res = findResourceBundle(src, locale);
 				if (res != null) {
 					String txt = res.getString(key);

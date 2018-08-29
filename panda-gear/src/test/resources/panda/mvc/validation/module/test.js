@@ -1,6 +1,6 @@
 {
 	// default resources
-	"panda.resources.default": [ "panda.mvc.Resource" ],
+	"panda.mvc.resources": [ "panda.mvc.Resource" ],
 
 	// allowed locales
 	"panda.locale.allowed": [ "en" ],
