@@ -52,7 +52,7 @@ public class ComboIocLoader implements IocLoader {
 
 	/**
 	 * Initialize the combo IocLoader.
-	 * If duplicated name bean exists, the last added loader will handle the bean (FIFO priority).
+	 * If duplicated name bean exists, the last added loader will handle the bean (LIFO priority).
 	 * 
 	 * <p/>
 	 * <pre>{ 
@@ -122,7 +122,7 @@ public class ComboIocLoader implements IocLoader {
 	}
 	
 	protected void addIocLoader(String name, List<Object> args) {
-		iocLoaders.add(createIocLoader(name, args));
+		iocLoaders.add(0, createIocLoader(name, args));
 	}
 	
 	protected IocLoader createIocLoader(String name, List<Object> args) {
