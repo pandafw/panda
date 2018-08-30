@@ -1,6 +1,8 @@
 package panda.lang;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -9733,6 +9735,41 @@ public class Strings {
 			return null;
 		}
 		return string.getBytes();
+	}
+
+	/**
+	 * Calls {@link String#getBytes(String)}
+	 *
+	 * @param string The string to encode (if null, return null).
+	 * @param charset The {@link Charset} to encode the <code>String</code>
+	 * @return the encoded bytes
+	 */
+	private static ByteBuffer getByteBuffer(final String string, final String charset) {
+		if (string == null) {
+			return null;
+		}
+		try {
+			return ByteBuffer.wrap(string.getBytes(charset));
+		}
+		catch (UnsupportedEncodingException e) {
+			throw newIllegalStateException(charset, e);
+		}
+	}
+
+	/**
+	 * Encodes the given string into a byte buffer using the UTF-8 charset, storing the result into
+	 * a new byte array.
+	 *
+	 * @param string the String to encode, may be <code>null</code>
+	 * @return encoded bytes, or <code>null</code> if the input string was <code>null</code>
+	 * @throws NullPointerException Thrown if {@link Charsets#UTF_8} is not initialized, which
+	 *             should never happen since it is required by the Java platform specification.
+	 * @see <a href=
+	 *      "http://download.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard
+	 *      charsets</a>
+	 */
+	public static ByteBuffer getByteBufferUtf8(final String string) {
+		return getByteBuffer(string, Charsets.UTF_8);
 	}
 
 	private static IllegalStateException newIllegalStateException(String charsetName, UnsupportedEncodingException e) {
