@@ -113,6 +113,17 @@ public class BaseNCodecOutputStream extends FilterOutputStream {
 	 */
 	@Override
 	public void close() throws IOException {
+		eof();
+		flush();
+		out.close();
+	}
+
+	/**
+	 * Writes EOF.
+	 *
+	 * @throws IOException if an I/O error occurs.
+	 */
+	public void eof() throws IOException {
 		// Notify encoder of EOF (-1).
 		if (doEncode) {
 			baseNCodec.encode(singleByte, 0, EOF, context);
@@ -120,8 +131,6 @@ public class BaseNCodecOutputStream extends FilterOutputStream {
 		else {
 			baseNCodec.decode(singleByte, 0, EOF, context);
 		}
-		flush();
-		out.close();
 	}
 
 }

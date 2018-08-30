@@ -323,17 +323,6 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	}
 
 	/**
-	 * Encodes a byte[] containing binary data, into a String containing characters in the
-	 * appropriate alphabet. Uses UTF8 encoding.
-	 * 
-	 * @param pArray a byte array containing binary data
-	 * @return String containing only character data in the appropriate alphabet.
-	 */
-	public String encodeAsString(final byte[] pArray) {
-		return Strings.newStringUtf8(encode(pArray));
-	}
-
-	/**
 	 * Decodes an Object using the Base-N algorithm. This method is provided in order to satisfy the
 	 * requirements of the Decoder interface, and will throw a DecoderException if the supplied
 	 * object is not of type byte[] or String.
@@ -396,13 +385,33 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 		if (pArray == null || pArray.length == 0) {
 			return pArray;
 		}
+		return encode(pArray, 0, pArray.length);
+	}
+
+	/**
+	 * Encodes a byte[] containing binary data, into a byte[] containing
+	 * characters in the alphabet.
+	 *
+	 * @param pArray
+	 *            a byte array containing binary data
+	 * @param offset
+	 *            initial offset of the subarray.
+	 * @param length
+	 *            length of the subarray.
+	 * @return A byte array containing only the base N alphabetic character data
+	 */
+	public byte[] encode(final byte[] pArray, final int offset, final int length) {
+		if (pArray == null || pArray.length == 0) {
+			return pArray;
+		}
 		final Context context = new Context();
-		encode(pArray, 0, pArray.length, context);
-		encode(pArray, 0, EOF, context); // Notify encoder of EOF.
+		encode(pArray, offset, length, context);
+		encode(pArray, offset, EOF, context); // Notify encoder of EOF.
 		final byte[] buf = new byte[context.pos - context.readPos];
 		readResults(buf, 0, buf.length, context);
 		return buf;
 	}
+
 
 	// package protected for access from I/O streams
 	abstract void encode(byte[] pArray, int i, int length, Context context);
@@ -429,8 +438,8 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 *         empty; {@code false}, otherwise
 	 */
 	public boolean isInAlphabet(final byte[] arrayOctet, final boolean allowWSPad) {
-		for (int i = 0; i < arrayOctet.length; i++) {
-			if (!isInAlphabet(arrayOctet[i]) && (!allowWSPad || (arrayOctet[i] != pad) && !isWhiteSpace(arrayOctet[i]))) {
+		for (final byte octet : arrayOctet) {
+			if (!isInAlphabet(octet) && (!allowWSPad || (octet != pad) && !isWhiteSpace(octet))) {
 				return false;
 			}
 		}

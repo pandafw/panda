@@ -56,21 +56,27 @@ public class Base32 extends BaseNCodec {
 	 * array are translated to -1.
 	 */
 	private static final byte[] DECODE_TABLE = {
-			// 0 1 2 3 4 5 6 7 8 9 A B C D E F
-			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 00-0f
-			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 10-1f
-			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 20-2f
-			-1, -1, 26, 27, 28, 29, 30, 31, -1, -1, -1, -1, -1, -1, -1, -1, // 30-3f 2-7
-			-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, // 40-4f A-N
-			15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // 50-5a O-Z
+         //  0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 00-0f
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 10-1f
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 20-2f
+            -1, -1, 26, 27, 28, 29, 30, 31, -1, -1, -1, -1, -1, -1, -1, -1, // 30-3f 2-7
+            -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, // 40-4f A-O
+            15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,                     // 50-5a P-Z
+                                                        -1, -1, -1, -1, -1, // 5b - 5f
+            -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, // 60 - 6f a-o
+            15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,                     // 70 - 7a p-z/**/
 	};
 
 	/**
 	 * This array is a lookup table that translates 5-bit positive integer index values into their
 	 * "Base32 Alphabet" equivalents as specified in Table 3 of RFC 4648.
 	 */
-	private static final byte[] ENCODE_TABLE = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-			'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', };
+    private static final byte[] ENCODE_TABLE = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '2', '3', '4', '5', '6', '7',
+    };
 
 	/**
 	 * This array is a lookup table that translates Unicode characters drawn from the
@@ -79,21 +85,27 @@ public class Base32 extends BaseNCodec {
 	 * bounds of the array are translated to -1.
 	 */
 	private static final byte[] HEX_DECODE_TABLE = {
-			// 0 1 2 3 4 5 6 7 8 9 A B C D E F
-			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 00-0f
-			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 10-1f
-			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 20-2f
-			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1, -1, -1, // 30-3f 2-7
-			-1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, // 40-4f A-N
-			25, 26, 27, 28, 29, 30, 31, 32, // 50-57 O-V
+         //  0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 00-0f
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 10-1f
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 20-2f
+             0,  1,  2,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, -1, -1, // 30-3f 2-7
+            -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, // 40-4f A-O
+            25, 26, 27, 28, 29, 30, 31,                                     // 50-56 P-V
+                                        -1, -1, -1, -1, -1, -1, -1, -1, -1, // 57-5f Z-_
+            -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, // 60-6f `-o
+            25, 26, 27, 28, 29, 30, 31                                      // 70-76 p-v
 	};
 
 	/**
 	 * This array is a lookup table that translates 5-bit positive integer index values into their
 	 * "Base32 Hex Alphabet" equivalents as specified in Table 3 of RFC 4648.
 	 */
-	private static final byte[] HEX_ENCODE_TABLE = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
-			'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', };
+    private static final byte[] HEX_ENCODE_TABLE = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+    };
 
 	/** Mask used to extract 5 bits, used when encoding Base32 bytes */
 	private static final int MASK_5BITS = 0x1f;
@@ -331,21 +343,19 @@ public class Base32 extends BaseNCodec {
 				context.eof = true;
 				break;
 			}
-			else {
-				final byte[] buffer = ensureBufferSize(decodeSize, context);
-				if (b >= 0 && b < this.decodeTable.length) {
-					final int result = this.decodeTable[b];
-					if (result >= 0) {
-						context.modulus = (context.modulus + 1) % BYTES_PER_ENCODED_BLOCK;
-						// collect decoded bytes
-						context.lbitWorkArea = (context.lbitWorkArea << BITS_PER_ENCODED_BYTE) + result;
-						if (context.modulus == 0) { // we can output the 5 bytes
-							buffer[context.pos++] = (byte)((context.lbitWorkArea >> 32) & MASK_8BITS);
-							buffer[context.pos++] = (byte)((context.lbitWorkArea >> 24) & MASK_8BITS);
-							buffer[context.pos++] = (byte)((context.lbitWorkArea >> 16) & MASK_8BITS);
-							buffer[context.pos++] = (byte)((context.lbitWorkArea >> 8) & MASK_8BITS);
-							buffer[context.pos++] = (byte)(context.lbitWorkArea & MASK_8BITS);
-						}
+			final byte[] buffer = ensureBufferSize(decodeSize, context);
+			if (b >= 0 && b < this.decodeTable.length) {
+				final int result = this.decodeTable[b];
+				if (result >= 0) {
+					context.modulus = (context.modulus + 1) % BYTES_PER_ENCODED_BLOCK;
+					// collect decoded bytes
+					context.lbitWorkArea = (context.lbitWorkArea << BITS_PER_ENCODED_BYTE) + result;
+					if (context.modulus == 0) { // we can output the 5 bytes
+						buffer[context.pos++] = (byte)((context.lbitWorkArea >> 32) & MASK_8BITS);
+						buffer[context.pos++] = (byte)((context.lbitWorkArea >> 24) & MASK_8BITS);
+						buffer[context.pos++] = (byte)((context.lbitWorkArea >> 16) & MASK_8BITS);
+						buffer[context.pos++] = (byte)((context.lbitWorkArea >> 8) & MASK_8BITS);
+						buffer[context.pos++] = (byte)(context.lbitWorkArea & MASK_8BITS);
 					}
 				}
 			}
@@ -428,9 +438,7 @@ public class Base32 extends BaseNCodec {
 			case 0:
 				break;
 			case 1: // Only 1 octet; take top 5 bits then remainder
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 3) & MASK_5BITS]; // 8-1*5
-																									// =
-																									// 3
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 3) & MASK_5BITS]; // 8-1*5 = 3
 				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea << 2) & MASK_5BITS]; // 5-3=2
 				buffer[context.pos++] = pad;
 				buffer[context.pos++] = pad;
@@ -440,65 +448,33 @@ public class Base32 extends BaseNCodec {
 				buffer[context.pos++] = pad;
 				break;
 			case 2: // 2 octets = 16 bits to use
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 11) & MASK_5BITS]; // 16-1*5
-																										// =
-																										// 11
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 6) & MASK_5BITS]; // 16-2*5
-																									// =
-																									// 6
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 1) & MASK_5BITS]; // 16-3*5
-																									// =
-																									// 1
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea << 4) & MASK_5BITS]; // 5-1
-																									// =
-																									// 4
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 11) & MASK_5BITS]; // 16-1*5 = 11
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 6) & MASK_5BITS]; // 16-2*5 = 6
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 1) & MASK_5BITS]; // 16-3*5 = 1
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea << 4) & MASK_5BITS]; // 5-1 = 4
 				buffer[context.pos++] = pad;
 				buffer[context.pos++] = pad;
 				buffer[context.pos++] = pad;
 				buffer[context.pos++] = pad;
 				break;
 			case 3: // 3 octets = 24 bits to use
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 19) & MASK_5BITS]; // 24-1*5
-																										// =
-																										// 19
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 14) & MASK_5BITS]; // 24-2*5
-																										// =
-																										// 14
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 9) & MASK_5BITS]; // 24-3*5
-																									// =
-																									// 9
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 4) & MASK_5BITS]; // 24-4*5
-																									// =
-																									// 4
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea << 1) & MASK_5BITS]; // 5-4
-																									// =
-																									// 1
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 19) & MASK_5BITS]; // 24-1*5 = 19
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 14) & MASK_5BITS]; // 24-2*5 = 14
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 9) & MASK_5BITS]; // 24-3*5 = 9
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 4) & MASK_5BITS]; // 24-4*5 = 4
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea << 1) & MASK_5BITS]; // 5-4 = 1
 				buffer[context.pos++] = pad;
 				buffer[context.pos++] = pad;
 				buffer[context.pos++] = pad;
 				break;
 			case 4: // 4 octets = 32 bits to use
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 27) & MASK_5BITS]; // 32-1*5
-																										// =
-																										// 27
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 22) & MASK_5BITS]; // 32-2*5
-																										// =
-																										// 22
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 17) & MASK_5BITS]; // 32-3*5
-																										// =
-																										// 17
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 12) & MASK_5BITS]; // 32-4*5
-																										// =
-																										// 12
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 7) & MASK_5BITS]; // 32-5*5
-																									// =
-																									// 7
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 2) & MASK_5BITS]; // 32-6*5
-																									// =
-																									// 2
-				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea << 3) & MASK_5BITS]; // 5-2
-																									// =
-																									// 3
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 27) & MASK_5BITS]; // 32-1*5 = 27
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 22) & MASK_5BITS]; // 32-2*5 = 22
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 17) & MASK_5BITS]; // 32-3*5 = 17
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 12) & MASK_5BITS]; // 32-4*5 = 12
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 7) & MASK_5BITS]; // 32-5*5 = 7
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea >> 2) & MASK_5BITS]; // 32-6*5 = 2
+				buffer[context.pos++] = encodeTable[(int)(context.lbitWorkArea << 3) & MASK_5BITS]; // 5-2 = 3
 				buffer[context.pos++] = pad;
 				break;
 			default:
