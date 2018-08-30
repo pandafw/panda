@@ -1,4 +1,4 @@
-package panda.codec.binary;
+package panda.net.p2p;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
