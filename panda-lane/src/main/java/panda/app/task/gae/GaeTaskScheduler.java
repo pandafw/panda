@@ -10,7 +10,7 @@ import javax.servlet.ServletContext;
 
 import panda.app.constant.MVC;
 import panda.app.constant.SET;
-import panda.app.task.CronEntry;
+import panda.app.task.CronActionTask;
 import panda.app.util.AppSettings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -35,7 +35,7 @@ public class GaeTaskScheduler implements TaskScheduler {
 	protected boolean enable;
 
 	@IocInject(value=MVC.SCHEDULER_CRONS, required=false)
-	protected List<CronEntry> crons;
+	protected List<CronActionTask> crons;
 	
 	public void initialize() {
 		enable = settings.getPropertyAsBoolean(SET.SCHEDULER_ENABLE, enable);
@@ -65,26 +65,26 @@ public class GaeTaskScheduler implements TaskScheduler {
 			return;
 		}
 		
-		for (CronEntry ce : crons) {
-			if (Strings.isNotEmpty(ce.getCron())) {
-				log.info("Add cron task (" + ce.getCron() + "): " + ce.getUrl());
-				schedule(ce.getUrl(), ce.getCron());
+		for (CronActionTask cat : crons) {
+			if (Strings.isNotEmpty(cat.getCron())) {
+				log.info("Add cron task (" + cat.getCron() + "): " + cat.getAction());
+				schedule(cat.getAction(), cat.getCron());
 				continue;
 			}
 
-			if (ce.getFixedDelay() > 0) {
-				log.info("Add fixedDelay task (" + ce.getInitialDelay() + ", " + ce.getFixedDelay() + "): " + ce.getUrl());
-				scheduleWithFixedDelay(ce.getUrl(), ce.getInitialDelay(), ce.getFixedDelay());
+			if (cat.getFixedDelay() > 0) {
+				log.info("Add fixedDelay task (" + cat.getInitialDelay() + ", " + cat.getFixedDelay() + "): " + cat.getAction());
+				scheduleWithFixedDelay(cat.getAction(), cat.getInitialDelay(), cat.getFixedDelay());
 			}
 
-			if (ce.getFixedRate() > 0) {
-				log.info("Add fixedRate task (" + ce.getInitialDelay() + ", " + ce.getFixedRate() + "): " + ce.getUrl());
-				scheduleAtFixedRate(ce.getUrl(), ce.getInitialDelay(), ce.getFixedRate());
+			if (cat.getFixedRate() > 0) {
+				log.info("Add fixedRate task (" + cat.getInitialDelay() + ", " + cat.getFixedRate() + "): " + cat.getAction());
+				scheduleAtFixedRate(cat.getAction(), cat.getInitialDelay(), cat.getFixedRate());
 			}
 			
-			if (ce.getDelay() > 0) {
-				log.info("Add delay task (" + ce.getDelay() + "): " + ce.getUrl());
-				schedule(ce.getUrl(), ce.getDelay());
+			if (cat.getDelay() > 0) {
+				log.info("Add delay task (" + cat.getDelay() + "): " + cat.getAction());
+				schedule(cat.getAction(), cat.getDelay());
 			}
 		}
 	}

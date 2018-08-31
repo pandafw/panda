@@ -2,44 +2,12 @@ package panda.app.task;
 
 import panda.lang.Objects;
 
-public class CronEntry {
-	private String url;
-	private String description;
+public class CronActionTask extends ActionTask {
 	private long delay;
 	private long initialDelay;
 	private long fixedDelay;
 	private long fixedRate;
 	private String cron;
-	private boolean token;
-	private Integer errorLimit;
-
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
-
-	/**
-	 * @param url the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	/**
 	 * @return the delay
@@ -111,45 +79,15 @@ public class CronEntry {
 		this.cron = cron;
 	}
 
-	/**
-	 * @return the token
-	 */
-	public boolean isToken() {
-		return token;
-	}
-
-	/**
-	 * @param token the token to set
-	 */
-	public void setToken(boolean token) {
-		this.token = token;
-	}
-
-	/**
-	 * @return the errorLimit
-	 */
-	public Integer getErrorLimit() {
-		return errorLimit;
-	}
-
-	/**
-	 * @param errorLimit the errorLimit to set
-	 */
-	public void setErrorLimit(Integer errorLimit) {
-		this.errorLimit = errorLimit;
-	}
-
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
-				.append("url", url)
-				.append("description", description)
+				.appendSuper(super.toString())
 				.append("delay", delay)
 				.append("initialDelay", initialDelay)
 				.append("fixedDelay", fixedDelay)
+				.append("fixedRate", fixedRate)
 				.append("cron", cron)
-				.append("token", token)
-				.append("errorLimit", errorLimit)
 				.toString();
 	}
 }

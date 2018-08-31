@@ -3,52 +3,33 @@ package panda.app.task;
 import java.util.HashMap;
 import java.util.Map;
 
-import panda.app.auth.UserAuthenticator;
-import panda.app.constant.MVC;
-import panda.io.Streams;
-import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
+import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.lang.time.StopWatch;
-import panda.log.Log;
-import panda.log.Logs;
-import panda.net.http.HttpClient;
 import panda.net.http.HttpMethod;
-import panda.net.http.HttpRequest;
-import panda.net.http.HttpResponse;
 
-@IocBean(singleton=false)
-public class ActionTask implements Runnable {
-	private static Log log = Logs.getLog(ActionTask.class);
-
-	@IocInject(required=false)
-	private UserAuthenticator authenticator;
-
-	@IocInject(value=MVC.TASK_ERROR_LIMIT, required=false)
-	private int errorLimit = 3;
-
-	private String url;
+public class ActionTask {
+	private String action;
 	private String method = HttpMethod.GET;
 	private Map<String, String> headers;
 	private Map<String, String> params;
 	private boolean token;
 
-	private int errors;
+	private String description;
+	private Integer errorLimit;
 
 	/**
-	 * @return the url
+	 * @return the action
 	 */
-	public String getUrl() {
-		return url;
+	public String getAction() {
+		return action;
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param action the action to set
 	 */
-	public void setUrl(String url) {
-		this.url = url;
+	public void setAction(String action) {
+		this.action = action;
 	}
-
 	/**
 	 * @return the method
 	 */
@@ -112,85 +93,43 @@ public class ActionTask implements Runnable {
 	}
 
 	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
 	 * @return the errorLimit
 	 */
-	public int getErrorLimit() {
+	public Integer getErrorLimit() {
 		return errorLimit;
 	}
 
 	/**
 	 * @param errorLimit the errorLimit to set
 	 */
-	public void setErrorLimit(int errorLimit) {
+	public void setErrorLimit(Integer errorLimit) {
 		this.errorLimit = errorLimit;
 	}
 
 	@Override
-	public void run() {
-		if (log.isInfoEnabled()) {
-			log.info("Start action task: " + url);
-		}
-
-		HttpResponse hres = null;
-		try {
-			HttpClient hc = new HttpClient();
-			
-			hc.setAutoRedirect(false);
-			HttpRequest hreq = HttpRequest.create(url, method);
-			if (params != null) {
-				hreq.getParams().putAll(params);
-			}
-			if (headers != null) {
-				hreq.getHeader().putAll(headers);
-			}
-			if (token && authenticator != null) {
-				hreq.setParam(authenticator.getTokenName(), authenticator.getTokenValue());
-			}
-			hc.setRequest(hreq);
-			
-			if (log.isDebugEnabled()) {
-				log.debug("Task> " + url);
-			}
-
-			StopWatch sw = new StopWatch();
-			hres = hc.send();
-
-			if (hres.isOK()) {
-				if (log.isDebugEnabled()) {
-					log.debug("Task> " + url + " : " + hres.getStatusLine() 
-						+ Streams.LINE_SEPARATOR
-						+ hres.getContentText());
-					log.debug("Task> " + url + " : " + hres.getStatusLine() + " (" + sw + ")");
-				}
-				else if (log.isInfoEnabled()) {
-					hres.safeDrain();
-					log.info("Task> " + url + " : " + hres.getStatusLine() + " (" + sw + ")");
-				}
-				else {
-					hres.safeDrain();
-				}
-				errors = 0;
-			}
-			else {
-				errors++;
-				String msg = "Failed to GET " + url + " : " + hres.getStatusLine() 
-						+ Streams.LINE_SEPARATOR
-						+ hres.getHeader().toString()
-						+ Streams.LINE_SEPARATOR
-						+ hres.getContentText();
-				if (errors < errorLimit) {
-					log.warn(msg);
-				}
-				else {
-					log.error(msg);
-				}
-			}
-		}
-		catch (Throwable e) {
-			log.error("Failed to GET " + getUrl(), e);
-		}
-		finally {
-			Streams.safeClose(hres);
-		}
+	public String toString() {
+		return Objects.toStringBuilder()
+				.append("action", action)
+				.append("method", method)
+				.append("headers", headers)
+				.append("params", params)
+				.append("token", token)
+				.append("description", description)
+				.append("errorLimit", errorLimit)
+				.toString();
 	}
 }

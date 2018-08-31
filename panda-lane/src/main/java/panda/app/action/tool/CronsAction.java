@@ -6,7 +6,7 @@ import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.MVC;
-import panda.app.task.CronEntry;
+import panda.app.task.CronActionTask;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
@@ -16,7 +16,7 @@ import panda.mvc.view.Views;
 @Auth(AUTH.SUPER)
 public class CronsAction extends AbstractAction {
 	@IocInject(value=MVC.SCHEDULER_CRONS, required=false)
-	private List<CronEntry> crons;
+	private List<CronActionTask> crons;
 	
 	/**
 	 * execute
@@ -26,7 +26,7 @@ public class CronsAction extends AbstractAction {
 	 */
 	@At("")
 	@To(Views.SFTL)
-	public List<CronEntry> execute() throws Exception {
+	public List<CronActionTask> execute() throws Exception {
 		return crons;
 	}
 }

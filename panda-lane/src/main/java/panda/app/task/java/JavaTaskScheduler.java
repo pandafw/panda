@@ -2,12 +2,10 @@ package panda.app.task.java;
 
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
 import panda.app.constant.MVC;
 import panda.app.constant.SET;
-import panda.app.task.ActionTask;
-import panda.app.task.CronEntry;
+import panda.app.task.ActionTaskSubmitter;
+import panda.app.task.CronActionTask;
 import panda.app.util.AppSettings;
 import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
@@ -28,9 +26,6 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	@IocInject(required=false)
 	protected Ioc ioc;
 	
-	@IocInject(required=false)
-	protected ServletContext servlet;
-
 	@IocInject
 	protected AppSettings settings;
 	
@@ -38,10 +33,7 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	protected boolean enable;
 
 	@IocInject(value=MVC.SCHEDULER_CRONS, required=false)
-	protected List<CronEntry> crons;
-
-	@IocInject(value=MVC.TASK_ACTION_SCHEME, required=false)
-	protected String scheme = "http://localhost:8080";
+	protected List<CronActionTask> crons;
 
 	@IocInject(value=MVC.SCHEDULER_NAME, required=false)
 	public void setName(String name) {
@@ -63,8 +55,6 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 		if (enable) {
 			log.info("Starting " + getClass().getName() + " ...");
 			
-			scheme = settings.getProperty(SET.TASK_ACTION_SCHEME, scheme);
-
 			super.initialize();
 			
 			addCronTask();
@@ -72,55 +62,44 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	}
 	
 	private void addCronTask() {
-		if (servlet == null || Collections.isEmpty(crons)) {
+		if (Collections.isEmpty(crons)) {
 			return;
 		}
 		
-		for (CronEntry ce : crons) {
-			ActionTask at = newActionTask(ce);
+		for (CronActionTask cat : crons) {
+			ActionTaskSubmitter ats = newActionTaskSubmitter(cat);
 
-			if (Strings.isNotEmpty(ce.getCron())) {
-				log.info("Add cron task (" + ce.getCron() + "): " + at.getUrl());
-				CronTrigger ct = new CronTrigger(ce.getCron());
-				schedule(at, ct);
+			if (Strings.isNotEmpty(cat.getCron())) {
+				log.info("Add cron task (" + cat.getCron() + "): " + cat.getAction());
+				CronTrigger ct = new CronTrigger(cat.getCron());
+				schedule(ats, ct);
 				continue;
 			}
 
-			if (ce.getFixedDelay() > 0) {
-				log.info("Add fixedDelay task (" + ce.getInitialDelay() + ", " + ce.getFixedDelay() + "): " + at.getUrl());
-				scheduleWithFixedDelay(at, ce.getInitialDelay(), ce.getFixedDelay());
+			if (cat.getFixedDelay() > 0) {
+				log.info("Add fixedDelay task (" + cat.getInitialDelay() + ", " + cat.getFixedDelay() + "): " + cat.getAction());
+				scheduleWithFixedDelay(ats, cat.getInitialDelay(), cat.getFixedDelay());
 				continue;
 			}
 
-			if (ce.getFixedRate() > 0) {
-				log.info("Add fixedRate task (" + ce.getInitialDelay() + ", " + ce.getFixedRate() + "): " + at.getUrl());
-				scheduleAtFixedRate(at, ce.getInitialDelay(), ce.getFixedRate());
+			if (cat.getFixedRate() > 0) {
+				log.info("Add fixedRate task (" + cat.getInitialDelay() + ", " + cat.getFixedRate() + "): " + cat.getAction());
+				scheduleAtFixedRate(ats, cat.getInitialDelay(), cat.getFixedRate());
 				continue;
 			}
 			
-			if (ce.getDelay() > 0) {
-				log.info("Add delay task (" + ce.getDelay() + "): " + at.getUrl());
-				schedule(at, ce.getDelay());
+			if (cat.getDelay() > 0) {
+				log.info("Add delay task (" + cat.getDelay() + "): " + cat.getAction());
+				schedule(ats, cat.getDelay());
 				continue;
 			}
 		}
 	}
 
-	private ActionTask newActionTask(CronEntry ce) {
-		String url = ce.getUrl();
-		if (servlet != null && url.startsWith("/")) {
-			url = scheme + servlet.getContextPath() + url;
-		}
-		
-		ActionTask at = Mvcs.born(ioc, ActionTask.class);
-
-		at.setUrl(url);
-		at.setToken(ce.isToken());
-		if (ce.getErrorLimit() != null) {
-			at.setErrorLimit(ce.getErrorLimit());
-		}
-
-		return at;
+	private ActionTaskSubmitter newActionTaskSubmitter(CronActionTask cat) {
+		ActionTaskSubmitter ats = Mvcs.born(ioc, ActionTaskSubmitter.class);
+		ats.setTask(cat);
+		return ats;
 	}
 
 }
