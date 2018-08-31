@@ -545,7 +545,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 
 			int cnt = st.getUpdateCount();
 			if (log.isDebugEnabled()) {
-				log.debug("updated: " + sql);
+				log.debug("updated: " + cnt);
 			}
 			return cnt;
 		}
