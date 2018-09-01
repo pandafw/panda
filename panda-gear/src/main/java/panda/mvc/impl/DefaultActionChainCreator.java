@@ -16,6 +16,7 @@ import panda.mvc.ActionChainCreator;
 import panda.mvc.ActionConfig;
 import panda.mvc.MvcConstants;
 import panda.mvc.processor.AdaptProcessor;
+import panda.mvc.processor.AuthenticateProcessor;
 import panda.mvc.processor.FatalProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
@@ -39,6 +40,7 @@ public class DefaultActionChainCreator implements ActionChainCreator {
 			IocValue.TYPE_REF + RedirectProcessor.class.getName(),
 			IocValue.TYPE_REF + LocaleProcessor.class.getName(),
 			IocValue.TYPE_REF + LayoutProcessor.class.getName(),
+			IocValue.TYPE_REF + AuthenticateProcessor.class.getName(),
 			IocValue.TYPE_REF + AdaptProcessor.class.getName(),
 			IocValue.TYPE_REF + PrepareProcessor.class.getName(),
 			IocValue.TYPE_REF + ValidateProcessor.class.getName(),

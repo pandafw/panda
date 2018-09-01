@@ -11,32 +11,32 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.mvc.ViewCreator;
-import panda.mvc.processor.AbstractProcessor;
+import panda.mvc.processor.AuthenticateProcessor;
 import panda.mvc.view.Views;
 import panda.net.URLBuilder;
 import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 
-@IocBean(create="initialize")
-public class UserAuthenticateProcessor extends AbstractProcessor {
+@IocBean(type=AuthenticateProcessor.class, create="initialize")
+public class UserAuthenticateProcessor extends AuthenticateProcessor {
 	@IocInject(value=MVC.AUTH_VIEW_UNLOGIN, required=false)
-	private String unloginView;
+	protected String unloginView;
 	
 	@IocInject(value=MVC.AUTH_VIEW_UNSECURE, required=false)
-	private String unsecureView;
+	protected String unsecureView;
 	
 	@IocInject(value=MVC.AUTH_VIEW_FORBIDDEN, required=false)
-	private String forbiddenView = Views.SE_FORBIDDEN;
+	protected String forbiddenView = Views.SE_FORBIDDEN;
 
 	@IocInject
-	private AppSettings settings;
+	protected AppSettings settings;
 
 	@IocInject
-	private ViewCreator vcreator;
+	protected ViewCreator vcreator;
 	
 	@IocInject(required=false)
-	private UserAuthenticator authenticator;
+	protected UserAuthenticator authenticator;
 	
 	public void initialize() {
 		if (authenticator == null) {

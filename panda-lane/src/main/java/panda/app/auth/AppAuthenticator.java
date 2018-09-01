@@ -250,8 +250,6 @@ public class AppAuthenticator extends UserAuthenticator {
 		c.setPath(getCookiePath(ac));
 
 		ac.getResponse().addCookie(c);
-
-		ac.getRequest().setAttribute(REQ.USER, user);
 	}
 
 	protected void removeUserFromCookie(ActionContext ac) {
