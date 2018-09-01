@@ -10,6 +10,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.net.ssl.HostnameVerifiers;
 import panda.net.ssl.SSLContexts;
 import panda.net.ssl.SSLSocketFactoryEx;
@@ -19,7 +20,15 @@ import panda.net.ssl.TrustManagers;
  * panda.log use this class, so do not use log
  */
 public class Https {
-	public static void setEnabledProtocals(HttpURLConnection conn, String ... protocols) {
+	public static void setSNIExtension(boolean enable) {
+		System.setProperty("jsse.enableSNIExtension", String.valueOf(enable));
+	}
+
+	public static void setProtocals(String ... protocols) {
+		System.setProperty("https.protocols", Strings.join(protocols, ','));
+	}
+	
+	public static void setProtocals(HttpURLConnection conn, String ... protocols) {
 		try {
 			if (conn instanceof HttpsURLConnection) {
 				HttpsURLConnection sconn = (HttpsURLConnection)conn;
