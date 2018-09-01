@@ -59,11 +59,11 @@ public class HttpRequest {
 		return new HttpRequest().setUrl(url).setMethod(method);
 	}
 
-	public static HttpRequest create(String url, String method, Map<String, Object> params) {
+	public static HttpRequest create(String url, String method, Map<String, ?> params) {
 		return new HttpRequest().setUrl(url).setMethod(method).setParams(params);
 	}
 
-	public static HttpRequest create(String url, String method, Map<String, Object> params, HttpHeader header) {
+	public static HttpRequest create(String url, String method, Map<String, ?> params, HttpHeader header) {
 		return new HttpRequest().setUrl(url).setMethod(method).setParams(params).setHeader(header);
 	}
 
@@ -196,8 +196,9 @@ public class HttpRequest {
 		return URLBuilder.buildQueryString(params, encoding);
 	}
 
-	public HttpRequest setParams(Map<String, Object> params) {
-		this.params = params;
+	@SuppressWarnings("unchecked")
+	public HttpRequest setParams(Map<String, ?> params) {
+		this.params = (Map<String, Object>)params;
 		return this;
 	}
 

@@ -36,7 +36,7 @@ public class HttpClient {
 		return send(url, HttpMethod.GET, null, null, timeout);
 	}
 
-	public static HttpResponse get(String url, Map<String, Object> params) throws IOException {
+	public static HttpResponse get(String url, Map<String, ?> params) throws IOException {
 		return send(url, HttpMethod.GET, params);
 	}
 	
@@ -44,7 +44,7 @@ public class HttpClient {
 		return send(url, HttpMethod.POST, null);
 	}
 	
-	public static HttpResponse post(String url, Map<String, Object> params) throws IOException {
+	public static HttpResponse post(String url, Map<String, ?> params) throws IOException {
 		return send(url, HttpMethod.POST, params);
 	}
 
@@ -52,11 +52,11 @@ public class HttpClient {
 		return send(url, HttpMethod.POST, null, body, 0);
 	}
 	
-	public static HttpResponse send(String url, String method, Map<String, Object> params) throws IOException {
+	public static HttpResponse send(String url, String method, Map<String, ?> params) throws IOException {
 		return send(url, method, params, null, 0);
 	}
 	
-	public static HttpResponse send(String url, String method, Map<String, Object> params, byte[] body, int timeout) throws IOException {
+	public static HttpResponse send(String url, String method, Map<String, ?> params, byte[] body, int timeout) throws IOException {
 		HttpRequest hr = HttpRequest.create(url, method, params);
 		hr.setDefault();
 		hr.setBody(body);
@@ -344,7 +344,7 @@ public class HttpClient {
 			Https.ignoreValidateCertification(httpconn);
 		}
 		if (Arrays.isNotEmpty(enabledSslProtocols)) {
-			Https.setEnabledProtocals(httpconn, enabledSslProtocols);
+			Https.setProtocals(httpconn, enabledSslProtocols);
 		}
 		httpconn.setConnectTimeout(connTimeout);
 		httpconn.setReadTimeout(readTimeout);
