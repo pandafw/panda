@@ -106,7 +106,7 @@ public class HttpClientTest {
 	@Test
 	public void testGetHttps() throws Exception {
 		HttpClient hc = new HttpClient();
-		hc.setEnabledSslProtocols(SSLProtocols.TLSv1_2);
+		hc.setSslProtocols(SSLProtocols.TLSv1_2);
 		hc.getRequest().setUrl("https://github.com");
 		HttpResponse response = hc.doGet();
 		assertTrue(response.getStatusCode() == 200);
@@ -116,7 +116,7 @@ public class HttpClientTest {
 	@Test
 	public void testGetHttpsTrust() throws Exception {
 		HttpClient hc = new HttpClient();
-		hc.setEnabledSslProtocols(SSLProtocols.TLSv1_2);
+		hc.setSslProtocols(SSLProtocols.TLSv1_2);
 		hc.setValidateSslCert(false);
 		hc.getRequest().setUrl("https://github.com");
 		HttpResponse response = hc.doGet();

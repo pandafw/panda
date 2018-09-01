@@ -85,7 +85,7 @@ public class HttpClient {
 
 	protected boolean autoRedirect = false;
 	protected boolean validateSslCert = true;
-	protected String[] enabledSslProtocols;
+	protected String[] sslProtocols;
 	
 	static {
 		if (Systems.IS_JAVA_1_6) {
@@ -163,17 +163,17 @@ public class HttpClient {
 	}
 
 	/**
-	 * @return the enabledSslProtocols
+	 * @return the sslProtocols
 	 */
-	public String[] getEnabledSslProtocols() {
-		return enabledSslProtocols;
+	public String[] getSslProtocols() {
+		return sslProtocols;
 	}
 
 	/**
-	 * @param enabledSslProtocols the enabledSslProtocols to set
+	 * @param sslProtocols the sslProtocols to set
 	 */
-	public void setEnabledSslProtocols(String ... enabledSslProtocols) {
-		this.enabledSslProtocols = enabledSslProtocols;
+	public void setSslProtocols(String ... sslProtocols) {
+		this.sslProtocols = sslProtocols;
 	}
 
 	/**
@@ -278,6 +278,9 @@ public class HttpClient {
 		else if (log.isDebugEnabled()) {
 			log.debug(request.toString(1024));
 		}
+		else if (log.isInfoEnabled()) {
+			log.info(request.getMethod() + ": " + request.getURL());
+		}
 		
 		StopWatch sw = new StopWatch();
 		if (request.isPost()) {
@@ -343,8 +346,8 @@ public class HttpClient {
 		if (!validateSslCert) {
 			Https.ignoreValidateCertification(httpconn);
 		}
-		if (Arrays.isNotEmpty(enabledSslProtocols)) {
-			Https.setProtocals(httpconn, enabledSslProtocols);
+		if (Arrays.isNotEmpty(sslProtocols)) {
+			Https.setProtocals(httpconn, sslProtocols);
 		}
 		httpconn.setConnectTimeout(connTimeout);
 		httpconn.setReadTimeout(readTimeout);

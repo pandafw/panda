@@ -176,7 +176,7 @@ public class Freshdesk {
 	 * @param uri http uri
 	 */
 	protected void authenticateRequest(HttpClient hc, String uri) {
-		hc.setEnabledSslProtocols(SSLProtocols.TLS_ONLY);
+		hc.setSslProtocols(SSLProtocols.TLS_ONLY);
 		hc.setValidateSslCert(validateSslCert);
 		hc.setProxy(proxy);
 		hc.getRequest().setUrl(domain + uri);
