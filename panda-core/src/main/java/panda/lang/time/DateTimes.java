@@ -215,14 +215,19 @@ public class DateTimes {
 	public static final String TIME_HHMM_FORMAT = "HH:mm";
 
 	/**
-	 * Timestamp format for log. The format used is <tt>yyyyMMddTHHmmss.SSS</tt>. 
+	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
 	 */
 	public static final String TIMESTAMP_LOG_FORMAT = "yyyyMMdd'T'HHmmss.SSS";
 
 	/**
-	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
+	 * DateTime format for log. The format used is <tt>yyyyMMdd'T'HHmmss</tt>. 
 	 */
 	public static final String DATETIME_LOG_FORMAT = "yyyyMMdd'T'HHmmss";
+
+	/**
+	 * DateTime format for number. The format used is <tt>yyyyMMddHHmmss</tt>. 
+	 */
+	public static final String DATETIME_NUM_FORMAT = "yyyyMMddHHmmss";
 
 	// -----------------------------------------------------------------------
 	/**
@@ -308,9 +313,14 @@ public class DateTimes {
 	private static final FastDateFormat datetime_hhmm_format = FastDateFormat.getInstance(DATETIME_HHMM_FORMAT);
 
 	/**
-	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
+	 * DateTime format for log. The format used is <tt>yyyyMMdd'T'HHmmss</tt>. 
 	 */
 	private static final FastDateFormat datetime_log_format = FastDateFormat.getInstance(DATETIME_LOG_FORMAT);
+
+	/**
+	 * DateTime format for number. The format used is <tt>yyyyMMddHHmmss</tt>. 
+	 */
+	private static final FastDateFormat datetime_num_format = FastDateFormat.getInstance(DATETIME_NUM_FORMAT);
 
 	// -----------------------------------------------------------------------
 	/**
@@ -2160,6 +2170,15 @@ public class DateTimes {
 	 */
 	public static FastDateFormat datetimeLogFormat() {
 		return datetime_log_format;
+	}
+
+	/**
+	 * DateTime format for number. The format used is <tt>yyyyMMddHHmmss</tt>. 
+	 * 
+	 * @return the FastDateFormat object
+	 */
+	public static FastDateFormat datetimeNumFormat() {
+		return datetime_num_format;
 	}
 	
 	// -----------------------------------------------------------------------
