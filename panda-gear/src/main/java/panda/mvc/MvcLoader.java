@@ -49,25 +49,25 @@ public class MvcLoader {
 		
 		if (log.isInfoEnabled()) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(String.format("Panda.Mvc [%s] is initializing ... ", config.getMainModule().getName())).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - Panda Version   : %s ", Panda.VERSION)).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - OS              : %s %s", Systems.OS_NAME, Systems.OS_ARCH)).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - Java            : %s", Systems.JAVA_VERSION)).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - Charset         : %s", Charsets.defaultEncoding())).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - Timezone        : %s", Systems.USER_TIMEZONE)).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - User Directory  : %s", Systems.getUserDir())).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - Temp Directory  : %s", Files.getTempDirectoryPath())).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - File Separator  : %s", Systems.FILE_SEPARATOR)).append(Streams.LINE_SEPARATOR);
-			sb.append(String.format(" - Server Info     : %s", config.getServletContext().getServerInfo())).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format("Panda.Mvc [%s] is initializing ... ", config.getMainModule().getName())).append(Streams.EOL);
+			sb.append(String.format(" - Panda Version   : %s ", Panda.VERSION)).append(Streams.EOL);
+			sb.append(String.format(" - OS              : %s %s", Systems.OS_NAME, Systems.OS_ARCH)).append(Streams.EOL);
+			sb.append(String.format(" - Java            : %s", Systems.JAVA_VERSION)).append(Streams.EOL);
+			sb.append(String.format(" - Charset         : %s", Charsets.defaultEncoding())).append(Streams.EOL);
+			sb.append(String.format(" - Timezone        : %s", Systems.USER_TIMEZONE)).append(Streams.EOL);
+			sb.append(String.format(" - User Directory  : %s", Systems.getUserDir())).append(Streams.EOL);
+			sb.append(String.format(" - Temp Directory  : %s", Files.getTempDirectoryPath())).append(Streams.EOL);
+			sb.append(String.format(" - File Separator  : %s", Systems.FILE_SEPARATOR)).append(Streams.EOL);
+			sb.append(String.format(" - Server Info     : %s", config.getServletContext().getServerInfo())).append(Streams.EOL);
 			sb.append(String.format(" - Servlet API     : %d.%d", 
 				config.getServletContext().getMajorVersion(), 
 				config.getServletContext().getMinorVersion()))
-				.append(Streams.LINE_SEPARATOR);
+				.append(Streams.EOL);
 
 			if (config.getServletContext().getMajorVersion() > 2 || config.getServletContext().getMinorVersion() > 4) {
-				sb.append(String.format(" - ContextPath     : %s", config.getServletContext().getContextPath())).append(Streams.LINE_SEPARATOR);
+				sb.append(String.format(" - ContextPath     : %s", config.getServletContext().getContextPath())).append(Streams.EOL);
 			}
-			sb.append(String.format(" - Web Directory   : %s", config.getServletContext().getRealPath("/"))).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Web Directory   : %s", config.getServletContext().getRealPath("/"))).append(Streams.EOL);
 			log.info(sb.toString());
 		}
 

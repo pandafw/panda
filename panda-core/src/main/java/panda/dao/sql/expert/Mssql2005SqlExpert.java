@@ -34,7 +34,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL);
 			sb.append(escapeColumn(ef.getColumn())).append(' ').append(evalFieldType(ef));
 			if (ef.isUnsigned()) {
 				sb.append(" UNSIGNED");

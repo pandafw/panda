@@ -35,17 +35,17 @@ public class CmdLineParserTest {
 	
 	@Test
 	public void testUsage() {
-		String usage = "Usage: java panda.args.CmdLineParserTest [OPTIONS] <A0> <A1> [AS]" + Streams.LINE_SEPARATOR
-			+ Streams.LINE_SEPARATOR
-			+ "Arguments: " + Streams.LINE_SEPARATOR
-			+ "  <A0>    " + Streams.LINE_SEPARATOR
-			+ "  <A1>    " + Streams.LINE_SEPARATOR
-			+ "  [AS]    " + Streams.LINE_SEPARATOR
-			+ Streams.LINE_SEPARATOR
-			+ "Options: " + Streams.LINE_SEPARATOR
-			+ "  -f, --ff=F    UF" + Streams.LINE_SEPARATOR
-			+ "  -i, --ii=I    UI" + Streams.LINE_SEPARATOR
-			+ "  -s, --ss=S    US" + Streams.LINE_SEPARATOR;
+		String usage = "Usage: java panda.args.CmdLineParserTest [OPTIONS] <A0> <A1> [AS]" + Streams.EOL
+			+ Streams.EOL
+			+ "Arguments: " + Streams.EOL
+			+ "  <A0>    " + Streams.EOL
+			+ "  <A1>    " + Streams.EOL
+			+ "  [AS]    " + Streams.EOL
+			+ Streams.EOL
+			+ "Options: " + Streams.EOL
+			+ "  -f, --ff=F    UF" + Streams.EOL
+			+ "  -i, --ii=I    UI" + Streams.EOL
+			+ "  -s, --ss=S    US" + Streams.EOL;
 
 		CmdLineParser clp = new CmdLineParser(this);
 		Assert.assertEquals(usage, clp.usage());

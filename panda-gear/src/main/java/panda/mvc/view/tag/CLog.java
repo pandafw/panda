@@ -31,7 +31,7 @@ public class CLog extends TagBean {
 			msg = String.valueOf(add);
 		}
 		else {
-			msg += Streams.LINE_SEPARATOR + add; 
+			msg += Streams.EOL + add; 
 		}
 		return msg;
 	}

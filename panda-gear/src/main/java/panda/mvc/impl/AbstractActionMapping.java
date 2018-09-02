@@ -138,7 +138,7 @@ public abstract class AbstractActionMapping implements ActionMapping {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getClass());
 		for (Entry<String, ActionDispatcher> en : (new TreeMap<String, ActionDispatcher>(dispatchers)).entrySet()) {
-			sb.append(Streams.LINE_SEPARATOR)
+			sb.append(Streams.EOL)
 				.append(" - ")
 				.append(Strings.rightPad(en.getKey(), 50))
 				.append(" >> ")

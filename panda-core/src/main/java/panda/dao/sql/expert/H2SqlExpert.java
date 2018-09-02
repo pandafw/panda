@@ -39,7 +39,7 @@ public class H2SqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL);
 			sb.append(escapeColumn(ef.getColumn())).append(' ').append(evalFieldType(ef));
 			
 			// unsupported

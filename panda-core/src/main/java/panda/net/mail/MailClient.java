@@ -210,12 +210,12 @@ public class MailClient {
 		}
 
 		if (log != null && log.isDebugEnabled()) {
-			log.debug(Streams.LINE_SEPARATOR
+			log.debug(Streams.EOL
 					+ "============SEND EMAIL================================" 
-					+ Streams.LINE_SEPARATOR
+					+ Streams.EOL
 					+ email.toString()
 					+ "======================================================"
-					+ Streams.LINE_SEPARATOR
+					+ Streams.EOL
 					);
 		}
 

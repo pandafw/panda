@@ -87,7 +87,7 @@ public class ActionTaskSubmitter implements Runnable {
 			if (hres.isOK()) {
 				if (log.isDebugEnabled()) {
 					log.debug("Task> " + url + " : " + hres.getStatusLine() 
-						+ Streams.LINE_SEPARATOR
+						+ Streams.EOL
 						+ hres.getContentText());
 					log.debug("Task> " + url + " : " + hres.getStatusLine() + " (" + sw + ")");
 				}
@@ -103,9 +103,9 @@ public class ActionTaskSubmitter implements Runnable {
 			else {
 				errors++;
 				String msg = "Failed to " + task.getMethod() + " " + url + " : " + hres.getStatusLine() 
-						+ Streams.LINE_SEPARATOR
+						+ Streams.EOL
 						+ hres.getHeader().toString()
-						+ Streams.LINE_SEPARATOR
+						+ Streams.EOL
 						+ hres.getContentText();
 				if (errors < errorLimit) {
 					log.warn(msg);

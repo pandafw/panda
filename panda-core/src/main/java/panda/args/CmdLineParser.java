@@ -389,10 +389,10 @@ public class CmdLineParser {
 				sb.append(a.required() ? '>' : ']');
 			}
 		}
-		sb.append(Streams.LINE_SEPARATOR);
+		sb.append(Streams.EOL);
 		
 		if (Collections.isNotEmpty(args)) {
-			sb.append(Streams.LINE_SEPARATOR).append("Arguments: ").append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL).append("Arguments: ").append(Streams.EOL);
 			
 			int len = 0;
 			for (Argument a : args) {
@@ -405,12 +405,12 @@ public class CmdLineParser {
 			for (Argument a : args) {
 				String n = (a.required() ? '<' : '[') + a.name() + (a.required() ? '>' : ']');
 				n = Strings.rightPad(n, len);
-				sb.append("  ").append(n).append(a.usage()).append(Streams.LINE_SEPARATOR);
+				sb.append("  ").append(n).append(a.usage()).append(Streams.EOL);
 			}
 		}
 
 		if (Collections.isNotEmpty(opts)) {
-			sb.append(Streams.LINE_SEPARATOR).append("Options: ").append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL).append("Options: ").append(Streams.EOL);
 			
 			int len = 0;
 			for (Option o : opts) {
@@ -441,7 +441,7 @@ public class CmdLineParser {
 					}
 				}
 				n = Strings.rightPad(n, len);
-				sb.append(n).append(o.usage()).append(Streams.LINE_SEPARATOR);
+				sb.append(n).append(o.usage()).append(Streams.EOL);
 			}
 		}
 		return sb.toString();

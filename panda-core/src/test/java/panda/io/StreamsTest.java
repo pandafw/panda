@@ -150,13 +150,13 @@ public class StreamsTest extends FileBasedTestCase {
 	}
 
 	public void testConstants() throws Exception {
-		assertEquals("\n", Streams.LINE_SEPARATOR_UNIX);
-		assertEquals("\r\n", Streams.LINE_SEPARATOR_WINDOWS);
+		assertEquals("\n", Streams.EOL_UNIX);
+		assertEquals("\r\n", Streams.EOL_WINDOWS);
 		if (WINDOWS) {
-			assertEquals("\r\n", Streams.LINE_SEPARATOR);
+			assertEquals("\r\n", Streams.EOL);
 		}
 		else {
-			assertEquals("\n", Streams.LINE_SEPARATOR);
+			assertEquals("\n", Streams.EOL);
 		}
 	}
 

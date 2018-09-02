@@ -234,7 +234,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 	}
 	
 	private void printLine(String msg) {
-		flushPrint(msg + Streams.LINE_SEPARATOR);
+		flushPrint(msg + Streams.EOL);
 	}
 
 	protected void printStatus(char level, String msg) {

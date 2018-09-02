@@ -348,7 +348,7 @@ public class HttpServlets {
 
 		sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
 		if (request != null) {
-			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL);
 			if (trace) {
 				dumpRequestTrace(request, sb);
 			}
@@ -398,17 +398,17 @@ public class HttpServlets {
 		try {
 			dumpRequestPath(request, writer);
 
-			writer.append(Streams.LINE_SEPARATOR);
+			writer.append(Streams.EOL);
 			dumpRequestHeaders(request, writer);
 			
 			if (Arrays.isNotEmpty(request.getCookies())) {
-				writer.append(Streams.LINE_SEPARATOR);
+				writer.append(Streams.EOL);
 				dumpRequestCookies(request, writer);
 			}
 
 			if (HttpMethod.POST.equalsIgnoreCase(request.getMethod())
 					&& !request.getParameterMap().isEmpty()) {
-				writer.append(Streams.LINE_SEPARATOR);
+				writer.append(Streams.EOL);
 				dumpRequestParameters(request, writer);
 			}
 		}
@@ -431,12 +431,12 @@ public class HttpServlets {
 		try {
 			dumpRequestPath(request, writer);
 
-			writer.append(Streams.LINE_SEPARATOR);
+			writer.append(Streams.EOL);
 			dumpRequestHeaders(request, writer);
 
 			if (HttpMethod.POST.equalsIgnoreCase(request.getMethod())
 					&& !request.getParameterMap().isEmpty()) {
-				writer.append(Streams.LINE_SEPARATOR);
+				writer.append(Streams.EOL);
 				dumpRequestParameters(request, writer);
 			}
 		}

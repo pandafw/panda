@@ -308,7 +308,7 @@ public class SqlDao extends AbstractDao {
 		
 		StringBuilder sb = new StringBuilder();
 		for (String s : sqls) {
-			sb.append(s).append(';').append(Streams.LINE_SEPARATOR);
+			sb.append(s).append(';').append(Streams.EOL);
 		}
 		return sb.toString();
 	}

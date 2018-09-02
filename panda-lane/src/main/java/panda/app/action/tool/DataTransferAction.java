@@ -125,7 +125,7 @@ public class DataTransferAction extends GenericSyncWorkAction {
 				});
 			}
 			catch (DaoException e) {
-				printError("Failed to copy table for " + c + Streams.LINE_SEPARATOR + getStackTrace(e));
+				printError("Failed to copy table for " + c + Streams.EOL + getStackTrace(e));
 			}
 			finally {
 				Streams.safeClose(di);

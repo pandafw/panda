@@ -307,13 +307,13 @@ public class HttpClient {
 			}
 			msg.append(sw).append(')');
 			if (response.getHeader() != null) {
-				msg.append(Streams.LINE_SEPARATOR); 
+				msg.append(Streams.EOL); 
 				response.getHeader().write(msg);
 			}
 
 			String text = response.getContentText(log.isTraceEnabled() ? 10240 : 1024);
 			if (Strings.isNotEmpty(text)) {
-				msg.append(Streams.LINE_SEPARATOR).append(text);
+				msg.append(Streams.EOL).append(text);
 			}
 
 			if (log.isTraceEnabled()) {

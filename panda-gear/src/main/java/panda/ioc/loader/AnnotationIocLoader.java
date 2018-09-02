@@ -65,22 +65,22 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 					as.add(String.valueOf(a));
 				}
 				log.info("Successfully scan/add " + args.size() + " args:" 
-						+ Streams.LINE_SEPARATOR + " - "
-						+ Strings.join(as, Streams.LINE_SEPARATOR + " - "));
+						+ Streams.EOL + " - "
+						+ Strings.join(as, Streams.EOL + " - "));
 			}
 		}
 		
 		if (beans.size() > 0) {
 			if (log.isInfoEnabled()) {
 				log.info("Found " + beans.size() + " bean classes:" 
-						+ Streams.LINE_SEPARATOR + " - "
-						+ Strings.join(new TreeSet<String>(beans.keySet()), Streams.LINE_SEPARATOR + " - "));
+						+ Streams.EOL + " - "
+						+ Strings.join(new TreeSet<String>(beans.keySet()), Streams.EOL + " - "));
 			}
 		}
 		else {
 			log.warn("NONE Annotation-Class found!\nCheck your configure for packages:" 
-					+ Streams.LINE_SEPARATOR + " - "
-					+ Strings.join(args, Streams.LINE_SEPARATOR + " - "));
+					+ Streams.EOL + " - "
+					+ Strings.join(args, Streams.EOL + " - "));
 		}
 	}
 	
@@ -195,7 +195,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 
 				Collection<Field> fields = Fields.getAnnotationFields(clazz, IocInject.class);
 				for (Field f : fields) {
-					sb.append(Streams.LINE_SEPARATOR)
+					sb.append(Streams.EOL)
 					  .append(" - ")
 					  .append(f.getName())
 					  .append(" of ")
@@ -204,7 +204,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 
 				Collection<Method> methods = Methods.getAnnotationMethods(clazz, IocInject.class);
 				for (Method m : methods) {
-					sb.append(Streams.LINE_SEPARATOR)
+					sb.append(Streams.EOL)
 					  .append(" - ")
 					  .append(m.getName())
 					  .append("() of ")

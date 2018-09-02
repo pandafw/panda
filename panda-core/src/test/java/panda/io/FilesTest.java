@@ -1658,9 +1658,9 @@ public class FilesTest extends FileBasedTestCase {
 		final File file = newFile("lines.txt");
 		Files.writeLines(file, "US-ASCII", list, null);
 
-		final String expected = "hello" + Streams.LINE_SEPARATOR + "world" + Streams.LINE_SEPARATOR
-				+ Streams.LINE_SEPARATOR + "this is" + Streams.LINE_SEPARATOR + Streams.LINE_SEPARATOR + "some text"
-				+ Streams.LINE_SEPARATOR;
+		final String expected = "hello" + Streams.EOL + "world" + Streams.EOL
+				+ Streams.EOL + "this is" + Streams.EOL + Streams.EOL + "some text"
+				+ Streams.EOL;
 		final String actual = Streams.toString(file, "US-ASCII");
 		assertEquals(expected, actual);
 	}
@@ -1672,9 +1672,9 @@ public class FilesTest extends FileBasedTestCase {
 		final File file = newFile("lines.txt");
 		Files.writeLines(file, "US-ASCII", list);
 
-		final String expected = "hello" + Streams.LINE_SEPARATOR + "world" + Streams.LINE_SEPARATOR
-				+ Streams.LINE_SEPARATOR + "this is" + Streams.LINE_SEPARATOR + Streams.LINE_SEPARATOR + "some text"
-				+ Streams.LINE_SEPARATOR;
+		final String expected = "hello" + Streams.EOL + "world" + Streams.EOL
+				+ Streams.EOL + "this is" + Streams.EOL + Streams.EOL + "some text"
+				+ Streams.EOL;
 		final String actual = Streams.toString(file, "US-ASCII");
 		assertEquals(expected, actual);
 	}
@@ -1686,8 +1686,8 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, null, linesToAppend, null, true);
 
-		final String expected = "This line was there before you..." + "my first line" + Streams.LINE_SEPARATOR
-				+ "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
+				+ "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}
@@ -1699,7 +1699,7 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, null, linesToAppend, null, false);
 
-		final String expected = "my first line" + Streams.LINE_SEPARATOR + "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}
@@ -1711,8 +1711,8 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, linesToAppend, null, true);
 
-		final String expected = "This line was there before you..." + "my first line" + Streams.LINE_SEPARATOR
-				+ "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
+				+ "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}
@@ -1724,7 +1724,7 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, linesToAppend, null, false);
 
-		final String expected = "my first line" + Streams.LINE_SEPARATOR + "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}
@@ -1736,8 +1736,8 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, null, linesToAppend, true);
 
-		final String expected = "This line was there before you..." + "my first line" + Streams.LINE_SEPARATOR
-				+ "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
+				+ "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}
@@ -1749,7 +1749,7 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, null, linesToAppend, false);
 
-		final String expected = "my first line" + Streams.LINE_SEPARATOR + "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}
@@ -1761,8 +1761,8 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, linesToAppend, true);
 
-		final String expected = "This line was there before you..." + "my first line" + Streams.LINE_SEPARATOR
-				+ "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
+				+ "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}
@@ -1774,7 +1774,7 @@ public class FilesTest extends FileBasedTestCase {
 		final List<String> linesToAppend = Arrays.asList(new String[] { "my first line", "The second Line" });
 		Files.writeLines(file, linesToAppend, false);
 
-		final String expected = "my first line" + Streams.LINE_SEPARATOR + "The second Line" + Streams.LINE_SEPARATOR;
+		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
 		final String actual = Streams.toString(file);
 		assertEquals(expected, actual);
 	}

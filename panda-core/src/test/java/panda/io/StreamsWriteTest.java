@@ -593,7 +593,7 @@ public class StreamsWriteTest extends FileBasedTestCase {
 		out.off();
 		out.flush();
 
-		final String expected = "hello" + Streams.LINE_SEPARATOR + "world" + Streams.LINE_SEPARATOR;
+		final String expected = "hello" + Streams.EOL + "world" + Streams.EOL;
 		final String actual = baout.toString();
 		assertEquals(expected, actual);
 	}
@@ -649,7 +649,7 @@ public class StreamsWriteTest extends FileBasedTestCase {
 		out.off();
 		out.flush();
 
-		final String expected = "hello" + Streams.LINE_SEPARATOR + "world" + Streams.LINE_SEPARATOR;
+		final String expected = "hello" + Streams.EOL + "world" + Streams.EOL;
 		final String actual = baout.toString();
 		assertEquals(expected, actual);
 	}
@@ -731,7 +731,7 @@ public class StreamsWriteTest extends FileBasedTestCase {
 		out.off();
 		writer.flush();
 
-		final String expected = "hello" + Streams.LINE_SEPARATOR + "world" + Streams.LINE_SEPARATOR;
+		final String expected = "hello" + Streams.EOL + "world" + Streams.EOL;
 		final String actual = baout.toString();
 		assertEquals(expected, actual);
 	}

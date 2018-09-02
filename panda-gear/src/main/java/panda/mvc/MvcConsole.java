@@ -159,22 +159,22 @@ public class MvcConsole {
 		if (log.isDebugEnabled()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(request.getRequestURI()).append(" - end.");
-			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL);
 			sb.append("  Response Status: ");
 			sb.append(response.getStatus());
 			sb.append(" - ");
 			sb.append(HttpStatus.getStatusReason(response.getStatus()));
 			String rh = dumpMockResponseHeader(response, "\t");
 			if (Strings.isNotEmpty(rh)) {
-				sb.append(Streams.LINE_SEPARATOR);
+				sb.append(Streams.EOL);
 				sb.append("  Response Head: ");
-				sb.append(Streams.LINE_SEPARATOR);
+				sb.append(Streams.EOL);
 				sb.append(rh);
 			}
 			if (response.getContentType().indexOf("text") >= 0) {
 				String rb = response.getContentAsString();
 				if (Strings.isNotEmpty(rb)) {
-					sb.append(Streams.LINE_SEPARATOR);
+					sb.append(Streams.EOL);
 					sb.append("  Response Body: ");
 					sb.append(rb);
 				}
@@ -188,7 +188,7 @@ public class MvcConsole {
 		Set<String> hns = response.getHeaderNames();
 		for (String hn : hns) {
 			if (sb.length() > 0) {
-				sb.append(Streams.LINE_SEPARATOR);
+				sb.append(Streams.EOL);
 			}
 			sb.append(indent);
 			sb.append(hn);

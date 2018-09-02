@@ -89,7 +89,7 @@ public abstract class LogFormat {
 					format = new MessageLogFormat(padding);
 					break;
 				case 'n':
-					format = new StringLogFormat(Streams.LINE_SEPARATOR);
+					format = new StringLogFormat(Streams.EOL);
 					break;
 				case 'l':
 				case 'p':

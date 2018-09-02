@@ -289,7 +289,7 @@ public class SqlExecuteAction extends AbstractAction {
 		catch (Exception e) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
-			sb.append(Streams.LINE_SEPARATOR).append(Exceptions.getStackTrace(e));
+			sb.append(Streams.EOL).append(Exceptions.getStackTrace(e));
 			r.setError(sb.toString());
 		}
 		finally {

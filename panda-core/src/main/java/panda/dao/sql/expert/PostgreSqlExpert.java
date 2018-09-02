@@ -44,7 +44,7 @@ public class PostgreSqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL);
 			sb.append(escapeColumn(ef.getColumn()));
 
 			if (ef.isAutoIncrement()) {

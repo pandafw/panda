@@ -115,7 +115,7 @@ public class ActionDispatcher {
 		if (Collections.isNotEmpty(chainMap)) {
 			for (Entry<String, ActionChain> en : chainMap.entrySet()) {
 				if (sb.length() > 0) {
-					sb.append(Streams.LINE_SEPARATOR).append("   - ");
+					sb.append(Streams.EOL).append("   - ");
 				}
 				sb.append(en.getKey()).append(": ").append(en.getValue().getConfig());
 			}

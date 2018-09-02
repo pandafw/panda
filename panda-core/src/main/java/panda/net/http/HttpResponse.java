@@ -326,13 +326,13 @@ public class HttpResponse implements Closeable {
 		writer.append(statusLine);
 		
 		if (header != null) {
-			writer.append(Streams.LINE_SEPARATOR);
+			writer.append(Streams.EOL);
 			header.write(writer);
 		}
 
 		String text = getContentText();
 		if (Strings.isNotEmpty(text)) {
-			writer.append(Streams.LINE_SEPARATOR);
+			writer.append(Streams.EOL);
 			writer.append(text);
 		}
 	}

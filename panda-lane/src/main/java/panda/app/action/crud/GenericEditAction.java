@@ -911,7 +911,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 			addFieldError(eff.getName(), getMessage(itemErrMsg));
 
-			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(Streams.EOL);
 
 			String label = getFieldLabel(eff.getName());
 			sb.append(label);

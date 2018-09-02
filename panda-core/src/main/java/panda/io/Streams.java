@@ -68,17 +68,17 @@ public class Streams {
 	/**
 	 * The Unix line separator string.
 	 */
-	public static final String LINE_SEPARATOR_UNIX = Strings.LF;
+	public static final String EOL_UNIX = Strings.LF;
 
 	/**
 	 * The Windows line separator string.
 	 */
-	public static final String LINE_SEPARATOR_WINDOWS = Strings.CRLF;
+	public static final String EOL_WINDOWS = Strings.CRLF;
 
 	/**
 	 * The system line separator string.
 	 */
-	public static final String LINE_SEPARATOR = Systems.LINE_SEPARATOR;
+	public static final String EOL = Systems.LINE_SEPARATOR;
 
 	/**
 	 * The default buffer size ({@value} ) to use for {@link #copyLarge(InputStream, OutputStream)}
@@ -1747,7 +1747,7 @@ public class Streams {
 			return;
 		}
 		if (lineEnding == null) {
-			lineEnding = LINE_SEPARATOR;
+			lineEnding = EOL;
 		}
 		final Charset cs = Charsets.toCharset(encoding);
 		for (final Object line : lines) {
@@ -1795,7 +1795,7 @@ public class Streams {
 			return;
 		}
 		if (lineEnding == null) {
-			lineEnding = LINE_SEPARATOR;
+			lineEnding = EOL;
 		}
 		for (Object line : lines) {
 			if (line != null) {

@@ -248,10 +248,10 @@ public class LogEvent {
 			.append(", method: ").append(callMethod)
 			.append(", lineno: ").append(callLineNo)
 			.append(", FQCN: ").append(fqcn)
-			.append(Streams.LINE_SEPARATOR)
+			.append(Streams.EOL)
 			.append("message: ").append(message);
 		if (error != null) {
-			sb.append(Streams.LINE_SEPARATOR).append(error);
+			sb.append(Streams.EOL).append(error);
 		}
 		return sb.toString();
 	}

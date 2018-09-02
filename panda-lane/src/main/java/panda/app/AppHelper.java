@@ -45,10 +45,10 @@ public abstract class AppHelper {
 			for (Class<?> c : classes) {
 				Entity<?> e = dao.getEntity(c);
 				writer.append("/* ").append(e.getTable()).append(" */");
-				writer.append(Streams.LINE_SEPARATOR);
+				writer.append(Streams.EOL);
 				writer.append(dao.ddl(c));
-				writer.append(Streams.LINE_SEPARATOR);
-				writer.append(Streams.LINE_SEPARATOR);
+				writer.append(Streams.EOL);
+				writer.append(Streams.EOL);
 			}
 		}
 		catch (IOException e) {

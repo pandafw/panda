@@ -583,40 +583,40 @@ public class Email {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (Strings.isNotEmpty(msgId)) {
-			sb.append("MSGID  : ").append(Strings.defaultString(msgId)).append(Streams.LINE_SEPARATOR);
+			sb.append("MSGID  : ").append(Strings.defaultString(msgId)).append(Streams.EOL);
 		}
 		if (date != null) {
-			sb.append("DATE   : ").append(date).append(Streams.LINE_SEPARATOR);
+			sb.append("DATE   : ").append(date).append(Streams.EOL);
 		}
 		if (sender != null) {
-			sb.append("SENDER : ").append(sender.getAddress()).append(Streams.LINE_SEPARATOR);
+			sb.append("SENDER : ").append(sender.getAddress()).append(Streams.EOL);
 		}
 		if (from != null) {
-			sb.append("FROM   : ").append(from).append(Streams.LINE_SEPARATOR);
+			sb.append("FROM   : ").append(from).append(Streams.EOL);
 		}
 		if (Collections.isNotEmpty(tos)) {
-			sb.append("TO     : ").append(tos).append(Streams.LINE_SEPARATOR);
+			sb.append("TO     : ").append(tos).append(Streams.EOL);
 		}
 		if (Collections.isNotEmpty(ccs)) {
-			sb.append("CC     : ").append(ccs).append(Streams.LINE_SEPARATOR);
+			sb.append("CC     : ").append(ccs).append(Streams.EOL);
 		}
 		if (Collections.isNotEmpty(bccs)) {
-			sb.append("BCC    : ").append(bccs).append(Streams.LINE_SEPARATOR);
+			sb.append("BCC    : ").append(bccs).append(Streams.EOL);
 		}
 		if (Collections.isNotEmpty(replyTos)) {
-			sb.append("REPLYTO: ").append(replyTos).append(Streams.LINE_SEPARATOR);
+			sb.append("REPLYTO: ").append(replyTos).append(Streams.EOL);
 		}
 		if (html) {
-			sb.append("HTML   : ").append(html).append(Streams.LINE_SEPARATOR);
+			sb.append("HTML   : ").append(html).append(Streams.EOL);
 		}
 		if (Strings.isNotEmpty(charset)) {
-			sb.append("CHARSET: ").append(charset).append(Streams.LINE_SEPARATOR);
+			sb.append("CHARSET: ").append(charset).append(Streams.EOL);
 		}
 		if (Strings.isNotEmpty(charset)) {
-			sb.append("SUBJECT: ").append(subject).append(Streams.LINE_SEPARATOR);
+			sb.append("SUBJECT: ").append(subject).append(Streams.EOL);
 		}
 		if (Strings.isNotEmpty(charset)) {
-			sb.append("MESSAGE: ").append(message).append(Streams.LINE_SEPARATOR);
+			sb.append("MESSAGE: ").append(message).append(Streams.EOL);
 		}
 		return sb.toString();
 	}

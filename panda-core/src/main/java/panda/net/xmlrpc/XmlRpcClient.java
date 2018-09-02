@@ -93,7 +93,7 @@ public class XmlRpcClient {
 		http.setRequest(hreq);
 		
 		if (log.isDebugEnabled()) {
-			log.debug("XML-RPC Call> " + url + " [" + method + "]: " + Streams.LINE_SEPARATOR + xbody);
+			log.debug("XML-RPC Call> " + url + " [" + method + "]: " + Streams.EOL + xbody);
 		}
 
 		StopWatch sw = new StopWatch();
@@ -103,7 +103,7 @@ public class XmlRpcClient {
 		if (hres.isOK()) {
 			if (log.isDebugEnabled()) {
 				log.debug("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() 
-					+ Streams.LINE_SEPARATOR
+					+ Streams.EOL
 					+ hres.getContentText());
 				xres = XmlRpcs.fromXml(hres.getReader(), XmlRpcDocument.class);
 				log.debug("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() + " (" + sw + ")");
@@ -125,7 +125,7 @@ public class XmlRpcClient {
 		}
 
 		log.warn("XML-RPC Call Failed> " + url + " [" + method + "]: " + hres.getStatusLine() 
-			+ Streams.LINE_SEPARATOR
+			+ Streams.EOL
 			+ hres.getContentText());
 
 		throw new XmlRpcFaultException(hres.getStatusCode(), hres.getStatusReason());

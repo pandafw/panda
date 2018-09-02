@@ -520,11 +520,11 @@ public class HttpRequest {
 	public void toString(Appendable writer, int limit) throws IOException {
 		writer.append(method).append(' ').append(getURL().toString());
 		if (header != null) {
-			writer.append(Streams.LINE_SEPARATOR);
+			writer.append(Streams.EOL);
 			header.write(writer);
 		}
 		if (isPost()) {
-			writer.append(Streams.LINE_SEPARATOR);
+			writer.append(Streams.EOL);
 			WriterOutputStream wos = new WriterOutputStream(writer, encoding);
 			if (body != null) {
 				if (body.markSupported()) {
@@ -532,16 +532,16 @@ public class HttpRequest {
 					Streams.copyLarge(body, wos, 0, limit);
 					wos.flush();
 					if (body.available() > 0) {
-						writer.append(Streams.LINE_SEPARATOR).append("...");
+						writer.append(Streams.EOL).append("...");
 					}
 					body.reset();
-					writer.append(Streams.LINE_SEPARATOR);
+					writer.append(Streams.EOL);
 				}
 				writer.append("<<stream: " + body + " [" + body.available() + "] >>");
 			}
 			else {
 				if (!writeBodyParams(wos, limit)) {
-					writer.append(Streams.LINE_SEPARATOR).append("...");
+					writer.append(Streams.EOL).append("...");
 				}
 			}
 		}
