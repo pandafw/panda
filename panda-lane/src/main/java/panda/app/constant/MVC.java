@@ -93,6 +93,8 @@ public interface MVC extends MvcConstants {
 	
 	public static final String AUTH_TICKET_COOKIE_NAME = "panda.auth.ticket.cookie.name";
 	
+	public static final String AUTH_TICKET_COOKIE_SUFFIX = "panda.auth.ticket.cookie.suffix";
+	
 	public static final String AUTH_TICKET_COOKIE_PATH = "panda.auth.ticket.cookie.path";
 
 	public static final String AUTH_TICKET_COOKIE_AGE = "panda.auth.ticket.cookie.age";

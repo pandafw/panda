@@ -60,6 +60,12 @@ public class AppAuthenticator extends UserAuthenticator {
 	protected String cookieName;
 
 	/**
+	 * ticket cookie name (default: WW_TICKET + CONTEXT_PATH.replace('/', '_'))
+	 */
+	@IocInject(value=MVC.AUTH_TICKET_COOKIE_SUFFIX, required=false)
+	protected boolean cookieSuffix = true;
+
+	/**
 	 * ticket cookie path (default: CONTEXT_PATH)
 	 */
 	@IocInject(value=MVC.AUTH_TICKET_COOKIE_PATH, required=false)
@@ -218,14 +224,15 @@ public class AppAuthenticator extends UserAuthenticator {
 	}
 	
 	protected String getCookieName(ActionContext ac) {
-		if (Strings.isNotEmpty(cookieName)) {
-			return cookieName;
+		String cn = cookieName;
+		if (Strings.isEmpty(cn)) {
+			cn = DEFAULT_COOKIE_NAME;
 		}
 		
-		if (Strings.isEmpty(ac.getBase())) {
-			return DEFAULT_COOKIE_NAME;
+		if (cookieSuffix && Strings.isNotEmpty(ac.getBase())) {
+			cn += Strings.replaceChars(ac.getBase(), '/', '_').toUpperCase();
 		}
-		return DEFAULT_COOKIE_NAME + Strings.replaceChars(ac.getBase(), '/', '_').toUpperCase();
+		return cn;
 	}
 	
 	protected String getCookiePath(ActionContext ac) {
