@@ -29,7 +29,7 @@ public class JsonView extends BindView {
 	protected String jsonp;
 	
 	public JsonView() {
-		setContentType(MimeTypes.TEXT_JAVASCRIPT);
+		setContentType(MimeTypes.APP_JSON);
 	}
 
 	/**
@@ -54,6 +54,19 @@ public class JsonView extends BindView {
 		this.jsonp = jsonp;
 	}
 
+	@Override
+	public void render(ActionContext ac) {
+		if (Strings.isEmpty(jsonp)) {
+			jsonp = ac.getRequest().getParameter("jsonp");
+		}
+
+		if (Strings.isNotEmpty(jsonp)) {
+			setContentType(MimeTypes.TEXT_JAVASCRIPT);
+		}
+		
+		super.render(ac);
+	}
+
 	/**
 	 * write result
 	 * @param ac action context
@@ -63,10 +76,6 @@ public class JsonView extends BindView {
 	 */
 	@Override
 	protected void writeResult(ActionContext ac, PrintWriter writer, Object result) throws IOException {
-		if (Strings.isEmpty(jsonp)) {
-			jsonp = ac.getRequest().getParameter("jsonp");
-		}
-
 		if (Strings.isNotEmpty(jsonp)) {
 			writer.write(jsonp);
 			writer.write('(');
