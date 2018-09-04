@@ -53,23 +53,23 @@ public class LogEvent {
 		this.threadId = Thread.currentThread().getId();
 		this.millis = System.currentTimeMillis();
 
+		if (args != null && args.length > 0 && args[args.length - 1] instanceof Throwable) {
+			error = (Throwable)args[args.length - 1];
+		}
+
 		if (format == null) {
 			message = "<NULL>";
 		}
 		else {
 			message = format;
-			if (args != null && args.length > 0) {
+			if (args != null && args.length > 0 && !(args.length == 1 && args[0] instanceof Throwable)) {
 				try {
 					message = String.format(format, args);
 				}
 				catch (Throwable e) {
-					LogLog.warn("String format fail in log , format = " + format + " , args = " + Arrays.toString(args), e);
+					LogLog.warn("String format fail in log , format = " + format + " , args = " + Arrays.toString(args));
 				}
 			}
-		}
-
-		if (args != null && args.length > 0 && args[args.length - 1] instanceof Throwable) {
-			error = (Throwable)args[args.length - 1];
 		}
 	}
 
