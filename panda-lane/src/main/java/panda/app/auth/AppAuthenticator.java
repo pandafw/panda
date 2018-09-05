@@ -181,6 +181,14 @@ public class AppAuthenticator extends UserAuthenticator {
 	}
 
 	/**
+	 * @param u user
+	 * @return true - if the user is a super or admin
+	 */
+	public boolean isAdministrators(IUser u) {
+		return isSuperUser(u) || isAdminUser(u);
+	}
+
+	/**
 	 * @param ac action context
 	 * @return login user ID or SYSTEM_UID
 	 */

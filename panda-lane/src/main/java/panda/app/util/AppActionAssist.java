@@ -145,6 +145,21 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	}
 
 	/**
+	 * @return true - if the login user is administrator or super
+	 */
+	public boolean isAdministrators() {
+		return isAdministrators(getLoginUser());
+	}
+
+	/**
+	 * @param u user
+	 * @return true - if the user is administrator or super
+	 */
+	public boolean isAdministrators(IUser u) {
+		return authenticator.isAdministrators(u);
+	}
+
+	/**
 	 * @return true - if the login user is administrator
 	 */
 	public boolean isAdminUser() {
