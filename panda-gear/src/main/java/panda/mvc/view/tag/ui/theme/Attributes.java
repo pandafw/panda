@@ -471,6 +471,11 @@ public class Attributes {
 		return this;
 	}
 
+	public Attributes multiple(File tag) {
+		addIfTrue("multiple", tag.isMultiple());
+		return this;
+	}
+
 	public Attributes multiple(Select tag) {
 		addIfTrue("multiple", tag.isMultiple());
 		return this;
