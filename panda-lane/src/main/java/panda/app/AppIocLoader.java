@@ -25,7 +25,6 @@ import panda.app.util.pdf.WkHtml2Pdf;
 import panda.lang.Collections;
 import panda.lang.Systems;
 import panda.mvc.MvcConfig;
-import panda.mvc.filepool.MvcDaoFilePool;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
 
@@ -41,7 +40,6 @@ public class AppIocLoader extends MvcComboIocLoader {
 			super.addDefaults(ss);
 			
 			Collections.addAll(ss, 
-				MvcDaoFilePool.class,
 				AppAuthenticator.class,
 				UserAuthenticateProcessor.class,
 				AppActionAssist.class,
