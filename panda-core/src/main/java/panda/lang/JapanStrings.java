@@ -238,7 +238,6 @@ public abstract class JapanStrings {
 		return zenkaku.toString();
 	}
 
-
 	/**
 	 * convert the string from zenkaku to hankaku
 	 * @param value string
@@ -258,6 +257,30 @@ public abstract class JapanStrings {
 			}
 
 			JapanChars.zenkakuToHankaku(hankaku, c);
+		}
+
+		return hankaku.toString();
+	}
+
+	/**
+	 * convert the string from zenkaku to hankaku
+	 * @param value string
+	 * @return converted hankaku string
+	 */
+	public static String asciiZenkakuToHankaku(String value) {
+		if (Strings.isEmpty(value)) {
+			return value;
+		}
+
+		StringBuilder hankaku = new StringBuilder(value.length());
+		for (int i = 0; i < value.length(); i++) {
+			char c = value.charAt(i);
+			if (JapanChars.isHankaku(c)) {
+				hankaku.append(c);
+				continue;
+			}
+
+			JapanChars.asciiZenkakuToHankaku(hankaku, c);
 		}
 
 		return hankaku.toString();

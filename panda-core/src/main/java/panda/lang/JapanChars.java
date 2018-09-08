@@ -175,8 +175,20 @@ public abstract class JapanChars {
 
 		sb.append(c);
 	}
-	//------------------------------------------------------------------------------
 
+	public static void asciiZenkakuToHankaku(StringBuilder sb, char c) {
+		int i;
+
+		i = ZENKAKU_ASCII.indexOf(c);
+		if (i >= 0) {
+			sb.append(HANKAKU_ASCII.charAt(i));
+			return;
+		}
+
+		sb.append(c);
+	}
+
+	//------------------------------------------------------------------------------
 	/**
 	 * isHankakuKatakanaChar
 	 * @param c char
