@@ -42,6 +42,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.util.Escapes;
 import panda.vfs.FileItem;
+import panda.vfs.FilePools;
 
 /**
  * @param <T> data type
@@ -237,12 +238,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 		finally {
 			Streams.safeClose((Closeable)reader);
-			try {
-				arg.file.delete();
-			}
-			catch (IOException e) {
-				log.error("Failed to delete file " + arg.file.getName(), e);
-			}
+			FilePools.safeDelete(arg.file);
 		}
 	}
 

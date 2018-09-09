@@ -50,6 +50,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 import panda.vfs.FileItem;
+import panda.vfs.FilePools;
 
 @At("${super_path}/dataimp")
 @Auth(AUTH.SUPER)
@@ -149,9 +150,7 @@ public class DataImportAction extends AbstractAction {
 			}
 		}
 		finally {
-			if (arg.file != null) {
-				arg.file.delete();
-			}
+			FilePools.safeDelete(arg.file);
 		}
 		return tableList;
 	}
