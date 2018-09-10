@@ -44,7 +44,7 @@
 	<table class="cron-tb">
 		<tr><th class="cron-th-no" rowspan="4">${ce_index + 1}.</th>
 			<th class="cron-th-url"><@p.text name="lbl-url"/>:</th>
-			<td class="cron-td-url">${base}${(ce.getUrl()!'')?html}</td>
+			<td class="cron-td-url">${base}${(ce.action!'')?html}</td>
 		</tr>
 		<tr><th class="cron-th-desc"><@p.text name="lbl-description"/>:</th>
 			<td class="cron-td-desc">${(ce.description!'')?html}</td>
