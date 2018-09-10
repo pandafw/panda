@@ -10,7 +10,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="sendmail" method="post" action="~/send" theme="bs3h" loadmask="true">
+	<@p.form id="sendmail" cssClass="p-eform" method="post" action="~/send" theme="bs3h" loadmask="true">
 		<@p.textfield key="host"/>
 		<@p.textfield key="port"/>
 		<@p.textfield key="username"/>
@@ -26,7 +26,7 @@
 		<@p.textarea key="message" rows="10" enterfire="form"/>
 		<@p.checkbox key="html" fieldValue="true"/>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="icon-email" label="#(btn-send)"/>
+			<@p.submit icon="icon-sendmail" label="#(btn-send)"/>
 		</@p.div>
 	</@p.form>
 

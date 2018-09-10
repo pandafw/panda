@@ -23,7 +23,6 @@
 		<@p.file
 			key="file"
 			value=""
-			size="50"
 		/>
 	<#if a.updatable>
 		<@p.checkbox name="update" fieldLabel="#(p.update)" fieldValue="true"/>

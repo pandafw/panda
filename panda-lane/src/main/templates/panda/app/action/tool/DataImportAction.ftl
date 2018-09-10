@@ -11,12 +11,11 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="dataimp" method="post" enctype="multipart/form-data" theme="bs3h">
+	<@p.form id="dataimp" cssClass="p-eform" method="post" enctype="multipart/form-data" theme="bs3h">
 		<@p.select key="target" list="%{action.targets}"/>
 		<@p.file
 			key="file"
 			value=""
-			size="50"
 			onchange="onFileChange(this)"
 		/>
 		<@p.checkbox name="deleteAll" fieldLabel="#(deleteAll)" fieldValue="true"/>

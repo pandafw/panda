@@ -11,7 +11,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="dataexp" method="post" theme="bs3h">
+	<@p.form id="dataexp" cssClass="p-eform" method="post" theme="bs3h">
 		<@p.select key="target" list="%{action.targets}"/>
 		<@p.textfield key="start" size="20" />
 		<@p.textfield key="limit" size="20" />

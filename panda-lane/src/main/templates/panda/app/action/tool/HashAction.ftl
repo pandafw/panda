@@ -19,7 +19,7 @@
 	<!-- Tab panes -->
 	<div class="tab-content">
 		<div class="tab-pane<#if !(params.f??)> active</#if>" id="hash_string">
-			<@p.form id="hashs" action="~/" method="get" theme="bs3h">
+			<@p.form id="hashs" cssClass="p-eform" action="~/" method="get" theme="bs3h">
 				<@p.textarea key="s" rows="3" enterfire="form"/>
 				<@p.div cssClass="p-buttons">
 					<@p.submit icon="fa fa-gear" label="#(btn-hash)"/>
@@ -31,10 +31,9 @@
 				<@p.file
 					key="f"
 					value=""
-					size="50"
 				/>
 				<@p.div cssClass="p-buttons">
-					<@p.submit icon="fa fa-gear" label="#(btn-hash)"/>
+					<@p.submit icon="fa fa-hashtag" label="#(btn-hash)"/>
 				</@p.div>
 			</@p.form>
 		</div>
