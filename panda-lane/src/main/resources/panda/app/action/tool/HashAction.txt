@@ -1,4 +1,4 @@
-icon=fa fa-strikethrough
+icon=fa fa-hashtag
 
 title=Hash
 

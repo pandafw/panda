@@ -53,17 +53,19 @@ navi-super-loadtask=キャッシュ
 navi-super-property=プロパティ
 navi-super-resource=リソース
 navi-super-template=テンプレート
+
+navi-super-cmdexec=CMDツール
 navi-super-crons=Cronジョブ
 navi-super-datacpy=データ移行
 navi-super-dataexp=データエクスポート
 navi-super-dataimp=データインポート
-navi-super-html2pdf=HTML⇒PDF出力
-navi-super-filepool=ファイルプール
 navi-super-eleval=ELツール
+navi-super-filepool=ファイルプール
+navi-super-hash=ハッシュツール
+navi-super-html2pdf=HTML⇒PDF出力
+navi-super-pwdhash=パスワードハッシュ
 navi-super-sendmail=メール送信
 navi-super-sqlexec=SQLツール
-navi-super-cmdexec=CMDツール
-navi-super-pwdhash=パスワードハッシュ
 
 
 #-----------------------------------------------------------------------------
