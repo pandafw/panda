@@ -48,7 +48,7 @@ Panda Frameworkは下記のモジュールで構成されている。
  | [panda-gear](gear/index_ja.md) | [IOC](gear/ioc/ioc_ja.md)/[MVC](gear/mvc/mvc_ja.md)/Taglibモジュール。       |
  | [panda-glue](glue/index_ja.md) | [ASM](glue/asm_ja.md)/[AOP](glue/aop_ja.md)モジュール。                  |
  | [panda-html](html/index_ja.md) | jQuery、Bootstrapなどを含むCSS/JavaScriptモジュール。 |
- | [panda-lane](lane/index_ja.md) | CRUD機能/ユーザー認証機能などを実装した拡張モジュール。 |
+ | [panda-pump](pump/index_ja.md) | CRUD機能/ユーザー認証機能などを実装した拡張モジュール。 |
  | [panda-tool](tool/index_ja.md) | コードジェネレータ。 |
  | [panda-tube](tube/index_ja.md) | Web Service APIのクライアント（WordPress XMP-RPC, Google Vision APIなど）。    |
 

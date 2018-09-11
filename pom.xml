@@ -24,8 +24,8 @@
 		<module>panda-html</module>
 		<module>panda-gear</module>
 		<module>panda-glue</module>
-		<module>panda-lane</module>
 		<module>panda-nets</module>
+		<module>panda-pump</module>
 		<module>panda-tube</module>
 		<module>panda-tool</module>
 		<module>panda-roid</module>
