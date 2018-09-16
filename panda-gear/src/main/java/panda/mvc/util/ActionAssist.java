@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import panda.bind.json.Jsons;
 import panda.io.Files;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
@@ -332,6 +333,15 @@ public class ActionAssist extends ActionSupport {
 	 */
 	public String ellipsiz(String str, int len) {
 		return Texts.ellipsiz(str, len);
+	}
+
+	/**
+	 * convert to object to a json string
+	 * @param o object
+	 * @return json string
+	 */
+	public String toJson(Object o) {
+		return Jsons.toJson(o);
 	}
 	
 	/**
