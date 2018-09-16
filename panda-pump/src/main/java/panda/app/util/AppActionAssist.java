@@ -245,10 +245,10 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 
 	//-------------------------------------------------------------
 	/**
-	 * initialize common fields of data
+	 * initialize ICreatedBy fields of data
 	 * @param data data
 	 */
-	public void initCommonFields(Object data) {
+	public void initCreatedByFields(Object data) {
 		if (data instanceof IStatus) {
 			if (((IStatus)data).getStatus() == null) {
 				((IStatus)data).setStatus(VAL.STATUS_ACTIVE);
@@ -272,18 +272,12 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 
 	
 	/**
-	 * initialize update fields of data
+	 * initialize IUpdatedBy fields of data
 	 * @param data input data
 	 * @param sdat source data
 	 */
-	public void initUpdateFields(Object data, Object sdat) {
-		if (data instanceof IStatus) {
-			if (((IStatus)data).getStatus() == null) {
-				((IStatus)data).setStatus(VAL.STATUS_ACTIVE);
-			}
-		}
-		
-		if (data instanceof ICreatedBy) {
+	public void initUpdatedByFields(Object data, Object sdat) {
+		if (data instanceof ICreatedBy && sdat instanceof ICreatedBy) {
 			ICreatedBy cb = (ICreatedBy)data;
 			ICreatedBy sb = (ICreatedBy)sdat;
 	
