@@ -1,10 +1,10 @@
 package panda.cast.castor;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.sql.Blob;
 import java.sql.Clob;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +15,7 @@ import panda.bind.json.Jsons;
 import panda.cast.CastContext;
 import panda.cast.CastException;
 import panda.cast.castor.DateTypeCastor.DateCastor;
+import panda.codec.binary.Base64;
 import panda.io.Streams;
 import panda.lang.Numbers;
 import panda.net.mail.EmailAddress;
@@ -40,13 +41,6 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			if (value instanceof Class) {
 				a.append(((Class)value).getName().toString());
 			}
-			else if (value instanceof byte[]) {
-				InputStream bis = new ByteArrayInputStream((byte[])value);
-				Streams.copy(bis, a, cc.getEncoding());
-			}
-			else if (value instanceof char[]) {
-				a.append(new String((char[])value));
-			}
 			else if (value instanceof Character) {
 				a.append((Character)value);
 			}
@@ -66,14 +60,8 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof Calendar) {
 				a.append(dateCastor.getDateFormat(cc.getFormat(), cc.getLocale()).format(((Calendar)value).getTime()));
 			}
-			else if (value instanceof JsonObject || value instanceof JsonArray) {
-				Jsons.toJson(value, a);
-			}
-			else if (value instanceof Reader) {
-				Streams.copy((Reader)value, a);
-			}
-			else if (value instanceof Clob) {
-				Streams.copy(((Clob)value).getCharacterStream(), a);
+			else if (value instanceof EmailAddress) {
+				a.append(value.toString());
 			}
 			else if (value instanceof File) {
 				a.append(value.toString());
@@ -87,11 +75,28 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 					a.append(fi.getName());
 				}
 			}
-			else if (value instanceof InputStream) {
-				Streams.copy((InputStream)value, a, cc.getEncoding());
+			else if (value instanceof JsonObject || value instanceof JsonArray) {
+				Jsons.toJson(value, a);
 			}
-			else if (value instanceof EmailAddress) {
-				a.append(value.toString());
+			else if (value instanceof char[]) {
+				a.append(new String((char[])value));
+			}
+			else if (value instanceof Reader) {
+				Streams.copy((Reader)value, a);
+			}
+			else if (value instanceof Clob) {
+				String s = ((Clob)value).getSubString(1L, (int)((Clob)value).length());
+				a.append(s);
+			}
+			else if (value instanceof byte[]) {
+				a.append(Base64.encodeBase64String((byte[])value));
+			}
+			else if (value instanceof InputStream) {
+				a.append(Base64.encodeBase64String((InputStream)value));
+			}
+			else if (value instanceof Blob) {
+				byte[] bs = ((Blob)value).getBytes(1, (int)((Blob)value).length());
+				a.append(Base64.encodeBase64String(bs));
 			}
 			else if (value instanceof Enum) {
 				a.append(value.toString());

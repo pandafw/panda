@@ -45,6 +45,7 @@ import panda.io.stream.ByteArrayOutputStream;
 import panda.io.stream.ClosedInputStream;
 import panda.io.stream.ClosedOutputStream;
 import panda.io.stream.NullOutputStream;
+import panda.io.stream.ReaderInputStream;
 import panda.io.stream.StringBuilderWriter;
 import panda.io.stream.WriterOutputStream;
 import panda.lang.Arrays;
@@ -1207,6 +1208,21 @@ public class Streams {
 	 */
 	public static InputStream toInputStream(final CharSequence input, final String encoding) {
 		return toInputStream(input, Charsets.toCharset(encoding));
+	}
+
+	/**
+	 * Convert the specified Reader to an input stream, encoded as bytes using the specified
+	 * character encoding.
+	 * <p>
+	 * Character encoding names can be found at <a
+	 * href="http://www.iana.org/assignments/character-sets">IANA</a>.
+	 * 
+	 * @param input the Reader to convert
+	 * @param encoding the encoding to use, null means platform default
+	 * @return an input stream
+	 */
+	public static InputStream toInputStream(final Reader input, final String encoding) {
+		return new ReaderInputStream(input, encoding);
 	}
 
 	// -----------------------------------------------------------------------

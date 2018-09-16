@@ -582,7 +582,7 @@ public class Base64 extends BaseNCodec {
 	}
 
 	/**
-	 * Encodes binary data using the base64 algorithm but does not chunk the output.
+	 * Encodes binary data using the base64 algorithm but chunk the output.
 	 * 
 	 * @param binaryData binary data to encode
 	 * @return String containing Base64 characters.

@@ -27,21 +27,21 @@ public class ByteArrayCastor extends AnySingleCastor<byte[]> {
 			if (value instanceof Blob) {
 				return ((Blob)value).getBytes(1, (int)((Blob)value).length());
 			}
+			if (value instanceof FileItem) {
+				FileItem fi = (FileItem)value;
+				return fi.isExists() ? fi.getData() : null;
+			}
 			if (value instanceof InputStream) {
 				return Streams.toByteArray((InputStream)value);
-			}
-			if (value instanceof Reader) {
-				return Base64.decodeBase64((Reader)value);
-			}
-			if (value instanceof CharSequence) {
-				return Base64.decodeBase64(((CharSequence)value).toString());
 			}
 			if (value instanceof char[]) {
 				return Base64.decodeBase64(new String((char[])value));
 			}
-			if (value instanceof FileItem) {
-				FileItem fi = (FileItem)value;
-				return fi.isExists() ? fi.getData() : null;
+			if (value instanceof CharSequence) {
+				return Base64.decodeBase64(((CharSequence)value).toString());
+			}
+			if (value instanceof Reader) {
+				return Base64.decodeBase64((Reader)value);
 			}
 			return castError(value, context);
 		}

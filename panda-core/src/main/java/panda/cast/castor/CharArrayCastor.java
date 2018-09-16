@@ -3,6 +3,7 @@ package panda.cast.castor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.SQLException;
 
@@ -23,20 +24,25 @@ public class CharArrayCastor extends AnySingleCastor<char[]> {
 	@Override
 	protected char[] castValue(Object value, CastContext context) {
 		try {
-			if (value instanceof Clob) {
-				return Streams.toCharArray(((Clob)value).getCharacterStream());
-			}
 			if (value instanceof CharSequence) {
 				return value.toString().toCharArray();
 			}
 			if (value instanceof Reader) {
 				return Streams.toCharArray((Reader)value);
 			}
+			if (value instanceof Clob) {
+				String s = ((Clob)value).getSubString(1L, (int)((Clob)value).length());
+				return s.toCharArray();
+			}
 			if (value instanceof byte[]) {
 				return Base64.encodeBase64String((byte[])value).toCharArray();
 			}
 			if (value instanceof InputStream) {
 				return Base64.encodeBase64String((InputStream)value).toCharArray();
+			}
+			if (value instanceof Blob) {
+				byte[] bs = ((Blob)value).getBytes(1, (int)((Blob)value).length());
+				return Base64.encodeBase64String(bs).toCharArray();
 			}
 			return castError(value, context);
 		}

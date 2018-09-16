@@ -3,14 +3,17 @@ package panda.cast.castor;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Type;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.SQLException;
 
 import panda.cast.CastContext;
+import panda.codec.binary.Base64;
+import panda.codec.binary.Base64InputStream;
 import panda.io.Streams;
-import panda.io.stream.ReaderInputStream;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.vfs.FileItem;
@@ -33,29 +36,41 @@ public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 		protected InputStream castValue(Object value, CastContext context) {
 			try {
 				if (value instanceof byte[]) {
-					ByteArrayInputStream bais = new ByteArrayInputStream((byte[])value);
-					return bais;
-				}
-				if (value instanceof char[]) {
-					return Streams.toInputStream(new String((char[])value), Charsets.UTF_8);
-				}
-				
-				if (value instanceof Reader) {
-					return new ReaderInputStream((Reader)value, Charsets.CS_UTF_8);
-				}
-				if (value instanceof CharSequence) {
-					return Streams.toInputStream((CharSequence)value, Charsets.UTF_8);
+					return new ByteArrayInputStream((byte[])value);
 				}
 				if (value instanceof FileItem) {
 					FileItem fi = (FileItem)value;
 					return fi.isExists() ? fi.getInputStream() : null;
 				}
+				if (value instanceof Blob) {
+					return ((Blob)value).getBinaryStream();
+				}
+
+				if (value instanceof char[]) {
+					InputStream in = Streams.toInputStream(new String((char[])value), context.getEncoding());
+					Base64InputStream b64i = new Base64InputStream(in);
+					return b64i;
+				}
+				if (value instanceof CharSequence) {
+					InputStream in = Streams.toInputStream((CharSequence)value, Charsets.UTF_8);
+					Base64InputStream b64i = new Base64InputStream(in);
+					return b64i;
+				}
+				if (value instanceof Reader) {
+					return Streams.toInputStream((Reader)value, context.getEncoding());
+				}
+				if (value instanceof Clob) {
+					return Streams.toInputStream(((Clob)value).getCharacterStream(), context.getEncoding());
+				}
+
+				return castError(value, context);
 			}
 			catch (IOException e) {
 				throw Exceptions.wrapThrow(e);
 			}
-
-			return castError(value, context);
+			catch (SQLException e) {
+				throw Exceptions.wrapThrow(e);
+			}
 		}
 	}
 
@@ -66,20 +81,41 @@ public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 		
 		@Override
 		protected Reader castValue(Object value, CastContext context) {
-			if (value instanceof char[]) {
-				return new StringReader(new String((char[])value));
+			try {
+				if (value instanceof char[]) {
+					return new StringReader(new String((char[])value));
+				}
+				if (value instanceof CharSequence) {
+					return new StringReader(value.toString());
+				}
+				if (value instanceof Clob) {
+					return ((Clob)value).getCharacterStream();
+				}
+
+				if (value instanceof FileItem) {
+					FileItem fi = (FileItem)value;
+					return fi.isExists() ? Streams.toReader(fi.getInputStream(), context.getEncoding()) : null;
+				}
+
+				if (value instanceof byte[]) {
+					String s = Base64.decodeBase64String((byte[])value);
+					return new StringReader(s);
+				}
+				if (value instanceof InputStream) {
+					return Streams.toReader((InputStream)value, context.getEncoding());
+				}
+				if (value instanceof Blob) {
+					return Streams.toReader(((Blob)value).getBinaryStream(), context.getEncoding());
+				}
+				
+				return castError(value, context);
 			}
-			if (value instanceof byte[]) {
-				ByteArrayInputStream bais = new ByteArrayInputStream((byte[])value);
-				return new InputStreamReader(bais, Charsets.CS_UTF_8);
+			catch (IOException e) {
+				throw Exceptions.wrapThrow(e);
 			}
-			
-			if (value instanceof InputStream) {
-				return new InputStreamReader((InputStream)value, Charsets.CS_UTF_8);
+			catch (SQLException e) {
+				throw Exceptions.wrapThrow(e);
 			}
-			
-			String sv = value.toString();
-			return new StringReader(sv);
 		}
 	}
 }	
