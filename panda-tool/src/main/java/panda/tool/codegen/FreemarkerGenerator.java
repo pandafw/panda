@@ -78,8 +78,12 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		return tpl;
 	}
 	
+	private Module module;
+	
 	@Override
 	protected void processModule(Module module) throws Exception {
+		this.module = module;
+
 		for (Action action : module.getActionList()) {
 			if (Boolean.TRUE.equals(action.getGenerate())) {
 				print2("Processing action - " + action.getName());
@@ -223,5 +227,22 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 	
 	public String getActionName(String uri) {
 		return Strings.substringAfter(Strings.substringBefore(uri, '?'), '/');
+	}
+	
+	public String focusme(Object ui) {
+		String f = null;
+		if (ui instanceof ListUI) {
+			f = ((ListUI)ui).getFocusme();
+		}
+		else if (ui instanceof InputUI) {
+			f = ((InputUI)ui).getFocusme();
+		}
+		if (f == null) {
+			f = module.getProps().get("ui.input.focusme");
+		}
+		if (Strings.isNotEmpty(f)) {
+			return " focusme=\"" + f + "\"";
+		}
+		return "";
 	}
 }

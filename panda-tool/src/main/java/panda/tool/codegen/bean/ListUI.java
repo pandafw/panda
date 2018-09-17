@@ -34,6 +34,7 @@ import panda.lang.Strings;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;safeInclude&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;focusme&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;cssColumn&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;template&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;extend&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -61,6 +62,8 @@ public class ListUI implements Comparable<ListUI> {
 	@XmlAttribute
 	private String safeInclude;
 	@XmlAttribute
+	private String focusme;
+	@XmlAttribute
 	private String cssColumn;
 	@XmlAttribute
 	private String template;
@@ -82,6 +85,7 @@ public class ListUI implements Comparable<ListUI> {
 	 */
 	public ListUI(ListUI lui) {
 		this.safeInclude = lui.safeInclude;
+		this.focusme = lui.focusme;
 		this.cssColumn = lui.cssColumn;
 		this.template = lui.template;
 		this.extend = lui.extend;
@@ -114,6 +118,9 @@ public class ListUI implements Comparable<ListUI> {
 
 		if (src.safeInclude != null) {
 			me.safeInclude = src.safeInclude;
+		}
+		if (src.focusme != null) {
+			me.focusme = src.focusme;
 		}
 		if (src.cssColumn != null) {
 			me.cssColumn = src.cssColumn;
@@ -270,6 +277,20 @@ public class ListUI implements Comparable<ListUI> {
 	 */
 	public void setSafeInclude(String safeInclude) {
 		this.safeInclude = safeInclude;
+	}
+
+	/**
+	 * @return the focusme
+	 */
+	public String getFocusme() {
+		return focusme;
+	}
+
+	/**
+	 * @param focusme the focusme to set
+	 */
+	public void setFocusme(String focusme) {
+		this.focusme = focusme;
 	}
 
 	/**

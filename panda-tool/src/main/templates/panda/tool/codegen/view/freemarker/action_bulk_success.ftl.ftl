@@ -53,7 +53,7 @@ ${s}#if result?has_content>
 	/>
 	
 	<br/>
-	<div class="p-tcenter">
+	<div class="p-tcenter"${gen.focusme(ui)}>
 		<#include "bulk-success-buttons.ftl"/>
 	</div>
 ${s}#else>

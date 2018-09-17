@@ -64,7 +64,7 @@ ${s}#if result?has_content>
 	/>
 	
 	<br/>
-	<div class="p-tcenter">
+	<div class="p-tcenter"${gen.focusme(ui)}>
 		${s}@p.submit onclick="return ${action.name}_${ui.name}_submit();" icon="icon-${ui.name}-execute" label="#(btn-${ui.name}-execute)"/>
 		<#include "bulk-buttons.ftl"/>
 

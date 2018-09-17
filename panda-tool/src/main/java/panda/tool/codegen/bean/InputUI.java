@@ -33,7 +33,7 @@ import panda.lang.Strings;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;safeInclude&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;focus&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;focus&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;theme&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;formId&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;template&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -60,7 +60,7 @@ public class InputUI implements Comparable<InputUI> {
 	@XmlAttribute
 	private Boolean generate;
 	@XmlAttribute
-	private Boolean focus = true;
+	private String focusme;
 	@XmlAttribute
 	private String safeInclude;
 	@XmlAttribute
@@ -87,7 +87,7 @@ public class InputUI implements Comparable<InputUI> {
 	 */
 	public InputUI(InputUI iui) {
 		this.generate = iui.generate;
-		this.focus = iui.focus;
+		this.focusme = iui.focusme;
 		this.theme = iui.theme;
 		this.safeInclude = iui.safeInclude;
 		this.formId = iui.formId;
@@ -123,8 +123,8 @@ public class InputUI implements Comparable<InputUI> {
 		if (src.generate != null) {
 			me.generate = src.generate;
 		}
-		if (src.focus != null) {
-			me.focus = src.focus;
+		if (src.focusme != null) {
+			me.focusme = src.focusme;
 		}
 		if (src.safeInclude != null) {
 			me.safeInclude = src.safeInclude;
@@ -322,17 +322,17 @@ public class InputUI implements Comparable<InputUI> {
 	}
 
 	/**
-	 * @return the focus
+	 * @return the focusme
 	 */
-	public Boolean getFocus() {
-		return focus;
+	public String getFocusme() {
+		return focusme;
 	}
 
 	/**
-	 * @param focus the focus to set
+	 * @param focusme the focusme to set
 	 */
-	public void setFocus(Boolean focus) {
-		this.focus = focus;
+	public void setFocusme(String focusme) {
+		this.focusme = focusme;
 	}
 
 	/**
