@@ -83,7 +83,7 @@
 	/>
 	
 	<br/>
-	<div class="p-tcenter">
+	<div class="p-tcenter" focusme="true">
 		<@p.submit onclick="return filepool_bdelete_submit();" icon="icon-bdelete-execute" label="#(btn-bdelete-execute)"/>
 
 		<@p.a href="javascript:window.history.back()" btn="default" icon="icon-back" label="#(btn-back)"/>

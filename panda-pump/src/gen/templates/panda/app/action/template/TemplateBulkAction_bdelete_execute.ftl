@@ -111,9 +111,7 @@
 	/>
 	
 	<br/>
-	<div class="p-tcenter">
-
-		
+	<div class="p-tcenter" focusme="true">
 	<#if a.canAccess("~/list")>
 		<@p.a action="~/list" btn="default" icon="icon-list" label="#(btn-list)"/>
 	</#if>
