@@ -832,6 +832,46 @@ jQuery.jcookie = function(name, value, options) {
 	});
 })(jQuery);
 (function($) {
+	function focusme() {
+		var f = false;
+		$('[focusme]').each(function() {
+			var $i = $(this);
+			if (f) {
+				$i.removeAttr('focusme');
+				return;
+			}
+
+			var a = $i.attr('focusme');
+			$i.removeAttr('focusme');
+
+			var $a = null;
+			if (a == 'true') {
+				$a = $i.find('input,select,textarea,button').not(':hidden,:disabled,[readonly]').eq(0);
+				if ($a.length < 1) {
+					$a = $i.find('a').not(':hidden,:disabled').eq(0);
+					if ($a.length < 1) {
+						$a = $i;
+					}
+				}
+			}
+			else if (a != '' && a != 'false') {
+				$a = $i.find(a).eq(0);
+			}
+			
+			if ($a && $a.length) {
+				f = true;
+				var $w = $(window), st = $w.scrollTop(), sl = $w.scrollLeft();
+				$a.focus();
+				$(window).scrollTop(st).scrollLeft(sl);
+			}
+		});
+	}
+
+	$(window).on('load', function() {
+		focusme();
+	});
+})(jQuery);
+(function($) {
 	function maskElement($el, c) {
 		//if this element has delayed mask scheduled then remove it and display the new one
 		if ($el.data("_mask_timeout") !== undefined) {
@@ -2012,4 +2052,27 @@ jQuery.jcookie = function(name, value, options) {
 			}
 		}
 	};
+})(jQuery);
+(function($) {
+	function enterfire() {
+		$('textarea[enterfire]').each(function() {
+			var f = $(this).attr("enterfire");
+			if (f) {
+				$(this).removeAttr("enterfire").keyup(function(evt) {
+					if (evt.ctrlKey && evt.which == 13) {
+						if (f == "form") {
+							$(this).closest("form").submit();
+						}
+						else {
+							$(f).click();
+						}
+					}
+				});
+			}
+		});
+	}
+
+	$(window).on('load', function() {
+		enterfire();
+	});
 })(jQuery);
