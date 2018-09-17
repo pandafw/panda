@@ -26,22 +26,22 @@ public abstract class JapanChars {
 	public static final String ZENKAKU_LETTER = "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ";
 	
 	/**
-	 * 半角記号: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+	 * 半角記号: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~~
 	 */
-	public static final String HANKAKU_SYMBOL = " !\"\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+	public static final String HANKAKU_SYMBOL = " !\"\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~~";
 
 	/**
-	 * 全角記号: ！“”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～
+	 * 全角記号: ！“”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～〜
 	 */
-	public static final String ZENKAKU_SYMBOL = "　！”“＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～";
+	public static final String ZENKAKU_SYMBOL = "　！”“＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～〜";
 
 	/** 
-	 * 半角: !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+	 * 半角: !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~~
 	 */
 	public static final String HANKAKU_ASCII = HANKAKU_DIGIT + HANKAKU_LETTER + HANKAKU_SYMBOL;
 
 	/** 
-	 * 全角: ！“”＃＄％＆’（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［￥］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～
+	 * 全角: ！“”＃＄％＆’（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［￥］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～〜
 	 */
 	public static final String ZENKAKU_ASCII = ZENKAKU_DIGIT + ZENKAKU_LETTER + ZENKAKU_SYMBOL;
 
