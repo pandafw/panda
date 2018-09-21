@@ -17,14 +17,12 @@ if (typeof Number.trim != "function") {
 }
 if (typeof Number.parseInt != "function") {
 	Number.parseInt = function(s, r) {
-		var n = parseInt(Number.trim(s), r);
-		return isNaN(n) ? 0 : n;
+		return parseInt(Number.trim(s), r);
 	};
 }
 if (typeof Number.parseFloat != "function") {
 	Number.parseFloat = function(s) {
-		var n = parseFloat(Number.trim(s));
-		return isNaN(n) ? 0 : n;
+		return parseFloat(Number.trim(s));
 	};
 }
 
