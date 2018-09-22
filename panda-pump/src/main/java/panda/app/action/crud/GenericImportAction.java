@@ -180,13 +180,13 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		ListReader reader = null;
 		try {
 			InputStream input = null;
-			String fext = FileNames.getExtension(arg.file.getName());
+			String fext = Strings.lowerCase(FileNames.getExtension(arg.file.getName()));
 			if (FileTypes.ZIP.equalsIgnoreCase(fext)) {
 				ZipInputStream zis = new ZipInputStream(arg.file.getInputStream(), Charsets.CS_UTF_8);
 				ZipEntry entry;
 				try {
 					while ((entry = zis.getNextEntry()) != null) {
-						fext = FileNames.getExtension(entry.getName());
+						fext = Strings.lowerCase(FileNames.getExtension(entry.getName()));
 						if (isAcceptableFileType(fext)) {
 							ByteArrayOutputStream baos = new ByteArrayOutputStream();
 							Streams.copy(zis, baos);
