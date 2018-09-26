@@ -37,7 +37,6 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 	
 	/**
 	 * initialize
-	 * @throws IOException if an IO error occurs
 	 */
 	public void initialize() {
 		try {
