@@ -9,11 +9,11 @@
 		<version>1.3.0</version>
 	</parent>
 
-	<artifactId>panda-pump</artifactId>
+	<artifactId>panda-wear</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Pump</name>
-	<description>Panda Pump is a extension module of the Panda development framework for web applications. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
+	<name>Panda Wear</name>
+	<description>Panda Wear is a extension module of the Panda development framework for web applications. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
 
 	<build>
 		<resources>

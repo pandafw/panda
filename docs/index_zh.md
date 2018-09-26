@@ -46,9 +46,9 @@ Panda Framework由以下模块构成。
  | [panda-gear](gear/index_zh.md) | [IOC](gear/ioc/ioc_zh.md)/[MVC](gear/mvc/mvc_zh.md)模块。类似Spring-MVC, Struts2。包含了一些常用的Taglib。            |
  | [panda-glue](glue/index_zh.md) | [ASM](glue/asm_zh.md)/[AOP](glue/aop_zh.md)模块。                  |
  | [panda-html](html/index_zh.md) | 包含了jQuery, Bootstrap, 以及panda-gear中一些taglib所需要的css/javascript。|
- | [panda-pump](pump/index_zh.md) | 扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。|
  | [panda-tool](tool/index_zh.md) | 源代码生成器。可以自动生成Entity类, Query类, Dao类, Action类, View的Freemarker(HTML)模板文件。 |
  | [panda-tube](tube/index_zh.md) | Web Service API的客户端（WordPress XMP-RPC, Google Vision API）。                           |
+ | [panda-wear](wear/index_zh.md) | Web-APP扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。|
 
 
 ## 代码生成器的介绍
