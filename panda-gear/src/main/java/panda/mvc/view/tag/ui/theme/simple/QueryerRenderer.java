@@ -138,10 +138,12 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 					}
 				}
 	
-				Filter qf = qfs == null ? null : qfs.get(c.name);
+				Filter qf = (qfs == null ? null : qfs.get(c.name));
 				if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
 					fsinputs.add(c.name);
-					fsinput = true;
+					if (!qf.isEmpty()) {
+						fsinput = true;
+					}
 				}
 				else if (cf.fixed) {
 					fsinputs.add(c.name);

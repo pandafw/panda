@@ -152,6 +152,17 @@ public class Filter implements Cloneable, Serializable {
 	private List values;
 	private String type;
 
+	public boolean isEmpty() {
+		if (Collections.isNotEmpty(values)) {
+			for (Object v : values) {
+				if (Objects.isNotEmpty(v)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
 	@SuppressWarnings("unchecked")
 	private <T> T getObject(int idx, Class<T> cls, String type) {
 		if (type != null && !type.equals(this.type)) {
