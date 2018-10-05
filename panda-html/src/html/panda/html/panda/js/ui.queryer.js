@@ -32,6 +32,10 @@
 		case "INPUT":
 			switch (this.type) {
 			case "radio":
+				if (this.name != 'm' && !this.name.endsWith(".m")) {
+					this.checked = false;
+				}
+				break;
 			case "checkbox":
 				this.checked = false;
 				break;
