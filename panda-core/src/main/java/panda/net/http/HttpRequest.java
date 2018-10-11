@@ -224,6 +224,13 @@ public class HttpRequest {
 		return this;
 	}
 
+	public HttpRequest clearParams() {
+		if (params != null) {
+			params.clear();
+		}
+		return this;
+	}
+
 	public String getContentEncoding() {
 		return getHeader().getContentEncoding();
 	}
