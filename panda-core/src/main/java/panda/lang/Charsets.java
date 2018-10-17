@@ -40,6 +40,32 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Charsets {
 	/**
+	 * Japanese charsets. </p>
+	 * <p>
+	 * Every implementation of the Java platform is required to support this character encoding.
+	 * </p>
+	 * 
+	 * @see <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/nio/charset/Charset.html">Standard
+	 *      charsets</a>
+	 */
+	public static final String MS932 = "MS932";
+	public static final String Shift_JIS = "Shift_JIS";
+	public static final String EUC_JP = "EUC-JP";
+
+	/**
+	 * Chinese charsets. </p>
+	 * <p>
+	 * Every implementation of the Java platform is required to support this character encoding.
+	 * </p>
+	 * 
+	 * @see <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/nio/charset/Charset.html">Standard
+	 *      charsets</a>
+	 */
+	public static final String GB2312 = "GB2312";
+	public static final String GBK = "GBK";
+	public static final String BIG5 = "Big5";
+
+	/**
 	 * CharEncodingISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1. </p>
 	 * <p>
 	 * Every implementation of the Java platform is required to support this character encoding.
