@@ -156,6 +156,12 @@ public class DateTimes {
 	public static final String ISO_DATETIME_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	/**
+	 * ISO8601 formatter for date-time without seconds, time zone and prefix 'T' char. The format used is
+	 * <tt>yyyy-MM-dd HH:mm</tt>.
+	 */
+	public static final String ISO_DATETIME_NO_TS_FORMAT = "yyyy-MM-dd HH:mm";
+
+	/**
 	 * ISO8601 formatter for date-time with time zone. The format used is
 	 * <tt>yyyy-MM-dd'T'HH:mm:ssZZ</tt>.
 	 */
@@ -179,6 +185,11 @@ public class DateTimes {
 	public static final String ISO_TIME_FORMAT = "HH:mm:ss";
 
 	/**
+	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
+	 */
+	public static final String ISO_TIME_NO_S_FORMAT = "HH:mm";
+
+	/**
 	 * ISO8601 formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>.
 	 */
 	public static final String ISO_TIME_TIMEZONE_FORMAT = "HH:mm:ssZZ";
@@ -195,26 +206,6 @@ public class DateTimes {
 	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
 	/**
-	 * Date Time format without seconds. The format used is <tt>yyyy-MM-dd HH:mm</tt>. 
-	 */
-	public static final String DATETIME_HHMM_FORMAT = "yyyy-MM-dd HH:mm";
-
-	/**
-	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>.
-	 */
-	public static final String DATE_YMD_NO_H_FORMAT = "yyyyMMdd";
-
-	/**
-	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
-	 */
-	public static final String TIME_HMS_NO_C_FORMAT = "HHmmss";
-
-	/**
-	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
-	 */
-	public static final String TIME_HHMM_FORMAT = "HH:mm";
-
-	/**
 	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
 	 */
 	public static final String TIMESTAMP_LOG_FORMAT = "yyyyMMdd'T'HHmmss.SSS";
@@ -225,9 +216,24 @@ public class DateTimes {
 	public static final String DATETIME_LOG_FORMAT = "yyyyMMdd'T'HHmmss";
 
 	/**
-	 * DateTime format for number. The format used is <tt>yyyyMMddHHmmss</tt>. 
+	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>.
 	 */
-	public static final String DATETIME_NUM_FORMAT = "yyyyMMddHHmmss";
+	public static final String DATE_YMD_FORMAT = "yyyyMMdd";
+
+	/**
+	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
+	 */
+	public static final String TIME_HMS_FORMAT = "HHmmss";
+
+	/**
+	 * DateTime format for <tt>yyyyMMddHHmmss</tt>. 
+	 */
+	public static final String DATETIME_YMDHMS_FORMAT = "yyyyMMddHHmmss";
+
+	/**
+	 * DateTime format for <tt>yyyyMMddHHmm</tt>. 
+	 */
+	public static final String DATETIME_YMDHM_FORMAT = "yyyyMMddHHmm";
 
 	// -----------------------------------------------------------------------
 	/**
@@ -247,6 +253,12 @@ public class DateTimes {
 	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
 	 */
 	private static final FastDateFormat iso_datetime_no_t_format = FastDateFormat.getInstance(ISO_DATETIME_NO_T_FORMAT);
+
+	/**
+	 * ISO8601 formatter for date-time without seconds, time zone and prefix 'T' char. The format used is
+	 * <tt>yyyy-MM-dd HH:mm</tt>.
+	 */
+	private static final FastDateFormat iso_datetime_no_ts_format = FastDateFormat.getInstance(ISO_DATETIME_NO_TS_FORMAT);
 
 	/**
 	 * ISO8601 formatter for date-time with time zone. The format used is
@@ -272,6 +284,11 @@ public class DateTimes {
 	private static final FastDateFormat iso_time_format = FastDateFormat.getInstance(ISO_TIME_FORMAT);
 
 	/**
+	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
+	 */
+	private static final FastDateFormat iso_time_no_s_format = FastDateFormat.getInstance(ISO_TIME_NO_S_FORMAT);
+
+	/**
 	 * ISO8601 formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>.
 	 */
 	private static final FastDateFormat iso_time_timezone_format = FastDateFormat.getInstance(ISO_TIME_TIMEZONE_FORMAT);
@@ -288,29 +305,9 @@ public class DateTimes {
 	private static final FastDateFormat timestamp_format = FastDateFormat.getInstance(TIMESTAMP_FORMAT);
 
 	/**
-	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>. 
-	 */
-	private static final FastDateFormat date_ymd_noh_format = FastDateFormat.getInstance(DATE_YMD_NO_H_FORMAT);
-
-	/**
-	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
-	 */
-	private static final FastDateFormat time_hms_noc_format = FastDateFormat.getInstance(TIME_HMS_NO_C_FORMAT);
-
-	/**
-	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
-	 */
-	private static final FastDateFormat time_hhmm_format = FastDateFormat.getInstance(TIME_HHMM_FORMAT);
-
-	/**
 	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
 	 */
 	private static final FastDateFormat timestamp_log_format = FastDateFormat.getInstance(TIMESTAMP_LOG_FORMAT);
-
-	/**
-	 * Date Time format without seconds. The format used is <tt>yyyy-MM-dd HH:mm</tt>. 
-	 */
-	private static final FastDateFormat datetime_hhmm_format = FastDateFormat.getInstance(DATETIME_HHMM_FORMAT);
 
 	/**
 	 * DateTime format for log. The format used is <tt>yyyyMMdd'T'HHmmss</tt>. 
@@ -318,9 +315,24 @@ public class DateTimes {
 	private static final FastDateFormat datetime_log_format = FastDateFormat.getInstance(DATETIME_LOG_FORMAT);
 
 	/**
+	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>. 
+	 */
+	private static final FastDateFormat date_ymd_format = FastDateFormat.getInstance(DATE_YMD_FORMAT);
+
+	/**
+	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
+	 */
+	private static final FastDateFormat time_hms_format = FastDateFormat.getInstance(TIME_HMS_FORMAT);
+
+	/**
 	 * DateTime format for number. The format used is <tt>yyyyMMddHHmmss</tt>. 
 	 */
-	private static final FastDateFormat datetime_num_format = FastDateFormat.getInstance(DATETIME_NUM_FORMAT);
+	private static final FastDateFormat datetime_ymdhms_format = FastDateFormat.getInstance(DATETIME_YMDHMS_FORMAT);
+
+	/**
+	 * DateTime format for number. The format used is <tt>yyyyMMddHHmm</tt>. 
+	 */
+	private static final FastDateFormat datetime_ymdhm_format = FastDateFormat.getInstance(DATETIME_YMDHM_FORMAT);
 
 	// -----------------------------------------------------------------------
 	/**
@@ -2039,6 +2051,16 @@ public class DateTimes {
 	public static FastDateFormat isoDatetimeNotFormat() {
 		return iso_datetime_no_t_format;
 	}
+	
+	/**
+	 * ISO8601 formatter for date-time without seconds, time zone and prefix 'T' char. The format used is
+	 * <tt>yyyy-MM-dd HH:mm</tt>.
+	 * 
+	 * @return the FastDateFormat object
+	 */
+	public static FastDateFormat isoDatetimeNotsFormat() {
+		return iso_datetime_no_ts_format;
+	}
 
 	/**
 	 * ISO8601 formatter for date-time with time zone. The format used is
@@ -2089,6 +2111,15 @@ public class DateTimes {
 	public static FastDateFormat isoTimeFormat() {
 		return iso_time_format;
 	}
+
+	/**
+	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
+	 * 
+	 * @return the FastDateFormat object
+	 */
+	public static final FastDateFormat isoTimeNosFormat() {
+		return iso_time_no_s_format;
+	}
 	
 	/**
 	 * ISO8601 formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>.
@@ -2117,33 +2148,6 @@ public class DateTimes {
 	public static FastDateFormat timestampFormat() {
 		return timestamp_format;
 	}
-
-	/**
-	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>. 
-	 * 
-	 * @return the FastDateFormat object
-	 */
-	public static FastDateFormat dateYmdNohFormat() {
-		return date_ymd_noh_format;
-	}
-
-	/**
-	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
-	 * 
-	 * @return the FastDateFormat object
-	 */
-	public static final FastDateFormat timeHmsNocFormat() {
-		return time_hms_noc_format;
-	}
-
-	/**
-	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
-	 * 
-	 * @return the FastDateFormat object
-	 */
-	public static final FastDateFormat timeHhmmFormat() {
-		return time_hhmm_format;
-	}
 	
 	/**
 	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
@@ -2152,15 +2156,6 @@ public class DateTimes {
 	 */
 	public static FastDateFormat timestampLogFormat() {
 		return timestamp_log_format;
-	}
-
-	/**
-	 * DateTime without secnods. The format used is <tt>yyyy-MM-dd HH:mm</tt>. 
-	 * 
-	 * @return the FastDateFormat object
-	 */
-	public static FastDateFormat datetimeHhmmFormat() {
-		return datetime_hhmm_format;
 	}
 
 	/**
@@ -2173,12 +2168,39 @@ public class DateTimes {
 	}
 
 	/**
-	 * DateTime format for number. The format used is <tt>yyyyMMddHHmmss</tt>. 
+	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>. 
 	 * 
 	 * @return the FastDateFormat object
 	 */
-	public static FastDateFormat datetimeNumFormat() {
-		return datetime_num_format;
+	public static FastDateFormat dateYmdFormat() {
+		return date_ymd_format;
+	}
+
+	/**
+	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
+	 * 
+	 * @return the FastDateFormat object
+	 */
+	public static final FastDateFormat timeHmsFormat() {
+		return time_hms_format;
+	}
+
+	/**
+	 * The format used is <tt>yyyyMMddHHmmss</tt>. 
+	 * 
+	 * @return the FastDateFormat object
+	 */
+	public static FastDateFormat datetimeYmdhmsFormat() {
+		return datetime_ymdhms_format;
+	}
+
+	/**
+	 * The format used is <tt>yyyyMMddHHmm</tt>. 
+	 * 
+	 * @return the FastDateFormat object
+	 */
+	public static FastDateFormat datetimeYmdhmFormat() {
+		return datetime_ymdhm_format;
 	}
 	
 	// -----------------------------------------------------------------------

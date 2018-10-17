@@ -41,10 +41,10 @@ public class DateTypeCastor {
 		DATE_FORMATS.put(ISODATE_NOH, DateTimes.isoDatetimeNohFormat());
 		DATE_FORMATS.put(TIMESTAMP, DateTimes.timestampFormat());
 		DATE_FORMATS.put(DATETIME, DateTimes.isoDatetimeNotFormat());
-		DATE_FORMATS.put(DATEHHMM, DateTimes.datetimeHhmmFormat());
+		DATE_FORMATS.put(DATEHHMM, DateTimes.isoDatetimeNotsFormat());
 		DATE_FORMATS.put(DATE, DateTimes.isoDateFormat());
 		DATE_FORMATS.put(TIME, DateTimes.isoTimeFormat());
-		DATE_FORMATS.put(HHMM, DateTimes.timeHhmmFormat());
+		DATE_FORMATS.put(HHMM, DateTimes.isoTimeNosFormat());
 
 		JP_DATE_FORMATS.put(TIMESTAMP, FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss.SSS"));
 		JP_DATE_FORMATS.put(DATETIME, FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss"));
