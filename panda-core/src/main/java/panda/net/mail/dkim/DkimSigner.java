@@ -22,6 +22,7 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.net.Mimes;
 import panda.net.smtp.SMTPHeader;
+import panda.util.crypto.Algorithms;
 import panda.util.crypto.Keys;
 
 
@@ -119,7 +120,7 @@ public class DkimSigner {
 	 */
 	public DkimSigner(String domain, String selector, byte[] key) throws 
 			NoSuchAlgorithmException, InvalidKeySpecException {
-		PrivateKey privKey = Keys.getPrivateKey(key, Keys.RSA);
+		PrivateKey privKey = Keys.getPrivateKey(key, Algorithms.RSA);
 		initDkimSigner(domain, selector, privKey);
 	}
 
@@ -145,7 +146,7 @@ public class DkimSigner {
 	 */
 	public DkimSigner(String domain, String selector, String key) throws 
 			NoSuchAlgorithmException, InvalidKeySpecException {
-		PrivateKey privKey = Keys.getPrivateKey(key, Keys.RSA);
+		PrivateKey privKey = Keys.getPrivateKey(key, Algorithms.RSA);
 		initDkimSigner(domain, selector, privKey);
 	}
 

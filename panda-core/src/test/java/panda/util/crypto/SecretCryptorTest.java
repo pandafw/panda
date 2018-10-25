@@ -13,8 +13,6 @@ import org.junit.Test;
 
 import panda.lang.Randoms;
 import panda.lang.time.StopWatch;
-import panda.util.crypto.Ciphers;
-import panda.util.crypto.Cryptor;
 
 /**
  * test class for Encrypts
@@ -36,17 +34,17 @@ public class SecretCryptorTest {
 
 	@Test
 	public void testBlowfish() {
-		encdec("panda", Ciphers.Blowfish);
+		encdec("panda", Algorithms.Blowfish);
 	}
 
 	@Test
 	public void testDES() throws Exception {
-		encdec("1234567", "12345678", Ciphers.DES);
+		encdec("1234567", "12345678", Algorithms.DES);
 	}
 
 	@Test
 	public void testAES() {
-		encdec("1234567890123456", Ciphers.AES);
+		encdec("1234567890123456", Algorithms.AES);
 	}
 	
 	private void speedTest(List<String> samples, String algo) {
@@ -74,12 +72,12 @@ public class SecretCryptorTest {
 			samples.add(Randoms.randString(11));
 		}
 
-		speedTest(samples, Ciphers.AES);
-		speedTest(samples, Ciphers.Blowfish);
-		speedTest(samples, "12345678", Ciphers.DES);
-		speedTest(samples, "123456781234567812345678", Ciphers.DESede);
-		speedTest(samples, Ciphers.RC2);
-		speedTest(samples, Ciphers.RC4);
+		speedTest(samples, Algorithms.AES);
+		speedTest(samples, Algorithms.Blowfish);
+		speedTest(samples, "12345678", Algorithms.DES);
+		speedTest(samples, "123456781234567812345678", Algorithms.DESede);
+		speedTest(samples, Algorithms.RC2);
+		speedTest(samples, Algorithms.RC4);
 	}
 
 	@Test

@@ -22,6 +22,7 @@ import javax.naming.directory.InitialDirContext;
 
 import panda.codec.binary.Base64;
 import panda.io.Streams;
+import panda.util.crypto.Algorithms;
 import panda.util.crypto.Keys;
 
 public final class DomainKeyTest {
@@ -42,7 +43,7 @@ public final class DomainKeyTest {
 			System.out.println("=========== DOMAIN KEY ==============");
 			System.out.println(dkey);
 			
-			PrivateKey pkey = Keys.getPrivateKey(Streams.toByteArray(new File(args[2])), Keys.RSA);
+			PrivateKey pkey = Keys.getPrivateKey(Streams.toByteArray(new File(args[2])), Algorithms.RSA);
 			System.out.println("=========== PRIVATE KEY ==============");
 			System.out.println(Base64.encodeBase64ChunkedString(pkey.getEncoded()));
 			

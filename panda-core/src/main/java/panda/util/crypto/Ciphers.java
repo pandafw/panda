@@ -5,14 +5,6 @@ package panda.util.crypto;
  */
 public class Ciphers {
 	//------------------------------------------------------------------------------
-	public static final String AES = "AES";
-	public static final String Blowfish = "Blowfish";
-	public static final String DES = "DES";
-	public static final String DESede = "DESede";
-	public static final String RC2 = "RC2";
-	public static final String RC4 = "RC4";
-	
-	//------------------------------------------------------------------------------
 	/** AES/CBC/NoPadding (128) */
 	public static final String AES_CBC_NOPADDING                      =  "AES/CBC/NoPadding";
 	/** AES/CBC/PKCS5Padding (128) */

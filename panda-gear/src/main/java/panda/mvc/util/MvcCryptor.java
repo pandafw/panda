@@ -1,9 +1,11 @@
 package panda.mvc.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+import panda.io.Files;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.MvcConstants;
@@ -24,8 +26,14 @@ public class MvcCryptor extends Cryptor {
 	}
 	
 	@IocInject(value=MvcConstants.CRYPTO_KEY_SECRET, required=false)
-	public void setSecretKey(String key) throws IOException {
-		super.setSecretKey(key);
+	public void setCryptoSecretKey(String key) throws IOException {
+		File file = new File(key);
+		if (Files.exists(file)) {
+			setSecretKey(file);
+		}
+		else {
+			setSecretKey(key);
+		}
 	}
 
 	/**
@@ -35,8 +43,14 @@ public class MvcCryptor extends Cryptor {
 	 * @throws IOException 
 	 */
 	@IocInject(value=MvcConstants.CRYPTO_KEY_ENCODE, required=false)
-	public void setEncodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-		super.setEncodeKey(key);
+	public void setCryptoEncodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		File file = new File(key);
+		if (Files.exists(file)) {
+			setEncodeKey(file);
+		}
+		else {
+			setEncodeKey(key);
+		}
 	}
 
 	/**
@@ -46,7 +60,13 @@ public class MvcCryptor extends Cryptor {
 	 * @throws IOException
 	 */
 	@IocInject(value=MvcConstants.CRYPTO_KEY_DECODE, required=false)
-	public void setDecodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-		super.setDecodeKey(key);
+	public void setCryptoDecodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		File file = new File(key);
+		if (Files.exists(file)) {
+			setDecodeKey(file);
+		}
+		else {
+			setDecodeKey(key);
+		}
 	}
 }

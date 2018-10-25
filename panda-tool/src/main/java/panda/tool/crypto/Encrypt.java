@@ -5,7 +5,7 @@ import java.security.Key;
 import panda.args.Argument;
 import panda.args.Option;
 import panda.tool.AbstractCommandTool;
-import panda.util.crypto.Ciphers;
+import panda.util.crypto.Algorithms;
 import panda.util.crypto.Cryptor;
 import panda.util.crypto.Keys;
 
@@ -24,7 +24,7 @@ public class Encrypt extends AbstractCommandTool {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	private String algorithm = Ciphers.AES;
+	private String algorithm = Algorithms.AES;
 	private String key = "== Panda Java ==";
 	private boolean decrypt = false;
 	private String[] args;

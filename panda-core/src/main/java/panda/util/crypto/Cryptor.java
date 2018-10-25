@@ -1,10 +1,11 @@
 package panda.util.crypto;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -12,6 +13,8 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import panda.codec.binary.Base64;
@@ -23,12 +26,15 @@ public class Cryptor {
 	protected String algorithm;
 	protected Key encodeKey;
 	protected Key decodeKey;
+	protected IvParameterSpec ivParam;
+
+	public Cryptor(String algorithm) {
+		this.algorithm = algorithm;
+	}
 
 	public Cryptor(String algorithm, String secretKey) {
 		this.algorithm = algorithm;
-		SecretKeySpec skeys = Keys.secretKeySpec(secretKey, algorithm);
-		this.encodeKey = skeys;
-		this.decodeKey = skeys;
+		setSecretKey(secretKey);
 	}
 
 	public Cryptor(String algorithm, Key encodeKey, Key decodeKey) {
@@ -79,25 +85,49 @@ public class Cryptor {
 		this.decodeKey = decodeKey;
 	}
 
-	protected String getKeyContent(String src) throws IOException {
-		try {
-			URI uri = new URI(src);
-			if (Strings.isNotEmpty(uri.getScheme())) {
-				byte[] data = Streams.toByteArray(uri);
-				return Strings.newStringUtf8(data);
-			}
-		}
-		catch (URISyntaxException e) {
-			// skip
-		}
-		return src;
-	}
-
-	public void setSecretKey(String key) throws IOException {
-		String data = getKeyContent(key);
-		SecretKeySpec skeys = Keys.secretKeySpec(data, algorithm);
+	/**
+	 * @param secretKey secret key to set
+	 */
+	public void setSecretKey(byte[] secretKey) {
+		String keya = Strings.substringBefore(algorithm, '/');
+		SecretKeySpec skeys = Keys.secretKeySpec(secretKey, keya);
 		this.encodeKey = skeys;
 		this.decodeKey = skeys;
+	}
+
+	/**
+	 * @param secretKey secret key to set
+	 */
+	public void setSecretKey(String secretKey) {
+		byte[] data = Strings.getBytesUtf8(secretKey);
+		setSecretKey(data);
+	}
+
+	/**
+	 * @param secretKey secret key file to set
+	 * @throws IOException 
+	 */
+	public void setSecretKey(File secretKey) throws IOException {
+		byte[] data = Streams.toByteArray(secretKey);
+		setSecretKey(data);
+	}
+
+	/**
+	 * @param key the encode key file or text
+	 * @throws InvalidKeySpecException 
+	 * @throws NoSuchAlgorithmException 
+	 */
+	public void setEncodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		this.encodeKey = Keys.parseKey(key, algorithm);
+	}
+
+	/**
+	 * @param key the decode key file or text
+	 * @throws InvalidKeySpecException 
+	 * @throws NoSuchAlgorithmException 
+	 */
+	public void setDecodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		this.decodeKey = Keys.parseKey(key, algorithm);
 	}
 
 	/**
@@ -106,9 +136,8 @@ public class Cryptor {
 	 * @throws NoSuchAlgorithmException 
 	 * @throws IOException 
 	 */
-	public void setEncodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-		String data = getKeyContent(key);
-		this.encodeKey = Keys.parseKey(data, algorithm);
+	public void setEncodeKey(File key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		this.encodeKey = Keys.parseKey(key, algorithm);
 	}
 
 	/**
@@ -117,11 +146,43 @@ public class Cryptor {
 	 * @throws NoSuchAlgorithmException 
 	 * @throws IOException
 	 */
-	public void setDecodeKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-		String data = getKeyContent(key);
-		this.decodeKey = Keys.parseKey(data, algorithm);
+	public void setDecodeKey(File key) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		this.decodeKey = Keys.parseKey(key, algorithm);
 	}
 
+	/**
+	 * @return the ivParam
+	 */
+	public IvParameterSpec getIvParameterSpec() {
+		return ivParam;
+	}
+
+	/**
+	 * @return the ivParam
+	 */
+	public String getIvParamString() {
+		if (ivParam == null) {
+			return null;
+		}
+		return Strings.newStringUtf8(ivParam.getIV());
+	}
+
+	/**
+	 * @param ivParam the ivParam to set
+	 */
+	public void setIvParam(byte[] ivParam) {
+		this.ivParam = new IvParameterSpec(ivParam);
+	}
+
+	/**
+	 * @param ivParam the ivParam to set
+	 */
+	public void setIvParam(String ivParam) {
+		byte[] ivs = Strings.getBytesUtf8(ivParam);
+		this.ivParam = new IvParameterSpec(ivs);
+	}
+
+	//----------------------------------------------------------
 	public String encrypt(String text) {
 		byte[] t = Strings.getBytesUtf8(text);
 		byte[] encrypted = encrypt(t);
@@ -136,8 +197,7 @@ public class Cryptor {
 
 	public byte[] encrypt(byte[] data) {
 		try {
-			Cipher cipher = Cipher.getInstance(algorithm);
-			cipher.init(Cipher.ENCRYPT_MODE, encodeKey);
+			Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, encodeKey);
 			byte[] encrypted = cipher.doFinal(data);
 			return encrypted;
 		}
@@ -148,8 +208,7 @@ public class Cryptor {
 
 	public byte[] decrypt(byte[] data) {
 		try {
-			Cipher cipher = Cipher.getInstance(algorithm);
-			cipher.init(Cipher.DECRYPT_MODE, decodeKey);
+			Cipher cipher = initCipher(Cipher.DECRYPT_MODE, decodeKey);
 			byte[] decrypted = cipher.doFinal(data);
 			return decrypted;
 		}
@@ -160,8 +219,7 @@ public class Cryptor {
 
 	public CipherOutputStream encrypt(OutputStream os) {
 		try {
-			Cipher cipher = Cipher.getInstance(algorithm);
-			cipher.init(Cipher.ENCRYPT_MODE, encodeKey);
+			Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, encodeKey);
 			CipherOutputStream cos = new CipherOutputStream(os, cipher);
 			return cos;
 		}
@@ -172,13 +230,23 @@ public class Cryptor {
 
 	public CipherInputStream decrypt(InputStream is) {
 		try {
-			Cipher cipher = Cipher.getInstance(algorithm);
-			cipher.init(Cipher.DECRYPT_MODE, decodeKey);
+			Cipher cipher = initCipher(Cipher.DECRYPT_MODE, decodeKey);
 			CipherInputStream cis = new CipherInputStream(is, cipher);
 			return cis;
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
 		}
+	}
+	
+	protected Cipher initCipher(int mode, Key key) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
+		Cipher cipher = Cipher.getInstance(algorithm);
+		if (ivParam == null) {
+			cipher.init(mode, key);
+		}
+		else {
+			cipher.init(mode, key, ivParam);
+		}
+		return cipher;
 	}
 }

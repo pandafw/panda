@@ -1,5 +1,6 @@
 package panda.util.crypto;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -15,6 +16,7 @@ import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import panda.codec.binary.Base64;
+import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 
@@ -25,14 +27,6 @@ public class Keys {
 	public final static String END_RSA_PRIVATE_KEY = "-----END RSA PRIVATE KEY-----";
 	public final static String BEGIN_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----";
 	public final static String END_PUBLIC_KEY = "-----END PUBLIC KEY-----";
-
-	//------------------------------------------------------------------------
-	// Algorithm
-	//------------------------------------------------------------------------
-	public final static String DH = "DH"; //DiffieHellman
-	public final static String DSA = "DSA";
-	public final static String RSA = "RSA";
-	public final static String EC = "EC";
 
 	public static SecretKeySpec secretKeySpec(String key, String algorithm) {
 		return secretKeySpec(Strings.getBytesUtf8(key), algorithm);
@@ -132,6 +126,21 @@ public class Keys {
 		String encoded = Strings.strip(Strings.remove(Strings.remove(data, BEGIN_PUBLIC_KEY), END_PUBLIC_KEY));
 		byte[] decoded = Base64.decodeBase64(encoded);
 		return getPublicKey(decoded, algorithm);
+	}
+
+	/**
+	 * parse key from file
+	 * @param file key file
+	 * @param algorithm algorithm
+	 * @return key
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 * @throws IOException
+	 */
+	public static Key parseKey(File file, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		byte[] data = Streams.toByteArray(file);
+		String text = Strings.newStringUtf8(data);
+		return parseKey(text, algorithm);
 	}
 
 	/**
