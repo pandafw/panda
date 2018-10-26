@@ -20,7 +20,6 @@ import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
-import panda.net.http.Https;
 
 public class SlackLogAppender extends AbstractAppender {
 	/** default subject */
@@ -152,8 +151,6 @@ public class SlackLogAppender extends AbstractAppender {
 			String body = Jsons.toJson(msg, true);
 
 			conn = (HttpURLConnection)url.openConnection();
-
-			Https.ignoreValidateCertification(conn);
 
 			conn.setConnectTimeout(connTimeout);
 			conn.setReadTimeout(readTimeout);

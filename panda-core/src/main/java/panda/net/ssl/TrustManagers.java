@@ -15,10 +15,9 @@ public final class TrustManagers {
 	private static final X509Certificate[] EMPTY_X509CERTIFICATE_ARRAY = new X509Certificate[] {};
 
 	private static class TrustManager implements X509TrustManager {
-
 		private final boolean checkServerValidity;
 
-		TrustManager(boolean checkServerValidity) {
+		private TrustManager(boolean checkServerValidity) {
 			this.checkServerValidity = checkServerValidity;
 		}
 
@@ -27,7 +26,6 @@ public final class TrustManagers {
 		 */
 		@Override
 		public void checkClientTrusted(X509Certificate[] certificates, String authType) {
-			return;
 		}
 
 		@Override
@@ -57,7 +55,7 @@ public final class TrustManagers {
 	 * 
 	 * @return the TrustManager
 	 */
-	public static X509TrustManager getAcceptAllTrustManager() {
+	public static X509TrustManager acceptAllTrustManager() {
 		return ACCEPT_ALL;
 	}
 
@@ -67,7 +65,7 @@ public final class TrustManagers {
 	 * 
 	 * @return the validating TrustManager
 	 */
-	public static X509TrustManager getValidateServerCertificateTrustManager() {
+	public static X509TrustManager validateServerCertificateTrustManager() {
 		return CHECK_SERVER_VALIDITY;
 	}
 

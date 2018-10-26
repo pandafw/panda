@@ -22,7 +22,6 @@ import panda.log.LogLevel;
 import panda.log.LogLog;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
-import panda.net.http.Https;
 
 
 public class SlackLogAdapter extends AbstractLogAdapter {
@@ -134,8 +133,6 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 			String body = Jsons.toJson(msg, true);
 
 			conn = (HttpURLConnection)webhook.openConnection();
-
-			Https.ignoreValidateCertification(conn);
 
 			conn.setConnectTimeout(connTimeout);
 			conn.setReadTimeout(readTimeout);

@@ -92,9 +92,9 @@ public class FTPSClient extends FTPClient {
 
 	/**
 	 * The FTPS {@link TrustManager} implementation, default validate only
-	 * {@link TrustManagers#getValidateServerCertificateTrustManager()}.
+	 * {@link TrustManagers#validateServerCertificateTrustManager()}.
 	 */
-	private TrustManager trustManager = TrustManagers.getValidateServerCertificateTrustManager();
+	private TrustManager trustManager = TrustManagers.validateServerCertificateTrustManager();
 
 	/** The {@link KeyManager}, default null (i.e. use system default). */
 	private KeyManager keyManager = null;
@@ -135,7 +135,7 @@ public class FTPSClient extends FTPClient {
 	/**
 	 * Constructor for FTPSClient allowing specification of protocol and security mode. If
 	 * isImplicit is true, the port is set to {@link #DEFAULT_FTPS_PORT} i.e. 990. The default
-	 * TrustManager is set from {@link TrustManagers#getValidateServerCertificateTrustManager()}
+	 * TrustManager is set from {@link TrustManagers#validateServerCertificateTrustManager()}
 	 * 
 	 * @param protocol the protocol
 	 * @param isImplicit The security mode(Implicit/Explicit).
@@ -151,7 +151,7 @@ public class FTPSClient extends FTPClient {
 
 	/**
 	 * Constructor for FTPSClient, using {@link #DEFAULT_PROTOCOL} - i.e. TLS The default
-	 * TrustManager is set from {@link TrustManagers#getValidateServerCertificateTrustManager()}
+	 * TrustManager is set from {@link TrustManagers#validateServerCertificateTrustManager()}
 	 * 
 	 * @param isImplicit The security mode(Implicit/Explicit).
 	 * @param context A pre-configured SSL Context

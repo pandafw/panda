@@ -44,6 +44,8 @@ public class HttpResponse implements Closeable {
 
 	public HttpResponse(URL url, HttpURLConnection conn) throws IOException {
 		this.url = url;
+
+		conn.connect();
 		statusCode = conn.getResponseCode();
 		if (statusCode < 0) {
 			throw new IOException("Invalid HTTP response");

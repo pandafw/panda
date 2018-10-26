@@ -117,11 +117,11 @@ public class HttpClientTest {
 	public void testGetHttpsTrust() throws Exception {
 		HttpClient hc = new HttpClient();
 		hc.setSslProtocols(SSLProtocols.TLSv1_2);
-		hc.setValidateSslCert(false);
-		hc.getRequest().setUrl("https://github.com");
+		hc.setSslHostnameCheck(false);
+		hc.getRequest().setUrl("https://xxx.orange1.net");
 		HttpResponse response = hc.doGet();
 
 		assertTrue(response.getStatusCode() == 200);
-		assertTrue(response.getContentText().indexOf("github.com") >= 0);
+//		assertTrue(response.getContentText().indexOf("github.com") >= 0);
 	}
 }

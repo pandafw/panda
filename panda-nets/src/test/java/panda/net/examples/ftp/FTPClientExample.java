@@ -260,10 +260,10 @@ public final class FTPClientExample {
 			}
 			ftp = ftps;
 			if ("all".equals(trustmgr)) {
-				ftps.setTrustManager(TrustManagers.getAcceptAllTrustManager());
+				ftps.setTrustManager(TrustManagers.acceptAllTrustManager());
 			}
 			else if ("valid".equals(trustmgr)) {
-				ftps.setTrustManager(TrustManagers.getValidateServerCertificateTrustManager());
+				ftps.setTrustManager(TrustManagers.validateServerCertificateTrustManager());
 			}
 			else if ("none".equals(trustmgr)) {
 				ftps.setTrustManager(null);

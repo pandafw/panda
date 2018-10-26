@@ -55,7 +55,9 @@ public class Zendesk {
 	public static final String API_LIST_GROUP_USERS = "/api/v2/groups/%d/users.json";
 	public static final String API_LIST_ORANIZATION_USERS = "/api/v2/organizations/%d/users.json";
 	
-	private boolean validateSslCert = true;
+	private boolean sslHostnameCheck = true;
+	private boolean sslSniExtension = true;
+
 	private Proxy proxy;
 	private String domain;
 	private String apitoken;
@@ -161,17 +163,31 @@ public class Zendesk {
 	}
 
 	/**
-	 * @return the validateSslCert
+	 * @return the sslHostnameCheck
 	 */
-	public boolean isValidateSslCert() {
-		return validateSslCert;
+	public boolean isSslHostnameCheck() {
+		return sslHostnameCheck;
 	}
 
 	/**
-	 * @param validateSslCert the validateSslCert to set
+	 * @param sslHostnameCheck the sslHostnameCheck to set
 	 */
-	public void setValidateSslCert(boolean validateSslCert) {
-		this.validateSslCert = validateSslCert;
+	public void setSslHostnameCheck(boolean sslHostnameCheck) {
+		this.sslHostnameCheck = sslHostnameCheck;
+	}
+
+	/**
+	 * @return the sslSniExtension
+	 */
+	public boolean isSslSniExtension() {
+		return sslSniExtension;
+	}
+
+	/**
+	 * @param sslSniExtension the sslSniExtension to set
+	 */
+	public void setSslSniExtension(boolean sslSniExtension) {
+		this.sslSniExtension = sslSniExtension;
 	}
 
 	/** 
@@ -181,7 +197,8 @@ public class Zendesk {
 	 */
 	protected void authenticateRequest(HttpClient hc, String uri) {
 		hc.setSslProtocols(SSLProtocols.TLS_ONLY);
-		hc.setValidateSslCert(validateSslCert);
+		hc.setSslHostnameCheck(sslHostnameCheck);
+		hc.setSslSniExtension(sslSniExtension);
 		hc.setProxy(proxy);
 		hc.getRequest().setUrl(domain + uri);
 		if (Strings.isNotEmpty(apitoken)) {

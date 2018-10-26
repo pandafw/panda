@@ -6,15 +6,13 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.net.ssl.HostnameVerifiers;
-import panda.net.ssl.SSLContexts;
-import panda.net.ssl.SSLSocketFactoryEx;
-import panda.net.ssl.TrustManagers;
+import panda.net.ssl.ExtendSSLSocketFactory;
+import panda.net.ssl.TrustedSSLSocketFactory;
 
 /**
  * panda.log use this class, so do not use log
@@ -24,38 +22,59 @@ public class Https {
 		System.setProperty("jsse.enableSNIExtension", String.valueOf(enable));
 	}
 
-	public static void setProtocals(String ... protocols) {
+	public static void setProtocols(String ... protocols) {
 		System.setProperty("https.protocols", Strings.join(protocols, ','));
 	}
 	
-	public static void setProtocals(HttpURLConnection conn, String ... protocols) {
+	public static void setProtocols(HttpURLConnection conn, String ... protocols) {
 		try {
 			if (conn instanceof HttpsURLConnection) {
 				HttpsURLConnection sconn = (HttpsURLConnection)conn;
 				SSLSocketFactory sslsf = sconn.getSSLSocketFactory();
-				SSLSocketFactoryEx sslsfe = new SSLSocketFactoryEx(sslsf, protocols);
-				sconn.setSSLSocketFactory(sslsfe);
+				if (sslsf instanceof ExtendSSLSocketFactory) {
+					((ExtendSSLSocketFactory)sslsf).setEnabledProtocols(protocols);
+				}
+				else {
+					ExtendSSLSocketFactory sslsfe = new ExtendSSLSocketFactory(sslsf);
+					sslsfe.setEnabledProtocols(protocols);
+					sconn.setSSLSocketFactory(sslsfe);
+				}
 			}
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
 		}
 	}
-	
-	public static void ignoreValidateCertification(HttpURLConnection conn) {
-		try {
-			if (conn instanceof HttpsURLConnection) {
-				HttpsURLConnection sconn = (HttpsURLConnection)conn;
 
-				SSLContext sslcontext = SSLContexts.createSSLContext("SSL", null, TrustManagers.getAcceptAllTrustManager());
-				SSLSocketFactory sslsf = sslcontext.getSocketFactory();
-				sconn.setSSLSocketFactory(sslsf);
-				sconn.setHostnameVerifier(HostnameVerifiers.trustHostnameVerifier());
-			}
+	public static TrustedSSLSocketFactory setTrustedSSLSocketFactory(HttpsURLConnection sconn) {
+		SSLSocketFactory sslsf = sconn.getSSLSocketFactory();
+		if (sslsf instanceof TrustedSSLSocketFactory) {
+			return ((TrustedSSLSocketFactory)sslsf);
 		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
+		
+		TrustedSSLSocketFactory tsslsf = new TrustedSSLSocketFactory();
+		sconn.setSSLSocketFactory(tsslsf);
+		return tsslsf;
+	}
+
+	public static void disableHostnameCheck(HttpURLConnection conn) {
+		if (!(conn instanceof HttpsURLConnection)) {
+			return;
 		}
+
+		HttpsURLConnection sconn = (HttpsURLConnection)conn;
+		setTrustedSSLSocketFactory(sconn);
+		sconn.setHostnameVerifier(HostnameVerifiers.trustHostnameVerifier());
+	}
+	
+	public static void disableSniExtension(HttpURLConnection conn) {
+		if (!(conn instanceof HttpsURLConnection)) {
+			return;
+		}
+
+		HttpsURLConnection sconn = (HttpsURLConnection)conn;
+		TrustedSSLSocketFactory tsslsf = setTrustedSSLSocketFactory(sconn);
+		tsslsf.setSniExtensionDisabled(true);
 	}
 
 	public static void setRequestHost(HttpURLConnection conn, URL url) {

@@ -84,7 +84,8 @@ public class HttpClient {
 	protected int readTimeout = 300000;
 
 	protected boolean autoRedirect = false;
-	protected boolean validateSslCert = true;
+	protected boolean sslHostnameCheck = true;
+	protected boolean sslSniExtension = true;
 	protected String[] sslProtocols;
 	
 	static {
@@ -149,17 +150,31 @@ public class HttpClient {
 	}
 
 	/**
-	 * @return the validateSslCert
+	 * @return the sslHostnameCheck
 	 */
-	public boolean isValidateSslCert() {
-		return validateSslCert;
+	public boolean isSslHostnameCheck() {
+		return sslHostnameCheck;
 	}
 
 	/**
-	 * @param validateSslCert the validateSslCert to set
+	 * @param sslHostnameCheck the sslHostnameCheck to set
 	 */
-	public void setValidateSslCert(boolean validateSslCert) {
-		this.validateSslCert = validateSslCert;
+	public void setSslHostnameCheck(boolean sslHostnameCheck) {
+		this.sslHostnameCheck = sslHostnameCheck;
+	}
+
+	/**
+	 * @return the sslSniExtension
+	 */
+	public boolean isSslSniExtension() {
+		return sslSniExtension;
+	}
+
+	/**
+	 * @param sslSniExtension the sslSniExtension to set
+	 */
+	public void setSslSniExtension(boolean sslSniExtension) {
+		this.sslSniExtension = sslSniExtension;
 	}
 
 	/**
@@ -343,11 +358,14 @@ public class HttpClient {
 			httpconn = (HttpURLConnection)request.getURL().openConnection();
 		}
 
-		if (!validateSslCert) {
-			Https.ignoreValidateCertification(httpconn);
+		if (!sslHostnameCheck) {
+			Https.disableHostnameCheck(httpconn);
+		}
+		if (!sslSniExtension) {
+			Https.disableSniExtension(httpconn);
 		}
 		if (Arrays.isNotEmpty(sslProtocols)) {
-			Https.setProtocals(httpconn, sslProtocols);
+			Https.setProtocols(httpconn, sslProtocols);
 		}
 		httpconn.setConnectTimeout(connTimeout);
 		httpconn.setReadTimeout(readTimeout);

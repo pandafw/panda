@@ -51,7 +51,9 @@ public class Freshdesk {
 
 	public static final String API_TICKETS = "/api/v2/tickets";
 	
-	private boolean validateSslCert = true;
+	private boolean sslHostnameCheck = true;
+	private boolean sslSniExtension = true;
+	
 	private Proxy proxy;
 	private String domain;
 	private String apikey;
@@ -157,17 +159,31 @@ public class Freshdesk {
 	}
 
 	/**
-	 * @return the validateSslCert
+	 * @return the sslHostnameCheck
 	 */
-	public boolean isValidateSslCert() {
-		return validateSslCert;
+	public boolean isSslHostnameCheck() {
+		return sslHostnameCheck;
 	}
 
 	/**
-	 * @param validateSslCert the validateSslCert to set
+	 * @param sslHostnameCheck the sslHostnameCheck to set
 	 */
-	public void setValidateSslCert(boolean validateSslCert) {
-		this.validateSslCert = validateSslCert;
+	public void setSslHostnameCheck(boolean sslHostnameCheck) {
+		this.sslHostnameCheck = sslHostnameCheck;
+	}
+
+	/**
+	 * @return the sslSniExtension
+	 */
+	public boolean isSslSniExtension() {
+		return sslSniExtension;
+	}
+
+	/**
+	 * @param sslSniExtension the sslSniExtension to set
+	 */
+	public void setSslSniExtension(boolean sslSniExtension) {
+		this.sslSniExtension = sslSniExtension;
 	}
 
 	/** 
@@ -177,7 +193,8 @@ public class Freshdesk {
 	 */
 	protected void authenticateRequest(HttpClient hc, String uri) {
 		hc.setSslProtocols(SSLProtocols.TLS_ONLY);
-		hc.setValidateSslCert(validateSslCert);
+		hc.setSslHostnameCheck(sslHostnameCheck);
+		hc.setSslSniExtension(sslSniExtension);
 		hc.setProxy(proxy);
 		hc.getRequest().setUrl(domain + uri);
 		if (Strings.isNotEmpty(apikey)) {

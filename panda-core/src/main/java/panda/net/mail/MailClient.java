@@ -341,7 +341,7 @@ public class MailClient {
 			// we're done here
 			if (tls && isSupportStartTLS(client.getReplyStrings())) {
 				try {
-					client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
+					client.setTrustManager(TrustManagers.acceptAllTrustManager());
 					if (client.execTLS()) {
 						// ehlo again for some mail service
 						client.ehlo(helo);
