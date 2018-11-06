@@ -62,6 +62,7 @@ Panda use or refer the following software packages:
 | ------                  | ------                                                        | ------                                                 |
 | Bootstrap               | [MIT](https://opensource.org/licenses/MIT)                    | [http://getbootstrap.com/](http://getbootstrap.com/)   |
 | bootstrap-datepicker    | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | [http://www.eyecon.ro/bootstrap-datepicker/](http://www.eyecon.ro/bootstrap-datepicker/) |
+| Chart.js                | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/chartjs/Chart.js](https://github.com/chartjs/Chart.js) |
 | Font Awesome            | [Font Awesome](http://fontawesome.io/license/)                | [http://fontawesome.io/](http://fontawesome.io/)       |
 | Hammer.js               | [MIT](https://opensource.org/licenses/MIT)                    | [http://hammerjs.github.io/](http://hammerjs.github.io/ |
 | jQuery                  | [jQuery](https://jquery.org/license/)                         | [https://jquery.com/](https://jquery.com/              |
@@ -71,3 +72,4 @@ Panda use or refer the following software packages:
 | Notify.js               | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/jpillora/notifyjs](https://github.com/jpillora/notifyjs) |
 | Respond.js              | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/scottjehl/Respond](https://github.com/scottjehl/Respond) |
 | tablesorter             | [MIT](https://opensource.org/licenses/MIT)                    | [http://tablesorter.com](http://tablesorter.com)       |
+
