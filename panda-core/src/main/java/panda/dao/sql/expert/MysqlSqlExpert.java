@@ -151,7 +151,8 @@ public class MysqlSqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see <a href="http://hsqldb.org/doc/guide/ch09.html#select-section">http://hsqldb.org/doc/guide/ch09.html#select-section</a>
+	 * @param alias table alias
+	 * @see <a href="https://dev.mysql.com/doc/refman/5.5/en/select.html">https://dev.mysql.com/doc/refman/5.5/en/select.html</a>
 	 */
 	@Override
 	protected void limit(Sql sql, Query<?> query, String alias) {
