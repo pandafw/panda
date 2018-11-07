@@ -1,13 +1,17 @@
 package panda.dao.entity;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
 import panda.dao.entity.annotation.Indexes;
+import panda.lang.Exceptions;
 import panda.lang.Objects;
+import panda.lang.time.DateTimes;
 
 @Indexes({@Index(fields={"name"})})
 public class Student {
@@ -17,6 +21,9 @@ public class Student {
 	
 	@Column("STUDENT_NAME")
 	String name;
+
+	@Column
+	Date birthday;
 	
 	String dummy;
 
@@ -36,6 +43,20 @@ public class Student {
 		this.name = name;
 	}
 
+	/**
+	 * @return the birthday
+	 */
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	/**
+	 * @param birthday the birthday to set
+	 */
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
 	public String getDummy() {
 		return dummy;
 	}
@@ -50,13 +71,14 @@ public class Student {
 		return Objects.toStringBuilder()
 				.append("id", id)
 				.append("name", name)
+				.append("birthday", birthday)
 				.append("dummy", dummy)
 				.toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(id, name, dummy);
+		return Objects.hashCodes(id, name, birthday, dummy);
 	}
 
 	@Override
@@ -72,6 +94,7 @@ public class Student {
 		return Objects.equalsBuilder()
 				.append(id, rhs.id)
 				.append(name, rhs.name)
+				.append(birthday, rhs.birthday)
 				.append(dummy, rhs.dummy)
 				.isEquals();
 	}
@@ -82,6 +105,12 @@ public class Student {
 	public Student(int i) {
 		this.id = i;
 		this.name = "S" + i;
+		try {
+			this.birthday = DateTimes.isoDateFormat().parse(String.format("%d-01-01", 2000 + i));
+		}
+		catch (ParseException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 
 	public static Student create(int i) {
