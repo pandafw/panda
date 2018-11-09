@@ -1,5 +1,6 @@
 <#include "common.ftl"/>
 <@header/>
+<@headinc step="_execute"/>
 
 <div class="p-section">
 	<@sheader steps=[ ui.name, ui.name + "-success" ]/>
@@ -59,7 +60,7 @@ ${s}#if result?has_content>
 ${s}#else>
 	<@sback/>
 ${s}/#if>
-	<@safeinc step="_execute"/>
 </div>
 
+<@footinc step="_execute"/>
 <@footer/>

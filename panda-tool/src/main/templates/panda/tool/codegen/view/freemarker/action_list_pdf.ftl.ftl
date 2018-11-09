@@ -1,5 +1,6 @@
 <#include "common.ftl"/>
 <@header/>
+<@headinc step=""/>
 
 <div class="p-section">
 	<@sheader steps=[ ui.name ]/>
@@ -13,7 +14,7 @@
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		cssTable="table-striped" header=" " footer=" "
 	/>
-	<@safeinc step=""/>
 </div>
 
+<@footinc step=""/>
 <@footer/>

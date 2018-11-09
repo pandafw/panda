@@ -1,5 +1,6 @@
 <#include "common.ftl"/>
 <@header/>
+<@headinc step=""/>
 
 <div class="p-section">
 	<@sheader steps=[ ui.name ]/>
@@ -12,7 +13,7 @@ ${s}#if r??>
 		<#include "edit-view-fields.ftl"/>
 	${s}/@p.form>
 ${s}/#if>
-	<@safeinc step=""/>
 </div>
 
+<@footinc step=""/>
 <@footer/>

@@ -152,7 +152,8 @@
 			</choice>
 		</sequence>
 		<attribute name="generate" type="string"></attribute>
-		<attribute name="safeInclude" type="string"></attribute>
+		<attribute name="headinc" type="string"></attribute>
+		<attribute name="footinc" type="string"></attribute>
 		<attribute name="focusme" type="string"></attribute>
 		<attribute name="cssColumn" type="string"></attribute>
 		<attribute name="template" type="string"></attribute>
@@ -170,7 +171,8 @@
 			</choice>
 		</sequence>
 		<attribute name="generate" type="string"></attribute>
-		<attribute name="safeInclude" type="string"></attribute>
+		<attribute name="headinc" type="string"></attribute>
+		<attribute name="footinc" type="string"></attribute>
 		<attribute name="focusme" type="string"></attribute>
 		<attribute name="theme" type="string"></attribute>
 		<attribute name="formId" type="string"></attribute>

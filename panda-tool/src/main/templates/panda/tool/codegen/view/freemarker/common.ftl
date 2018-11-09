@@ -105,9 +105,14 @@ ${s}@p.param name="${pn}" value="%{<#if _dpv?starts_with('.')>r</#if>${_dpv}}"/>
 				</#if>
 ${s}/@p.url><#rt/>
 	</#macro>
-	<#macro safeinc step>
-<#if ui.safeInclude?? && ui.safeInclude?lower_case != 'false'>
-	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${gen.trimUiName(ui.name)}${step}-custom.ftl</#if>"/>
+	<#macro headinc step>
+<#if ui.headinc?? && ui.headinc?lower_case != 'false'>
+	${s}@safeinclude path="<#if ui.headinc?has_content>${ui.headinc}<#else>${action.simpleActionClass}_${gen.trimUiName(ui.name)}${step}-header.ftl</#if>"/>
+</#if>
+	</#macro>
+	<#macro footinc step>
+<#if ui.footinc?? && ui.footinc?lower_case != 'false'>
+	${s}@safeinclude path="<#if ui.footinc?has_content>${ui.footinc}<#else>${action.simpleActionClass}_${gen.trimUiName(ui.name)}${step}-footer.ftl</#if>"/>
 </#if>
 	</#macro>
 </#if>

@@ -1,5 +1,6 @@
 <#include "common.ftl"/>
 <@header/>
+<@headinc step="_confirm"/>
 
 <div class="p-section">
 	<@sheader steps=[ ui.name, ui.name + "-confirm" ]/>
@@ -20,7 +21,7 @@ ${s}#if r??>
 ${s}#else>
 	<@sback/>
 ${s}/#if>
-	<@safeinc step="_confirm"/>
 </div>
 
+<@footinc step="_confirm"/>
 <@footer/>

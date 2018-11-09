@@ -1,5 +1,6 @@
 <#include "common.ftl"/>
 <@header/>
+<@headinc step="_popup"/>
 
 <div class="p-section">
 	<@sheader steps=[ ui.name ]/>
@@ -73,7 +74,7 @@
 		cssClass="p-lv-clickable" cssTable="table-hover table-striped"
 		onrowclick="$.popup().callback(plv_getRowData(this));"
 	/>
-	<@safeinc step="_popup"/>
 </div>
 
+<@footinc step="_popup"/>
 <@footer/>

@@ -1,5 +1,6 @@
 <#include "common.ftl"/>
 <@header/>
+<@headinc step="_execute"/>
 
 <div class="p-section">
 	<@sheader steps=[ ui.name, ui.name + "-success" ]/>
@@ -15,7 +16,7 @@ ${s}#if r??>
 		<#include "edit-success-actions.ftl"/>
 	${s}/@p.form>
 ${s}/#if>
-	<@safeinc step="_execute"/>
 </div>
 
+<@footinc step="_execute"/>
 <@footer/>

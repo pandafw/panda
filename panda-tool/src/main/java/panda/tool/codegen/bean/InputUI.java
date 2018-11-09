@@ -32,7 +32,8 @@ import panda.lang.Strings;
  *         &lt;element name=&quot;footer&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; maxOccurs=&quot;1&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
- *       &lt;attribute name=&quot;safeInclude&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;headinc&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;footinc&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;focus&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;theme&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;formId&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -62,7 +63,9 @@ public class InputUI implements Comparable<InputUI> {
 	@XmlAttribute
 	private String focusme;
 	@XmlAttribute
-	private String safeInclude;
+	private String headinc;
+	@XmlAttribute
+	private String footinc;
 	@XmlAttribute
 	private String theme;
 	@XmlAttribute
@@ -89,7 +92,8 @@ public class InputUI implements Comparable<InputUI> {
 		this.generate = iui.generate;
 		this.focusme = iui.focusme;
 		this.theme = iui.theme;
-		this.safeInclude = iui.safeInclude;
+		this.headinc = iui.headinc;
+		this.footinc = iui.footinc;
 		this.formId = iui.formId;
 		this.template = iui.template;
 		this.extend = iui.extend;
@@ -126,8 +130,11 @@ public class InputUI implements Comparable<InputUI> {
 		if (src.focusme != null) {
 			me.focusme = src.focusme;
 		}
-		if (src.safeInclude != null) {
-			me.safeInclude = src.safeInclude;
+		if (src.headinc != null) {
+			me.headinc = src.headinc;
+		}
+		if (src.footinc != null) {
+			me.footinc = src.footinc;
 		}
 		if (src.theme != null) {
 			me.theme = src.theme;
@@ -350,17 +357,31 @@ public class InputUI implements Comparable<InputUI> {
 	}
 
 	/**
-	 * @return the safeInclude
+	 * @return the headinc
 	 */
-	public String getSafeInclude() {
-		return safeInclude;
+	public String getHeadinc() {
+		return headinc;
 	}
 
 	/**
-	 * @param safeInclude the safeInclude to set
+	 * @param headinc the headinc to set
 	 */
-	public void setSafeInclude(String safeInclude) {
-		this.safeInclude = safeInclude;
+	public void setHeadinc(String headinc) {
+		this.headinc = headinc;
+	}
+
+	/**
+	 * @return the footinc
+	 */
+	public String getFootinc() {
+		return footinc;
+	}
+
+	/**
+	 * @param footinc the footinc to set
+	 */
+	public void setFootinc(String footinc) {
+		this.footinc = footinc;
 	}
 
 	/**
