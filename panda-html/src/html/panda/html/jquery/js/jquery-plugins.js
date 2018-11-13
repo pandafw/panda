@@ -439,6 +439,16 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
+	$.jcss = function(url, dup) {
+		if (dup && $('link[href="' + url + '"]').size()) {
+			return false;
+		}
+		$('<link>').attr({ type: 'text/css', rel: 'stylesheet', href: url}).appendTo('body');
+		return true;
+	};
+})(jQuery);
+
+(function($) {
 	$.jscript = function(url, sync) {
 		var s = document.createElement('script');
 		s.type = 'text/javascript';
