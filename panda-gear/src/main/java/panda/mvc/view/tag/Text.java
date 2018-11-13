@@ -1,11 +1,9 @@
 package panda.mvc.view.tag;
 
-import java.io.IOException;
 import java.io.Writer;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
-import panda.mvc.MvcException;
 import panda.mvc.view.util.Escapes;
 
 /**
@@ -72,20 +70,7 @@ public class Text extends ContextBean {
 
 		String txt = context.getText().getText(name, defaultMessage, getParameters());
 		String msg = Escapes.escape(txt, escape);
-
-		if (msg != null) {
-			try {
-				if (getVar() == null) {
-					writer.write(msg);
-				}
-				else {
-					putInVars(msg);
-				}
-			}
-			catch (IOException e) {
-				throw new MvcException("Failed to write out Text tag", e);
-			}
-		}
+		writeOrSetVar(writer, msg);
 
 		return super.end(writer, "");
 	}

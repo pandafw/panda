@@ -1,13 +1,11 @@
 package panda.mvc.view.tag;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Date;
 import java.util.TimeZone;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.time.DateTimes;
-import panda.mvc.MvcException;
 import panda.mvc.Mvcs;
 
 
@@ -94,19 +92,7 @@ public class CDate extends ContextBean {
 				msg = DateTimes.format(value, pattern, timezone, context.getLocale());
 			}
 
-			if (msg != null) {
-				try {
-					if (getVar() == null) {
-						writer.write(msg);
-					}
-					else {
-						putInVars(msg);
-					}
-				}
-				catch (IOException e) {
-					throw new MvcException("Failed to write out Date tag", e);
-				}
-			}
+			writeOrSetVar(writer, msg);
 		}
 		return super.end(writer, "");
 	}

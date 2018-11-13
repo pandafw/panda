@@ -1,6 +1,5 @@
 package panda.mvc.view.tag;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,7 +8,6 @@ import panda.io.stream.StringBuilderWriter;
 import panda.ioc.annotation.IocBean;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
-import panda.mvc.MvcException;
 import panda.mvc.view.util.Escapes;
 
 /**
@@ -98,19 +96,11 @@ public class Property extends ContextBean {
 		boolean result = super.start(writer);
 
 		String av = formatValue();
-
-		try {
-			if (av == null) {
-				av = defaultValue;
-			}
-
-			if (av != null) {
-				write(writer, av);
-			}
+		if (av == null) {
+			av = defaultValue;
 		}
-		catch (IOException e) {
-			throw new MvcException("Failed to print out value '" + av + "'", e);
-		}
+		
+		writeOrSetVar(writer, av);
 
 		return result;
 	}
@@ -199,15 +189,6 @@ public class Property extends ContextBean {
 		}
 
 		return Strings.defaultString(findString(name));
-	}
-
-	private void write(Writer writer, String value) throws IOException {
-		if (getVar() == null) {
-			writer.write(value);
-		}
-		else {
-			putInVars(value);
-		}
 	}
 
 	private String escape(String value) {

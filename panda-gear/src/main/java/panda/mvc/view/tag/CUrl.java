@@ -1,13 +1,11 @@
 package panda.mvc.view.tag;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
-import panda.mvc.MvcException;
 import panda.mvc.util.MvcURLBuilder;
 
 @IocBean(singleton=false)
@@ -29,19 +27,7 @@ public class CUrl extends ContextBean {
 		}
 
 		String url = urlbuilder.build();
-		if (url != null) {
-			try {
-				if (getVar() == null) {
-					writer.write(url);
-				}
-				else {
-					putInVars(url);
-				}
-			}
-			catch (IOException e) {
-				throw new MvcException("Failed to write out URL tag", e);
-			}
-		}
+		writeOrSetVar(writer, url);
 
 		return super.end(writer, "");
 	}

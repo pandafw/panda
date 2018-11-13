@@ -1,6 +1,5 @@
 package panda.mvc.view.tag;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -8,7 +7,6 @@ import java.text.NumberFormat;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Numbers;
-import panda.mvc.MvcException;
 import panda.mvc.Mvcs;
 
 
@@ -85,19 +83,7 @@ public class CNumber extends ContextBean {
 				msg = df.format(value);
 			}
 
-			if (msg != null) {
-				try {
-					if (getVar() == null) {
-						writer.write(msg);
-					}
-					else {
-						putInVars(msg);
-					}
-				}
-				catch (IOException e) {
-					throw new MvcException("Failed to write out Number tag", e);
-				}
-			}
+			writeOrSetVar(writer, msg);
 		}
 		return super.end(writer, "");
 	}
