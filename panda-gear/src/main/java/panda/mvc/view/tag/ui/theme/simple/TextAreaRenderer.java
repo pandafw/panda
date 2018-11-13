@@ -18,7 +18,7 @@ public class TextAreaRenderer extends AbstractEndRenderer<TextArea> {
 
 		attrs.id(tag)
 			.name(tag)
-			.css(this, "p-" + tag.getLayout() + "area")
+			.css(this, "p-textarea")
 			.cols(tag)
 			.rows(tag)
 			.wrap(tag)
@@ -28,7 +28,6 @@ public class TextAreaRenderer extends AbstractEndRenderer<TextArea> {
 			.maxlength(tag)
 			.tooltip(tag)
 			.placeholder(tag)
-			.data("layout", tag.getLayout())
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag);

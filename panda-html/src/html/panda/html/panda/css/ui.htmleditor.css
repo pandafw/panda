@@ -1,0 +1,8 @@
+.p-htmleditor-readonly .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
+	background-color: transparent;
+}
+.p-htmleditor-readonly .note-editor.note-frame {
+	border: none;
+	background-color: transparent;
+}
+

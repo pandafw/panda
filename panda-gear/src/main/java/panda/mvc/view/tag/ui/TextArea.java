@@ -10,7 +10,7 @@ import panda.ioc.annotation.IocBean;
  * 
  * <pre>
  * &lt;!-- START SNIPPET: example --&gt;
- * &lt;s:textarea label=&quot;Comments&quot; name=&quot;comments&quot; cols=&quot;30&quot; rows=&quot;8&quot;/&gt;
+ * &lt;p:textarea label=&quot;Comments&quot; name=&quot;comments&quot; cols=&quot;30&quot; rows=&quot;8&quot;/&gt;
  * &lt;!-- END SNIPPET: example --&gt;
  * </pre>
  */
@@ -19,21 +19,6 @@ public class TextArea extends TextField {
 	protected Integer cols;
 	protected Integer rows;
 	protected String wrap;
-	protected String layout;
-
-	/**
-	 * @return the layout
-	 */
-	public String getLayout() {
-		return layout;
-	}
-
-	/**
-	 * @param layout the layout to set
-	 */
-	public void setLayout(String layout) {
-		this.layout = layout;
-	}
 
 	/**
 	 * @return the cols

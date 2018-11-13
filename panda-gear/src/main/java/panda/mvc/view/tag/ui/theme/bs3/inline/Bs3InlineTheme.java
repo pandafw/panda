@@ -7,6 +7,7 @@ import panda.mvc.view.tag.ui.DateTimePicker;
 import panda.mvc.view.tag.ui.Div;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
+import panda.mvc.view.tag.ui.HtmlEditor;
 import panda.mvc.view.tag.ui.Password;
 import panda.mvc.view.tag.ui.Radio;
 import panda.mvc.view.tag.ui.Reset;
@@ -28,6 +29,7 @@ import panda.mvc.view.tag.ui.theme.simple.DateTimePickerRenderer;
 import panda.mvc.view.tag.ui.theme.simple.DivRenderer;
 import panda.mvc.view.tag.ui.theme.simple.FileRenderer;
 import panda.mvc.view.tag.ui.theme.simple.FormRenderer;
+import panda.mvc.view.tag.ui.theme.simple.HtmlEditorRenderer;
 import panda.mvc.view.tag.ui.theme.simple.PasswordRenderer;
 import panda.mvc.view.tag.ui.theme.simple.RadioRenderer;
 import panda.mvc.view.tag.ui.theme.simple.ResetRenderer;
@@ -51,11 +53,16 @@ public class Bs3InlineTheme extends WrapTheme {
 
 		addWrapper(Checkbox.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, CheckboxRenderer.class));
 		addWrapper(CheckboxList.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, CheckboxListRenderer.class));
+		addWrapper(Radio.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, RadioRenderer.class));
+
+		addWrapper(Reset.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, ResetRenderer.class));
+		addWrapper(Submit.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, SubmitRenderer.class));
+
 		addWrapper(DatePicker.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, DatePickerRenderer.class));
 		addWrapper(DateTimePicker.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, DateTimePickerRenderer.class));
 		addWrapper(File.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, FileRenderer.class));
+		addWrapper(HtmlEditor.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, HtmlEditorRenderer.class));
 		addWrapper(Password.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, PasswordRenderer.class));
-		addWrapper(Radio.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, RadioRenderer.class));
 		addWrapper(Select.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, SelectRenderer.class));
 		addWrapper(TextField.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, TextFieldRenderer.class));
 		addWrapper(TextArea.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, TextAreaRenderer.class));
@@ -64,8 +71,5 @@ public class Bs3InlineTheme extends WrapTheme {
 		addWrapper(Uploader.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, UploaderRenderer.class));
 
 		addWrapper(ViewField.class, new RendererWrapperFactory(Bs3InlineInputWrapper.StaticWrapper.class, ViewFieldRenderer.class));
-
-		addWrapper(Reset.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, ResetRenderer.class));
-		addWrapper(Submit.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, SubmitRenderer.class));
 	}
 }

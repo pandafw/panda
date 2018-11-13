@@ -17,7 +17,7 @@ import panda.mvc.ActionContext;
 import panda.mvc.view.tag.TagBean;
 
 public class TagModel implements TemplateTransformModel {
-	private static final Log LOG = Logs.getLog(TagModel.class);
+	private static final Log log = Logs.getLog(TagModel.class);
 
 	private Class<? extends TagBean> tagCls;
 	protected ActionContext context;
@@ -49,20 +49,20 @@ public class TagModel implements TemplateTransformModel {
 			Object value = entry.getValue();
 
 			if (value != null) {
-				// the value should ALWAYS be a decendant of TemplateModel
+				// the value should ALWAYS be a descendant of TemplateModel
 				if (value instanceof TemplateModel) {
 					try {
 						map.put(entry.getKey().toString(), objectWrapper.unwrap((TemplateModel)value));
 					}
 					catch (TemplateModelException e) {
-						if (LOG.isErrorEnabled()) {
-							LOG.errorf("failed to unwrap [%s] it will be ignored", value.toString(), e);
+						if (log.isErrorEnabled()) {
+							log.errorf("failed to unwrap [%s] it will be ignored", value.toString(), e);
 						}
 					}
 				}
-				// if it doesn't, we'll do it the old way by just returning the toString()
-				// representation
 				else {
+					// if it doesn't, we'll do it the old way by just returning the toString()
+					// representation
 					map.put(entry.getKey().toString(), value.toString());
 				}
 			}

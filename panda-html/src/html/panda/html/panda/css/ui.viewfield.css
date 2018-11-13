@@ -1,0 +1,13 @@
+.p-viewfield {
+	word-wrap: break-word;
+}
+.p-vf-code {
+	padding: 0 4px;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.p-vf-code:active, .p-vf-code.active {
+	box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+	-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}

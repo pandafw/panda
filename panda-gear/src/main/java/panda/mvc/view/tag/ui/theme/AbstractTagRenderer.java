@@ -201,6 +201,12 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return StringEscapes.escapePhtml(s);
 	}
 
+	protected String suri(String uri) {
+		StringBuilder s = new StringBuilder();
+		s.append(context.getStatics()).append(uri);
+		return s.toString();
+	}
+
 	protected void writeJsc(String jsc) throws IOException {
 		write("<script type=\"");
 		write(MimeTypes.TEXT_JAVASCRIPT);

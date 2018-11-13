@@ -17,8 +17,8 @@ import panda.mvc.alert.ParamAlertSupport;
 import panda.mvc.annotation.Modules;
 import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.filter.DecodingFilter;
-import panda.mvc.filter.HttpDumpFilter;
 import panda.mvc.filter.DispatchFilter;
+import panda.mvc.filter.HttpDumpFilter;
 import panda.mvc.filter.LoggingFilter;
 import panda.mvc.impl.DefaultActionChainCreator;
 import panda.mvc.impl.DefaultServletChain;
@@ -115,6 +115,7 @@ import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Hidden;
+import panda.mvc.view.tag.ui.HtmlEditor;
 import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
@@ -325,6 +326,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			File.class,
 			Form.class,
 			Hidden.class,
+			HtmlEditor.class,
 			Icon.class,
 			Link.class,
 			ListView.class,

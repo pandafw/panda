@@ -168,6 +168,14 @@
 	</tag>
 
 	<tag>
+		<description><![CDATA[Render HTML textarea tag.]]></description>
+		<name>htmleditor</name>
+		<tag-class>panda.mvc.view.tag.io.jsp.HtmlEditorTag</tag-class>
+		<body-content>JSP</body-content>
+		<dynamic-attributes>true</dynamic-attributes>
+	</tag>
+
+	<tag>
 		<description><![CDATA[Render Icon.]]></description>
 		<name>link</name>
 		<tag-class>panda.mvc.view.tag.io.jsp.IconTag</tag-class>

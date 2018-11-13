@@ -28,6 +28,7 @@ import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Hidden;
+import panda.mvc.view.tag.ui.HtmlEditor;
 import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
@@ -72,6 +73,7 @@ public class TagModels {
 	protected TagModel form;
 	protected TagModel head;
 	protected TagModel hidden;
+	protected TagModel htmleditor;
 	protected TagModel i;
 	protected TagModel label;
 	protected TagModel link;
@@ -305,6 +307,16 @@ public class TagModels {
 			hidden = new TagModel(context, Hidden.class);
 		}
 		return hidden;
+	}
+
+	/**
+	 * @return HtmleditorModel
+	 */
+	public TagModel getHtmleditor() {
+		if (htmleditor == null) {
+			htmleditor = new TagModel(context, HtmlEditor.class);
+		}
+		return htmleditor;
 	}
 
 	/**

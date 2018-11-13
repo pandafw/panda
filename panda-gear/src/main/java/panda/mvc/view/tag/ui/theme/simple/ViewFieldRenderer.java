@@ -48,8 +48,9 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 		a.css(this, "p-viewfield")
 		 .tooltip(tag)
 		 .commons(tag)
+		 .data("format", tag.getFormat())
 		 .dynamics(tag);
-		stag("p", a);
+		stag("div", a);
 
 		StringBuilder body = new StringBuilder();
 		if (Objects.isNotEmpty(value)) {
@@ -98,6 +99,9 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 					}
 				}
 			}
+			else if ("html".equalsIgnoreCase(tag.getFormat())) {
+				body.append(tag.getValue());
+			}
 			else {
 				body.append(formatValue(tag.getValue(), tag.getFormat(), tag.getEscape()));
 			}
@@ -109,7 +113,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 		else {
 			write("&nbsp;");
 		}
-		etag("p");
+		etag("div");
 	}
 	
 	private String hiddenValue(ViewField tag) {

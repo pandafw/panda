@@ -2183,6 +2183,48 @@ if (typeof String.formatSize != "function") {
 		hookForm();
 	});
 })(jQuery);
+(function($) {	
+	function initSummerNote() {
+		if (typeof($.fn.summernote) == 'undefined') {
+			setTimeout(initSummerNote, 100);
+			return;
+		}
+
+		$('textarea.p-htmleditor').each(function() {
+			var $t = $(this);
+			if ($t.attr('readonly')) {
+				$t.summernote({ toolbar: false }).summernote('disable');
+				$t.parent().addClass('p-htmleditor-readonly');
+			}
+			else {
+				$t.summernote({
+					toolbar: [
+						[ 'style', [ 'style', 'fontname', 'fontsize', 'color', 'forecolor', 'backcolor', 'height', 'paragraph', 'ol', 'ul', 'hr' ] ],
+						[ 'text', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript' ] ],
+						[ 'media', [ 'link', 'picture', 'video', 'table' ] ],
+						[ 'edit', [ 'undo', 'redo', 'clear', 'fullscreen', 'codeview', 'help' ] ],
+					]
+				});
+			}
+		});
+	}
+
+	$(window).on('load', function () {
+		var $hs = $('textarea.p-htmleditor');
+		if ($hs.size()) {
+			var css = $hs.data('summernoteCss');
+			if (css) {
+				$.jcss(css);
+			}
+			var js = $hs.data('summernoteJs');
+			if (js) {
+				$.jscript(js, true);
+			}
+		
+			initSummerNote();
+		}
+	});
+})(jQuery);
 function plv_options(id, options) {
 	var lv = document.getElementById(id);
 	for (var p in options) {
@@ -3302,3 +3344,22 @@ panda.viewfield = function(o) {
 	
 	return api;
 };
+
+(function($) {	
+	$(window).on('load', function () {
+		$('.p-viewfield[data-format="html"]').each(function() {
+			var $t = $(this);
+			$('<a href="#" class="p-vf-code"><i class="fa fa-code"></i></a>').appendTo($(this).parent());
+		});
+		
+		$('.p-vf-code').click(function() {
+			var $t = $(this);
+			$t.toggleClass('active');
+			
+			var $p = $t.parent();
+			var v = $p.find('input').val();
+			var $d = $p.find('.p-viewfield').html($t.hasClass('active') ? v.escapePhtml() : v);
+			return false;
+		});
+	});
+})(jQuery);

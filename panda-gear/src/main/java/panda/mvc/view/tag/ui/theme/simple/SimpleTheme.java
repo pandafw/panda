@@ -19,6 +19,7 @@ import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Hidden;
+import panda.mvc.view.tag.ui.HtmlEditor;
 import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
@@ -64,6 +65,7 @@ public class SimpleTheme extends Theme {
 		rfs.put(File.class, FileRenderer.class);
 		rfs.put(Form.class, FormRenderer.class);
 		rfs.put(Hidden.class, HiddenRenderer.class);
+		rfs.put(HtmlEditor.class, HtmlEditorRenderer.class);
 		rfs.put(Icon.class, IconRenderer.class);
 		rfs.put(Link.class, LinkRenderer.class);
 		rfs.put(ListView.class, ListViewRenderer.class);
