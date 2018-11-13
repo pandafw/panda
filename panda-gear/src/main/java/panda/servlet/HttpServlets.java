@@ -135,7 +135,7 @@ public class HttpServlets {
 	}
 
 	/**
-	 * get remote ip from X_REAL_IP, X_FORWARD_FOR, request.getRemoteAddr
+	 * get remote ip from X_REAL_IP, X_FORWARD_FOR (last), request.getRemoteAddr
 	 * @param request request
 	 * @return remote ip
 	 */
@@ -143,7 +143,7 @@ public class HttpServlets {
 		String ip = request.getHeader(HttpHeader.X_REAL_IP);
 		if (Strings.isEmpty(ip)) {
 			ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
-			int i = Strings.indexOf(ip, ',');
+			int i = Strings.lastIndexOf(ip, ',');
 			if (i >= 0) {
 				ip = ip.substring(i + 1);
 			}
