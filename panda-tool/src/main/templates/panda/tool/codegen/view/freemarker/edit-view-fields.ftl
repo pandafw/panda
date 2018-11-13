@@ -82,6 +82,8 @@
 				format="time"
 			<#elseif tag.name?ends_with(".datetimepicker")>
 				format="datetime"
+			<#elseif tag.name?ends_with(".htmleditor")>
+				format="html"
 			</#if>
 			<#list tag.paramList as tp>
 				<#if [ "fieldValue", "list", "listKey", "listValue", "listBreak", "listOrder" ]?seq_contains(tp.name)>
