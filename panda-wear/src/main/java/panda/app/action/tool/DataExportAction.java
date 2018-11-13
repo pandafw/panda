@@ -188,7 +188,7 @@ public class DataExportAction extends AbstractAction {
 	
 	protected void logException(String msg, Throwable e) {
 		Logs.getLog(getClass()).warn(msg, e);
-		if (assist().isDebugEnabled()) {
+		if (assist().isAppDebug()) {
 			String s = Exceptions.getStackTrace(e);
 			addActionError(e.getMessage() + "\n" + s);
 		}

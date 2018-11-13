@@ -131,20 +131,6 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	
 	//--------------------------------------------------------------------------	
 	/**
-	 * @return true if remote host is local network host
-	 */
-	@Override
-	public boolean isDebugEnabled() {
-		if (appDebug == null) {
-			appDebug = getAppDebug();
-			if (appDebug == null) {
-				appDebug = isSuperUser();
-			}
-		}
-		return appDebug;
-	}
-
-	/**
 	 * @return true - if the login user is administrator or super
 	 */
 	public boolean isAdministrators() {
