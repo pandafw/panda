@@ -3,8 +3,6 @@ package panda.mvc;
 import panda.ioc.IocConstants;
 
 public interface MvcConstants extends IocConstants {
-	public static final String APP_DEBUG = "panda.app.debug";
-
 	public static final String TAGLIB_NAME = "panda.taglib.name";
 
 	public static final String MVC_ACTION_CONTEXT_TYPE = "panda.action.context.type";
@@ -68,9 +66,6 @@ public interface MvcConstants extends IocConstants {
 
 	/** incude context path of url */
 	public static final String URL_INCLUDE_CONTEXT = "panda.url.include.context";
-
-	/** Use cdn for js/css */
-	public static final String UI_LINK_CDN = "panda.ui.link.cdn";
 
 	/** The defaults of datepicker */
 	public static final String UI_DATEPICKER_DEFAULTS = "panda.ui.datepicker.defaults";

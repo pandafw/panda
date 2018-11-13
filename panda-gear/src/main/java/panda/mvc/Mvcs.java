@@ -16,7 +16,6 @@ import panda.cast.Castors;
 import panda.cast.castor.FileItemCastor;
 import panda.el.EL;
 import panda.el.ELTemplate;
-import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.lang.Chars;
 import panda.lang.Classes;
@@ -153,18 +152,24 @@ public abstract class Mvcs {
 			req.setAttribute(ActionContext.class.getName(), ac);
 		}
 	}
-	
+
+	public static boolean isUseCdn(ActionContext ac) {
+		return ac.getSettings().getPropertyAsBoolean(SetConstants.LINK_CDN);
+	}
+
+	public static boolean isAppDebug(ActionContext ac) {
+		return ac.getSettings().getPropertyAsBoolean(SetConstants.APP_DEBUG);
+	}
+
 	/**
 	 * @param ac the action context
-	 * @param sp the static path string
 	 * @return the static base path
 	 */
-	public static String getStaticPath(ActionContext ac, String sp) {
-		if (Strings.isEmpty(sp)) {
-			Settings ss = ac.getSettings();
-			if (ss.getPropertyAsBoolean(SetConstants.LINK_CDN)) {
-				sp = PANDA_CDN;
-			}
+	public static String getStaticPath(ActionContext ac) {
+		String sp = null;
+
+		if (isUseCdn(ac)) {
+			sp = PANDA_CDN;
 		}
 
 		if (Strings.isEmpty(sp)) {

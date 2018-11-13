@@ -12,7 +12,6 @@ import panda.bind.json.Jsons;
 import panda.io.Files;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.lang.Objects;
 import panda.lang.Order;
@@ -23,9 +22,7 @@ import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
-import panda.mvc.SetConstants;
 import panda.mvc.processor.LayoutProcessor;
 import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
@@ -37,9 +34,6 @@ import panda.servlet.HttpServlets;
 public class ActionAssist extends ActionSupport {
 	private UserAgent userAgent;
 
-	@IocInject(value=MvcConstants.APP_DEBUG, required=false)
-	protected Boolean appDebug;
-	
 	/**
 	 * @return log
 	 */
@@ -48,29 +42,10 @@ public class ActionAssist extends ActionSupport {
 	}
 	
 	/**
-	 * @return true if remote host is local network host
+	 * @return true if app.debug = true
 	 */
-	public boolean isDebugEnabled() {
-		if (appDebug == null) {
-			appDebug = getAppDebug();
-			if (appDebug == null) {
-				appDebug = false;
-			}
-		}
-		return appDebug;
-	}
-
-	public Boolean getAppDebug() {
-		String dbg = context.getSettings().getProperty(SetConstants.APP_DEBUG);
-		if ("true".equalsIgnoreCase(dbg)) {
-			return true;
-		}
-		
-		if ("false".equalsIgnoreCase(dbg)) {
-			return false;
-		}
-		
-		return null;
+	public boolean isAppDebug() {
+		return Mvcs.isAppDebug(context);
 	}
 
 	public String getServletErrorReason(int sc) {

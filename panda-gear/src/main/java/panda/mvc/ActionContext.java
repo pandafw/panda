@@ -520,7 +520,7 @@ public class ActionContext {
 	 */
 	public String getStatics() {
 		if (statics == null) {
-			statics = Mvcs.getStaticPath(this, null);
+			statics = Mvcs.getStaticPath(this);
 		}
 		return statics;
 	}
