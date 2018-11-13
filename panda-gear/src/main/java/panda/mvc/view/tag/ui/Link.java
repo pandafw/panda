@@ -3,11 +3,8 @@ package panda.mvc.view.tag.ui;
 import java.util.List;
 import java.util.Locale;
 
-import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
-import panda.mvc.MvcConstants;
-import panda.mvc.SetConstants;
+import panda.mvc.Mvcs;
 
 
 /**
@@ -52,23 +49,23 @@ import panda.mvc.SetConstants;
  */
 @IocBean(singleton=false)
 public class Link extends UIBean {
-	@IocInject
-	private Settings settings;
-	
 	// attributes
-	protected String statics;
 	protected String version;
 	protected Boolean cdn;
 
-	@IocInject(value=MvcConstants.APP_DEBUG, required=false)
 	protected Boolean debug;
 
 	protected boolean js;
 	protected boolean css;
 	protected Locale locale;
 	protected boolean jquery;
+	protected boolean jquery1;
+	protected boolean jquery2;
+	protected boolean jquery3;
 	protected boolean jqplugins;
 	protected boolean bootstrap;
+	protected boolean bootstrap3;
+	protected boolean bootstrap4;
 	protected boolean bsplugins;
 	protected boolean i18n;
 	protected boolean panda;
@@ -94,6 +91,14 @@ public class Link extends UIBean {
 			locale = context.getLocale();
 		}
 
+		if (bootstrap3 || bootstrap4) {
+			bootstrap = true;
+		}
+		
+		if (jquery1 || jquery2 || jquery3) {
+			jquery = true;
+		}
+		
 		if (bootstrap || jqplugins || extras) {
 			jquery = true;
 		}
@@ -124,25 +129,11 @@ public class Link extends UIBean {
 		}
 		
 		if (cdn == null) {
-			cdn = settings.getPropertyAsBoolean(SetConstants.LINK_CDN);
+			cdn = Mvcs.isUseCdn(context);
 		}
 		if (debug == null) {
-			debug = settings.getPropertyAsBoolean(SetConstants.APP_DEBUG);
+			debug = Mvcs.isAppDebug(context);
 		}
-	}
-
-	/**
-	 * @return the statics
-	 */
-	public String getStatics() {
-		return statics;
-	}
-
-	/**
-	 * @param statics the statics to set
-	 */
-	public void setStatics(String statics) {
-		this.statics = statics;
 	}
 
 	/**
@@ -258,6 +249,48 @@ public class Link extends UIBean {
 	}
 
 	/**
+	 * @return the jquery1
+	 */
+	public boolean isJquery1() {
+		return jquery1;
+	}
+
+	/**
+	 * @param jquery1 the jquery1 to set
+	 */
+	public void setJquery1(boolean jquery1) {
+		this.jquery1 = jquery1;
+	}
+
+	/**
+	 * @return the jquery2
+	 */
+	public boolean isJquery2() {
+		return jquery2;
+	}
+
+	/**
+	 * @param jquery2 the jquery2 to set
+	 */
+	public void setJquery2(boolean jquery2) {
+		this.jquery2 = jquery2;
+	}
+
+	/**
+	 * @return the jquery3
+	 */
+	public boolean isJquery3() {
+		return jquery3;
+	}
+
+	/**
+	 * @param jquery3 the jquery3 to set
+	 */
+	public void setJquery3(boolean jquery3) {
+		this.jquery3 = jquery3;
+	}
+
+	/**
 	 * @return the jqplugins
 	 */
 	public boolean isJqplugins() {
@@ -283,6 +316,34 @@ public class Link extends UIBean {
 	 */
 	public void setBootstrap(boolean bootstrap) {
 		this.bootstrap = bootstrap;
+	}
+
+	/**
+	 * @return the bootstrap3
+	 */
+	public boolean isBootstrap3() {
+		return bootstrap3;
+	}
+
+	/**
+	 * @param bootstrap3 the bootstrap3 to set
+	 */
+	public void setBootstrap3(boolean bootstrap3) {
+		this.bootstrap3 = bootstrap3;
+	}
+
+	/**
+	 * @return the bootstrap4
+	 */
+	public boolean isBootstrap4() {
+		return bootstrap4;
+	}
+
+	/**
+	 * @param bootstrap4 the bootstrap4 to set
+	 */
+	public void setBootstrap4(boolean bootstrap4) {
+		this.bootstrap4 = bootstrap4;
 	}
 
 	/**

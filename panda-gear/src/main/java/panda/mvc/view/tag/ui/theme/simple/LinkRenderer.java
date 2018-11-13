@@ -16,9 +16,20 @@ import panda.servlet.HttpServlets;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String CDN_BASE = Mvcs.PANDA_CDN + '/' + Panda.VERSION;
-	private static final String JQUERY_VERSION = "1.12.4";
-	private static final String BOOTSTRAP_VERSION = "3.3.7";
-	private static final String FONTAWESOME_VERSION = "4.7.0";
+	private static final String JQUERY1_VERSION = "1.12.4";
+	private static final String JQUERY2_VERSION = "2.2.4";
+	private static final String JQUERY3_VERSION = "3.3.1";
+	private static final String JQUERY_CDN_BASE = "//code.jquery.com/jquery-";
+	private static final String JQUERY_BIND_BASE = "/jquery/js/jquery-";
+	private static final String JQUERY1_CDN_PATH = JQUERY_CDN_BASE + JQUERY1_VERSION;
+	private static final String JQUERY2_CDN_PATH = JQUERY_CDN_BASE + JQUERY2_VERSION;
+	private static final String JQUERY3_CDN_PATH = JQUERY_CDN_BASE + JQUERY3_VERSION;
+	private static final String JQUERY1_BIND_PATH = JQUERY_BIND_BASE + JQUERY1_VERSION;
+	private static final String JQUERY2_BIND_PATH = JQUERY_BIND_BASE + JQUERY2_VERSION;
+	private static final String JQUERY3_BIND_PATH = JQUERY_BIND_BASE + JQUERY3_VERSION;
+
+	private static final String BOOTSTRAP3_VERSION = "3.3.7";
+	private static final String FONTAWESOME4_VERSION = "4.7.0";
 	
 	private boolean js;
 	private boolean css;
@@ -58,12 +69,30 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 
 	private void writeJquery() throws IOException {
-		if (js && tag.isJquery()) {
-			if (tag.getCdn()) {
-				writeCdnJs("//code.jquery.com/jquery-" + JQUERY_VERSION);
+		if (js) {
+			if (tag.isJquery3()) {
+				if (tag.getCdn()) {
+					writeCdnJs(JQUERY3_CDN_PATH);
+				}
+				else {
+					writeStaticJs(JQUERY3_BIND_PATH);
+				}
 			}
-			else {
-				writeStaticJs("/jquery/js/jquery-" + JQUERY_VERSION);
+			else if (tag.isJquery2()) {
+				if (tag.getCdn()) {
+					writeCdnJs(JQUERY2_CDN_PATH);
+				}
+				else {
+					writeStaticJs(JQUERY2_BIND_PATH);
+				}
+			}
+			else if (tag.isJquery1() || tag.isJquery()) {
+				if (tag.getCdn()) {
+					writeCdnJs(JQUERY1_CDN_PATH);
+				}
+				else {
+					writeStaticJs(JQUERY1_BIND_PATH);
+				}
 			}
 		}
 	}
@@ -146,10 +175,10 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (css && bs) {
 			if (tag.useCdn()) {
 				writeCdnCss("//netdna.bootstrapcdn.com/bootstrap/" 
-						+ BOOTSTRAP_VERSION 
+						+ BOOTSTRAP3_VERSION 
 						+ "/css/bootstrap");
 				writeCdnCss("//netdna.bootstrapcdn.com/font-awesome/" 
-						+ FONTAWESOME_VERSION 
+						+ FONTAWESOME4_VERSION 
 						+ "/css/font-awesome");
 			}
 			else {
@@ -160,7 +189,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (js && bs) {
 			if (tag.useCdn()) {
 				writeCdnJs("//netdna.bootstrapcdn.com/bootstrap/" 
-						+ BOOTSTRAP_VERSION 
+						+ BOOTSTRAP3_VERSION 
 						+ "/js/bootstrap");
 			}
 			else {
@@ -343,15 +372,8 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		return "?v=" + URLHelper.encodeURL(tag.getVersion());
 	}
 
-	private String sbase;
-	private String suri(String uri) {
-		if (sbase == null) {
-			sbase = Mvcs.getStaticPath(context, ((Link)tag).getStatics());
-		}
-		
-		StringBuilder s = new StringBuilder();
-		s.append(sbase).append(uri).append(vquery());
-
-		return s.toString();
+	@Override
+	protected String suri(String uri) {
+		return super.suri(uri + vquery());
 	}
 }
