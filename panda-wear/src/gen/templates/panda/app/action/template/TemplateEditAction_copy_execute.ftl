@@ -119,6 +119,14 @@
 					"onclick": "location.href='${vars._u_?js_string}'; return false;"
 				}]/>
 			</#if>
+			<#if a.canAccess('~/list')>
+				<@p.url var="_u_" action="~/list"/>
+				<#assign _buttons_ = _buttons_ + [{
+					"icon": "icon-list",
+					"text": "btn-list",
+					"onclick": "location.href='${vars._u_?js_string}'; return false;"
+				}]/>
+			</#if>
 			<#include "/panda/mvc/view/form-buttons.ftl"/>
 			<@form_buttons buttons=_buttons_/>
 	</@p.form>
