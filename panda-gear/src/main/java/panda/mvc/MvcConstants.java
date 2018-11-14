@@ -3,6 +3,10 @@ package panda.mvc;
 import panda.ioc.IocConstants;
 
 public interface MvcConstants extends IocConstants {
+
+	/** The static resource path */
+	public static final String STATIC_PATH = "static_path";
+
 	public static final String TAGLIB_NAME = "panda.taglib.name";
 
 	public static final String MVC_ACTION_CONTEXT_TYPE = "panda.action.context.type";
@@ -49,12 +53,6 @@ public interface MvcConstants extends IocConstants {
 	/** Cache model instances at BeanWrapper level */
 	public static final String FREEMARKER_BEANWRAPPER_CACHE = "panda.freemarker.beanwrapper.cache";
 
-	/** Access log name */
-	public static final String ACCESS_LOG_NAME = "panda.access.log.name";
-
-	/** Access log format */
-	public static final String ACCESS_LOG_FORMAT = "panda.access.log.format";
-
 	/** Request encoding */
 	public static final String REQUEST_ENCODING = "panda.request.encoding";
 
@@ -67,38 +65,17 @@ public interface MvcConstants extends IocConstants {
 	/** incude context path of url */
 	public static final String URL_INCLUDE_CONTEXT = "panda.url.include.context";
 
-	/** The defaults of datepicker */
-	public static final String UI_DATEPICKER_DEFAULTS = "panda.ui.datepicker.defaults";
+	/** The default tag template theme */
+	public static final String TAG_THEME = "panda.tag.theme";
 
-	/** The defaults of timepicker */
-	public static final String UI_TIMEPICKER_DEFAULTS = "panda.ui.timepicker.defaults";
-
-	/** The defaults of datetimepicker */
-	public static final String UI_DATETIMEPICKER_DEFAULTS = "panda.ui.datetimepicker.defaults";
-
-	/** The static resource path */
-	public static final String STATIC_PATH = "static_path";
-
-	/** The static resource version */
-	public static final String STATIC_VERSION = "panda.static.version";
-
-	/** The static resource browser cache */
-	public static final String STATIC_BROWSER_CACHE = "panda.static.browser.cache";
-
-	/** The static resource expire days */
-	public static final String STATIC_EXPIRE_DAYS = "panda.static.expire.days";
-
-	/** The default UI template theme */
-	public static final String UI_THEME = "panda.ui.theme";
-
-	/** The custom themes */
-	public static final String UI_CUSTOM_THEMES = "panda.ui.themes";
+	/** The custom tag themes */
+	public static final String TAG_THEMES = "panda.tag.themes";
 
 	/** JsonView Pretty Print */
-	public static final String JSON_VIEW_PRETTY_PRINT = "panda.view.json.pretty";
+	public static final String VIEW_JSON_PRETTY = "panda.view.json.pretty";
 
 	/** XmlView Pretty Print */
-	public static final String XML_VIEW_PRETTY_PRINT = "panda.view.xml.pretty";
+	public static final String VIEW_XML_PRETTY = "panda.view.xml.pretty";
 
 	/** Custom Servlet Error View */
 	public static final String SERVLET_ERROR_VIEW = "panda.view.servlet.error";

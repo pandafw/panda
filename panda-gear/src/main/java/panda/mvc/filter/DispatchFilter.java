@@ -20,7 +20,6 @@ import panda.ioc.annotation.IocInject;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.impl.SingletonObjectProxy;
-import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Regexs;
 import panda.lang.Strings;
@@ -42,7 +41,7 @@ import panda.mvc.ioc.ResponseObjectProxy;
 import panda.mvc.ioc.SessionIocContext;
 import panda.servlet.HttpServlets;
 
-@IocBean(create="initialize")
+@IocBean
 public class DispatchFilter implements ServletFilter {
 	private static final Log log = Logs.getLog(DispatchFilter.class);
 
@@ -59,6 +58,17 @@ public class DispatchFilter implements ServletFilter {
 	private Settings settings;
 
 	/**
+	 * ActionContext class
+	 */
+	@IocInject(value=MvcConstants.MVC_ACTION_CONTEXT_TYPE, required=false)
+	private Class<? extends ActionContext> acClass = ActionContext.class;
+
+	/**
+	 * ignore settings
+	 */
+	private String ignores = "";
+
+	/**
 	 * the regex patterns of the URI to exclude
 	 */
 	private List<Pattern> ignoreRegexs;
@@ -69,46 +79,58 @@ public class DispatchFilter implements ServletFilter {
 	private Set<String> ignorePaths;
 
 	/**
-	 * ActionContext class
+	 * @param ignores the ignores to set
 	 */
-	private Class<? extends ActionContext> acClass = ActionContext.class;
-
-	@SuppressWarnings("unchecked")
-	public void initialize() throws ClassNotFoundException {
-		String cls = ioc.getIfExists(String.class, MvcConstants.MVC_ACTION_CONTEXT_TYPE);
-		cls = settings.getProperty(SetConstants.MVC_ACTION_CONTEXT_TYPE, cls);
-		if (Strings.isNotEmpty(cls)) {
-			acClass = (Class<? extends ActionContext>)Classes.getClass(cls);
+	@IocInject(value=MvcConstants.MVC_IGNORES, required=false)
+	public void setIgnores(String ignores) {
+		if (Strings.equals(this.ignores, ignores)) {
+			return;
 		}
 		
-		String ignores = ioc.getIfExists(String.class, MvcConstants.MVC_IGNORES);
-		ignores = settings.getProperty(SetConstants.MVC_IGNORES, ignores);
-		if (ignores != null) {
-			String[] es = Strings.split(ignores);
-			Set<String> regex = new HashSet<String>();
-			Set<String> paths = new HashSet<String>();
-			for (String s : es) {
-				s = Strings.strip(s);
-				if (Strings.isEmpty(s)) {
-					continue;
-				}
-				
-				if (Strings.startsWithChar(s, '^') || Strings.endsWithChar(s, '&')) {
-					regex.add(s);
-					continue;
-				}
-				paths.add(s);
+		synchronized(this) {
+			if (Strings.equals(this.ignores, ignores)) {
+				return;
 			}
-			if (regex.size() > 0) {
-				ignoreRegexs = new ArrayList<Pattern>();
-				for (String s : regex) {
-					ignoreRegexs.add(Pattern.compile(s));
-				}
-				log.info("ignore regexs  = " + Strings.join(regex, " "));
+
+			this.ignores = ignores;
+			if (Strings.isEmpty(ignores)) {
+				ignorePaths = null;
+				ignoreRegexs = null;
+				log.info("clear mvc ignores");
+				return;
 			}
-			if (paths.size() > 0) {
-				ignorePaths = paths;
-				log.info("ignore paths   = " + ignorePaths);
+
+			try {
+				String[] es = Strings.split(ignores);
+				Set<String> regex = new HashSet<String>();
+				Set<String> paths = new HashSet<String>();
+				for (String s : es) {
+					s = Strings.strip(s);
+					if (Strings.isEmpty(s)) {
+						continue;
+					}
+					
+					if (Strings.startsWithChar(s, '^') || Strings.endsWithChar(s, '&')) {
+						regex.add(s);
+						continue;
+					}
+					paths.add(s);
+				}
+				if (paths.size() > 0) {
+					ignorePaths = paths;
+					log.info("mvc ignore paths   = " + ignorePaths);
+				}
+				if (regex.size() > 0) {
+					List<Pattern> patterns = new ArrayList<Pattern>();
+					for (String s : regex) {
+						patterns.add(Pattern.compile(s));
+					}
+					ignoreRegexs = patterns;
+					log.info("mvc ignore mvc regexs  = " + Strings.join(regex, " "));
+				}
+			}
+			catch (Throwable e) {
+				log.error("Failed to set mvc ignores = " + ignores, e);
 			}
 		}
 	}
@@ -121,10 +143,15 @@ public class DispatchFilter implements ServletFilter {
 	 * @return true if path should ignored
 	 */
 	protected boolean ignore(String path) {
+		String ignores = settings.getProperty(SetConstants.MVC_IGNORES);
+		if (ignores != null) {
+			setIgnores(ignores);
+		}
+		
 		if (ignorePaths != null && ignorePaths.contains(path)) {
 			return true;
 		}
-		if (Regexs.matches(ignoreRegexs, path)) {
+		if (ignoreRegexs != null && Regexs.matches(ignoreRegexs, path)) {
 			return true;
 		}
 		return false;

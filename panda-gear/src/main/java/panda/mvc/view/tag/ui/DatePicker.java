@@ -2,6 +2,7 @@ package panda.mvc.view.tag.ui;
 
 import panda.cast.castor.DateTypeCastor;
 import panda.ioc.annotation.IocBean;
+import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
@@ -39,15 +40,13 @@ public class DatePicker extends TriggerField {
 	protected static final String DEFAULT_DATE_PATTERN = DateTimes.ISO_DATE_FORMAT;
 
 	protected String pattern;
-	protected String options;
 
 	protected Boolean pickSeconds;
 
 	//TODO
 	//NOT USED
 	protected String inline;
-	protected String defaults;
-	
+
 	public DatePicker() {
 		ricon = "icon-calendar";
 		
@@ -56,37 +55,37 @@ public class DatePicker extends TriggerField {
 	}
 
 	/**
-	 * @return the inline
+	 * evaluate parameters
 	 */
-	public String getInline() {
-		return inline;
+	@Override
+	public void evaluateParams() {
+		super.evaluateParams();
+
+		if (Strings.isEmpty(format)) {
+			format = getDefaultFormat();
+		}
+
+		if (Strings.isEmpty(pattern)) {
+			pattern = Mvcs.getDatePattern(context, format, getDefaultPattern());
+		}
 	}
 
 	/**
-	 * @return the options
-	 */
-	public String getOptions() {
-		return options;
-	}
-
-	/**
-	 * @return the defaults
-	 */
-	public String getDefaults() {
-		return defaults;
-	}
-
-	/**
-	 * get date format from text
+	 * get default date format
 	 * 
 	 * @return date format
 	 */
-	@Override
-	public String getFormat() {
-		if (format == null) {
-			format = DEFAULT_DATE_FORMAT;
-		}
-		return format;
+	protected String getDefaultFormat() {
+		return DEFAULT_DATE_FORMAT;
+	}
+
+	/**
+	 * get default date pattern
+	 * 
+	 * @return date pattern
+	 */
+	protected String getDefaultPattern() {
+		return DEFAULT_DATE_PATTERN;
 	}
 
 	/**
@@ -95,24 +94,7 @@ public class DatePicker extends TriggerField {
 	 * @return date pattern
 	 */
 	public String getPattern() {
-		if (pattern == null) {
-			pattern = Mvcs.getDatePattern(context, getFormat(), DEFAULT_DATE_PATTERN);
-		}
 		return pattern;
-	}
-
-	/**
-	 * @param defaults defaults
-	 */
-	public void setDefaults(String defaults) {
-		this.defaults = defaults;
-	}
-
-	/**
-	 * @param inline the inline to set
-	 */
-	public void setInline(String inline) {
-		this.inline = inline;
 	}
 
 	/**
@@ -120,13 +102,6 @@ public class DatePicker extends TriggerField {
 	 */
 	public void setPattern(String pattern) {
 		this.pattern = pattern;
-	}
-
-	/**
-	 * @param options the options to set
-	 */
-	public void setOptions(String options) {
-		this.options = options;
 	}
 
 	/**
@@ -143,4 +118,17 @@ public class DatePicker extends TriggerField {
 		this.pickSeconds = pickSeconds;
 	}
 	
+	/**
+	 * @return the inline
+	 */
+	public String getInline() {
+		return inline;
+	}
+
+	/**
+	 * @param inline the inline to set
+	 */
+	public void setInline(String inline) {
+		this.inline = inline;
+	}
 }

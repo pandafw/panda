@@ -38,7 +38,7 @@ public class XmlView extends BindView {
 	/**
 	 * @param prettyPrint the prettyPrint to set
 	 */
-	@IocInject(value=MvcConstants.JSON_VIEW_PRETTY_PRINT, required=false)
+	@IocInject(value=MvcConstants.VIEW_JSON_PRETTY, required=false)
 	public void setPrettyPrint(boolean prettyPrint) {
 		super.setPrettyPrint(prettyPrint);
 	}
@@ -73,7 +73,7 @@ public class XmlView extends BindView {
 				xs.setRootName(rootName);
 			}
 			setSerializerOptions(xs);
-			xs.setPrettyPrint(settings.getPropertyAsBoolean(SetConstants.XML_VIEW_PRETTY_PRINT, prettyPrint));
+			xs.setPrettyPrint(settings.getPropertyAsBoolean(SetConstants.MVC_VIEW_XML_PRETTY, prettyPrint));
 
 			if (log.isDebugEnabled()) {
 				String xml = xs.serialize(result);

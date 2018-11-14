@@ -2,12 +2,9 @@ package panda.mvc.view.tag.ui;
 
 import panda.cast.castor.DateTypeCastor;
 import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.MvcConstants;
-import panda.mvc.Mvcs;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -40,42 +37,27 @@ public class TimePicker extends DatePicker {
 
 	protected static final String DEFAULT_TIME_PATTERN = DateTimes.ISO_TIME_FORMAT;
 
-	
 	public TimePicker() {
 		ricon = "icon-clock";
 	}
 
 	/**
-	 * get time format from text
+	 * get default time format
 	 * 
 	 * @return time format
 	 */
 	@Override
-	public String getFormat() {
-		if (format == null) {
-			format = DEFAULT_TIME_FORMAT;
-		}		
-		return format;
+	protected String getDefaultFormat() {
+		return DEFAULT_TIME_FORMAT;
 	}
 
 	/**
-	 * get time pattern from text
+	 * get default time pattern
 	 * 
 	 * @return time pattern
 	 */
 	@Override
-	public String getPattern() {
-		if (pattern == null) {
-			pattern = Mvcs.getDatePattern(context, getFormat(), DEFAULT_TIME_PATTERN);
-		}
-		return pattern;
-	}
-
-	/**
-	 * @param defaults defaults
-	 */
-	@IocInject(value = MvcConstants.UI_TIMEPICKER_DEFAULTS, required = false)
-	public void setDefaults(String defaults) {
-		this.defaults = defaults;
+	protected String getDefaultPattern() {
+		return DEFAULT_TIME_PATTERN;
 	}
 }

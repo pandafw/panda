@@ -110,7 +110,7 @@ public class UserAuthenticateProcessor extends AuthenticateProcessor {
 				return;
 			}
 
-			String unlogin = settings.getProperty(SET.VIEW_UNLOGIN, unloginView);
+			String unlogin = settings.getProperty(SET.AUTH_VIEW_UNLOGIN, unloginView);
 			if (Strings.isNotEmpty(unlogin)) {
 				addActionError(ac, RES.ERROR_UNLOGIN);
 				ac.push(getRedirectURL(ac));
@@ -128,9 +128,9 @@ public class UserAuthenticateProcessor extends AuthenticateProcessor {
 				return;
 			}
 
-			String unsecure = settings.getProperty(SET.VIEW_UNLOGIN, unsecureView);
+			String unsecure = settings.getProperty(SET.AUTH_VIEW_UNLOGIN, unsecureView);
 			if (Strings.isEmpty(unsecure)) {
-				unsecure = settings.getProperty(SET.VIEW_UNLOGIN, unloginView);
+				unsecure = settings.getProperty(SET.AUTH_VIEW_UNLOGIN, unloginView);
 			}
 			if (Strings.isNotEmpty(unsecure)) {
 				addActionError(ac, RES.ERROR_UNSECURE);
@@ -148,7 +148,7 @@ public class UserAuthenticateProcessor extends AuthenticateProcessor {
 			return;
 		}
 
-		String forbidden = settings.getProperty(SET.VIEW_FORBIDDEN, forbiddenView);
+		String forbidden = settings.getProperty(SET.AUTH_VIEW_FORBIDDEN, forbiddenView);
 		if (Strings.isNotEmpty(forbidden)) {
 			addActionError(ac, RES.ERROR_FORBIDDEN);
 			ac.push(getRedirectURL(ac));

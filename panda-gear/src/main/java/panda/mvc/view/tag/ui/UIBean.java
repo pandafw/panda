@@ -51,7 +51,7 @@ public abstract class UIBean extends TagBean {
 	// javascript tooltip attribute
 	protected String tooltip;
 
-	@IocInject(value=MvcConstants.UI_THEME, required=false)
+	@IocInject(value=MvcConstants.TAG_THEME, required=false)
 	protected String defaultUITheme = "simple";
 
 	@IocInject

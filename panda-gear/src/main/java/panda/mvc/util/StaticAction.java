@@ -11,14 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import panda.Panda;
 import panda.io.MimeTypes;
 import panda.io.Streams;
-import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.MvcConstants;
+import panda.mvc.SetConstants;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.view.Views;
@@ -32,37 +31,29 @@ public class StaticAction extends ActionSupport {
 	protected static final String BASE = "panda/html/";
 	protected static final String VERSION = Panda.VERSION + '/';
 	
-	@IocInject(value = MvcConstants.STATIC_BROWSER_CACHE, required = false)
-	protected boolean cache = true;
-	
-	protected String version = VERSION;
+	protected String getStaticVersion() {
+		String version = getSettings().getProperty(SetConstants.MVC_STATIC_VERSION);
 
-	protected long expires = DateTimes.MS_MONTH;
-
-	protected String charset = Charsets.UTF_8;
-	
-	/**
-	 * @param version the version to set
-	 */
-	@IocInject(value = MvcConstants.STATIC_VERSION, required = false)
-	public void setVersion(String version) {
-		this.version = Strings.stripToNull(version);
-		if (!Strings.endsWithChar(this.version, '/')) {
-			this.version += '/';
+		version = Strings.stripToNull(version);
+		if (Strings.isEmpty(version)) {
+			return VERSION;
 		}
-	}
-
-	/**
-	 * @param expires the expires to set
-	 */
-	@IocInject(value = MvcConstants.STATIC_EXPIRE_DAYS, required = false)
-	public void setExpires(long expires) {
-		this.expires = expires * DateTimes.MS_DAY;
+		
+		if (!Strings.endsWithChar(version, '/')) {
+			version += '/';
+		}
+		return version;
 	}
 
 	@At("${!!static_path|||'/static'}/(.*)$")
 	@To(Views.NONE)
 	public void execute(String path) {
+		boolean cache = getSettings().getPropertyAsBoolean(SetConstants.MVC_STATIC_BROWSER_CACHE, true);
+		
+		long expires = getSettings().getPropertyAsInt(SetConstants.MVC_STATIC_EXPIRE_DAYS, 30) * DateTimes.MS_DAY;
+
+		String charset = getSettings().getProperty(SetConstants.MVC_STATIC_CHARSET, Charsets.UTF_8);
+		
 		URL url = findResource(path);
 		if (url == null) {
 			if (log.isDebugEnabled()) {
@@ -134,6 +125,8 @@ public class StaticAction extends ActionSupport {
 	}
 	
 	protected URL findResource(String name) {
+		String version = getStaticVersion();
+
 		String path = BASE + name;
 		
 		if (log.isDebugEnabled()) {

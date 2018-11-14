@@ -2,10 +2,7 @@ package panda.mvc.view.tag.ui;
 
 import panda.cast.castor.DateTypeCastor;
 import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
 import panda.lang.time.DateTimes;
-import panda.mvc.MvcConstants;
-import panda.mvc.Mvcs;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -37,36 +34,22 @@ public class DateTimePicker extends DatePicker {
 	protected static final String DEFAULT_DATETIME_PATTERN = DateTimes.ISO_DATETIME_NO_T_FORMAT;
 
 	/**
-	 * get date time format from text
+	 * get default date time format
 	 * 
 	 * @return date time format
 	 */
 	@Override
-	public String getFormat() {
-		if (format == null) {
-			format = DEFAULT_DATETIME_FORMAT;
-		}
-		return format;
+	protected String getDefaultFormat() {
+		return DEFAULT_DATETIME_FORMAT;
 	}
 
 	/**
-	 * get date time pattern from text
+	 * get default date time pattern
 	 * 
 	 * @return date time pattern
 	 */
 	@Override
-	public String getPattern() {
-		if (pattern == null) {
-			pattern = Mvcs.getDatePattern(context, getFormat(), DEFAULT_DATETIME_PATTERN);
-		}
-		return pattern;
-	}
-
-	/**
-	 * @param defaults defaults
-	 */
-	@IocInject(value = MvcConstants.UI_DATETIMEPICKER_DEFAULTS, required = false)
-	public void setDefaults(String defaults) {
-		this.defaults = defaults;
+	protected String getDefaultPattern() {
+		return DEFAULT_DATETIME_PATTERN;
 	}
 }

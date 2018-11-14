@@ -154,7 +154,7 @@ public abstract class Mvcs {
 	}
 
 	public static boolean isUseCdn(ActionContext ac) {
-		return ac.getSettings().getPropertyAsBoolean(SetConstants.LINK_CDN);
+		return ac.getSettings().getPropertyAsBoolean(SetConstants.MVC_LINK_USECDN);
 	}
 
 	public static boolean isAppDebug(ActionContext ac) {

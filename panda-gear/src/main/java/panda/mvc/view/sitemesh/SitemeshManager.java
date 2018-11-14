@@ -42,7 +42,7 @@ public class SitemeshManager {
 			return null;
 		}
 		
-		if (settings.getPropertyAsBoolean(SetConstants.SITEMESH_DISABLE, disabled)) {
+		if (settings.getPropertyAsBoolean(SetConstants.MVC_SITEMESH_DISABLE, disabled)) {
 			log.debug("Sitemesh disabled");
 			return null;
 		}

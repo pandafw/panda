@@ -67,7 +67,7 @@ public class ThemeRenderEngine implements RendererEngine {
 	 * @param themes a space delimited list of theme class names
 	 * @throws Exception if a custom theme class could not be create
 	 */
-	@IocInject(value = MvcConstants.UI_CUSTOM_THEMES, required = false)
+	@IocInject(value = MvcConstants.TAG_THEMES, required = false)
 	public void setThemeClasses(String themes) throws Exception {
 		String[] ts = Strings.split(themes);
 		for (String t : ts) {

@@ -20,6 +20,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ServletChain;
 import panda.mvc.ServletFilter;
+import panda.mvc.SetConstants;
 import panda.mvc.util.MvcSettings;
 import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletRequestCapturer;
@@ -42,9 +43,9 @@ public class HttpDumpFilter implements ServletFilter {
 
 	@Override
 	public boolean doFilter(HttpServletRequest req, HttpServletResponse res, ServletChain sc) {
-		String path = settings.getProperty("http.dump.path");
-		boolean dreq = settings.getPropertyAsBoolean("http.dump.request");
-		boolean dres = settings.getPropertyAsBoolean("http.dump.response");
+		String path = settings.getProperty(SetConstants.MVC_HTTP_DUMP_PATH);
+		boolean dreq = settings.getPropertyAsBoolean(SetConstants.MVC_HTTP_DUMP_REQUEST);
+		boolean dres = settings.getPropertyAsBoolean(SetConstants.MVC_HTTP_DUMP_RESPONSE);
 
 		if (Strings.isEmpty(path) || (!dreq && !dres)) {
 			return sc.doNext(req, res);

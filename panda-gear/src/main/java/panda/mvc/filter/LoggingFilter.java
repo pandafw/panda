@@ -10,9 +10,10 @@ import panda.lang.time.DateTimes;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.MvcConstants;
 import panda.mvc.ServletChain;
 import panda.mvc.ServletFilter;
+import panda.mvc.SetConstants;
+import panda.mvc.util.MvcSettings;
 import panda.servlet.FilteredHttpServletResponseWrapper;
 import panda.servlet.HttpServlets;
 
@@ -40,44 +41,14 @@ import panda.servlet.HttpServlets;
  */
 @IocBean
 public class LoggingFilter implements ServletFilter {
-	private static final String DEFAULT_LOGGER = "access";
-
 	private static final String DEFAULT_FORMAT = "%t %a %h %p %m %s %A %V %P %S %T %I %u";
 
 	private static Log log = Logs.getLog(LoggingFilter.class);
 
-	private Log logger;
-
-	private String[] format;
-
-	/**
-	 * @param name the log name to set
-	 */
-	@IocInject(value=MvcConstants.ACCESS_LOG_NAME, required=false)
-	public void setLogger(String name) {
-		if (Strings.isNotEmpty(name)) {
-			logger = Logs.getLog(name);
-			if (!logger.isInfoEnabled()) {
-				logger = null;
-			}
-		}
-	}
-
-	/**
-	 * @param format the format to set
-	 */
-	@IocInject(value=MvcConstants.ACCESS_LOG_FORMAT, required=false)
-	public void setFormat(String format) {
-		this.format = parseFormat(format);
-	}
-
-	protected String[] parseFormat(String format) {
-		return Strings.split(Strings.remove(format, '%'));
-	}
+	@IocInject
+	private MvcSettings settings;
 
 	public LoggingFilter() {
-		setLogger(DEFAULT_LOGGER);
-		setFormat(DEFAULT_FORMAT);
 	}
 	
 	@Override
@@ -116,9 +87,7 @@ public class LoggingFilter implements ServletFilter {
 			return true;
 		}
 		finally {
-			if (logger != null) {
-				logAccess(req, res, sw);
-			}
+			logAccess(req, res, sw);
 		}
 	}
 
@@ -141,24 +110,23 @@ public class LoggingFilter implements ServletFilter {
 		}
 	}
 
-	private void append(StringBuilder msg, String value) {
-		append(msg, value, "");
-	}
-	
-	private void append(StringBuilder msg, String value, String defv) {
-		msg.append(Strings.isEmpty(value) ? defv : value);
-	}
-	
 	private void logAccess(HttpServletRequest request, HttpServletResponse response, StopWatch sw) {
-		if (logger == null) {
-			return;
-		}
-		
 		try {
+			String name = settings.getProperty(SetConstants.MVC_ACCESS_LOG_NAME);
+			if (Strings.isEmpty(name)) {
+				return;
+			}
+			
+			Log logger = Logs.getLog(name);
+			if (!logger.isInfoEnabled()) {
+				return;
+			}
+
 			sw.stop();
 
+			String[] format = parseFormat(settings.getProperty(SetConstants.MVC_ACCESS_LOG_FORMAT, DEFAULT_FORMAT));
+
 			StringBuilder msg = new StringBuilder();
-			
 			for (String s : format) {
 				char f = s.charAt(0);
 				switch (f) {
@@ -221,5 +189,17 @@ public class LoggingFilter implements ServletFilter {
 		catch (Throwable e) {
 			//pass
 		}
+	}
+
+	protected String[] parseFormat(String format) {
+		return Strings.split(Strings.remove(format, '%'));
+	}
+
+	private void append(StringBuilder msg, String value) {
+		append(msg, value, "");
+	}
+	
+	private void append(StringBuilder msg, String value, String defv) {
+		msg.append(Strings.isEmpty(value) ? defv : value);
 	}
 }

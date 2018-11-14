@@ -29,7 +29,13 @@ public interface SET extends SetConstants {
 	public static final String DATA_QUERY_TIMEOUT = "data.query.timeout";
 
 	//--------------------------------------------------------
-	public static final String LUCENE_LOCATION = "lucene.location";
+	// auth view
+	//
+	public static final String AUTH_VIEW_FORBIDDEN = "auth.view.forbidden";
+	
+	public static final String AUTH_VIEW_UNLOGIN = "auth.view.unlogin";
+	
+	public static final String AUTH_VIEW_UNSECURE = "auth.view.unsecure";
 
 	//------------------------------------------------
 	// scheduler & executor
@@ -40,6 +46,9 @@ public interface SET extends SetConstants {
 
 	public static final String TASK_ACTION_SCHEME = "task.action.scheme";
 
+	//--------------------------------------------------------
+	public static final String LUCENE_LOCATION = "lucene.location";
+
 	//------------------------------------------------
 	// html to pdf
 	//
@@ -48,15 +57,6 @@ public interface SET extends SetConstants {
 
 	/** The wkhtmltopdf processor wait timeout */
 	public static final String WKHTML2PDF_TIMEOUT = "wkhtml2pdf.timeout";
-
-	//--------------------------------------------------------
-	// auth view
-	//
-	public static final String VIEW_FORBIDDEN = "view.forbidden";
-	
-	public static final String VIEW_UNLOGIN = "view.unlogin";
-	
-	public static final String VIEW_UNSECURE = "view.unsecure";
 
 	//--------------------------------------------------------
 	// mail properties
