@@ -64,9 +64,9 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		xtag("input", a);
 
 		if (!(tag.isReadonly() || tag.isDisabled())) {
-			write("<button class=\"btn btn-sm btn-default p-uploader-btn\">");
+			write("<a class=\"btn btn-sm btn-default p-uploader-btn\">");
 			write(html(getText("btn-select-file", "Browse...")));
-			write("</button>");
+			write("</a>");
 		}
 		write("<div class=\"p-uploader-sep\"></div>");
 		
