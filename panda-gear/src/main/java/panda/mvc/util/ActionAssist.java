@@ -38,13 +38,6 @@ public class ActionAssist extends ActionSupport {
 	public Log getLog() {
 		return Logs.getLog(context.getAction().getClass());
 	}
-	
-	/**
-	 * @return true if app.debug = true
-	 */
-	public boolean isAppDebug() {
-		return Mvcs.isAppDebug(context);
-	}
 
 	public String getServletErrorReason(int sc) {
 		return HttpStatus.getStatusReason(sc);

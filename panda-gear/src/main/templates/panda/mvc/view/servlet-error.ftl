@@ -24,7 +24,7 @@
 		</ul>
 	</div>
 <#if assist.servletException??>
-	<#if assist.appDebug>
+	<#if appDebug>
 	<div class="alert alert-warning p-exception">
 		<h5>${action.getText('servlet-error-exception')}</h5>
 		<div>${assist.escapePhtml(assist.servletExceptionStackTrace)}</div>

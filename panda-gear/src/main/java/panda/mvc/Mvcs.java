@@ -157,10 +157,6 @@ public abstract class Mvcs {
 		return ac.getSettings().getPropertyAsBoolean(SetConstants.MVC_LINK_USECDN);
 	}
 
-	public static boolean isAppDebug(ActionContext ac) {
-		return ac.getSettings().getPropertyAsBoolean(SetConstants.APP_DEBUG);
-	}
-
 	/**
 	 * @param ac the action context
 	 * @return the static base path

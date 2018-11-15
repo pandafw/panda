@@ -448,7 +448,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	protected void logException(String method, Throwable e) {
 		log.warn(method, e);
 
-		if (assist().isAppDebug()) {
+		if (getContext().isAppDebug()) {
 			String s = Exceptions.getStackTrace(e);
 			addActionError(s);
 		}

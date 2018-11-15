@@ -183,7 +183,7 @@ public abstract class BindView extends DataView {
 
 		Map<String, Object> em = new HashMap<String, Object>();
 		em.put("message", ex.getMessage());
-		if (ac.getAssist().isAppDebug()) {
+		if (ac.isAppDebug()) {
 			em.put("stackTrace", Exceptions.getStackTrace(ex));
 		}
 		

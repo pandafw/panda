@@ -157,7 +157,7 @@ public class DataImportAction extends AbstractAction {
 
 	protected void logException(String method, Throwable e) {
 		Logs.getLog(getClass()).warn(method, e);
-		if (assist().isAppDebug()) {
+		if (getContext().isAppDebug()) {
 			String s = Exceptions.getStackTrace(e);
 			addActionError(e.getMessage() + "\n" + s);
 		}

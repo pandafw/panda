@@ -31,7 +31,7 @@ public class HtmlEditor extends TextArea {
 			cdn = Mvcs.isUseCdn(context);
 		}
 		if (debug == null) {
-			debug = Mvcs.isAppDebug(context);
+			debug = context.isAppDebug();
 		}
 	}
 

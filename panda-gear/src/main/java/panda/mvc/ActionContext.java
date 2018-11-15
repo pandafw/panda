@@ -380,6 +380,16 @@ public class ActionContext {
 	}
 
 	//----------------------------------------------------
+	// settings
+	//
+	/**
+	 * @return true if app.debug = true
+	 */
+	public boolean isAppDebug() {
+		return getSettings().getPropertyAsBoolean(SetConstants.APP_DEBUG);
+	}
+	
+	//----------------------------------------------------
 	// ioc object
 	//
 	/**
