@@ -12,7 +12,6 @@ import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 import panda.net.URLHelper;
 import panda.net.http.UserAgent;
-import panda.servlet.HttpServlets;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String CDN_BASE = Mvcs.PANDA_CDN + '/' + Panda.VERSION;
@@ -70,29 +69,43 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 	private void writeJquery() throws IOException {
 		if (js) {
-			if (tag.isJquery3()) {
+			int v = tag.isJquery3() ? 3 : (tag.isJquery2() ? 2 : (tag.isJquery1() ? 1 : 0));
+			if (v == 0) {
+				UserAgent ua = context.getUserAgent();
+				if (ua.isMsie()) {
+					int m = ua.getMajorVersion(UserAgent.MSIE);
+					v = m < 9 ? 1 : 2;
+				}
+				else {
+					v = 2;
+				}
+			}
+
+			switch (v) {
+			case 3:
 				if (tag.getCdn()) {
 					writeCdnJs(JQUERY3_CDN_PATH);
 				}
 				else {
 					writeStaticJs(JQUERY3_BIND_PATH);
 				}
-			}
-			else if (tag.isJquery2()) {
+				break;
+			case 2:
 				if (tag.getCdn()) {
 					writeCdnJs(JQUERY2_CDN_PATH);
 				}
 				else {
 					writeStaticJs(JQUERY2_BIND_PATH);
 				}
-			}
-			else if (tag.isJquery1() || tag.isJquery()) {
+				break;
+			case 1:
 				if (tag.getCdn()) {
 					writeCdnJs(JQUERY1_CDN_PATH);
 				}
 				else {
 					writeStaticJs(JQUERY1_BIND_PATH);
 				}
+				break;
 			}
 		}
 	}
@@ -277,7 +290,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	
 	private void writeRespondJs() throws IOException {
 		if (js && tag.isRespondjs()) {
-			UserAgent ua = HttpServlets.getUserAgent(context.getRequest());
+			UserAgent ua = context.getUserAgent();
 			if (ua.isMsie() && ua.getMajorVersion(UserAgent.MSIE) < 9) {
 				if (tag.useCdn()) {
 					writeCdnJs("//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond");
