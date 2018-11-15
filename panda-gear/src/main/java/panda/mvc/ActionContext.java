@@ -25,6 +25,8 @@ import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.util.StateProvider;
 import panda.mvc.util.TextProvider;
+import panda.net.http.UserAgent;
+import panda.servlet.HttpServlets;
 import panda.servlet.HttpSessionMap;
 import panda.servlet.ServletContextMap;
 import panda.servlet.ServletRequestAttrMap;
@@ -59,6 +61,7 @@ public class ActionContext {
 	//-------------------------------------
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	private UserAgent userAgent;
 
 	//--------------------------------------
 	private ActionChain chain;
@@ -164,6 +167,17 @@ public class ActionContext {
 	 */
 	public void setResponse(HttpServletResponse response) {
 		this.response = response;
+	}
+
+	
+	/**
+	 * @return the userAgent
+	 */
+	public UserAgent getUserAgent() {
+		if (userAgent == null) {
+			userAgent = HttpServlets.getUserAgent(request);
+		}
+		return userAgent;
 	}
 
 	//--------------------------------------------

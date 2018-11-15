@@ -182,7 +182,7 @@ public class LayoutProcessor extends AbstractProcessor {
 	}
 
 	protected String getLayoutFromUserAgent(ActionContext ac) {
-		UserAgent ua = HttpServlets.getUserAgent(ac.getRequest());
+		UserAgent ua = ac.getUserAgent();
 		if (ua.isMobile() || ua.isRobot()) {
 			return MOBILE_LAYOUT;
 		}

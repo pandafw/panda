@@ -32,8 +32,6 @@ import panda.servlet.HttpServlets;
 
 @IocBean(scope=Scope.REQUEST)
 public class ActionAssist extends ActionSupport {
-	private UserAgent userAgent;
-
 	/**
 	 * @return log
 	 */
@@ -180,11 +178,7 @@ public class ActionAssist extends ActionSupport {
 	 * @return userAgent
 	 */
 	public UserAgent getUserAgent() {
-		if (userAgent == null) {
-			HttpServletRequest req = getRequest();
-			userAgent = HttpServlets.getUserAgent(req);
-		}
-		return userAgent;
+		return context.getUserAgent();
 	}
 
 	/**
