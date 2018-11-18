@@ -63,15 +63,10 @@ public abstract class Images {
 	/**
 	 * @param data image data
 	 * @return image wrapper
-	 * @throws RuntimeException if the data is not a image
+	 * @throws IOException if the data is not a image
 	 */
-	public ImageWrapper read(byte[] data) {
-		try {
-			return read(new ByteArrayInputStream(data));
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	public ImageWrapper read(byte[] data) throws IOException {
+		return read(new ByteArrayInputStream(data));
 	}
 
 	/**
