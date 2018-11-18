@@ -19,13 +19,20 @@
 .p-w100p		{ width: 100%; }
 .p-wauto		{ width: auto; }
 
+.p-wh16px		{ width: 16px; height: 16px; }
+.p-wh24px		{ width: 24px; height: 24px; }
+.p-wh32px		{ width: 32px; height: 32px; }
+.p-wh48px		{ width: 48px; height: 48px; }
+.p-wh64px		{ width: 64px; height: 64px; }
+.p-wh128px		{ width: 128px; height: 128px; }
+
 .p-fleft		{ float: left;}
 .p-fright		{ float: right; }
 .p-fnone		{ float: none; }
 
-.p-block		{ display: block; }
-.p-inline		{ display: inline; }
-.p-iblock		{ display: inline-block; }
+.p-dblock		{ display: block; }
+.p-dinline		{ display: inline; }
+.p-diblock		{ display: inline-block; }
 .p-hidden		{ display: none; }
 .p-dispear		{ position: absolute; top: -999999px; left: -999999px; }
 
