@@ -71,6 +71,12 @@ public abstract class FileNames {
 	protected static final Pattern ABS_PATH = Pattern.compile("^[/\\\\]|[a-zA-Z]:[/\\\\]");
 
 	/**
+	 * maximum file name length
+	 * https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+	 */
+	public static final int MAX_FILENAME_LENGTH = 255;
+	
+	/**
 	 * The extension separator character.
 	 */
 	public static final char EXTENSION_SEPARATOR = '.';
