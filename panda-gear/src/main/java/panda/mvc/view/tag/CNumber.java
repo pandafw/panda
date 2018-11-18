@@ -70,19 +70,24 @@ public class CNumber extends ContextBean {
 	 */
 	public boolean end(Writer writer, String body) {
 		if (value != null) {
-			if (pattern == null) {
-				pattern = getNumberPattern(format);
-			}
-
 			String msg = null;
-			if (pattern == null) {
-				msg = Numbers.format(value);
+
+			if ("filesize".equalsIgnoreCase(format)) {
+				msg = Numbers.formatSize(value); 
 			}
 			else {
-				NumberFormat df = new DecimalFormat(pattern, new DecimalFormatSymbols(context.getLocale()));
-				msg = df.format(value);
+				if (pattern == null) {
+					pattern = getNumberPattern(format);
+				}
+	
+				if (pattern == null) {
+					msg = Numbers.format(value);
+				}
+				else {
+					NumberFormat df = new DecimalFormat(pattern, new DecimalFormatSymbols(context.getLocale()));
+					msg = df.format(value);
+				}
 			}
-
 			writeOrSetVar(writer, msg);
 		}
 		return super.end(writer, "");
