@@ -2,8 +2,8 @@ package panda.mvc.validator;
 
 import java.io.File;
 
-import panda.io.Files;
 import panda.ioc.annotation.IocBean;
+import panda.lang.Numbers;
 import panda.mvc.ActionContext;
 import panda.vfs.FileItem;
 
@@ -72,21 +72,21 @@ public class FileValidator extends AbstractValidator {
 	 * @return minFileSize
 	 */
 	public String getMinFileSize() {
-		return Files.toDisplaySize(minLength);
+		return Numbers.formatSize(minLength);
 	}
 	
 	/**
 	 * @return maxFileSize
 	 */
 	public String getMaxFileSize() {
-		return Files.toDisplaySize(maxLength);
+		return Numbers.formatSize(maxLength);
 	}
 	
 	/**
 	 * @return fileSize
 	 */
 	public String getFileSize() {
-		return Files.toDisplaySize(length);
+		return Numbers.formatSize(length);
 	}
 	
 	@Override

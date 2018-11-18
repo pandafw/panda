@@ -11,11 +11,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import panda.io.Files;
 import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Asserts;
+import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.lang.time.StopWatch;
@@ -318,7 +318,7 @@ public class HttpClient {
 				.append(" - ").append(response.getStatusLine());
 			msg.append(" (");
 			if (response.getContentLength() != null) {
-				msg.append(Files.toDisplaySize(response.getContentLength())).append(" / ");
+				msg.append(Numbers.formatSize(response.getContentLength())).append(" / ");
 			}
 			msg.append(sw).append(')');
 			if (response.getHeader() != null) {

@@ -6,8 +6,8 @@ import java.util.Map;
 
 import panda.bind.json.JsonObject;
 import panda.doc.html.HTMLEntities;
-import panda.io.Files;
 import panda.lang.Collections;
+import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
@@ -169,7 +169,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 	}
 	
 	private String filesize(Integer fs) {
-		String sz = Files.toDisplaySize(fs);
+		String sz = Numbers.formatSize(fs);
 
 		if (sz.length() > 0) {
 			sz = '(' + sz + ')';

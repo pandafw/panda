@@ -1,6 +1,6 @@
 package panda.net;
 
-import panda.io.Files;
+import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 
@@ -25,7 +25,7 @@ public class Inets {
 	 * @return speed string
 	 */
 	public static String toSpeedString(double speed) {
-		return Files.toDisplaySize(speed) + "/s";
+		return Numbers.formatSize(speed) + "/s";
 	}
 
 	/**

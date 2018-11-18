@@ -1,7 +1,7 @@
 package panda.mvc.validator;
 
-import panda.io.Files;
 import panda.ioc.annotation.IocBean;
+import panda.lang.Numbers;
 import panda.mvc.ActionContext;
 
 @IocBean(singleton=false)
@@ -54,21 +54,21 @@ public class BinaryValidator extends AbstractValidator {
 	 * @return minBinSize
 	 */
 	public String getMinBinSize() {
-		return Files.toDisplaySize(minLength);
+		return Numbers.formatSize(minLength);
 	}
 
 	/**
 	 * @return maxBinSize
 	 */
 	public String getMaxBinSize() {
-		return Files.toDisplaySize(maxLength);
+		return Numbers.formatSize(maxLength);
 	}
 
 	/**
 	 * @return BinSize
 	 */
 	public String getBinSize() {
-		return Files.toDisplaySize(length);
+		return Numbers.formatSize(length);
 	}
 
 	@Override

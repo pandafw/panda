@@ -2,6 +2,8 @@ package panda.io;
 
 import java.io.IOException;
 
+import panda.lang.Numbers;
+
 public class SizeLimitExceededException extends IOException {
 
 	private static final long serialVersionUID = 1L;
@@ -54,7 +56,7 @@ public class SizeLimitExceededException extends IOException {
 	 * @return The actual size of the request.
 	 */
 	public String getDisplayActualSize() {
-		return Files.toDisplaySize(actual);
+		return Numbers.formatSize(actual);
 	}
 
 	/**
@@ -63,6 +65,6 @@ public class SizeLimitExceededException extends IOException {
 	 * @return The limited size of the request.
 	 */
 	public String getDisplayLimitedSize() {
-		return Files.toDisplaySize(limited);
+		return Numbers.formatSize(limited);
 	}
 }

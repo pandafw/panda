@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Chars;
 import panda.lang.Charsets;
@@ -268,7 +267,7 @@ public class HttpResponse implements Closeable {
 
 				if (log.isDebugEnabled()) {
 					log.debug("DOWN " + url + " - (" 
-							+ Files.toDisplaySize(content.length) + " / " + sw 
+							+ Numbers.formatSize(content.length) + " / " + sw 
 							+ ") [" + Inets.toSpeedString(content.length, sw.getTime()) + "]");
 				}
 			}

@@ -9,10 +9,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import panda.bind.json.Jsons;
-import panda.io.Files;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
+import panda.lang.Numbers;
 import panda.lang.Objects;
 import panda.lang.Order;
 import panda.lang.StringEscapes;
@@ -264,12 +264,11 @@ public class ActionAssist extends ActionSupport {
 	}
 	
 	/**
-	 * @param size file size
+	 * @param size size
 	 * @return formatted string
-	 * @see Files#toDisplaySize(Long)
 	 */
-	public String formatFileSize(Long size) {
-		return Files.toDisplaySize(size);
+	public String formatSize(Number size) {
+		return Numbers.formatSize(size);
 	}
 	
 	/**

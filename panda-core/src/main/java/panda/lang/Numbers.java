@@ -2241,4 +2241,207 @@ public class Numbers {
 		return sb.toString();
 	}
 
+	// -----------------------------------------------------------------------
+	private static String _formatFileSize(final double size) {
+		return cutFormat(size, 2);
+	}
+	
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final BigInteger size) {
+		if (size == null) {
+			return Strings.EMPTY;
+		}
+
+		return formatSize(new BigDecimal(size));
+	}
+	
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final BigDecimal size) {
+		if (size == null) {
+			return Strings.EMPTY;
+		}
+
+		String sz;
+		if (size.compareTo(Numbers.BD_YB) > 0) {
+			sz = _formatFileSize(size.divide(BD_YB).doubleValue()) + " YB";
+		}
+		else if (size.compareTo(BD_ZB) > 0) {
+			sz = _formatFileSize(size.divide(BD_ZB).doubleValue()) + " ZB";
+		}
+		else {
+			sz = formatSize(size.longValue());
+		}
+		return sz;
+	}
+
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final Number size) {
+		if (size == null) {
+			return Strings.EMPTY;
+		}
+
+		return formatSize(size.doubleValue());
+	}
+
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final long size) {
+		return formatSize((double)size);
+	}
+	
+
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final double size) {
+		String sz;
+		if (size >= EB) {
+			sz = _formatFileSize(size / EB) + " EB";
+		}
+		else if (size >= PB) {
+			sz = _formatFileSize(size / PB) + " PB";
+		}
+		else if (size >= TB) {
+			sz = _formatFileSize(size / TB) + " TB";
+		}
+		else if (size >= GB) {
+			sz = _formatFileSize(size / GB) + " GB";
+		}
+		else if (size >= MB) {
+			sz = _formatFileSize(size / MB) + " MB";
+		}
+		else if (size >= KB) {
+			sz = _formatFileSize(size / KB) + " KB";
+		}
+		else {
+			sz = _formatFileSize(size) + " bytes";
+		}
+		return sz;
+	}
+
+	/**
+	 * parse display size to number.
+	 * return null if the input string is not a valid display size string.
+	 * 
+	 * @param str display size string
+	 * @return number
+	 */
+	public static BigDecimal parseSize(final String str) {
+		if (Strings.isEmpty(str)) {
+			return null;
+		}
+
+		int i = 0;
+		while (i < str.length() && !Character.isLetter(str.charAt(i))) {
+			i++;
+		}
+
+		BigDecimal n = toBigDecimal(Strings.strip(str.substring(0, i)));
+		if (n == null) {
+			return null;
+		}
+
+		if (i == str.length()) {
+			return n;
+		}
+
+		char unit = str.charAt(i);
+		switch (unit) {
+		case 'Y':
+		case 'y':
+			n = n.multiply(BD_YB);
+			break;
+		case 'Z':
+		case 'z':
+			n = n.multiply(BD_ZB);
+			break;
+		case 'E':
+		case 'e':
+			n = n.multiply(BD_EB);
+			break;
+		case 'P':
+		case 'p':
+			n = n.multiply(BD_PB);
+			break;
+		case 'T':
+		case 't':
+			n = n.multiply(BD_TB);
+			break;
+		case 'G':
+		case 'g':
+			n = n.multiply(BD_GB);
+			break;
+		case 'M':
+		case 'm':
+			n = n.multiply(BD_MB);
+			break;
+		case 'K':
+		case 'k':
+			n = n.multiply(BD_KB);
+			break;
+		}
+		return n;
+	}
 }
