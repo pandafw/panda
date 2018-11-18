@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pandafw.github.io/repos/1.3.0/panda-codegen-module.xsd">
+	<include>codegen.xml</include>
+
+	<!-- entity -->
+	<entity name="${entity.package}.Media" baseBeanClass="${entity.uBeanClass}" baseQueryClass="${entity.uQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
+		<property name="id" type="Long" notNull="true" primaryKey="true"/>
+		<property name="kind" type="String" size="2">
+			<validator type="constant">
+				<param name="list" value="'%{consts.mediaKindMap}'"/>
+			</validator>
+		</property>
+		<property name="mediaName" type="String" size="255">
+			<validator type="stringlength">
+				<param name="maxLength" value="255"/>
+			</validator>
+		</property>
+		<property name="mediaData" type="byte[]" jdbcType="BLOB" notNull="true"/>
+		<property name="mediaSize" type="Integer" notNull="true"/>
+		<property name="mediaWidth" type="Integer" notNull="true"/>
+		<property name="mediaHeight" type="Integer" notNull="true"/>
+		<property name="mediaFile" type="FileItem" column="false">
+			<validator type="file"/>
+			<validator type="image"/>
+		</property>
+	</entity>
+
+	<!-- action -->
+	<action name="action.Media" entity="${entity.package}.Media" extend="baseAction">
+		<property name="file" type="FileItem"/>
+		<list name="basicList" extend="uList">
+			<column name="id" hidden="false" sortable="true" link="true">
+				<filter type="number"/>
+			</column>
+			<column name="kind" hidden="false" sortable="true" link="false">
+				<format type="code">
+					<param name="codemap" value="consts.mediaKindMap"/>
+				</format>
+				<filter type="select">
+					<param name="list" value="consts.mediaKindMap"/>
+				</filter>
+			</column>
+			<column name="mediaName" hidden="false" sortable="true" link="true">
+				<filter type="string"/>
+			</column>
+			<column name="mediaSize" hidden="false" sortable="true" link="false">
+				<format type="filesize"/>
+			</column>
+			<column name="mediaWidth" hidden="false" sortable="true" link="false"/>
+			<column name="mediaHeight" hidden="false" sortable="true" link="false"/>
+			<column name="mediaFile" hidden="false" sortable="true" link="false">
+				<format type="expr">
+					<param name="expr" value="&quot;action.getMediaLink(top)&quot;"/>
+					<param name="escape" value="&quot;none&quot;"/>
+				</format>
+			</column>
+		</list>
+		<list name="basicBulk" extend="basicList">
+			<param name="toolbar" value="${bulk.toolbar}"/>
+			<param name="buttons" value="${bulk.buttons}"/>
+		</list>
+		<input name="basicInput" extend="uInput">
+			<field name="id">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="mediaName">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="255"/>
+				</editTag>
+			</field>
+			<field name="mediaSize">
+				<editTag name="${tag.viewfield}">
+					<param name="format" value="filesize"/>
+				</editTag>
+			</field>
+			<field name="mediaWidth">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="mediaHeight">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="mediaFile">
+				<editTag name="${tag.uploader}">
+					<param name="accept" value="image/*"/>
+					<param name="size" value="${tag.uploader.size}"/>
+					<param name="uploadAction" value="%{b.files_path + '/upload'}"/>
+					<param name="uploadName" value="file"/>
+					<param name="dnloadAction" value="%{b.files_path + '/download'}"/>
+					<param name="dnloadName" value="id"/>
+					<param name="defaultAction" value="mediaview"/>
+					<param name="defaultParams" value="!{'id': '%{r.id}'}"/>
+					<param name="defaultEnable" value="%{r.id != null &amp;&amp; r.mediaSize > 0}"/>
+				</editTag>
+			</field>
+		</input>
+		<input name="basicAdd" extend="basicInput">
+			<field name="mediaFile" required="true"/>
+		</input>
+	</action>
+	<action name="media" extend="action.Media" actionClass="${action.package}.media.MediaListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
+		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
+	</action>
+	<action name="media" extend="action.Media" actionClass="${action.package}.media.MediaBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="media" extend="action.Media" actionClass="${action.package}.media.MediaEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+		<input name="view" extend="basicInput" template="${template.view}" generate="true">
+			<param name="toolbar" value="${view.toolbar}"/>
+			<param name="actions" value="${view.actions}"/>
+		</input>
+		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+		<input name="add" extend="basicAdd" template="${template.add}" generate="true"/>
+		<input name="copy" extend="basicAdd" template="${template.copy}" generate="true"/>
+		<input name="edit" extend="basicInput" template="${template.edit}" generate="true"/>
+		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
+			<param name="toolbar" value="${delete.toolbar}"/>
+			<param name="actions" value="${delete.actions}"/>
+		</input>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="${entity.package}.Media">
+			<property name="kind" label="Kind"/>
+			<property name="mediaName" label="Media Name"/>
+			<property name="mediaSize" label="Media Size"/>
+			<property name="mediaWidth" label="Media Width"/>
+			<property name="mediaHeight" label="Media Height"/>
+			<property name="mediaFile" label="Media"/>
+		</entity>
+		<action name="media" title="Media">
+			<property name="icon" label="fa fa-picture-o"/>
+		</action>
+	</resource>
+	<resource locale="ja">
+		<entity name="${entity.package}.Media">
+			<property name="kind" label="種別"/>
+			<property name="mediaName" label="メディア名"/>
+			<property name="mediaSize" label="メディアサイズ"/>
+			<property name="mediaWidth" label="メディア幅"/>
+			<property name="mediaHeight" label="メディア高"/>
+			<property name="mediaFile" label="メディア"/>
+		</entity>
+		<action name="media" title="メディア"/>
+	</resource>
+	<resource locale="zh">
+		<entity name="${entity.package}.Media">
+			<property name="kind" label="种类"/>
+			<property name="mediaName" label="媒体名"/>
+			<property name="mediaSize" label="媒体大小"/>
+			<property name="mediaWidth" label="媒体宽"/>
+			<property name="mediaHeight" label="媒体高"/>
+			<property name="mediaFile" label="媒体"/>
+		</entity>
+		<action name="media" title="媒体"/>
+	</resource>
+</module>

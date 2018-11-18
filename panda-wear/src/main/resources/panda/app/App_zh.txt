@@ -46,8 +46,8 @@ navi-admin-index=索引管理
 navi-admin-tag=标签管理
 
 navi-super=系统管理
-navi-super-sysdump=系统信息
-navi-super-loadtask=应用缓存
+
+navi-super-media=媒体
 navi-super-property=配置
 navi-super-resource=资源
 navi-super-template=模板
@@ -61,9 +61,11 @@ navi-super-eleval=EL工具
 navi-super-filepool=文件池
 navi-super-hash=哈希工具
 navi-super-html2pdf=HTML⇒PDF打印
+navi-super-loadtask=应用缓存
 navi-super-pwdhash=密码哈希
 navi-super-sqlexec=SQL工具
 navi-super-sendmail=电子邮件送信
+navi-super-sysdump=系统信息
 
 
 #-----------------------------------------------------------------------------

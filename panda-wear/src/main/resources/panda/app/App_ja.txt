@@ -48,8 +48,9 @@ navi-admin-tag=タグ管理
 
 
 navi-super=システム管理
-navi-super-sysdump=システムダンプ
-navi-super-loadtask=キャッシュ
+
+navi-super-media=メディア
+navi-super-filepool=ファイルプール
 navi-super-property=プロパティ
 navi-super-resource=リソース
 navi-super-template=テンプレート
@@ -60,12 +61,13 @@ navi-super-datacpy=データ移行
 navi-super-dataexp=データエクスポート
 navi-super-dataimp=データインポート
 navi-super-eleval=ELツール
-navi-super-filepool=ファイルプール
 navi-super-hash=ハッシュツール
 navi-super-html2pdf=HTML⇒PDF出力
+navi-super-loadtask=キャッシュ
 navi-super-pwdhash=パスワードハッシュ
 navi-super-sendmail=メール送信
 navi-super-sqlexec=SQLツール
+navi-super-sysdump=システムダンプ
 
 
 #-----------------------------------------------------------------------------

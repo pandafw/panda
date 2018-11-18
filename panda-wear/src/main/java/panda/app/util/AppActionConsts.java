@@ -69,6 +69,14 @@ public class AppActionConsts extends ActionConsts {
 	}
 
 	/**
+	 * get media kind map
+	 * @return map
+	 */
+	public Map<String, String> getMediaKindMap() {
+		return getTextAsMap(RES.MEDIA_KINDS);
+	}
+
+	/**
 	 * get weekdays
 	 * @return weekdays list
 	 */

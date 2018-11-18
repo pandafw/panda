@@ -1,0 +1,13 @@
+kind=種別
+
+mediaName=メディア名
+
+mediaSize=メディアサイズ
+
+mediaWidth=メディア幅
+
+mediaHeight=メディア高
+
+mediaFile=メディア
+
+

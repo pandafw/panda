@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import panda.app.entity.Media;
 import panda.app.entity.Resource;
 import panda.app.entity.Template;
 import panda.dao.Dao;
@@ -36,7 +37,8 @@ public abstract class AppHelper {
 			DaoFileItem.class,
 			DaoFileData.class,
 			Template.class,
-			Resource.class
+			Resource.class,
+			Media.class
 		};
 		
 

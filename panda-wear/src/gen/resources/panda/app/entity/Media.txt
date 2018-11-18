@@ -1,0 +1,13 @@
+kind=Kind
+
+mediaName=Media Name
+
+mediaSize=Media Size
+
+mediaWidth=Media Width
+
+mediaHeight=Media Height
+
+mediaFile=Media
+
+

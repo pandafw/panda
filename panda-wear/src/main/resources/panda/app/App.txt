@@ -89,8 +89,8 @@ icon-admin-index=fa fa-search
 icon-admin-tag=fa fa-bookmark
 
 navi-super=System
-icon-super=fa fa-wrench
 
+navi-super-media=Media
 navi-super-filepool=File Pool
 navi-super-property=Property
 navi-super-resource=Resource
@@ -110,6 +110,10 @@ navi-super-sendmail=Send Mail
 navi-super-sqlexec=SQL Tool
 navi-super-sysdump=System Dump
 
+
+icon-super=fa fa-wrench
+
+icon-super-media=fa fa-picture-o
 icon-super-filepool=fa fa-file-o
 icon-super-property=fa fa-file-text-o
 icon-super-resource=fa fa-file-text-o

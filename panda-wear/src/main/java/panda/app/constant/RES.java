@@ -25,6 +25,11 @@ public interface RES {
 	public final static String LOCALE_COUNTRIES = "locale-countries";
 
 	/**
+	 *  MEDIA_KINDS = "media-kinds";
+	 */
+	public final static String MEDIA_KINDS = "media-kinds";
+
+	/**
 	 * CALENDAR_WEEKDAYS = "calendar-weekdays";
 	 */
 	public final static String CALENDAR_WEEKDAYS = "calendar-weekdays";;
