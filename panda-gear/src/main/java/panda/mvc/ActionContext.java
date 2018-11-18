@@ -638,14 +638,6 @@ public class ActionContext {
 	// shortcut alias
 	//
 	/**
-	 * @return self
-	 * @see #getContext
-	 */
-	public ActionContext getC() {
-		return this;
-	}
-	
-	/**
 	 * @return the action object
 	 * @see #getAction()
 	 */
@@ -653,6 +645,22 @@ public class ActionContext {
 		return action;
 	}
 
+	/**
+	 * @return ioc beans
+	 * @see #getBeans
+	 */
+	public IocProxy getB() {
+		return getBeans();
+	}
+	
+	/**
+	 * @return self
+	 * @see #getContext
+	 */
+	public ActionContext getC() {
+		return this;
+	}
+	
 	/**
 	 * @return the request parameters
 	 * @see #getParams()
