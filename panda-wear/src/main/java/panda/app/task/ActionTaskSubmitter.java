@@ -47,14 +47,20 @@ public class ActionTaskSubmitter implements Runnable {
 
 	@Override
 	public void run() {
-		scheme = settings.getProperty(SET.TASK_ACTION_SCHEME, scheme);
-
 		String url = task.getAction();
 		if (servlet != null && url.startsWith("/")) {
+			scheme = settings.getProperty(SET.TASK_ACTION_SCHEME, scheme);
 			url = scheme + servlet.getContextPath() + url;
 		}
 
-		int errorLimit = task.getErrorLimit() == null ? defaultErrorLimit : task.getErrorLimit();
+		int errorLimit = defaultErrorLimit;
+		if (task.getErrorLimit() == null) {
+			defaultErrorLimit = settings.getPropertyAsInt(SET.TASK_ERROR_LIMIT, defaultErrorLimit);
+			errorLimit = defaultErrorLimit;
+		}
+		else {
+			errorLimit = task.getErrorLimit();
+		}
 		
 		if (log.isInfoEnabled()) {
 			log.info("Start action task: " + url);

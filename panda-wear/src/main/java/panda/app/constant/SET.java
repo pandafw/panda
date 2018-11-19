@@ -44,7 +44,11 @@ public interface SET extends SetConstants {
 
 	public static final String EXECUTOR_ENABLE = "executor.enable";
 
+	/** The task action scheme */
 	public static final String TASK_ACTION_SCHEME = "task.action.scheme";
+
+	/** The task error limit */
+	public static final String TASK_ERROR_LIMIT = "task.error.limit";
 
 	//--------------------------------------------------------
 	public static final String LUCENE_LOCATION = "lucene.location";
