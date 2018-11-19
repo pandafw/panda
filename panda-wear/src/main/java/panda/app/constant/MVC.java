@@ -66,15 +66,6 @@ public interface MVC extends MvcConstants {
 	public static final String TASK_LOAD_KEYS = "panda.task.load.keys";
 
 	//------------------------------------------------
-	// html to pdf
-	//
-	/** The wkhtmltopdf exe path */
-	public static final String WKHTML2PDF_PATH = "panda.wkhtml2pdf.path";
-
-	/** The wkhtmltopdf processor wait timeout */
-	public static final String WKHTML2PDF_TIMEOUT = "panda.wkhtml2pdf.timeout";
-
-	//------------------------------------------------
 	// The authenticate
 	//
 	public static final String AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";

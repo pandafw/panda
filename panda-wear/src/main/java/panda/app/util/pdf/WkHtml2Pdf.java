@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.util.AppSettings;
 import panda.io.Files;
@@ -25,42 +24,21 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpHeader;
 
-@IocBean(type=Html2Pdf.class, singleton=false, create="initialize")
+@IocBean(type=Html2Pdf.class)
 public class WkHtml2Pdf extends Html2Pdf {
 	private static final Log log = Logs.getLog(WkHtml2Pdf.class);
 
 	@IocInject
 	protected AppSettings settings;
 	
-	@IocInject(value=MVC.WKHTML2PDF_PATH, required=false)
-	protected String path = "wkhtmltopdf";
-	
-	@IocInject(value=MVC.WKHTML2PDF_TIMEOUT, required=false)
-	protected int timeout = 120;
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public int getTimeout() {
-		return timeout;
-	}
-
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
-	}
-
-	public void initialize() {
-		path = settings.getProperty(SET.WKHTML2PDF_PATH, path);
-		timeout = settings.getPropertyAsInt(SET.WKHTML2PDF_TIMEOUT, timeout);
-	}
-	
 	@Override
 	public void process(OutputStream os) throws Exception {
+		String path = "wkhtmltopdf";
+		int timeout = 120;
+
+		path = settings.getProperty(SET.WKHTML2PDF_PATH, path);
+		timeout = settings.getPropertyAsInt(SET.WKHTML2PDF_TIMEOUT, timeout);
+
 		if (!Files.isFile(path)) {
 			throw new RuntimeException("wkhtmltopdf not exists: " + path);
 		}
@@ -148,7 +126,7 @@ public class WkHtml2Pdf extends Html2Pdf {
 			}
 
 			if (w.exitValue() != 0) {
-				throw new IOException("Html2PDF failed with code (" + w.exitValue() + ")\n" + sb.toString());
+				throw new IOException(path + " failed with code (" + w.exitValue() + "): " + sb.toString());
 			}
 			Files.copyFile(of, os);
 		}
