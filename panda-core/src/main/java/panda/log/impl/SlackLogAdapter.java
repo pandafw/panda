@@ -1,17 +1,19 @@
 package panda.log.impl;
 
-import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import panda.bind.json.JsonSerializer;
 import panda.bind.json.Jsons;
 import panda.ex.slack.Attachment;
 import panda.ex.slack.Message;
 import panda.io.MimeTypes;
 import panda.io.Streams;
+import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.log.Log;
@@ -130,21 +132,25 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 		HttpURLConnection conn = null;
 		OutputStream hos = null;
 		try {
-			String body = Jsons.toJson(msg, true);
-
 			conn = (HttpURLConnection)webhook.openConnection();
 
 			conn.setConnectTimeout(connTimeout);
 			conn.setReadTimeout(readTimeout);
 			conn.setRequestMethod(HttpMethod.POST);
-			conn.addRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.APP_JAVASCRIPT);
+			conn.addRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.APP_JAVASCRIPT + "; charset=UTF-8");
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
 			
 			hos = conn.getOutputStream();
-			DataOutputStream dos = new DataOutputStream(hos);
-			dos.writeBytes(body);
-			dos.flush();
+			hos = conn.getOutputStream();
+
+			OutputStream bos = Streams.buffer(hos);
+			Writer writer = Streams.toWriter(bos, Charsets.UTF_8);
+			JsonSerializer js = Jsons.newJsonSerializer();
+			js.serialize(msg, writer);
+
+			writer.flush();
+			bos.flush();
 			hos.flush();
 		}
 		catch (Throwable e) {
