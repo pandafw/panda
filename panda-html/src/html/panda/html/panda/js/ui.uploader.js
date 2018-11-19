@@ -1,4 +1,9 @@
 (function($) {
+	var isAdvancedUpload = function() {
+		var div = document.createElement('div');
+		return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+	}();
+
 	var puploader = function($u) {
 		if ($u.data('puploader')) {
 			return;
@@ -6,7 +11,8 @@
 		$u.data('puploader', true);
 		
 		var loading = false;
-		
+		var progress = 0;
+
 		var $uf = $u.children('.p-uploader-file');
 		var $ub = $u.children('.p-uploader-btn');
 
@@ -74,39 +80,91 @@
 			$(this).closest('.p-uploader-item').fadeOut(function() { $(this).remove(); });
 			$ue.hide().empty();
 		}
-		
-		function _upload() {
-			if (loading || $uf.val() == "") {
-				return;
-			}
+
+		function _start_upload() {
 			loading = true;
+			progress = 0;
 
 			$ub.length ? $ub.hide() : $uf.hide();
 			$ue.hide().empty();
 
 			$up.show();
 
-			var progress = 0;
-			
-			_progress(progress);
+			_do_progress();
+		}
 
-			var timer = setInterval(function() {
-				_progress(progress++);
-				if (progress >= 90) {
-					if (timer) {
-						clearInterval(timer);
-						timer = null;
+		function _do_progress() {
+			_progress(progress++);
+			if (progress < 90) {
+				setTimeout(_do_progress, 20);
+			}
+		}
+		
+		function _end_upload() {
+			_progress(100);
+			$up.hide();
+			$uf.val("");
+			$ub.length ? $ub.show() : $uf.show();
+			loading = false;
+		}
+
+		function _upload_on_success(d) {
+			_end_upload();
+
+			if (d.success) {
+				$u.children('.p-uploader-item').remove();
+				
+				var r = d.result;
+				if ($.isArray(r)) {
+					for (var i = 0; i < r.length; i++) {
+						_info(r[i]);
 					}
 				}
-			}, 20);
-
-			function _endUpload() {
-				_progress(100);
-				$up.hide();
-				$uf.val("");
-				$ub.length ? $ub.show() : $uf.show();
-				loading = false;
+				else {
+					_info(r);
+				}
 			}
+			else {
+				if (d.alerts) {
+					$ue.palert('add', d.alerts);
+				}
+				if (d.exception) {
+					var e = d.exception;
+					$ue.palert('error', (e.message + (e.stackTrace ? ("\n" + e.stackTrace) : "")).escapePhtml());
+				}
+				$ue.slideDown();
+			}
+		}
+
+		function _upload_on_error(xhr, status, e) {
+			_end_upload();
+			$ue.palert('error', (e ? (e + "").escapePhtml() : (xhr ? xhr.responseText : status)));
+			$ue.slideDown();
+		}
+		
+		function _upload_on_change() {
+			if (loading || $uf.val() == "") {
+				return;
+			}
+
+			if (isAdvancedUpload && $uf[0].files) {
+				_ajax_upload($uf[0].files);
+			}
+			else {
+				_ajaf_upload();
+			}
+		}
+
+		function _upload_on_drop(e) {
+			e.preventDefault();
+			if (loading) {
+				return;
+			}
+			_ajax_upload(e.originalEvent.dataTransfer.files);
+		}
+
+		function _ajaf_upload() {
+			_start_upload();
 
 			var file = {}; file[$u.data('uploadName')] = $uf; 
 			$.ajaf({
@@ -114,42 +172,45 @@
 				data: JSON.sparse($u.data('uploadData')),
 				file: file,
 				dataType: 'json',
-				success: function(d) {
-					_endUpload();
-					if (d.success) {
-						$u.children('.p-uploader-item').remove();
-						
-						var r = d.result;
-						if ($.isArray(r)) {
-							for (var i = 0; i < r.length; i++) {
-								_info(r[i]);
-							}
-						}
-						else {
-							_info(r);
-						}
-					}
-					else {
-						if (d.alerts) {
-							$ue.palert('add', d.alerts);
-						}
-						if (d.exception) {
-							var e = d.exception;
-							$ue.palert('error', (e.message + (e.stackTrace ? ("\n" + e.stackTrace) : "")).escapePhtml());
-						}
-						$ue.slideDown();
-					}
-				},
-				error: function(xhr, status, e) {
-					_endUpload();
-					$ue.palert('error', (e ? (e + "").escapePhtml() : (xhr ? xhr.responseText : status)));
-					$ue.slideDown();
-				}
+				success: _upload_on_success,
+				error: _upload_on_error
 			});
 		}
 
+		function _ajax_upload(dfs) {
+			_start_upload();
+
+			var data = new FormData();
+
+			var ud = JSON.sparse($u.data('uploadData'));
+			if (ud) {
+				for (var i in ud) {
+					data.append(i, ud[i]);
+				}
+			}
+
+			if (dfs) {
+				$.each(dfs, function(i, f) {
+					data.append($u.data('uploadName'), f);
+				});
+			}
+
+			$.ajax({
+				url: $u.data('uploadLink'),
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: _upload_on_success,
+				error: _upload_on_error
+			});
+		}
+
+		// event handler
 		$uf.change(function() { 
-			setTimeout(_upload, 10);
+			setTimeout(_upload_on_change, 10);
 		});
 		
 		$ub.click(function(e) {
@@ -157,6 +218,22 @@
 			$uf.trigger('click');
 			return false;
 		});
+
+		// drap & drop
+		if (isAdvancedUpload) {
+			$u.addClass('p-uploader-draggable')
+				.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+				})
+				.on('dragover dragenter', function() {
+					$u.addClass('p-uploader-dragover');
+				})
+				.on('dragleave dragend drop', function() {
+					$u.removeClass('p-uploader-dragover');
+				})
+				.on('drop', _upload_on_drop);
+		}
 	};
 
 	// UPLOADER FUNCTION

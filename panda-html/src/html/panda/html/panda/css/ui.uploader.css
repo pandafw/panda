@@ -34,3 +34,13 @@
 	max-width: 192px;
 	max-height: 192px;
 }
+
+/* drag & drop */
+.p-uploader-draggable {
+	padding: 20px;
+	outline: 2px dashed #ccc;
+	outline-offset: -10px;
+}
+.p-uploader-dragover {
+	background-color: #eee;
+}
