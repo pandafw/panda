@@ -15,6 +15,7 @@ Features
  - Font-Awesome
  - jQuery
  - jQuery Plugins
+
    | Name                         | Description                         |
    |------------------------------|-------------------------------------|
    | jquery.ajaf.js               | a ajax for file upload              |
@@ -23,6 +24,7 @@ Features
    | jquery.disable.js            | $.disable function                  |
    | jquery.jscript.js            | dynamic load javascript             |
    | jquery.ui.autosize.js        | auto expand size for textarea tag   |
+   | jquery.ui.editable-select.js | a simple plugin that converts a select into an text field with suggestions |
    | jquery.ui.fieldset.js        | collapseable fieldset               |
    | jquery.ui.loadmask.js        | loader mask                         |
    | jquery.ui.notify.js          | notification plugin                 |
@@ -31,6 +33,7 @@ Features
    | jquery.ui.selecttext.js      | $.selectText function               |
 
  - jQuery Extra
+
    | Name                     | Description                              |
    |--------------------------|------------------------------------------|
    | jquery.ui.hammer.js      | Gestures for TouchPad device             |
@@ -40,6 +43,7 @@ Features
    | jquery.ui.tablesorter.js | A jquery plugin for html table sort      |
 
  - Panda
+
    | Name                     | Description                                                              |
    |--------------------------|--------------------------------------------------------------------------|
    | core.array.js            | functions for Array                                                      |
@@ -71,15 +75,16 @@ Panda HTML use the following software packages:
 | Bootstrap               | [MIT](https://opensource.org/licenses/MIT)                    | http://getbootstrap.com/                               |
 | bootstrap-datepicker    | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | http://www.eyecon.ro/bootstrap-datepicker/             |
 | Chart.js                | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/chartjs/Chart.js                    |
-| Font Awesome            | http://fontawesome.io/license/                                | http://fontawesome.io/                                 |
+| Font Awesome            | [fontawesome](http://fontawesome.io/license/)                 | http://fontawesome.io/                                 |
 | Hammer.js               | [MIT](https://opensource.org/licenses/MIT)                    | http://hammerjs.github.io/                             |
 | jQuery                  | [jQuery](https://jquery.org/license/)                         | https://jquery.com/                                    |
+| jquery-editable-select  | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/indrimuska/jquery-editable-select   |
 | jquery-lightbox         |                                                               | http://leandrovieira.com                               |
 | jquery-meiomask         | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/fabiomcosta/jquery-meiomask         |
 | jquery-mousewheel       | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/jquery/jquery-mousewheel            |
 | Notify.js               | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/jpillora/notifyjs                   |
-| Respond.js              | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/scottjehl/Respond](https://github.com/scottjehl/Respond) |
+| Respond.js              | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/scottjehl/Respond                   |
 | summernote              | [MIT](https://opensource.org/licenses/MIT)                    | https://summernote.org                                 |
-| tablesorter             | [MIT](https://opensource.org/licenses/MIT)                    | [http://tablesorter.com](http://tablesorter.com)       |
-| TinyMCE                 | [LGPL](http://www.gnu.org/licenses/lgpl.html)                 | [https://github.com/tinymce/tinymce](https://github.com/tinymce/tinymce) |
+| tablesorter             | [MIT](https://opensource.org/licenses/MIT)                    | http://tablesorter.com                                 |
+| TinyMCE                 | [LGPL](http://www.gnu.org/licenses/lgpl.html)                 | https://github.com/tinymce/tinymce                     |
 

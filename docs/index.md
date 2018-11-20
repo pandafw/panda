@@ -66,12 +66,13 @@ Panda use or refer the following software packages:
 | Font Awesome            | [Font Awesome](http://fontawesome.io/license/)                | [http://fontawesome.io/](http://fontawesome.io/)       |
 | Hammer.js               | [MIT](https://opensource.org/licenses/MIT)                    | [http://hammerjs.github.io/](http://hammerjs.github.io/ |
 | jQuery                  | [jQuery](https://jquery.org/license/)                         | [https://jquery.com/](https://jquery.com/              |
+| jquery-editable-select  | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/indrimuska/jquery-editable-select]   |
 | jquery-lightbox         |                                                               | [http://leandrovieira.com](http://leandrovieira.com)   |
 | jquery-meiomask         | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/fabiomcosta/jquery-meiomask](https://github.com/fabiomcosta/jquery-meiomask) |
 | jquery-mousewheel       | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/jquery/jquery-mousewheel](https://github.com/jquery/jquery-mousewheel) |
 | Notify.js               | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/jpillora/notifyjs](https://github.com/jpillora/notifyjs) |
 | Respond.js              | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/scottjehl/Respond](https://github.com/scottjehl/Respond) |
-| summernote              | [MIT](https://opensource.org/licenses/MIT)                    | https://summernote.org                                 |
+| summernote              | [MIT](https://opensource.org/licenses/MIT)                    | [https://summernote.org](https://summernote.org)                                 |
 | tablesorter             | [MIT](https://opensource.org/licenses/MIT)                    | [http://tablesorter.com](http://tablesorter.com)       |
 | TinyMCE                 | [LGPL](http://www.gnu.org/licenses/lgpl.html)                 | [https://github.com/tinymce/tinymce](https://github.com/tinymce/tinymce) |
 

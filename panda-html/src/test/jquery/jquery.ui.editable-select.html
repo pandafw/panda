@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>jQuery Editable Select - A simple jQuery Plugin that converts a select into an text field with suggestions.</title>
+		<meta name="description" content="jQuery Editable Select is a simple jQuery Plugin that converts a select into an text field with suggestions.">
+		<meta name="author" content="Indri Muska <indrimuska@gmail.com>">
+		<meta name="keywords" content="jquery plugin editable select typeahead suggestion">
+		
+		<!-- Open Graph Meta Tags -->
+		<meta property="og:title" content="jQuery Editable Select">
+		<meta property="og:site_name" content="jQuery Editable Select">
+		<meta property="og:url" content="http://indrimuska.github.io/jquery-editable-select/">
+		<meta property="og:description" content="jQuery Editable Select is a simple jQuery Plugin that converts a select into an text field with suggestions.">
+		<meta property="og:image" content="http://indrimuska.github.io/jquery-editable-select/img/jquery-editable-select.gif">
+		<meta property="og:type" content="website">
+		
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/mono-blue.min.css">
+		<link rel="stylesheet" href="https://rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body class="container">
+		
+		<h2 class="page-header">
+			<a href="https://github.com/indrimuska/jquery-editable-select" class="pull-right small">Get sources</a>
+			jQuery Editable Select
+		</h2>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Basic example</h3>
+				<div class="row form-group">
+					<div class="col-md-4">It transforms this</div>
+					<div class="col-md-7">
+						<select class="form-control" id="base">
+							<option>Alfa Romeo</option>
+							<option>Audi</option>
+							<option>BMW</option>
+							<option>Citroen</option>
+							<option>Fiat</option>
+							<option>Ford</option>
+							<option>Jaguar</option>
+							<option>Jeep</option>
+							<option>Lancia</option>
+							<option>Land Rover</option>
+							<option>Mercedes</option>
+							<option>Mini</option>
+							<option>Nissan</option>
+							<option>Opel</option>
+							<option>Peugeot</option>
+							<option>Porsche</option>
+							<option>Renault</option>
+							<option selected>Smart</option>
+							<option>Volkswagen</option>
+							<option>Volvo</option>
+						</select>
+					</div>
+				</div>
+				<div class="row form-group">
+					<div class="col-md-4">Into this</div>
+					<div class="col-md-7" id="basic-place"></div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h3>Code</h3>
+				<pre><code class="javascript">$('#basic').editableSelect();</code></pre>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Effects</h3>
+				<div class="row form-group">
+					<div class="col-md-4">Default</div>
+					<div class="col-md-7" id="default-place" data-effects="default"></div>
+				</div>
+				<div class="row form-group">
+					<div class="col-md-4">Slide</div>
+					<div class="col-md-7" id="slide-place" data-effects="slide"></div>
+				</div>
+				<div class="row form-group">
+					<div class="col-md-4">Fade</div>
+					<div class="col-md-7" id="fade-place" data-effects="fade"></div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h3>Code</h3>
+				<pre><code class="javascript">$('#default').editableSelect({ effects: 'default' });
+$('#slide').editableSelect({ effects: 'slide' });
+$('#fade').editableSelect({ effects: 'fade' });</code></pre>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Dialog</h3>
+				<a href="#dialog" class="btn btn-default" data-toggle="modal">
+					Open modal dialog
+				</a>
+				<div class="modal fade" id="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title">Modal title</h4>
+							</div>
+							<div class="modal-body" id="appendTo-place" data-append-to=".modal-body"></div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary">Save changes</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h3>Code</h3>
+				<pre><code class="javascript">$('#appendTo').editableSelect({
+    appendTo: '.modal-body'
+});</code></pre>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-6">
+				<h3>No filtering</h3>
+				<div id="no-filtering-place" data-filter="false"></div>
+			</div>
+			<div class="col-md-6">
+				<h3>Code</h3>
+				<pre><code class="javascript">$('#no-filter').editableSelect({ filter: false });</code></pre>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-6">
+				<h3>HTML support</h3>
+				<div id="html-place"></div>
+			</div>
+			<div class="col-md-6">
+				<h3>Code</h3>
+				<pre><code class="javascript">$('#html').editableSelect();</code></pre>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Listen changes</h3>
+				<p>
+					<select id="select" class="form-control">
+						<option value="1">Alfa Romeo</option>
+						<option value="2">Audi</option>
+						<option value="3">BMW</option>
+						<option value="4">Citroen</option>
+						<option value="5">Fiat</option>
+						<option value="6">Ford</option>
+						<option value="7">Jaguar</option>
+						<option value="8">Jeep</option>
+						<option value="9">Lancia</option>
+						<option value="10">Land Rover</option>
+						<option value="11">Mercedes</option>
+						<option value="12">Mini</option>
+						<option value="13">Nissan</option>
+						<option value="14">Opel</option>
+						<option value="15">Peugeot</option>
+						<option value="16">Porsche</option>
+						<option value="17">Renault</option>
+						<option value="18">Smart</option>
+						<option value="19">Volkswagen</option>
+						<option value="20">Volvo</option>
+					</select>
+				</p>
+				<p>
+					Last selected:
+					<code id="last-selected"></code>
+				</p>
+			</div>
+			<div class="col-md-6">
+				<h3>Code</h3>
+				<pre><code class="javascript">$('#select')
+    .editableSelect()
+    .on('select.editable-select', function (e, li) {
+        $('#last-selected').html(
+            li.val() + '. ' + li.text()
+        );
+    });</code></pre>
+			</div>
+		</div>
+		<hr>
+		<h3>Try it out</h3>
+		<div class="row">
+			<div class="col-md-6">
+				<h4>Result</h4>
+				<select id="test" class="form-control">
+					<option>One</option>
+					<option disabled>Two</option>
+					<option>Three</option>
+				</select>
+			</div>
+			<div class="col-md-6">
+				<h4>Options</h4>
+				<div class="row form-group">
+					<div class="col-xs-4 form-group">
+						<div class="input-group">
+							<span class="input-group-addon">Filter:</span>
+							<select id="filter" class="form-control">
+								<option>True</option>
+								<option>False</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-xs-4 form-group">
+						<div class="input-group">
+							<span class="input-group-addon">Effects:</span>
+							<select id="effects" class="form-control">
+								<option>default</option>
+								<option>slide</option>
+								<option>fade</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-xs-4 form-group">
+						<div class="input-group">
+							<span class="input-group-addon">Duration:</span>
+							<select id="duration" class="form-control">
+								<option>fast</option>
+								<option>slow</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<h4>Methods</h4>
+				<div class="row form-group">
+					<div class="col-xs-12 form-group">
+		        <span id="methods">
+		          <button class="btn btn-default">Create</button>
+		          <button class="btn btn-default" id="destroy">Destroy</button>
+		          <button class="btn btn-default" id="show">Show</button>
+		          <button class="btn btn-default" id="hide">Hide</button>
+		        </span>
+		        <button class="btn btn-default" id="focus">Focus</button>
+					</div>
+					<div class="col-xs-6 form-group">
+						<div class="input-group">
+							<span class="input-group-addon">text:</span>
+							<input id="text" value="New option" class="form-control" placeholder="text">
+							<div class="input-group-btn">
+								<button class="btn btn-success" id="add">Add</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6 form-group">
+						<div class="input-group">
+							<span class="input-group-addon">index:</span>
+							<input id="number" type="number" value="0" class="form-control" placeholder="index">
+							<div class="input-group-btn">
+								<button class="btn btn-danger" id="remove">Remove</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<h3>Author</h3>
+		<div class="row">
+			<div class="col-md-6">
+				Indri Muska<br>
+				<a href="mailto:indrimuska@gmail.com">indrimuska@gmail.com</a>
+			</div>
+			<div class="col-md-6">
+				<iframe src="http://ghbtns.com/github-btn.html?user=indrimuska&repo=jquery-editable-select&type=fork&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="30"></iframe>
+				<iframe src="http://ghbtns.com/github-btn.html?user=indrimuska&repo=jquery-editable-select&type=watch&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="30"></iframe>
+				<iframe src="http://ghbtns.com/github-btn.html?user=indrimuska&repo=jquery-editable-select&type=follow&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="210" height="30"></iframe>
+			</div>
+		</div>
+		
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+		<script src="https://rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('pre code').each(function(i, block) { hljs.highlightBlock(block); });
+				$.each(['basic', 'default', 'slide', 'fade', 'appendTo', 'no-filtering', 'html'], function (i, id) {
+					var $place  = $('#' + id + '-place');
+					var $select = $('#base').clone().removeAttr('id').appendTo($place);
+					if (id != 'basic') $select.find('option:selected').removeAttr('selected');
+					$select.editableSelect($place.data());
+				});
+				$('#select').editableSelect().on('select.editable-select', function (e, li) {
+					$('#last-selected').html(li.val() + '. ' + li.text());
+				});
+				$('#methods button').on('click', function () {
+					var action =  $(this).attr('id') || {
+						filter:   $('#filter').val() === 'True',
+						effects:  $('#effects').val(),
+						duration: $('#duration').val()
+					};
+					$('#test').editableSelect(action);
+				});
+				$('#focus').on('click', function () {
+				  $('#test')[0].focus();
+				});
+				$('#add').on('click', function () {
+					$('#test').editableSelect('add', $('#text').val());
+				});
+				$('#remove').on('click', function () {
+					$('#test').editableSelect('remove', $('#number').val());
+				});
+			});
+		</script>
+	</body>
+</html>
