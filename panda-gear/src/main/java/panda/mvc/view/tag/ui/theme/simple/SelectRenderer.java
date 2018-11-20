@@ -36,6 +36,10 @@ public class SelectRenderer extends AbstractEndRenderer<Select> {
 			.events(tag)
 			.dynamics(tag);
 
+		if (tag.isEditable()) {
+			a.data("spy", "editable-select");
+		}
+
 		stag("select", a);
 
 		// options

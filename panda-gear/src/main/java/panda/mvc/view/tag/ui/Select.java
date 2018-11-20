@@ -54,6 +54,7 @@ public class Select extends ListUIBean {
 	protected boolean emptyOption;
 	protected String headerKey;
 	protected String headerValue;
+	protected boolean editable;
 	protected boolean multiple;
 	protected String size;
 	
@@ -84,39 +85,18 @@ public class Select extends ListUIBean {
 	}
 
 	/**
-	 * @return the headerKey
-	 */
-	public String getHeaderKey() {
-		return headerKey;
-	}
-
-	/**
-	 * @return the headerValue
-	 */
-	public String getHeaderValue() {
-		return headerValue;
-	}
-
-	/**
-	 * @return the multiple
-	 */
-	public boolean isMultiple() {
-		return multiple;
-	}
-
-	/**
-	 * @return the size
-	 */
-	public String getSize() {
-		return size;
-	}
-
-	/**
 	 * Whether or not to add an empty (--) option after the header option
 	 * @param emptyOption the emptyOption to set
 	 */
 	public void setEmptyOption(boolean emptyOption) {
 		this.emptyOption = emptyOption;
+	}
+
+	/**
+	 * @return the headerKey
+	 */
+	public String getHeaderKey() {
+		return headerKey;
 	}
 
 	/**
@@ -128,11 +108,39 @@ public class Select extends ListUIBean {
 	}
 
 	/**
+	 * @return the headerValue
+	 */
+	public String getHeaderValue() {
+		return headerValue;
+	}
+
+	/**
 	 * Value expression for first item in list
 	 * @param headerValue the headerValue to set
 	 */
 	public void setHeaderValue(String headerValue) {
 		this.headerValue = headerValue;
+	}
+
+	/**
+	 * @return the editable
+	 */
+	public boolean isEditable() {
+		return editable;
+	}
+
+	/**
+	 * @param editable the editable to set
+	 */
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+
+	/**
+	 * @return the multiple
+	 */
+	public boolean isMultiple() {
+		return multiple;
 	}
 
 	/**
@@ -143,6 +151,13 @@ public class Select extends ListUIBean {
 	 */
 	public void setMultiple(boolean multiple) {
 		this.multiple = multiple;
+	}
+
+	/**
+	 * @return the size
+	 */
+	public String getSize() {
+		return size;
 	}
 
 	/**
