@@ -2,6 +2,7 @@ package panda.el;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -136,7 +137,7 @@ public class ELTest {
 		assertEquals(2, EL.eval("'jk'.length()"));
 		assertEquals(2, EL.eval("\"jk\".length()"));
 		assertEquals("jk", EL.eval("\"    jk   \".trim()"));
-		assertEquals("j\\n\\tk", EL.eval("\"j\\n\\tk\""));
+		assertEquals("j\r\n\t '\"　k", EL.eval("\"j\\r\\n\\t\\x20\\'\\\"\\u3000k\""));
 		
 		assertEquals("jk", EL.eval("'j' + 'k'"));
 		assertEquals("j0", EL.eval("'j' + 0"));
@@ -316,6 +317,8 @@ public class ELTest {
 		assertEquals(100, EL.eval("a.x*10", context));
 		assertEquals(100, EL.eval("a['x']*10", context));
 		assertEquals("Hello-40", EL.eval("a.get('txt')+(a.get('x')-a.get('y'))", context));
+		assertNull(EL.eval("a['z']", context));
+		assertNull(EL.eval("a['\\'z']", context));
 	}
 
 	/**

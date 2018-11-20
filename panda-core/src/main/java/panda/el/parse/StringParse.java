@@ -15,6 +15,7 @@ public class StringParse implements Parse {
 			char end = exp.poll();
 			while (!exp.isEmpty() && exp.peek() != end) {
 				if (exp.peek() == '\\') {
+					exp.poll();
 					parseSp(exp, sb);
 				}
 				else {
@@ -47,11 +48,11 @@ public class StringParse implements Parse {
 		case '\"':
 			sb.append('\"');
 			break;
+		case 'x':
+			sb.append(hex2char(exp, 2));
+			break;
 		case 'u':
-			char[] hex = new char[4];
-			for (int i = 0; i < 4; i++)
-				hex[i] = exp.poll();
-			sb.append((char)Integer.valueOf(new String(hex), 16).intValue());
+			sb.append(hex2char(exp, 4));
 			break;
 		case 'b':
 			sb.append(' ');
@@ -60,7 +61,15 @@ public class StringParse implements Parse {
 			sb.append('\f');
 			break;
 		default:
-			throw new ELException("Unexpected char");
+			throw new ELException("Unexpected char after \\");
 		}
+	}
+	
+	private char hex2char(CharQueue exp, int len) {
+		char[] hex = new char[len];
+		for (int i = 0; i < len; i++) {
+			hex[i] = exp.poll();
+		}
+		return (char)Integer.valueOf(new String(hex), 16).intValue();
 	}
 }
