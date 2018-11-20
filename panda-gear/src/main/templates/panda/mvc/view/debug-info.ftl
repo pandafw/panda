@@ -39,7 +39,7 @@
 		</thead>
 		<tbody>
 <#list reqParams?keys?sort as k>
-			<tr><td>${k!''?html}</td><td>${assist.escapePhtml(reqParams[k]!)}</td></tr>
+			<tr><td>${k!''?html}</td><td><@p.property name="reqParams['${k?js_string}']" escape="phtml"/></td></tr>
 </#list>
 		</tbody>
 		</table>
@@ -168,7 +168,7 @@
 <#list req?keys?sort as k>
 			<tr><td>${k!''?html}</td>
 				<td><#if req[k]??><i>${(req[k].class.name)!''?html}</i>
-					<div>${assist.escapePhtml(req[k]!)}</div>
+					<div><@p.property name="req['${k?js_string}']" escape="phtml"/></div>
 				</#if></td>
 			</tr>
 </#list>
@@ -192,7 +192,7 @@
 <#list ses?keys?sort as k>
 			<tr><td>${k?html}</td>
 				<td><#if ses[k]??><i>${(ses[k].class.name)!''?html}</i>
-					</div>${assist.escapePhtml(ses[k]!)}</div>
+					</div><@p.property name="ses['${k?js_string}']" escape="phtml"/></div>
 				</#if></td>
 			</tr>
 </#list>
@@ -222,7 +222,7 @@
 <#list app?keys?sort as k>
 			<tr><td>${k?html}</td>
 				<td><#if app[k]??><i>${(app[k].class.name)!''?html}</i>
-					<div>${assist.escapePhtml(app[k]!)}</div>
+					<div><@p.property name="app['${k?js_string}']" escape="phtml"/></div>
 				</#if></td>
 			</tr>
 </#list>
