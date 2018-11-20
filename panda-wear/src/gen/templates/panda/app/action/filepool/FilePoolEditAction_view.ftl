@@ -29,7 +29,7 @@
 <#if r??>
 	<@p.form cssClass="p-vform" id="filepool" focusme="true" method="post" theme="bs3h">
 	<#if a.displayField("id")>
-			<@n.viewfield
+			<@p.viewfield
 				key="id"
 				value="%{r.id}"
 			/>
