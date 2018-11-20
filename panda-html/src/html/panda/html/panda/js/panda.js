@@ -3168,13 +3168,18 @@ s_setbase({
 
 		var $uf = $u.children('.p-uploader-file');
 		var $ub = $u.children('.p-uploader-btn');
+		var $us = $u.children('.p-uploader-sep');
 
 		var $up = $('<div class="p-uploader-progress progress progress-striped" style="display: none"><div class="progress-bar progress-bar-info" style="width: 0%"></div></div>');
 		$up.insertAfter($ub.length > 0 ? $ub : $uf);
 
 		var $ue = $('<div class="p-uploader-error"></div>');
 		$ue.insertAfter($up);
-		
+
+		if ($us.length) {
+			$us = $('<div class="p-uploader-sep"></div>').insertAfter($ue);
+		}
+
 		function _filesize(fs) {
 			var sz = String.formatSize(fs);
 			if (sz.length > 0) {
@@ -3184,44 +3189,44 @@ s_setbase({
 		}
 
 		function _info(fi) {
-			var uid = fi.id, ufn = fi.name, ufs = fi.size, uct = fi.contentType;
+			var fid = fi.id, fnm = fi.name, fsz = fi.size, fct = fi.contentType;
 			var pdl = $u.data('dnloadLink');
 			var pdn = $u.data('dnloadName');
 			var pdd = JSON.sparse($u.data('dnloadData'));
 
-			var $uitem = $('<div>').addClass('p-uploader-item').appendTo($u);
-			var $uid = $('<input>').attr('type', 'hidden').attr('name', $u.data('name')).addClass('p-uploader-fid').appendTo($uitem);
-			var $ut = $('<span>').addClass('p-uploader-text').appendTo($uitem);
-			var $ui = $('<div>').addClass('p-uploader-image').appendTo($uitem);
+			var $fit = $('<div>').addClass('p-uploader-item').insertAfter($us);
+			var $fid = $('<input>').attr('type', 'hidden').attr('name', $u.data('name')).addClass('p-uploader-fid').appendTo($fit);
+			var $ftx = $('<span>').addClass('p-uploader-text').appendTo($fit);
+			var $fim = $('<div>').addClass('p-uploader-image').appendTo($fit);
 
 
-			$uid.val(uid || '');
+			$fid.val(fid || '');
 			
-			ufn = ufn || uid || $uf.val();
+			fnm = fnm || fid || $uf.val();
 			var durl = null;
-			if (pdl && uid) {
+			if (pdl && fid) {
 				var ps = $.extend({}, pdd);
-				ps[pdn] = uid;
+				ps[pdn] = fid;
 				durl = pdl + '?' + $.param(ps);
 			}
 			
-			var img = String.startsWith(uct, 'image/');
-			if (ufn) {
-				var s = '<i class="fa fa-' + (img ? 'image' : 'paperclip') + ' p-uploader-icon"></i> ' + ufn + ' ' + _filesize(ufs);
+			var img = String.startsWith(fct, 'image/');
+			if (fnm) {
+				var s = '<i class="fa fa-' + (img ? 'image' : 'paperclip') + ' p-uploader-icon"></i> ' + fnm + ' ' + _filesize(fsz);
 				if (durl) {
-					$('<a>').attr('href', durl).html(s).appendTo($ut);
+					$('<a>').attr('href', durl).html(s).appendTo($ftx);
 				}
 				else {
-					$('<span>').html(s).appendTo($ut);
+					$('<span>').html(s).appendTo($ftx);
 				}
 			}
 			
-			$('<i>').addClass('p-uploader-remove fa fa-remove').click(_remove).appendTo($ut);
+			$('<i>').addClass('p-uploader-remove fa fa-remove').click(_remove).appendTo($ftx);
 
 			if (img && durl) {
 				var $a = $('<a>').attr('href', durl);
 				var $i = $('<img>').addClass('img-thumbnail').attr('src', durl).appendTo($a);
-				$a.appendTo($ui).fadeIn();
+				$a.appendTo($fim).fadeIn();
 			}
 		}
 
@@ -3265,7 +3270,9 @@ s_setbase({
 			_end_upload();
 
 			if (d.success) {
-				$u.children('.p-uploader-item').remove();
+				if (!$uf.attr('multiple')) {
+					$u.children('.p-uploader-item').remove();
+				}
 				
 				var r = d.result;
 				if ($.isArray(r)) {
