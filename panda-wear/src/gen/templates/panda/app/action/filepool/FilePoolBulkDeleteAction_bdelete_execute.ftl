@@ -48,7 +48,7 @@
 			"header": a.getFieldLabel("size"),
 			"display": a.displayField("size"),
 			"format": {
-				"type": "intcomma"
+				"type": "size"
 			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("size")

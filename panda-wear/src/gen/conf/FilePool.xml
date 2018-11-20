@@ -21,11 +21,11 @@
 			<column name="id" sortable="true" link="true">
 				<filter type="number"/>
 			</column>
-			<column name="name" sortable="true">
+			<column name="name" sortable="true" link="true">
 				<filter type="string"/>
 			</column>
 			<column name="size" sortable="true">
-				<format type="intcomma"/>
+				<format type="size"/>
 				<filter type="number"/>
 			</column>
 			<column name="date" sortable="true">
@@ -40,33 +40,6 @@
 			<param name="toolbar" value="${bulk.toolbar}"/>
 			<param name="buttons" value="${bulk.buttons}"/>
 		</list>
-		<input name="basicInput" extend="baseInput">
-			<field name="id">
-				<editTag name="${tag.viewfield}"/>
-			</field>
-			<field name="name" required="true">
-				<editTag name="${tag.textfield}">
-					<param name="maxlength" value="255"/>
-					<param name="size" value="50"/>
-				</editTag>
-			</field>
-			<field name="size">
-				<editTag name="${tag.viewfield}"/>
-			</field>
-			<field name="date">
-				<editTag name="${tag.datetimepicker}">
-					<param name="format" value="timestamp"/>
-					<param name="maxlength" value="28"/>
-					<param name="size" value="30"/>
-				</editTag>
-			</field>
-			<field name="flag">
-				<editTag name="${tag.textfield}">
-					<param name="maxlength" value="1"/>
-					<param name="size" value="4"/>
-				</editTag>
-			</field>
-		</input>
 	</action>
 	<action name="filepool" auth="${super.auth}" path="${super.path}" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
@@ -76,17 +49,6 @@
 	</action>
 	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
-	</action>
-	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
-		<input name="view" extend="basicInput" template="${template.view}" generate="true">
-			<param name="toolbar" value="${view.toolbar}"/>
-			<param name="actions" value="${view.actions}"/>
-		</input>
-		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
-		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
-			<param name="toolbar" value="${delete.toolbar}"/>
-			<param name="actions" value="${delete.actions}"/>
-		</input>
 	</action>
 
 	<!-- resource -->

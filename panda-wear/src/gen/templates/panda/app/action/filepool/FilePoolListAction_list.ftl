@@ -112,6 +112,7 @@
 			"filter": {
 				"type": "string"
 			},
+			"link": true,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("name")
 		}, {
@@ -119,7 +120,7 @@
 			"header": a.getFieldLabel("size"),
 			"display": a.displayField("size"),
 			"format": {
-				"type": "intcomma"
+				"type": "size"
 			},
 			"filterable": a.filterField("size"),
 			"filter": {
