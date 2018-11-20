@@ -20,7 +20,7 @@ public class ProxyFileItem implements FileItem {
 
 	private Date date;
 
-	private String contentType;
+	private String type;
 
 	private byte[] data;
 
@@ -65,11 +65,11 @@ public class ProxyFileItem implements FileItem {
 	}
 
 	/**
-	 * @return the contentType
+	 * @return the content type
 	 */
 	@Override
-	public String getContentType() {
-		return contentType == null ? MimeTypes.getMimeType(name) : contentType;
+	public String getType() {
+		return type == null ? MimeTypes.getMimeType(name) : type;
 	}
 
 	/**
@@ -147,8 +147,8 @@ public class ProxyFileItem implements FileItem {
 	/**
 	 * @param contentType the contentType to set
 	 */
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
+	public void setType(String contentType) {
+		this.type = contentType;
 	}
 
 	/**
@@ -217,7 +217,7 @@ public class ProxyFileItem implements FileItem {
 		copy.name = name;
 		copy.size = size;
 		copy.date = date;
-		copy.contentType = contentType;
+		copy.type = type;
 		copy.data = data;
 		copy.stream = stream;
 		return copy;

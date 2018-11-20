@@ -14,7 +14,7 @@ public class FileItemAdapter extends IncludePropertyFilter<FileItem> {
 		includes.add("name");
 		includes.add("size");
 		includes.add("date");
-		includes.add("contentType");
+		includes.add("type");
 		includes.add("exists");
 		includes.add("temporary");
 	}

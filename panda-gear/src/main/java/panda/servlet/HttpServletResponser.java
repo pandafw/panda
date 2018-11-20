@@ -246,7 +246,7 @@ public class HttpServletResponser {
 	public void setFile(FileItem file) {
 		setFileName(file.getName());
 		setContentLength(file.getSize());
-		setContentType(file.getContentType());
+		setContentType(file.getType());
 		setBody(file);
 	}
 	

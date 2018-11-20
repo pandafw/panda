@@ -75,10 +75,10 @@ public class LocalFileItem implements FileItem, Serializable {
 	}
 
 	/**
-	 * @return the contentType
+	 * @return the content type
 	 */
 	@Override
-	public String getContentType() {
+	public String getType() {
 		return MimeTypes.getMimeType(getName());
 	}
 

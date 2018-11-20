@@ -3189,7 +3189,7 @@ s_setbase({
 		}
 
 		function _info(fi) {
-			var fid = fi.id, fnm = fi.name, fsz = fi.size, fct = fi.contentType;
+			var fid = fi.id, fnm = fi.name, fsz = fi.size, fct = fi.type;
 			var pdl = $u.data('dnloadLink');
 			var pdn = $u.data('dnloadName');
 			var pdd = JSON.sparse($u.data('dnloadData'));

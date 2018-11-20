@@ -28,9 +28,9 @@ public interface FileItem {
 	Date getDate();
 
 	/**
-	 * @return the contentType
+	 * @return the type
 	 */
-	String getContentType();
+	String getType();
 
 	/**
 	 * @return true if this is a temporary file

@@ -113,7 +113,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		xtag("input", a);
 
 		String durl = null;
-		boolean isImg = Strings.startsWith(fi.getContentType(), "image/") || Strings.startsWith(tag.getAccept(), "image/");
+		boolean isImg = Strings.startsWith(fi.getType(), "image/") || Strings.startsWith(tag.getAccept(), "image/");
 
 		write("<span class=\"p-uploader-text\">");
 		if (fi.isExists()) {
