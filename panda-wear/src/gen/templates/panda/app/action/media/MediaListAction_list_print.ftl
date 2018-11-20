@@ -32,57 +32,22 @@
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("id")
 		}, {
-			"name": "kind",
+			"name": "tag",
 			"value": false,
-			"header": a.getFieldLabel("kind"),
-			"display": a.displayField("kind"),
+			"header": a.getFieldLabel("tag"),
+			"display": a.displayField("tag"),
 			"format": {
-				"codemap": consts.mediaKindMap,
+				"codemap": consts.mediaTagMap,
 				"type": "code"
 			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("kind")
+			"tooltip": a.getFieldTooltip("tag")
 		}, {
-			"name": "mediaName",
+			"name": "file",
 			"value": false,
-			"header": a.getFieldLabel("mediaName"),
-			"display": a.displayField("mediaName"),
-			"hidden": false,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("mediaName")
-		}, {
-			"name": "mediaSize",
-			"value": false,
-			"header": a.getFieldLabel("mediaSize"),
-			"display": a.displayField("mediaSize"),
-			"format": {
-				"type": "filesize"
-			},
-			"hidden": false,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("mediaSize")
-		}, {
-			"name": "mediaWidth",
-			"value": false,
-			"header": a.getFieldLabel("mediaWidth"),
-			"display": a.displayField("mediaWidth"),
-			"hidden": false,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("mediaWidth")
-		}, {
-			"name": "mediaHeight",
-			"value": false,
-			"header": a.getFieldLabel("mediaHeight"),
-			"display": a.displayField("mediaHeight"),
-			"hidden": false,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("mediaHeight")
-		}, {
-			"name": "mediaFile",
-			"value": false,
-			"header": a.getFieldLabel("mediaFile"),
-			"display": a.displayField("mediaFile"),
+			"header": a.getFieldLabel("file"),
+			"display": a.displayField("file"),
 			"format": {
 				"expr": "action.getMediaLink(top)",
 				"escape": "none",
@@ -90,7 +55,42 @@
 			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("mediaFile")
+			"tooltip": a.getFieldTooltip("file")
+		}, {
+			"name": "name",
+			"value": false,
+			"header": a.getFieldLabel("name"),
+			"display": a.displayField("name"),
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("name")
+		}, {
+			"name": "size",
+			"value": false,
+			"header": a.getFieldLabel("size"),
+			"display": a.displayField("size"),
+			"format": {
+				"type": "size"
+			},
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("size")
+		}, {
+			"name": "width",
+			"value": false,
+			"header": a.getFieldLabel("width"),
+			"display": a.displayField("width"),
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("width")
+		}, {
+			"name": "height",
+			"value": false,
+			"header": a.getFieldLabel("height"),
+			"display": a.displayField("height"),
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("height")
 		}, {
 			"name": "updatedAt",
 			"value": false,

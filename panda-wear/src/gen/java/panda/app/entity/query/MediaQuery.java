@@ -35,45 +35,45 @@ public class MediaQuery extends UQuery<Media, MediaQuery> {
 	}
 
 	/**
-	 * @return condition of kind
+	 * @return condition of tag
 	 */
-	public StringCondition<MediaQuery> kind() {
-		return new StringCondition<MediaQuery>(this, Media.KIND);
+	public StringCondition<MediaQuery> tag() {
+		return new StringCondition<MediaQuery>(this, Media.TAG);
 	}
 
 	/**
-	 * @return condition of mediaName
+	 * @return condition of name
 	 */
-	public StringCondition<MediaQuery> mediaName() {
-		return new StringCondition<MediaQuery>(this, Media.MEDIA_NAME);
+	public StringCondition<MediaQuery> name() {
+		return new StringCondition<MediaQuery>(this, Media.NAME);
 	}
 
 	/**
-	 * @return condition of mediaData
+	 * @return condition of data
 	 */
-	public ObjectCondition<MediaQuery> mediaData() {
-		return new ObjectCondition<MediaQuery>(this, Media.MEDIA_DATA);
+	public ObjectCondition<MediaQuery> data() {
+		return new ObjectCondition<MediaQuery>(this, Media.DATA);
 	}
 
 	/**
-	 * @return condition of mediaSize
+	 * @return condition of size
 	 */
-	public ComparableCondition<MediaQuery, Integer> mediaSize() {
-		return new ComparableCondition<MediaQuery, Integer>(this, Media.MEDIA_SIZE);
+	public ComparableCondition<MediaQuery, Integer> size() {
+		return new ComparableCondition<MediaQuery, Integer>(this, Media.SIZE);
 	}
 
 	/**
-	 * @return condition of mediaWidth
+	 * @return condition of width
 	 */
-	public ComparableCondition<MediaQuery, Integer> mediaWidth() {
-		return new ComparableCondition<MediaQuery, Integer>(this, Media.MEDIA_WIDTH);
+	public ComparableCondition<MediaQuery, Integer> width() {
+		return new ComparableCondition<MediaQuery, Integer>(this, Media.WIDTH);
 	}
 
 	/**
-	 * @return condition of mediaHeight
+	 * @return condition of height
 	 */
-	public ComparableCondition<MediaQuery, Integer> mediaHeight() {
-		return new ComparableCondition<MediaQuery, Integer>(this, Media.MEDIA_HEIGHT);
+	public ComparableCondition<MediaQuery, Integer> height() {
+		return new ComparableCondition<MediaQuery, Integer>(this, Media.HEIGHT);
 	}
 
 

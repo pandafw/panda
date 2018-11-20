@@ -1,13 +1,13 @@
-kind=種別
+tag=タグ
 
-mediaName=メディア名
+name=メディア名
 
-mediaSize=メディアサイズ
+size=メディアサイズ
 
-mediaWidth=メディア幅
+width=メディア幅
 
-mediaHeight=メディア高
+height=メディア高
 
-mediaFile=メディア
+file=メディア
 
 

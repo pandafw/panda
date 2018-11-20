@@ -22,7 +22,7 @@ public abstract class MediaEditAction extends GenericEditAction<Media> {
 	 */
 	public MediaEditAction() {
 		setType(Media.class);
-		addDisplayFields(Media.ID, Media.MEDIA_NAME, Media.MEDIA_SIZE, Media.MEDIA_WIDTH, Media.MEDIA_HEIGHT, Media.MEDIA_FILE, Media.UPDATED_AT, Media.UPDATED_BY, Media.UPDATED_BY_USER);
+		addDisplayFields(Media.ID, Media.TAG, Media.NAME, Media.SIZE, Media.WIDTH, Media.HEIGHT, Media.FILE, Media.UPDATED_AT, Media.UPDATED_BY, Media.UPDATED_BY_USER);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public abstract class MediaEditAction extends GenericEditAction<Media> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'mediaFile' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'file' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Media data) {
 		return super.add_confirm(data);
@@ -130,7 +130,7 @@ public abstract class MediaEditAction extends GenericEditAction<Media> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'mediaFile' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'file' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Media data) {
 		return super.add_execute(data);
@@ -166,7 +166,7 @@ public abstract class MediaEditAction extends GenericEditAction<Media> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'mediaFile' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'file' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Media data) {
 		return super.copy_confirm(data);
@@ -180,7 +180,7 @@ public abstract class MediaEditAction extends GenericEditAction<Media> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'mediaFile' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'file' ] }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Media data) {
 		return super.copy_execute(data);

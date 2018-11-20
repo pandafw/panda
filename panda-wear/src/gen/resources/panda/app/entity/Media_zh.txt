@@ -1,13 +1,13 @@
-kind=种类
+tag=标签
 
-mediaName=媒体名
+name=媒体名
 
-mediaSize=媒体大小
+size=媒体大小
 
-mediaWidth=媒体宽
+width=媒体宽
 
-mediaHeight=媒体高
+height=媒体高
 
-mediaFile=媒体
+file=媒体
 
 

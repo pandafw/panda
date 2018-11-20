@@ -4,7 +4,7 @@ import panda.app.entity.Media;
 
 public class Medias {
 	public static String getMediaLink(Media m) {
-		if (m == null || m.getMediaSize() <= 0) {
+		if (m == null || m.getSize() <= 0) {
 			return "";
 		}
 		return "<a href=\"view?id=" + m.getId() + "\">"

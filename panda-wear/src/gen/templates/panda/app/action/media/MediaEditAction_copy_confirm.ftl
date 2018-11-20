@@ -32,35 +32,42 @@
 				value="%{r.id}"
 			/>
 	</#if>
-	<#if a.displayField("mediaName")>
+	<#if a.displayField("tag")>
 			<@p.viewfield
-				key="mediaName"
-				value="%{r.mediaName}"
+				key="tag"
+				value="%{r.tag}"
+				list="%{consts.mediaTagMap}"
 			/>
 	</#if>
-	<#if a.displayField("mediaSize")>
+	<#if a.displayField("name")>
 			<@p.viewfield
-				key="mediaSize"
-				value="%{r.mediaSize}"
-				format="filesize"
+				key="name"
+				value="%{r.name}"
 			/>
 	</#if>
-	<#if a.displayField("mediaWidth")>
+	<#if a.displayField("size")>
 			<@p.viewfield
-				key="mediaWidth"
-				value="%{r.mediaWidth}"
+				key="size"
+				value="%{r.size}"
+				format="size"
 			/>
 	</#if>
-	<#if a.displayField("mediaHeight")>
+	<#if a.displayField("width")>
 			<@p.viewfield
-				key="mediaHeight"
-				value="%{r.mediaHeight}"
+				key="width"
+				value="%{r.width}"
 			/>
 	</#if>
-	<#if a.displayField("mediaFile")>
+	<#if a.displayField("height")>
+			<@p.viewfield
+				key="height"
+				value="%{r.height}"
+			/>
+	</#if>
+	<#if a.displayField("file")>
 			<@p.uploader
-				key="mediaFile"
-				value="%{r.mediaFile}"
+				key="file"
+				value="%{r.file}"
 				readonly="true"
 				accept="image/*"
 				size="30"
@@ -70,7 +77,7 @@
 				dnloadName="id"
 				defaultAction="mediaview"
 				defaultParams="!{'id': '%{r.id}'}"
-				defaultEnable="%{r.id != null && r.mediaSize > 0}"
+				defaultEnable="%{r.id != null && r.size > 0}"
 			/>
 	</#if>
 	<#if a.displayField("updatedAt")>

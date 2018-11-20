@@ -69,11 +69,11 @@ public class AppActionConsts extends ActionConsts {
 	}
 
 	/**
-	 * get media kind map
+	 * get media tag map
 	 * @return map
 	 */
-	public Map<String, String> getMediaKindMap() {
-		return getTextAsMap(RES.MEDIA_KINDS);
+	public Map<String, String> getMediaTagMap() {
+		return getTextAsMap(RES.MEDIA_TAGS);
 	}
 
 	/**

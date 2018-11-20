@@ -106,65 +106,26 @@
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("id")
 		}, {
-			"name" : "kind",
-			"header": a.getFieldLabel("kind"),
-			"display": a.displayField("kind"),
+			"name" : "tag",
+			"header": a.getFieldLabel("tag"),
+			"display": a.displayField("tag"),
 			"format": {
-				"codemap": consts.mediaKindMap,
+				"codemap": consts.mediaTagMap,
 				"type": "code"
 			},
-			"filterable": a.filterField("kind"),
+			"filterable": a.filterField("tag"),
 			"filter": {
-				"list": consts.mediaKindMap,
+				"list": consts.mediaTagMap,
 				"type": "select"
 			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": a.getFieldTooltip("kind")
+			"tooltip": a.getFieldTooltip("tag")
 		}, {
-			"name" : "mediaName",
-			"header": a.getFieldLabel("mediaName"),
-			"display": a.displayField("mediaName"),
-			"filterable": a.filterField("mediaName"),
-			"filter": {
-				"type": "string"
-			},
-			"hidden": false,
-			"link": true,
-			"sortable": true,
-			"tooltip": a.getFieldTooltip("mediaName")
-		}, {
-			"name" : "mediaSize",
-			"header": a.getFieldLabel("mediaSize"),
-			"display": a.displayField("mediaSize"),
-			"format": {
-				"type": "filesize"
-			},
-			"hidden": false,
-			"link": false,
-			"sortable": true,
-			"tooltip": a.getFieldTooltip("mediaSize")
-		}, {
-			"name" : "mediaWidth",
-			"header": a.getFieldLabel("mediaWidth"),
-			"display": a.displayField("mediaWidth"),
-			"hidden": false,
-			"link": false,
-			"sortable": true,
-			"tooltip": a.getFieldTooltip("mediaWidth")
-		}, {
-			"name" : "mediaHeight",
-			"header": a.getFieldLabel("mediaHeight"),
-			"display": a.displayField("mediaHeight"),
-			"hidden": false,
-			"link": false,
-			"sortable": true,
-			"tooltip": a.getFieldTooltip("mediaHeight")
-		}, {
-			"name" : "mediaFile",
-			"header": a.getFieldLabel("mediaFile"),
-			"display": a.displayField("mediaFile"),
+			"name" : "file",
+			"header": a.getFieldLabel("file"),
+			"display": a.displayField("file"),
 			"format": {
 				"expr": "action.getMediaLink(top)",
 				"escape": "none",
@@ -173,7 +134,46 @@
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": a.getFieldTooltip("mediaFile")
+			"tooltip": a.getFieldTooltip("file")
+		}, {
+			"name" : "name",
+			"header": a.getFieldLabel("name"),
+			"display": a.displayField("name"),
+			"filterable": a.filterField("name"),
+			"filter": {
+				"type": "string"
+			},
+			"hidden": false,
+			"link": true,
+			"sortable": true,
+			"tooltip": a.getFieldTooltip("name")
+		}, {
+			"name" : "size",
+			"header": a.getFieldLabel("size"),
+			"display": a.displayField("size"),
+			"format": {
+				"type": "size"
+			},
+			"hidden": false,
+			"link": false,
+			"sortable": true,
+			"tooltip": a.getFieldTooltip("size")
+		}, {
+			"name" : "width",
+			"header": a.getFieldLabel("width"),
+			"display": a.displayField("width"),
+			"hidden": false,
+			"link": false,
+			"sortable": true,
+			"tooltip": a.getFieldTooltip("width")
+		}, {
+			"name" : "height",
+			"header": a.getFieldLabel("height"),
+			"display": a.displayField("height"),
+			"hidden": false,
+			"link": false,
+			"sortable": true,
+			"tooltip": a.getFieldTooltip("height")
 		}, {
 			"name" : "updatedAt",
 			"header": a.getFieldLabel("updatedAt"),

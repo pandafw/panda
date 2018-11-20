@@ -1,13 +1,13 @@
-kind=Kind
+tag=Tag
 
-mediaName=Media Name
+name=Media Name
 
-mediaSize=Media Size
+size=Media Size
 
-mediaWidth=Media Width
+width=Media Width
 
-mediaHeight=Media Height
+height=Media Height
 
-mediaFile=Media
+file=Media
 
 

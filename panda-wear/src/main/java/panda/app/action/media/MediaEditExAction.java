@@ -16,15 +16,15 @@ import panda.mvc.annotation.At;
 public class MediaEditExAction extends MediaEditAction {
 	private void setFileData(Media data) {
 		try {
-			if (data.getMediaFile() != null && data.getMediaFile().isExists()) {
-				data.setMediaData(data.getMediaFile().getData());
-				data.setMediaSize(data.getMediaData().length);
-				if (Strings.isEmpty(data.getMediaName())) {
-					data.setMediaName(Strings.right(data.getMediaFile().getName(), FileNames.MAX_FILENAME_LENGTH));
+			if (data.getFile() != null && data.getFile().isExists()) {
+				data.setData(data.getFile().getData());
+				data.setSize(data.getData().length);
+				if (Strings.isEmpty(data.getName())) {
+					data.setName(Strings.right(data.getFile().getName(), FileNames.MAX_FILENAME_LENGTH));
 				}
-				ImageWrapper iw = Images.i().read(data.getMediaData());
-				data.setMediaWidth(iw.getWidth());
-				data.setMediaHeight(iw.getHeight());
+				ImageWrapper iw = Images.i().read(data.getData());
+				data.setWidth(iw.getWidth());
+				data.setHeight(iw.getHeight());
 			}
 		}
 		catch (IOException e) {
@@ -35,7 +35,7 @@ public class MediaEditExAction extends MediaEditAction {
 	@Override
 	protected Media startInsert(Media data) {
 		data =  super.startInsert(data);
-		data.setMediaSize(0);
+		data.setSize(0);
 		setFileData(data);
 		return data;
 	}
@@ -44,13 +44,13 @@ public class MediaEditExAction extends MediaEditAction {
 	protected void afterInsert(Media data) {
 		super.afterInsert(data);
 		
-		data.setMediaFile(null);
+		data.setFile(null);
 	}
 
 	@Override
 	protected Media startUpdate(Media data, Media sd) {
 		data =  super.startUpdate(data, sd);
-		data.setMediaSize(sd.getMediaSize());
+		data.setSize(sd.getSize());
 		setFileData(data);
 		return data;
 	}
@@ -58,8 +58,8 @@ public class MediaEditExAction extends MediaEditAction {
 	@Override
 	protected Set<String> getUpdateFields(Media data, Media sd) {
 		Set<String> ufs = new HashSet<String>(super.getUpdateFields(data, sd));
-		if (data.getMediaData() != null) {
-			ufs.add(Media.MEDIA_DATA);
+		if (data.getData() != null) {
+			ufs.add(Media.DATA);
 		}
 		return ufs;
 	}
@@ -68,6 +68,6 @@ public class MediaEditExAction extends MediaEditAction {
 	protected void afterUpdate(Media data, Media sd) {
 		super.afterUpdate(data, sd);
 		
-		data.setMediaFile(null);
+		data.setFile(null);
 	}
 }

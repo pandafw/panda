@@ -5,21 +5,21 @@
 	<!-- entity -->
 	<entity name="${entity.package}.Media" baseBeanClass="${entity.uBeanClass}" baseQueryClass="${entity.uQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
 		<property name="id" type="Long" notNull="true" primaryKey="true"/>
-		<property name="kind" type="String" size="2">
+		<property name="tag" type="String" size="10">
 			<validator type="constant">
-				<param name="list" value="'%{consts.mediaKindMap}'"/>
+				<param name="list" value="'%{consts.mediaTagMap}'"/>
 			</validator>
 		</property>
-		<property name="mediaName" type="String" size="255">
+		<property name="name" type="String" size="255">
 			<validator type="stringlength">
 				<param name="maxLength" value="255"/>
 			</validator>
 		</property>
-		<property name="mediaData" type="byte[]" jdbcType="BLOB" notNull="true"/>
-		<property name="mediaSize" type="Integer" notNull="true"/>
-		<property name="mediaWidth" type="Integer" notNull="true"/>
-		<property name="mediaHeight" type="Integer" notNull="true"/>
-		<property name="mediaFile" type="FileItem" column="false">
+		<property name="data" type="byte[]" jdbcType="BLOB" notNull="true"/>
+		<property name="size" type="Integer" notNull="true"/>
+		<property name="width" type="Integer" notNull="true"/>
+		<property name="height" type="Integer" notNull="true"/>
+		<property name="file" type="FileItem" column="false">
 			<validator type="file"/>
 			<validator type="image"/>
 		</property>
@@ -32,28 +32,28 @@
 			<column name="id" hidden="false" sortable="true" link="true">
 				<filter type="number"/>
 			</column>
-			<column name="kind" hidden="false" sortable="true" link="false">
+			<column name="tag" hidden="false" sortable="true" link="false">
 				<format type="code">
-					<param name="codemap" value="consts.mediaKindMap"/>
+					<param name="codemap" value="consts.mediaTagMap"/>
 				</format>
 				<filter type="select">
-					<param name="list" value="consts.mediaKindMap"/>
+					<param name="list" value="consts.mediaTagMap"/>
 				</filter>
 			</column>
-			<column name="mediaName" hidden="false" sortable="true" link="true">
-				<filter type="string"/>
-			</column>
-			<column name="mediaSize" hidden="false" sortable="true" link="false">
-				<format type="filesize"/>
-			</column>
-			<column name="mediaWidth" hidden="false" sortable="true" link="false"/>
-			<column name="mediaHeight" hidden="false" sortable="true" link="false"/>
-			<column name="mediaFile" hidden="false" sortable="true" link="false">
+			<column name="file" hidden="false" sortable="true" link="false">
 				<format type="expr">
 					<param name="expr" value="&quot;action.getMediaLink(top)&quot;"/>
 					<param name="escape" value="&quot;none&quot;"/>
 				</format>
 			</column>
+			<column name="name" hidden="false" sortable="true" link="true">
+				<filter type="string"/>
+			</column>
+			<column name="size" hidden="false" sortable="true" link="false">
+				<format type="size"/>
+			</column>
+			<column name="width" hidden="false" sortable="true" link="false"/>
+			<column name="height" hidden="false" sortable="true" link="false"/>
 		</list>
 		<list name="basicBulk" extend="basicList">
 			<param name="toolbar" value="${bulk.toolbar}"/>
@@ -63,23 +63,29 @@
 			<field name="id">
 				<editTag name="${tag.viewfield}"/>
 			</field>
-			<field name="mediaName">
+			<field name="tag">
+				<editTag name="${tag.select}">
+					<param name="emptyOption" value="false"/>
+					<param name="list" value="%{consts.mediaTagMap}"/>
+				</editTag>
+			</field>
+			<field name="name">
 				<editTag name="${tag.textfield}">
 					<param name="maxlength" value="255"/>
 				</editTag>
 			</field>
-			<field name="mediaSize">
+			<field name="size">
 				<editTag name="${tag.viewfield}">
-					<param name="format" value="filesize"/>
+					<param name="format" value="size"/>
 				</editTag>
 			</field>
-			<field name="mediaWidth">
+			<field name="width">
 				<editTag name="${tag.viewfield}"/>
 			</field>
-			<field name="mediaHeight">
+			<field name="height">
 				<editTag name="${tag.viewfield}"/>
 			</field>
-			<field name="mediaFile">
+			<field name="file">
 				<editTag name="${tag.uploader}">
 					<param name="accept" value="image/*"/>
 					<param name="size" value="${tag.uploader.size}"/>
@@ -89,12 +95,12 @@
 					<param name="dnloadName" value="id"/>
 					<param name="defaultAction" value="mediaview"/>
 					<param name="defaultParams" value="!{'id': '%{r.id}'}"/>
-					<param name="defaultEnable" value="%{r.id != null &amp;&amp; r.mediaSize > 0}"/>
+					<param name="defaultEnable" value="%{r.id != null &amp;&amp; r.size > 0}"/>
 				</editTag>
 			</field>
 		</input>
 		<input name="basicAdd" extend="basicInput">
-			<field name="mediaFile" required="true"/>
+			<field name="file" required="true"/>
 		</input>
 	</action>
 	<action name="media" extend="action.Media" actionClass="${action.package}.media.MediaListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
@@ -124,12 +130,12 @@
 	<!-- resource -->
 	<resource>
 		<entity name="${entity.package}.Media">
-			<property name="kind" label="Kind"/>
-			<property name="mediaName" label="Media Name"/>
-			<property name="mediaSize" label="Media Size"/>
-			<property name="mediaWidth" label="Media Width"/>
-			<property name="mediaHeight" label="Media Height"/>
-			<property name="mediaFile" label="Media"/>
+			<property name="tag" label="Tag"/>
+			<property name="name" label="Media Name"/>
+			<property name="size" label="Media Size"/>
+			<property name="width" label="Media Width"/>
+			<property name="height" label="Media Height"/>
+			<property name="file" label="Media"/>
 		</entity>
 		<action name="media" title="Media">
 			<property name="icon" label="fa fa-picture-o"/>
@@ -137,23 +143,23 @@
 	</resource>
 	<resource locale="ja">
 		<entity name="${entity.package}.Media">
-			<property name="kind" label="種別"/>
-			<property name="mediaName" label="メディア名"/>
-			<property name="mediaSize" label="メディアサイズ"/>
-			<property name="mediaWidth" label="メディア幅"/>
-			<property name="mediaHeight" label="メディア高"/>
-			<property name="mediaFile" label="メディア"/>
+			<property name="tag" label="タグ"/>
+			<property name="name" label="メディア名"/>
+			<property name="size" label="メディアサイズ"/>
+			<property name="width" label="メディア幅"/>
+			<property name="height" label="メディア高"/>
+			<property name="file" label="メディア"/>
 		</entity>
 		<action name="media" title="メディア"/>
 	</resource>
 	<resource locale="zh">
 		<entity name="${entity.package}.Media">
-			<property name="kind" label="种类"/>
-			<property name="mediaName" label="媒体名"/>
-			<property name="mediaSize" label="媒体大小"/>
-			<property name="mediaWidth" label="媒体宽"/>
-			<property name="mediaHeight" label="媒体高"/>
-			<property name="mediaFile" label="媒体"/>
+			<property name="tag" label="标签"/>
+			<property name="name" label="媒体名"/>
+			<property name="size" label="媒体大小"/>
+			<property name="width" label="媒体宽"/>
+			<property name="height" label="媒体高"/>
+			<property name="file" label="媒体"/>
 		</entity>
 		<action name="media" title="媒体"/>
 	</resource>

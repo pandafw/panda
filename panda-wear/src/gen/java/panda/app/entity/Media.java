@@ -13,7 +13,7 @@ import panda.vfs.FileItem;
 
 public class Media extends UBean implements Serializable {
 
-	private static final long serialVersionUID = -1419169521L;
+	private static final long serialVersionUID = 2093480655L;
 
 	/**
 	 * Constructor
@@ -26,22 +26,22 @@ public class Media extends UBean implements Serializable {
 	 * Constants
 	 *----------------------------------------------------------------------*/
 	public static final String ID = "id";
-	public static final String KIND = "kind";
-	public static final String MEDIA_NAME = "mediaName";
-	public static final String MEDIA_DATA = "mediaData";
-	public static final String MEDIA_SIZE = "mediaSize";
-	public static final String MEDIA_WIDTH = "mediaWidth";
-	public static final String MEDIA_HEIGHT = "mediaHeight";
-	public static final String MEDIA_FILE = "mediaFile";
+	public static final String TAG = "tag";
+	public static final String NAME = "name";
+	public static final String DATA = "data";
+	public static final String SIZE = "size";
+	public static final String WIDTH = "width";
+	public static final String HEIGHT = "height";
+	public static final String FILE = "file";
 
 	public static final String[] _COLUMNS_ = new String[] {
 			ID,
-			KIND,
-			MEDIA_NAME,
-			MEDIA_DATA,
-			MEDIA_SIZE,
-			MEDIA_WIDTH,
-			MEDIA_HEIGHT
+			TAG,
+			NAME,
+			DATA,
+			SIZE,
+			WIDTH,
+			HEIGHT
 		};
 
 
@@ -52,25 +52,25 @@ public class Media extends UBean implements Serializable {
 	@Id(start=1001)
 	protected Long id;
 
-	@Column(size=2)
-	protected String kind;
+	@Column(size=10)
+	protected String tag;
 
 	@Column(size=255)
-	protected String mediaName;
+	protected String name;
 
 	@Column(type=DaoTypes.BLOB, notNull=true)
-	protected byte[] mediaData;
+	protected byte[] data;
 
 	@Column(notNull=true)
-	protected Integer mediaSize;
+	protected Integer size;
 
 	@Column(notNull=true)
-	protected Integer mediaWidth;
+	protected Integer width;
 
 	@Column(notNull=true)
-	protected Integer mediaHeight;
+	protected Integer height;
 
-	protected FileItem mediaFile;
+	protected FileItem file;
 
 
 	/*----------------------------------------------------------------------*
@@ -94,121 +94,121 @@ public class Media extends UBean implements Serializable {
 	}
 
 	/**
-	 * @return the kind
+	 * @return the tag
 	 */
 	@Validates({
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.mediaKindMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.mediaTagMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
-	public String getKind() {
-		return kind;
+	public String getTag() {
+		return tag;
 	}
 
 	/**
-	 * @param kind the kind to set
+	 * @param tag the tag to set
 	 */
-	public void setKind(String kind) {
-		this.kind = panda.lang.Strings.stripToNull(kind);
+	public void setTag(String tag) {
+		this.tag = panda.lang.Strings.stripToNull(tag);
 	}
 
 	/**
-	 * @return the mediaName
+	 * @return the name
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 255 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
-	public String getMediaName() {
-		return mediaName;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @param mediaName the mediaName to set
+	 * @param name the name to set
 	 */
-	public void setMediaName(String mediaName) {
-		this.mediaName = panda.lang.Strings.stripToNull(mediaName);
+	public void setName(String name) {
+		this.name = panda.lang.Strings.stripToNull(name);
 	}
 
 	/**
-	 * @return the mediaData
+	 * @return the data
 	 */
-	public byte[] getMediaData() {
-		return mediaData;
+	public byte[] getData() {
+		return data;
 	}
 
 	/**
-	 * @param mediaData the mediaData to set
+	 * @param data the data to set
 	 */
-	public void setMediaData(byte[] mediaData) {
-		this.mediaData = mediaData;
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 
 	/**
-	 * @return the mediaSize
-	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
-	public Integer getMediaSize() {
-		return mediaSize;
-	}
-
-	/**
-	 * @param mediaSize the mediaSize to set
-	 */
-	public void setMediaSize(Integer mediaSize) {
-		this.mediaSize = mediaSize;
-	}
-
-	/**
-	 * @return the mediaWidth
+	 * @return the size
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
 	})
-	public Integer getMediaWidth() {
-		return mediaWidth;
+	public Integer getSize() {
+		return size;
 	}
 
 	/**
-	 * @param mediaWidth the mediaWidth to set
+	 * @param size the size to set
 	 */
-	public void setMediaWidth(Integer mediaWidth) {
-		this.mediaWidth = mediaWidth;
+	public void setSize(Integer size) {
+		this.size = size;
 	}
 
 	/**
-	 * @return the mediaHeight
+	 * @return the width
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
 	})
-	public Integer getMediaHeight() {
-		return mediaHeight;
+	public Integer getWidth() {
+		return width;
 	}
 
 	/**
-	 * @param mediaHeight the mediaHeight to set
+	 * @param width the width to set
 	 */
-	public void setMediaHeight(Integer mediaHeight) {
-		this.mediaHeight = mediaHeight;
+	public void setWidth(Integer width) {
+		this.width = width;
 	}
 
 	/**
-	 * @return the mediaFile
+	 * @return the height
+	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
+	})
+	public Integer getHeight() {
+		return height;
+	}
+
+	/**
+	 * @param height the height to set
+	 */
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
+	/**
+	 * @return the file
 	 */
 	@Validates({
 		@Validate(value=Validators.FILE, msgId=Validators.MSGID_FILE), 
 		@Validate(value=Validators.IMAGE, msgId=Validators.MSGID_IMAGE), 
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_FILE)
 	})
-	public FileItem getMediaFile() {
-		return mediaFile;
+	public FileItem getFile() {
+		return file;
 	}
 
 	/**
-	 * @param mediaFile the mediaFile to set
+	 * @param file the file to set
 	 */
-	public void setMediaFile(FileItem mediaFile) {
-		this.mediaFile = mediaFile;
+	public void setFile(FileItem file) {
+		this.file = file;
 	}
 
 
@@ -218,13 +218,13 @@ public class Media extends UBean implements Serializable {
 	 */
 	public void copy(Media src) {
 		this.id = src.id;
-		this.kind = src.kind;
-		this.mediaName = src.mediaName;
-		this.mediaData = src.mediaData;
-		this.mediaSize = src.mediaSize;
-		this.mediaWidth = src.mediaWidth;
-		this.mediaHeight = src.mediaHeight;
-		this.mediaFile = src.mediaFile;
+		this.tag = src.tag;
+		this.name = src.name;
+		this.data = src.data;
+		this.size = src.size;
+		this.width = src.width;
+		this.height = src.height;
+		this.file = src.file;
 		super.copy(src);
 	}
 
@@ -281,13 +281,13 @@ public class Media extends UBean implements Serializable {
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append(ID, id)
-				.append(KIND, kind)
-				.append(MEDIA_NAME, mediaName)
-				.append(MEDIA_DATA, mediaData)
-				.append(MEDIA_SIZE, mediaSize)
-				.append(MEDIA_WIDTH, mediaWidth)
-				.append(MEDIA_HEIGHT, mediaHeight)
-				.append(MEDIA_FILE, mediaFile)
+				.append(TAG, tag)
+				.append(NAME, name)
+				.append(DATA, data)
+				.append(SIZE, size)
+				.append(WIDTH, width)
+				.append(HEIGHT, height)
+				.append(FILE, file)
 				.appendSuper(super.toString())
 				.toString();
 	}

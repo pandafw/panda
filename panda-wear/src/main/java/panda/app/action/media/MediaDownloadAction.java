@@ -21,7 +21,7 @@ public class MediaDownloadAction extends AbstractAction {
 		if (id != null && id > 0) {
 			EntityDao<Media> dao = getDaoClient().getEntityDao(Media.class);
 			Media m = dao.fetch(id);
-			if (m != null && m.getMediaData() != null) {
+			if (m != null && m.getData() != null) {
 				writeImage(m);
 				return;
 			}
@@ -37,11 +37,11 @@ public class MediaDownloadAction extends AbstractAction {
 		HttpServletResponse res = getResponse();
 
 		HttpServletResponser hsrs = new HttpServletResponser(req, res);
-		hsrs.setFileName(Strings.isEmpty(m.getMediaName()) ? ("media-" + m.getId() + ".jpg") : m.getMediaName());
+		hsrs.setFileName(Strings.isEmpty(m.getName()) ? ("media-" + m.getId() + ".jpg") : m.getName());
 		hsrs.setContentType(MimeTypes.getMimeType(hsrs.getFileName()));
-		hsrs.setContentLength(m.getMediaData().length);
+		hsrs.setContentLength(m.getData().length);
 		hsrs.writeHeader();
-		hsrs.writeBytes(m.getMediaData());
+		hsrs.writeBytes(m.getData());
 	}
 }
 
