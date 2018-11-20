@@ -437,28 +437,6 @@ public class TextsTest {
 	}
 	
 	// -----------------------------------------------------------------------
-//	/**
-//	 * test method: formatFileSize
-//	 * @throws Exception if an error occurs
-//	 */
-//	@Test
-//	public void testFormatSize() throws Exception {
-//		assertEquals("", Texts.formatFileSize((Integer)null));
-//		assertEquals("", Texts.formatFileSize((Long)null));
-//		assertEquals("0B", Texts.formatFileSize(0));
-//		assertEquals("1023B", Texts.formatFileSize(1023));
-//		assertEquals("1KB", Texts.formatFileSize(1024));
-//		assertEquals("1023KB", Texts.formatFileSize(1024*1024-1));
-//		assertEquals("1MB", Texts.formatFileSize(1024*1024));
-//		assertEquals("1023MB", Texts.formatFileSize(1024*1024*1024-1));
-//		assertEquals("1GB", Texts.formatFileSize(1024*1024*1024));
-//		assertEquals("1023GB", Texts.formatFileSize(1024L*1024*1024*1024-1));
-//		assertEquals("1TB", Texts.formatFileSize(1024L*1024*1024*1024));
-//		assertEquals("1023TB", Texts.formatFileSize(1024L*1024*1024*1024*1024-1));
-//		assertEquals("1PB", Texts.formatFileSize(1024L*1024*1024*1024*1024));
-//	}
-	
-	// -----------------------------------------------------------------------
 	/**
 	 * test method: ellipsis
 	 * @throws Exception if an error occurs

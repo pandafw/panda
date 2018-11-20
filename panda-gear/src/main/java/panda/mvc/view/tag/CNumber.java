@@ -72,7 +72,7 @@ public class CNumber extends ContextBean {
 		if (value != null) {
 			String msg = null;
 
-			if ("filesize".equalsIgnoreCase(format)) {
+			if ("size".equalsIgnoreCase(format)) {
 				msg = Numbers.formatSize(value); 
 			}
 			else {

@@ -1409,8 +1409,8 @@ public class NumbersTest {
 	}
 	
 	// -----------------------------------------------------------------------
-	// byteCountToDisplaySize
-	public void testFormatFileSize() {
+	// 
+	public void testFormatSize() {
 		final BigInteger b1023 = BigInteger.valueOf(1023);
 		final BigInteger b1025 = BigInteger.valueOf(1025);
 		final BigInteger KB1 = BigInteger.valueOf(1024);
@@ -1443,7 +1443,7 @@ public class NumbersTest {
 		assertEquals(Numbers.formatSize(BigInteger.valueOf(Integer.MAX_VALUE)), "1.99 GB");
 	}
 
-	public void testByteCountToDisplaySizeLong() {
+	public void testFormatSizeLong() {
 		assertEquals(Numbers.formatSize(0), "0 bytes");
 		assertEquals(Numbers.formatSize(1), "1 bytes");
 		assertEquals(Numbers.formatSize(1023), "1023 bytes");
@@ -1468,8 +1468,8 @@ public class NumbersTest {
 	}
 
 	// -----------------------------------------------------------------------
-	// parseFileSize
-	public void testParsFileSize() {
+	// 
+	public void testParseSize() {
 		final BigDecimal b1023 = BigDecimal.valueOf(1023);
 		final BigDecimal b1025 = BigDecimal.valueOf(1025);
 		final BigDecimal KB1 = BigDecimal.valueOf(1024);
