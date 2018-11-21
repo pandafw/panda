@@ -40,7 +40,7 @@ public class LayoutProcessor extends AbstractProcessor {
 	public static final String PC_LAYOUT = "pc";
 
 	/**
-	 * MOBILE_LAYOUT = "pc";
+	 * MOBILE_LAYOUT = "mb";
 	 */
 	public static final String MOBILE_LAYOUT = "mb";
 
@@ -70,6 +70,7 @@ public class LayoutProcessor extends AbstractProcessor {
 	@IocInject(value=MvcConstants.LAYOUT_COOKIE_MAXAGE, required=false)
 	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
 
+	@IocInject(value=MvcConstants.LAYOUT_DEFAULT, required=false)
 	protected String defaultLayout = PC_LAYOUT;
 
 	@IocInject(value=MvcConstants.LAYOUT_SAVE_TO_SESSION, required=false)
