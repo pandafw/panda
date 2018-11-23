@@ -13,7 +13,7 @@ import panda.io.FileIterator;
 import panda.io.FileNames;
 import panda.io.Files;
 import panda.io.Streams;
-import panda.io.filter.IOFileFilter;
+import panda.io.filter.FileFilters;
 import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
@@ -176,18 +176,7 @@ public class LocalFilePool implements FilePool {
 		File root = new File(path);
 		
 		final long time = System.currentTimeMillis() - expires;
-		
-		Collection<File> fs = Files.listFiles(root, new IOFileFilter() {
-			@Override
-			public boolean accept(File file) {
-				return (file.lastModified() < time);
-			}
-
-			@Override
-			public boolean accept(File dir, String name) {
-				return accept(new File(dir, name));
-			}
-		}, true);
+		Collection<File> fs = Files.listFiles(root, true, FileFilters.ageFileFilter(time));
 
 		int cnt = 0;
 		for (File f : fs) {
