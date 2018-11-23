@@ -141,16 +141,6 @@
 			},
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("date")
-		}, {
-			"name" : "flag",
-			"header": a.getFieldLabel("flag"),
-			"display": a.displayField("flag"),
-			"filterable": a.filterField("flag"),
-			"filter": {
-				"type": "number"
-			},
-			"sortable": true,
-			"tooltip": a.getFieldTooltip("flag")
 		}] />
 
 

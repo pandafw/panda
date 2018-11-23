@@ -3,20 +3,19 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="panda.vfs.dao.DaoFileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
+	<entity name="panda.vfs.FileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="file id"/>
-		<property name="name" type="String" size="250" notNull="true" comment="file name">
+		<property name="name" type="String" size="255" notNull="true" comment="file name">
 			<validator type="stringlength">
-				<param name="maxLength" value="250"/>
+				<param name="maxLength" value="255"/>
 			</validator>
 		</property>
 		<property name="size" type="Long" notNull="true" comment="file size"/>
 		<property name="date" type="Long" notNull="true" comment="file date"/>
-		<property name="flag" type="Integer" notNull="true" comment="flag"/>
 	</entity>
 
 	<!-- action -->
-	<action name="action.FilePool" entity="panda.vfs.dao.DaoFileItem" extend="baseAction">
+	<action name="action.FilePool" entity="panda.vfs.FileItem" extend="baseAction">
 		<list name="basicList" extend="baseList">
 			<column name="id" sortable="true" link="true">
 				<filter type="number"/>
@@ -32,16 +31,13 @@
 				<format type="timestamp"/>
 				<filter type="datetime"/>
 			</column>
-			<column name="flag" sortable="true">
-				<filter type="number"/>
-			</column>
 		</list>
 		<list name="basicBulk" extend="basicList">
 			<param name="toolbar" value="${bulk.toolbar}"/>
 			<param name="buttons" value="${bulk.buttons}"/>
 		</list>
 	</action>
-	<action name="filepool" auth="${super.auth}" path="${super.path}" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
@@ -53,33 +49,28 @@
 
 	<!-- resource -->
 	<resource>
-		<entity name="panda.vfs.dao.DaoFileItem">
+		<entity name="panda.vfs.FileItem">
 			<property name="id" label="ID"/>
 			<property name="name" label="Name"/>
 			<property name="size" label="Size"/>
 			<property name="date" label="Date"/>
-			<property name="flag" label="Flag"/>
 		</entity>
 		<action name="filepool" title="File Pool">
 			<property name="icon" label="fa fa-file-o"/>
 		</action>
 	</resource>
 	<resource locale="ja">
-		<entity name="panda.vfs.dao.DaoFileItem">
-			<property name="id" label="ファイルID"/>
+		<entity name="panda.vfs.FileItem">
 			<property name="name" label="ファイル名"/>
 			<property name="size" label="サイズ"/>
 			<property name="date" label="更新日付"/>
-			<property name="flag" label="フラグ"/>
 		</entity>
 	</resource>
 	<resource locale="zh">
-		<entity name="panda.vfs.dao.DaoFileItem">
-			<property name="id" label="文件ID"/>
+		<entity name="panda.vfs.FileItem">
 			<property name="name" label="文件名"/>
 			<property name="size" label="大小"/>
 			<property name="date" label="更新日期"/>
-			<property name="flag" label="flag"/>
 		</entity>
 	</resource>
 </module>

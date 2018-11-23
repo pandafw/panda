@@ -6,16 +6,16 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
-import panda.vfs.dao.DaoFileItem;
+import panda.vfs.FileItem;
 
-public abstract class FilePoolBulkDeleteAction extends GenericBulkAction<DaoFileItem> {
+public abstract class FilePoolBulkDeleteAction extends GenericBulkAction<FileItem> {
 
 	/**
 	 * Constructor
 	 */
 	public FilePoolBulkDeleteAction() {
-		setType(DaoFileItem.class);
-		addDisplayFields(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
+		setType(FileItem.class);
+		addDisplayFields(FileItem.ID, FileItem.NAME, FileItem.SIZE, FileItem.DATE);
 	}
 
 

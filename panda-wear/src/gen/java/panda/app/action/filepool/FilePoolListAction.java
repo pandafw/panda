@@ -1,26 +1,22 @@
 package panda.app.action.filepool;
 
 import panda.app.action.crud.GenericListAction;
-import panda.app.auth.Auth;
-import panda.app.constant.AUTH;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.bean.Queryer;
 import panda.mvc.view.Views;
-import panda.vfs.dao.DaoFileItem;
+import panda.vfs.FileItem;
 
-@At("${super_path}/filepool")
-@Auth(AUTH.SUPER)
-public class FilePoolListAction extends GenericListAction<DaoFileItem> {
+public abstract class FilePoolListAction extends GenericListAction<FileItem> {
 
 	/**
 	 * Constructor
 	 */
 	public FilePoolListAction() {
-		setType(DaoFileItem.class);
-		addDisplayFields(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
+		setType(FileItem.class);
+		addDisplayFields(FileItem.ID, FileItem.NAME, FileItem.SIZE, FileItem.DATE);
 	}
 
 

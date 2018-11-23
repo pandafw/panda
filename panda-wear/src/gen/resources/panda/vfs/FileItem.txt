@@ -6,6 +6,4 @@ size=Size
 
 date=Date
 
-flag=Flag
-
 

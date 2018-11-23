@@ -57,13 +57,6 @@
 			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("date")
-		}, {
-			"name": "flag",
-			"value": false,
-			"header": a.getFieldLabel("flag"),
-			"display": a.displayField("flag"),
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("flag")
 		}] />
 
 

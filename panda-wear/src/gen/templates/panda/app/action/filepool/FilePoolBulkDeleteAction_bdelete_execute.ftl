@@ -61,12 +61,6 @@
 			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("date")
-		}, {
-			"name": "flag",
-			"header": a.getFieldLabel("flag"),
-			"display": a.displayField("flag"),
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("flag")
 		}] />
 
 
