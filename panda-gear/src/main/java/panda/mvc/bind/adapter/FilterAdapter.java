@@ -4,6 +4,17 @@ import panda.bind.adapter.IncludePropertyFilter;
 import panda.mvc.bean.Filter;
 
 public class FilterAdapter extends IncludePropertyFilter<Filter> {
+	private static final FilterAdapter s = new FilterAdapter(true);
+	private static final FilterAdapter i = new FilterAdapter(false);
+
+	public static FilterAdapter s() {
+		return s;
+	}
+	
+	public static FilterAdapter i() {
+		return i;
+	}
+	
 	/**
 	 * Constructor
 	 */

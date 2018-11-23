@@ -4,6 +4,17 @@ import panda.bind.adapter.IncludePropertyFilter;
 import panda.mvc.bean.Sorter;
 
 public class SorterAdapter extends IncludePropertyFilter<Sorter> {
+	private static final SorterAdapter s = new SorterAdapter(true);
+	private static final SorterAdapter i = new SorterAdapter(false);
+
+	public static SorterAdapter s() {
+		return s;
+	}
+	
+	public static SorterAdapter i() {
+		return i;
+	}
+	
 	/**
 	 * Constructor
 	 */

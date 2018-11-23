@@ -4,6 +4,17 @@ import panda.bind.adapter.IncludePropertyFilter;
 import panda.mvc.bean.Queryer;
 
 public class QueryerAdapter extends IncludePropertyFilter<Queryer> {
+	private static final QueryerAdapter s = new QueryerAdapter(true);
+	private static final QueryerAdapter i = new QueryerAdapter(false);
+
+	public static QueryerAdapter s() {
+		return s;
+	}
+	
+	public static QueryerAdapter i() {
+		return i;
+	}
+	
 	/**
 	 * Constructor
 	 */

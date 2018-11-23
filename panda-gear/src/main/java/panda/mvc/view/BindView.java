@@ -291,10 +291,18 @@ public abstract class BindView extends DataView {
 			as.registerAdapter(Calendar.class, new CalendarAdapter(dateFormat));
 		}
 
-		as.registerAdapter(Filter.class, new FilterAdapter(shortName));
-		as.registerAdapter(Pager.class, new PagerAdapter(shortName));
-		as.registerAdapter(Queryer.class, new QueryerAdapter(shortName));
-		as.registerAdapter(Sorter.class, new SorterAdapter(shortName));
+		if (shortName) {
+			as.registerAdapter(Filter.class, FilterAdapter.s());
+			as.registerAdapter(Pager.class, PagerAdapter.s());
+			as.registerAdapter(Queryer.class, QueryerAdapter.s());
+			as.registerAdapter(Sorter.class, SorterAdapter.s());
+		}
+		else {
+			as.registerAdapter(Filter.class, FilterAdapter.i());
+			as.registerAdapter(Pager.class, PagerAdapter.i());
+			as.registerAdapter(Queryer.class, QueryerAdapter.i());
+			as.registerAdapter(Sorter.class, SorterAdapter.i());
+		}
 		
 		as.setPrettyPrint(prettyPrint);
 	}

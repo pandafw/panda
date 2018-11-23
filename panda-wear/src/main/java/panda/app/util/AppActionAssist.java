@@ -335,7 +335,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 */
 	public void saveSorterParams(Sorter sorter) {
 		JsonSerializer js = Jsons.newJsonSerializer();
-		js.registerAdapter(Sorter.class, new SorterAdapter(true));
+		js.registerAdapter(Sorter.class, SorterAdapter.s());
 
 		String ss = js.serialize(sorter);
 		getState().saveState("sorter", ss);
