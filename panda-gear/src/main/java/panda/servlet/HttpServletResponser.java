@@ -358,7 +358,7 @@ public class HttpServletResponser {
 	}
 
 	public void writeFile(FileItem file) throws IOException {
-		writeStream(file.getInputStream());
+		writeStream(file.open());
 	}
 
 	public void writeReader(Reader r) throws IOException {

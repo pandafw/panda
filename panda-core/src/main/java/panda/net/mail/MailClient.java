@@ -585,7 +585,7 @@ public class MailClient {
 				Streams.copy((File)data, bos);
 			}
 			else if (data instanceof FileItem) {
-				InputStream fis = ((FileItem)data).getInputStream();
+				InputStream fis = ((FileItem)data).open();
 				try {
 					Streams.copy(fis, bos);
 				}

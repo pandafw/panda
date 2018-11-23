@@ -157,7 +157,7 @@ public class DaoFileItem implements FileItem, Serializable {
 	 * @return the data
 	 */
 	@Override
-	public byte[] getData() throws IOException {
+	public byte[] data() throws IOException {
 		if (data == null) {
 			data = daoFilePool.readFile(this);
 		}
@@ -175,8 +175,8 @@ public class DaoFileItem implements FileItem, Serializable {
 	 * @return the input stream
 	 */
 	@Override
-	public InputStream getInputStream() throws IOException {
-		return new ByteArrayInputStream(getData());
+	public InputStream open() throws IOException {
+		return new ByteArrayInputStream(data());
 	}
 
 	/**

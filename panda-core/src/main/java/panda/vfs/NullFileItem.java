@@ -87,7 +87,7 @@ public class NullFileItem implements FileItem {
 	 * @return the data
 	 */
 	@Override
-	public byte[] getData() throws IOException {
+	public byte[] data() throws IOException {
 		throw error();
 	}
 
@@ -95,7 +95,7 @@ public class NullFileItem implements FileItem {
 	 * @return the input stream
 	 */
 	@Override
-	public InputStream getInputStream() throws IOException {
+	public InputStream open() throws IOException {
 		throw error();
 	}
 

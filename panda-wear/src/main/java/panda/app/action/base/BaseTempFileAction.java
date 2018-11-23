@@ -135,13 +135,13 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	public FileItem iupload(@Param("file") FileItem file, @Param("width") int width, @Param("height") int height, @Param("scale") int scale) throws Exception {
 		if (file != null && file.isExists()) {
 			if (width > 0 && height > 0) {
-				ImageWrapper iw = Images.i().read(file.getData());
+				ImageWrapper iw = Images.i().read(file.data());
 				iw.resize(width, height);
 				byte[] data = iw.getData();
 				file.save(data);
 			}
 			else if (scale > 0) {
-				ImageWrapper iw = Images.i().read(file.getData());
+				ImageWrapper iw = Images.i().read(file.data());
 				iw.resize(scale);
 				byte[] data = iw.getData();
 				file.save(data);

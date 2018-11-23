@@ -111,13 +111,13 @@ public class DataImportAction extends AbstractAction {
 		try {
 			String fext = FileNames.getExtension(arg.file.getName());
 			if (FileTypes.XLS.equalsIgnoreCase(fext)) {
-				byte[] data = arg.file.getData();
+				byte[] data = arg.file.data();
 				if (data != null) {
 					impXls(data, false);
 				}
 			}
 			else if (FileTypes.XLSX.equalsIgnoreCase(fext)) {
-				byte[] data = arg.file.getData();
+				byte[] data = arg.file.data();
 				if (data != null) {
 					impXls(data, true);
 				}
@@ -127,7 +127,7 @@ public class DataImportAction extends AbstractAction {
 					addFieldError("target", getText(Validators.MSGID_REQUIRED));
 				}
 				else {
-					byte[] data = arg.file.getData();
+					byte[] data = arg.file.data();
 					if (data != null) {
 						impCsv(data, Chars.COMMA);
 					}
@@ -139,7 +139,7 @@ public class DataImportAction extends AbstractAction {
 					addFieldError("target", getText(Validators.MSGID_REQUIRED));
 				}
 				else {
-					byte[] data = arg.file.getData();
+					byte[] data = arg.file.data();
 					if (data != null) {
 						impCsv(data, Chars.TAB);
 					}

@@ -146,7 +146,7 @@ public class ImageValidator extends AbstractValidator {
 			}
 			else if (value instanceof FileItem) {
 				FileItem f = (FileItem)value;
-				img = Images.i().read(f.getData());
+				img = Images.i().read(f.data());
 			}
 			else {
 				throw new IllegalArgumentException("The value type of '" + getName() + "' is invalid. (only RenderedImage/byte[]/File/URL/InputStream is allowed)");

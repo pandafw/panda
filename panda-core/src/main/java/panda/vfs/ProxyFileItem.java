@@ -84,7 +84,7 @@ public class ProxyFileItem implements FileItem {
 	 * @return the data
 	 */
 	@Override
-	public byte[] getData() throws IOException {
+	public byte[] data() throws IOException {
 		if (data != null) {
 			return data;
 		}
@@ -98,7 +98,7 @@ public class ProxyFileItem implements FileItem {
 	 * @return the input stream
 	 */
 	@Override
-	public InputStream getInputStream() throws IOException {
+	public InputStream open() throws IOException {
 		if (stream != null) {
 			return stream;
 		}

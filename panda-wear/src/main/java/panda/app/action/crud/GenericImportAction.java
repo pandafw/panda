@@ -182,7 +182,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			InputStream input = null;
 			String fext = Strings.lowerCase(FileNames.getExtension(arg.file.getName()));
 			if (FileTypes.ZIP.equalsIgnoreCase(fext)) {
-				ZipInputStream zis = new ZipInputStream(arg.file.getInputStream(), Charsets.CS_UTF_8);
+				ZipInputStream zis = new ZipInputStream(arg.file.open(), Charsets.CS_UTF_8);
 				ZipEntry entry;
 				try {
 					while ((entry = zis.getNextEntry()) != null) {
@@ -211,7 +211,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 					addFieldError("file", getText("error-file"));
 					return null;
 				}
-				input = arg.file.getInputStream();
+				input = arg.file.open();
 			}
 
 			if (FileTypes.XLS.equalsIgnoreCase(fext)) {

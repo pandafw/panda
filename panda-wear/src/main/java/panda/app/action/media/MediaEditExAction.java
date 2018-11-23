@@ -17,7 +17,7 @@ public class MediaEditExAction extends MediaEditAction {
 	private void setFileData(Media data) {
 		try {
 			if (data.getFile() != null && data.getFile().isExists()) {
-				data.setData(data.getFile().getData());
+				data.setData(data.getFile().data());
 				data.setSize(data.getData().length);
 				if (Strings.isEmpty(data.getName())) {
 					data.setName(Strings.right(data.getFile().getName(), FileNames.MAX_FILENAME_LENGTH));

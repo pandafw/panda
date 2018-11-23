@@ -59,7 +59,7 @@ public class HashAction extends AbstractAction {
 		
 		Set<String> as = Digests.getAvailableAlgorithms();
 		for (String a : as) {
-			InputStream fis = f.getInputStream();
+			InputStream fis = f.open();
 			try {
 				m.put(a, Hex.encodeHexString(Digests.digest(Digests.getDigest(a), fis)));
 			}

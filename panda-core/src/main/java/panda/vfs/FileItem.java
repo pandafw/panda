@@ -11,6 +11,7 @@ public interface FileItem {
 	public static final String NAME = "name";
 	public static final String SIZE = "size";
 	public static final String DATE = "date";
+	public static final String TYPE = "type";
 
 	/**
 	 * @return the id
@@ -46,13 +47,13 @@ public interface FileItem {
 	 * @return the data
 	 * @throws IOException if an IO error occurs.
 	 */
-	byte[] getData() throws IOException;
+	byte[] data() throws IOException;
 
 	/**
 	 * @return the input stream
 	 * @throws IOException if an IO error occurs.
 	 */
-	InputStream getInputStream() throws IOException;
+	InputStream open() throws IOException;
 
 	/**
 	 * save data

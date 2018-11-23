@@ -29,7 +29,7 @@ public class ByteArrayCastor extends AnySingleCastor<byte[]> {
 			}
 			if (value instanceof FileItem) {
 				FileItem fi = (FileItem)value;
-				return fi.isExists() ? fi.getData() : null;
+				return fi.isExists() ? fi.data() : null;
 			}
 			if (value instanceof InputStream) {
 				return Streams.toByteArray((InputStream)value);

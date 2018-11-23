@@ -40,7 +40,7 @@ public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 				}
 				if (value instanceof FileItem) {
 					FileItem fi = (FileItem)value;
-					return fi.isExists() ? fi.getInputStream() : null;
+					return fi.isExists() ? fi.open() : null;
 				}
 				if (value instanceof Blob) {
 					return ((Blob)value).getBinaryStream();
@@ -94,7 +94,7 @@ public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 
 				if (value instanceof FileItem) {
 					FileItem fi = (FileItem)value;
-					return fi.isExists() ? Streams.toReader(fi.getInputStream(), context.getEncoding()) : null;
+					return fi.isExists() ? Streams.toReader(fi.open(), context.getEncoding()) : null;
 				}
 
 				if (value instanceof byte[]) {
