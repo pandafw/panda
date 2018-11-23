@@ -88,7 +88,7 @@ public class IOFileIterator implements FileIterator {
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public IOFileIterator(File directory, IOFileFilter fileFilter, boolean recursive) {
+	public IOFileIterator(File directory, boolean recursive, IOFileFilter fileFilter) {
 		open(directory, fileFilter, recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE, false);
 	}
 

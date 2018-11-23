@@ -440,12 +440,12 @@ public class FileFilters {
 	 * Returns a filter that filters files based on a cutoff time.
 	 * 
 	 * @param cutoff the time threshold
-	 * @param acceptOlder if true, older files get accepted, if false, newer
+	 * @param newer if false, older files get accepted, if false, newer
 	 * @return an appropriately configured age file filter
 	 * @see AgeFileFilter
 	 */
-	public static IOFileFilter ageFileFilter(long cutoff, boolean acceptOlder) {
-		return new AgeFileFilter(cutoff, acceptOlder);
+	public static IOFileFilter ageFileFilter(long cutoff, boolean newer) {
+		return new AgeFileFilter(cutoff, newer);
 	}
 
 	/**
@@ -464,12 +464,12 @@ public class FileFilters {
 	 * Returns a filter that filters files based on a cutoff date.
 	 * 
 	 * @param cutoffDate the time threshold
-	 * @param acceptOlder if true, older files get accepted, if false, newer
+	 * @param newer if false, older files get accepted, if false, newer
 	 * @return an appropriately configured age file filter
 	 * @see AgeFileFilter
 	 */
-	public static IOFileFilter ageFileFilter(Date cutoffDate, boolean acceptOlder) {
-		return new AgeFileFilter(cutoffDate, acceptOlder);
+	public static IOFileFilter ageFileFilter(Date cutoffDate, boolean newer) {
+		return new AgeFileFilter(cutoffDate, newer);
 	}
 
 	/**
@@ -490,12 +490,12 @@ public class FileFilters {
 	 * 
 	 * @param cutoffReference the file whose last modification time is usesd as the threshold age of
 	 *            the files
-	 * @param acceptOlder if true, older files get accepted, if false, newer
+	 * @param newer if false, older files get accepted, if false, newer
 	 * @return an appropriately configured age file filter
 	 * @see AgeFileFilter
 	 */
-	public static IOFileFilter ageFileFilter(File cutoffReference, boolean acceptOlder) {
-		return new AgeFileFilter(cutoffReference, acceptOlder);
+	public static IOFileFilter ageFileFilter(File cutoffReference, boolean newer) {
+		return new AgeFileFilter(cutoffReference, newer);
 	}
 
 	// -----------------------------------------------------------------------

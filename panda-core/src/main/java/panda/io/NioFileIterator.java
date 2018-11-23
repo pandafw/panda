@@ -47,13 +47,13 @@ public class NioFileIterator extends IOFileIterator {
 	 * <p>
 	 * 
 	 * @param directory the directory to search in
-	 * @param fileFilter filter to apply when finding files.
 	 * @param recursive if true all sub directories are searched as well
+	 * @param fileFilter filter to apply when finding files.
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public NioFileIterator(File directory, IOFileFilter fileFilter, boolean recursive) {
-		super(directory, fileFilter, recursive);
+	public NioFileIterator(File directory, boolean recursive, IOFileFilter fileFilter) {
+		super(directory, recursive, fileFilter);
 	}
 
 	/**

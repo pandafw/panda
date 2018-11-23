@@ -376,14 +376,14 @@ public class Files {
 	 * <code>FileFilters.makeCVSAware(null)</code>.
 	 * 
 	 * @param directory the directory to search in
-	 * @param fileFilter filter to apply when finding files.
 	 * @param recursive if true all sub directories are searched as well
+	 * @param fileFilter filter to apply when finding files.
 	 * @return an collection of java.io.File with the matching files
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public static Collection<File> listFiles(File directory, IOFileFilter fileFilter, boolean recursive) {
-		return fileIteratorToList(iterateFiles(directory, fileFilter, recursive));
+	public static Collection<File> listFiles(File directory, boolean recursive, IOFileFilter fileFilter) {
+		return fileIteratorToList(iterateFiles(directory, recursive, fileFilter));
 	}
 	
 	/**
@@ -476,17 +476,17 @@ public class Files {
 	 * <p>
 	 * 
 	 * @param directory the directory to search in
-	 * @param fileFilter filter to apply when finding files.
 	 * @param recursive if true all sub directories are searched as well
+	 * @param fileFilter filter to apply when finding files.
 	 * @return an iterator of java.io.File for the matching files
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public static FileIterator iterateFiles(File directory, IOFileFilter fileFilter, boolean recursive) {
+	public static FileIterator iterateFiles(File directory, boolean recursive, IOFileFilter fileFilter) {
 		if (Systems.IS_OS_APPENGINE) {
-			return new IOFileIterator(directory, fileFilter, recursive);
+			return new IOFileIterator(directory, recursive, fileFilter);
 		}
-		return new NioFileIterator(directory, fileFilter, recursive);
+		return new NioFileIterator(directory, recursive, fileFilter);
 	}
 
 	/**
