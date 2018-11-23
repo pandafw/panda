@@ -17,26 +17,16 @@ import panda.vfs.FileItem;
  */
 @Table("file_item")
 public class DaoFileItem implements FileItem, Serializable {
-	public static final int TEMPORARY = 0;
-	public static final int ARCHIVE = 1;
-
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	/*----------------------------------------------------------------------*
 	 * Constants
 	 *----------------------------------------------------------------------*/
-	public static final String ID = "id";
-	public static final String NAME = "name";
-	public static final String SIZE = "size";
-	public static final String DATE = "date";
-	public static final String FLAG = "flag";
-
 	public static final String[] COLUMNS = new String[] {
 			ID,
 			NAME,
 			SIZE,
-			DATE,
-			FLAG,
+			DATE
 		};
 
 	private DaoFilePool daoFilePool;
@@ -48,7 +38,7 @@ public class DaoFileItem implements FileItem, Serializable {
 	@Id
 	protected Long id;
 
-	@Column(notNull=true, size=250)
+	@Column(notNull=true, size=255)
 	protected String name;
 
 	@Column(notNull=true, defaults="0")
@@ -56,9 +46,6 @@ public class DaoFileItem implements FileItem, Serializable {
 
 	@Column(notNull=true)
 	protected Date date;
-
-	@Column(notNull=true, defaults="0")
-	protected int flag = 0;
 
 	private boolean exists = true;
 	
@@ -152,28 +139,6 @@ public class DaoFileItem implements FileItem, Serializable {
 	}
 
 	/**
-	 * @return the flag
-	 */
-	public int getFlag() {
-		return flag;
-	}
-
-	/**
-	 * @param flag the flag to set
-	 */
-	public void setFlag(Integer flag) {
-		this.flag = flag;
-	}
-
-	/**
-	 * @return true if this is a temporary file
-	 */
-	@Override
-	public boolean isTemporary() {
-		return flag == TEMPORARY;
-	}
-
-	/**
 	 * @return true
 	 */
 	@Override
@@ -245,7 +210,6 @@ public class DaoFileItem implements FileItem, Serializable {
 				.append(NAME, name)
 				.append(SIZE, size)
 				.append(DATE, date)
-				.append(FLAG, flag)
 				.append("data", data)
 				.toString();
 	}
@@ -299,7 +263,6 @@ public class DaoFileItem implements FileItem, Serializable {
 		copy.name = this.name;
 		copy.size = this.size;
 		copy.date = this.date;
-		copy.flag = this.flag;
 		copy.data = this.data;
 
 		return copy;

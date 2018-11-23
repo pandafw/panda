@@ -7,6 +7,11 @@ import java.util.Date;
 /**
  */
 public interface FileItem {
+	public static final String ID = "id";
+	public static final String NAME = "name";
+	public static final String SIZE = "size";
+	public static final String DATE = "date";
+
 	/**
 	 * @return the id
 	 */
@@ -31,11 +36,6 @@ public interface FileItem {
 	 * @return the type
 	 */
 	String getType();
-
-	/**
-	 * @return true if this is a temporary file
-	 */
-	boolean isTemporary();
 
 	/**
 	 * @return exists

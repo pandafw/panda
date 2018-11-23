@@ -76,14 +76,6 @@ public class NullFileItem implements FileItem {
 	}
 
 	/**
-	 * @return true if this is a temporary file
-	 */
-	@Override
-	public boolean isTemporary() {
-		return true;
-	}
-
-	/**
 	 * @return false
 	 */
 	@Override

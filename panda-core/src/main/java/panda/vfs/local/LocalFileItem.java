@@ -24,6 +24,12 @@ public class LocalFileItem implements FileItem, Serializable {
 	
 	/**
 	 * Constructor
+	 */
+	public LocalFileItem() {
+	}
+
+	/**
+	 * Constructor
 	 * 
 	 * @param localFilePool local file pool
 	 * @param id file id
@@ -48,6 +54,13 @@ public class LocalFileItem implements FileItem, Serializable {
 	@Override
 	public Long getId() {
 		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/**
@@ -80,14 +93,6 @@ public class LocalFileItem implements FileItem, Serializable {
 	@Override
 	public String getType() {
 		return MimeTypes.getMimeType(getName());
-	}
-
-	/**
-	 * @return true if this is a temporary file
-	 */
-	@Override
-	public boolean isTemporary() {
-		return (getId().longValue() & 1L) == 0;
 	}
 
 	/**

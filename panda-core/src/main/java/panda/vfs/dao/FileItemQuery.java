@@ -46,12 +46,5 @@ public class FileItemQuery extends EntityQuery<DaoFileItem, FileItemQuery> {
 	public ComparableCondition<FileItemQuery, Date> date() {
 		return new ComparableCondition<FileItemQuery, Date>(this, DaoFileItem.DATE);
 	}
-
-	/**
-	 * @return condition of id
-	 */
-	public ComparableCondition<FileItemQuery, Integer> flag() {
-		return new ComparableCondition<FileItemQuery, Integer>(this, DaoFileItem.FLAG);
-	}
 }
 

@@ -3,12 +3,20 @@ package panda.vfs.local;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
+import panda.io.FileIterator;
+import panda.io.FileNames;
 import panda.io.Files;
+import panda.io.Streams;
 import panda.io.filter.IOFileFilter;
 import panda.lang.Arrays;
 import panda.lang.Numbers;
+import panda.lang.Strings;
 import panda.lang.Threads;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
@@ -23,14 +31,20 @@ public class LocalFilePool implements FilePool {
 	
 	protected final static FastDateFormat fdf = FastDateFormat.getInstance("yyyy/MM/dd/HH/mm/ss/SSS");
 
-	private String path = Files.getTempDirectoryPath();
+	protected String path;
 
 	/**
-	 * milliseconds since last modified. (default: 1h) 
+	 * milliseconds since last modified. (default: 1 day) 
 	 */
-	private long expires = DateTimes.MS_HOUR;
+	protected long expires = DateTimes.MS_DAY;
 
 	public LocalFilePool() {
+	}
+
+	public void initialize() {
+		if (Strings.isEmpty(path)) {
+			path = new File(Files.getTempDirectory(), "files").getPath();
+		}
 	}
 	
 	/**
@@ -61,12 +75,14 @@ public class LocalFilePool implements FilePool {
 		this.expires = maxAge * 1000L;
 	}
 
-	protected LocalFileItem randFile(String name, boolean temporary) {
+	protected LocalFileItem randFile(String name) {
+		name = FileNames.trimFileName(name);
+		if (Strings.isEmpty(name)) {
+			name = "noname";
+		}
+
 		while (true) {
 			long id = DateTimes.getDate().getTime();
-			if (temporary && (id & 1L) != 0) {
-				id++;
-			}
 	
 			File dir = new File(path, fdf.format(id));
 			if (dir.exists()) {
@@ -80,16 +96,21 @@ public class LocalFilePool implements FilePool {
 	}
 	
 	@Override
-	public FileItem saveFile(String name, final byte[] data, boolean temporary) throws IOException {
-		LocalFileItem fi = randFile(name ,temporary);
+	public Class<? extends FileItem> getItemType() {
+		return LocalFileItem.class;
+	}
+	
+	@Override
+	public FileItem saveFile(String name, final byte[] data) throws IOException {
+		LocalFileItem fi = randFile(name);
 		fi.getFile().getParentFile().mkdirs();
 		Files.write(fi.getFile(), data);
 		return fi;
 	}
 	
 	@Override
-	public FileItem saveFile(String name, final InputStream data, boolean temporary) throws IOException {
-		LocalFileItem fi = randFile(name ,temporary);
+	public FileItem saveFile(String name, final InputStream data) throws IOException {
+		LocalFileItem fi = randFile(name);
 		fi.getFile().getParentFile().mkdirs();
 		Files.write(fi.getFile(), data);
 		return fi;
@@ -119,9 +140,13 @@ public class LocalFilePool implements FilePool {
 
 	protected void removeDirs(File root, File dir) {
 		while (!root.equals(dir)) {
+			if (!dir.exists()) {
+				break;
+			}
 			if (!dir.delete()) {
 				break;
 			}
+			dir = dir.getParentFile();
 		}
 	}
 	
@@ -160,5 +185,36 @@ public class LocalFilePool implements FilePool {
 			
 			removeDirs(root, f.getParentFile());
 		}
+	}
+	
+	public List<LocalFileItem> listFiles() throws IOException {
+		File root = new File(path);
+		
+		if (!root.exists()) {
+			return null;
+		}
+		
+		List<LocalFileItem> fis = new ArrayList<LocalFileItem>();
+		FileIterator fit = Files.iterateFiles(root, true);
+		try {
+			while (fit.hasNext()) {
+				long id;
+				File f = fit.next();
+				String rp = FileNames.getRelativePath(root, f.getParentFile());
+				try {
+					Date d = fdf.parse(rp);
+					id = d.getTime();
+				}
+				catch (ParseException e) {
+					continue;
+				}
+				fis.add(new LocalFileItem(this, id, f));
+			}
+		}
+		finally {
+			Streams.safeClose(fit);
+		}
+		
+		return fis;
 	}
 }

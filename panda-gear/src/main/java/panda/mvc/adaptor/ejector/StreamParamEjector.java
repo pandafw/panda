@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
+import panda.lang.time.DateTimes;
 import panda.net.URLHelper;
 import panda.vfs.FileItem;
 
@@ -24,8 +25,9 @@ public class StreamParamEjector extends AbstractParamEjector {
 				
 				String qs = req.getQueryString();
 				params = URLHelper.parseQueryString(qs);
-				
-				FileItem fi = getActionContext().getFilePool().saveFile("noname", req.getInputStream(), true);
+
+				String fn = "noname-" + DateTimes.timestampLogFormat().format(DateTimes.getDate());
+				FileItem fi = getActionContext().getFilePool().saveFile(fn, req.getInputStream());
 				params.put(ALL, fi);
 			}
 			catch (Exception e) {

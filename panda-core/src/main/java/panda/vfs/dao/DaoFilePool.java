@@ -9,8 +9,10 @@ import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
 import panda.dao.DaoIterator;
+import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Collections;
+import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
@@ -22,9 +24,9 @@ public class DaoFilePool implements FilePool {
 	private int blockSize = Integer.MAX_VALUE;
 
 	/**
-	 * milliseconds since last modified. (default: 1h) 
+	 * milliseconds since last modified. (default: 1 day) 
 	 */
-	private long expires = DateTimes.MS_HOUR;
+	private long expires = DateTimes.MS_DAY;
 
 	/**
 	 * @return the daoClient
@@ -97,20 +99,25 @@ public class DaoFilePool implements FilePool {
 	}
 
 	@Override
-	public FileItem saveFile(String name, final InputStream data, boolean temporary) throws IOException {
-		return saveFile(name, Streams.toByteArray(data), temporary);
+	public Class<? extends FileItem> getItemType() {
+		return DaoFileItem.class;
 	}
 	
 	@Override
-	public FileItem saveFile(String name, final byte[] data, boolean temporary) throws IOException {
+	public FileItem saveFile(String name, final InputStream data) throws IOException {
+		return saveFile(name, Streams.toByteArray(data));
+	}
+	
+	@Override
+	public FileItem saveFile(String name, final byte[] data) throws IOException {
+		name = Strings.right(name, FileNames.MAX_FILENAME_LENGTH);
+
 		final DaoFileItem fi = new DaoFileItem();
-		
 		fi.setDaoFilePool(this);
 		fi.setName(name);
 		fi.setDate(DateTimes.getDate());
 		fi.setData(data);
 		fi.setSize(data.length);
-		fi.setFlag(temporary ? DaoFileItem.TEMPORARY : DaoFileItem.ARCHIVE);
 		
 		try {
 			final Dao dao = getDaoClient().getDao();
@@ -240,7 +247,7 @@ public class DaoFilePool implements FilePool {
 		final Date time = new Date(System.currentTimeMillis() - expires);
 		
 		FileItemQuery fiq = new FileItemQuery();
-		fiq.flag().equalTo(DaoFileItem.TEMPORARY).date().lessThan(time);
+		fiq.date().lessThan(time);
 		
 		final List<DaoFileItem> fis = dao.select(fiq);
 		if (Collections.isEmpty(fis)) {

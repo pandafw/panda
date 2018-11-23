@@ -114,7 +114,7 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	protected FileItem saveUploadFile(FileItemStream item) throws IOException {
 		FilePool fp = getActionContext().getFilePool();
 		String name = FileNames.getName(item.getName());
-		return fp.saveFile(name, item.openStream(), true);
+		return fp.saveFile(name, item.openStream());
 	}
 
 	protected void addStringParam(String name, String value) {
