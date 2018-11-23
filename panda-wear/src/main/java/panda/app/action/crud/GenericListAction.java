@@ -51,7 +51,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// result properties
 	//------------------------------------------------------------
-	private List<T> dataList;
+	protected List<T> dataList;
 	
 	/**
 	 * Constructor 
@@ -576,7 +576,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * @param maxLimit default maximum limit
 	 */
 	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
-		final DataQuery<T> dq = new DataQuery<T>(getEntity());
+		final DataQuery<T> dq = getDataQuery();
 
 		addQueryColumns(dq);
 		addQueryJoins(dq);
@@ -588,28 +588,25 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			listCountable = getTextAsBoolean(RES.UI_LIST_COUNTABLE, true);
 		}
 
+		queryList(qr, dq);
+	}
+	
+	protected void queryList(final Queryer qr, final DataQuery<T> dq) {
 		final Dao dao = getDao();
 		dao.exec(new Runnable() {
 			public void run() {
 				if (listCountable) {
-					qr.getPager().setTotal(getDao().count(dq));
+					qr.getPager().setTotal(dao.count(dq));
 					qr.getPager().normalize();
-					if (qr.getPager().getTotal() > 0) {
-						dq.setStart(qr.getPager().getStart());
-						dq.setLimit(qr.getPager().getLimit());
-						dataList = getDao().select(dq);
-						dataList = trimDataList(dataList);
-					}
-					else {
+					if (qr.getPager().getTotal() < 1) {
 						dataList = new ArrayList<T>();
+						return;
 					}
 				}
-				else {
-					dq.setStart(qr.getPager().getStart());
-					dq.setLimit(qr.getPager().getLimit());
-					dataList = getDao().select(dq);
-					dataList = trimDataList(dataList);
-				}
+				dq.setStart(qr.getPager().getStart());
+				dq.setLimit(qr.getPager().getLimit());
+				dataList = dao.select(dq);
+				dataList = trimDataList(dataList);
 			}
 		});
 	}

@@ -10,6 +10,7 @@ import panda.app.action.AbstractAction;
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
+import panda.dao.query.DataQuery;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
@@ -32,7 +33,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	// entity properties
 	//------------------------------------------------------------
-	private Class<T> type;
+	private Class<? extends T> type;
 	private Entity<T> entity;
 	private Dao dao;
 	
@@ -182,7 +183,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * public for getText(...)
 	 * @return the type
 	 */
-	public Class<T> getT() {
+	public Class<? extends T> getT() {
 		return type;
 	}
 
@@ -190,22 +191,27 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * public for getText(...)
 	 * @return the type
 	 */
-	public Class<T> getType() {
+	public Class<? extends T> getType() {
 		return type;
 	}
 
 	/**
 	 * @param type the type to set
 	 */
-	protected void setType(Class<T> type) {
+	protected void setType(Class<? extends T> type) {
 		this.type = type;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Entity<T> getEntity() {
 		if (entity == null) {
-			entity = getDaoClient().getEntity(type);
+			entity = (Entity<T>)getDaoClient().getEntity(getType());
 		}
 		return entity;
+	}
+	
+	protected DataQuery<T> getDataQuery() {
+		return new DataQuery<T>(getEntity());
 	}
 	
 	protected Dao getDao() {

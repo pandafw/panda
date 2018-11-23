@@ -8,7 +8,6 @@ import java.util.Set;
 
 import panda.app.BusinessRuntimeException;
 import panda.app.constant.RES;
-import panda.cast.Castors;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.DataQuery;
@@ -16,6 +15,7 @@ import panda.lang.Collections;
 import panda.lang.mutable.MutableInt;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.Mvcs;
 
 
 /**
@@ -78,8 +78,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @return data list
 	 */
 	protected Object doBulkDeleteSelect(Map<String, String[]> args) {
-		List<T> keys = convertArgsToList(args);
-		final List<T> dataList = selectDataList(keys, true);
+		final List<T> dataList = selectDataList(args, true);
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			return dataList;
@@ -96,8 +95,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @return data list
 	 */
 	protected Object doBulkDeleteExecute(Map<String, String[]> args) {
-		List<T> keys = convertArgsToList(args);
-		final List<T> dataList = selectDataList(keys, true);
+		final List<T> dataList = selectDataList(args, true);
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			setScenarioView();
@@ -112,11 +110,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		final MutableInt count = new MutableInt(0);
 		try {
 			startBulkDelete(dataList);
-			getDao().exec(new Runnable() {
-				public void run() {
-					count.setValue(deleteDataList(dataList));
-				}
-			});
+			execBulkDelete(dataList, count);
 		}
 		catch (Exception e) {
 			if (e instanceof BusinessRuntimeException) {
@@ -139,7 +133,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			return dataList;
 		}
 
-		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX, String.valueOf(dataList.size())));
+		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX, count.toString()));
 		return dataList;
 	}
 
@@ -160,24 +154,50 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	}
 	
 	/**
+	 * execBulkDelete
+	 * @param dataList data list
+	 * @param count deleted count
+	 */
+	protected void execBulkDelete(final List<T> dataList, final MutableInt count) {
+		getDao().exec(new Runnable() {
+			public void run() {
+				deleteDataList(dataList, count);
+			}
+		});
+	}
+
+	/**
 	 * delete data list
 	 * @param dataList data list
+	 * @param count counter
 	 * @return deleted count
 	 */
-	protected int deleteDataList(List<T> dataList) {
+	protected int deleteDataList(List<T> dataList, MutableInt count) {
+		count.setValue(0);
+
 		if (Collections.isEmpty(dataList)) {
 			return 0;
 		}
 
-		int cnt = 0;
 		for (int i = dataList.size() - 1; i >= 0; i--) {
-			int c = getDao().delete(dataList.get(i));
+			int c = deleteData(dataList.get(i));
 			if (c <= 0) {
 				dataList.remove(i);
 			}
-			cnt += c;
+			else {
+				count.add(c);
+			}
 		}
-		return cnt;
+		return count.intValue();
+	}
+
+	/**
+	 * delete data
+	 * @param data data to be delete
+	 * @return deleted count
+	 */
+	protected int deleteData(T data) {
+		return getDao().delete(data);
 	}
 
 	/**
@@ -196,8 +216,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @return data list
 	 */
 	protected Object doBulkUpdateSelect(Map<String, String[]> args) {
-		List<T> keys = convertArgsToList(args);
-		final List<T> dataList = selectDataList(keys,true);
+		final List<T> dataList = selectDataList(args, true);
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			return dataList;
@@ -214,8 +233,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @return data list
 	 */
 	protected Object doBulkUpdateExecute(Map<String, String[]> args) {
-		List<T> keys = convertArgsToList(args);
-		final List<T> dataList = selectDataList(keys, true);
+		final List<T> dataList = selectDataList(args, true);
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			setScenarioView();
@@ -230,11 +248,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		final MutableInt count = new MutableInt(0);
 		try {
 			startBulkUpdate(dataList);
-			getDao().exec(new Runnable() {
-				public void run() {
-					count.setValue(updateDataList(dataList));
-				}
-			});
+			execBulkUpdate(dataList, count);
 		}
 		catch (Exception e) {
 			if (e instanceof BusinessRuntimeException) {
@@ -257,7 +271,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			return dataList;
 		}
 
-		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX, String.valueOf(dataList.size())));
+		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX, count.toString()));
 		return dataList;
 	}
 
@@ -293,7 +307,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			gq.in(pk.getName(), vs);
 			return vs.size();
 		}
-		else if (keys.size() > 1) {
+		
+		if (keys.size() > 1) {
 			int count = 0;
 
 			gq.or();
@@ -327,12 +342,11 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			gq.end();
 			return count;
 		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
-	protected List<T> convertArgsToList(Map<String, String[]> args) {
+	protected List<T> convertArgsToList(Map<String, String[]> args, Class<? extends T> type) {
 		List<T> ds = new ArrayList<T>();
 		if (Collections.isEmpty(args)) {
 			return ds;
@@ -354,7 +368,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				String v = (vs == null || i >= vs.length) ? null : vs[i];
 				o.put(k, v);
 			}
-			T d = Castors.scast(o, getType());
+			T d = Mvcs.castValue(getContext(), o, type);
 			ds.add(d);
 		}
 
@@ -375,6 +389,17 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	
 	protected void addQueryFilters(DataQuery<T> gq) {
 	}
+	
+	/**
+	 * selectDataList
+	 * @param args   arguments
+	 * @param filter true to call addQueryFilters()
+	 * @return dataList
+	 */
+	protected List<T> selectDataList(Map<String, String[]> args, boolean filter) {
+		List<T> keys = convertArgsToList(args, getType());
+		return selectDataList(keys, true);
+	}
 
 	/**
 	 * selectDataList
@@ -385,7 +410,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	protected List<T> selectDataList(List<T> dataList, boolean filter) {
 		Collections.removeNull(dataList);
 		if (Collections.isNotEmpty(dataList)) {
-			DataQuery<T> q = new DataQuery<T>(getEntity());
+			DataQuery<T> q = getDataQuery();
 
 			int count = addKeyListToQuery(q, dataList, false);
 			if (count > 0) {
@@ -428,6 +453,19 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	}
 	
 	/**
+	 * execBulkUpdate
+	 * @param dataList data list
+	 * @param count updated count
+	 */
+	protected void execBulkUpdate(final List<T> dataList, final MutableInt count) {
+		getDao().exec(new Runnable() {
+			public void run() {
+				count.setValue(updateDataList(dataList));
+			}
+		});
+	}
+	
+	/**
 	 * getBulkUpdateSample
 	 * @param dataList data list
 	 * @param gq generic query
@@ -447,7 +485,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			return 0;
 		}
 
-		DataQuery<T> q = new DataQuery<T>(getEntity());
+		DataQuery<T> q = getDataQuery();
 		addKeyListToQuery(q, dataList, true);
 		addQueryFilters(q);
 
@@ -460,7 +498,9 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		List<T> newList = selectDataList(dataList, false);
 
 		dataList.clear();
-		dataList.addAll(newList);
+		if (Collections.isNotEmpty(newList)) {
+			dataList.addAll(newList);
+		}
 		
 		return cnt;
 	}

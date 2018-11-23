@@ -576,7 +576,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 		
-		DataQuery<T> gq = new DataQuery<T>(getEntity());
+		DataQuery<T> gq = getDataQuery();
 		addQueryFields(gq);
 		addQueryJoins(gq);
 		addQueryFilters(gq, key);
