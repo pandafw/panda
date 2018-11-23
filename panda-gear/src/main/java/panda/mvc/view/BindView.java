@@ -25,13 +25,11 @@ import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Sorter;
-import panda.mvc.bind.adapter.FileItemAdapter;
 import panda.mvc.bind.adapter.FilterAdapter;
 import panda.mvc.bind.adapter.PagerAdapter;
 import panda.mvc.bind.adapter.QueryerAdapter;
 import panda.mvc.bind.adapter.SorterAdapter;
 import panda.net.http.HttpStatus;
-import panda.vfs.FileItem;
 
 
 public abstract class BindView extends DataView {
@@ -297,7 +295,6 @@ public abstract class BindView extends DataView {
 		as.registerAdapter(Pager.class, new PagerAdapter(shortName));
 		as.registerAdapter(Queryer.class, new QueryerAdapter(shortName));
 		as.registerAdapter(Sorter.class, new SorterAdapter(shortName));
-		as.registerAdapter(FileItem.class, new FileItemAdapter());
 		
 		as.setPrettyPrint(prettyPrint);
 	}
