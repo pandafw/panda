@@ -2,20 +2,20 @@ package panda.lang.comparator;
 
 import java.util.Comparator;
 
-import panda.lang.Objects;
+import panda.lang.Numbers;
 
 
 /**
  * string comparator for string
  */
-public class StringComparator implements Comparator<String> {
-	private final static StringComparator i = new StringComparator();
+public class NumberComparator implements Comparator<Number> {
+	private final static NumberComparator i = new NumberComparator();
 	
-	public final static StringComparator i() {
+	public final static NumberComparator i() {
 		return i;
 	}
 	
-	private StringComparator() {
+	private NumberComparator() {
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class StringComparator implements Comparator<String> {
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int compare(String o1, String o2) {
-		return Objects.compare(o1, o2);
+	public int compare(Number o1, Number o2) {
+		return Numbers.compare(o1, o2);
 	}
 }

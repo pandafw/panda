@@ -1899,6 +1899,25 @@ public class Numbers {
 	}
 
 	// -----------------------------------------------------------------------
+	public static int compare(Number n1, Number n2) {
+		return compare(n1, n2, false);
+	}
+	
+	public static int compare(Number n1, Number n2, boolean nullGreater) {
+		if (n1 == n2) {
+			return 0;
+		}
+		
+		if (n1 == null) {
+			return nullGreater ? 1 : -1;
+		}
+		
+		if (n2 == null) {
+			return nullGreater ? -1 : 1;
+		}
+		return compare(n1.doubleValue(), n2.doubleValue());
+	}
+
 	/**
 	 * <p>
 	 * Compares two <code>doubles</code> for order.

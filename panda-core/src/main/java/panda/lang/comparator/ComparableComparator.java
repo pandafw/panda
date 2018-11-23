@@ -2,6 +2,8 @@ package panda.lang.comparator;
 
 import java.util.Comparator;
 
+import panda.lang.Objects;
+
 /**
  * comparator for comparable object
  * @param <T> comparable type
@@ -27,19 +29,8 @@ public class ComparableComparator<T extends Comparable> implements Comparator<T>
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public int compare(Comparable o1, Comparable o2) {
-		if (o1 == null && o2 == null) {
-			return 0;
-		}
-		if (o1 == null) {
-			return -1;
-		}
-		if (o2 == null) {
-			return 1;
-		}
-		if (o1 == o2) {
-			return 0;
-		}
-		return o1.compareTo(o2);
+		return Objects.compare(o1, o2);
 	}
 }

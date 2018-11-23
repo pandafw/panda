@@ -18,6 +18,7 @@ public class DictionaryComparator implements Comparator<byte[]> {
 		return int1 - int2;
 	}
 
+	@Override
 	public int compare(byte[] bs1, byte[] bs2) {
 		int minLength = bs1.length > bs2.length ? bs2.length : bs1.length;
 		for (int i = 0; i < minLength; i++) {

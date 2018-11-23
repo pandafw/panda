@@ -27,6 +27,7 @@ public class ReverseComparator<T> implements Comparator<T> {
 	 *         equal to, or greater than the second.
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public int compare(T o1, T o2) {
 		return - comparator.compare(o1, o2);
 	}

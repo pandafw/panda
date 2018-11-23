@@ -37,8 +37,9 @@ public class PropertyComparator<T> implements Comparator<T> {
 	 *         equal to, or greater than the second.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
 	public int compare(T o1, T o2) {
-		if (o1 == null && o2 == null) {
+		if (o1 == o2) {
 			return 0;
 		}
 		if (o1 == null) {
@@ -47,29 +48,30 @@ public class PropertyComparator<T> implements Comparator<T> {
 		if (o2 == null) {
 			return 1;
 		}
-		if (o1 == o2) {
+
+		Object v1 = bh.getPropertyValue(o1, prop);
+		Object v2 = bh.getPropertyValue(o2, prop);
+		if (v1 == v2) {
 			return 0;
 		}
 
-		Object v1 = bh.getPropertyValue(o1, prop);
 		if (v1 == null) {
 			return -1;
 		}
 
-		Object v2 = bh.getPropertyValue(o2, prop);
 		if (v2 == null) {
 			return 1;
 		}
 		
-		if (v1 instanceof Comparable) {
+		if (v1 instanceof Comparable && v1.getClass().isAssignableFrom(v2.getClass())) {
 			return ((Comparable)v1).compareTo(v2);
 		}
-		else if (v2 instanceof Comparable) {
+		
+		if (v2 instanceof Comparable && v2.getClass().isAssignableFrom(v1.getClass())) {
 			return -((Comparable)v2).compareTo(v1);
 		}
-		else {
-			return v1.toString().compareTo(v2.toString());
-		}
+
+		return v1.toString().compareTo(v2.toString());
 	}
 
 	/**
@@ -78,8 +80,8 @@ public class PropertyComparator<T> implements Comparator<T> {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
+				.append("type", bh.getType())
 				.append("prop", prop)
-				.append("bh", bh)
 				.toString();
 	}
 }
