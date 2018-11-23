@@ -63,9 +63,10 @@ public class MvcLoader {
 				config.getServletContext().getMajorVersion(), 
 				config.getServletContext().getMinorVersion()))
 				.append(Streams.EOL);
+			sb.append(String.format(" - Context Name    : %s", config.getServletContext().getServletContextName())).append(Streams.EOL);
 
 			if (config.getServletContext().getMajorVersion() > 2 || config.getServletContext().getMinorVersion() > 4) {
-				sb.append(String.format(" - ContextPath     : %s", config.getServletContext().getContextPath())).append(Streams.EOL);
+				sb.append(String.format(" - Context Path    : %s", config.getServletContext().getContextPath())).append(Streams.EOL);
 			}
 			sb.append(String.format(" - Web Directory   : %s", config.getServletContext().getRealPath("/"))).append(Streams.EOL);
 			log.info(sb.toString());
