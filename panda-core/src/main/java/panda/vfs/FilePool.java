@@ -12,5 +12,5 @@ public interface FilePool {
 	
 	FileItem findFile(Long id);
 	
-	void clean() throws IOException;
+	int clean() throws IOException;
 }

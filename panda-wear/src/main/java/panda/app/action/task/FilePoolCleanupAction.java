@@ -21,7 +21,7 @@ public class FilePoolCleanupAction extends GenericSyncWorkAction {
 	@Override
 	protected void doExecute() {
 		try {
-			filePool.clean();
+			status.count = filePool.clean();
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);

@@ -13,6 +13,7 @@ import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.lang.mutable.MutableInt;
 import panda.lang.time.DateTimes;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
@@ -213,10 +214,17 @@ public class DaoFilePool implements FilePool {
 	private static class DeleteFile implements Runnable {
 		private Dao dao;
 		private FileItem file;
+		private MutableInt count;
 		
 		public DeleteFile(Dao dao, FileItem file) {
 			this.dao = dao;
 			this.file = file;
+		}
+		
+		public DeleteFile(Dao dao, FileItem file, MutableInt count) {
+			this.dao = dao;
+			this.file = file;
+			this.count = count;
 		}
 		
 		public void run() {
@@ -224,7 +232,10 @@ public class DaoFilePool implements FilePool {
 			fdq.fid().equalTo(file.getId());
 			dao.deletes(fdq);
 			
-			dao.delete(file);
+			int cnt = dao.delete(file);
+			if (count != null) {
+				count.add(cnt);
+			}
 		}
 	}
 
@@ -242,7 +253,7 @@ public class DaoFilePool implements FilePool {
 	}
 	
 	@Override
-	public void clean() throws IOException {
+	public int clean() throws IOException {
 		final Dao dao = getDaoClient().getDao();
 		final Date time = new Date(System.currentTimeMillis() - expires);
 		
@@ -251,16 +262,18 @@ public class DaoFilePool implements FilePool {
 		
 		final List<DaoFileItem> fis = dao.select(fiq);
 		if (Collections.isEmpty(fis)) {
-			return;
+			return 0;
 		}
 		
+		MutableInt cnt = new MutableInt();
 		for (DaoFileItem fi : fis) {
 			try {
-				dao.exec(new DeleteFile(dao, fi));
+				dao.exec(new DeleteFile(dao, fi, cnt));
 			}
 			catch (DaoException e) {
 				throw new IOException("Failed to delete file: " + fi.getId(), e);
 			}
 		}
+		return cnt.intValue();
 	}
 }
