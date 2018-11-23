@@ -15,9 +15,7 @@ import panda.io.Files;
 import panda.io.Streams;
 import panda.io.filter.IOFileFilter;
 import panda.lang.Arrays;
-import panda.lang.Numbers;
 import panda.lang.Strings;
-import panda.lang.Threads;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 import panda.log.Log;
@@ -33,6 +31,8 @@ public class LocalFilePool implements FilePool {
 
 	protected String path;
 
+	protected long serial;
+	
 	/**
 	 * milliseconds since last modified. (default: 1 day) 
 	 */
@@ -75,23 +75,44 @@ public class LocalFilePool implements FilePool {
 		this.expires = maxAge * 1000L;
 	}
 
-	protected LocalFileItem randFile(String name) {
+	protected synchronized long nextId() {
+		long time = DateTimes.getDate().getTime();
+		if (serial < time) {
+			serial = time;
+		}
+
+		while (true) {
+			File dir = new File(path, fdf.format(serial));
+			if (dir.exists()) {
+				serial++;
+				continue;
+			}
+			return serial;
+		}
+	}
+	
+	protected synchronized LocalFileItem getLocalFile(String name) {
 		name = FileNames.trimFileName(name);
 		if (Strings.isEmpty(name)) {
 			name = "noname";
 		}
 
+		long time = DateTimes.getDate().getTime();
+		if (serial < time) {
+			serial = time;
+		}
+		else {
+			serial++;
+		}
+
 		while (true) {
-			long id = DateTimes.getDate().getTime();
-	
-			File dir = new File(path, fdf.format(id));
+			File dir = new File(path, fdf.format(serial));
 			if (dir.exists()) {
-				Threads.safeSleep(1);
+				serial++;
 				continue;
 			}
-
 			File file = new File(dir, name);
-			return new LocalFileItem(this, id, file);
+			return new LocalFileItem(this, serial, file);
 		}
 	}
 	
@@ -102,7 +123,7 @@ public class LocalFilePool implements FilePool {
 	
 	@Override
 	public FileItem saveFile(String name, final byte[] data) throws IOException {
-		LocalFileItem fi = randFile(name);
+		LocalFileItem fi = getLocalFile(name);
 		fi.getFile().getParentFile().mkdirs();
 		Files.write(fi.getFile(), data);
 		return fi;
@@ -110,7 +131,7 @@ public class LocalFilePool implements FilePool {
 	
 	@Override
 	public FileItem saveFile(String name, final InputStream data) throws IOException {
-		LocalFileItem fi = randFile(name);
+		LocalFileItem fi = getLocalFile(name);
 		fi.getFile().getParentFile().mkdirs();
 		Files.write(fi.getFile(), data);
 		return fi;
@@ -151,7 +172,7 @@ public class LocalFilePool implements FilePool {
 	}
 	
 	@Override
-	public synchronized void clean() throws IOException {
+	public synchronized int clean() throws IOException {
 		File root = new File(path);
 		
 		final long time = System.currentTimeMillis() - expires;
@@ -159,25 +180,19 @@ public class LocalFilePool implements FilePool {
 		Collection<File> fs = Files.listFiles(root, new IOFileFilter() {
 			@Override
 			public boolean accept(File file) {
-				if (file.lastModified() < time) {
-					Integer ms = Numbers.toInt(file.getParentFile().getName());
-					if (ms != null && (ms.intValue() & 1) == 0) {
-						return true;
-					}
-				}
-				
-				return false;
+				return (file.lastModified() < time);
 			}
 
 			@Override
 			public boolean accept(File dir, String name) {
 				return accept(new File(dir, name));
 			}
-			
 		}, true);
-		
+
+		int cnt = 0;
 		for (File f : fs) {
 			if (f.delete()) {
+				cnt++;
 				if (log.isDebugEnabled()) {
 					log.debug("Remove temporary file: " + f.getPath());
 				}
@@ -185,6 +200,8 @@ public class LocalFilePool implements FilePool {
 			
 			removeDirs(root, f.getParentFile());
 		}
+		
+		return cnt;
 	}
 	
 	public List<LocalFileItem> listFiles() throws IOException {
