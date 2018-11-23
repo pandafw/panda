@@ -15,12 +15,12 @@ public interface SerializeAdapter<T> {
 	 * @param name the name of the property
 	 * @return property name, null if the property is not accepted
 	 */
-	String acceptProperty(T src, String name);
+	String adaptPropertyName(T src, String name);
 
 	/**
 	 * @param src the owner of the property
 	 * @param value the value of the property
 	 * @return property value
 	 */
-	Object filterProperty(T src, Object value);
+	Object adaptPropertyValue(T src, Object value);
 }

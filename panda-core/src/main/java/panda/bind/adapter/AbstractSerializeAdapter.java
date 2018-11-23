@@ -15,7 +15,7 @@ public class AbstractSerializeAdapter<T> implements SerializeAdapter<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String acceptProperty(T src, String name) {
+	public String adaptPropertyName(T src, String name) {
 		return name;
 	}
 
@@ -23,7 +23,7 @@ public class AbstractSerializeAdapter<T> implements SerializeAdapter<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object filterProperty(T src, Object value) {
+	public Object adaptPropertyValue(T src, Object value) {
 		return value;
 	}
 }

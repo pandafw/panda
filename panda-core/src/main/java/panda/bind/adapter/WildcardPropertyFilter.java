@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.poi.ss.formula.functions.T;
 
 import panda.io.FileNames;
+import panda.lang.Collections;
 
 public class WildcardPropertyFilter extends AbstractSerializeAdapter<T> {
 	private List<String> filterNames;
@@ -55,7 +56,7 @@ public class WildcardPropertyFilter extends AbstractSerializeAdapter<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String acceptProperty(T src, String name) {
+	public String adaptPropertyName(T src, String name) {
 		if (filterNames != null) {
 			for (String s : filterNames) {
 				if (FileNames.wildcardMatch(name, s)) {
@@ -71,19 +72,19 @@ public class WildcardPropertyFilter extends AbstractSerializeAdapter<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object filterProperty(T src, Object value) {
+	public Object adaptPropertyValue(T src, Object value) {
 		if (value == null) {
 			return null;
 		}
 		
-		if (filterTypes != null) {
+		if (Collections.isNotEmpty(filterTypes)) {
 			for (String s : filterTypes) {
 				if (FileNames.wildcardMatch(value.getClass().getName(), s)) {
-					return null;
+					return FILTERED;
 				}
 			}
 		}
 
-		return super.filterProperty(src, value);
+		return value;
 	}
 }

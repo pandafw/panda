@@ -318,11 +318,6 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 
 	@SuppressWarnings("unchecked")
 	private boolean serializeObjectProperty(Object src, String key, Object val, int idx, SerializeAdapter sa) {
-		// ignore null
-		if (val == null && isIgnoreNullProperty()) {
-			return false;
-		}
-
 		// exclude type
 		if (val != null && isExcludeProperty(val.getClass())) {
 			return false;
@@ -330,15 +325,15 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		
 		// acceptable ?
 		if (sa != null) {
-			key = sa.acceptProperty(src, key);
-			if (Strings.isEmpty(key)) {
-				return false;
-			}
-			
-			val = sa.filterProperty(src, val);
+			val = sa.adaptPropertyValue(src, val);
 			if (val == SerializeAdapter.FILTERED) {
 				return false;
 			}
+		}
+
+		// ignore null
+		if (val == null && isIgnoreNullProperty()) {
+			return false;
 		}
 
 		// cycle detect
@@ -396,6 +391,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		endArray(name, src, len);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void serializeMap(String name, Class<?> type, Map src, SerializeAdapter sa) {
 		int len = 0;
 		startObject(name, src);
@@ -407,6 +403,13 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 			}
 			
 			String key = en.getKey().toString();
+			if (sa != null) {
+				key = sa.adaptPropertyName(src, key);
+				if (Strings.isEmpty(key)) {
+					continue;
+				}
+			}
+
 			Object val = en.getValue();
 			if (serializeObjectProperty(src, key, val, len, sa)) {
 				len++;
@@ -444,6 +447,13 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		for (String key : pns) {
 			if (isExcludeProperty(key)) {
 				continue;
+			}
+			
+			if (sa != null) {
+				key = sa.adaptPropertyName(src, key);
+				if (Strings.isEmpty(key)) {
+					continue;
+				}
 			}
 			
 			Object val = bh.getPropertyValue(src, key);

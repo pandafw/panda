@@ -32,7 +32,7 @@ public class ExcludePropertyFilter<T> extends AbstractSerializeAdapter<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String acceptProperty(T src, String name) {
+	public String adaptPropertyName(T src, String name) {
 		if (excludes != null) {
 			if (excludes.contains(name)) {
 				return null;
