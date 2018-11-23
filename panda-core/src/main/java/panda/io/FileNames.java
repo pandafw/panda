@@ -70,6 +70,8 @@ import panda.lang.Systems;
 public abstract class FileNames {
 	protected static final Pattern ABS_PATH = Pattern.compile("^[/\\\\]|[a-zA-Z]:[/\\\\]");
 
+	public static final String FILENAME_ILLEGAL_CHARS = "\\/:*?\"<>|";
+
 	/**
 	 * maximum file name length
 	 * https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
@@ -1977,6 +1979,12 @@ public abstract class FileNames {
 		
 		Matcher m = ABS_PATH.matcher(path);
 		return m.find();
+	}
+	
+	public static String trimFileName(String name) {
+		name = Strings.removeChars(name, FILENAME_ILLEGAL_CHARS);
+		name = Strings.right(name, MAX_FILENAME_LENGTH);
+		return name;
 	}
 
 }
