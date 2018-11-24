@@ -13,6 +13,8 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String MVC_ACTION_METHOD_SEPARATORS = "panda.action.method.separators";
 
+	public static final String MVC_ACTION_MAPPING_CASE_SENSITIVE = "panda.action.mapping.case.sensitive";
+
 	public static final String MVC_IGNORES = "panda.mvc.ignores";
 
 	public static final String MVC_FILTERS = "panda.mvc.filters";

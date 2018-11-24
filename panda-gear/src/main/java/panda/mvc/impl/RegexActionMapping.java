@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
+import panda.lang.collection.CaseInsensitiveMap;
 import panda.mvc.ActionMapping;
 
 /**
@@ -17,14 +18,17 @@ import panda.mvc.ActionMapping;
  * The regular expression must end with $.
  *
  */
-@IocBean(type=ActionMapping.class)
-public class RegexActionMapping extends AbstractActionMapping implements ActionMapping {
+@IocBean(type=ActionMapping.class, create="initialize")
+public class RegexActionMapping extends AbstractActionMapping {
 	private Map<String, ActionDispatcher> urlmap;
 	private List<Pattern> patterns;
 	private List<ActionDispatcher> dispatchers;
 
-	public RegexActionMapping() {
-		urlmap = new HashMap<String, ActionDispatcher>();
+	@Override
+	public void initialize() {
+		super.initialize();
+		
+		urlmap = caseSensitive ? new HashMap<String, ActionDispatcher>() : new CaseInsensitiveMap<String, ActionDispatcher>();
 		patterns = new ArrayList<Pattern>();
 		dispatchers = new ArrayList<ActionDispatcher>();
 	}
@@ -32,7 +36,7 @@ public class RegexActionMapping extends AbstractActionMapping implements ActionM
 	@Override
 	protected void addDispatcher(String path, ActionDispatcher dispatcher) {
 		if (Strings.endsWithChar(path, '$')) {
-			Pattern pattern = Pattern.compile(path);
+			Pattern pattern = caseSensitive ? Pattern.compile(path) : Pattern.compile(path, Pattern.CASE_INSENSITIVE);
 			patterns.add(pattern);
 			dispatchers.add(dispatcher);
 		}

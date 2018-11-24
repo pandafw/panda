@@ -9,8 +9,10 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import panda.io.Streams;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Strings;
+import panda.lang.collection.CaseInsensitiveMap;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChain;
@@ -18,18 +20,27 @@ import panda.mvc.ActionChainCreator;
 import panda.mvc.ActionConfig;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionMapping;
+import panda.mvc.MvcConstants;
 import panda.servlet.HttpServlets;
 
 public abstract class AbstractActionMapping implements ActionMapping {
 	private static final Log log = Logs.getLog(AbstractActionMapping.class);
 
+	@IocInject(value=MvcConstants.MVC_ACTION_MAPPING_CASE_SENSITIVE, required=false)
+	protected boolean caseSensitive;
+	
 	protected abstract void addDispatcher(String path, ActionDispatcher dispatcher);
 	
 	protected abstract ActionDispatcher getDispatcher(String path, List<String> args);
 
-	private Map<String, ActionDispatcher> dispatchers = new HashMap<String, ActionDispatcher>();
-	private Map<String, ActionConfig> configs = new HashMap<String, ActionConfig>();
+	private Map<String, ActionDispatcher> dispatchers;
+	private Map<String, ActionConfig> configs;
 
+	public void initialize() {
+		dispatchers = caseSensitive ? new HashMap<String, ActionDispatcher>() : new CaseInsensitiveMap<String, ActionDispatcher>();
+		configs = caseSensitive ? new HashMap<String, ActionConfig>() : new CaseInsensitiveMap<String, ActionConfig>();
+	}
+	
 	@Override
 	public void add(ActionChainCreator acc, ActionConfig acfg) {
 		// add method

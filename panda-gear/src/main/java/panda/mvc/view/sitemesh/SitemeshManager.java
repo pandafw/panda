@@ -17,7 +17,7 @@ import panda.mvc.SetConstants;
 import panda.mvc.view.sitemesh.SitemeshConfig.SitemeshDecorator;
 import panda.servlet.HttpServlets;
 
-@IocBean
+@IocBean(create="initialize")
 public class SitemeshManager {
 	private static final Log log = Logs.getLog(SitemeshManager.class);
 
@@ -27,11 +27,20 @@ public class SitemeshManager {
 	@IocInject
 	protected Settings settings;
 
+	@IocInject(value=MvcConstants.MVC_ACTION_MAPPING_CASE_SENSITIVE, required=false)
+	protected boolean caseSensitive;
+	
 	@IocInject(value=MvcConstants.SITEMESH, required=false)
 	protected SitemeshConfig smcfg;
 	
 	@IocInject(value=MvcConstants.SITEMESH_DISABLE, required=false)
 	protected boolean disabled;
+
+	public void initialize() {
+		if (smcfg != null && caseSensitive) {
+			smcfg.initCaseSensetive();
+		}
+	}
 	
 	public SitemeshDecorator findDecorator(ActionContext ac) {
 		if (smcfg == null) {

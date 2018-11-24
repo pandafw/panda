@@ -41,7 +41,7 @@ import panda.mvc.ioc.ResponseObjectProxy;
 import panda.mvc.ioc.SessionIocContext;
 import panda.servlet.HttpServlets;
 
-@IocBean
+@IocBean(create="initialize")
 public class DispatchFilter implements ServletFilter {
 	private static final Log log = Logs.getLog(DispatchFilter.class);
 
@@ -63,10 +63,14 @@ public class DispatchFilter implements ServletFilter {
 	@IocInject(value=MvcConstants.MVC_ACTION_CONTEXT_TYPE, required=false)
 	private Class<? extends ActionContext> acClass = ActionContext.class;
 
+	@IocInject(value=MvcConstants.MVC_ACTION_MAPPING_CASE_SENSITIVE, required=false)
+	private boolean caseSensitive;
+
 	/**
 	 * ignore settings
 	 */
-	private String ignores = "";
+	@IocInject(value=MvcConstants.MVC_IGNORES, required=false)
+	private String ignores;
 
 	/**
 	 * the regex patterns of the URI to exclude
@@ -81,57 +85,41 @@ public class DispatchFilter implements ServletFilter {
 	/**
 	 * @param ignores the ignores to set
 	 */
-	@IocInject(value=MvcConstants.MVC_IGNORES, required=false)
-	public void setIgnores(String ignores) {
-		if (Strings.equals(this.ignores, ignores)) {
+	public void initialize() {
+		ignores = settings.getProperty(SetConstants.MVC_IGNORES, ignores);
+
+		if (Strings.isEmpty(ignores)) {
 			return;
 		}
-		
-		synchronized(this) {
-			if (Strings.equals(this.ignores, ignores)) {
-				return;
-			}
 
-			this.ignores = ignores;
-			if (Strings.isEmpty(ignores)) {
-				ignorePaths = null;
-				ignoreRegexs = null;
-				log.info("clear mvc ignores");
-				return;
+		String[] es = Strings.split(ignores);
+		Set<String> regex = new HashSet<String>();
+		Set<String> paths = new HashSet<String>();
+		for (String s : es) {
+			s = Strings.strip(s);
+			if (Strings.isEmpty(s)) {
+				continue;
 			}
+			
+			if (Strings.startsWithChar(s, '^') || Strings.endsWithChar(s, '&')) {
+				regex.add(s);
+				continue;
+			}
+			paths.add(s);
+		}
 
-			try {
-				String[] es = Strings.split(ignores);
-				Set<String> regex = new HashSet<String>();
-				Set<String> paths = new HashSet<String>();
-				for (String s : es) {
-					s = Strings.strip(s);
-					if (Strings.isEmpty(s)) {
-						continue;
-					}
-					
-					if (Strings.startsWithChar(s, '^') || Strings.endsWithChar(s, '&')) {
-						regex.add(s);
-						continue;
-					}
-					paths.add(s);
-				}
-				if (paths.size() > 0) {
-					ignorePaths = paths;
-					log.info("mvc ignore paths   = " + ignorePaths);
-				}
-				if (regex.size() > 0) {
-					List<Pattern> patterns = new ArrayList<Pattern>();
-					for (String s : regex) {
-						patterns.add(Pattern.compile(s));
-					}
-					ignoreRegexs = patterns;
-					log.info("mvc ignore mvc regexs  = " + Strings.join(regex, " "));
-				}
+		if (paths.size() > 0) {
+			ignorePaths = paths;
+			log.info("mvc ignore paths   = " + ignorePaths);
+		}
+
+		if (regex.size() > 0) {
+			List<Pattern> patterns = new ArrayList<Pattern>();
+			for (String s : regex) {
+				patterns.add(caseSensitive ? Pattern.compile(s) : Pattern.compile(s, Pattern.CASE_INSENSITIVE));
 			}
-			catch (Throwable e) {
-				log.error("Failed to set mvc ignores = " + ignores, e);
-			}
+			ignoreRegexs = patterns;
+			log.info("mvc ignore regexs  = " + Strings.join(regex, " "));
 		}
 	}
 
@@ -143,11 +131,6 @@ public class DispatchFilter implements ServletFilter {
 	 * @return true if path should ignored
 	 */
 	protected boolean ignore(String path) {
-		String ignores = settings.getProperty(SetConstants.MVC_IGNORES);
-		if (ignores != null) {
-			setIgnores(ignores);
-		}
-		
 		if (ignorePaths != null && ignorePaths.contains(path)) {
 			return true;
 		}

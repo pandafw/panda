@@ -30,11 +30,11 @@ public class SitemeshConfig {
 		}
 		
 		public void setPath(String path) {
-			this.path = Pattern.compile(path);
+			this.path = Pattern.compile(path, Pattern.CASE_INSENSITIVE);
 		}
 		
 		public void setUri(String uri) {
-			this.uri = Pattern.compile(uri);
+			this.uri = Pattern.compile(uri, Pattern.CASE_INSENSITIVE);
 		}
 	}
 	
@@ -42,14 +42,32 @@ public class SitemeshConfig {
 	public List<SitemeshDecorator> decorators;
 	
 	public void setExcludes(List<String> excludes) {
-		if (Collections.isEmpty(excludes)) {
-			return;
-		}
-		
 		this.excludes = new ArrayList<Pattern>();
-		for (String s : excludes) {
-			this.excludes.add(Pattern.compile(s));
+		if (Collections.isNotEmpty(excludes)) {
+			this.excludes = new ArrayList<Pattern>();
+			for (String s : excludes) {
+				this.excludes.add(Pattern.compile(s, Pattern.CASE_INSENSITIVE));
+			}
 		}
 	}
 
+	public void initCaseSensetive() {
+		if (Collections.isNotEmpty(excludes)) {
+			for (int i = 0; i < excludes.size(); i++) {
+				Pattern p = excludes.get(i);
+				excludes.set(i, Pattern.compile(p.pattern()));
+			}
+		}
+
+		if (Collections.isNotEmpty(decorators)) {
+			for (SitemeshDecorator sd : decorators) {
+				if (sd.path != null) {
+					sd.path = Pattern.compile(sd.path.pattern());
+				}
+				if (sd.uri != null) {
+					sd.uri = Pattern.compile(sd.uri.pattern());
+				}
+			}
+		}
+	}
 }

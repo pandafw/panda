@@ -46,7 +46,8 @@ public class ForwardView extends AbstractView {
 		String args = "";
 		if (path != null) {
 			int q = path.indexOf("?");
-			if (q >= 0) { // 将参数部分分解出来
+			if (q >= 0) {
+				// split path and args
 				args = path.substring(q);
 				path = path.substring(0, q);
 			}
@@ -54,13 +55,12 @@ public class ForwardView extends AbstractView {
 
 		String ext = getExt();
 		
-		// 空路径，采用默认规则
 		if (Strings.isBlank(path)) {
 			path = ac.getPath();
 			path = "/WEB-INF" + (path.startsWith("/") ? "" : "/") + FileNames.removeExtension(path) +  ext;
 		}
-		// 绝对路径 : 以 '/' 开头的路径不增加 '/WEB-INF'
 		else if (path.charAt(0) == '/') {
+			// absolute path
 			if (!path.toLowerCase().endsWith(ext)) {
 				path += ext;
 			}
@@ -72,7 +72,7 @@ public class ForwardView extends AbstractView {
 			path = "/WEB-INF/" + path;
 		}
 
-		// 执行 Forward
+		// do forward
 		forward(ac, path + args);
 	}
 
@@ -101,9 +101,9 @@ public class ForwardView extends AbstractView {
 	}
 	
 	/**
-	 * 子类可以覆盖这个方法，给出自己特殊的后缀,必须小写哦
+	 * override this method to customize
 	 * 
-	 * @return 后缀
+	 * @return extension
 	 */
 	protected String getExt() {
 		return "";
