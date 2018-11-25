@@ -29,11 +29,13 @@ import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
 import panda.mvc.view.RedirectView;
+import panda.mvc.view.ResourceView;
 import panda.mvc.view.ServletErrorView;
 import panda.mvc.view.SitemeshForwardView;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.SitemeshJsonView;
 import panda.mvc.view.SitemeshJspView;
+import panda.mvc.view.SitemeshResourceView;
 import panda.mvc.view.SitemeshXmlView;
 import panda.mvc.view.TsvView;
 import panda.mvc.view.Views;
@@ -72,12 +74,15 @@ public class DefaultViewCreator implements ViewCreator {
 		addView(Views.SJSP, SitemeshJspView.class);
 		addView(Views.FTL, FreemarkerView.class);
 		addView(Views.SFTL, SitemeshFreemarkerView.class);
+		addView(Views.RES, ResourceView.class);
+		addView(Views.SRES, SitemeshResourceView.class);
+
+		addView(Views.RAW, DataView.class);
+
 		addView(Views.FORWARD, ForwardView.class);
 		addView(Views.FORWARD2, ForwardView.class);
 		addView(Views.SFORWARD, SitemeshForwardView.class);
 		addView(Views.SFORWARD2, SitemeshForwardView.class);
-		addView(Views.RAW, DataView.class);
-
 		addView(Views.REDIRECT, RedirectView.class);
 		addView(Views.REDIRECT2, RedirectView.class);
 

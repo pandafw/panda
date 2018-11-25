@@ -73,11 +73,13 @@ import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
 import panda.mvc.view.RedirectView;
+import panda.mvc.view.ResourceView;
 import panda.mvc.view.ServletErrorView;
 import panda.mvc.view.SitemeshForwardView;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.SitemeshJsonView;
 import panda.mvc.view.SitemeshJspView;
+import panda.mvc.view.SitemeshResourceView;
 import panda.mvc.view.SitemeshXmlView;
 import panda.mvc.view.TsvView;
 import panda.mvc.view.VoidView;
@@ -273,6 +275,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			JsonView.class,
 			JspView.class,
 			RedirectView.class,
+			ResourceView.class,
 			ServletErrorView.class,
 			TsvView.class,
 			XlsView.class,
@@ -282,6 +285,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			SitemeshFreemarkerView.class,
 			SitemeshJsonView.class,
 			SitemeshJspView.class,
+			SitemeshResourceView.class,
 			SitemeshXmlView.class,
 			VoidView.class,
 			

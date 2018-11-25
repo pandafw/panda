@@ -40,16 +40,19 @@ public class Views {
 	
 	public static final String JSP = "jsp";
 	public static final String SJSP = "sjsp";
-	public static final String REDIRECT = ">>";
-	public static final String REDIRECT2 = "redirect";
-
 	public static final String FTL = "ftl";
 	public static final String SFTL = "sftl";
+
+	public static final String RES = "res";
+	public static final String SRES = "sres";
+	public static final String RAW = "raw";
+
+	public static final String REDIRECT = ">>";
+	public static final String REDIRECT2 = "redirect";
 	public static final String FORWARD = "->";
 	public static final String FORWARD2 = "forward";
 	public static final String SFORWARD = "=>";
 	public static final String SFORWARD2 = "sforward";
-	public static final String RAW = "raw";
 
 	public static final String VOID = "void";
 	public static final String NONE = "none";
@@ -141,6 +144,22 @@ public class Views {
 		return createView(ac, REDIRECT + SEP + location);
 	}
 	
+	public static View res(ActionContext ac) {
+		return createView(ac, RES);
+	}
+	
+	public static View sres(ActionContext ac) {
+		return createView(ac, SRES);
+	}
+	
+	public static View res(ActionContext ac, String location) {
+		return createView(ac, RES + SEP + location);
+	}
+	
+	public static View sres(ActionContext ac, String location) {
+		return createView(ac, SRES + SEP + location);
+	}
+
 	public static View ftl(ActionContext ac) {
 		return createView(ac, FTL);
 	}
