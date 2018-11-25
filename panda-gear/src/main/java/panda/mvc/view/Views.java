@@ -47,6 +47,8 @@ public class Views {
 	public static final String SFTL = "sftl";
 	public static final String FORWARD = "->";
 	public static final String FORWARD2 = "forward";
+	public static final String SFORWARD = "=>";
+	public static final String SFORWARD2 = "sforward";
 	public static final String RAW = "raw";
 
 	public static final String VOID = "void";

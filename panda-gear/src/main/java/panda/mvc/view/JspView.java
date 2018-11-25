@@ -47,7 +47,7 @@ public class JspView extends ForwardView {
 	}
 
 	@Override
-	protected String getExt() {
+	protected String getExtension() {
 		return ".jsp";
 	}
 }

@@ -44,7 +44,7 @@ public class ForwardView extends AbstractView {
 	public void render(ActionContext ac) {
 		String path = argument;
 		String args = "";
-		if (path != null) {
+		if (Strings.isNotEmpty(path)) {
 			int q = path.indexOf("?");
 			if (q >= 0) {
 				// split path and args
@@ -53,20 +53,20 @@ public class ForwardView extends AbstractView {
 			}
 		}
 
-		String ext = getExt();
+		String ext = getExtension();
 		
 		if (Strings.isBlank(path)) {
 			path = ac.getPath();
-			path = "/WEB-INF" + (path.startsWith("/") ? "" : "/") + FileNames.removeExtension(path) +  ext;
+			path = "/WEB-INF" + (Strings.startsWithChar(path, '/') ? "" : "/") + FileNames.removeExtension(path) +  ext;
 		}
 		else if (path.charAt(0) == '/') {
 			// absolute path
-			if (!path.toLowerCase().endsWith(ext)) {
+			if (!Strings.endsWithIgnoreCase(path, ext)) {
 				path += ext;
 			}
 		}
 		else {
-			if (!path.toLowerCase().endsWith(ext)) {
+			if (!Strings.endsWithIgnoreCase(path, ext)) {
 				path += ext;
 			}
 			path = "/WEB-INF/" + path;
@@ -105,7 +105,7 @@ public class ForwardView extends AbstractView {
 	 * 
 	 * @return extension
 	 */
-	protected String getExt() {
+	protected String getExtension() {
 		return "";
 	}
 
