@@ -1,8 +1,6 @@
 package panda.app.action.tool;
 
-import panda.mvc.annotation.At;
-import panda.mvc.util.StaticAction;
+import panda.mvc.util.StaticResourceAction;
 
-@At
-public class StaticContentAction extends StaticAction {
+public class StaticContentAction extends StaticResourceAction {
 }
