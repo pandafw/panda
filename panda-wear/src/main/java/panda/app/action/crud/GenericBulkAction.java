@@ -159,6 +159,10 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @param count deleted count
 	 */
 	protected void execBulkDelete(final List<T> dataList, final MutableInt count) {
+		if (Collections.isEmpty(dataList)) {
+			return;
+		}
+
 		getDao().exec(new Runnable() {
 			public void run() {
 				deleteDataList(dataList, count);
@@ -169,16 +173,9 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	/**
 	 * delete data list
 	 * @param dataList data list
-	 * @param count counter
-	 * @return deleted count
+	 * @param count count for delete
 	 */
-	protected int deleteDataList(List<T> dataList, MutableInt count) {
-		count.setValue(0);
-
-		if (Collections.isEmpty(dataList)) {
-			return 0;
-		}
-
+	protected void deleteDataList(List<T> dataList, MutableInt count) {
 		for (int i = dataList.size() - 1; i >= 0; i--) {
 			int c = deleteData(dataList.get(i));
 			if (c <= 0) {
@@ -188,7 +185,6 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				count.add(c);
 			}
 		}
-		return count.intValue();
 	}
 
 	/**
@@ -245,7 +241,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			return dataList;
 		}
 		
-		final MutableInt count = new MutableInt(0);
+		final MutableInt count = new MutableInt();
 		try {
 			startBulkUpdate(dataList);
 			execBulkUpdate(dataList, count);
@@ -279,12 +275,12 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	// bulk methods
 	//------------------------------------------------------------
 	/**
-	 * @param gq query
+	 * @param dq query
 	 * @param dataList data list
 	 * @param raiseError raise error if invalid item 
 	 * @return count
 	 */
-	protected int addKeyListToQuery(DataQuery<T> gq, List<T> dataList, boolean raiseError) {
+	protected int addKeyListToQuery(DataQuery<T> dq, List<T> dataList, boolean raiseError) {
 		Entity<T> entity = getEntity();
 		List<EntityField> keys = entity.getPrimaryKeys();
 
@@ -304,14 +300,14 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				}
 			}
 
-			gq.in(pk.getName(), vs);
+			dq.in(pk.getName(), vs);
 			return vs.size();
 		}
 		
 		if (keys.size() > 1) {
 			int count = 0;
 
-			gq.or();
+			dq.or();
 			Object[] vs = new Object[keys.size()]; 
 			for (int n = 0; n < dataList.size(); n++) {
 				T d = dataList.get(n);
@@ -331,15 +327,15 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 					}
 				}
 				if (vs[0] != null) {
-					gq.and();
+					dq.and();
 					for (int i = 0; i < keys.size(); i++) {
-						gq.equalTo(keys.get(i).getName(), vs[i]);
+						dq.equalTo(keys.get(i).getName(), vs[i]);
 					}
-					gq.end();
+					dq.end();
 					count++;
 				}
 			}
-			gq.end();
+			dq.end();
 			return count;
 		}
 
@@ -375,19 +371,19 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		return ds;
 	}
 	
-	protected void addQueryColumns(DataQuery<T> gq) {
+	protected void addQueryColumns(DataQuery<T> dq) {
 		Set<String> cs = getDisplayFields();
 		if (Collections.isNotEmpty(cs)) {
-			gq.excludeAll();
-			gq.includePrimayKeys();
-			gq.include(cs);
+			dq.excludeAll();
+			dq.includePrimayKeys();
+			dq.include(cs);
 		}
 	}
 	
-	protected void addQueryJoins(DataQuery<T> gq) {
+	protected void addQueryJoins(DataQuery<T> dq) {
 	}
 	
-	protected void addQueryFilters(DataQuery<T> gq) {
+	protected void addQueryFilters(DataQuery<T> dq) {
 	}
 	
 	/**
@@ -410,16 +406,16 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	protected List<T> selectDataList(List<T> dataList, boolean filter) {
 		Collections.removeNull(dataList);
 		if (Collections.isNotEmpty(dataList)) {
-			DataQuery<T> q = getDataQuery();
+			DataQuery<T> dq = getDataQuery();
 
-			int count = addKeyListToQuery(q, dataList, false);
+			int count = addKeyListToQuery(dq, dataList, false);
 			if (count > 0) {
-				addQueryColumns(q);
-				addQueryJoins(q);
+				addQueryColumns(dq);
+				addQueryJoins(dq);
 				if (filter) {
-					addQueryFilters(q);
+					addQueryFilters(dq);
 				}
-				dataList = getDao().select(q);
+				dataList = getDao().select(dq);
 				dataList = trimDataList(dataList);
 			}
 			else {
@@ -458,9 +454,13 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @param count updated count
 	 */
 	protected void execBulkUpdate(final List<T> dataList, final MutableInt count) {
+		if (Collections.isEmpty(dataList)) {
+			return;
+		}
+
 		getDao().exec(new Runnable() {
 			public void run() {
-				count.setValue(updateDataList(dataList));
+				updateDataList(dataList, count);
 			}
 		});
 	}
@@ -468,41 +468,36 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	/**
 	 * getBulkUpdateSample
 	 * @param dataList data list
-	 * @param gq generic query
+	 * @param dq data query
 	 * @return sample data
 	 */
-	protected T getBulkUpdateSample(List<T> dataList, DataQuery<T> gq) {
+	protected T getBulkUpdateSample(List<T> dataList, DataQuery<T> dq) {
 		return null;
 	}
 	
 	/**
 	 * update data list
 	 * @param dataList data list
-	 * @return updated count
+	 * @param count updated count
 	 */
-	protected int updateDataList(List<T> dataList) {
-		if (Collections.isEmpty(dataList)) {
-			return 0;
-		}
+	protected void updateDataList(List<T> dataList, MutableInt count) {
+		DataQuery<T> dq = getDataQuery();
+		addKeyListToQuery(dq, dataList, true);
+		addQueryFilters(dq);
 
-		DataQuery<T> q = getDataQuery();
-		addKeyListToQuery(q, dataList, true);
-		addQueryFilters(q);
-
-		T sample = getBulkUpdateSample(dataList, q);
+		T sample = getBulkUpdateSample(dataList, dq);
 		if (sample == null) {
-			return 0;
+			return;
 		}
 
-		int cnt = getDao().updates(sample, q);
+		count.add(getDao().updates(sample, dq));
+
 		List<T> newList = selectDataList(dataList, false);
 
 		dataList.clear();
 		if (Collections.isNotEmpty(newList)) {
 			dataList.addAll(newList);
 		}
-		
-		return cnt;
 	}
 
 

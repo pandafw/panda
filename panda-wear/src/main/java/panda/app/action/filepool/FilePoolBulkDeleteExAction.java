@@ -14,6 +14,7 @@ import panda.mvc.annotation.At;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
 import panda.vfs.dao.DaoFilePool;
+import panda.vfs.dao.FileDataQuery;
 
 @At("${super_path}/filepool")
 @Auth(AUTH.SUPER)
@@ -49,17 +50,43 @@ public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
 	 */
 	@Override
 	protected void execBulkDelete(final List<FileItem> dataList, final MutableInt count) {
+		if (filePool instanceof DaoFilePool) {
+			super.execBulkDelete(dataList, count);
+			return;
+		}
+
 		deleteDataList(dataList, count);
+	}
+
+
+	@Override
+	protected void deleteDataList(List<FileItem> dataList, MutableInt count) {
+		if (filePool instanceof DaoFilePool) {
+			List<Long> ids = new ArrayList<Long>(dataList.size());
+			for (FileItem f : dataList) {
+				ids.add(f.getId());
+			}
+
+			FileDataQuery fdq = new FileDataQuery();
+			fdq.fid().in(ids);
+			getDao().deletes(fdq);
+		}
+		
+		super.deleteDataList(dataList, count);
 	}
 
 	@Override
 	protected int deleteData(FileItem data) {
+		if (filePool instanceof DaoFilePool) {
+			return super.deleteData(data);
+		}
+		
 		try {
 			data.delete();
+			return 1;
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);
 		}
-		return 1;
 	}
 }
