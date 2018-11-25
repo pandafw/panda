@@ -8,7 +8,7 @@ import panda.mvc.view.Views;
 public abstract class BaseFreemarkerAction extends AbstractAction {
 	@At("(.*)\\.ftl$")
 	@To("ftl:${result}")
-	public Object ftl(String path) throws Exception {
+	public Object ftl(String path) {
 		String location = "/" + path + ".ftl";
 		if (!assist().hasTemplate(location)) {
 			return Views.notFound(context);
@@ -18,7 +18,7 @@ public abstract class BaseFreemarkerAction extends AbstractAction {
 
 	@At("(.*)\\.sftl$")
 	@To("sftl:${result}")
-	public Object sftl(String path) throws Exception {
+	public Object sftl(String path) {
 		return ftl(path);
 	}
 }
