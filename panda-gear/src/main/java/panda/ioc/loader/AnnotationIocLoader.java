@@ -300,7 +300,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 	protected boolean isNeedCheckInject(Class<?> cls) {
 		return !cls.isInterface() 
 				&& !Modifier.isAbstract(cls.getModifiers()) 
-				&& (cls.getAnnotation(IocBean.class) == null);
+				&& !cls.isAnnotationPresent(IocBean.class);
 	}
 	
 	protected String getBeanName(Class<?> cls) {

@@ -157,10 +157,7 @@ public class MvcLoader {
 
 			for (Method method : action.getMethods()) {
 				// public & not synthetic/bridge (ignore generic type method for super class) & @At is declared
-				if (Modifier.isPublic(method.getModifiers()) 
-						&& !method.isSynthetic() 
-						&& !method.isBridge()
-						&& method.isAnnotationPresent(At.class)) {
+				if (isActionMethod(method)) {
 					// merge with action
 					ActionConfig acfg = createActionConfig(method).mergeWith(clsCfg);
 
@@ -294,7 +291,7 @@ public class MvcLoader {
 	}
 
 	private void addAction(Set<Class<?>> actions, Class<?> action, boolean warn) {
-		if (isAction(action)) {
+		if (isActionClass(action)) {
 			if (log.isDebugEnabled()) {
 				log.debug(" > add " + action.getName());
 			}
@@ -388,17 +385,26 @@ public class MvcLoader {
 		}
 	}
 
-	protected boolean isAction(Class<?> cls) {
+	protected boolean isActionMethod(Method method) {
+		return Modifier.isPublic(method.getModifiers()) 
+				&& !method.isSynthetic() 
+				&& !method.isBridge()
+				&& method.isAnnotationPresent(At.class);
+	}
+
+	protected boolean isActionClass(Class<?> cls) {
 		try {
 			int cm = cls.getModifiers();
-			if (Modifier.isAbstract(cm) || Modifier.isInterface(cm)
-					|| !Modifier.isPublic(cm)
-					|| !cls.isAnnotationPresent(At.class)) {
+			if (Modifier.isAbstract(cm) || Modifier.isInterface(cm) || !Modifier.isPublic(cm)) {
 				return false;
 			}
 
+			if (!cls.isAnnotationPresent(At.class)) {
+				return false;
+			}
+			
 			for (Method m : cls.getMethods()) {
-				if (m.isAnnotationPresent(At.class)) {
+				if (isActionMethod(m)) {
 					return true;
 				}
 			}

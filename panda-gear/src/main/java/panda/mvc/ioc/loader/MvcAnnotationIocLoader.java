@@ -25,7 +25,7 @@ public class MvcAnnotationIocLoader extends AnnotationIocLoader {
 
 	@Override
 	protected boolean isNeedCheckInject(Class<?> cls) {
-		return super.isNeedCheckInject(cls) && cls.getAnnotation(At.class) == null;
+		return super.isNeedCheckInject(cls) && !cls.isAnnotationPresent(At.class);
 	}
 
 	@Override
