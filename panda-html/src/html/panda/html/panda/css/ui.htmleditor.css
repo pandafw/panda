@@ -1,3 +1,6 @@
+/*--------------------------------
+ * summernote css fix
+ */
 .p-htmleditor-readonly .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
 	background-color: transparent;
 }
@@ -5,4 +8,6 @@
 	border: none;
 	background-color: transparent;
 }
-
+.note-editor .modal-body > .form-group {
+	margin: 0 0 15px 0;
+}

@@ -227,6 +227,9 @@ div.p-datetimepicker > .input-group-addon {
 div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i, div.p-datetimepicker i {
 }
 
+/*--------------------------------
+ * summernote css fix
+ */
 .p-htmleditor-readonly .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
 	background-color: transparent;
 }
@@ -234,7 +237,9 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 	border: none;
 	background-color: transparent;
 }
-
+.note-editor .modal-body > .form-group {
+	margin: 0 0 15px 0;
+}
 /* LOADER */
 .p-loader-fading-squares {
 	background: url("../img/loader/fading-squares.gif") center center no-repeat;
