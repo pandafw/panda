@@ -48,6 +48,9 @@ public interface SetConstants {
 	 */
 	public static final String MVC_LINK_USECDN = "mvc.link.usecdn";
 
+	/** html editor (summernote or cleditor) */
+	public static final String MVC_TAG_HTML_EDITOR = "mvc.tag.html.editor";
+
 	/** JsonView Pretty Print */
 	public static final String MVC_VIEW_JSON_PRETTY = "mvc.view.json.pretty";
 

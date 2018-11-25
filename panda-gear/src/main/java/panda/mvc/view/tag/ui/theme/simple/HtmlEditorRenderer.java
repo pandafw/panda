@@ -8,10 +8,14 @@ import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
-	private static final String KEY = HtmlEditorRenderer.class.getName() + ".summernote";
+	private static final String SUMMERNOTE_KEY = HtmlEditorRenderer.class.getName() + ".summernote";
 	private static final String SUMMERNOTE_VERSION = "0.8.9";
 	private static final String SUMMERNOTE_CDN = "http://cdnjs.cloudflare.com/ajax/libs/summernote/" + SUMMERNOTE_VERSION + "/summernote";
 	private static final String SUMMERNOTE_PATH = "/summernote/summernote";
+
+	private static final String CLEDITOR_KEY = HtmlEditorRenderer.class.getName() + ".cleditor";
+	private static final String CLEDITOR_VERSION = "1.4.5";
+	private static final String CLEDITOR_PATH = "/cleditor/jquery.cleditor";
 
 	public HtmlEditorRenderer(RenderingContext context) {
 		super(context);
@@ -23,7 +27,6 @@ public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 
 		attrs.id(tag)
 			.name(tag)
-			.css(this, "p-htmleditor")
 			.cols(tag)
 			.rows(tag)
 			.wrap(tag)
@@ -33,16 +36,28 @@ public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 			.maxlength(tag)
 			.tooltip(tag)
 			.placeholder(tag)
-//			.data("summernoteCss", summernoteCss())
-			.data("summernoteJs", summernoteJs())
 			.commons(tag)
-			.events(tag)
-			.dynamics(tag);
+			.events(tag);
 
-		if (!Boolean.TRUE.equals(context.getReq().get(KEY))) {
-			context.getReq().put(KEY, true);
-			writeCss(summernoteCss());
-//			writeJs(summernoteJs());
+		if ("cleditor".equalsIgnoreCase(tag.getEditor())) {
+			attrs.css(this, "p-htmleditor p-cleditor");
+			attrs.data("cleditorJs", cleditorJs());
+			attrs.dynamics(tag);
+
+			if (!Boolean.TRUE.equals(context.getReq().get(CLEDITOR_KEY))) {
+				context.getReq().put(CLEDITOR_KEY, true);
+				writeCss(cleditorCss());
+			}
+		}
+		else {
+			attrs.css(this, "p-htmleditor p-summernote");
+			attrs.data("summernoteJs", summernoteJs());
+			attrs.dynamics(tag);
+
+			if (!Boolean.TRUE.equals(context.getReq().get(SUMMERNOTE_KEY))) {
+				context.getReq().put(SUMMERNOTE_KEY, true);
+				writeCss(summernoteCss());
+			}
 		}
 
 		stag("textarea", attrs);
@@ -62,6 +77,14 @@ public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 			return SUMMERNOTE_CDN + debug() + ".js";
 		}
 		return suri(SUMMERNOTE_PATH + debug() + ".js?v=" + SUMMERNOTE_VERSION);
+	}
+
+	private String cleditorCss() {
+		return suri(CLEDITOR_PATH + ".css?v=" + CLEDITOR_VERSION);
+	}
+	
+	private String cleditorJs() {
+		return suri(CLEDITOR_PATH + debug() + ".js?v=" + CLEDITOR_VERSION);
 	}
 
 	private String debug() {

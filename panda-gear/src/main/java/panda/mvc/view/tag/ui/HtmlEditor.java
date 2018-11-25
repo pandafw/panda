@@ -1,7 +1,9 @@
 package panda.mvc.view.tag.ui;
 
 import panda.ioc.annotation.IocBean;
+import panda.lang.Strings;
 import panda.mvc.Mvcs;
+import panda.mvc.SetConstants;
 
 
 /**
@@ -17,6 +19,7 @@ import panda.mvc.Mvcs;
  */
 @IocBean(singleton=false)
 public class HtmlEditor extends TextArea {
+	protected String editor;
 	protected Boolean cdn;
 	protected Boolean debug;
 
@@ -33,6 +36,23 @@ public class HtmlEditor extends TextArea {
 		if (debug == null) {
 			debug = context.isAppDebug();
 		}
+		if (Strings.isEmpty(editor)) {
+			editor = context.getSettings().getProperty(SetConstants.MVC_TAG_HTML_EDITOR, "summernote");
+		}
+	}
+
+	/**
+	 * @return the editor
+	 */
+	public String getEditor() {
+		return editor;
+	}
+
+	/**
+	 * @param editor the editor to set
+	 */
+	public void setEditor(String editor) {
+		this.editor = editor;
 	}
 
 	/**
