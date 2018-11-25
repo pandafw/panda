@@ -78,6 +78,7 @@ Panda HTML use the following software packages:
 | Font Awesome            | [fontawesome](http://fontawesome.io/license/)                 | http://fontawesome.io/                                 |
 | Hammer.js               | [MIT](https://opensource.org/licenses/MIT)                    | http://hammerjs.github.io/                             |
 | jQuery                  | [jQuery](https://jquery.org/license/)                         | https://jquery.com/                                    |
+| jquery-cleditor         | [MIT](https://opensource.org/licenses/MIT)                    | http://premiumsoftware.net/cleditor/                   |
 | jquery-editable-select  | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/indrimuska/jquery-editable-select   |
 | jquery-lightbox         |                                                               | http://leandrovieira.com                               |
 | jquery-meiomask         | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/fabiomcosta/jquery-meiomask         |
