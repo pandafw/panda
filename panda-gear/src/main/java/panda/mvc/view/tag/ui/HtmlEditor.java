@@ -1,5 +1,7 @@
 package panda.mvc.view.tag.ui;
 
+import java.util.Locale;
+
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
 import panda.mvc.Mvcs;
@@ -20,6 +22,7 @@ import panda.mvc.SetConstants;
 @IocBean(singleton=false)
 public class HtmlEditor extends TextArea {
 	protected String editor;
+	protected Locale locale;
 	protected Boolean cdn;
 	protected Boolean debug;
 
@@ -30,6 +33,9 @@ public class HtmlEditor extends TextArea {
 	public void evaluateParams() {
 		super.evaluateParams();
 
+		if (locale == null) {
+			locale = context.getLocale();
+		}
 		if (cdn == null) {
 			cdn = Mvcs.isUseCdn(context);
 		}
@@ -39,6 +45,20 @@ public class HtmlEditor extends TextArea {
 		if (Strings.isEmpty(editor)) {
 			editor = context.getSettings().getProperty(SetConstants.MVC_TAG_HTML_EDITOR, "summernote");
 		}
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
 	}
 
 	/**

@@ -2184,15 +2184,27 @@ if (typeof String.formatSize != "function") {
 	});
 })(jQuery);
 (function($) {
+	var langs = {};
 	function initSummerNote() {
 		if (typeof($.fn.summernote) == 'undefined') {
 			setTimeout(initSummerNote, 100);
 			return;
 		}
+		for (var i in langs) {
+			if (!$.summernote.lang[i]) {
+				setTimeout(initSummerNote, 100);
+				return;
+			}
+		}
 
 		$('textarea.p-htmleditor.p-summernote').each(function() {
 			var $t = $(this);
 			var o = $t.data('summernoteOptions') || {};
+			var l = $t.data('summernoteLang');
+			if (l) {
+				o.lang = l;
+			}
+
 			if ($t.attr('readonly')) {
 				$t.parent().addClass('p-htmleditor-readonly');
 				$t.summernote($.extend(o, { toolbar: false })).summernote('disable');
@@ -2228,8 +2240,16 @@ if (typeof String.formatSize != "function") {
 			}
 			var js = $sns.data('summernoteJs');
 			if (js) {
-				$.jscript(js, true);
+				$.jscript(js);
 			}
+			$sns.each(function() {
+				var i = $(this).data('summernoteLang');
+				var v = $(this).data('summernoteLangJs');
+				if (i && v && !langs[i]) {
+					$.jscript(v);
+					langs[i] = v;
+				}
+			});
 			initSummerNote();
 		}
 

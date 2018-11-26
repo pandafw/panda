@@ -1,7 +1,11 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
 
+import panda.lang.Arrays;
+import panda.lang.Strings;
 import panda.mvc.view.tag.ui.HtmlEditor;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
@@ -11,8 +15,47 @@ public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 	private static final String SUMMERNOTE_KEY = HtmlEditorRenderer.class.getName() + ".summernote";
 	private static final String SUMMERNOTE_VERSION = "0.8.11";
 	private static final String SUMMERNOTE_CDN = "http://cdnjs.cloudflare.com/ajax/libs/summernote/" + SUMMERNOTE_VERSION + "/summernote";
-	private static final String SUMMERNOTE_PATH = "/summernote/summernote";
+	private static final String SUMMERNOTE_ROOT = "/summernote/";
+	private static final String SUMMERNOTE_PATH = SUMMERNOTE_ROOT + "summernote";
 
+	private static final Map<String, String> SUMMERNOTE_LANGS = Arrays.toMap(
+			"ar",  "AR", 
+			"bg",  "BG", 
+			"ca",  "ES", 
+			"cs",  "CZ", 
+			"da",  "DK", 
+			"de",  "DE", 
+			"el",  "GR", 
+			"fa",  "IR", 
+			"fi",  "FI", 
+			"fr",  "FR", 
+			"gl",  "ES", 
+			"he",  "IL", 
+			"hr",  "HR", 
+			"hu",  "HU", 
+			"id",  "ID", 
+			"it",  "IT", 
+			"ja",  "JP", 
+			"ko",  "KR", 
+			"lt",  "LT", 
+			"lt",  "LV", 
+			"mn",  "MN", 
+			"nb",  "NO", 
+			"nl",  "NL", 
+			"pl",  "PL", 
+			"ro",  "RO", 
+			"ru",  "RU", 
+			"sk",  "SK", 
+			"sl",  "SI", 
+			"sr",  "RS", 
+			"sv",  "SE", 
+			"ta",  "IN", 
+			"th",  "TH", 
+			"tr",  "TR", 
+			"uk",  "UA", 
+			"uz",  "UZ", 
+			"vi",  "VN"
+		);
 	private static final String CLEDITOR_KEY = HtmlEditorRenderer.class.getName() + ".cleditor";
 	private static final String CLEDITOR_VERSION = "1.4.5";
 	private static final String CLEDITOR_PATH = "/cleditor/jquery.cleditor";
@@ -50,8 +93,13 @@ public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 			}
 		}
 		else {
+			String lang = getSummerNoteLang();
 			attrs.css(this, "p-htmleditor p-summernote");
 			attrs.data("summernoteJs", summernoteJs());
+			if (Strings.isNotEmpty(lang)) {
+				attrs.data("summernoteLang", lang);
+				attrs.data("summernoteLangJs", suri(SUMMERNOTE_ROOT + "lang/summernote-" + lang + ".js?v=" + SUMMERNOTE_VERSION));
+			}
 			attrs.dynamics(tag);
 
 			if (!Boolean.TRUE.equals(context.getReq().get(SUMMERNOTE_KEY))) {
@@ -65,6 +113,26 @@ public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 		etag("textarea");
 	}
 	
+	private String getSummerNoteLang() {
+		Locale locale = tag.getLocale();
+		String lang = locale.getLanguage();
+		String country = Strings.upperCase(locale.getCountry());
+		if ("zh".equals(lang)) {
+			lang += ("TW".equals(country) || "HK".equals(country)) ? "-TW" : "-CN";
+		}
+		else if ("es".equals(lang)) {
+			lang += "EU".equals(country) ? "-EU" : "-ES";
+		}
+		else if ("pt".equals(lang)) {
+			lang += "BR".equals(country) ? "-BR" : "-ES";
+		}
+		else {
+			country = SUMMERNOTE_LANGS.get(lang);
+			lang = country == null ? null : (lang + '-' + country);
+		}
+		return lang;
+	}
+
 	private String summernoteCss() {
 		if (tag.useCdn()) {
 			return SUMMERNOTE_CDN + ".css";
