@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////
-// Patch for carousel
+// swipe for carousel
 //
 (function($) {
 	var regTouchGestures = function($e) {
@@ -15,8 +15,10 @@
 	};
 	
 	$(window).on('load', function () {
-		$('[data-ride="carousel"]').each(function() {
-			regTouchGestures($(this));
-		})
+		if (typeof($.fn.hammer) == 'function') {
+			$('[data-ride="carousel"]').each(function() {
+				regTouchGestures($(this));
+			})
+		}
 	});
 })(jQuery);

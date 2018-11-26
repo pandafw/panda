@@ -1,13 +1,10 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
-import java.io.IOException;
-import java.util.Map;
-
-import panda.lang.Arrays;
 import panda.mvc.view.tag.ui.TimePicker;
+import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-public class TimePickerRenderer extends AbstractTextFieldRenderer<TimePicker> {
+public class TimePickerRenderer extends AbstractDatePickerRenderer<TimePicker> {
 	public TimePickerRenderer(RenderingContext context) {
 		super(context);
 	}
@@ -18,16 +15,10 @@ public class TimePickerRenderer extends AbstractTextFieldRenderer<TimePicker> {
 	}
 	
 	@Override
-	protected Map<String, String> getDatas() {
-		return Arrays.toMap("format", tag.getPattern());
-	}
-
-	@Override
-	protected void renderHeader() throws IOException {
-		write("<div class=\"input-group p-timepicker\" data-spy=\"datetimepicker\" data-pick-date=\"false\"");
+	protected void addDatetimepickerOptions(Attributes attrs) {
+		attrs.data("pickDate", "false");
 		if (Boolean.FALSE.equals(tag.getPickSeconds())) {
-			write(" data-pick-seconds=\"false\"");
+			attrs.data("pickSeconds", "false");
 		}
-		write(">");
 	}
 }

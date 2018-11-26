@@ -1,5 +1,7 @@
 package panda.mvc.view.tag.ui;
 
+import java.util.Locale;
+
 import panda.cast.castor.DateTypeCastor;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
@@ -36,11 +38,13 @@ public class DatePicker extends TriggerField {
 	protected static final Log log = Logs.getLog(DatePicker.class);
 
 	protected static final String DEFAULT_DATE_FORMAT = DateTypeCastor.DATE;
-
 	protected static final String DEFAULT_DATE_PATTERN = DateTimes.ISO_DATE_FORMAT;
 
-	protected String pattern;
+	protected Locale locale;
+	protected Boolean cdn;
+	protected Boolean debug;
 
+	protected String pattern;
 	protected Boolean pickSeconds;
 
 	//TODO
@@ -60,6 +64,16 @@ public class DatePicker extends TriggerField {
 	@Override
 	public void evaluateParams() {
 		super.evaluateParams();
+
+		if (locale == null) {
+			locale = context.getLocale();
+		}
+		if (cdn == null) {
+			cdn = Mvcs.isUseCdn(context);
+		}
+		if (debug == null) {
+			debug = context.isAppDebug();
+		}
 
 		if (Strings.isEmpty(format)) {
 			format = getDefaultFormat();
@@ -86,6 +100,62 @@ public class DatePicker extends TriggerField {
 	 */
 	protected String getDefaultPattern() {
 		return DEFAULT_DATE_PATTERN;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	/**
+	 * @return the cdn
+	 */
+	public boolean useCdn() {
+		return cdn;
+	}
+
+	/**
+	 * @return the cdn
+	 */
+	public Boolean getCdn() {
+		return cdn;
+	}
+
+	/**
+	 * @param cdn the cdn to set
+	 */
+	public void setCdn(Boolean cdn) {
+		this.cdn = cdn;
+	}
+
+	/**
+	 * @return the debug
+	 */
+	public boolean useDebug() {
+		return debug;
+	}
+
+	/**
+	 * @return the debug
+	 */
+	public Boolean getDebug() {
+		return debug;
+	}
+
+	/**
+	 * @param debug the debug to set
+	 */
+	public void setDebug(Boolean debug) {
+		this.debug = debug;
 	}
 
 	/**

@@ -49,69 +49,6 @@ build-js          --> Merge & minify javascript files
 
 	<!-- build -->
 	<target name="build-js" description="Merge &amp; minify javascript files">
-		<!-- bootstrap2 -->
-		<concat
-			destfile="${dir.bs2}/js/bootstrap-datetimepicker-i18n.js"
-			binary="true">
-			<fileset dir="${dir.bs2}/js/i18n">
-				<include name="*.js" />
-			</fileset>
-		</concat>
-		<antcall target="minjs">
-			<param name="src" value="${dir.bs2}/js/bootstrap-datetimepicker-i18n" />
-		</antcall>
-		<antcall target="minjs">
-			<param name="src" value="${dir.bs2}/js/bootstrap-datetimepicker" />
-		</antcall>
-
-		<!-- bootstrap3 -->
-		<antcall target="minjs">
-			<param name="src" value="${dir.bs3}/js/bootstrap-datetimepicker" />
-		</antcall>
-		<antcall target="minjs">
-			<param name="src" value="${dir.bs3}/js/bootstrap-patch" />
-		</antcall>
-
-		<!-- bootstrap3 plugins -->
-		<concat destfile="${dir.bs3}/js/bootstrap-plugins.js"
-			binary="true">
-			<fileset dir="${dir.bs3}/js">
-				<include name="bootstrap-*.js" />
-				<exclude name="bootstrap-plugins*.js" />
-				<exclude name="bootstrap-*.min.js" />
-				<exclude name="bootstrap-*-i18n.*js" />
-			</fileset>
-		</concat>
-		<antcall target="minjs">
-			<param name="src" value="${dir.bs3}/js/bootstrap-plugins" />
-		</antcall>
-
-		<!-- boostrap i18n -->
-		<concat
-			destfile="${dir.bs3}/js/bootstrap-datetimepicker-i18n.js"
-			binary="true">
-			<fileset dir="${dir.bs3}/js/i18n">
-				<include name="bootstrap-datetimepicker.*.js" />
-			</fileset>
-		</concat>
-		<antcall target="minjs">
-			<param name="src" value="${dir.bs3}/js/bootstrap-datetimepicker-i18n" />
-		</antcall>
-		<concat destfile="${dir.bs3}/js/bootstrap-plugins-i18n.js"
-			binary="true">
-			<fileset dir="${dir.bs3}/js">
-				<include name="bootstrap-*-i18n.js" />
-				<exclude name="bootstrap-plugins-i18n.js" />
-			</fileset>
-		</concat>
-		<concat destfile="${dir.bs3}/js/bootstrap-plugins-i18n.min.js"
-			binary="true">
-			<fileset dir="${dir.bs3}/js">
-				<include name="bootstrap-*-i18n.min.js" />
-				<exclude name="bootstrap-plugins-i18n.min.js" />
-			</fileset>
-		</concat>
-
 		<!-- jquery plugins -->
 		<concat destfile="${dir.jq}/js/jquery-plugins.js" binary="true">
 			<fileset dir="${dir.jq}/js" includes="jquery.*.js" />
@@ -184,7 +121,12 @@ build-js          --> Merge & minify javascript files
 			<param name="src" value="${dir.ex}/js/i18n/extras.zh_TW" />
 		</antcall>
 
-		<!-- others -->
+		<!-- datetimepicker -->
+		<antcall target="minjs">
+			<param name="src" value="${dir.s}/datetimepicker/bootstrap-datetimepicker" />
+		</antcall>
+
+		<!-- respondjs -->
 		<antcall target="minjs">
 			<param name="src" value="${dir.s}/respondjs/respond" />
 		</antcall>
@@ -202,30 +144,6 @@ build-js          --> Merge & minify javascript files
 	</target>
 
 	<target name="build-css" description="Merge &amp; minify css files">
-		<!-- bootstrap2 -->
-		<antcall target="mincss">
-			<param name="src" value="${dir.bs2}/css/bootstrap-datetimepicker" />
-		</antcall>
-
-		<!-- bootstrap3 -->
-		<antcall target="mincss">
-			<param name="src" value="${dir.bs3}/css/bootstrap-datetimepicker" />
-		</antcall>
-
-		<!-- bootstrap3 plugins -->
-		<concat destfile="${dir.bs3}/css/bootstrap-plugins.css"
-			binary="true">
-			<fileset dir="${dir.bs3}/css">
-				<include name="bootstrap-*.css" />
-				<exclude name="bootstrap-theme*.css" />
-				<exclude name="bootstrap-plugins*.css" />
-				<exclude name="bootstrap-*.min.css" />
-			</fileset>
-		</concat>
-		<antcall target="mincss">
-			<param name="src" value="${dir.bs3}/css/bootstrap-plugins" />
-		</antcall>
-
 		<!-- jquery plugins -->
 		<concat destfile="${dir.jq}/css/jquery-plugins.css" binary="true">
 			<fileset dir="${dir.jq}/css" includes="jquery.*.css" />
@@ -253,6 +171,11 @@ build-js          --> Merge & minify javascript files
 		</concat>
 		<antcall target="mincss">
 			<param name="src" value="${dir.ex}/css/extras" />
+		</antcall>
+
+		<!-- datetimepicker -->
+		<antcall target="mincss">
+			<param name="src" value="${dir.s}/datetimepicker/bootstrap-datetimepicker" />
 		</antcall>
 
 		<!-- panda -->

@@ -52,7 +52,6 @@ public class Link extends UIBean {
 	// attributes
 	protected String version;
 	protected Boolean cdn;
-
 	protected Boolean debug;
 
 	protected boolean js;
@@ -66,7 +65,6 @@ public class Link extends UIBean {
 	protected boolean bootstrap;
 	protected boolean bootstrap3;
 	protected boolean bootstrap4;
-	protected boolean bsplugins;
 	protected boolean i18n;
 	protected boolean panda;
 	protected boolean extras;
@@ -102,15 +100,10 @@ public class Link extends UIBean {
 		if (bootstrap || jqplugins || extras) {
 			jquery = true;
 		}
-		if (bsplugins) {
-			jquery = true;
-			bootstrap = true;
-		}
 		if (panda) {
 			jquery = true;
 			jqplugins = true;
 			bootstrap = true;
-			bsplugins = true;
 		}
 		
 		if (bswitch || hammer || lightbox || meiomask || mousewheel || tablesorter) {
@@ -344,20 +337,6 @@ public class Link extends UIBean {
 	 */
 	public void setBootstrap4(boolean bootstrap4) {
 		this.bootstrap4 = bootstrap4;
-	}
-
-	/**
-	 * @return the bsplugins
-	 */
-	public boolean isBsplugins() {
-		return bsplugins;
-	}
-
-	/**
-	 * @param bsplugins the bsplugins to set
-	 */
-	public void setBsplugins(boolean bsplugins) {
-		this.bsplugins = bsplugins;
 	}
 
 	/**
