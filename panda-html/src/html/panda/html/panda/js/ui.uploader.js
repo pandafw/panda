@@ -77,7 +77,7 @@
 			}
 		}
 
-		function _progress(v) {
+		function _set_progress(v) {
 			$up.children('.progress-bar').css({width: v + '%'});
 		}
 		
@@ -93,20 +93,26 @@
 			$ub.length ? $ub.hide() : $uf.hide();
 			$ue.hide().empty();
 
+			_set_progress(0);
 			$up.show();
-
-			_do_progress();
 		}
 
-		function _do_progress() {
-			_progress(progress++);
+		function _fake_progress() {
+			_set_progress(progress++);
 			if (progress < 90) {
-				setTimeout(_do_progress, 20);
+				setTimeout(_fake_progress, 20);
+			}
+		}
+
+		function _ajax_progress(e) {
+			if (e.lengthComputable) {
+				var p = Math.round(e.loaded * 100 / e.total);
+				_set_progress(p);
 			}
 		}
 		
 		function _end_upload() {
-			_progress(100);
+			_set_progress(100);
 			$up.hide();
 			$uf.val("");
 			$ub.length ? $ub.show() : $uf.show();
@@ -172,6 +178,7 @@
 
 		function _ajaf_upload() {
 			_start_upload();
+			_fake_progress();
 
 			var file = {}; file[$u.data('uploadName')] = $uf; 
 			$.ajaf({
@@ -210,6 +217,11 @@
 				cache: false,
 				contentType: false,
 				processData: false,
+				xhr: function() {
+					var xhr = $.ajaxSettings.xhr();
+					xhr.upload.addEventListener('progress', _ajax_progress);
+					return xhr;
+				},
 				success: _upload_on_success,
 				error: _upload_on_error
 			});
