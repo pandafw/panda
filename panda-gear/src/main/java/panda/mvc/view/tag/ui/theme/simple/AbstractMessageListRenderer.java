@@ -8,6 +8,7 @@ import panda.mvc.view.tag.ui.EscapeUIBean;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
+import panda.mvc.view.util.Escapes;
 
 /**
  * Base class for ActionError and ActionMessage
@@ -44,13 +45,7 @@ public abstract class AbstractMessageListRenderer<T extends EscapeUIBean> extend
 
 					// img for error
 					write(icon(getDefaultIconClass()));
-
-					if (tag.isEscape()) {
-						write(phtml(msg));
-					}
-					else {
-						write(msg);
-					}
+					write(Escapes.escape(msg, tag.getEscape()));
 
 					etag("li");
 				}

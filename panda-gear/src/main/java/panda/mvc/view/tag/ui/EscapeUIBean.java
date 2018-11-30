@@ -1,21 +1,22 @@
 package panda.mvc.view.tag.ui;
 
+import panda.mvc.view.util.Escapes;
 
 public abstract class EscapeUIBean extends UIBean {
 
-	protected boolean escape = true;
+	protected String escape = Escapes.ESCAPE_PHTML;
 
 	/**
 	 * @return the escape
 	 */
-	public boolean isEscape() {
+	public String getEscape() {
 		return escape;
 	}
 
 	/** 
 	 * @param escape the escape to set
 	 */
-	public void setEscape(boolean escape) {
+	public void setEscape(String escape) {
 		this.escape = escape;
 	}
 }

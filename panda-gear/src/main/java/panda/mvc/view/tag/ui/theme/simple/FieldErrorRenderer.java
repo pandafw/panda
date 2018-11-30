@@ -11,6 +11,7 @@ import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
+import panda.mvc.view.util.Escapes;
 
 public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 	public static final String UL_CLASS = "fa-ul p-field-errors";
@@ -36,8 +37,6 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 			return;
 		}
 
-		boolean escape = tag.isEscape();
-		
 		Attributes ula = new Attributes();
 
 		// iterate over field error names
@@ -82,12 +81,7 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 					write("\">");
 					write(icon(ICON_CLASS));
 					write(label);
-					if (escape) {
-						write(phtml(fieldError));
-					}
-					else {
-						write(fieldError);
-					}
+					write(Escapes.escape(fieldError, tag.getEscape()));
 					etag("li");
 				}
 			}
