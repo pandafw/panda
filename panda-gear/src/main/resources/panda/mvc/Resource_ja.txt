@@ -157,7 +157,7 @@ validation-email=正しいメールアドレスを入力してください。（
 validation-email-notsame=メールアドレスが一致していません。
 validation-empty=項目の値は空ではありません。
 validation-filename=ファイル名には次の文字　\/:*?"<>|　は使えません。
-validation-file=${exists ? \
+validation-file=${top.exists ? \
 (((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
  (top.minLength != null ? (top.minFileSize + "以上") : \
  (top.maxLength != null ? (top.maxFileSize + "以下") : ""))) + \

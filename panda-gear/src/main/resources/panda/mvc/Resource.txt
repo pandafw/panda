@@ -233,7 +233,7 @@ validation-email=The format of email address must be "user@domain.com".
 validation-email-notsame=The confirm email is not same as you input.
 validation-empty=This field should be empty.
 validation-filename=The file name can't contain these \/:*?"<>| characters. 
-validation-file=${exists ? ("The file size (" + top.fieSize + " must be " + \
+validation-file=${top.exists ? ("The file size (" + top.fileSize + " must be " + \
 ((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize) : \
  (top.minLength != null ? (">= " + top.minFileSize) : \
  (top.maxLength != null ? ("<= " + top.maxFileSize) : ""))))\
@@ -241,14 +241,14 @@ validation-file=${exists ? ("The file size (" + top.fieSize + " must be " + \
 validation-futuredate=The future date is not allowed.
 validation-hankakustring=Please input half character string.
 validation-hankakukatakanastring=Please input half katakana character string.
-validation-image=${top.image ? ("The image size " + top.width + "x" + top.height + " must be " + \
-((top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "px ~ " + top.maxWidth + "px)") : \
- (top.minWidth != null ? ("W:(>=" + top.minWidth + "px)") : \
- (top.maxWidth != null ? ("W:(<=" + top.maxWidth + "px)") : ""))) + \
-(((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : "") + \
-((top.minHeight != null && top.maxHeight != null) ? ("H: (" + top.minHeight + "px ~ " + top.maxHeight + "px)") : \
- (top.minHeight != null ? ("H:(>=" + top.minHeight + "px)") : \
- (top.maxHeight != null ? ("H:(<=" + top.maxHeight + "px)") : ""))))\
+validation-image=${top.image ? ("The image size " + top.width + "x" + top.height + " must " + \
+((top.minWidth != null && top.maxWidth != null) ? ("width between " + top.minWidth + "px ~ " + top.maxWidth + "px") : \
+ (top.minWidth != null ? ("width >= " + top.minWidth + "px") : \
+ (top.maxWidth != null ? ("width <= " + top.maxWidth + "px") : ""))) + \
+(((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? " and " : "") + \
+((top.minHeight != null && top.maxHeight != null) ? ("height between " + top.minHeight + "px ~ " + top.maxHeight + "px") : \
+ (top.minHeight != null ? ("height >= " + top.minHeight + "px)") : \
+ (top.maxHeight != null ? ("height <= " + top.maxHeight + "px)") : ""))))\
  : "The image format is not correct"}.
 validation-incorrect=Incorrect value.
 validation-number-range=The number must be \

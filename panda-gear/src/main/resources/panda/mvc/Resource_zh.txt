@@ -148,7 +148,7 @@ validation-email=请输入正确的电子邮件地址。（例: user@domain.com�
 validation-email-notsame=电子邮件和确认电子邮件不一致。
 validation-empty=该项目必须为空。
 validation-filename=文件名中无法使用以下　\/:*?"<>|　文字。
-validation-file=${exists ? ("请指定" + \
+validation-file=${top.exists ? ("请指定" + \
 ((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
  (top.minLength != null ? (top.minFileSize + "以上") : \
  (top.maxLength != null ? (top.maxFileSize + "以下") : ""))) + \
