@@ -1,12 +1,19 @@
 (function($) {
 	function setAlertType($p, s, t) {
-		$p.removeClass('alert-danger alert-warning alert-info alert-success').addClass(s.types[t]);
+		for (var i in s.types) {
+			$p.removeClass(s.types[i]);
+		}
+		$p.addClass(s.types[t]);
+	}
+
+	function msg_li(tc, ic, m) {
+		return $('<li>').addClass(tc).append($('<i>').addClass(ic)).append($('<span>').text(m));
 	}
 
 	function addMsg($p, s, m, t) {
 		var ic = s.icons[t];
 		var tc = s.texts[t];
-		$p.append('<ul class="' +  s.ulCls + '"><li class="' + tc + '"><i class="' + ic + '"></i>' + m + '</li></ul>');
+		$p.append($('<ul>').addClass(s.css).append(msg_li(tc, ic, m)));
 		setAlertType($p, s, t);
 	}
 
@@ -14,10 +21,10 @@
 		if (m) {
 			var ic = s.icons[t];
 			var tc = s.texts[t];
-			var h = '<ul class="' + s.ulCls + '">';
+			var $u = $('<ul>').addClass(s.css);
 			if ($.isArray(m)) {
 				for (var i = 0; i < m.length; i++) {
-					h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + m[i] + '</li>';
+					$u.append(msg_li(tc, ic, m[i]));
 				}
 			}
 			else {
@@ -25,16 +32,15 @@
 					var v = m[n];
 					if ($.isArray(v)) {
 						for (var i = 0; i < v.length; i++) {
-							h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + n + ': ' + v[i] + '</li>';
+							$u.append(msg_li(tc, ic, s.label ? (n + s.label + v[i]) : v[i]));
 						}
 					}
 					else {
-						h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + n + ': ' + v + '</li>';
+						$u.append(msg_li(tc, ic, s.label ? (n + s.label + v) : v));
 					}
 				}
 			}
-			h += '</ul>';
-			$p.append(h);
+			$p.append($u);
 			setAlertType($p, s, t);
 		}
 	}
@@ -67,7 +73,8 @@
 	}
 
 	$.palert = {
-		ulCls: 'fa-ul',
+		css: 'fa-ul',
+		label: false, //': ',
 		icons: {
 			'down': 'fa-caret-down',
 			'up': 'fa-caret-up',
@@ -101,20 +108,16 @@
 				return this;
 			},
 			error: function(m) {
-				this.add(m, 'error');
-				return this;
+				return this.add(m, 'error');
 			},
 			warn: function(m) {
-				this.add(m, 'warn');
-				return this;
+				return this.add(m, 'warn');
 			},
-			promt: function(m) {
-				this.add(m, 'help');
-				return this;
+			help: function(m) {
+				return this.add(m, 'help');
 			},
 			info: function(m) {
-				this.add(m, 'info');
-				return this;
+				return this.add(m, 'info');
 			},
 			add: function(m, t) {
 				t = t || 'info';
