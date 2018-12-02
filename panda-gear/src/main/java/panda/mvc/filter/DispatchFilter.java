@@ -20,9 +20,11 @@ import panda.ioc.annotation.IocInject;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.impl.SingletonObjectProxy;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Regexs;
 import panda.lang.Strings;
+import panda.lang.collection.CaseInsensitiveSet;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
@@ -63,14 +65,14 @@ public class DispatchFilter implements ServletFilter {
 	@IocInject(value=MvcConstants.MVC_ACTION_CONTEXT_TYPE, required=false)
 	private Class<? extends ActionContext> acClass = ActionContext.class;
 
-	@IocInject(value=MvcConstants.MVC_ACTION_MAPPING_CASE_SENSITIVE, required=false)
-	private boolean caseSensitive;
+	@IocInject(value=MvcConstants.MVC_MAPPING_CASE_IGNORE, required=false)
+	private boolean ignoreCase;
 
 	/**
 	 * ignore settings
 	 */
-	@IocInject(value=MvcConstants.MVC_IGNORES, required=false)
-	private String ignores;
+	@IocInject(value=MvcConstants.MVC_MAPPING_IGNORES, required=false)
+	private List<String> ignores;
 
 	/**
 	 * the regex patterns of the URI to exclude
@@ -83,19 +85,19 @@ public class DispatchFilter implements ServletFilter {
 	private Set<String> ignorePaths;
 
 	/**
-	 * @param ignores the ignores to set
+	 * initialize on ioc bean created
 	 */
+	@SuppressWarnings("unchecked")
 	public void initialize() {
-		ignores = settings.getProperty(SetConstants.MVC_IGNORES, ignores);
+		ignores = (List<String>)settings.getPropertyAsList(SetConstants.MVC_MAPPING_IGNORES, ignores);
 
-		if (Strings.isEmpty(ignores)) {
+		if (Collections.isEmpty(ignores)) {
 			return;
 		}
 
-		String[] es = Strings.split(ignores);
 		Set<String> regex = new HashSet<String>();
-		Set<String> paths = new HashSet<String>();
-		for (String s : es) {
+		Set<String> paths = ignoreCase ? new CaseInsensitiveSet<String>() : new HashSet<String>();
+		for (String s : ignores) {
 			s = Strings.strip(s);
 			if (Strings.isEmpty(s)) {
 				continue;
@@ -116,7 +118,7 @@ public class DispatchFilter implements ServletFilter {
 		if (regex.size() > 0) {
 			List<Pattern> patterns = new ArrayList<Pattern>();
 			for (String s : regex) {
-				patterns.add(caseSensitive ? Pattern.compile(s) : Pattern.compile(s, Pattern.CASE_INSENSITIVE));
+				patterns.add(ignoreCase ? Pattern.compile(s, Pattern.CASE_INSENSITIVE) : Pattern.compile(s));
 			}
 			ignoreRegexs = patterns;
 			log.info("mvc ignore regexs  = " + Strings.join(regex, " "));

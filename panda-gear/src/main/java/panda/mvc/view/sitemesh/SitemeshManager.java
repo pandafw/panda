@@ -27,8 +27,8 @@ public class SitemeshManager {
 	@IocInject
 	protected Settings settings;
 
-	@IocInject(value=MvcConstants.MVC_ACTION_MAPPING_CASE_SENSITIVE, required=false)
-	protected boolean caseSensitive;
+	@IocInject(value=MvcConstants.MVC_MAPPING_CASE_IGNORE, required=false)
+	protected boolean ignoreCase;
 	
 	@IocInject(value=MvcConstants.SITEMESH, required=false)
 	protected SitemeshConfig smcfg;
@@ -37,8 +37,8 @@ public class SitemeshManager {
 	protected boolean disabled;
 
 	public void initialize() {
-		if (smcfg != null && caseSensitive) {
-			smcfg.initCaseSensetive();
+		if (smcfg != null && ignoreCase) {
+			smcfg.initIgnoreCase();
 		}
 	}
 	

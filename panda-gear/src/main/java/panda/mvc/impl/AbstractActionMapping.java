@@ -26,8 +26,8 @@ import panda.servlet.HttpServlets;
 public abstract class AbstractActionMapping implements ActionMapping {
 	private static final Log log = Logs.getLog(AbstractActionMapping.class);
 
-	@IocInject(value=MvcConstants.MVC_ACTION_MAPPING_CASE_SENSITIVE, required=false)
-	protected boolean caseSensitive;
+	@IocInject(value=MvcConstants.MVC_MAPPING_CASE_IGNORE, required=false)
+	protected boolean ignoreCase;
 	
 	protected abstract void addDispatcher(String path, ActionDispatcher dispatcher);
 	
@@ -37,8 +37,8 @@ public abstract class AbstractActionMapping implements ActionMapping {
 	private Map<String, ActionConfig> configs;
 
 	public void initialize() {
-		dispatchers = caseSensitive ? new HashMap<String, ActionDispatcher>() : new CaseInsensitiveMap<String, ActionDispatcher>();
-		configs = caseSensitive ? new HashMap<String, ActionConfig>() : new CaseInsensitiveMap<String, ActionConfig>();
+		dispatchers = ignoreCase ? new CaseInsensitiveMap<String, ActionDispatcher>() : new HashMap<String, ActionDispatcher>();
+		configs = ignoreCase ? new CaseInsensitiveMap<String, ActionConfig>() : new HashMap<String, ActionConfig>();
 	}
 	
 	@Override

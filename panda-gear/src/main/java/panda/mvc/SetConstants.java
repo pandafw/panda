@@ -13,9 +13,9 @@ public interface SetConstants {
 	public static final String WEB_DIR = "web.dir";
 
 	/**
-	 * mvc ignores
+	 * mvc mapping ignores
 	 */
-	public static final String MVC_IGNORES = "mvc.ignores";
+	public static final String MVC_MAPPING_IGNORES = "mvc.mapping.ignores";
 
 	/** Access log name */
 	public static final String MVC_ACCESS_LOG_NAME = "mvc.access.log.name";

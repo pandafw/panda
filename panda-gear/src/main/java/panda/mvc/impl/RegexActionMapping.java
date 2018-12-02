@@ -28,7 +28,7 @@ public class RegexActionMapping extends AbstractActionMapping {
 	public void initialize() {
 		super.initialize();
 		
-		urlmap = caseSensitive ? new HashMap<String, ActionDispatcher>() : new CaseInsensitiveMap<String, ActionDispatcher>();
+		urlmap = ignoreCase ? new HashMap<String, ActionDispatcher>() : new CaseInsensitiveMap<String, ActionDispatcher>();
 		patterns = new ArrayList<Pattern>();
 		dispatchers = new ArrayList<ActionDispatcher>();
 	}
@@ -36,7 +36,7 @@ public class RegexActionMapping extends AbstractActionMapping {
 	@Override
 	protected void addDispatcher(String path, ActionDispatcher dispatcher) {
 		if (Strings.endsWithChar(path, '$')) {
-			Pattern pattern = caseSensitive ? Pattern.compile(path) : Pattern.compile(path, Pattern.CASE_INSENSITIVE);
+			Pattern pattern = ignoreCase ? Pattern.compile(path) : Pattern.compile(path, Pattern.CASE_INSENSITIVE);
 			patterns.add(pattern);
 			dispatchers.add(dispatcher);
 		}
