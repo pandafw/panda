@@ -54,6 +54,13 @@ public interface SET extends SetConstants {
 	public static final String LUCENE_LOCATION = "lucene.location";
 
 	//------------------------------------------------
+	// temporary file cleanup
+	//
+	public static final String TMP_FILES_CLEANUP = "tmp.files.cleanup";
+	
+	public static final String TMP_FILES_MAXAGE = "tmp.files.maxage";
+
+	//------------------------------------------------
 	// html to pdf
 	//
 	/** The wkhtmltopdf exe path */
