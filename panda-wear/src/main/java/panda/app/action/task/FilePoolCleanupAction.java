@@ -12,7 +12,7 @@ import panda.vfs.FilePool;
 /**
  * delete upload temporary files
  */
-@At("/task/filecleanup")
+@At("/task/filepoolcleanup")
 @Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
 public class FilePoolCleanupAction extends GenericSyncWorkAction {
 	@IocInject
