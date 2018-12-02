@@ -24,7 +24,7 @@ import panda.mvc.annotation.At;
 /**
  * delete temporary files
  */
-@At("/task/tmpfilescleanup")
+@At("${!!task_path|||'/task'}/tmpfilescleanup")
 @Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
 public class TmpFilesCleanupAction extends GenericSyncWorkAction {
 	@IocInject

@@ -8,7 +8,7 @@ import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 import panda.mvc.util.ActionTextProvider;
 
-@At("/task/resource/load")
+@At("${!!task_path|||'/task'}/resource/load")
 @Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
 public class ResourceLoadAction extends BaseLoadAction {
 	@IocInject
