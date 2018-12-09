@@ -324,7 +324,7 @@ public class Files {
 	}
 
 	// -----------------------------------------------------------------------
-	private static Collection<File> fileIteratorToList(FileIterator it) {
+	private static List<File> fileIteratorToList(FileIterator it) {
 		try {
 			return Iterators.toList(it);
 		}
@@ -342,7 +342,7 @@ public class Files {
 	 *            {@code null}, all files are returned.
 	 * @return an collection of java.io.File with the matching files
 	 */
-	public static Collection<File> listFiles(File directory, String... extensions) {
+	public static List<File> listFiles(File directory, String... extensions) {
 		return fileIteratorToList(iterateFiles(directory, extensions));
 	}
 
@@ -356,7 +356,7 @@ public class Files {
 	 * @param recursive if true all sub directories are searched as well
 	 * @return an collection of java.io.File with the matching files
 	 */
-	public static Collection<File> listFiles(File directory, boolean recursive, String... extensions) {
+	public static List<File> listFiles(File directory, boolean recursive, String... extensions) {
 		return fileIteratorToList(iterateFiles(directory, recursive, extensions));
 	}
 
@@ -382,7 +382,7 @@ public class Files {
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public static Collection<File> listFiles(File directory, boolean recursive, IOFileFilter fileFilter) {
+	public static List<File> listFiles(File directory, boolean recursive, IOFileFilter fileFilter) {
 		return fileIteratorToList(iterateFiles(directory, recursive, fileFilter));
 	}
 	
@@ -410,7 +410,7 @@ public class Files {
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public static Collection<File> listFiles(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+	public static List<File> listFiles(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
 		return fileIteratorToList(iterateFiles(directory, fileFilter, dirFilter));
 	}
 
@@ -431,7 +431,7 @@ public class Files {
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public static Collection<File> listFilesAndDirs(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+	public static List<File> listFilesAndDirs(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
 		return fileIteratorToList(iterateFilesAndDirs(directory, fileFilter, dirFilter));
 	}
 
