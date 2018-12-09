@@ -15,6 +15,27 @@ public class Attachment {
 	private List<Field> fields;
 	private String image_url;
 	private String thumb_url;
+	
+	
+	public Attachment() {
+	}
+	
+	/**
+	 * @param text attachment body
+	 */
+	public Attachment(String text) {
+		this.text = text;
+	}
+
+	/**
+	 * @param title attachment title
+	 * @param text attachment body
+	 */
+	public Attachment(String title, String text) {
+		this.title = title;
+		this.text = text;
+	}
+
 	/**
 	 * @return the callback
 	 */
