@@ -7,9 +7,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 import panda.lang.Arrays;
 import panda.lang.Collections;
@@ -86,6 +88,17 @@ public class ExtendSSLSocketFactory extends SSLSocketFactory {
 	 */
 	public void setSniExtensionDisabled(boolean sniExtensionDisabled) {
 		this.sniExtensionDisabled = sniExtensionDisabled;
+	}
+
+	protected void initSSLSocketFactory(TrustManager tm) {
+		try {
+			SSLContext sslctx = SSLContexts.createSSLContext("SSL", null, tm);
+			ExtendSSLSocketFactory sslsf = new ExtendSSLSocketFactory(sslctx.getSocketFactory());
+			setSslSocketFactory(sslsf);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 
 	private Socket initSocketSettings(Socket socket) {
