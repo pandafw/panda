@@ -178,6 +178,21 @@ public class Email {
 	}
 
 	/**
+	 * add to
+	 * @param tos to address array
+	 * @param name name
+	 * @throws EmailException if an error occurs
+	 */
+	public void addTos(String... tos) throws EmailException {
+		if (Arrays.isEmpty(tos)) {
+			return;
+		}
+		for (String to : tos) {
+			addTo(to);
+		}
+	}
+
+	/**
 	 * @param tos the tos to set
 	 */
 	public void setTos(List<EmailAddress> tos) {
@@ -232,6 +247,21 @@ public class Email {
 	 */
 	public void addCc(String addr, String name) throws EmailException {
 		addCc(new EmailAddress(addr, name));
+	}
+
+	/**
+	 * add cc
+	 * @param ccs cc address array
+	 * @param name name
+	 * @throws EmailException if an error occurs
+	 */
+	public void addCcs(String... ccs) throws EmailException {
+		if (Arrays.isEmpty(ccs)) {
+			return;
+		}
+		for (String cc : ccs) {
+			addCc(cc);
+		}
 	}
 
 	/**
