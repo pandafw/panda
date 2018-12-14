@@ -23,6 +23,7 @@ import panda.mvc.ActionContext;
 import panda.mvc.SetConstants;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
+import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 
 /**
@@ -93,7 +94,7 @@ public class ResourceView extends AbstractView {
 			if (log.isDebugEnabled()) {
 				log.warn("[NOT FOUND]: " + file);
 			}
-			ac.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
+			ac.getResponse().setStatus(HttpStatus.SC_NOT_FOUND);
 			return;
 		}
 		
