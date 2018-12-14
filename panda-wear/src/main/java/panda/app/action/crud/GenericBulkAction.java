@@ -111,6 +111,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		try {
 			startBulkDelete(dataList);
 			execBulkDelete(dataList, count);
+			afterBulkDelete(dataList);
 		}
 		catch (Exception e) {
 			if (e instanceof BusinessRuntimeException) {
@@ -151,6 +152,13 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @param dataList data list
 	 */
 	protected void startBulkDelete(List<T> dataList) {
+	}
+	
+	/**
+	 * afterBulkDelete
+	 * @param dataList data list
+	 */
+	protected void afterBulkDelete(List<T> dataList) {
 	}
 	
 	/**
@@ -245,6 +253,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		try {
 			startBulkUpdate(dataList);
 			execBulkUpdate(dataList, count);
+			afterBulkUpdate(dataList);
 		}
 		catch (Exception e) {
 			if (e instanceof BusinessRuntimeException) {
@@ -446,6 +455,13 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @param dataList data list
 	 */
 	protected void startBulkUpdate(List<T> dataList) {
+	}
+
+	/**
+	 * afterBulkUpdate
+	 * @param dataList data list
+	 */
+	protected void afterBulkUpdate(List<T> dataList) {
 	}
 	
 	/**
