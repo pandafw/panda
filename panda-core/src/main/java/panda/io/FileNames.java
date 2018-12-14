@@ -1318,13 +1318,13 @@ public abstract class FileNames {
 		if (filename == null) {
 			return null;
 		}
+		
 		int index = indexOfExtension(filename);
 		if (index == -1) {
 			return "";
 		}
-		else {
-			return filename.substring(index + 1);
-		}
+
+		return filename.substring(index + 1);
 	}
 
 	/**
@@ -1987,4 +1987,16 @@ public abstract class FileNames {
 		return name;
 	}
 
+	public static String addSuffix(String filename, String suffix) {
+		if (filename == null) {
+			return null;
+		}
+		
+		int index = indexOfExtension(filename);
+		if (index == -1) {
+			return filename + suffix;
+		}
+
+		return filename.substring(0, index) + suffix + filename.substring(index);
+	}
 }
