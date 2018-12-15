@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 
 import panda.app.entity.Media;
 import panda.app.entity.Resource;
@@ -17,6 +18,7 @@ import panda.dao.entity.Entity;
 import panda.dao.sql.SqlDaoClient;
 import panda.dao.sql.SqlIterator;
 import panda.dao.sql.Sqls;
+import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.io.Streams;
 import panda.lang.Arrays;
@@ -145,5 +147,14 @@ public abstract class AppHelper {
 				Sqls.safeClose(connection);
 			}
 		}
+	}
+
+	public static SqlDaoClient createSqlDaoClient(Map<String, String> props) throws SQLException {
+		SimpleDataSource sds = new SimpleDataSource();
+		sds.initialize(props);
+		SqlDaoClient sdc = new SqlDaoClient();
+		sdc.setDataSource(sds);
+		
+		return sdc;
 	}
 }

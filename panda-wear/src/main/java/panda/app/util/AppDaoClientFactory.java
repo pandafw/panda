@@ -13,9 +13,11 @@ import panda.dao.DaoClient;
 import panda.dao.DaoException;
 import panda.dao.gae.GaeDaoClient;
 import panda.dao.mongo.MongoDaoClient;
-import panda.dao.sql.SimpleDataSource;
 import panda.dao.sql.SqlDaoClient;
 import panda.dao.sql.Sqls;
+import panda.dao.sql.dbcp.AbstractDataSource;
+import panda.dao.sql.dbcp.SimpleDataSource;
+import panda.dao.sql.dbcp.ThreadLocalDataSource;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -145,7 +147,15 @@ public class AppDaoClientFactory {
 			log.info("  " + en.getKey() + ": " + en.getValue());
 		}
 
-		DataSource ds = new SimpleDataSource(dps);
+		AbstractDataSource ds = null;
+		String driver = dps.get("jdbc.driver");
+		if ("org.sqlite.JDBC".equals(driver)) {
+			ds = new ThreadLocalDataSource();
+		}
+		else {
+			ds = new SimpleDataSource();
+		}
+		ds.initialize(dps);
 		return ds;
 	}
 }

@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;

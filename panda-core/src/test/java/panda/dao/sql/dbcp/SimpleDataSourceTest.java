@@ -1,9 +1,11 @@
-package panda.dao.sql;
+package panda.dao.sql.dbcp;
 
 import java.sql.Statement;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+import panda.dao.sql.dbcp.SimpleDataSource;
+import panda.dao.sql.dbcp.SimplePooledConnection;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -20,7 +22,8 @@ public class SimpleDataSourceTest extends TestCase {
 		try {
 			Properties p = new Properties();
 			p.load(SimpleDataSourceTest.class.getResourceAsStream("SimpleDataSourceTest.properties"));
-			simpleDataSource = new SimpleDataSource(p);
+			simpleDataSource = new SimpleDataSource();
+			simpleDataSource.initialize(p);
 		}
 		catch (Exception e) {
 			log.error("exception", e);

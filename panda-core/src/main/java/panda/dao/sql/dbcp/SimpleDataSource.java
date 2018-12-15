@@ -1,25 +1,16 @@
-package panda.dao.sql;
+package panda.dao.sql.dbcp;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Logger;
 
-import javax.sql.DataSource;
-
-import panda.cast.Castors;
-import panda.lang.Asserts;
+import panda.dao.sql.Sqls;
 import panda.lang.Strings;
 import panda.lang.Threads;
-import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -52,116 +43,13 @@ import panda.log.Logs;
  * <p/>
  * 
  */
-public class SimpleDataSource implements DataSource {
+public class SimpleDataSource extends AbstractDataSource {
 	private static Log log = Logs.getLog(SimpleDataSource.class);
 
 	//--------------------------------------------------------------------------------------
 	// PROPERTY FIELDS FOR CONFIGURATION
 	//--------------------------------------------------------------------------------------
-	public static class JdbcConf {
-		private String driver;
-		private String url;
-		private String username;
-		private String password;
-		private boolean autoCommit = false;
-		public String getDriver() {
-			return driver;
-		}
-		public void setDriver(String driver) {
-			this.driver = driver;
-		}
-		public String getUrl() {
-			return url;
-		}
-		public void setUrl(String url) {
-			this.url = url;
-		}
-		public String getUsername() {
-			return username;
-		}
-		public void setUsername(String username) {
-			this.username = username;
-		}
-		public String getPassword() {
-			return password;
-		}
-		public void setPassword(String password) {
-			this.password = password;
-		}
-		public boolean isAutoCommit() {
-			return autoCommit;
-		}
-		public void setAutoCommit(boolean autoCommit) {
-			this.autoCommit = autoCommit;
-		}
-	}
-
-	public static class PoolConf {
-		private int maxActive = 10;
-		private int maxIdle = 5;
-		private long maxCheckoutTime = DateTimes.MS_WEEK;
-		private String pingQuery = "";
-		private int pingTimeout = 1;
-		private long pingOlderThan;
-		private long pingNotUsedFor = 600000;
-		private long timeToWait = 20000;
-
-		public int getMaxActive() {
-			return maxActive;
-		}
-		public void setMaxActive(int maxActive) {
-			this.maxActive = maxActive;
-		}
-		public int getMaxIdle() {
-			return maxIdle;
-		}
-		public void setMaxIdle(int maxIdle) {
-			this.maxIdle = maxIdle;
-		}
-		public long getMaxCheckoutTime() {
-			return maxCheckoutTime;
-		}
-		public void setMaxCheckoutTime(long maxCheckoutTime) {
-			this.maxCheckoutTime = maxCheckoutTime;
-		}
-		public String getPingQuery() {
-			return pingQuery;
-		}
-		public void setPingQuery(String pingQuery) {
-			this.pingQuery = Strings.stripToEmpty(pingQuery);
-		}
-		public long getPingTimeout() {
-			return pingTimeout * 1000L;
-		}
-		public void setPingTimeout(long pingTimeout) {
-			this.pingTimeout = (int)(pingTimeout / 1000);
-			if (this.pingTimeout < 1) {
-				this.pingTimeout = 1;
-			}
-		}
-		public long getPingOlderThan() {
-			return pingOlderThan;
-		}
-		public void setPingOlderThan(long pingOlderThan) {
-			this.pingOlderThan = pingOlderThan;
-		}
-		public long getPingNotUsedFor() {
-			return pingNotUsedFor;
-		}
-		public void setPingNotUsedFor(long pingNotUsedFor) {
-			this.pingNotUsedFor = pingNotUsedFor;
-		}
-		public long getTimeToWait() {
-			return timeToWait;
-		}
-		public void setTimeToWait(long timeToWait) {
-			this.timeToWait = timeToWait;
-		}
-	}
-
-	private JdbcConf jdbc = new JdbcConf();
-	private PoolConf pool = new PoolConf();
-	private Properties props = new Properties();
+	private PoolConfig pool = new PoolConfig();
 
 	//--------------------------------------------------------------------------------------
 	// FIELDS LOCKED BY POOL_LOCK
@@ -172,165 +60,41 @@ public class SimpleDataSource implements DataSource {
 
 	private List<SimplePooledConnection> actives = new ArrayList<SimplePooledConnection>();
 
-	private long requestCount = 0;
+	private long requestCount;
 
-	private long accumulatedRequestTime = 0;
+	private long accumulatedRequestTime;
 
-	private long accumulatedCheckoutTime = 0;
+	private long accumulatedCheckoutTime;
 
-	private long claimedOverdueConnectionCount = 0;
+	private long claimedOverdueConnectionCount;
 
-	private long accumulatedCheckoutTimeOfOverdueConnections = 0;
+	private long accumulatedCheckoutTimeOfOverdueConnections;
 
-	private long accumulatedWaitTime = 0;
+	private long accumulatedWaitTime;
 
-	private long hadToWaitCount = 0;
+	private long hadToWaitCount;
 
-	private long badConnectionCount = 0;
+	private long badConnectionCount;
 
 	/**
 	 * Constructor
 	 */
 	public SimpleDataSource() {
-	}
-
-	/**
-	 * Constructor to allow passing in a map of properties for configuration
-	 * 
-	 * @param props - the configuration parameters
-	 */
-	public SimpleDataSource(Map<String, String> props) {
-		initialize(props);
-	}
-
-	/**
-	 * Constructor to allow passing in a map of properties for configuration
-	 * 
-	 * @param props - the configuration parameters
-	 */
-	public SimpleDataSource(Properties props) {
-		initialize((Map<?, ?>)props);
-	}
-
-	private void initialize(Map<?, ?> props) {
-		if (props == null) {
-			throw new IllegalArgumentException(
-					"SimpleDataSource: The properties map passed to the initializer was null.");
-		}
-
-		Castors.scastTo(props, this);
-		
-		initialize();
-	}
-	
-	public void initialize() {
-		Asserts.notEmpty(jdbc.driver, "The jdbc.driver property is empty.");
-		Asserts.notEmpty(jdbc.url, "The jdbc.url property is empty.");
-
-		try {
-			Class.forName(jdbc.driver);
-		}
-		catch (ClassNotFoundException e) {
-			throw new RuntimeException("Failed to initialize jdbc driver: " + jdbc.driver, e);
-		}
-
-		if (jdbc.username != null) {
-			props.put("user", jdbc.username);
-		}
-		if (jdbc.password != null) {
-			props.put("password", jdbc.password);
-		}
-	}
-
-	/**
-	 * @see javax.sql.DataSource#getConnection()
-	 */
-	public Connection getConnection() throws SQLException {
-		return popConnection();
-	}
-
-	/**
-	 * @see javax.sql.DataSource#getConnection(java.lang.String, java.lang.String)
-	 */
-	public Connection getConnection(String username, String password) throws SQLException {
-		if (Strings.equals(jdbc.username, username) && Strings.equals(jdbc.password, password)) {
-			return popConnection();
-		}
-
-		if (log.isWarnEnabled()) {
-			log.warn("Create a non-pooled connection due to different username/password.");
-		}
-		return DriverManager.getConnection(jdbc.url, username, password);
-	}
-
-	/**
-	 * @see javax.sql.DataSource#setLoginTimeout(int)
-	 */
-	public void setLoginTimeout(int loginTimeout) throws SQLException {
-		DriverManager.setLoginTimeout(loginTimeout);
-	}
-
-	/**
-	 * @see javax.sql.DataSource#getLoginTimeout()
-	 */
-	public int getLoginTimeout() throws SQLException {
-		return DriverManager.getLoginTimeout();
-	}
-
-	/**
-	 * @see javax.sql.DataSource#setLogWriter(java.io.PrintWriter)
-	 */
-	public void setLogWriter(PrintWriter logWriter) throws SQLException {
-		DriverManager.setLogWriter(logWriter);
-	}
-
-	/**
-	 * @see javax.sql.DataSource#getLogWriter()
-	 */
-	public PrintWriter getLogWriter() throws SQLException {
-		return DriverManager.getLogWriter();
-	}
-
-	/**
-	 * @return the jdbc
-	 */
-	public JdbcConf getJdbc() {
-		return jdbc;
-	}
-
-	/**
-	 * @param jdbc the jdbc to set
-	 */
-	public void setJdbc(JdbcConf jdbc) {
-		this.jdbc = jdbc;
+		super();
 	}
 
 	/**
 	 * @return the pool
 	 */
-	public PoolConf getPool() {
+	public PoolConfig getPool() {
 		return pool;
 	}
 
 	/**
 	 * @param pool the pool to set
 	 */
-	public void setPool(PoolConf pool) {
+	public void setPool(PoolConfig pool) {
 		this.pool = pool;
-	}
-
-	/**
-	 * @return the driver
-	 */
-	public Properties getProps() {
-		return props;
-	}
-
-	/**
-	 * @param driver the driver to set
-	 */
-	public void setProps(Properties driver) {
-		this.props = driver;
 	}
 
 	/**
@@ -418,15 +182,11 @@ public class SimpleDataSource implements DataSource {
 	 * 
 	 * @return The status
 	 */
+	@Override
 	public String getStatus() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("\n===============================================================");
-		sb.append("\n jdbc.driver                     ").append(jdbc.getDriver());
-		sb.append("\n jdbc.url                        ").append(jdbc.getUrl());
-		sb.append("\n jdbc.username                   ").append(jdbc.getUsername());
-		sb.append("\n jdbc.password                   ").append(jdbc.getPassword());
-		sb.append("\n jdbc.autoCommit                 ").append(jdbc.isAutoCommit());
+		sb.append(super.getStatus());
 		sb.append("\n pool.maxActive                  ").append(pool.getMaxActive());
 		sb.append("\n pool.maxIdle                    ").append(pool.getMaxIdle());
 		sb.append("\n pool.maxCheckoutTime            ").append(pool.getMaxCheckoutTime());
@@ -546,7 +306,8 @@ public class SimpleDataSource implements DataSource {
 		}
 	}
 
-	private SimplePooledConnection popConnection() throws SQLException {
+	@Override
+	protected Connection popConnection() throws SQLException {
 		long start = System.currentTimeMillis();
 		int bad = 0, wait = 0;
 
@@ -720,26 +481,5 @@ public class SimpleDataSource implements DataSource {
 
 	protected void finalize() throws Throwable {
 		close();
-	}
-
-	/**
-	 * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
-	 */
-	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		return false;
-	}
-
-	/**
-	 * @see java.sql.Wrapper#unwrap(java.lang.Class)
-	 */
-	public <T> T unwrap(Class<T> iface) throws SQLException {
-		return null;
-	}
-
-	//--------------------------------------------------------------------
-	// JDK 1.7 Methods below
-	//--------------------------------------------------------------------
-	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		return null;
 	}
 }

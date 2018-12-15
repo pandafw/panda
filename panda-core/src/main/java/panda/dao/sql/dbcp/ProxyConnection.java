@@ -1,4 +1,4 @@
-package panda.dao.sql;
+package panda.dao.sql.dbcp;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -19,25 +19,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import panda.lang.Exceptions;
-import panda.lang.reflect.Methods;
-
-/**
- * SimplePooledConnection
- */
-public class SimplePooledConnection implements Connection {
+public class ProxyConnection implements Connection {
 
 	private int hashCode = 0;
 
-	private SimpleDataSource dataSource;
-
 	private Connection realConnection;
-
-	private long checkoutTimestamp;
-
-	private long createdTimestamp;
-
-	private long lastUsedTimestamp;
 
 	private boolean valid;
 
@@ -46,14 +32,10 @@ public class SimplePooledConnection implements Connection {
 	 * passed in
 	 * 
 	 * @param connection - the connection that is to be presented as a pooled connection
-	 * @param dataSource - the dataSource that the connection is from
 	 */
-	public SimplePooledConnection(Connection connection, SimpleDataSource dataSource) {
+	public ProxyConnection(Connection connection) {
 		this.hashCode = connection.hashCode();
 		this.realConnection = connection;
-		this.dataSource = dataSource;
-		this.createdTimestamp = System.currentTimeMillis();
-		this.lastUsedTimestamp = System.currentTimeMillis();
 		this.valid = true;
 	}
 
@@ -74,15 +56,6 @@ public class SimplePooledConnection implements Connection {
 	}
 
 	/**
-	 * Method to see if the connection is usable, run ping query if pingQuery is setted
-	 * 
-	 * @return True if the connection is usable
-	 */
-	public boolean testValid() {
-		return isValid() && dataSource.pingConnection(this);
-	}
-
-	/**
 	 * Getter for the *real* connection that this wraps
 	 * 
 	 * @return The connection
@@ -100,90 +73,7 @@ public class SimplePooledConnection implements Connection {
 		if (realConnection == null) {
 			return 0;
 		}
-		else {
-			return realConnection.hashCode();
-		}
-	}
-
-	/**
-	 * Getter for the time that the connection was created
-	 * 
-	 * @return The creation timestamp
-	 */
-	public long getCreatedTimestamp() {
-		return createdTimestamp;
-	}
-
-	/**
-	 * Setter for the time that the connection was created
-	 * 
-	 * @param createdTimestamp - the timestamp
-	 */
-	public void setCreatedTimestamp(long createdTimestamp) {
-		this.createdTimestamp = createdTimestamp;
-	}
-
-	/**
-	 * Getter for the time that the connection was last used
-	 * 
-	 * @return - the timestamp
-	 */
-	public long getLastUsedTimestamp() {
-		return lastUsedTimestamp;
-	}
-
-	/**
-	 * Setter for the time that the connection was last used
-	 * 
-	 * @param lastUsedTimestamp - the timestamp
-	 */
-	public void setLastUsedTimestamp(long lastUsedTimestamp) {
-		this.lastUsedTimestamp = lastUsedTimestamp;
-	}
-
-	/**
-	 * Getter for the time since this connection was last used
-	 * 
-	 * @return - the time since the last use
-	 */
-	public long getTimeElapsedSinceLastUse() {
-		return System.currentTimeMillis() - lastUsedTimestamp;
-	}
-
-	/**
-	 * Getter for the age of the connection
-	 * 
-	 * @return the age
-	 */
-	public long getAge() {
-		return System.currentTimeMillis() - createdTimestamp;
-	}
-
-	/**
-	 * Getter for the timestamp that this connection was checked out
-	 * 
-	 * @return the timestamp
-	 */
-	public long getCheckoutTimestamp() {
-		return checkoutTimestamp;
-	}
-
-	/**
-	 * Setter for the timestamp that this connection was checked out
-	 * 
-	 * @param timestamp the timestamp
-	 */
-	public void setCheckoutTimestamp(long timestamp) {
-		this.checkoutTimestamp = timestamp;
-	}
-
-	/**
-	 * Getter for the time that this connection has been checked out
-	 * 
-	 * @return the time
-	 */
-	public long getCheckoutTime() {
-		return System.currentTimeMillis() - checkoutTimestamp;
+		return realConnection.hashCode();
 	}
 
 	private Connection getValidConnection() {
@@ -210,16 +100,16 @@ public class SimplePooledConnection implements Connection {
 		if (this == obj) {
 			return true;
 		}
-		if (obj instanceof SimplePooledConnection) {
-			return realConnection.hashCode() == (((SimplePooledConnection) obj).realConnection
-					.hashCode());
+
+		if (obj instanceof ProxyConnection) {
+			return realConnection.hashCode() == ((ProxyConnection)obj).realConnection.hashCode();
 		}
-		else if (obj instanceof Connection) {
+		
+		if (obj instanceof Connection) {
 			return hashCode == obj.hashCode();
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	//--------------------------------------------------------------------
@@ -285,7 +175,7 @@ public class SimplePooledConnection implements Connection {
 	 * @see java.sql.Connection#close()
 	 */
 	public void close() throws SQLException {
-		dataSource.pushConnection(this);
+		getValidConnection().close();
 	}
 
 	/**
@@ -590,47 +480,22 @@ public class SimplePooledConnection implements Connection {
 	// JDBC 4.1 JDK 1.7 Methods below
 	//--------------------------------------------------------------------
 	public void setSchema(String schema) throws SQLException {
-		try {
-			Methods.invokeMethod(getValidConnection(), "setSchema", schema);
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		getValidConnection().setSchema(schema);
 	}
 
 	public String getSchema() throws SQLException {
-		try {
-			return (String)Methods.invokeMethod(getValidConnection(), "getSchema");
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		return getValidConnection().getSchema();
 	}
 
 	public void abort(Executor executor) throws SQLException {
-		try {
-			Methods.invokeMethod(getValidConnection(), "abort", executor);
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		getValidConnection().abort(executor);
 	}
 
 	public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-		try {
-			Methods.invokeMethod(getValidConnection(), "setNetworkTimeout", new Object[] { executor, milliseconds });
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		getValidConnection().setNetworkTimeout(executor, milliseconds);
 	}
 
 	public int getNetworkTimeout() throws SQLException {
-		try {
-			return (Integer)Methods.invokeMethod(getValidConnection(), "getNetworkTimeout");
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		return getValidConnection().getNetworkTimeout();
 	}
 }
