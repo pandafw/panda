@@ -924,6 +924,15 @@ tbody.p-lv-tbody > tr > td:first-child {
 .p-wh48px		{ width: 48px; height: 48px; }
 .p-wh64px		{ width: 64px; height: 64px; }
 .p-wh128px		{ width: 128px; height: 128px; }
+.p-wh192px		{ width: 192px; height: 192px; }
+
+.p-mwh16px		{ max-width: 16px; max-height: 16px; }
+.p-mwh24px		{ max-width: 24px; max-height: 24px; }
+.p-mwh32px		{ max-width: 32px; max-height: 32px; }
+.p-mwh48px		{ max-width: 48px; max-height: 48px; }
+.p-mwh64px		{ max-width: 64px; max-height: 64px; }
+.p-mwh128px		{ max-width: 128px; max-height: 128px; }
+.p-mwh192px		{ max-width: 192px; max-height: 192px; }
 
 .p-fleft		{ float: left;}
 .p-fright		{ float: right; }
