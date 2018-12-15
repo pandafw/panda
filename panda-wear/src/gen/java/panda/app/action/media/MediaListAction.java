@@ -21,7 +21,7 @@ public abstract class MediaListAction extends GenericListAction<Media> {
 	 */
 	public MediaListAction() {
 		setType(Media.class);
-		addDisplayFields(Media.ID, Media.TAG, Media.FILE, Media.NAME, Media.SIZE, Media.WIDTH, Media.HEIGHT, Media.UPDATED_AT, Media.UPDATED_BY, Media.UPDATED_BY_USER);
+		addDisplayFields(Media.ID, Media.TAG, Media.FILE, Media.NAME, Media.SIZE, Media.WIDTH, Media.HEIGHT, Media.CREATED_AT, Media.CREATED_BY, Media.CREATED_BY_USER, Media.UPDATED_AT, Media.UPDATED_BY, Media.UPDATED_BY_USER);
 	}
 
 	/**

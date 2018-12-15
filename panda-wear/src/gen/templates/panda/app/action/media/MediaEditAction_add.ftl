@@ -42,7 +42,7 @@
 			<@p.textfield
 				key="name"
 				value="%{r.name}"
-				maxlength="255"
+				maxlength="200"
 			/>
 	</#if>
 	<#if a.displayField("size")>
@@ -78,6 +78,25 @@
 				defaultAction="mediaview"
 				defaultParams="!{'id': '%{r.id}'}"
 				defaultEnable="%{r.id != null && r.size > 0}"
+			/>
+	</#if>
+	<#if a.displayField("createdAt")>
+			<@p.viewfield
+				key="createdAt"
+				value="%{r.createdAt}"
+				format="datetime"
+			/>
+	</#if>
+	<#if a.displayField("createdBy")>
+			<@p.hidden
+				name="createdBy"
+				value="%{r.createdBy}"
+			/>
+	</#if>
+	<#if a.displayField("createdByUser")>
+			<@p.viewfield
+				key="createdByUser"
+				value="%{r.createdByUser}"
 			/>
 	</#if>
 	<#if a.displayField("updatedAt")>

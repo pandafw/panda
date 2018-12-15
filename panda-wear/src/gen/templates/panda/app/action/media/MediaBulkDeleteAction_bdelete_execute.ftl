@@ -93,6 +93,30 @@
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("height")
 		}, {
+			"name": "createdAt",
+			"header": a.getFieldLabel("createdAt"),
+			"display": a.displayField("createdAt"),
+			"format": {
+				"type": "datetime"
+			},
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("createdAt")
+		}, {
+			"name": "createdBy",
+			"header": a.getFieldLabel("createdBy"),
+			"display": a.displayField("createdBy"),
+			"hidden": true,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("createdBy")
+		}, {
+			"name": "createdByUser",
+			"header": a.getFieldLabel("createdByUser"),
+			"display": a.displayField("createdByUser"),
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("createdByUser")
+		}, {
 			"name": "updatedAt",
 			"header": a.getFieldLabel("updatedAt"),
 			"display": a.displayField("updatedAt"),

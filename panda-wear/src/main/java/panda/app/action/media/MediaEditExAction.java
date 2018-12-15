@@ -1,28 +1,31 @@
 package panda.app.action.media;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import panda.app.entity.Media;
+import panda.app.media.MediaDataDaoSaver;
+import panda.app.media.Medias;
 import panda.image.ImageWrapper;
 import panda.image.Images;
-import panda.io.FileNames;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
 
 @At("${super_path}/media")
 public class MediaEditExAction extends MediaEditAction {
-	private void setFileData(Media data) {
+
+	@IocInject
+	private MediaDataDaoSaver mds;
+	
+	private void setFileMeta(Media data) {
 		try {
 			if (data.getFile() != null && data.getFile().isExists()) {
-				data.setData(data.getFile().data());
-				data.setSize(data.getData().length);
+				data.setSize(data.getFile().getSize());
 				if (Strings.isEmpty(data.getName())) {
-					data.setName(Strings.right(data.getFile().getName(), FileNames.MAX_FILENAME_LENGTH));
+					data.setName(Strings.right(data.getFile().getName(), Medias.MAX_FILENAME_LENGTH));
 				}
-				ImageWrapper iw = Images.i().read(data.getData());
+				ImageWrapper iw = Images.i().read(data.getFile().data());
 				data.setWidth(iw.getWidth());
 				data.setHeight(iw.getHeight());
 			}
@@ -34,34 +37,40 @@ public class MediaEditExAction extends MediaEditAction {
 
 	@Override
 	protected Media startInsert(Media data) {
-		data =  super.startInsert(data);
+		data = super.startInsert(data);
 		data.setSize(0);
-		setFileData(data);
+		setFileMeta(data);
 		return data;
+	}
+
+	@Override
+	protected void insertData(Media data) {
+		super.insertData(data);
+
+		mds.save(data);
 	}
 
 	@Override
 	protected void afterInsert(Media data) {
 		super.afterInsert(data);
-		
+
 		data.setFile(null);
 	}
 
 	@Override
 	protected Media startUpdate(Media data, Media sd) {
-		data =  super.startUpdate(data, sd);
+		data = super.startUpdate(data, sd);
 		data.setSize(sd.getSize());
-		setFileData(data);
+		setFileMeta(data);
 		return data;
 	}
 
 	@Override
-	protected Set<String> getUpdateFields(Media data, Media sd) {
-		Set<String> ufs = new HashSet<String>(super.getUpdateFields(data, sd));
-		if (data.getData() != null) {
-			ufs.add(Media.DATA);
+	protected int updateData(Media udat, Media sdat) {
+		if (udat.getFile() != null && udat.getFile().isExists()) {
+			mds.save(udat);
 		}
-		return ufs;
+		return super.updateData(udat, sdat);
 	}
 
 	@Override
@@ -70,4 +79,12 @@ public class MediaEditExAction extends MediaEditAction {
 		
 		data.setFile(null);
 	}
+
+	@Override
+	protected void afterDelete(Media data) {
+		mds.delete(data);
+
+		super.afterDelete(data);
+	}
+
 }

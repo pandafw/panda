@@ -3,19 +3,19 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="${entity.package}.Media" baseBeanClass="${entity.uBeanClass}" baseQueryClass="${entity.uQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
+	<entity name="${entity.package}.Media" baseBeanClass="${entity.cuBeanClass}" baseQueryClass="${entity.cuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
 		<property name="id" type="Long" notNull="true" primaryKey="true"/>
+		<property name="mid" type="Long"/>
 		<property name="tag" type="String" size="10">
 			<validator type="constant">
 				<param name="list" value="'%{consts.mediaTagMap}'"/>
 			</validator>
 		</property>
-		<property name="name" type="String" size="255">
+		<property name="name" type="String" size="200">
 			<validator type="stringlength">
-				<param name="maxLength" value="255"/>
+				<param name="maxLength" value="200"/>
 			</validator>
 		</property>
-		<property name="data" type="byte[]" jdbcType="BLOB" notNull="true"/>
 		<property name="size" type="Integer" notNull="true"/>
 		<property name="width" type="Integer" notNull="true"/>
 		<property name="height" type="Integer" notNull="true"/>
@@ -28,7 +28,7 @@
 	<!-- action -->
 	<action name="action.Media" entity="${entity.package}.Media" extend="baseAction">
 		<property name="file" type="FileItem"/>
-		<list name="basicList" extend="uList">
+		<list name="basicList" extend="cuList">
 			<column name="id" hidden="false" sortable="true" link="true">
 				<filter type="number"/>
 			</column>
@@ -59,7 +59,7 @@
 			<param name="toolbar" value="${bulk.toolbar}"/>
 			<param name="buttons" value="${bulk.buttons}"/>
 		</list>
-		<input name="basicInput" extend="uInput">
+		<input name="basicInput" extend="cuInput">
 			<field name="id">
 				<editTag name="${tag.viewfield}"/>
 			</field>
@@ -71,7 +71,7 @@
 			</field>
 			<field name="name">
 				<editTag name="${tag.textfield}">
-					<param name="maxlength" value="255"/>
+					<param name="maxlength" value="200"/>
 				</editTag>
 			</field>
 			<field name="size">
@@ -109,7 +109,7 @@
 		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
-	<action name="media" extend="action.Media" actionClass="${action.package}.media.MediaBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="media" extend="action.Media" actionClass="${action.package}.media.MediaBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="media" extend="action.Media" actionClass="${action.package}.media.MediaEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">

@@ -6,6 +6,7 @@ import panda.app.auth.AppAuthenticator;
 import panda.app.auth.UserAuthenticateProcessor;
 import panda.app.index.gae.RevisionedGaeIndexes;
 import panda.app.index.lucene.RevisionedLuceneIndexes;
+import panda.app.media.MediaDataDaoSaver;
 import panda.app.task.ActionTaskSubmitter;
 import panda.app.task.gae.GaeTaskExecutor;
 import panda.app.task.gae.GaeTaskScheduler;
@@ -40,18 +41,19 @@ public class AppIocLoader extends MvcComboIocLoader {
 			super.addDefaults(ss);
 			
 			Collections.addAll(ss, 
-				AppAuthenticator.class,
-				UserAuthenticateProcessor.class,
 				AppActionAssist.class,
 				AppActionConsts.class,
-				AppResourceBundleLoader.class,
-				AppFreemarkerTemplateLoader.class,
+				AppAuthenticator.class,
 				AppCache.class,
 				AppCacheFactory.class,
 				AppDao.class,
 				AppDaoClient.class,
 				AppDaoClientFactory.class,
+				AppFreemarkerTemplateLoader.class,
+				AppResourceBundleLoader.class,
 				AppSettings.class,
+				MediaDataDaoSaver.class,
+				UserAuthenticateProcessor.class,
 				WkHtml2Pdf.class);
 			
 			if (Systems.IS_OS_APPENGINE) {

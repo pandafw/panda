@@ -1,14 +1,13 @@
 package panda.app.entity.query;
 
 import panda.app.entity.Media;
-import panda.app.entity.query.UQuery;
+import panda.app.entity.query.CUQuery;
 import panda.dao.entity.Entities;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.DataQuery;
-import panda.dao.query.ObjectCondition;
 import panda.dao.query.StringCondition;
 
-public class MediaQuery extends UQuery<Media, MediaQuery> {
+public class MediaQuery extends CUQuery<Media, MediaQuery> {
 	/**
 	 * Constructor
 	 */
@@ -35,6 +34,13 @@ public class MediaQuery extends UQuery<Media, MediaQuery> {
 	}
 
 	/**
+	 * @return condition of mid
+	 */
+	public ComparableCondition<MediaQuery, Long> mid() {
+		return new ComparableCondition<MediaQuery, Long>(this, Media.MID);
+	}
+
+	/**
 	 * @return condition of tag
 	 */
 	public StringCondition<MediaQuery> tag() {
@@ -46,13 +52,6 @@ public class MediaQuery extends UQuery<Media, MediaQuery> {
 	 */
 	public StringCondition<MediaQuery> name() {
 		return new StringCondition<MediaQuery>(this, Media.NAME);
-	}
-
-	/**
-	 * @return condition of data
-	 */
-	public ObjectCondition<MediaQuery> data() {
-		return new ObjectCondition<MediaQuery>(this, Media.DATA);
 	}
 
 	/**

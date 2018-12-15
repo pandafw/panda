@@ -1,8 +1,7 @@
 package panda.app.entity;
 
 import java.io.Serializable;
-import panda.app.entity.UBean;
-import panda.dao.DaoTypes;
+import panda.app.entity.CUBean;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Id;
 import panda.lang.Objects;
@@ -11,9 +10,9 @@ import panda.mvc.annotation.Validates;
 import panda.mvc.validator.Validators;
 import panda.vfs.FileItem;
 
-public class Media extends UBean implements Serializable {
+public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = 2093480655L;
+	private static final long serialVersionUID = -1112649986L;
 
 	/**
 	 * Constructor
@@ -26,9 +25,9 @@ public class Media extends UBean implements Serializable {
 	 * Constants
 	 *----------------------------------------------------------------------*/
 	public static final String ID = "id";
+	public static final String MID = "mid";
 	public static final String TAG = "tag";
 	public static final String NAME = "name";
-	public static final String DATA = "data";
 	public static final String SIZE = "size";
 	public static final String WIDTH = "width";
 	public static final String HEIGHT = "height";
@@ -36,9 +35,9 @@ public class Media extends UBean implements Serializable {
 
 	public static final String[] _COLUMNS_ = new String[] {
 			ID,
+			MID,
 			TAG,
 			NAME,
-			DATA,
 			SIZE,
 			WIDTH,
 			HEIGHT
@@ -52,14 +51,14 @@ public class Media extends UBean implements Serializable {
 	@Id(start=1001)
 	protected Long id;
 
+	@Column
+	protected Long mid;
+
 	@Column(size=10)
 	protected String tag;
 
-	@Column(size=255)
+	@Column(size=200)
 	protected String name;
-
-	@Column(type=DaoTypes.BLOB, notNull=true)
-	protected byte[] data;
 
 	@Column(notNull=true)
 	protected Integer size;
@@ -94,6 +93,23 @@ public class Media extends UBean implements Serializable {
 	}
 
 	/**
+	 * @return the mid
+	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
+	})
+	public Long getMid() {
+		return mid;
+	}
+
+	/**
+	 * @param mid the mid to set
+	 */
+	public void setMid(Long mid) {
+		this.mid = mid;
+	}
+
+	/**
 	 * @return the tag
 	 */
 	@Validates({
@@ -114,7 +130,7 @@ public class Media extends UBean implements Serializable {
 	 * @return the name
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 255 }", msgId=Validators.MSGID_STRING_LENTH)
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 200 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	public String getName() {
 		return name;
@@ -125,20 +141,6 @@ public class Media extends UBean implements Serializable {
 	 */
 	public void setName(String name) {
 		this.name = panda.lang.Strings.stripToNull(name);
-	}
-
-	/**
-	 * @return the data
-	 */
-	public byte[] getData() {
-		return data;
-	}
-
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(byte[] data) {
-		this.data = data;
 	}
 
 	/**
@@ -218,9 +220,9 @@ public class Media extends UBean implements Serializable {
 	 */
 	public void copy(Media src) {
 		this.id = src.id;
+		this.mid = src.mid;
 		this.tag = src.tag;
 		this.name = src.name;
-		this.data = src.data;
 		this.size = src.size;
 		this.width = src.width;
 		this.height = src.height;
@@ -281,9 +283,9 @@ public class Media extends UBean implements Serializable {
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append(ID, id)
+				.append(MID, mid)
 				.append(TAG, tag)
 				.append(NAME, name)
-				.append(DATA, data)
 				.append(SIZE, size)
 				.append(WIDTH, width)
 				.append(HEIGHT, height)

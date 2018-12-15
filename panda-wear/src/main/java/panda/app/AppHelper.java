@@ -10,6 +10,7 @@ import java.util.Map;
 import panda.app.entity.Media;
 import panda.app.entity.Resource;
 import panda.app.entity.Template;
+import panda.app.media.MediaData;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
@@ -40,7 +41,8 @@ public abstract class AppHelper {
 			DaoFileData.class,
 			Template.class,
 			Resource.class,
-			Media.class
+			Media.class,
+			MediaData.class
 		};
 		
 
