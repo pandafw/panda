@@ -991,7 +991,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 		}
 		
-		if (!getDao().exists(getEntity(), data)) {
+		if (getDao().exists(getEntity(), data)) {
 			addDataDuplicateError(data, getEntity().getPrimaryKeys());
 			return false;
 		}
