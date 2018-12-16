@@ -303,6 +303,7 @@ error-forbidden=You have no permission.
 error-email-is-used=The email address is already registered.
 error-sendmail=Failed to send email.\nPlease confirm the email address ${top} is correct.
 error-file-upload=Failed to upload file.
+error-server-connect=Failed to connect server!
 
 #-----------------------------------------------------------------------------
 # info messages

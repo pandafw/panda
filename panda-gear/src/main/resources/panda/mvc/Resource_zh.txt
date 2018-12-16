@@ -224,6 +224,7 @@ error-forbidden=用户没有权限!
 error-email-is-used=电子邮件地址已经被使用。
 error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址${top}是否正确。
 error-file-upload=文件上传失敗。
+error-server-connect=服务器连接失败！
 
 #-----------------------------------------------------------------------------
 # info messages

@@ -232,6 +232,7 @@ error-forbidden=権限ありません!
 error-email-is-used=入力したメールアドレスは既に登録されています。
 error-sendmail=<${top}>にメール送信が失敗しました。\nメールアドレスが正しいかどうかを確認してください。
 error-file-upload=ファイル転送失敗しました。
+error-server-connect=サーバーに接続できません！
 
 #-----------------------------------------------------------------------------
 # info messages
