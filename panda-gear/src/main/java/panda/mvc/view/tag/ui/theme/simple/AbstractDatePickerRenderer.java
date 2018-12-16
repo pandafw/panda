@@ -54,7 +54,7 @@ public abstract class AbstractDatePickerRenderer<T extends DatePicker> extends A
 
 		Attributes attrs = new Attributes();
 		
-		attrs.cssClass("p-" + getName(), "input-group");
+		attrs.cssClass("input-group", "p-" + getName());
 
 		attrs.data("datetimepickerJs", datetimepickerJs());
 

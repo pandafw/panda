@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.StringEscapes;
@@ -241,55 +242,40 @@ public class Attributes {
 		UIBean tag = tr.tag;
 
 		String name = tag.getName();
-		String cssClass = tag.getCssClass();
-		String cssErrorClass = tag.getCssErrorClass();
-		String cssStyle = tag.getCssStyle();
-		String cssErrorStyle = tag.getCssErrorStyle();
 		
 		Map<String, List<String>> errors = tr.context.getParamAlert().getErrors();
 		
 		boolean hasFieldErrors = (name != null && errors != null && errors.get(name) != null);
 		
-		if (cssClass != null && !(hasFieldErrors && cssErrorClass != null)) {
-			cssClass(cssClass, basic);
-		}
-		else if (cssClass != null && hasFieldErrors && cssErrorClass != null) {
-			cssClass(cssClass + ' ' + cssErrorClass, basic);
-		}
-		else if (cssClass == null && hasFieldErrors && cssErrorClass != null) {
-			cssClass(cssErrorClass, basic);
-		}
-		
-		if (cssStyle != null && !(hasFieldErrors && cssErrorStyle != null)) {
-			cssStyle(cssStyle);
-		}
-		else if (cssStyle != null && hasFieldErrors && cssErrorStyle != null) {
-			cssStyle(cssStyle + ' ' + cssErrorStyle);
-		}
-		else if (cssStyle == null && hasFieldErrors && cssErrorStyle != null) {
-			cssStyle(cssErrorStyle);
-		}
+		cssClass(basic, tag.getCssClass(), hasFieldErrors ? tag.getCssErrorClass() : null);
+		cssStyle(tag.getCssStyle(), hasFieldErrors ? tag.getCssErrorStyle() : null);
 		
 		return this;
 	}
 
-	public Attributes cssClass(String cssClass) {
-		addIfExists("class", cssClass);
+	public Attributes cssClass(String css) {
+		addIfExists("class", css);
 		return this;
 	}
 
-	public Attributes cssClass(String cssClass, String basic) {
+	private String join(String[] ss, char sp) {
 		StringBuilder sb = new StringBuilder();
-		if (Strings.isNotEmpty(basic)) {
-			sb.append(basic);
-		}
-		if (Strings.isNotEmpty(cssClass)) {
-			if (sb.length() > 0) {
-				sb.append(' ');
+		for (String s : ss) {
+			if (Strings.isNotEmpty(s)) {
+				if (sb.length() > 0) {
+					sb.append(sp);
+				}
+				sb.append(s);
 			}
-			sb.append(cssClass);
 		}
-		addIfExists("class", sb.toString());
+		return sb.toString();
+	}
+	
+	public Attributes cssClass(String... ccs) {
+		if (Arrays.isNotEmpty(ccs)) {
+			String css = join(ccs, ' ');
+			addIfExists("class", css);
+		}
 		return this;
 	}
 
@@ -299,11 +285,19 @@ public class Attributes {
 	}
 
 	public Attributes cssClass(UIBean tag, String basic) {
-		return cssClass(tag.getCssClass(), basic);
+		return cssClass(basic, tag.getCssClass());
 	}
 
 	public Attributes cssStyle(String cssStyle) {
 		addIfExists("style", cssStyle);
+		return this;
+	}
+
+	public Attributes cssStyle(String... css) {
+		if (Arrays.isNotEmpty(css)) {
+			String s = join(css, ';');
+			addIfExists("style", s);
+		}
 		return this;
 	}
 
