@@ -3070,16 +3070,28 @@ function sl_submit(id) {
 	}
 }
 
+//------------------------------------------------------
+function s_copyToClipboard(s) {
+	try {
+		$.copyToClipboard(s);
+	}
+	catch (e) {
+		var swf = document.createElement('embed');
+		swf.src = site.statics + "/panda/swf/clipboard.swf";
+		swf.setAttribute('FlashVars','code=' + encodeURIComponent(s));
+		swf.type = 'application/x-shockwave-flash';
+		swf.width = '0';
+		swf.height = '0';
+		$('body').append(swf);
+	}
+}
+
 function s_loadmask() {
 	$('body').loadmask({
 		cssClass: 'p-loader-fountain',
 		mask: false,
 		window: true
 	});
-}
-
-function s_resize() {
-	$(window).trigger('resize');
 }
 
 function s_getLinkMark() {
@@ -3116,23 +3128,6 @@ function s_setLang(v) {
 	location.href = s_setQueryParam({ '__locale': v });
 }
 
-function s_addScript(url) {
-	$.jscript(url);
-}
-
-//------------------------------------------------------
-// google analytics
-function s_google_analytics(c) {
-	if (c.google_analytics) {
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-		ga('create', c.google_analytics, 'auto');
-		ga('send', 'pageview');
-	}
-}
 
 //------------------------------------------------------
 // site vars
@@ -3144,39 +3139,6 @@ function s_setbase(c) {
 	c = $.extend(site, c);
 	$.cookie.defaults = c.cookie || {};
 	return site;
-}
-
-//------------------------------------------------------
-// clipboard
-function s_copyToClipboard(s) {
-	if (window.clipboardData) {
-		// ie
-		clipboardData.setData('Text', s);
-		return;
-	}
-
-	var $t = $('<textarea>').css({ 'width' : '0px', 'height': '0px' }).html(s.escapeHtml());
-	var l = $t.val().length;
-	var t = $t.get(0);
-	
-	t.setSelectionRange(0, l);
-	document.execCommand('copy');
-	t.blur();
-}
-
-function s_copyToClipboardEx(s) {
-	try {
-		s_copyToClipboard(s);
-	}
-	catch (e) {
-		var swf = document.createElement('embed');
-		swf.src = site.statics + "/panda/swf/clipboard.swf";
-		swf.setAttribute('FlashVars','code=' + encodeURIComponent(s));
-		swf.type = 'application/x-shockwave-flash';
-		swf.width = '0';
-		swf.height = '0';
-		$('body').append(swf);
-	}
 }
 
 //------------------------------------------------------
@@ -3214,9 +3176,6 @@ function s_init(c) {
 		var $w = $(c.body);
 		s_hook_forms($w);
 		s_ie6_hack_forms($w);
-
-		// google analytics
-		s_google_analytics(c);
 	});
 }
 
