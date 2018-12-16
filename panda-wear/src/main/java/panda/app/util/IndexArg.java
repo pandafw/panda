@@ -1,6 +1,8 @@
-package panda.mvc.bean;
+package panda.app.util;
 
 import panda.lang.Objects;
+import panda.mvc.bean.Pager;
+import panda.mvc.bean.Sorter;
 
 public class IndexArg {
 	protected Pager pager = new Pager();
