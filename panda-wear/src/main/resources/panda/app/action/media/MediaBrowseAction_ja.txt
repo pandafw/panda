@@ -1,0 +1,3 @@
+title=メディア
+
+lbl-date=日付

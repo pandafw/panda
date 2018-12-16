@@ -1,0 +1,5 @@
+icon=fa fa-picture-o
+
+title=Media
+
+lbl-date=Date

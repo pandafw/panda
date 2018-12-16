@@ -71,7 +71,7 @@
 				uploadName="file"
 				dnloadAction="%{b.files_path + '/download'}"
 				dnloadName="id"
-				defaultAction="mediaview"
+				defaultAction="media"
 				defaultParams="!{'id': '%{r.id}'}"
 				defaultEnable="%{r.id != null && r.size > 0}"
 			/>
