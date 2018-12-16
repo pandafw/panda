@@ -3341,10 +3341,22 @@ s_setbase({
 			loading = false;
 		}
 
+		function _on_success_uploaded(d) {
+			var fn = $u.data('onUploaded');
+			if (typeof(window[fn]) == 'function') {
+				return window[fn](d);
+			}
+			return false;
+		}
+		
 		function _upload_on_success(d) {
 			_end_upload();
 
 			if (d.success) {
+				if (_on_success_uploaded(d)) {
+					return;
+				}
+				
 				if (!$uf.attr('multiple')) {
 					$u.children('.p-uploader-item').remove();
 				}
