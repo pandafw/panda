@@ -21,9 +21,11 @@
 						panda_call(f, $t.get(0));
 					}
 					else {
-						$t.val('');
+						if ($t.val() != '') {
+							$t.val('').trigger('change');
+						}
 					}
-			});
+				});
 		});
 	};
 	
