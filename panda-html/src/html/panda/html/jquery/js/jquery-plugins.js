@@ -467,10 +467,10 @@ jQuery.jcookie = function(name, value, options) {
 })(jQuery);
 
 (function($) {
-	$.jscript = function(url, sync) {
+	$.jscript = function(url, async) {
 		var s = document.createElement('script');
 		s.type = 'text/javascript';
-		s.async = !sync;
+		s.async = async;
 		s.src = url;
 		$('body').append(s);
 		return $;

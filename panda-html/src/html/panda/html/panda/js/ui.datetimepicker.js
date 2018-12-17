@@ -1,5 +1,6 @@
 (function($) {
 	var langs = {};
+	var dps = 'div.p-datepicker, div.p-datetimepicker, div.p-timepicker';
 
 	function initDateTimePicker() {
 		if (typeof($.fn.datetimepicker) == 'undefined') {
@@ -13,11 +14,11 @@
 			}
 		}
 
-		$('.p-datepicker, .p-datetimepicker, .p-timepicker').datetimepicker();
+		$(dps).datetimepicker();
 	}
 
 	$(window).on('load', function () {
-		var $dps = $('.p-datepicker, .p-datetimepicker, .p-timepicker');
+		var $dps = $(dps);
 		if ($dps.size()) {
 			var css = $dps.data('datetimepickerCss');
 			if (css) {

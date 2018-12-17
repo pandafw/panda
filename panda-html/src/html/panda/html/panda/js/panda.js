@@ -2099,16 +2099,51 @@ if (typeof String.formatSize != "function") {
 					$p.slideDown();
 				}
 				return this;
+			},
+			actionError: function(d) {
+				if (d.alerts) {
+					this.add(d.alerts);
+				}
+				if (d.exception) {
+					var e = d.exception;
+					var m = e.message + (e.stackTrace ? ("\n" + e.stackTrace) : "");
+					this.add(m, 'error');
+				}
+				return this;
+			},
+			ajaxJsonError: function(xhr, status, e, m) {
+				var d = xhr.responseJSON;
+				if (d && (d.alerts || d.exception)) {
+					return this.actionError(d);
+				}
+			
+				msg = '';
+				if (e) {
+					msg += e + '\n';
+				}
+				
+				if (xhr) {
+					try {
+						var r = JSON.parse(xhr.responseText);
+						msg += JSON.stringify(r, null, 2);
+					}
+					catch (ex) {
+						msg += xhr.responseText;
+					}
+				}
+			
+				return this.add(msg || m, 'error');
 			}
 		}
 	};
 	
-	$.fn.palert = function(option, v1, v2) {
+	$.fn.palert = function(option) {
+		var args = Array.prototype.slice.call(arguments, 1);
 		return this.each(function () {
 			var ops = typeof option === 'object' && option;
 			var pa = palert($(this), ops);
 			if (typeof option === 'string') {
-				pa[option](v1, v2);
+				pa[option].apply(pa, args);
 			}
 		});
 	};
@@ -2129,7 +2164,7 @@ if (typeof String.formatSize != "function") {
 			}
 			$.notify({ html: $p}, ns);
 		}
-	}
+	};
 	
 	$.palert.toggleFieldErrors = function(el) {
 		var $fes = $(el).closest('.p-field-errors-alert').next('.p-field-errors');
@@ -2145,6 +2180,7 @@ if (typeof String.formatSize != "function") {
 		}
 		return false;
 	};
+	
 })(jQuery);
 ///////////////////////////////////////////////////////
 // swipe for carousel
@@ -2193,6 +2229,7 @@ if (typeof String.formatSize != "function") {
 })(jQuery);
 (function($) {
 	var langs = {};
+	var dps = 'div.p-datepicker, div.p-datetimepicker, div.p-timepicker';
 
 	function initDateTimePicker() {
 		if (typeof($.fn.datetimepicker) == 'undefined') {
@@ -2206,11 +2243,11 @@ if (typeof String.formatSize != "function") {
 			}
 		}
 
-		$('.p-datepicker, .p-datetimepicker, .p-timepicker').datetimepicker();
+		$(dps).datetimepicker();
 	}
 
 	$(window).on('load', function () {
-		var $dps = $('.p-datepicker, .p-datetimepicker, .p-timepicker');
+		var $dps = $(dps);
 		if ($dps.size()) {
 			var css = $dps.data('datetimepickerCss');
 			if (css) {
@@ -3208,9 +3245,11 @@ s_setbase({
 						panda_call(f, $t.get(0));
 					}
 					else {
-						$t.val('');
+						if ($t.val() != '') {
+							$t.val('').trigger('change');
+						}
 					}
-			});
+				});
 		});
 	};
 	
