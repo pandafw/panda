@@ -127,7 +127,7 @@ public class DaoFilePool implements FilePool {
 					dao.insert(fi);
 	
 					FileDataQuery fdq = new FileDataQuery();
-					fdq.fid().equalTo(fi.getId());
+					fdq.fid().eq(fi.getId());
 					dao.deletes(fdq);
 	
 					saveData(dao, fi, data);
@@ -186,7 +186,7 @@ public class DaoFilePool implements FilePool {
 				Dao dao = getDaoClient().getDao();
 				FileDataQuery fdq = new FileDataQuery();
 				
-				fdq.fid().equalTo(fi.getId()).bno().asc();
+				fdq.fid().eq(fi.getId()).bno().asc();
 				
 				DaoIterator<DaoFileData> it = dao.iterate(fdq);
 				try {
@@ -229,7 +229,7 @@ public class DaoFilePool implements FilePool {
 		
 		public void run() {
 			FileDataQuery fdq = new FileDataQuery();
-			fdq.fid().equalTo(file.getId());
+			fdq.fid().eq(file.getId());
 			dao.deletes(fdq);
 			
 			int cnt = dao.delete(file);
@@ -258,7 +258,7 @@ public class DaoFilePool implements FilePool {
 		final Date time = new Date(System.currentTimeMillis() - expires);
 		
 		FileItemQuery fiq = new FileItemQuery();
-		fiq.date().lessThan(time);
+		fiq.date().lt(time);
 		
 		final List<DaoFileItem> fis = dao.select(fiq);
 		if (Collections.isEmpty(fis)) {

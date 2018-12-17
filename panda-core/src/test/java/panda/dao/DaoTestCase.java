@@ -74,7 +74,7 @@ public abstract class DaoTestCase {
 	@Test
 	public void testCountQuery() {
 		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
-		q.equalTo("name", "T1");
+		q.eq("name", "T1");
 		Assert.assertEquals(1,  dao.count(q));
 	}
 
@@ -217,7 +217,7 @@ public abstract class DaoTestCase {
 		expect.remove(1);
 		
 		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
-		q.or().equalTo("name", "T1").equalTo("name", "T3").end();
+		q.or().eq("name", "T1").eq("name", "T3").end();
 		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -240,7 +240,7 @@ public abstract class DaoTestCase {
 		List<Teacher> expect = Teacher.creates(4, 5);
 		
 		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
-		q.notIn("name", new String[] { "T1", "T2", "T3" });
+		q.nin("name", new String[] { "T1", "T2", "T3" });
 		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -262,7 +262,7 @@ public abstract class DaoTestCase {
 		List<Student> expect = Student.creates(4, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.notBetween("id", 1, 3);
+		q.nbetween("id", 1, 3);
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -284,7 +284,7 @@ public abstract class DaoTestCase {
 		List<Student> expect = Student.creates(2, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.notLike("name", "%1");
+		q.nlike("name", "%1");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -307,7 +307,7 @@ public abstract class DaoTestCase {
 		List<Student> expect = Student.creates(2, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.notMatch("name", "1");
+		q.nmatch("name", "1");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -329,7 +329,7 @@ public abstract class DaoTestCase {
 		List<Student> expect = new ArrayList<Student>();
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.notMatch("name", "S");
+		q.nmatch("name", "S");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -351,7 +351,7 @@ public abstract class DaoTestCase {
 		List<Student> expect = Student.creates(2, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.notMatch("name", "1");
+		q.nmatch("name", "1");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -373,7 +373,7 @@ public abstract class DaoTestCase {
 		List<Student> expect = Student.creates(2, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.notLike("name", "SS%1", 'S');
+		q.nlike("name", "SS%1", 'S');
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -477,7 +477,7 @@ public abstract class DaoTestCase {
 		List<Student> expect = Student.creates(2, 3);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.greaterThan("id", 0).start(1).limit(2);
+		q.gt("id", 0).start(1).limit(2);
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);

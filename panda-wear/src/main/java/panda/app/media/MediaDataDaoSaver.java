@@ -85,7 +85,7 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 			Dao dao = daoClient.getDao();
 
 			MediaDataQuery mdq = new MediaDataQuery();
-			mdq.mid().equalTo(m.getId());
+			mdq.mid().eq(m.getId());
 			dao.deletes(mdq);
 		}
 		catch (Exception e) {

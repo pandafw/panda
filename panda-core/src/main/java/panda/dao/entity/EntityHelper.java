@@ -158,7 +158,7 @@ public abstract class EntityHelper {
 			if (dv == null) {
 				return false;
 			}
-			q.equalTo(ef.getName(), dv);
+			q.eq(ef.getName(), dv);
 		}
 
 		return dao.exists(q);
@@ -232,7 +232,7 @@ public abstract class EntityHelper {
 			}
 			else {
 				allNull = false;
-				q.equalTo(rf.getName(), dv);
+				q.eq(rf.getName(), dv);
 			}
 			i++;
 		}
@@ -301,7 +301,7 @@ public abstract class EntityHelper {
 		}
 		
 		DataQuery<T> q = new DataQuery<T>(entity);
-		q.equalTo(ef.getName(), dv).limit(1);
+		q.eq(ef.getName(), dv).limit(1);
 		return dao.fetch(q);
 	}
 	
@@ -350,7 +350,7 @@ public abstract class EntityHelper {
 			}
 			else {
 				allNull = false;
-				q.equalTo(ef.getName(), dv);
+				q.eq(ef.getName(), dv);
 			}
 		}
 

@@ -66,7 +66,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 			Dao dao = daoClient.getDao();
 	
 			TemplateQuery tq = new TemplateQuery();
-			tq.status().equalTo(VAL.STATUS_ACTIVE);
+			tq.status().eq(VAL.STATUS_ACTIVE);
 			List<Template> list = dao.select(tq);
 	
 			databaseTemplateLoader.loadTemplates(list);

@@ -93,7 +93,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 
 			Dao dao = daoClient.getDao();
 			ResourceQuery rq = new ResourceQuery();
-			rq.status().equalTo(VAL.STATUS_ACTIVE);
+			rq.status().eq(VAL.STATUS_ACTIVE);
 			List<Resource> list = dao.select(rq);
 			databaseResourceLoader.loadResources(list);
 		}
@@ -102,7 +102,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 
 			Dao dao = daoClient.getDao();
 			PropertyQuery pq = new PropertyQuery();
-			pq.status().equalTo(VAL.STATUS_ACTIVE);
+			pq.status().eq(VAL.STATUS_ACTIVE);
 			List<Property> list = dao.select(pq);
 			databaseResourceLoader.loadResources(list);
 		}

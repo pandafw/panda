@@ -41,7 +41,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @return this
 	 */
 	public E notLike(String value) {
-		parent.getQuery().notLike(field, value);
+		parent.getQuery().nlike(field, value);
 		return parent;
 	}
 
@@ -52,7 +52,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @return this
 	 */
 	public E notLike(String value, char esc) {
-		parent.getQuery().notLike(field, value, esc);
+		parent.getQuery().nlike(field, value, esc);
 		return parent;
 	}
 
@@ -72,7 +72,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @return this
 	 */
 	public E notMatch(String value) {
-		parent.getQuery().notMatch(field, value);
+		parent.getQuery().nmatch(field, value);
 		return parent;
 	}
 
@@ -82,7 +82,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @return this
 	 */
 	public E leftMatch(String value) {
-		parent.getQuery().leftMatch(field, value);
+		parent.getQuery().lmatch(field, value);
 		return parent;
 	}
 
@@ -92,7 +92,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @return this
 	 */
 	public E notLeftMatch(String value) {
-		parent.getQuery().notLeftMatch(field, value);
+		parent.getQuery().nlmatch(field, value);
 		return parent;
 	}
 
@@ -102,7 +102,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @return this
 	 */
 	public E rightMatch(String value) {
-		parent.getQuery().rightMatch(field, value);
+		parent.getQuery().rmatch(field, value);
 		return parent;
 	}
 
@@ -112,7 +112,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @return this
 	 */
 	public E notRightMatch(String value) {
-		parent.getQuery().notRightMatch(field, value);
+		parent.getQuery().nrmatch(field, value);
 		return parent;
 	}
 }

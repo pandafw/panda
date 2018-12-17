@@ -338,7 +338,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				if (vs[0] != null) {
 					dq.and();
 					for (int i = 0; i < keys.size(); i++) {
-						dq.equalTo(keys.get(i).getName(), vs[i]);
+						dq.eq(keys.get(i).getName(), vs[i]);
 					}
 					dq.end();
 					count++;

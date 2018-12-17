@@ -1075,7 +1075,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> equalTo(String field, Object value) {
+	public DataQuery<T> eq(String field, Object value) {
 		return addCompareValueExpression(field, Operator.EQUAL, value);
 	}
 
@@ -1085,7 +1085,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> notEqualTo(String field, Object value) {
+	public DataQuery<T> ne(String field, Object value) {
 		return addCompareValueExpression(field, Operator.NOT_EQUAL, value);
 	}
 
@@ -1095,7 +1095,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> greaterThan(String field, Object value) {
+	public DataQuery<T> gt(String field, Object value) {
 		return addCompareValueExpression(field, Operator.GREATER_THAN, value);
 	}
 
@@ -1105,7 +1105,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> greaterThanOrEqualTo(String field, Object value) {
+	public DataQuery<T> ge(String field, Object value) {
 		return addCompareValueExpression(field, Operator.GREATER_EQUAL, value);
 	}
 
@@ -1115,7 +1115,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> lessThan(String field, Object value) {
+	public DataQuery<T> lt(String field, Object value) {
 		return addCompareValueExpression(field, Operator.LESS_THAN, value);
 	}
 
@@ -1125,7 +1125,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> lessThanOrEqualTo(String field, Object value) {
+	public DataQuery<T> le(String field, Object value) {
 		return addCompareValueExpression(field, Operator.LESS_EQUAL, value);
 	}
 
@@ -1156,7 +1156,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> notLike(String field, String value) {
+	public DataQuery<T> nlike(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LIKE, value);
 	}
 
@@ -1167,7 +1167,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param esc escape char
 	 * @return this
 	 */
-	public DataQuery<T> notLike(String field, String value, char esc) {
+	public DataQuery<T> nlike(String field, String value, char esc) {
 		return addCompareValueExpression(field, Operator.NOT_LIKE, new Object[] { value, esc });
 	}
 
@@ -1187,7 +1187,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> notMatch(String field, String value) {
+	public DataQuery<T> nmatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_MATCH, value);
 	}
 
@@ -1197,7 +1197,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> leftMatch(String field, String value) {
+	public DataQuery<T> lmatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.LEFT_MATCH, value);
 	}
 
@@ -1207,7 +1207,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> notLeftMatch(String field, String value) {
+	public DataQuery<T> nlmatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LEFT_MATCH, value);
 	}
 
@@ -1217,7 +1217,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> rightMatch(String field, String value) {
+	public DataQuery<T> rmatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.RIGHT_MATCH, value);
 	}
 
@@ -1227,7 +1227,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> notRightMatch(String field, String value) {
+	public DataQuery<T> nrmatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_RIGHT_MATCH, value);
 	}
 
@@ -1237,7 +1237,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> equalToField(String field, String compareField) {
+	public DataQuery<T> eqf(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.EQUAL, compareField);
 	}
 
@@ -1247,7 +1247,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> notEqualToField(String field, String compareField) {
+	public DataQuery<T> nef(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.NOT_EQUAL, compareField);
 	}
 
@@ -1257,7 +1257,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> greaterThanField(String field, String compareField) {
+	public DataQuery<T> gtf(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_THAN, compareField);
 	}
 
@@ -1267,7 +1267,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> greaterThanOrEqualToField(String field, String compareField) {
+	public DataQuery<T> gef(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_EQUAL, compareField);
 	}
 
@@ -1277,7 +1277,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> lessThanField(String field, String compareField) {
+	public DataQuery<T> ltf(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_THAN, compareField);
 	}
 
@@ -1287,7 +1287,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> lessThanOrEqualToField(String field, String compareField) {
+	public DataQuery<T> lef(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_EQUAL, compareField);
 	}
 
@@ -1317,7 +1317,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public DataQuery<T> notIn(String field, Object[] values) {
+	public DataQuery<T> nin(String field, Object[] values) {
 		return addCompareCollectionExpression(field, Operator.NOT_IN, values);
 	}
 
@@ -1327,7 +1327,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public DataQuery<T> notIn(String field, Collection<?> values) {
+	public DataQuery<T> nin(String field, Collection<?> values) {
 		return addCompareCollectionExpression(field, Operator.NOT_IN, values);
 	}
 
@@ -1349,7 +1349,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param value2 value to
 	 * @return this
 	 */
-	public DataQuery<T> notBetween(String field, Object value1, Object value2) {
+	public DataQuery<T> nbetween(String field, Object value1, Object value2) {
 		return addCompareRanageExpression(field, Operator.NOT_BETWEEN, value1, value2);
 	}
 
@@ -1371,7 +1371,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 				if (k == null) {
 					throw new IllegalArgumentException("Null primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
 				}
-				equalTo(ef.getName(), k);
+				eq(ef.getName(), k);
 			}
 		}
 		else {
@@ -1382,7 +1382,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 			int i = 0;
 			for (EntityField ef : entity.getFields()) {
 				if (ef.isPrimaryKey()) {
-					equalTo(ef.getName(), keys[i++]);
+					eq(ef.getName(), keys[i++]);
 				}
 			}
 		}

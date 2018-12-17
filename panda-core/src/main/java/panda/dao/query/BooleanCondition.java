@@ -20,7 +20,7 @@ public class BooleanCondition<E extends EntityQuery> extends ObjectCondition<E> 
 	 * @return parent
 	 */
 	public E isTrue() {
-		parent.getQuery().equalTo(field, true);
+		parent.getQuery().eq(field, true);
 		return parent;
 	}
 
@@ -28,7 +28,7 @@ public class BooleanCondition<E extends EntityQuery> extends ObjectCondition<E> 
 	 * @return parent
 	 */
 	public E isFalse() {
-		parent.getQuery().equalTo(field, false);
+		parent.getQuery().eq(field, false);
 		return parent;
 	}
 }

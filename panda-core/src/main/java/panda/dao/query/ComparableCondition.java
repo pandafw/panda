@@ -21,8 +21,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param value value
 	 * @return parent
 	 */
-	public E equalTo(T value) {
-		parent.getQuery().equalTo(field, value);
+	public E eq(T value) {
+		parent.getQuery().eq(field, value);
 		return parent;
 	}
 
@@ -30,8 +30,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E equalToField(String otherField) {
-		parent.getQuery().equalToField(field, otherField);
+	public E eqf(String otherField) {
+		parent.getQuery().eqf(field, otherField);
 		return parent;
 	}
 
@@ -39,8 +39,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param value value
 	 * @return parent
 	 */
-	public E notEqualTo(T value) {
-		parent.getQuery().notEqualTo(field, value);
+	public E ne(T value) {
+		parent.getQuery().ne(field, value);
 		return parent;
 	}
 
@@ -48,8 +48,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E notEqualToField(String otherField) {
-		parent.getQuery().notEqualToField(field, otherField);
+	public E nef(String otherField) {
+		parent.getQuery().nef(field, otherField);
 		return parent;
 	}
 
@@ -57,8 +57,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param value value
 	 * @return parent
 	 */
-	public E greaterThan(T value) {
-		parent.getQuery().greaterThan(field, value);
+	public E gt(T value) {
+		parent.getQuery().gt(field, value);
 		return parent;
 	}
 
@@ -66,8 +66,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E greaterThanField(String otherField) {
-		parent.getQuery().greaterThanField(field, otherField);
+	public E gtf(String otherField) {
+		parent.getQuery().gtf(field, otherField);
 		return parent;
 	}
 
@@ -75,8 +75,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param value value
 	 * @return parent
 	 */
-	public E greaterThanOrEqualTo(T value) {
-		parent.getQuery().greaterThanOrEqualTo(field, value);
+	public E ge(T value) {
+		parent.getQuery().ge(field, value);
 		return parent;
 	}
 
@@ -84,8 +84,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E greaterThanOrEqualToField(String otherField) {
-		parent.getQuery().greaterThanOrEqualToField(field, otherField);
+	public E gef(String otherField) {
+		parent.getQuery().gef(field, otherField);
 		return parent;
 	}
 
@@ -93,8 +93,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param value value
 	 * @return parent
 	 */
-	public E lessThan(T value) {
-		parent.getQuery().lessThan(field, value);
+	public E lt(T value) {
+		parent.getQuery().lt(field, value);
 		return parent;
 	}
 
@@ -102,8 +102,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E lessThanField(String otherField) {
-		parent.getQuery().lessThanField(field, otherField);
+	public E ltf(String otherField) {
+		parent.getQuery().ltf(field, otherField);
 		return parent;
 	}
 
@@ -111,8 +111,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param value value
 	 * @return parent
 	 */
-	public E lessThanOrEqualTo(T value) {
-		parent.getQuery().lessThanOrEqualTo(field, value);
+	public E le(T value) {
+		parent.getQuery().le(field, value);
 		return parent;
 	}
 
@@ -120,8 +120,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E lessThanOrEqualToField(String otherField) {
-		parent.getQuery().lessThanOrEqualToField(field, otherField);
+	public E lef(String otherField) {
+		parent.getQuery().lef(field, otherField);
 		return parent;
 	}
 
@@ -147,8 +147,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param values value list
 	 * @return parent
 	 */
-	public E notIn(T[] values) {
-		parent.getQuery().notIn(field, values);
+	public E nin(T[] values) {
+		parent.getQuery().nin(field, values);
 		return parent;
 	}
 
@@ -156,8 +156,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param values value list
 	 * @return parent
 	 */
-	public E notIn(Collection<T> values) {
-		parent.getQuery().notIn(field, values);
+	public E nin(Collection<T> values) {
+		parent.getQuery().nin(field, values);
 		return parent;
 	}
 
@@ -176,8 +176,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param maxValue maxValue
 	 * @return parent
 	 */
-	public E notBetween(T minValue, T maxValue) {
-		parent.getQuery().notBetween(field, minValue, maxValue);
+	public E nbetween(T minValue, T maxValue) {
+		parent.getQuery().nbetween(field, minValue, maxValue);
 		return parent;
 	}
 }

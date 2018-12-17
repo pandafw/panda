@@ -139,59 +139,59 @@ public abstract class DataQueryHelper {
 				dq.between(name, value, value2);
 			}
 			else {
-				dq.equalTo(name, value);
+				dq.eq(name, value);
 			}
 		}
 		else if (Filter.NOT_EQUAL.equals(f.getComparator())) {
 			if (value instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
-				dq.notBetween(name, value, value2);
+				dq.nbetween(name, value, value2);
 			}
 			else {
-				dq.notEqualTo(name, value);
+				dq.ne(name, value);
 			}
 		}
 		else if (Filter.LESS_THAN.equals(f.getComparator())) {
-			dq.lessThan(name, value);
+			dq.lt(name, value);
 		}
 		else if (Filter.LESS_EQUAL.equals(f.getComparator())) {
-			dq.lessThanOrEqualTo(name, value);
+			dq.le(name, value);
 		}
 		else if (Filter.GREATER_THAN.equals(f.getComparator())) {
-			dq.greaterThan(name, value);
+			dq.gt(name, value);
 		}
 		else if (Filter.GREATER_EQUAL.equals(f.getComparator())) {
-			dq.greaterThanOrEqualTo(name, value);
+			dq.ge(name, value);
 		}
 		else if (Filter.LIKE.equals(f.getComparator())) {
 			dq.like(name, value.toString());
 		}
 		else if (Filter.NOT_LIKE.equals(f.getComparator())) {
-			dq.notLike(name, value.toString());
+			dq.nlike(name, value.toString());
 		}
 		else if (Filter.MATCH.equals(f.getComparator())) {
 			dq.match(name, value.toString());
 		}
 		else if (Filter.NOT_MATCH.equals(f.getComparator())) {
-			dq.notMatch(name, value.toString());
+			dq.nmatch(name, value.toString());
 		}
 		else if (Filter.LEFT_MATCH.equals(f.getComparator())) {
-			dq.leftMatch(name, value.toString());
+			dq.lmatch(name, value.toString());
 		}
 		else if (Filter.NOT_LEFT_MATCH.equals(f.getComparator())) {
-			dq.notLeftMatch(name, value.toString());
+			dq.nlmatch(name, value.toString());
 		}
 		else if (Filter.RIGHT_MATCH.equals(f.getComparator())) {
-			dq.rightMatch(name, value.toString());
+			dq.rmatch(name, value.toString());
 		}
 		else if (Filter.NOT_RIGHT_MATCH.equals(f.getComparator())) {
-			dq.notRightMatch(name, value.toString());
+			dq.nrmatch(name, value.toString());
 		}
 		else if (Filter.IN.equals(f.getComparator())) {
 			dq.in(name, values);
 		}
 		else if (Filter.NOT_IN.equals(f.getComparator())) {
-			dq.notIn(name, values);
+			dq.nin(name, values);
 		}
 		else if (Filter.BETWEEN.equals(f.getComparator())) {
 			Object v1 = values.get(0);
@@ -200,10 +200,10 @@ public abstract class DataQueryHelper {
 			if (v1 == null && v2 == null) {
 			}
 			else if (v1 == null) {
-				dq.lessThanOrEqualTo(name, v2);
+				dq.le(name, v2);
 			}
 			else if (v2 == null) {
-				dq.greaterThanOrEqualTo(name, v1);
+				dq.ge(name, v1);
 			}
 			else {
 				if (v1 instanceof Date && v2 instanceof Date && Filter.VT_DATE.equals(f.getType())) {

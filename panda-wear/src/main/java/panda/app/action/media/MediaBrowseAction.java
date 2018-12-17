@@ -113,17 +113,17 @@ public class MediaBrowseAction extends AbstractAction {
 
 		MediaQuery mq = new MediaQuery();
 		if (arg.ds != null) {
-			mq.createdAt().greaterThanOrEqualTo(arg.ds);
+			mq.createdAt().ge(arg.ds);
 		}
 		if (arg.de != null) {
 			arg.de = DateTimes.zeroCeiling(arg.de);
-			mq.createdAt().lessThan(arg.de);
+			mq.createdAt().lt(arg.de);
 		}
 		if (Strings.isNotEmpty(arg.qs)) {
 			mq.name().match(arg.qs);
 		}
 		if (arg.sn != null) {
-			mq.id().lessThan(arg.sn);
+			mq.id().lt(arg.sn);
 		}
 		mq.orderBy(Media.ID, false);
 		mq.limit(getMediaLimit());
