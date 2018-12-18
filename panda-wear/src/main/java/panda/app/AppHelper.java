@@ -7,10 +7,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
-import panda.app.entity.Media;
-import panda.app.entity.Resource;
-import panda.app.entity.Template;
-import panda.app.media.MediaData;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
@@ -22,30 +18,17 @@ import panda.dao.sql.Sqls;
 import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.io.Streams;
-import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.vfs.dao.DaoFileData;
-import panda.vfs.dao.DaoFileItem;
 
 /**
  */
 public abstract class AppHelper {
 	private static Log log = Logs.getLog(AppHelper.class);
 	
-	public static final Class[] APP_ENTITIES = {
-			DaoFileItem.class,
-			DaoFileData.class,
-			Template.class,
-			Resource.class,
-			Media.class,
-			MediaData.class
-		};
-		
-
 	public static void ddlTables(Appendable writer, Dao dao, Class<?> ... classes) {
 		try {
 			for (Class<?> c : classes) {
@@ -76,20 +59,6 @@ public abstract class AppHelper {
 			log.info("Drop table for " + c);
 			dao.drop(c);
 		}
-	}
-
-	public static void ddlDefaultTables(Appendable writer, Dao dao) {
-		ddlTables(writer, dao, APP_ENTITIES);
-	}
-
-	public static void createDefaultTables(Dao dao) {
-		createTables(dao, APP_ENTITIES);
-	}
-	
-	public static void dropDefaultTables(Dao dao) {
-		Class[] es = APP_ENTITIES.clone();
-		Arrays.reverse(es);
-		dropTables(dao, es);
 	}
 
 	public static void copyTables(final Dao sdao, final Dao ddao, Class<?>... classes) {

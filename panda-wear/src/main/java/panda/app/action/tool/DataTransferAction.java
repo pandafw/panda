@@ -1,12 +1,12 @@
 package panda.app.action.tool;
 
 
+import java.util.Collection;
 import java.util.Map;
 
 import panda.app.action.work.GenericSyncWorkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.util.AppDaoClientFactory;
 import panda.dao.Dao;
@@ -30,9 +30,6 @@ public class DataTransferAction extends GenericSyncWorkAction {
 		public String target;
 	}
 
-	@IocInject(MVC.DATA_ENTITIES)
-	protected Class<?>[] ENTITIES;
-	
 	@IocInject
 	protected AppDaoClientFactory dcfactory;
 
@@ -49,6 +46,10 @@ public class DataTransferAction extends GenericSyncWorkAction {
 		return arg;
 	}
 
+	protected Collection<Class<?>> getEntities() {
+		return getDaoClient().getEntities().keySet();
+	}
+	
 	public Map<String, String> getDataSettings() {
 		if (dataSettings == null) {
 			String prefix = SET.DATA + '.';
@@ -63,6 +64,7 @@ public class DataTransferAction extends GenericSyncWorkAction {
 		
 		return dataSettings;
 	}
+	
 	@At("")
 	@To(Views.SFTL)
 	public void input() {
@@ -87,8 +89,9 @@ public class DataTransferAction extends GenericSyncWorkAction {
 		final Dao sdao = sdc.getDao();
 		final Dao ddao = ddc.getDao();
 		
-		status.total = ENTITIES.length;
-		for (final Class<?> c : ENTITIES) {
+		Collection<Class<?>> entities = getEntities();
+		status.total = entities.size();
+		for (final Class<?> c : entities) {
 			printInfo("Copy table for " + c);
 			
 			final DaoIterator di = sdao.iterate(c);

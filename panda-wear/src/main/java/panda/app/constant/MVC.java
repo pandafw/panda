@@ -19,7 +19,6 @@ public interface MVC extends MvcConstants {
 	// data
 	//
 	public static final String DATA_QUERY_TIMEOUT = "panda.data.query.timeout";
-	public static final String DATA_ENTITIES = "panda.data.entities";
 	
 	//------------------------------------------------
 	// cache
