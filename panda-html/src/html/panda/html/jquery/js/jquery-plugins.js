@@ -457,23 +457,27 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
-	$.jcss = function(url, dup) {
-		if (dup && $('link[href="' + url + '"]').size()) {
+	$.jcss = function(url) {
+		if ($('link[href="' + url + '"]').size()) {
 			return false;
 		}
-		$('<link>').attr({ type: 'text/css', rel: 'stylesheet', href: url}).appendTo('body');
+		$('<link>').attr({ type: 'text/css', rel: 'stylesheet', href: url}).appendTo('head');
 		return true;
 	};
 })(jQuery);
 
 (function($) {
 	$.jscript = function(url, async) {
+		if ($('script[src="' + url + '"]').size()) {
+			return false;
+		}
+
 		var s = document.createElement('script');
 		s.type = 'text/javascript';
 		s.async = async;
 		s.src = url;
 		$('body').append(s);
-		return $;
+		return true;
 	};
 })(jQuery);
 
