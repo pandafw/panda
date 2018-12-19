@@ -724,7 +724,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATETIME),
-		@Validate(value=Validators.EL, params="{ el: 'top.value > top.parent.value.ev' }", msgId=Validators.MSGID_DATETIME_TO)
+		@Validate(value=Validators.EL, params="{ el: 'top.parent.value.ev == null || top.value > top.parent.value.ev' }", msgId=Validators.MSGID_DATETIME_TO)
 	})
 	public Date getEv2() {
 		return getDateTimeValue2();
@@ -772,7 +772,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE),
-		@Validate(value=Validators.EL, params="{ el: 'top.value > top.parent.value.dv' }", msgId=Validators.MSGID_DATE_TO)
+		@Validate(value=Validators.EL, params="{ el: 'top.parent.value.dv == null || top.value > top.parent.value.dv' }", msgId=Validators.MSGID_DATE_TO)
 	})
 	public Date getDv2() {
 		return getDateValue2();
@@ -820,7 +820,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_TIME),
-		@Validate(value=Validators.EL, params="{ el: 'top.value > top.parent.value.tv' }", msgId=Validators.MSGID_TIME_TO)
+		@Validate(value=Validators.EL, params="{ el: 'top.parent.value.tv == null || top.value > top.parent.value.tv' }", msgId=Validators.MSGID_TIME_TO)
 	})
 	public Date getTv2() {
 		return getTimeValue2();
@@ -868,7 +868,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-		@Validate(value=Validators.EL, params="{ el: 'top.value > top.parent.value.nv' }", msgId=Validators.MSGID_NUMBER_TO)
+		@Validate(value=Validators.EL, params="{ el: 'top.parent.value.nv == null || top.value > top.parent.value.nv' }", msgId=Validators.MSGID_NUMBER_TO)
 	})
 	public Number getNv2() {
 		return getNumberValue2();
