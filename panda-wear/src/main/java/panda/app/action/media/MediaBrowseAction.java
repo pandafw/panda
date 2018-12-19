@@ -28,6 +28,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServletResponser;
+import panda.servlet.HttpServlets;
 import panda.vfs.FileItem;
 
 @At("${super_path}/media")
@@ -49,6 +50,12 @@ public class MediaBrowseAction extends AbstractAction {
 			Media m = dao.fetch(Media.class, id);
 
 			if (m != null) {
+				int maxage = getSettings().getPropertyAsInt(SET.MEDIA_CACHE_MAXAGE, Medias.DEFAULT_CACHE_MAXAGE);
+
+				if (HttpServlets.checkAndSetNotModified(getRequest(), getResponse(), m.getUpdatedAt(), maxage)) {
+					return;
+				}
+				
 				MediaData md = null;
 				if (sc == null) {
 					md = mds.find(id);
@@ -58,7 +65,7 @@ public class MediaBrowseAction extends AbstractAction {
 					md = mds.find(id, sz); 
 				}
 				if (md != null) {
-					write(m, md);
+					write(m, md, maxage);
 					return;
 				}
 			}
@@ -82,7 +89,7 @@ public class MediaBrowseAction extends AbstractAction {
 		find(id, SET.MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
 	}
 
-	private void write(Media m, MediaData md) throws IOException {
+	private void write(Media m, MediaData md, int maxage) throws IOException {
 		String filename = m.getName();
 		if (Strings.isEmpty(filename)) { 
 			filename = "media-" + (m.getMid() == null ? m.getId() : m.getMid()) + ".jpg";
@@ -95,6 +102,7 @@ public class MediaBrowseAction extends AbstractAction {
 		hsrs.setFileName(filename);
 		hsrs.setContentType(MimeTypes.getMimeType(hsrs.getFileName()));
 		hsrs.setContentLength(md.getSize());
+		hsrs.setMaxAge(maxage);
 		hsrs.writeHeader();
 		hsrs.writeStream(md.open());
 	}

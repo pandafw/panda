@@ -6,6 +6,7 @@ import panda.app.entity.Media;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.lang.Strings;
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -19,6 +20,8 @@ public class Medias {
 	public static final int DEFAULT_ICON_SIZE = 32;
 
 	public static final int DEFAULT_THUMB_SIZE = 128;
+
+	public static final int DEFAULT_CACHE_MAXAGE = 30 * DateTimes.SEC_DAY;
 
 	public static String getMediaIcon(Media m) {
 		return "<img class=\"p-mwh32px\" src=\"icon?id=" + m.getId() + "\">";
