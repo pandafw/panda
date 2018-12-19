@@ -180,7 +180,6 @@ public class Email {
 	/**
 	 * add to
 	 * @param tos to address array
-	 * @param name name
 	 * @throws EmailException if an error occurs
 	 */
 	public void addTos(String... tos) throws EmailException {
@@ -252,7 +251,6 @@ public class Email {
 	/**
 	 * add cc
 	 * @param ccs cc address array
-	 * @param name name
 	 * @throws EmailException if an error occurs
 	 */
 	public void addCcs(String... ccs) throws EmailException {
@@ -319,6 +317,20 @@ public class Email {
 	 */
 	public void addBcc(String addr, String name) throws EmailException {
 		addBcc(new EmailAddress(addr, name));
+	}
+
+	/**
+	 * add bcc
+	 * @param bccs bcc address array
+	 * @throws EmailException if an error occurs
+	 */
+	public void addBccs(String... bccs) throws EmailException {
+		if (Arrays.isEmpty(bccs)) {
+			return;
+		}
+		for (String bcc : bccs) {
+			addBcc(bcc);
+		}
 	}
 
 	/**
