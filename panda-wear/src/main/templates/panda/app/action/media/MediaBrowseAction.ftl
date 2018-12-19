@@ -6,9 +6,16 @@
 <body>
 
 <style>
-.media-search.form-group {
-	float: right;
-	margin: 0 5px;
+#media_form .form-group {
+	display: inline-block;
+	margin-bottom: 10px;
+	vertical-align: middle;
+}
+.media-de.form-group, .media-qs.form-group {
+	margin-right: 10px;
+}
+#media_tool a {
+	margin: 0 10px 0 0;
 }
 .media-thumb {
 	display: inline-block;
@@ -20,14 +27,6 @@
 #media_uploader {
 	display: none;
 	margin: 10px 0;
-}
-#media_tool {
-	display: inline-block;
-	margin: 0 10px;
-	vertical-align: middle;
-}
-#media_tool a {
-	margin: 0 5px;
 }
 #media_browser {
 	margin: 15px 0;
@@ -47,8 +46,9 @@
 		<#include "/action-alert.ftl"/>
 	</div>
 	
-	<@p.form id="media_form" action="browse" theme="bs3i">
+	<@p.form id="media_form" action="browse" theme="bs3">
 		<@p.datepicker
+			cssClass="media-ds"
 			name="ds"
 			maxlength="10"
 			size="10"
@@ -56,23 +56,24 @@
 		/>
 		 ~ 
 		<@p.datepicker
+			cssClass="media-de"
 			name="de"
 			maxlength="10"
 			size="10"
 			/>
 		
-		<div id="media_tool">
-			<@p.a id="media_tool_upload" btn="default" icon="upload" label="#(btn-upload)"/>
-			<@p.a id="media_tool_delete" btn="warning" icon="trash" label="#(btn-delete)" cssClass="p-hidden"/>
-		</div>
-		
 		<@p.textfield
-			cssClass="media-search"
+			cssClass="media-qs"
 			name="qs"
 			size="18"
 			ricon="search"
 			placeholder="#(btn-search)"
 			/>
+		
+		<div id="media_tool" class="form-group">
+			<@p.a id="media_btn_upload" btn="default" icon="upload" label="#(btn-upload)"/>
+			<@p.a id="media_btn_delete" btn="warning" icon="trash" label="#(btn-delete)" cssClass="p-hidden"/>
+		</div>
 	</@p.form>
 
 	<@p.uploader
@@ -99,18 +100,22 @@
 	var media_loading = false;
 	
 	function onPageLoad() {
+		$.jcss('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>css?v=${assist.appVersion}');
+		$.jscript('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>js?v=${assist.appVersion}');
+
 		media_date_format = new DateFormat("<@p.text name='date-format-datetime'/>");
 
+		media_has_next = (media_items.length >= media_limit);
 		$.each(media_items, function() {
 			media_append(this);
 		});
-		media_has_next = (media_items.length >= media_limit);
+		media_lightbox();
 
-		$('#media_tool_upload').click(function(e) {
+		$('#media_btn_upload').click(function(e) {
 			e.preventDefault();
 			$('#media_uploader').slideToggle();
 		});
-		$('#media_tool_delete').click(function(e) {
+		$('#media_btn_delete').click(function(e) {
 			e.preventDefault();
 			media_delete();
 		});
@@ -121,17 +126,26 @@
 		$(window).scroll(media_on_scroll);
 	}
 
-	function media_on_click() {
+	function media_lightbox() {
+		if (typeof($.fn.lightbox) != 'function') {
+			setTimeout(media_lightbox, 100);
+			return;
+		}
+		$('#media_browser .media-thumb').lightbox({bindEvent: 'dblclick contextmenu'});
+	}
+	
+	function media_on_click(e) {
+		e.preventDefault();
 		$(this).toggleClass('media-select');
-		$('#media_tool_delete')[$('#media_browser .media-select').size() ? 'removeClass' : 'addClass']('p-hidden');
+		$('#media_btn_delete')[$('#media_browser .media-select').size() ? 'removeClass' : 'addClass']('p-hidden');
 		return false;
 	}
 	
 	function media_title(m) {
 		return m.name 
-			+ '<br>' + m.width + ' x ' + m.height
+			+ '\r\n' + m.width + ' x ' + m.height
 			+ ' (' + String.formatSize(m.size) + ')'
-			+ '<br>' + media_date_format.format(new Date(m.createdAt));
+			+ '\r\n' + media_date_format.format(new Date(m.createdAt));
 	}
 
 	function media_append(m) {
@@ -144,10 +158,12 @@
 
 	function media_create(m) {
 		return $('<a class="media-thumb img-thumbnail" href="#">')
-			.append($('<img src="thumb?id=' + m.id + '"/>'))
-			.attr('title', media_title(m))
+			.append($('<img src="thumb?id=' + m.id + '"/>').attr('alt', m.name))
+			.attr({
+				'href': 'media?id=' + m.id,
+				'title': media_title(m)
+			})
 			.data('mid', m.id)
-			.tooltip({placement: 'auto', html: true})
 			.click(media_on_click);
 	}
 	
@@ -161,6 +177,7 @@
 		else {
 			media_prepend(r);
 		}
+		media_lightbox();
 		return true;
 	}
 
@@ -198,6 +215,7 @@
 				}
 
 				$('#media_browser .media-select').remove();
+				$('#media_btn_delete').addClass('p-hidden');
 			},
 			error: media_ajax_error,
 			complete: media_ajax_end
@@ -230,6 +248,7 @@
 					$.each(d.result, function() {
 						media_append(this);
 					});
+					media_lightbox();
 				}
 				media_has_next = d.result ? (d.result.length >= media_limit) : false;
 			},
