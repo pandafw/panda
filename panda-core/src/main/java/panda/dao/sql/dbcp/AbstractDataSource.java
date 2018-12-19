@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -37,7 +38,7 @@ public abstract class AbstractDataSource implements DataSource {
 	private static Log log = Logs.getLog(AbstractDataSource.class);
 
 	protected JdbcConfig jdbc = new JdbcConfig();
-	protected Properties props = new Properties();
+	protected Properties prop = new Properties();
 
 	/**
 	 * Constructor
@@ -81,10 +82,10 @@ public abstract class AbstractDataSource implements DataSource {
 		}
 
 		if (jdbc.username != null) {
-			props.put("user", jdbc.username);
+			prop.put("user", jdbc.username);
 		}
 		if (jdbc.password != null) {
-			props.put("password", jdbc.password);
+			prop.put("password", jdbc.password);
 		}
 	}
 
@@ -152,17 +153,17 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * @return the driver
+	 * @return the properties
 	 */
-	public Properties getProps() {
-		return props;
+	public Properties getProp() {
+		return prop;
 	}
 
 	/**
-	 * @param driver the driver to set
+	 * @param prop the properties to set
 	 */
-	public void setProps(Properties driver) {
-		this.props = driver;
+	public void setProp(Properties prop) {
+		this.prop = prop;
 	}
 
 	/**
@@ -179,6 +180,11 @@ public abstract class AbstractDataSource implements DataSource {
 		sb.append("\n jdbc.username                   ").append(jdbc.getUsername());
 		sb.append("\n jdbc.password                   ").append(jdbc.getPassword());
 		sb.append("\n jdbc.autoCommit                 ").append(jdbc.isAutoCommit());
+		sb.append("\n===============================================================");
+		for (Entry en : prop.entrySet()) {
+			String k = (String)en.getKey();
+			sb.append("\n prop.").append(Strings.rightPad(k, 27)).append(en.getValue());
+		}
 		sb.append("\n===============================================================");
 
 		return sb.toString();

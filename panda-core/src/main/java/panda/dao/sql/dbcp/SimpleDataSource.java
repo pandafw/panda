@@ -196,16 +196,16 @@ public class SimpleDataSource extends AbstractDataSource {
 		sb.append("\n pool.pingNotUsedFor             ").append(pool.getPingNotUsedFor());
 		sb.append("\n pool.timeToWait                 ").append(pool.getTimeToWait());
 		sb.append("\n --------------------------------------------------------------");
-		sb.append("\n activeConnections              ").append(actives.size());
-		sb.append("\n idleConnections                ").append(idles.size());
-		sb.append("\n requestCount                   ").append(getRequestCount());
-		sb.append("\n averageRequestTime             ").append(getAverageRequestTime());
-		sb.append("\n averageCheckoutTime            ").append(getAverageCheckoutTime());
-		sb.append("\n claimedOverdue                 ").append(getClaimedOverdueConnectionCount());
-		sb.append("\n averageOverdueCheckoutTime     ").append(getAverageOverdueCheckoutTime());
-		sb.append("\n hadToWait                      ").append(getHadToWaitCount());
-		sb.append("\n averageWaitTime                ").append(getAverageWaitTime());
-		sb.append("\n badConnectionCount             ").append(getBadConnectionCount());
+		sb.append("\n activeConnections               ").append(actives.size());
+		sb.append("\n idleConnections                 ").append(idles.size());
+		sb.append("\n requestCount                    ").append(getRequestCount());
+		sb.append("\n averageRequestTime              ").append(getAverageRequestTime());
+		sb.append("\n averageCheckoutTime             ").append(getAverageCheckoutTime());
+		sb.append("\n claimedOverdue                  ").append(getClaimedOverdueConnectionCount());
+		sb.append("\n averageOverdueCheckoutTime      ").append(getAverageOverdueCheckoutTime());
+		sb.append("\n hadToWait                       ").append(getHadToWaitCount());
+		sb.append("\n averageWaitTime                 ").append(getAverageWaitTime());
+		sb.append("\n badConnectionCount              ").append(getBadConnectionCount());
 		sb.append("\n===============================================================");
 
 		return sb.toString();
@@ -336,7 +336,7 @@ public class SimpleDataSource extends AbstractDataSource {
 				// Pool does not have available connection
 				if (actives.size() < pool.maxActive) {
 					// create new connection
-					SimplePooledConnection conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, props), this);
+					SimplePooledConnection conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, prop), this);
 					Connection rcon = conn.getRealConnection();
 					if (rcon.getAutoCommit() != jdbc.autoCommit) {
 						rcon.setAutoCommit(jdbc.autoCommit);

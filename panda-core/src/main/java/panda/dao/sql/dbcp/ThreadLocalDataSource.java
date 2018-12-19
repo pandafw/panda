@@ -19,15 +19,18 @@ public class ThreadLocalDataSource extends AbstractDataSource {
 	protected Connection popConnection() throws SQLException {
 		ThreadLocalConnection c = local.get();
 		if (c == null || c.isClosed()) {
-			c = new ThreadLocalConnection(DriverManager.getConnection(jdbc.url, props));
-			Connection r = c.getRealConnection();
-			if (r.getAutoCommit() != jdbc.autoCommit) {
-				r.setAutoCommit(jdbc.autoCommit);
-			}
-
+			c = newConnection();
 			local.set(c);
 		}
 		return c;
 	}
 
+	protected ThreadLocalConnection newConnection() throws SQLException {
+		ThreadLocalConnection c = new ThreadLocalConnection(DriverManager.getConnection(jdbc.url, prop));
+		Connection r = c.getRealConnection();
+		if (r.getAutoCommit() != jdbc.autoCommit) {
+			r.setAutoCommit(jdbc.autoCommit);
+		}
+		return c;
+	}
 }
