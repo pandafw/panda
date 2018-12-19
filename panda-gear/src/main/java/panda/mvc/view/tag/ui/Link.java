@@ -65,15 +65,7 @@ public class Link extends UIBean {
 	protected boolean bootstrap;
 	protected boolean bootstrap3;
 	protected boolean bootstrap4;
-	protected boolean i18n;
 	protected boolean panda;
-	protected boolean extras;
-	protected boolean bswitch;
-	protected boolean hammer;
-	protected boolean lightbox;
-	protected boolean meiomask;
-	protected boolean mousewheel;
-	protected boolean tablesorter;
 	protected boolean respondjs;
 	protected List<String> stylesheets;
 	protected List<String> jscripts;
@@ -97,28 +89,13 @@ public class Link extends UIBean {
 			jquery = true;
 		}
 		
-		if (bootstrap || jqplugins || extras) {
+		if (bootstrap || jqplugins) {
 			jquery = true;
 		}
 		if (panda) {
 			jquery = true;
 			jqplugins = true;
 			bootstrap = true;
-		}
-		
-		if (bswitch || hammer || lightbox || meiomask || mousewheel || tablesorter) {
-			jquery = true;
-		}
-		if (bswitch) {
-			bootstrap = true;
-		}
-		if (extras) {
-			bswitch = false;
-			hammer = false;
-			lightbox = false;
-			meiomask = false;
-			mousewheel = false;
-			tablesorter = false;
 		}
 		
 		if (cdn == null) {
@@ -340,20 +317,6 @@ public class Link extends UIBean {
 	}
 
 	/**
-	 * @return the i18n
-	 */
-	public boolean isI18n() {
-		return i18n;
-	}
-
-	/**
-	 * @param i18n the i18n to set
-	 */
-	public void setI18n(boolean i18n) {
-		this.i18n = i18n;
-	}
-
-	/**
 	 * @return the panda
 	 */
 	public boolean isPanda() {
@@ -365,105 +328,6 @@ public class Link extends UIBean {
 	 */
 	public void setPanda(boolean panda) {
 		this.panda = panda;
-	}
-
-	/**
-	 * @return the extras
-	 */
-	public boolean isExtras() {
-		return extras;
-	}
-
-	/**
-	 * @param extras the extras to set
-	 */
-	public void setExtras(boolean extras) {
-		this.extras = extras;
-	}
-
-	
-	/**
-	 * @return the bswitch
-	 */
-	public boolean isSwitch() {
-		return bswitch;
-	}
-
-	/**
-	 * @param bswitch the bswitch to set
-	 */
-	public void setSwitch(boolean bswitch) {
-		this.bswitch = bswitch;
-	}
-
-	/**
-	 * @return the hammer
-	 */
-	public boolean isHammer() {
-		return hammer;
-	}
-
-	/**
-	 * @param hammer the hammer to set
-	 */
-	public void setHammer(boolean hammer) {
-		this.hammer = hammer;
-	}
-
-	/**
-	 * @return the lightbox
-	 */
-	public boolean isLightbox() {
-		return lightbox;
-	}
-
-	/**
-	 * @param lightbox the lightbox to set
-	 */
-	public void setLightbox(boolean lightbox) {
-		this.lightbox = lightbox;
-	}
-
-	/**
-	 * @return the meiomask
-	 */
-	public boolean isMeiomask() {
-		return meiomask;
-	}
-
-	/**
-	 * @param meiomask the meiomask to set
-	 */
-	public void setMeiomask(boolean meiomask) {
-		this.meiomask = meiomask;
-	}
-
-	/**
-	 * @return the mousewheel
-	 */
-	public boolean isMousewheel() {
-		return mousewheel;
-	}
-
-	/**
-	 * @param mousewheel the mousewheel to set
-	 */
-	public void setMousewheel(boolean mousewheel) {
-		this.mousewheel = mousewheel;
-	}
-
-	/**
-	 * @return the tablesorter
-	 */
-	public boolean isTablesorter() {
-		return tablesorter;
-	}
-
-	/**
-	 * @param tablesorter the tablesorter to set
-	 */
-	public void setTablesorter(boolean tablesorter) {
-		this.tablesorter = tablesorter;
 	}
 
 	/**

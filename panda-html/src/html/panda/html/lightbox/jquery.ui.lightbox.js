@@ -213,7 +213,7 @@
 				if ( $.browser.msie ) {
 					___pause(250);
 				} else {
-					___pause(100);	
+					___pause(100);
 				}
 			} 
 			$('#lightbox-container-image-data-box').css({ width: intImageWidth });
@@ -244,7 +244,7 @@
 			// If we have a image set, display 'Image X of X'
 			if ( settings.imageArray.length > 1 ) {
 				$('#lightbox-image-details-currentNumber').html(settings.txtImage + ' ' + ( settings.activeImage + 1 ) + ' ' + settings.txtOf + ' ' + settings.imageArray.length).show();
-			}		
+			}
 		}
 		/**
 		 * Display the button navigations
@@ -436,8 +436,8 @@
 				pageHeight = yScroll;
 			}
 			// for small pages with total width less then width of the viewport
-			if(xScroll < windowWidth){	
-				pageWidth = xScroll;		
+			if(xScroll < windowWidth){
+				pageWidth = xScroll;
 			} else {
 				pageWidth = windowWidth;
 			}

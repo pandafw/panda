@@ -1,7 +1,6 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import panda.lang.Collections;
 import panda.lang.Strings;
@@ -29,7 +28,6 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	
 	private boolean js;
 	private boolean css;
-	private String lang;
 
 	public LinkRenderer(RenderingContext rc) {
 		super(rc);
@@ -44,7 +42,6 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeJquery();
 			writeJqueryPlugins();
 			writeBootstrap();
-			writeExtras();
 			writePanda();
 			writeStyleSheets();
 		}
@@ -55,7 +52,6 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeJquery();
 			writeJqueryPlugins();
 			writeBootstrap();
-			writeExtras();
 			writeRespondJs();
 			writePanda();
 			writeJscripts();
@@ -112,58 +108,6 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 
-	private void writeExtras() throws IOException {
-		if (tag.isExtras()) {
-			writeExtra("extras", true);
-
-			String la = getBootstrapLang();
-			if ("ja".equals(la) || la.startsWith("zh")) {
-				writeStaticJs("/extras/i18n/extras." + la);
-			}
-		}
-		
-		if (tag.isHammer()) {
-			writeExtra("jquery.ui.hammer", false);
-		}
-		
-		if (tag.isLightbox()) {
-			writeExtra("jquery.ui.lightbox", true);
-
-			String la = getBootstrapLang();
-			if ("ja".equals(la) || la.startsWith("zh")) {
-				writeStaticJs("/extras/i18n/jquery.ui.lightbox." + la);
-			}
-		}
-
-		if (tag.isMeiomask()) {
-			writeExtra("jquery.ui.meio.mask", false);
-
-			String la = getBootstrapLang();
-			if ("ja".equals(la)) {
-				writeStaticJs("/extras/i18n/jquery.ui.meio.mask." + la);
-			}
-		}
-
-		if (tag.isMousewheel()) {
-			writeExtra("jquery.ui.mousewheel", false);
-		}
-
-		if (tag.isTablesorter()) {
-			writeExtra("jquery.ui.tablesorter", true);
-		}
-		
-		if (tag.isSwitch()) {
-			writeExtra("bootstrap-switch", true);
-		}
-	}
-	
-	private void writeExtra(String name, boolean css) throws IOException {
-		if (css) {
-			writeStaticCss("/extras/css/" + name);
-		}
-		writeStaticJs("/extras/js/" + name);
-	}
-	
 	private void writeBootstrap() throws IOException {
 		boolean bs = tag.isBootstrap();
 		if (css && bs) {
@@ -190,18 +134,6 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				writeStaticJs("/bootstrap3/js/bootstrap");
 			}
 		}
-	}
-
-	private String getBootstrapLang() {
-		if (Strings.isEmpty(lang)) {
-			Locale locale = tag.getLocale();
-			lang = locale.getLanguage();
-			if ("zh".equals(lang)) {
-				String country = Strings.upperCase(locale.getCountry());
-				lang += ("TW".equals(country) || "HK".equals(country)) ? "_TW" : "_CN";
-			}
-		}
-		return lang;
 	}
 
 	private void writePanda() throws IOException {
@@ -256,12 +188,8 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 
 	protected void writeCdnJs(String jsl) throws IOException {
-		writeCdnJs(jsl, true);
-	}
-	
-	protected void writeCdnJs(String jsl, boolean debug) throws IOException {
 		if (js) {
-			writeJs(jsl + (debug ? debug() : "") + ".js");
+			writeJs(jsl + debug() + ".js");
 		}
 	}
 	
@@ -272,12 +200,8 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 
 	protected void writeStaticJs(String jsl) throws IOException {
-		writeStaticJs(jsl, true);
-	}
-	
-	protected void writeStaticJs(String jsl, boolean debug) throws IOException {
 		if (js) {
-			writeJs(suri(jsl + (debug ? debug() : "") + ".js"));
+			writeJs(suri(jsl + debug() + ".js"));
 		}
 	}
 

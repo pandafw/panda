@@ -59,66 +59,22 @@ build-js          --> Merge & minify javascript files
 
 		<!-- extras -->
 		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/bootstrap-switch" />
+			<param name="src" value="${dir.s}/switch/bootstrap-switch" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/jquery.ui.hammer" />
+			<param name="src" value="${dir.s}/hammer/jquery.ui.hammer" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/jquery.ui.lightbox" />
+			<param name="src" value="${dir.s}/lightbox/jquery.ui.lightbox" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/jquery.ui.meio.mask" />
+			<param name="src" value="${dir.s}/meiomask/jquery.ui.meio.mask" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/jquery.ui.mousewheel" />
+			<param name="src" value="${dir.s}/mousewheel/jquery.ui.mousewheel" />
 		</antcall>
 		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/jquery.ui.tablesorter" />
-		</antcall>
-
-		<concat destfile="${dir.ex}/js/extras.js" binary="true">
-			<fileset dir="${dir.ex}/js">
-				<include name="jquery.*.js" />
-				<include name="bootstrap-*.js" />
-				<exclude name="*.min.js" />
-			</fileset>
-		</concat>
-		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/extras" />
-		</antcall>
-
-		<concat destfile="${dir.ex}/js/i18n/extras.ja.js"
-			binary="true">
-			<fileset dir="${dir.ex}/js/i18n">
-				<include name="*.ja.js" />
-				<exclude name="extras.*" />
-			</fileset>
-		</concat>
-		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/i18n/extras.ja" />
-		</antcall>
-
-		<concat destfile="${dir.ex}/js/i18n/extras.zh_CN.js"
-			binary="true">
-			<fileset dir="${dir.ex}/js/i18n">
-				<include name="*.zh_CN.js" />
-				<exclude name="extras.*" />
-			</fileset>
-		</concat>
-		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/i18n/extras.zh_CN" />
-		</antcall>
-
-		<concat destfile="${dir.ex}/js/i18n/extras.zh_TW.js"
-			binary="true">
-			<fileset dir="${dir.ex}/js/i18n">
-				<include name="*.zh_TW.js" />
-				<exclude name="extras.*" />
-			</fileset>
-		</concat>
-		<antcall target="minjs">
-			<param name="src" value="${dir.ex}/js/i18n/extras.zh_TW" />
+			<param name="src" value="${dir.s}/tablesorter/jquery.ui.tablesorter" />
 		</antcall>
 
 		<!-- datetimepicker -->
@@ -154,23 +110,13 @@ build-js          --> Merge & minify javascript files
 
 		<!-- extras -->
 		<antcall target="mincss">
-			<param name="src" value="${dir.ex}/css/bootstrap-switch" />
+			<param name="src" value="${dir.s}/switch/bootstrap-switch" />
 		</antcall>
 		<antcall target="mincss">
-			<param name="src" value="${dir.ex}/css/jquery.ui.lightbox" />
+			<param name="src" value="${dir.s}/lightbox/jquery.ui.lightbox" />
 		</antcall>
 		<antcall target="mincss">
-			<param name="src" value="${dir.ex}/css/jquery.ui.tablesort" />
-		</antcall>
-
-		<concat destfile="${dir.ex}/css/extras.css" binary="true">
-			<fileset dir="${dir.ex}/css">
-				<include name="jquery.*.css" />
-				<include name="bootstrap-*.css" />
-			</fileset>
-		</concat>
-		<antcall target="mincss">
-			<param name="src" value="${dir.ex}/css/extras" />
+			<param name="src" value="${dir.s}/tablesorter/jquery.ui.tablesorter" />
 		</antcall>
 
 		<!-- datetimepicker -->
