@@ -115,6 +115,7 @@
 			},
 			"filterable": a.filterField("tag"),
 			"filter": {
+				"fixed": true,
 				"list": consts.mediaTagMap,
 				"type": "select"
 			},
@@ -141,6 +142,7 @@
 			"display": a.displayField("name"),
 			"filterable": a.filterField("name"),
 			"filter": {
+				"fixed": true,
 				"type": "string"
 			},
 			"hidden": false,
@@ -154,6 +156,11 @@
 			"format": {
 				"type": "size"
 			},
+			"filterable": a.filterField("size"),
+			"filter": {
+				"fixed": true,
+				"type": "number"
+			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
@@ -162,6 +169,10 @@
 			"name" : "width",
 			"header": a.getFieldLabel("width"),
 			"display": a.displayField("width"),
+			"filterable": a.filterField("width"),
+			"filter": {
+				"type": "number"
+			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
@@ -170,6 +181,10 @@
 			"name" : "height",
 			"header": a.getFieldLabel("height"),
 			"display": a.displayField("height"),
+			"filterable": a.filterField("height"),
+			"filter": {
+				"type": "number"
+			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,

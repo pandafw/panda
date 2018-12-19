@@ -110,6 +110,7 @@
 			"display": a.displayField("name"),
 			"filterable": a.filterField("name"),
 			"filter": {
+				"fixed": true,
 				"type": "string"
 			},
 			"link": true,
@@ -124,6 +125,7 @@
 			},
 			"filterable": a.filterField("size"),
 			"filter": {
+				"fixed": true,
 				"type": "number"
 			},
 			"sortable": true,
@@ -137,6 +139,7 @@
 			},
 			"filterable": a.filterField("date"),
 			"filter": {
+				"fixed": true,
 				"type": "datetime"
 			},
 			"sortable": true,

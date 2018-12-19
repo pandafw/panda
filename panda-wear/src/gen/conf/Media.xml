@@ -36,7 +36,7 @@
 				<format type="code">
 					<param name="codemap" value="consts.mediaTagMap"/>
 				</format>
-				<filter type="select">
+				<filter type="select" fixed="true">
 					<param name="list" value="consts.mediaTagMap"/>
 				</filter>
 			</column>
@@ -47,13 +47,18 @@
 				</format>
 			</column>
 			<column name="name" hidden="false" sortable="true" link="true">
-				<filter type="string"/>
+				<filter type="string" fixed="true"/>
 			</column>
 			<column name="size" hidden="false" sortable="true" link="false">
 				<format type="size"/>
+				<filter type="number" fixed="true"/>
 			</column>
-			<column name="width" hidden="false" sortable="true" link="false"/>
-			<column name="height" hidden="false" sortable="true" link="false"/>
+			<column name="width" hidden="false" sortable="true" link="false">
+				<filter type="number"/>
+			</column>
+			<column name="height" hidden="false" sortable="true" link="false">
+				<filter type="number"/>
+			</column>
 		</list>
 		<list name="basicBulk" extend="basicList">
 			<param name="toolbar" value="${bulk.toolbar}"/>

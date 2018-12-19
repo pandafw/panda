@@ -21,15 +21,15 @@
 				<filter type="number"/>
 			</column>
 			<column name="name" sortable="true" link="true">
-				<filter type="string"/>
+				<filter type="string" fixed="true"/>
 			</column>
 			<column name="size" sortable="true">
 				<format type="size"/>
-				<filter type="number"/>
+				<filter type="number" fixed="true"/>
 			</column>
 			<column name="date" sortable="true">
 				<format type="timestamp"/>
-				<filter type="datetime"/>
+				<filter type="datetime" fixed="true"/>
 			</column>
 		</list>
 		<list name="basicBulk" extend="basicList">

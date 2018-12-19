@@ -56,13 +56,13 @@
 				<filter type="number"/>
 			</column>
 			<column name="clazz" hidden="false" sortable="true" link="false">
-				<filter type="string"/>
+				<filter type="string" fixed="true"/>
 			</column>
 			<column name="language" hidden="false" sortable="true" link="false">
 				<format type="code">
 					<param name="codemap" value="consts.localeLanguageMap"/>
 				</format>
-				<filter type="select">
+				<filter type="select" fixed="true">
 					<param name="list" value="consts.localeLanguageMap"/>
 				</filter>
 			</column>
@@ -70,12 +70,12 @@
 				<format type="code">
 					<param name="codemap" value="consts.localeCountryMap"/>
 				</format>
-				<filter type="select">
+				<filter type="select" fixed="true">
 					<param name="list" value="consts.localeCountryMap"/>
 				</filter>
 			</column>
 			<column name="name" hidden="false" sortable="true" link="false">
-				<filter type="string"/>
+				<filter type="string" fixed="true"/>
 			</column>
 			<column name="value" hidden="false" sortable="true" link="false">
 				<filter type="string"/>

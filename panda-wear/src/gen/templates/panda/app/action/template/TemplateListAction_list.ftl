@@ -111,6 +111,7 @@
 			"display": a.displayField("name"),
 			"filterable": a.filterField("name"),
 			"filter": {
+				"fixed": true,
 				"type": "string"
 			},
 			"hidden": false,
@@ -127,6 +128,7 @@
 			},
 			"filterable": a.filterField("language"),
 			"filter": {
+				"fixed": true,
 				"list": consts.localeLanguageMap,
 				"type": "select"
 			},
@@ -144,6 +146,7 @@
 			},
 			"filterable": a.filterField("country"),
 			"filter": {
+				"fixed": true,
 				"list": consts.localeCountryMap,
 				"type": "select"
 			},
