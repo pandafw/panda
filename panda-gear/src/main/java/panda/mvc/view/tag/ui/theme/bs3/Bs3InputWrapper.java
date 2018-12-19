@@ -58,9 +58,15 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends InputRender
 		attr.cssClass(join(tag.getCssClass(), "form-group", (hasFieldErrors ? "has-error" : null)));
 		stag("div", attr);
 
-		writeInputLabel();
+		renderInputLabel();
 
 		renderInputDivBegin();
+	}
+
+	protected void renderInputLabel() throws IOException {
+		if (Strings.isNotEmpty(tag.getLabel())) {
+			writeInputLabel();
+		}
 	}
 
 	protected void renderInputDivBegin() throws IOException {

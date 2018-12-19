@@ -22,6 +22,11 @@ public abstract class Bs3HorizontalInputWrapper<T extends InputUIBean> extends B
 	}
 
 	@Override
+	protected void renderInputLabel() throws IOException {
+		writeInputLabel();
+	}
+
+	@Override
 	protected void renderInputDivBegin() throws IOException {
 		write("<div");
 		if (Strings.isNotEmpty(tag.getInputClass())) {

@@ -54,7 +54,7 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 		return null;
 	}
 	
-	protected void writeInputLabel() throws Exception {
+	protected void writeInputLabel() throws IOException {
 		Attributes attr = new Attributes();
 		attr.forId(tag.getId()).cssClass(getLabelClass());
 		stag("label", attr);
