@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,12 +30,15 @@ import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.net.Mimes;
 import panda.net.URLBuilder;
 import panda.net.URLHelper;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
+import panda.net.http.HttpStatus;
 import panda.net.http.ParameterParser;
 import panda.net.http.UserAgent;
 
@@ -43,6 +47,7 @@ import panda.net.http.UserAgent;
  * utility class for http servlet
  */
 public class HttpServlets {
+	private static final Log log = Logs.getLog(HttpServlets.class);
 
 	/**
 	 * Standard Servlet spec context attribute that specifies a temporary
@@ -874,6 +879,31 @@ public class HttpServlets {
 	 */
 	public static void setResponseCache(HttpServletResponse response, int maxAge) {
 		setResponseCache(response, maxAge, HttpHeader.CACHE_CONTROL_PUBLIC);
+	}
+	
+	public static boolean checkAndSetNotModified(HttpServletRequest request, HttpServletResponse response, Date lastModified, int maxage) {
+		// check for if-modified-since, prior to any other headers
+		long ifModifiedSince = 0;
+		if (request != null) {
+			try {
+				ifModifiedSince = request.getDateHeader(HttpHeader.IF_MODIFIED_SINCE);
+			}
+			catch (Exception e) {
+				log.warn("Ignore invalid If-Modified-Since header value: " + request.getHeader(HttpHeader.IF_MODIFIED_SINCE));
+			}
+		}
+
+		long mod = lastModified == null ? 0 : lastModified.getTime();
+		long exp = mod + maxage * 1000;
+
+		if (ifModifiedSince > 0 && ifModifiedSince <= mod) {
+			// not modified, content is not sent - only basic
+			// headers and status SC_NOT_MODIFIED
+			response.setHeader(HttpHeader.EXPIRES, HttpDates.format(exp));
+			response.setStatus(HttpStatus.SC_NOT_MODIFIED);
+			return true;
+		}
+		return false;
 	}
 	
 	/**

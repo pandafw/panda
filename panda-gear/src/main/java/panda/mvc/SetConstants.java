@@ -60,11 +60,8 @@ public interface SetConstants {
 	/** The static resource version */
 	public static final String MVC_STATIC_VERSION = "mvc.static.version";
 
-	/** The static resource browser cache */
-	public static final String MVC_STATIC_BROWSER_CACHE = "mvc.static.browser.cache";
-
-	/** The static resource expire days */
-	public static final String MVC_STATIC_EXPIRE_DAYS = "mvc.static.expire.days";
+	/** The static resource browser cache max age (seconds) */
+	public static final String MVC_STATIC_MAXAGE = "mvc.static.maxage";
 
 	/** The static resource charset */
 	public static final String MVC_STATIC_CHARSET = "mvc.static.charset";

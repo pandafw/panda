@@ -6,17 +6,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URL;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.io.FileNames;
 import panda.io.Files;
 import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Strings;
+import panda.lang.time.DateTimes;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.UserAgent;
@@ -237,19 +240,60 @@ public class HttpServletResponser {
 		this.body = body;
 	}
 
+	public void setFile(Object file) {
+		if (file instanceof File) {
+			setFile((File)file);
+		}
+		else if (file instanceof FileItem) {
+			setFile((FileItem)file);
+		}
+		else if (file instanceof URL) {
+			setFile((URL)file);
+		}
+		else if (file instanceof byte[]) {
+			setFile((byte[])file);
+		}
+		else {
+			setLastModified(DateTimes.getDate());
+			setBody(file);
+		}
+	}
+
 	public void setFile(File file) {
 		setFileName(file.getName());
+		setLastModified(new Date(file.lastModified()));
 		setContentLength((int)file.length());
 		setBody(file);
 	}
 
 	public void setFile(FileItem file) {
 		setFileName(file.getName());
+		setLastModified(file.getDate());
 		setContentLength(file.getSize());
 		setContentType(file.getType());
 		setBody(file);
 	}
+
+	public void setFile(URL file) {
+		setFileName(FileNames.getName(file.getPath()));
+		setLastModified(DateTimes.getDate());
+		setBody(file);
+	}
+
+	public void setFile(byte[] file) {
+		setContentLength(file.length);
+		setLastModified(DateTimes.getDate());
+		setBody(file);
+	}
 	
+	public void forward() throws IOException {
+		if (HttpServlets.checkAndSetNotModified(request, response, lastModified, maxAge)) {
+			return;
+		}
+		writeHeader();
+		writeBody();
+	}
+
 	/**
 	 * write response header
 	 * @throws IOException if an I/O error occurs
@@ -325,6 +369,9 @@ public class HttpServletResponser {
 		else if (body instanceof FileItem) {
 			writeFile((FileItem)body);
 		}
+		else if (body instanceof URL) {
+			writeFile((URL)body);
+		}
 		else if (body instanceof Reader) {
 			writeReader((Reader)body);
 		}
@@ -359,6 +406,10 @@ public class HttpServletResponser {
 
 	public void writeFile(FileItem file) throws IOException {
 		writeStream(file.open());
+	}
+
+	public void writeFile(URL file) throws IOException {
+		writeStream(file.openStream());
 	}
 
 	public void writeReader(Reader r) throws IOException {
