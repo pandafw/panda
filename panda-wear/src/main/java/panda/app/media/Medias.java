@@ -14,9 +14,11 @@ public class Medias {
 	
 	public static final int MAX_FILENAME_LENGTH = 200;
 
+	public static final int DEFAULT_PAGE_LIMIT = 50;
+
 	public static final int DEFAULT_ICON_SIZE = 32;
 
-	public static final int DEFAULT_THUMB_SIZE = 192;
+	public static final int DEFAULT_THUMB_SIZE = 128;
 
 	public static String getMediaIcon(Media m) {
 		return "<img class=\"p-mwh32px\" src=\"icon?id=" + m.getId() + "\">";

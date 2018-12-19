@@ -23,7 +23,7 @@ public class MediaBulkDeleteExAction extends MediaBulkDeleteAction {
 
 	@Override
 	protected void afterBulkDelete(List<Media> dataList) {
-		mds.deletes(dataList);
+		mds.delete(dataList.toArray(new Media[dataList.size()]));
 		super.afterBulkDelete(dataList);
 	}
 }

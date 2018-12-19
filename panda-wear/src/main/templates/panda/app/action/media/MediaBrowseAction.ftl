@@ -14,21 +14,20 @@
 	display: inline-block;
 	margin: 3px;
 }
+.media-select {
+	background-color: #6495ED;
+}
 #media_uploader {
 	display: none;
 	margin: 10px 0;
 }
 #media_tool {
 	display: inline-block;
-	font-size: 150%;
-	margin: 0 20px;
+	margin: 0 10px;
 	vertical-align: middle;
 }
 #media_tool a {
-	margin: 0 10px;
-}
-#media_tool_trash {
-	display: none;
+	margin: 0 5px;
 }
 #media_browser {
 	margin: 15px 0;
@@ -50,10 +49,10 @@
 	
 	<@p.form id="media_form" action="browse" theme="bs3i">
 		<@p.datepicker
-			label="#(lbl-date)"
 			name="ds"
 			maxlength="10"
 			size="10"
+			placeholder="#(lbl-date)"
 		/>
 		 ~ 
 		<@p.datepicker
@@ -63,8 +62,8 @@
 			/>
 		
 		<div id="media_tool">
-			<@p.a id="media_tool_upload" icon="upload" tooltip="#(btn-upload)"/>
-			<@p.a id="media_tool_trash" icon="trash" tooltip="#(btn-delete)"/>
+			<@p.a id="media_tool_upload" btn="default" icon="upload" label="#(btn-upload)"/>
+			<@p.a id="media_tool_delete" btn="warning" icon="trash" label="#(btn-delete)" cssClass="p-hidden"/>
 		</div>
 		
 		<@p.textfield
@@ -72,6 +71,7 @@
 			name="qs"
 			size="18"
 			ricon="search"
+			placeholder="#(btn-search)"
 			/>
 	</@p.form>
 
@@ -86,23 +86,14 @@
 		dataOnUploaded="media_on_uploaded"
 	/>
 	
-	<#if result?has_content>
-		<div id="media_browser">
-		<#list result as _m>
-			<a data-mid="${_m.id}" class="media-thumb img-thumbnail" href="#" title="${_m.name?html}<br>
-${_m.width!} x ${_m.height} (<@p.number value=_m.size format="size"/>)<br>
-<@p.date value=_m.createdAt format="datetime"/>
-">
-				<img src="thumb?id=${_m.id}"/>
-			</a>
-		</#list>
-			<div id="media_end"></div>
-		</div>
-	</#if>
+	<div id="media_browser">
+		<div id="media_end"></div>
+	</div>
 </div>
 
 <script>
-	var media_limit = ${a.mediaLimit};
+	var media_items = <#if result?has_content>${assist.toJson(result)}<#else>[]</#if>;
+	var media_limit = ${a.mediaPageLimit};
 	var media_date_format = null;
 	var media_has_next = false;
 	var media_loading = false;
@@ -110,25 +101,29 @@ ${_m.width!} x ${_m.height} (<@p.number value=_m.size format="size"/>)<br>
 	function onPageLoad() {
 		media_date_format = new DateFormat("<@p.text name='date-format-datetime'/>");
 
-		media_has_next = ($('#media_browser a.media-thumb').size() >= media_limit);
+		$.each(media_items, function() {
+			media_append(this);
+		});
+		media_has_next = (media_items.length >= media_limit);
+
 		$('#media_tool_upload').click(function(e) {
 			e.preventDefault();
 			$('#media_uploader').slideToggle();
 		});
-		$('#media_tool_trash').click(function(e) {
+		$('#media_tool_delete').click(function(e) {
 			e.preventDefault();
+			media_delete();
 		});
 		$('#media_form').submit(media_on_change);
 		$('#media_form div.p-datepicker').on('changeDate', media_on_change);
 		$('#meida_form_ds, #media_form_de, #media_form_qs').change(media_on_change);
-		$('#media_browser a.media-thumb')
-			.tooltip({placement: 'auto', html: true})
-			.click(media_on_click);
 
 		$(window).scroll(media_on_scroll);
 	}
 
 	function media_on_click() {
+		$(this).toggleClass('media-select');
+		$('#media_tool_delete')[$('#media_browser .media-select').size() ? 'removeClass' : 'addClass']('p-hidden');
 		return false;
 	}
 	
@@ -172,6 +167,42 @@ ${_m.width!} x ${_m.height} (<@p.number value=_m.size format="size"/>)<br>
 	function media_on_change() {
 		media_search();
 	}
+
+	function media_ajax_start() {
+		media_loading = true;
+		$('#media_alert').palert('clear');
+		$('#media_browser').loadmask();
+	}
+
+	function media_ajax_end() {
+		media_loading = false;
+		$('#media_browser').unloadmask();
+	}
+	
+	function media_delete() {
+		var ps = [];
+		$('#media_browser .media-select').each(function() {
+			ps.push({name: 'id', value: $(this).data('mid')});
+		});
+		
+		media_ajax_start();
+		$.ajax({
+			url: 'deletes',
+			method: 'POST',
+			data: ps,
+			dataType: 'json',
+			success: function(d) {
+				if (!d.success) {
+					media_action_error(d);
+					return;
+				}
+
+				$('#media_browser .media-select').remove();
+			},
+			error: media_ajax_error,
+			complete: media_ajax_end
+		});
+	}
 	
 	function media_search(last) {
 		var ps = $('#media_form').serializeArray();
@@ -179,11 +210,10 @@ ${_m.width!} x ${_m.height} (<@p.number value=_m.size format="size"/>)<br>
 			ps.push({ name: 'sn', value: last });
 		}
 		
-		media_loading = true;
-		$('#media_alert').palert('clear');
-		$('#media_browser').loadmask();
+		media_ajax_start();
 		$.ajax({
 			url: 'browse',
+			method: 'POST',
 			data: ps,
 			dataType: 'json',
 			success: function(d) {
@@ -193,9 +223,9 @@ ${_m.width!} x ${_m.height} (<@p.number value=_m.size format="size"/>)<br>
 				}
 
 				if (!last) {
-					$('#media_browser').find('.media-thumb').remove();
+					$('#media_browser .media-thumb').remove();
 				}
-				
+
 				if (d.result) {
 					$.each(d.result, function() {
 						media_append(this);
@@ -203,11 +233,8 @@ ${_m.width!} x ${_m.height} (<@p.number value=_m.size format="size"/>)<br>
 				}
 				media_has_next = d.result ? (d.result.length >= media_limit) : false;
 			},
-			error: meia_ajax_error,
-			complete: function() {
-				media_loading = false;
-				$('#media_browser').unloadmask();
-			}
+			error: media_ajax_error,
+			complete: media_ajax_end
 		});
 	}
 	
@@ -223,7 +250,7 @@ ${_m.width!} x ${_m.height} (<@p.number value=_m.size format="size"/>)<br>
 		$('#media_alert').palert('actionError', d);
 	}
 	
-	function meia_ajax_error(xhr, status, e) {
+	function media_ajax_error(xhr, status, e) {
 		$('#media_alert').palert('ajaxJsonError', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
 	}
 </script>

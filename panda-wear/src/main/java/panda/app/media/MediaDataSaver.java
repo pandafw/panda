@@ -1,7 +1,5 @@
 package panda.app.media;
 
-import java.util.List;
-
 import panda.app.entity.Media;
 import panda.ioc.annotation.IocBean;
 
@@ -13,7 +11,8 @@ public interface MediaDataSaver {
 
 	public void save(Media m);
 	
-	public void delete(Media m);
+	public void delete(Long... mid);
 
-	public void deletes(List<Media> ms);
+	public void delete(Media... m);
+
 }

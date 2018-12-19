@@ -126,7 +126,7 @@ public class MediaBrowseAction extends AbstractAction {
 			mq.id().lt(arg.sn);
 		}
 		mq.orderBy(Media.ID, false);
-		mq.limit(getMediaLimit());
+		mq.limit(getMediaPageLimit());
 		
 		addFilters(mq);
 
@@ -137,15 +137,29 @@ public class MediaBrowseAction extends AbstractAction {
 	protected void addFilters(MediaQuery mq) {
 	}
 
-	public int getMediaLimit() {
-		return 3;
+	public int getMediaPageLimit() {
+		return getSettings().getPropertyAsInt(SET.MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
+	}
+	
+	@At
+	@To(Views.SJSON)
+	public void deletes(final @Param("id") Long[] ids) {
+		if (Arrays.isEmpty(ids)) {
+			return;
+		}
+		
+		MediaQuery mq = new MediaQuery();
+		mq.id().in(ids);
+		getDaoClient().getDao().deletes(mq);
+		
+		mds.delete(ids);
 	}
 	
 	/**
 	 * upload
 	 * 
 	 * @param files the upload files
-	 * @return the uploaded files
+	 * @return the uploaded media
 	 */
 	@At
 	@To(Views.SJSON)

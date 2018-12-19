@@ -1,8 +1,6 @@
 package panda.app.media;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import panda.app.entity.Media;
 import panda.dao.Dao;
@@ -11,6 +9,7 @@ import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
@@ -79,35 +78,36 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 			throw Exceptions.wrapThrow(e);
 		}
 	}
-	
-	public void delete(Media m) {
+
+	@Override
+	public void delete(Long... mids) {
+		if (Arrays.isEmpty(mids)) {
+			return;
+		}
+		
 		try {
 			Dao dao = daoClient.getDao();
 
 			MediaDataQuery mdq = new MediaDataQuery();
-			mdq.mid().eq(m.getId());
+			mdq.mid().in(mids);
 			dao.deletes(mdq);
 		}
 		catch (Exception e) {
-			log.error("Failed to delete media data for " + m.getId(), e);
+			log.error("Failed to delete media data for " + Strings.join(mids, ", "), e);
 		}
 	}
 
-	public void deletes(List<Media> ms) {
-		List<Long> ids = new ArrayList<Long>(ms.size());
-		for (Media m : ms) {
-			ids.add(m.getId());
+	@Override
+	public void delete(Media... ms) {
+		if (Arrays.isEmpty(ms)) {
+			return;
+		}
+		
+		Long[] ids = new Long[ms.length];
+		for (int i = 0; i < ms.length; i++) {
+			ids[i] = ms[i].getId();
 		}
 
-		try {
-			Dao dao = daoClient.getDao();
-
-			MediaDataQuery mdq = new MediaDataQuery();
-			mdq.mid().in(ids);
-			dao.deletes(mdq);
-		}
-		catch (Exception e) {
-			log.error("Failed to delete media data for " + Strings.join(ids, ", "), e);
-		}
+		delete(ids);
 	}
 }
