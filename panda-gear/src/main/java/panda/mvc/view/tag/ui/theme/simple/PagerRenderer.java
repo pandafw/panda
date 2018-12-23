@@ -31,8 +31,6 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	private String linkHref;
 	private Map<String, Object> linkBean;
 	
-	private boolean hiddenStyle;
-
 	public PagerRenderer(RenderingContext context) {
 		super(context);
 	}
@@ -48,11 +46,10 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		pages = defi(tag.getPages());
 
 		linkHref = Strings.replaceChars(defs(tag.getLinkHref(), "#"), '!', '$');
-		hiddenStyle = tag.isHiddenStyle();
 		
 		Attributes attr = new Attributes();
 		attr.add("id", id)
-			.cssClass(tag, "pagination p-pager")
+			.cssClass(tag, "p-pager clearfix")
 			.data("start", defs(start))
 			.data("count", defs(count))
 			.data("limit", defs(limit))
@@ -60,77 +57,124 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 			.data("click", tag.getOnLinkClick())
 			.data("spy", "ppager")
 			.cssStyle(tag);
-		stag("ul", attr);
-		
-		if (total > 0) {
-			writePagerTextInfo();
-			writePagerLinkFirst();
-			writePagerLinkPrev(false);
-			writePagerLinkPages();
-			writePagerLinkNext(false);
-			writePagerLinkLast();
-			writePagerLimit();
+		stag("div", attr);
+
+		String style = tag.getPagerStyle();
+		if (Strings.isNotEmpty(style)) {
+			if (total > 0 || count > 0 || start > 0) {
+				for (int i = 0; i < style.length(); i++) {
+					switch (style.charAt(i)) {
+					case '<':
+						write("<ul class=\"pagination\">");
+						break;
+					case 'f':
+						writePagerLinkFirst(true);
+						break;
+					case 'F':
+						writePagerLinkFirst(false);
+						break;
+					case 'p':
+						writePagerLinkPrev(total > 0);
+						break;
+					case 'P':
+						writePagerLinkPrev(false);
+						break;
+					case '#':
+						if (total > 0 || count > 0) {
+							writePagerLinkNums();
+						}
+						break;
+					case 'n':
+						if (total > 0) {
+							writePagerLinkNext(true);
+						}
+						else if (count > 0) {
+							writePagerLinkNext(false);
+						}
+						break;
+					case 'N':
+						if (total > 0 || count > 0) {
+							writePagerLinkNext(false);
+						}
+						break;
+					case 'l':
+						if (total > 0) {
+							writePagerLinkLast(true);
+						}
+						break;
+					case 'L':
+						if (total > 0) {
+							writePagerLinkLast(false);
+						}
+						break;
+					case '>':
+						if (total > 0 || count > 0 || start > 0) {
+							write("</ul>");
+						}
+						break;
+					case 'i':
+						if (total > 0 || count > 0) {
+							writePagerTextInfo();
+						}
+						else {
+							writePagerEmptyInfo();
+						}
+						break;
+					case 's':
+						if (total > 0 || count > 0 || start > 0) {
+							writePagerLimit();
+						}
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			else {
+				if (Strings.contains(style, 'i')){
+					writePagerEmptyInfo();
+				}
+			}
 		}
-		else if (count > 0) {
-			writePagerTextInfo();
-			writePagerLinkFirst();
-			writePagerLinkPrev(true);
-			writePagerLinkPages();
-			writePagerLinkNext(true);
-			writePagerLimit();
-		}
-		else if (start > 0) {
-			writePagerLinkFirst();
-			writePagerLinkPrev(true);
-			writePagerEmptyInfo();
-			writePagerLimit();
-		}
-		else {
-			writePagerEmptyInfo();
-		}
-		
-		etag("ul");
+
+		etag("div");
 	}
 
 	private void writePagerInfo(String info) throws IOException {
-		write("<li class=\"p-pager-info\"><span>");
+		write("<div class=\"p-pager-info\">");
 		write(info);
-		write("</span></li>");
+		write("</div>");
 	}
 
 	private void writePagerEmptyInfo() throws IOException {
-		if (tag.isRenderInfo()) {
-			writePagerInfo(tag.getEmptyText());
-		}
+		writePagerInfo(tag.getEmptyText());
 	}
 	
 	private void writePagerTextInfo() throws IOException {
-		if (tag.isRenderInfo()) {
-			writePagerInfo(tag.getInfoText());
-		}
+		writePagerInfo(tag.getInfoText());
 	}
 
 	private void writePagerLimit() throws IOException {
-		if (limit == null || limit < 1 || !tag.isLimitSelective() || Strings.isEmpty(tag.getOnLimitChange())) {
+		if (limit == null || limit < 1 || Strings.isEmpty(tag.getOnLimitChange())) {
 			return;
 		}
 
-		write("<li class=\"p-pager-limit\"><span>");
+		write("<div class=\"p-pager-limit\">");
 		write(tag.getLimitLabel());
 
 		Select select = context.getIoc().get(Select.class);
 		select.setTheme("simple");
 		select.setId(id + "_limit");
 		select.setName(Strings.isEmpty(tag.getLimitName()) ? id + "_limit" : tag.getLimitName());
-		select.setCssClass("select");
+		select.setCssClass("select form-control");
 		select.setValue(limit.toString());
 		select.setList(tag.getLimitList());
-		select.setTooltip(tag.getLimitTooltip());
+		select.setTitle(tag.getLimitTooltip());
 		select.setOnchange(tag.getOnLimitChange());
 		
 		select.start(writer);
 		select.end(writer, "");
-		write("</span></li>");
+		write("</div>");
 	}
 
 	private String getLinkHref(int pn) {
@@ -145,21 +189,17 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		return Mvcs.translate(linkHref, linkBean);
 	}
 	
-	private void writePagerLinkFirst() throws IOException {
-		boolean hasFirst = (page > 1);
+	private void writePagerLinkFirst(boolean hidden) throws IOException {
 		write("<li class=\"p-pager-first");
-		if ((!hasFirst && hiddenStyle) || !tag.isRenderFirst()) {
-			write(" hidden");
-		}
-		else if (!hasFirst) {
-			write(" disabled");
+		if (page <= 1) {
+			write(hidden? " hidden" : " disabled");
 		}
 		write("\"><a href=\"");
 		write(getLinkHref(1));
 		write('"');
 		write(" data-pageno=\"1");
-		if (hasFirst) {
-			write("\" data-toggle=\"tooltip\" title=\"");
+		if (page > 1) {
+			write("\" title=\"");
 			write(tag.getFirstTooltip());
 			write('"');
 		}
@@ -171,21 +211,17 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		write("</a></li>");
 	}
 	
-	private void writePagerLinkPrev(boolean force) throws IOException {
-		boolean hasPrev = (page > 1);
+	private void writePagerLinkPrev(boolean hidden) throws IOException {
 		write("<li class=\"p-pager-prev");
-		if ((!hasPrev && hiddenStyle) || (!force && !tag.isRenderPrev())) {
-			write(" hidden");
-		}
-		else if (!hasPrev) {
-			write(" disabled");
+		if (page <= 1) {
+			write(hidden? " hidden" : " disabled");
 		}
 		write("\"><a href=\"");
 		write(getLinkHref(page - 1));
 		write("\" data-pageno=\"");
 		write(String.valueOf(page - 1));
-		if (hasPrev) {
-			write("\" data-toggle=\"tooltip\" title=\"");
+		if (page > 1) {
+			write("\" title=\"");
 			write(tag.getPrevTooltip());
 			write('"');
 		}
@@ -197,21 +233,18 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		write("</a></li>");
 	}
 
-	private void writePagerLinkNext(boolean force) throws IOException {
+	private void writePagerLinkNext(boolean hidden) throws IOException {
 		boolean hasNext = (limit == null || (count >= limit && total < 1) || page < pages);
 		write("<li class=\"p-pager-next");
-		if ((!hasNext && hiddenStyle) || (!force && !tag.isRenderNext())) {
-			write(" hidden");
-		}
-		else if (!hasNext) {
-			write(" disabled");
+		if (!hasNext) {
+			write(hidden? " hidden" : " disabled");
 		}
 		write("\"><a href=\"");
 		write(getLinkHref(page + 1));
 		write("\" data-pageno=\"");
 		write(String.valueOf(page + 1));
 		if (hasNext) {
-			write("\" data-toggle=\"tooltip\" title=\"");
+			write("\" title=\"");
 			write(tag.getNextTooltip());
 			write('"');
 		}
@@ -223,21 +256,17 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		write("</a></li>");
 	}
 
-	private void writePagerLinkLast() throws IOException {
-		boolean hasLast = (page < pages);
+	private void writePagerLinkLast(boolean hidden) throws IOException {
 		write("<li class=\"p-pager-last");
-		if ((!hasLast && hiddenStyle) || !tag.isRenderLast()) {
-			write(" hidden");
-		}
-		else if (!hasLast) {
-			write(" disabled");
+		if (page >= pages) {
+			write(hidden? " hidden" : " disabled");
 		}
 		write("\"><a href=\"");
 		write(getLinkHref(pages));
 		write("\" data-pageno=\"");
 		write(pages.toString());
-		if (hasLast) {
-			write("\" data-toggle=\"tooltip\" title=\"");
+		if (page < pages) {
+			write("\" title=\"");
 			write(tag.getLastTooltip());
 			write('"');
 		}
@@ -249,14 +278,10 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		write("</a></li>");
 	}
 
-	private void writePagerLinkPages() throws IOException {
-		if (!tag.isRenderPageNo()) {
-			return;
-		}
-
-		boolean ep = tag.isRenderPageEllipsis();
-		boolean p1 = tag.isRenderPage1();
-		boolean px = tag.isRenderPageX();
+	private void writePagerLinkNums() throws IOException {
+		boolean ep = Strings.contains(tag.getPagerStyle(),  '.');
+		boolean p1 = Strings.contains(tag.getPagerStyle(),  '1');
+		boolean px = Strings.contains(tag.getPagerStyle(),  'x');
 
 		int linkSize = defi(tag.getLinkSize());
 		int linkMax = linkSize;

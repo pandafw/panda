@@ -66,8 +66,8 @@ regex-zipcode=\\d{3}-?\\d{4}
 # pager
 # vars: total, start(0-index), begin, end, count, limit, page, pages
 #-----------------------------------------------------------------------------
-pager-link-size=5
-pager-link-style=ihfp#nls
+#pager-style=is<fp#nl>
+#pager-link-size=5
 pager-limit-list={ '20': '20 Items', '50': '50 Items', '100': '100 Items' }
 pager-label-info=${top.begin}~${top.end}/${top.total}
 pager-label-infoz=${top.begin}~${top.end}

@@ -1,17 +1,29 @@
 /*---------------------------------------------*/
 /* pager.css                                   */
 /*---------------------------------------------*/
-.pagination.p-pager {
+.p-pager {
+	margin: 10px 0;
+	text-align: center;
+}
+.p-pager > .p-pager-info {
+	float: left;
+	padding: 8px;
+}
+.p-pager > .p-pager-limit {
+	float: right;
+}
+.p-pager > .pagination {
+	border-radius: 0;
+	margin: 0;
+}
+.p-pager > .pagination > li:first-child > a,
+.p-pager > .pagination > li:first-child > span,
+.p-pager > .pagination > li:last-child > a,
+.p-pager > .pagination > li:last-child > span {
 	border-radius: 0;
 }
-.pagination.p-pager > li:first-child > a,
-.pagination.p-pager > li:first-child > span,
-.pagination.p-pager > li:last-child > a,
-.pagination.p-pager > li:last-child > span {
-	border-radius: 0;
-}
-.pagination.p-pager > li > a,
-.pagination.p-pager > li > span {
+.p-pager > .pagination > li > a,
+.p-pager > .pagination > li > span {
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #ddd;
@@ -19,49 +31,38 @@
 	margin-left: 3px;
 	padding: 5px 11px;
 }
-.pagination.p-pager > li.p-pager-info > span {
-	padding: 5px 11px 0 0;
-}
-.pagination.p-pager > li.p-pager-info > span,
-.pagination.p-pager > li.p-pager-info > span:hover,
-.pagination.p-pager > li.p-pager-limit > span,
-.pagination.p-pager > li.p-pager-limit > span:hover {
-	background-color: transparent;
-	border-bottom: 0 none;
-	color: #555;
-}
-.pagination.p-pager > li > a:hover,
-.pagination.p-pager > li > span:hover {
+.p-pager > .pagination > li > a:hover,
+.p-pager > .pagination > li > span:hover {
 	background-color: #eee;
 	border: 0 none;
 	border-bottom: 3px solid #337ab7;
 }
 
-.pagination.p-pager > li.p-pager-ellipsis > span {
+.p-pager > .pagination > li.p-pager-ellipsis > span {
 	border: 0 none;
 	border-bottom: 3px solid transparent;
 	padding-left: 8px;
 	padding-right: 8px;
 }
-.pagination.p-pager > li.p-pager-first > a,
-.pagination.p-pager > li.p-pager-first > span {
+.p-pager > .pagination > li.p-pager-first > a,
+.p-pager > .pagination > li.p-pager-first > span {
 }
-.pagination.p-pager > li.p-pager-prev > a,
-.pagination.p-pager > li.p-pager-prev > span {
+.p-pager > .pagination > li.p-pager-prev > a,
+.p-pager > .pagination > li.p-pager-prev > span {
 }
-.pagination.p-pager > li.p-pager-next > a,
-.pagination.p-pager > li.p-pager-next > span {
+.p-pager > .pagination > li.p-pager-next > a,
+.p-pager > .pagination > li.p-pager-next > span {
 }
-.pagination.p-pager > li.p-pager-last > a,
-.pagination.p-pager > li.p-pager-last > span {
+.p-pager > .pagination > li.p-pager-last > a,
+.p-pager > .pagination > li.p-pager-last > span {
 }
 
-.pagination.p-pager > .active > a,
-.pagination.p-pager > .active > span,
-.pagination.p-pager > .active > a:hover,
-.pagination.p-pager > .active > span:hover,
-.pagination.p-pager > .active > a:focus,
-.pagination.p-pager > .active > span:focus {
+.p-pager > .pagination > .active > a,
+.p-pager > .pagination > .active > span,
+.p-pager > .pagination > .active > a:hover,
+.p-pager > .pagination > .active > span:hover,
+.p-pager > .pagination > .active > a:focus,
+.p-pager > .pagination > .active > span:focus {
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #337ab7;

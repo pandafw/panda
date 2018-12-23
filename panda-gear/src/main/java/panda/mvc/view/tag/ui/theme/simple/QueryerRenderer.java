@@ -260,7 +260,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 	private boolean isPagerLimitSelective() {
 		Pager pg = newTag(Pager.class);
 
-		pg.setLinkStyle(tag.getPagerStyle());
+		pg.setPagerStyle(tag.getPagerStyle());
 		pg.evaluateParams();
 
 		return pg.isLimitSelective();

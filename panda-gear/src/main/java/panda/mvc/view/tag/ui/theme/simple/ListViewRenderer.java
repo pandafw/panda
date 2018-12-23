@@ -232,19 +232,35 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	private boolean isPagerLimitSelective() {
 		Pager pg = newTag(Pager.class);
 
-		pg.setLinkStyle(tag.getPagerStyle());
+		pg.setPagerStyle(tag.getPagerStyle());
 		pg.evaluateParams();
 
 		return pg.isLimitSelective();
 	}
 
+	private void writeToolbar(String style, String pos) throws IOException {
+		for (int i = 0; i < style.length(); i++) {
+			switch (style.charAt(i)) {
+			case 't':
+				writeTools();
+				break;
+			case 'a':
+				writeAddon();
+				break;
+			case 'p':
+				writePager(pos);
+				break;
+			}
+		}
+	}
+	
 	private Pager createPager(String pos) {
 		Pager pg = newTag(Pager.class);
 
 		pg.setId(id + "_pager_" + pos);
 		pg.setCssClass("p-lv-pager");
 		pg.setPager(queryer.getPager());
-		pg.setLinkStyle(tag.getPagerStyle());
+		pg.setPagerStyle(tag.getPagerStyle());
 		pg.setCount((long)listz);
 		pg.setOnLinkClick("_plv_goto('" + id + "', #)");
 		pg.setOnLimitChange("_plv_limit('" + id + "', this.value)");
@@ -262,6 +278,23 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		pg.end(writer, "");
 	}
 	
+	private void writeAddon() throws IOException {
+		if (Strings.isEmpty(tag.getAddon())) {
+			return;
+		}
+
+		write("<div class=\"p-lv-addon\">");
+		write(tag.getAddon());
+		write("</div>");
+	}
+
+	private void writeTools() throws IOException {
+		write("<div class=\"p-lv-tools\">");
+		writeCheckAllButton();
+		write(tag.getTools());
+		write("</div>");
+	}
+
 	private void writeCheckAllButton() throws IOException {
 		if (tag.isHideCheckAll()) {
 			return;
@@ -289,72 +322,30 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 	
 	private void writeListViewHeader() throws IOException {
-		boolean p = tag.isShowHeadPager(listz);
-		boolean t = tag.isShowHeadTools(listz);
-		boolean a = tag.isShowHeadAddon(listz);
-
-		if (!p && !t && !a) {
+		if (listz < 1 
+				|| Strings.isEmpty(tag.getHeaderStyle()) 
+				|| (tag.getHeaderThreshold() > 0 && listz < tag.getHeaderThreshold())) {
 			return;
 		}
 
 		write("<div id=\"");
 		write(id);
 		write("_header\" class=\"p-lv-header\">");
-
-		write("<div class=\"clearfix\"></div>");
-		write("<div class=\"p-lv-toolbar\">");
-		if (t) {
-			write("<div class=\"p-lv-tools\">");
-			writeCheckAllButton();
-			write(tag.getTools());
-			write("</div>");
-		}
-		if (a) {
-			write("<div class=\"p-lv-addon\">");
-			write(tag.getAddon());
-			write("</div>");
-		}
-		if (p) {
-			writePager("header");
-		}
-		write("</div>");
-
-		write("<div class=\"clearfix\"></div>");
+		writeToolbar(tag.getHeaderStyle(), "header");
 		write("</div>");
 	}
 	
 	private void writeListViewFooter() throws IOException {
-		boolean p = tag.isShowFootPager(listz);
-		boolean t = tag.isShowFootTools(listz);
-		boolean a = tag.isShowFootAddon(listz);
-
-		if (!p && !t && !a) {
+		if (listz < 1 
+				|| Strings.isEmpty(tag.getFooterStyle()) 
+				|| (tag.getFooterThreshold() > 0 && listz < tag.getFooterThreshold())) {
 			return;
 		}
 
 		write("<div id=\"");
 		write(id);
 		write("_footer\" class=\"p-lv-footer\">");
-		
-		write("<div class=\"clearfix\"></div>");
-		write("<div class=\"p-lv-toolbar\">");
-		if (p) {
-			writePager("footer");
-		}
-		if (t) {
-			write("<div class=\"p-lv-tools\">");
-			writeCheckAllButton();
-			write(tag.getTools());
-			write("</div>");
-		}
-		if (a) {
-			write("<div class=\"p-lv-addon\">");
-			write(tag.getAddon());
-			write("</div>");
-		}
-		write("</div>");
-
-		write("<div class=\"clearfix\"></div>");
+		writeToolbar(tag.getFooterStyle(), "footer");
 		write("</div>");
 	}
 

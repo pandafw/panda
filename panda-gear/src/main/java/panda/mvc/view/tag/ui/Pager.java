@@ -10,24 +10,29 @@ import panda.mvc.util.TextProvider;
  * Render an HTML pager.
  * <pre>
  * LinkStyle: 
- *  p: previous page
- *  n: next page
- *  f: seek to first page
- *  l: seek to last page
+ *  <: <ul>
+ *  p: previous page (hidden)
+ *  P: previous page (disabled)
+ *  n: next page (hidden)
+ *  N: next page (disabled)
+ *  f: seek to first page (hidden)
+ *  F: seek to first page (disabled)
+ *  l: seek to last page (hidden)
+ *  L: seek to last page (disabled)
  *  1: #1 first page (depends on '#')
  *  #: page number links
  *  x: #x last page (depends on '#')
  *  .: ellipsis
- *  i: info
+ *  >: </ul>
+ *  i: pager info text
  *  s: limit size select
- *  h: hide disabled link
  * </pre>
  */
 @IocBean(singleton=false)
 public class Pager extends UIBean {
 	private final static String DEFAULT_LINK_HREF = "#";
 	private final static int DEFAULT_LINK_SIZE = 5;
-	private final static String DEFAULT_LINK_STYLE = "ihfp#nls";
+	private final static String DEFAULT_PAGER_STYLE = "is<fp#nl>";
 	private final static String DEFAULT_LIMIT_LIST = "{ '20': '20 Items', '50': '50 Items', '100': '100 Items' }";
 
 	private final static String LABEL_EMPTY = "pager-label-empty";
@@ -45,7 +50,7 @@ public class Pager extends UIBean {
 	private final static String TOOLTIP_LIMIT = "pager-tooltip-limit";
 	private final static String LIMIT_LIST = "pager-limit-list";
 	private final static String LINK_SIZE = "pager-link-size";
-	private final static String LINK_STYLE = "pager-link-style";
+	private final static String PAGER_STYLE = "pager-style";
 
 	// attributes
 	protected panda.mvc.bean.Pager pager = new panda.mvc.bean.Pager();
@@ -64,7 +69,7 @@ public class Pager extends UIBean {
 
 	protected String linkHref;
 	protected Integer linkSize;
-	protected String linkStyle;
+	protected String pagerStyle;
 	protected String onLinkClick;
 
 	protected String limitName;
@@ -129,8 +134,8 @@ public class Pager extends UIBean {
 			linkSize = txt.getTextAsInt(LINK_SIZE, DEFAULT_LINK_SIZE);
 		}
 
-		if (linkStyle == null) {
-			linkStyle = txt.getText(LINK_STYLE, DEFAULT_LINK_STYLE);
+		if (pagerStyle == null) {
+			pagerStyle = txt.getText(PAGER_STYLE, DEFAULT_PAGER_STYLE);
 		}
 
 		if (linkHref == null) {
@@ -314,10 +319,10 @@ public class Pager extends UIBean {
 	}
 
 	/**
-	 * @return the linkStyle
+	 * @return the pageStyle
 	 */
-	public String getLinkStyle() {
-		return linkStyle;
+	public String getPagerStyle() {
+		return pagerStyle;
 	}
 
 	/**
@@ -440,10 +445,10 @@ public class Pager extends UIBean {
 	}
 
 	/**
-	 * @param linkStyle the linkStyle to set
+	 * @param pagerStyle the pagerStyle to set
 	 */
-	public void setLinkStyle(String linkStyle) {
-		this.linkStyle = linkStyle;
+	public void setPagerStyle(String pagerStyle) {
+		this.pagerStyle = pagerStyle;
 	}
 
 	/**
@@ -530,47 +535,7 @@ public class Pager extends UIBean {
 		pager.setTotal(total);
 	}
 
-	public boolean isHiddenStyle() {
-		return Strings.contains(linkStyle, 'h');
-	}
-
-	public boolean isRenderInfo() {
-		return Strings.contains(linkStyle, 'i');
-	}
-
-	public boolean isRenderFirst() {
-		return Strings.contains(linkStyle, 'f');
-	}
-
-	public boolean isRenderLast() {
-		return Strings.contains(linkStyle, 'l');
-	}
-
-	public boolean isRenderPrev() {
-		return Strings.contains(linkStyle, 'p');
-	}
-
-	public boolean isRenderNext() {
-		return Strings.contains(linkStyle, 'n');
-	}
-
-	public boolean isRenderPage1() {
-		return Strings.contains(linkStyle, '1');
-	}
-
-	public boolean isRenderPageNo() {
-		return Strings.contains(linkStyle, '#');
-	}
-
-	public boolean isRenderPageX() {
-		return Strings.contains(linkStyle, 'x');
-	}
-
-	public boolean isRenderPageEllipsis() {
-		return Strings.contains(linkStyle, '.');
-	}
-
 	public boolean isLimitSelective() {
-		return Strings.contains(linkStyle, 's');
+		return Strings.contains(pagerStyle, 's');
 	}
 }

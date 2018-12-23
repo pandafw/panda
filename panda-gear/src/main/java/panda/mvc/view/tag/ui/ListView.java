@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.Objects;
-import panda.lang.Strings;
 import panda.mvc.view.util.ListColumn;
 
 /**
@@ -13,6 +11,8 @@ import panda.mvc.view.util.ListColumn;
  */
 @IocBean(singleton=false)
 public class ListView extends UIBean {
+	private final static String HEADER_STYLE = "listview-header-style";
+	private final static String FOOTER_STYLE = "listview-footer-style";
 	private final static String HEADER_THRESHOLD = "listview-header-threshold";
 	private final static String FOOTER_THRESHOLD = "listview-footer-threshold";
 	private final static String SORTABLE = "listview-sortable";
@@ -99,11 +99,17 @@ public class ListView extends UIBean {
 		super.evaluateParams();
 
 		populateComponentHtmlId();
-		
+
+		if (headerStyle == null) {
+			headerStyle = context.getText().getText(HEADER_STYLE, "pta");
+		}
 		if (headerThreshold == null) {
 			headerThreshold = context.getText().getTextAsInt(HEADER_THRESHOLD, 0);
 		}
 
+		if (footerStyle == null) {
+			footerStyle = context.getText().getText(FOOTER_STYLE, "tap");
+		}
 		if (footerThreshold == null) {
 			footerThreshold = context.getText().getTextAsInt(FOOTER_THRESHOLD, 10);
 		}
@@ -117,53 +123,6 @@ public class ListView extends UIBean {
 		}
 	}
 
-	/**
-	 * @param obj1 object 1
-	 * @param obj2 object 2
-	 * @return true if obj2 exists in obj1
-	 */
-	public boolean contains(Object obj1, Object obj2) {
-		return Objects.contains(obj1, obj2);
-	}
-
-	private boolean isShowHeadPart(int part, int count) {
-		if (Strings.isEmpty(headerStyle)) {
-			return headerThreshold == 0 || count > this.headerThreshold;
-		}
-		return Strings.contains(headerStyle, part);
-	}
-
-	private boolean isShowFootPart(int part, int count) {
-		if (Strings.isEmpty(footerStyle)) {
-			return footerThreshold == 0 || count > this.footerThreshold;
-		}
-		return Strings.contains(footerStyle, part);
-	}
-	
-	public boolean isShowHeadPager(int count) {
-		return isShowHeadPart('p', count);
-	}
-	
-	public boolean isShowHeadTools(int count) {
-		return Strings.isNotEmpty(tools) && isShowHeadPart('t', count);
-	}
-	
-	public boolean isShowHeadAddon(int count) {
-		return Strings.isNotEmpty(addon) && isShowHeadPart('a', count);
-	}
-	
-	public boolean isShowFootPager(int count) {
-		return isShowFootPart('p', count);
-	}
-	
-	public boolean isShowFootTools(int count) {
-		return Strings.isNotEmpty(tools) && isShowFootPart('t', count);
-	}
-	
-	public boolean isShowFootAddon(int count) {
-		return Strings.isNotEmpty(addon) && isShowFootPart('a', count);
-	}
-	
 	/**
 	 * @return the list
 	 */

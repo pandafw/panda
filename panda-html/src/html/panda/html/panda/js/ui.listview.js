@@ -247,10 +247,10 @@ function _plv_goto(id, p) {
 	document.getElementById(id + "_submit").click();
 }
 
-function _plv_limit(id, l) {
+function _plv_limit(id, n) {
 	$('#' + id).loadmask();
 
-	document.getElementById(id + "_limit").value = l;
+	document.getElementById(id + "_limit").value = n;
 	document.getElementById(id + "_submit").click();
 }
 
