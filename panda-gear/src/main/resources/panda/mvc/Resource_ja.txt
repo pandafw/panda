@@ -48,9 +48,7 @@ query-btn-clear=クリア
 query-lbl-method=検索方法
 
 
-query-booleans=\
-	"true":  "はい", \
-	"false": "いいえ" 
+query-booleans={ "true":  "はい", "false": "いいえ" }
 
 query-strings=\
 	"mt": "を含む", \

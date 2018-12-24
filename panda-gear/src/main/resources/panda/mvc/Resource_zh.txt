@@ -41,9 +41,7 @@ query-btn-search=检索
 query-btn-clear=清除
 query-lbl-method=检索方法
 
-query-booleans=\
-	"true":  "是", \
-	"false": "否"
+query-booleans={ "true":  "是", "false": "否" }
 
 query-strings=\
 	"mt": "包含", \

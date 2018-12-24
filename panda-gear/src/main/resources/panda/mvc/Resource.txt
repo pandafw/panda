@@ -108,18 +108,14 @@ query-btn-search=Search
 query-css-label=col-sm-3
 query-css-input=col-sm-9
 
-query-methods=\
-	"and": "AND", \
-	"or":  "OR"
+query-methods=
+#query-methods={ "and": "AND", "or":  "OR" }
 
-query-booleans=\
-	"true":  "Yes", \
-	"false": "No" 
+query-booleans={ "true": "Yes", "false": "No" }
 
-query-dates=\
-	"bt": "～", \
-	"eq": "＝", \
-	"ne": "≠" 
+query-dates={ "bt": "～", "eq": "＝", "ne": "≠" }
+
+query-numbers={ "bt": "～", 	"eq": "＝", 	"ne": "≠" }
 
 query-strings=\
 	"mt": "contains", \
@@ -132,11 +128,6 @@ query-strings=\
 #	, \
 #	"lk": "likes", \
 #	"nk": "not likes"
-
-query-numbers=\
-	"bt": "～", \
-	"eq": "＝", \
-	"ne": "≠" 
 
 
 #-----------------------------------------------------------------------------
