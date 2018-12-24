@@ -23,7 +23,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String JQUERY2_BIND_PATH = JQUERY_BIND_BASE + JQUERY2_VERSION;
 	private static final String JQUERY3_BIND_PATH = JQUERY_BIND_BASE + JQUERY3_VERSION;
 
-	private static final String BOOTSTRAP3_VERSION = "3.3.7";
+	private static final String BOOTSTRAP3_VERSION = "3.4.0";
 	private static final String FONTAWESOME4_VERSION = "4.7.0";
 	
 	private boolean js;
