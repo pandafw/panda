@@ -41,6 +41,7 @@ import panda.lang.Exceptions;
 import panda.lang.Iterators.SingleIterator;
 import panda.lang.Logical;
 import panda.lang.Order;
+import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
 import panda.log.Log;
@@ -219,17 +220,13 @@ public class GaeDao extends AbstractDao {
 	}
 
 	//-----------------------------------------------------------------------------
-	private Key createKey(String table, Object id) {
+	private Key createKey(Entity<?> entity, Object id) {
+		String table = getTableName(entity);
 		if (id instanceof Number) {
 			return KeyFactory.createKey(getRootKey(), table, ((Number)id).longValue());
 		}
-		else {
-			return KeyFactory.createKey(getRootKey(), table, id.toString());
-		}
-	}	
-	
-	private Key createKey(Entity<?> entity, Object id) {
-		return createKey(getTableName(entity), id);
+
+		return KeyFactory.createKey(getRootKey(), table, id.toString());
 	}
 
 	private Object getDataIdentity(Entity<?> en, Object data) {
@@ -254,7 +251,7 @@ public class GaeDao extends AbstractDao {
 			eid.setValue(data, id);
 		}
 		else {
-			Object id = convertValueFromGae(eid, key.getName());
+			Object id = convertValueFromGae(eid, Strings.isEmpty(key.getName()) ? key.getId() : key.getName());
 			eid.setValue(data, id);
 		}
 	}
@@ -1044,9 +1041,20 @@ public class GaeDao extends AbstractDao {
 			ge = new com.google.appengine.api.datastore.Entity(key); 
 		}
 		else {
-			ge = new com.google.appengine.api.datastore.Entity(getTableName(entity), getRootKey());
-			saveEntity(ge);
-			setDataIdentity(entity, data, ge.getKey());
+			EntityField ef = entity.getIdentity();
+			if (ef == null) {
+				ge = new com.google.appengine.api.datastore.Entity(getTableName(entity), getRootKey());
+			}
+			else {
+				if (ef.isNumberIdentity()) {
+					ge = new com.google.appengine.api.datastore.Entity(getTableName(entity), getRootKey());
+				}
+				else {
+					ge = new com.google.appengine.api.datastore.Entity(getTableName(entity), Randoms.randUUID32(), getRootKey());
+				}
+				saveEntity(ge);
+				setDataIdentity(entity, data, ge.getKey());
+			}
 		}
 
 		DataQuery<?> query = createQuery(entity);
