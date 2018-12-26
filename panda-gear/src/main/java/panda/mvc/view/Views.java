@@ -124,15 +124,27 @@ public class Views {
 		return createView(ac, NONE);
 	}
 
-	public static View forbidden(ActionContext ac) {
+	public static View scForbidden(ActionContext ac) {
+		return createView(ac, SC_FORBIDDEN);
+	}
+	
+	public static View scNotFound(ActionContext ac) {
+		return createView(ac, SC_NOT_FOUND);
+	}
+	
+	public static View scInternalError(ActionContext ac) {
+		return createView(ac, SC_INTERNAL_ERROR);
+	}
+
+	public static View seForbidden(ActionContext ac) {
 		return createView(ac, SE_FORBIDDEN);
 	}
 	
-	public static View notFound(ActionContext ac) {
+	public static View seNotFound(ActionContext ac) {
 		return createView(ac, SE_NOT_FOUND);
 	}
 	
-	public static View internalError(ActionContext ac) {
+	public static View seInternalError(ActionContext ac) {
 		return createView(ac, SE_INTERNAL_ERROR);
 	}
 

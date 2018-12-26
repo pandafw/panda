@@ -77,12 +77,12 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	@To(Views.RAW)
 	public Object download(@Param("id") String id) throws Exception {
 		if (id == null) {
-			return Views.notFound(context);
+			return Views.scNotFound(context);
 		}
 
 		FileItem file = filePool.findFile(id);
 		if (file == null || !file.isExists()) {
-			return Views.notFound(context);
+			return Views.scNotFound(context);
 		}
 
 		HttpServletResponser hss = new HttpServletResponser(getRequest(), getResponse());

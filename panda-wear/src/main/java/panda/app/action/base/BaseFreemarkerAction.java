@@ -11,7 +11,7 @@ public abstract class BaseFreemarkerAction extends AbstractAction {
 	public Object ftl(String path) {
 		String location = "/" + path + ".ftl";
 		if (!assist().hasTemplate(location)) {
-			return Views.notFound(context);
+			return Views.seNotFound(context);
 		}
 		return location;
 	}

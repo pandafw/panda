@@ -14,7 +14,7 @@ public abstract class BaseJspAction extends AbstractAction {
 		String location = "/" + path + ".jsp";
 		
 		File file = new File(context.getServlet().getRealPath(location));
-		return file.exists() ? location : Views.notFound(context);
+		return file.exists() ? location : Views.seNotFound(context);
 	}
 
 	@At("(.*)\\.sjsp$")
