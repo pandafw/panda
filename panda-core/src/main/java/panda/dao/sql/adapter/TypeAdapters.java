@@ -20,9 +20,9 @@ import panda.cast.Castors;
 import panda.dao.DaoTypes;
 import panda.lang.collection.MultiKey;
 import panda.vfs.FileItem;
-import panda.vfs.NullFileItem;
 import panda.vfs.ProxyFileItem;
 import panda.vfs.dao.DaoFileItem;
+import panda.vfs.gcs.GcsFileItem;
 import panda.vfs.local.LocalFileItem;
 
 /**
@@ -170,10 +170,10 @@ public class TypeAdapters {
 		//
 		adapter = new ByteArrayTypeAdapter<FileItem>(this, FileItem.class);
 		register(FileItem.class, adapter);
-		register(NullFileItem.class, adapter);
 		register(ProxyFileItem.class, adapter);
 		register(DaoFileItem.class, adapter);
 		register(LocalFileItem.class, adapter);
+		register(GcsFileItem.class, adapter);
 
 		//----------------------------------------------------
 		// date time

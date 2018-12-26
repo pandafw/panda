@@ -12,7 +12,7 @@ import panda.io.Streams;
  */
 public class ProxyFileItem implements FileItem {
 	
-	private Long id;
+	private String id;
 
 	private String name;
 
@@ -36,7 +36,7 @@ public class ProxyFileItem implements FileItem {
 	 * @return the id
 	 */
 	@Override
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -111,7 +111,7 @@ public class ProxyFileItem implements FileItem {
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

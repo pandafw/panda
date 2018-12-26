@@ -69,7 +69,7 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof FileItem) {
 				FileItem fi = (FileItem)value;
 				if (fi.getId() != null) {
-					a.append(fi.getId().toString());
+					a.append(fi.getId());
 				}
 				else if (fi.getName() != null) {
 					a.append(fi.getName());

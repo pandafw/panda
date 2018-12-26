@@ -7,7 +7,6 @@ import java.util.Date;
 
 import panda.cast.CastContext;
 import panda.lang.Numbers;
-import panda.vfs.FileItem;
 
 /**
  */
@@ -36,9 +35,6 @@ public class NumberTypeCastor {
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
 				}
-			}
-			if (value instanceof FileItem) {
-				return ((FileItem)value).getId();
 			}
 			return castError(value, context);
 		}
@@ -70,10 +66,6 @@ public class NumberTypeCastor {
 					return castError(value, context, e);
 				}
 			}
-			if (value instanceof FileItem) {
-				FileItem fi = (FileItem)value;
-				return fi.getId() == null ? defaultValue() : BigDecimal.valueOf(fi.getId());
-			}
 			return castError(value, context);
 		}
 	}
@@ -103,10 +95,6 @@ public class NumberTypeCastor {
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
 				}
-			}
-			if (value instanceof FileItem) {
-				FileItem fi = (FileItem)value;
-				return fi.getId() == null ? defaultValue() : BigInteger.valueOf(fi.getId());
 			}
 			return castError(value, context);
 		}

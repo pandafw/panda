@@ -19,8 +19,6 @@ import panda.mvc.bean.Sorter;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
 import panda.vfs.dao.DaoFilePool;
-import panda.vfs.local.LocalFileItem;
-import panda.vfs.local.LocalFilePool;
 
 @At("${super_path}/filepool")
 @Auth(AUTH.SUPER)
@@ -39,41 +37,41 @@ public class FilePoolListExAction extends FilePoolListAction {
 			super.queryList(qr, defLimit, maxLimit);
 			return;
 		}
-		
+
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
 
-		if (filePool instanceof LocalFilePool) {
-			try {
-				List<LocalFileItem> ds = ((LocalFilePool)filePool).listFiles();
-				qr.getPager().setTotal(ds.size());
-				qr.getPager().normalize();
+		List<FileItem> ds;
+		try {
+			ds = filePool.listFiles();
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 
-				// TODO: filter
-				
-				// sort
-				if (Strings.isNotEmpty(qr.getSorter().getColumn())) {
-					Comparator<FileItem> c = Comparators.property(FileItem.class, qr.getSorter().getColumn());
-					if (Sorter.DESC.equalsIgnoreCase(qr.getSorter().getDirection())) {
-						c = Comparators.reverse(c);
-					}
-					
-					Collections.sort(ds, c);
-				}
+		qr.getPager().setTotal(ds.size());
+		qr.getPager().normalize();
 
-				// start, limit
-				dataList = new ArrayList<FileItem>();
-				int start = qr.getPager().getStart().intValue();
-				int limit = start + qr.getPager().getLimit().intValue();
-				if (limit > ds.size()) {
-					limit = ds.size();
-				}
-				for (int i = start; i < limit; i++) {
-					dataList.add(ds.get(i));
-				}
+		// TODO: filter
+		
+		// sort
+		if (Strings.isNotEmpty(qr.getSorter().getColumn())) {
+			Comparator<FileItem> c = Comparators.property(FileItem.class, qr.getSorter().getColumn());
+			if (Sorter.DESC.equalsIgnoreCase(qr.getSorter().getDirection())) {
+				c = Comparators.reverse(c);
 			}
-			catch (IOException e) {
-				throw Exceptions.wrapThrow(e);
-			}
+			
+			Collections.sort(ds, c);
+		}
+
+		// start, limit
+		dataList = new ArrayList<FileItem>();
+		int start = qr.getPager().getStart().intValue();
+		int limit = start + qr.getPager().getLimit().intValue();
+		if (limit > ds.size()) {
+			limit = ds.size();
+		}
+		for (int i = start; i < limit; i++) {
+			dataList.add(ds.get(i));
 		}
 	}
 

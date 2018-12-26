@@ -1,13 +1,13 @@
-package panda.vfs.local;
+package panda.vfs.gcs;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 
-import panda.io.Files;
+import com.google.appengine.tools.cloudstorage.ListItem;
+
+import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Objects;
@@ -15,37 +15,38 @@ import panda.vfs.FileItem;
 
 /**
  */
-public class LocalFileItem implements FileItem, Serializable {
+public class GcsFileItem implements FileItem, Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private LocalFilePool localFilePool;
+	private GcsFilePool gcsFilePool;
 	private String id;
-	private File file;
+	private String name;
+	private int size;
+	private Date date;
+	private boolean exists;
 	
 	/**
 	 * Constructor
+	 * @param gcsFilePool GcsFilePool
 	 */
-	public LocalFileItem() {
+	public GcsFileItem(GcsFilePool gcsFilePool) {
+		this.gcsFilePool = gcsFilePool;
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param localFilePool local file pool
+	 * @param gcsFilePool local file pool
 	 * @param id file id
-	 * @param file the local file
+	 * @param item the gcs file item
 	 */
-	public LocalFileItem(LocalFilePool localFilePool, String id, File file) {
-		this.localFilePool = localFilePool;
+	public GcsFileItem(GcsFilePool gcsFilePool, String id, ListItem item) {
+		this.gcsFilePool = gcsFilePool;
 		this.id = id;
-		this.file = file;
-	}
-
-	/**
-	 * @return the file
-	 */
-	protected File getFile() {
-		return file;
+		this.name = FileNames.getName(item.getName());
+		this.size = (int)item.getLength();
+		this.date = item.getLastModified();
+		this.exists = true;
 	}
 
 	/**
@@ -68,7 +69,14 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public String getName() {
-		return file.getName();
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -76,7 +84,14 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public int getSize() {
-		return (int)file.length();
+		return size;
+	}
+
+	/**
+	 * @param size the size to set
+	 */
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	/**
@@ -84,7 +99,14 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public Date getDate() {
-		return new Date(file.lastModified());
+		return date;
+	}
+
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	/**
@@ -100,7 +122,14 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public boolean isExists() {
-		return file.exists();
+		return exists;
+	}
+
+	/**
+	 * @param exists the exists to set
+	 */
+	public void setExists(boolean exists) {
+		this.exists = exists;
 	}
 
 	/**
@@ -108,7 +137,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public byte[] data() throws IOException {
-		return Streams.toByteArray(file);
+		return Streams.toByteArray(open());
 	}
 
 	/**
@@ -116,7 +145,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public InputStream open() throws IOException {
-		return new FileInputStream(file);
+		return gcsFilePool.openFile(this);
 	}
 	
 	/**
@@ -124,7 +153,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public void save(byte[] data) throws IOException {
-		Files.write(file, data);
+		gcsFilePool.saveFile(this, data);
 	}
 
 	/**
@@ -132,12 +161,12 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public void save(InputStream data) throws IOException {
-		Files.write(file, data);
+		gcsFilePool.saveFile(this, data);
 	}
 
 	@Override
-	public void delete() {
-		localFilePool.removeFile(file);
+	public void delete() throws IOException {
+		gcsFilePool.removeFile(this);
 	}
 
 	/**
@@ -146,8 +175,10 @@ public class LocalFileItem implements FileItem, Serializable {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
-				.append("id", id)
-				.append("file", file)
+				.append(ID, id)
+				.append(NAME, name)
+				.append(SIZE, size)
+				.append(DATE, date)
 				.toString();
 	}
 
@@ -156,7 +187,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return ((file == null) ? 0 : file.hashCode());
+		return ((id == null) ? 0 : id.hashCode());
 	}
 
 	/**
@@ -175,13 +206,13 @@ public class LocalFileItem implements FileItem, Serializable {
 			return false;
 		}
 		
-		LocalFileItem other = (LocalFileItem)obj;
-		if (file == null) {
-			if (other.file != null) {
+		GcsFileItem other = (GcsFileItem)obj;
+		if (id == null) {
+			if (other.id != null) {
 				return false;
 			}
 		}
-		else if (!file.equals(other.file)) {
+		else if (!id.equals(other.id)) {
 			return false;
 		}
 
@@ -193,8 +224,12 @@ public class LocalFileItem implements FileItem, Serializable {
 	 * @return the copy object
 	 */
 	@Override
-	public LocalFileItem clone() {
-		LocalFileItem copy = new LocalFileItem(localFilePool, id, file);
+	public GcsFileItem clone() {
+		GcsFileItem copy = new GcsFileItem(gcsFilePool);
+		copy.id = id;
+		copy.name = name;
+		copy.size = size;
+		copy.date = date;
 		return copy;
 	}
 }

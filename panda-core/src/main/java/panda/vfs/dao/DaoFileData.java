@@ -34,7 +34,8 @@ public class DaoFileData implements Serializable {
 	 *----------------------------------------------------------------------*/
 	@PK
 	@FK(target=DaoFileItem.class)
-	protected Long fid;
+	@Column(notNull=true, size=64)
+	protected String fid;
 	
 	@PK
 	@Column(notNull=true)
@@ -56,14 +57,14 @@ public class DaoFileData implements Serializable {
 	/**
 	 * @return the fileId
 	 */
-	public Long getFid() {
+	public String getFid() {
 		return fid;
 	}
 
 	/**
 	 * @param fileId the fileId to set
 	 */
-	public void setFid(Long fileId) {
+	public void setFid(String fileId) {
 		this.fid = fileId;
 	}
 

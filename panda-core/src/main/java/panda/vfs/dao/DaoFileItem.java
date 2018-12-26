@@ -36,7 +36,8 @@ public class DaoFileItem implements FileItem, Serializable {
 	 * Properties
 	 *----------------------------------------------------------------------*/
 	@Id
-	protected Long id;
+	@Column(notNull=true, size=32)
+	protected String id;
 
 	@Column(notNull=true, size=255)
 	protected String name;
@@ -74,14 +75,14 @@ public class DaoFileItem implements FileItem, Serializable {
 	 * @return the id
 	 */
 	@Override
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

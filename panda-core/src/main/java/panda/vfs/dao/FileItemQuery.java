@@ -22,8 +22,8 @@ public class FileItemQuery extends EntityQuery<DaoFileItem, FileItemQuery> {
 	/**
 	 * @return condition of id
 	 */
-	public ComparableCondition<FileItemQuery, Long> id() {
-		return new ComparableCondition<FileItemQuery, Long>(this, DaoFileItem.ID);
+	public ComparableCondition<FileItemQuery, String> id() {
+		return new ComparableCondition<FileItemQuery, String>(this, DaoFileItem.ID);
 	}
 
 	/**

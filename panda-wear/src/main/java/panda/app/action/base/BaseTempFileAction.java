@@ -75,7 +75,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 */
 	@At
 	@To(Views.RAW)
-	public Object download(@Param("id") Long id) throws Exception {
+	public Object download(@Param("id") String id) throws Exception {
 		if (id == null) {
 			return Views.notFound(context);
 		}

@@ -15,6 +15,7 @@ import panda.io.Files;
 import panda.io.Streams;
 import panda.io.filter.FileFilters;
 import panda.lang.Arrays;
+import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
@@ -22,7 +23,6 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
-import panda.vfs.NullFileItem;
 
 public class LocalFilePool implements FilePool {
 	private final static Log log = Logs.getLog(LocalFilePool.class);
@@ -75,22 +75,6 @@ public class LocalFilePool implements FilePool {
 		this.expires = maxAge * 1000L;
 	}
 
-	protected synchronized long nextId() {
-		long time = DateTimes.getDate().getTime();
-		if (serial < time) {
-			serial = time;
-		}
-
-		while (true) {
-			File dir = new File(path, fdf.format(serial));
-			if (dir.exists()) {
-				serial++;
-				continue;
-			}
-			return serial;
-		}
-	}
-	
 	protected synchronized LocalFileItem getLocalFile(String name) {
 		name = FileNames.trimFileName(name);
 		if (Strings.isEmpty(name)) {
@@ -112,7 +96,7 @@ public class LocalFilePool implements FilePool {
 				continue;
 			}
 			File file = new File(dir, name);
-			return new LocalFileItem(this, serial, file);
+			return new LocalFileItem(this, String.valueOf(serial), file);
 		}
 	}
 	
@@ -138,16 +122,17 @@ public class LocalFilePool implements FilePool {
 	}
 	
 	@Override
-	public FileItem findFile(Long id) {
-		File dir = new File(path, fdf.format(id));
+	public FileItem findFile(String id) {
+		Long t = Numbers.toLong(id, 0L);
+		File dir = new File(path, fdf.format(t));
 		if (dir.exists()) {
 			File[] fs = dir.listFiles();
 			if (Arrays.isNotEmpty(fs)) {
-				return new LocalFileItem(this, id, fs[0]);
+				return new LocalFileItem(this, String.valueOf(t), fs[0]);
 			}
 		}
 
-		return new NullFileItem(id);
+		return new LocalFileItem(this, String.valueOf(t), new File(dir, "noname"));
 	}
 	
 	protected boolean removeFile(File file) {
@@ -193,23 +178,24 @@ public class LocalFilePool implements FilePool {
 		return cnt;
 	}
 	
-	public List<LocalFileItem> listFiles() throws IOException {
+	@Override
+	public List<FileItem> listFiles() throws IOException {
 		File root = new File(path);
 		
 		if (!root.exists()) {
 			return null;
 		}
 		
-		List<LocalFileItem> fis = new ArrayList<LocalFileItem>();
+		List<FileItem> fis = new ArrayList<FileItem>();
 		FileIterator fit = Files.iterateFiles(root, true);
 		try {
 			while (fit.hasNext()) {
-				long id;
+				String id;
 				File f = fit.next();
 				String rp = FileNames.getRelativePath(root, f.getParentFile());
 				try {
 					Date d = fdf.parse(rp);
-					id = d.getTime();
+					id = String.valueOf(d.getTime());
 				}
 				catch (ParseException e) {
 					continue;

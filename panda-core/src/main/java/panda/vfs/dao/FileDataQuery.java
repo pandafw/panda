@@ -20,8 +20,8 @@ public class FileDataQuery extends EntityQuery<DaoFileData, FileDataQuery> {
 	/**
 	 * @return condition of fid
 	 */
-	public ComparableCondition<FileDataQuery, Long> fid() {
-		return new ComparableCondition<FileDataQuery, Long>(this, DaoFileData.FID);
+	public ComparableCondition<FileDataQuery, String> fid() {
+		return new ComparableCondition<FileDataQuery, String>(this, DaoFileData.FID);
 	}
 
 	/**

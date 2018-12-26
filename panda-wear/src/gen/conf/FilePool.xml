@@ -3,8 +3,8 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="panda.vfs.FileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
-		<property name="id" type="Long" notNull="true" primaryKey="true" comment="file id"/>
+	<entity name="panda.vfs.FileItem" identity="id" baseQueryClass="${entity.baseQueryClass}" generate="false">
+		<property name="id" type="String" size="32" notNull="true" primaryKey="true" comment="file id"/>
 		<property name="name" type="String" size="255" notNull="true" comment="file name">
 			<validator type="stringlength">
 				<param name="maxLength" value="255"/>
@@ -18,7 +18,7 @@
 	<action name="action.FilePool" entity="panda.vfs.FileItem" extend="baseAction">
 		<list name="basicList" extend="baseList">
 			<column name="id" sortable="true" link="true">
-				<filter type="number"/>
+				<filter type="string"/>
 			</column>
 			<column name="name" sortable="true" link="true">
 				<filter type="string" fixed="true"/>

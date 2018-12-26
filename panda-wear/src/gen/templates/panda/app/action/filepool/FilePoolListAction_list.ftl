@@ -99,7 +99,7 @@
 			"display": a.displayField("id"),
 			"filterable": a.filterField("id"),
 			"filter": {
-				"type": "number"
+				"type": "string"
 			},
 			"link": true,
 			"sortable": true,

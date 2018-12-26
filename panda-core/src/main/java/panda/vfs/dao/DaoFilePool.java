@@ -2,6 +2,7 @@ package panda.vfs.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,6 @@ import panda.lang.mutable.MutableInt;
 import panda.lang.time.DateTimes;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
-import panda.vfs.NullFileItem;
 
 public class DaoFilePool implements FilePool {
 	private DaoClient daoClient;
@@ -71,34 +71,6 @@ public class DaoFilePool implements FilePool {
 		this.expires = maxage * 1000L;
 	}
 
-	protected FileItem saveFile(FileItem file, final InputStream body) throws IOException {
-		final byte[] data = Streams.toByteArray(body);
-		return saveFile(file, data);
-	}
-	
-	protected FileItem saveFile(FileItem file, final byte[] data) throws IOException {
-		final DaoFileItem fi = (DaoFileItem)file;
-		
-		fi.setDaoFilePool(this);
-		fi.setDate(DateTimes.getDate());
-		fi.setData(data);
-		fi.setSize(data.length);
-		
-		try {
-			final Dao dao = getDaoClient().getDao();
-			dao.exec(new Runnable() {
-				public void run() {
-					dao.update(fi);
-					saveData(dao, fi, data);
-				}
-			});
-		}
-		catch (DaoException e) {
-			throw new IOException("Failed to save file " + fi.getName(), e);
-		}
-		return fi;
-	}
-
 	@Override
 	public Class<? extends FileItem> getItemType() {
 		return DaoFileItem.class;
@@ -114,8 +86,19 @@ public class DaoFilePool implements FilePool {
 		name = Strings.right(name, FileNames.MAX_FILENAME_LENGTH);
 
 		final DaoFileItem fi = new DaoFileItem();
-		fi.setDaoFilePool(this);
 		fi.setName(name);
+		fi.setExists(false);
+
+		saveFile(fi, data);
+		return fi;
+	}
+
+	protected void saveFile(DaoFileItem file, InputStream body) throws IOException {
+		saveFile(file, Streams.toByteArray(body));
+	}
+	
+	protected void saveFile(final DaoFileItem fi, final byte[] data) throws IOException {
+		fi.setDaoFilePool(this);
 		fi.setDate(DateTimes.getDate());
 		fi.setData(data);
 		fi.setSize(data.length);
@@ -124,20 +107,24 @@ public class DaoFilePool implements FilePool {
 			final Dao dao = getDaoClient().getDao();
 			dao.exec(new Runnable() {
 				public void run() {
-					dao.insert(fi);
-	
-					FileDataQuery fdq = new FileDataQuery();
-					fdq.fid().eq(fi.getId());
-					dao.deletes(fdq);
-	
+					if (fi.isExists()) {
+						dao.update(fi);
+
+						FileDataQuery fdq = new FileDataQuery();
+						fdq.fid().eq(fi.getId());
+						dao.deletes(fdq);
+					}
+					else {
+						dao.insert(fi);
+					}
 					saveData(dao, fi, data);
 				}
 			});
+			fi.setExists(true);
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to save file " + name, e);
+			throw new IOException("Failed to save file [" + fi.getId() + "] " + fi.getName(), e);
 		}
-		return fi;
 	}
 
 	private void saveData(Dao dao, FileItem fi, byte[] data) {
@@ -168,14 +155,41 @@ public class DaoFilePool implements FilePool {
 	}
 
 	@Override
-	public FileItem findFile(Long id) {
-		Dao dao = getDaoClient().getDao();
-		DaoFileItem fi = dao.fetch(DaoFileItem.class, id);
-		if (fi == null) {
-			return new NullFileItem(id);
+	public FileItem findFile(String id) throws IOException {
+		try {
+			Dao dao = getDaoClient().getDao();
+			DaoFileItem fi = dao.fetch(DaoFileItem.class, id);
+			if (fi == null) {
+				fi = new DaoFileItem();
+				fi.setId(id);
+				fi.setName("noname");
+				fi.setExists(false);
+				fi.setSize(0);
+				fi.setData(new byte[0]);
+			}
+			fi.setDaoFilePool(this);
+			return fi;
 		}
-		fi.setDaoFilePool(this);
-		return fi;
+		catch (DaoException e) {
+			throw new IOException("Failed to find file: " + id, e);
+		}
+	}
+
+	@Override
+	public List<FileItem> listFiles() throws IOException {
+		try {
+			Dao dao = getDaoClient().getDao();
+			List<FileItem> list = new ArrayList<FileItem>();
+			try (DaoIterator<DaoFileItem> it = dao.iterate(DaoFileItem.class)) {
+				while (it.hasNext()) {
+					list.add(it.next());
+				}
+			}
+			return list;
+		}
+		catch (DaoException e) {
+			throw new IOException("Failed to list files", e);
+		}
 	}
 	
 	protected byte[] readFile(DaoFileItem fi) throws IOException {

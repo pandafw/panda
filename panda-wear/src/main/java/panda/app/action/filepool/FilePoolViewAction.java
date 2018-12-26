@@ -26,7 +26,7 @@ public class FilePoolViewAction extends BaseTempFileAction {
 	 */
 	@At
 	@To(Views.RAW)
-	public Object view(@Param("id") Long id) throws Exception {
+	public Object view(@Param("id") String id) throws Exception {
 		return download(id);
 	}
 }

@@ -33,14 +33,19 @@ public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
 			return super.selectDataList(dataList, filter);
 		}
 
-		List<FileItem> fis = new ArrayList<FileItem>();
-		for (FileItem a : dataList) {
-			FileItem fi = filePool.findFile(a.getId());
-			if (fi != null && fi.isExists()) {
-				fis.add(fi);
+		try {
+			List<FileItem> fis = new ArrayList<FileItem>();
+			for (FileItem a : dataList) {
+				FileItem fi = filePool.findFile(a.getId());
+				if (fi != null && fi.isExists()) {
+					fis.add(fi);
+				}
 			}
+			return fis;
 		}
-		return fis;
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 
 	/**
@@ -62,7 +67,7 @@ public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
 	@Override
 	protected void deleteDataList(List<FileItem> dataList, MutableInt count) {
 		if (filePool instanceof DaoFilePool) {
-			List<Long> ids = new ArrayList<Long>(dataList.size());
+			List<String> ids = new ArrayList<String>(dataList.size());
 			for (FileItem f : dataList) {
 				ids.add(f.getId());
 			}
