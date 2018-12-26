@@ -115,6 +115,6 @@ other Markdown constructs:
 
 This is a code span with a literal backslash-backtick sequence: `` \` ``
 
-This is a tag with unescaped backticks <span attr='`ticks`'>bar</span>.
+This is a tag with unescaped backticks <span id='`ticks`'>bar</span>.
 
-This is a tag with backslashes <span attr='\\backslashes\\'>bar</span>.
+This is a tag with backslashes <span id='\\backslashes\\'>bar</span>.
