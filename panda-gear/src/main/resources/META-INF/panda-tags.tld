@@ -258,7 +258,7 @@
 	<tag>
 		<description><![CDATA[Render a queryer]]></description>
 		<name>queryer</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.queryerTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.QueryerTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -346,7 +346,7 @@
 	<tag>
 		<description><![CDATA[This tag is used to create a URL]]></description>
 		<name>url</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.URLTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.UrlTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
