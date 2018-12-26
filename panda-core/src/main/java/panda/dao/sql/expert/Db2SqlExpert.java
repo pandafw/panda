@@ -45,6 +45,7 @@ public class Db2SqlExpert extends SqlExpert {
 			}
 			sb.append(',');
 		}
+
 		// append primary keys
 		addPrimaryKeys(sb, entity);
 		sb.setCharAt(sb.length() - 1, ')');

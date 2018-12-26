@@ -231,7 +231,7 @@ public class EntityField {
 	 * @return the autoIncrement
 	 */
 	public boolean isAutoIncrement() {
-		return (flag & AUTO_INCREMENT) != 0;
+		return (flag & AUTO_INCREMENT) == AUTO_INCREMENT;
 	}
 
 	/**

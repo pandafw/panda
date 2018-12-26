@@ -66,7 +66,7 @@ public class SQLiteSqlExpert extends SqlExpert {
 		}
 
 		// append primary keys
-		if (entity.getIdentity() == null) {
+		if (entity.getIdentity() == null || !entity.getIdentity().isAutoIncrement()) {
 			addPrimaryKeysConstraint(sb, entity);
 		}
 
