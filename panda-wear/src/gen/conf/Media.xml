@@ -4,8 +4,7 @@
 
 	<!-- entity -->
 	<entity name="${entity.package}.Media" baseBeanClass="${entity.cuBeanClass}" baseQueryClass="${entity.cuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
-		<property name="id" type="Long" notNull="true" primaryKey="true"/>
-		<property name="mid" type="Long"/>
+		<property name="id" type="String" size="32" notNull="true" primaryKey="true"/>
 		<property name="tag" type="String" size="10">
 			<validator type="constant">
 				<param name="list" value="'%{consts.mediaTagMap}'"/>
@@ -30,7 +29,7 @@
 		<property name="file" type="FileItem"/>
 		<list name="basicList" extend="cuList">
 			<column name="id" hidden="false" sortable="true" link="true">
-				<filter type="number"/>
+				<filter type="string"/>
 			</column>
 			<column name="tag" hidden="false" sortable="true" link="false">
 				<format type="code">

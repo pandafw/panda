@@ -13,6 +13,8 @@ import panda.log.Logs;
 public class Medias {
 	private static final Log log = Logs.getLog(Medias.class);
 	
+	public static final int ORIGINAL = 0;
+
 	public static final int MAX_FILENAME_LENGTH = 200;
 
 	public static final int DEFAULT_PAGE_LIMIT = 50;
@@ -24,7 +26,7 @@ public class Medias {
 	public static final int DEFAULT_CACHE_MAXAGE = 30 * DateTimes.SEC_DAY;
 
 	public static String getMediaIcon(Media m) {
-		return "<img class=\"p-mwh32px\" src=\"icon?id=" + m.getId() + "\">";
+		return "<img class=\"p-mwh32px\" src=\"icon/" + m.getId() + "\">";
 	}
 	
 	public static String getMediaLink(Media m) {

@@ -5,13 +5,13 @@ import panda.ioc.annotation.IocBean;
 
 @IocBean
 public interface MediaDataSaver {
-	public MediaData find(long id);
+	public MediaData find(String id);
 
-	public MediaData find(long id, int sz);
+	public MediaData find(String id, int sz);
 
 	public void save(Media m);
 	
-	public void delete(Long... mid);
+	public void delete(String... mid);
 
 	public void delete(Media... m);
 

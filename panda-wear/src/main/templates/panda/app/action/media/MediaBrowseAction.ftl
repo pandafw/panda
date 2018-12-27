@@ -158,9 +158,9 @@
 
 	function media_create(m) {
 		return $('<a class="media-thumb img-thumbnail" href="#">')
-			.append($('<img src="thumb?id=' + m.id + '"/>').attr('alt', m.name))
+			.append($('<img src="thumb/' + m.id + '"/>').attr('alt', m.name))
 			.attr({
-				'href': 'media?id=' + m.id,
+				'href': 'media/' + m.id,
 				'title': media_title(m)
 			})
 			.data('mid', m.id)

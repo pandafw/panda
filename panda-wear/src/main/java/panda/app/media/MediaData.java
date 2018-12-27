@@ -44,7 +44,7 @@ public class MediaData {
 	@PK
 	@Column(notNull=true)
 	@Comment("media id")
-	protected Long mid;
+	protected String mid;
 
 	@PK
 	@Column(notNull=true)
@@ -65,14 +65,14 @@ public class MediaData {
 	/**
 	 * @return the mid
 	 */
-	public Long getMid() {
+	public String getMid() {
 		return mid;
 	}
 
 	/**
 	 * @param mid the mid to set
 	 */
-	public void setMid(Long mid) {
+	public void setMid(String mid) {
 		this.mid = mid;
 	}
 

@@ -41,11 +41,11 @@ public class MediaBrowseAction extends AbstractAction {
 		public Date ds;
 		public Date de;
 		public String qs;
-		public Long sn;
+		public String sn;
 	}
 
-	private void find(Long id, String sc, int sz) throws IOException {
-		if (id != null && id > 0) {
+	private void find(String id, String sc, int sz) throws IOException {
+		if (Strings.isNotEmpty(id)) {
 			Dao dao = getDaoClient().getDao();
 			Media m = dao.fetch(Media.class, id);
 
@@ -74,27 +74,42 @@ public class MediaBrowseAction extends AbstractAction {
 		getResponse().setStatus(HttpStatus.SC_NOT_FOUND);
 	}
 
+	@At("media/(.*)$")
+	public void media2(String id) throws Exception {
+		media(id);
+	}
+
+	@At("thumb/(.*)$")
+	public void thumb2(String id) throws Exception {
+		thumb(id);
+	}
+
+	@At("icon/(.*)$")
+	public void icon2(String id) throws Exception {
+		icon(id);
+	}
+
 	@At
-	public void media(@Param("id") Long id) throws Exception {
+	public void media(@Param("id") String id) throws Exception {
 		find(id, null, 0);
 	}
 
 	@At
-	public void thumb(@Param("id") Long id) throws Exception {
+	public void thumb(@Param("id") String id) throws Exception {
 		find(id, SET.MEDIA_THUMB_SIZE, Medias.DEFAULT_THUMB_SIZE);
 	}
 
 	@At
-	public void icon(@Param("id") Long id) throws Exception {
+	public void icon(@Param("id") String id) throws Exception {
 		find(id, SET.MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
 	}
 
 	private void write(Media m, MediaData md, int maxage) throws IOException {
 		String filename = m.getName();
 		if (Strings.isEmpty(filename)) { 
-			filename = "media-" + (m.getMid() == null ? m.getId() : m.getMid()) + ".jpg";
+			filename = "media-" + m.getId() + ".jpg";
 		}
-		if (md.getMsz() > 0) {
+		if (md.getMsz() != Medias.ORIGINAL) {
 			filename = FileNames.addSuffix(filename, "-" + md.getMsz());
 		}
 
@@ -151,7 +166,7 @@ public class MediaBrowseAction extends AbstractAction {
 	
 	@At
 	@To(Views.SJSON)
-	public void deletes(final @Param("id") Long[] ids) {
+	public void deletes(final @Param("id") String[] ids) {
 		if (Arrays.isEmpty(ids)) {
 			return;
 		}

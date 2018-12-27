@@ -20,22 +20,22 @@ import panda.vfs.FilePools;
 public class MediaDataDaoSaver implements MediaDataSaver {
 	private static final Log log = Logs.getLog(MediaDataDaoSaver.class);
 
-	private static final int ORIGINAL = 0;
-
 	@IocInject
 	private DaoClient daoClient;
 	
 
-	public MediaData find(long id) {
-		return daoClient.getDao().fetch(MediaData.class, id, ORIGINAL);
+	@Override
+	public MediaData find(String id) {
+		return daoClient.getDao().fetch(MediaData.class, id, Medias.ORIGINAL);
 	}
 
-	public MediaData find(long id, int sz) {
+	@Override
+	public MediaData find(String id, int sz) {
 		Dao dao = daoClient.getDao();
 
 		MediaData md = dao.fetch(MediaData.class, id, sz);
 		if (md == null) {
-			MediaData mo = dao.fetch(MediaData.class, id, ORIGINAL);
+			MediaData mo = dao.fetch(MediaData.class, id, Medias.ORIGINAL);
 			if (mo == null) {
 				return null;
 			}
@@ -67,7 +67,7 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 
 			MediaData md = new MediaData();
 			md.setMid(m.getId());
-			md.setMsz(ORIGINAL);
+			md.setMsz(Medias.ORIGINAL);
 			md.setSize(m.getFile().getSize());
 			md.setData(m.getFile().data());
 			dao.save(md);
@@ -80,7 +80,7 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 	}
 
 	@Override
-	public void delete(Long... mids) {
+	public void delete(String... mids) {
 		if (Arrays.isEmpty(mids)) {
 			return;
 		}
@@ -103,7 +103,7 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 			return;
 		}
 		
-		Long[] ids = new Long[ms.length];
+		String[] ids = new String[ms.length];
 		for (int i = 0; i < ms.length; i++) {
 			ids[i] = ms[i].getId();
 		}

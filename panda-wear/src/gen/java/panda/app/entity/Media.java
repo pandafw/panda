@@ -12,7 +12,7 @@ import panda.vfs.FileItem;
 
 public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = 1783811870L;
+	private static final long serialVersionUID = 1412402979L;
 
 	/**
 	 * Constructor
@@ -25,7 +25,6 @@ public class Media extends CUBean implements Serializable {
 	 * Constants
 	 *----------------------------------------------------------------------*/
 	public static final String ID = "id";
-	public static final String MID = "mid";
 	public static final String TAG = "tag";
 	public static final String NAME = "name";
 	public static final String SIZE = "size";
@@ -35,7 +34,6 @@ public class Media extends CUBean implements Serializable {
 
 	public static final String[] _COLUMNS_ = new String[] {
 			ID,
-			MID,
 			TAG,
 			NAME,
 			SIZE,
@@ -49,10 +47,7 @@ public class Media extends CUBean implements Serializable {
 	 * Properties
 	 *----------------------------------------------------------------------*/
 	@Id(start=1001)
-	protected Long id;
-
-	@Column
-	protected Long mid;
+	protected String id;
 
 	@Column(size=10)
 	protected String tag;
@@ -78,35 +73,15 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the id
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the mid
-	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
-	public Long getMid() {
-		return mid;
-	}
-
-	/**
-	 * @param mid the mid to set
-	 */
-	public void setMid(Long mid) {
-		this.mid = mid;
+	public void setId(String id) {
+		this.id = panda.lang.Strings.stripToNull(id);
 	}
 
 	/**
@@ -220,7 +195,6 @@ public class Media extends CUBean implements Serializable {
 	 */
 	public void copy(Media src) {
 		this.id = src.id;
-		this.mid = src.mid;
 		this.tag = src.tag;
 		this.name = src.name;
 		this.size = src.size;
@@ -283,7 +257,6 @@ public class Media extends CUBean implements Serializable {
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append(ID, id)
-				.append(MID, mid)
 				.append(TAG, tag)
 				.append(NAME, name)
 				.append(SIZE, size)
