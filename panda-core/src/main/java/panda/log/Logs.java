@@ -20,8 +20,7 @@ import panda.log.impl.ConsoleLog;
 import panda.log.impl.ConsoleLogAdapter;
 
 public final class Logs {
-	public static final String SYSPROP = "panda.logging";
-	public static final String CONFIG = "panda-logging.properties";
+	public static final String CONFIG = "log.properties";
 
 	private static class LogConfig {
 		LogLevel level;
@@ -76,7 +75,7 @@ public final class Logs {
 	private static void init() {
 		Settings props = new Settings();
 
-		String file = Systems.getProperty(SYSPROP, CONFIG);
+		String file = Systems.getProperty(CONFIG, CONFIG);
 		try {
 			// load settings
 			props.load(file);
