@@ -19,11 +19,6 @@ import java.util.TreeSet;
 import panda.cast.Castors;
 import panda.dao.DaoTypes;
 import panda.lang.collection.MultiKey;
-import panda.vfs.FileItem;
-import panda.vfs.ProxyFileItem;
-import panda.vfs.dao.DaoFileItem;
-import panda.vfs.gcs.GcsFileItem;
-import panda.vfs.local.LocalFileItem;
 
 /**
  * a factory class for TypeAdapter objects.
@@ -164,16 +159,6 @@ public class TypeAdapters {
 		//
 		adapter = new BlobTypeAdapter<InputStream>(this, InputStream.class);
 		register(InputStream.class, adapter);
-
-		//----------------------------------------------------
-		// file
-		//
-		adapter = new ByteArrayTypeAdapter<FileItem>(this, FileItem.class);
-		register(FileItem.class, adapter);
-		register(ProxyFileItem.class, adapter);
-		register(DaoFileItem.class, adapter);
-		register(LocalFileItem.class, adapter);
-		register(GcsFileItem.class, adapter);
 
 		//----------------------------------------------------
 		// date time
