@@ -1,6 +1,6 @@
 package panda.vfs;
 
-public abstract class FilePools {
+public abstract class FileStores {
 	public static void safeDelete(FileItem f) {
 		if (f == null || !f.isExists()) {
 			return;
@@ -9,7 +9,7 @@ public abstract class FilePools {
 		try {
 			f.delete();
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			// ignore
 		}
 	}

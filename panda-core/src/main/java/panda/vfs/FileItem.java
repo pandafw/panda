@@ -7,18 +7,10 @@ import java.util.Date;
 /**
  */
 public interface FileItem {
-	public static final String NONAME = "noname";
-	
-	public static final String ID = "id";
 	public static final String NAME = "name";
 	public static final String SIZE = "size";
 	public static final String DATE = "date";
 	public static final String TYPE = "type";
-
-	/**
-	 * @return the id
-	 */
-	String getId();
 
 	/**
 	 * @return the name
