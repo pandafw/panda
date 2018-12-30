@@ -26,11 +26,14 @@
 			}
 			else {
 				$t.summernote($.extend({
+					followingToolbar: false,
 					toolbar: [
-						[ 'style', [ 'style', 'fontname', 'fontsize', 'color', 'forecolor', 'backcolor', 'height', 'paragraph', 'ol', 'ul', 'hr' ] ],
+						[ 'style', [ 'style', 'fontname', 'fontsize', 'color' ] ],
 						[ 'text', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript' ] ],
-						[ 'media', [ 'link', 'picture', 'video', 'table' ] ],
-						[ 'edit', [ 'undo', 'redo', 'clear', 'fullscreen', 'codeview', 'help' ] ],
+						[ 'para', [ /*'height', */'paragraph', 'ol', 'ul', 'hr', 'table', 'link' ] ],
+						[ 'media', [ 'picture', 'video' ] ],
+						[ 'edit', [ 'undo', 'redo', 'clear' ] ], 
+						[ 'misc', [ 'codeview', 'fullscreen', 'help' ] ],
 					]
 				}, o));
 			}
