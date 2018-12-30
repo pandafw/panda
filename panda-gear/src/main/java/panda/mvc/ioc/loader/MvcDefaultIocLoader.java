@@ -15,7 +15,6 @@ import panda.mvc.adaptor.ejector.XmlParamEjector;
 import panda.mvc.alert.ActionAlertSupport;
 import panda.mvc.alert.ParamAlertSupport;
 import panda.mvc.annotation.Modules;
-import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.filter.DecodingFilter;
 import panda.mvc.filter.DispatchFilter;
 import panda.mvc.filter.HttpDumpFilter;
@@ -64,6 +63,7 @@ import panda.mvc.validator.RequiredValidator;
 import panda.mvc.validator.StringValidator;
 import panda.mvc.validator.URLValidator;
 import panda.mvc.validator.VisitValidator;
+import panda.mvc.vfs.MvcLocalFileStore;
 import panda.mvc.view.AltView;
 import panda.mvc.view.CsvView;
 import panda.mvc.view.DataView;
@@ -191,7 +191,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			DefaultActionChainCreator.class,
 			
 			// file pool used by Upload
-			MvcLocalFilePool.class,
+			MvcLocalFileStore.class,
 			
 			// utilities
 			ActionAssist.class,

@@ -32,7 +32,7 @@ import panda.servlet.ServletContextMap;
 import panda.servlet.ServletRequestAttrMap;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.servlet.ServletRequestParamMap;
-import panda.vfs.FilePool;
+import panda.vfs.FileStore;
 
 public class ActionContext {
 	//----------------------------------------------------
@@ -48,7 +48,7 @@ public class ActionContext {
 	
 	private Settings settings;
 
-	private FilePool filePool;
+	private FileStore fileStore;
 
 	private TextProvider text;
 
@@ -403,13 +403,13 @@ public class ActionContext {
 	}
 
 	/**
-	 * @return the filePool
+	 * @return the fileStore
 	 */
-	public FilePool getFilePool() {
-		if (filePool == null) {
-			filePool = ioc.get(FilePool.class);
+	public FileStore getFileStore() {
+		if (fileStore == null) {
+			fileStore = ioc.get(FileStore.class);
 		}
-		return filePool;
+		return fileStore;
 	}
 
 	/**

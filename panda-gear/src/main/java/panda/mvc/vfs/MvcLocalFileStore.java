@@ -1,4 +1,4 @@
-package panda.mvc.filepool;
+package panda.mvc.vfs;
 
 import java.io.File;
 
@@ -10,11 +10,11 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.mvc.MvcConstants;
-import panda.vfs.FilePool;
-import panda.vfs.local.LocalFilePool;
+import panda.vfs.FileStore;
+import panda.vfs.local.LocalFileStore;
 
-@IocBean(type=FilePool.class, create="initialize")
-public class MvcLocalFilePool extends LocalFilePool {
+@IocBean(type=FileStore.class, create="initialize")
+public class MvcLocalFileStore extends LocalFileStore {
 	@IocInject(required=false)
 	private ServletContext servlet;
 	
@@ -35,18 +35,8 @@ public class MvcLocalFilePool extends LocalFilePool {
 	 * @param path the path to set
 	 */
 	@Override
-	@IocInject(value=MvcConstants.FILEPOOL_LOCAL_PATH, required=false)
+	@IocInject(value=MvcConstants.FILESTORE_LOCAL_PATH, required=false)
 	public void setPath(String path) {
 		super.setPath(path);
 	}
-
-	/**
-	 * @param maxAge the maxAge to set
-	 */
-	@Override
-	@IocInject(value=MvcConstants.FILEPOOL_MAXAGE, required=false)
-	public void setMaxAge(int maxAge) {
-		super.setMaxAge(maxAge);
-	}
-	
 }

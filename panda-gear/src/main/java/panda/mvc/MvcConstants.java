@@ -36,15 +36,20 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String CRYPTO_KEY_DECODE = "panda.crypto.key.decode";
 
-	/* File POOL */
-	public static final String FILEPOOL_MAXAGE = "panda.filepool.maxage";
-	public static final String FILEPOOL_LOCAL_PATH = "panda.filepool.local.path";
-	public static final String FILEPOOL_DAO_BLOCK_SIZE = "panda.filepool.dao.block.size";
-	public static final String FILEPOOL_GCS_BUCKET = "panda.filepool.gcs.bucket";
+	/* File Store */
+	public static final String FILESTORE_LOCAL_PATH = "panda.filestore.local.path";
+	public static final String FILESTORE_DAO_BLOCK_SIZE = "panda.filestore.dao.block.size";
+	public static final String FILESTORE_GCS_BUCKET = "panda.filestore.gcs.bucket";
+	public static final String FILESTORE_GCS_PREFIX = "panda.filestore.gcs.prefix";
 
-	public static final String MULTIPART_BODY_SIZE_MAX = "panda.multipart.body.size.max";
-	public static final String MULTIPART_FILE_SIZE_MAX = "panda.multipart.file.size.max";
+	/* MULTIPART */
+	public static final String MULTIPART_BODY_MAXSIZE = "panda.multipart.body.maxsize";
+	public static final String MULTIPART_FILE_MAXSIZE = "panda.multipart.file.maxsize";
 	public static final String MULTIPART_DRAIN_TIMEOUT = "panda.multipart.drain.timeout";
+
+	/* FILE UPLOAD */
+	public static final String FILE_UPLOAD_TMPDIR = "panda.file.upload.tmpdir";
+	public static final String FILE_UPLOAD_MAXAGE = "panda.file.upload.maxage";
 	
 	/* FREEMARKER */
 	public static final String FREEMARKER_TEMPLATES = "panda.freemarker.templates";

@@ -14,6 +14,7 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
+import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
@@ -25,12 +26,14 @@ import panda.mvc.adaptor.multipart.FileUploader;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.vfs.FileItem;
-import panda.vfs.FilePool;
+import panda.vfs.FileStore;
 
 @IocBean(singleton=false)
 public class MultiPartParamEjector extends AbstractParamEjector {
 	private static final Log log = Logs.getLog(MultiPartParamEjector.class);
 
+	public static final String DEFAULT_TMPDIR = "uploads";
+	
 	@IocInject(value=MvcConstants.REQUEST_ENCODING, required=false)
 	private String encoding = Charsets.UTF_8;
 	
@@ -44,7 +47,7 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	 * value of -1 indicates no maximum.
 	 * default: 2M
 	 */
-	@IocInject(value=MvcConstants.MULTIPART_BODY_SIZE_MAX, required=false)
+	@IocInject(value=MvcConstants.MULTIPART_BODY_MAXSIZE, required=false)
 	private long bodySizeMax = 2097152;
 
 	/**
@@ -52,7 +55,7 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	 * value of -1 indicates no maximum.
 	 * default: 2M
 	 */
-	@IocInject(value=MvcConstants.MULTIPART_FILE_SIZE_MAX, required=false)
+	@IocInject(value=MvcConstants.MULTIPART_FILE_MAXSIZE, required=false)
 	private long fileSizeMax = 2097152;
 
 	/**
@@ -61,6 +64,12 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	 */
 	@IocInject(value=MvcConstants.MULTIPART_DRAIN_TIMEOUT, required=false)
 	private long drainTimeout = DateTimes.MS_MINUTE;
+
+	/**
+	 * the temporary directory of upload file.
+	 */
+	@IocInject(value=MvcConstants.FILE_UPLOAD_TMPDIR, required=false)
+	private String tmpdir = DEFAULT_TMPDIR;
 
 	public MultiPartParamEjector() {
 	}
@@ -112,9 +121,15 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	}
 
 	protected FileItem saveUploadFile(FileItemStream item) throws IOException {
-		FilePool fp = getActionContext().getFilePool();
+		FileStore fs = getActionContext().getFileStore();
+
 		String name = FileNames.getName(item.getName());
-		return fp.saveFile(name, item.openStream());
+		String pref = tmpdir + '/' + Randoms.randUUID32() + '/';
+		String path = pref + FileNames.trimFileName(name, FileNames.MAX_FILENAME_LENGTH - pref.length());
+
+		FileItem fi = fs.getFile(path);
+		fi.save(item.openStream());
+		return fi;
 	}
 
 	protected void addStringParam(String name, String value) {

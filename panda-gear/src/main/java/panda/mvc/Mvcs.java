@@ -245,7 +245,7 @@ public abstract class Mvcs {
 		CastContext cc = cs.newCastContext();
 		
 		cc.setSkipCastError(true);
-		cc.set(FileItemCastor.KEY, ac.getFilePool());
+		cc.set(FileItemCastor.KEY, ac.getFileStore());
 		cc.setFormat(format);
 		cc.setLocale(ac.getLocale());
 		
@@ -279,7 +279,7 @@ public abstract class Mvcs {
 		
 		cc.setSkipCastError(true);
 		cc.setPrefix(name);
-		cc.set(FileItemCastor.KEY, ac.getFilePool());
+		cc.set(FileItemCastor.KEY, ac.getFileStore());
 		cc.setFormat(format);
 		cc.setLocale(ac.getLocale());
 		
