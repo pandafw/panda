@@ -7,19 +7,19 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 
+import panda.io.FileNames;
 import panda.io.Files;
 import panda.io.MimeTypes;
 import panda.io.Streams;
-import panda.lang.Objects;
+import panda.lang.Strings;
 import panda.vfs.FileItem;
 
 /**
  */
 public class LocalFileItem implements FileItem, Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
-	private LocalFilePool localFilePool;
-	private String id;
+	private LocalFileStore localFileStore;
 	private File file;
 	
 	/**
@@ -31,13 +31,12 @@ public class LocalFileItem implements FileItem, Serializable {
 	/**
 	 * Constructor
 	 * 
-	 * @param localFilePool local file pool
+	 * @param localFileStore local file store
 	 * @param id file id
 	 * @param file the local file
 	 */
-	public LocalFileItem(LocalFilePool localFilePool, String id, File file) {
-		this.localFilePool = localFilePool;
-		this.id = id;
+	public LocalFileItem(LocalFileStore localFileStore, File file) {
+		this.localFileStore = localFileStore;
 		this.file = file;
 	}
 
@@ -49,26 +48,13 @@ public class LocalFileItem implements FileItem, Serializable {
 	}
 
 	/**
-	 * @return the id
-	 */
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	/**
 	 * @return the name
 	 */
 	@Override
 	public String getName() {
-		return file.getName();
+		String path = FileNames.separatorsToUnix(file.getPath());
+		String name = Strings.removeStart(path, localFileStore.getPath());
+		return Strings.stripStart(name, '/');
 	}
 
 	/**
@@ -124,6 +110,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public void save(byte[] data) throws IOException {
+		Files.makeParents(file);
 		Files.write(file, data);
 	}
 
@@ -132,12 +119,21 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public void save(InputStream data) throws IOException {
+		Files.makeParents(file);
 		Files.write(file, data);
 	}
 
 	@Override
 	public void delete() {
-		localFilePool.removeFile(file);
+		File root = new File(localFileStore.path);
+
+		File f = file;
+		while (f.delete()) {
+			f = f.getParentFile();
+			if (root.equals(f)) {
+				break;
+			}
+		}
 	}
 
 	/**
@@ -145,10 +141,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder()
-				.append("id", id)
-				.append("file", file)
-				.toString();
+		return file == null ? "" : file.getPath();
 	}
 
 	/**
@@ -194,7 +187,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public LocalFileItem clone() {
-		LocalFileItem copy = new LocalFileItem(localFilePool, id, file);
+		LocalFileItem copy = new LocalFileItem(localFileStore, file);
 		return copy;
 	}
 }
