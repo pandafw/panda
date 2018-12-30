@@ -39,13 +39,13 @@ public class NotFileFilter extends AbstractFileFilter {
 	/**
 	 * Returns the logical NOT of the underlying filter's return value for the same arguments.
 	 * 
-	 * @param file the File directory
+	 * @param dir the File directory
 	 * @param name the filename
 	 * @return true if the filter returns false
 	 */
 	@Override
-	public boolean accept(File file, String name) {
-		return !filter.accept(file, name);
+	public boolean accept(File dir, String name) {
+		return !filter.accept(dir, name);
 	}
 
 	/**

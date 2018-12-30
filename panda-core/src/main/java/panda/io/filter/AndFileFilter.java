@@ -102,12 +102,12 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean accept(final File file, final String name) {
+	public boolean accept(final File dir, final String name) {
 		if (this.fileFilters.isEmpty()) {
 			return false;
 		}
 		for (IOFileFilter fileFilter : fileFilters) {
-			if (!fileFilter.accept(file, name)) {
+			if (!fileFilter.accept(dir, name)) {
 				return false;
 			}
 		}

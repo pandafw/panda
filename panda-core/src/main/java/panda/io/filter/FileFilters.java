@@ -257,6 +257,29 @@ public class FileFilters {
 	}
 
 	/**
+	 * Returns a filter that returns true if the filename starts with the specified text.
+	 * 
+	 * @param prefix the file path prefix
+	 * @return a prefix checking filter
+	 * @see PrefixPathFilter
+	 */
+	public static IOFileFilter prefixPathFilter(String... prefix) {
+		return new PrefixPathFilter(prefix);
+	}
+
+	/**
+	 * Returns a filter that returns true if the filename starts with the specified text.
+	 * 
+	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
+	 * @param prefix the filename prefix
+	 * @return a prefix checking filter
+	 * @see PrefixPathFilter
+	 */
+	public static IOFileFilter prefixPathFilter(IOCase caseSensitivity, String... prefix) {
+		return new PrefixPathFilter(prefix, caseSensitivity);
+	}
+
+	/**
 	 * Returns a filter that returns true if the filename ends with the specified text.
 	 * 
 	 * @param suffix the filename suffix
@@ -277,6 +300,29 @@ public class FileFilters {
 	 */
 	public static IOFileFilter suffixFileFilter(IOCase caseSensitivity, String... suffix) {
 		return new SuffixFileFilter(suffix, caseSensitivity);
+	}
+
+	/**
+	 * Returns a filter that returns true if the filename ends with the specified text.
+	 * 
+	 * @param suffix the file path suffix
+	 * @return a suffix checking filter
+	 * @see SuffixPathFilter
+	 */
+	public static IOFileFilter suffixPathFilter(String... suffix) {
+		return new SuffixPathFilter(suffix);
+	}
+
+	/**
+	 * Returns a filter that returns true if the filename ends with the specified text.
+	 * 
+	 * @param suffix the file path suffix
+	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
+	 * @return a suffix checking filter
+	 * @see SuffixFileFilter
+	 */
+	public static IOFileFilter suffixPathFilter(IOCase caseSensitivity, String... suffix) {
+		return new SuffixPathFilter(suffix, caseSensitivity);
 	}
 
 	/**

@@ -137,23 +137,6 @@ public class WildcardFileFilter extends AbstractFileFilter {
 	}
 
 	/**
-	 * Checks to see if the filename matches one of the wildcards.
-	 * 
-	 * @param file the file to check
-	 * @return true if the filename matches one of the wildcards
-	 */
-	@Override
-	public boolean accept(File file) {
-		String name = file.getName();
-		for (String wildcard : wildcards) {
-			if (FileNames.wildcardMatch(name, wildcard, caseSensitivity)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Provide a String representaion of this file filter.
 	 * 
 	 * @return a String representaion

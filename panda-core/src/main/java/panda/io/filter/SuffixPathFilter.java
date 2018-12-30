@@ -13,16 +13,16 @@ import panda.io.IOCase;
  * 
  * <pre>
  * File dir = new File(&quot;.&quot;);
- * String[] files = dir.list(new SuffixFileFilter(&quot;.java&quot;));
+ * String[] files = dir.list(new SuffixPathFilter(&quot;.java&quot;));
  * for (int i = 0; i &lt; files.length; i++) {
  * 	System.out.println(files[i]);
  * }
  * </pre>
  * 
- * @see FileFilters#suffixFileFilter(String...)
- * @see FileFilters#suffixFileFilter(IOCase, String...)
+ * @see FileFilters#suffixPathFilter(String...)
+ * @see FileFilters#suffixPathFilter(IOCase, String...)
  */
-public class SuffixFileFilter extends AbstractFileFilter {
+public class SuffixPathFilter extends AbstractFileFilter {
 
 	/** The filename suffixes to search for */
 	private final String[] suffixes;
@@ -36,7 +36,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @param suffix the suffix to allow, must not be null
 	 * @throws IllegalArgumentException if the suffix is null
 	 */
-	public SuffixFileFilter(String suffix) {
+	public SuffixPathFilter(String suffix) {
 		this(suffix, null);
 	}
 
@@ -47,7 +47,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
 	 * @throws IllegalArgumentException if the suffix is null
 	 */
-	public SuffixFileFilter(String suffix, IOCase caseSensitivity) {
+	public SuffixPathFilter(String suffix, IOCase caseSensitivity) {
 		if (suffix == null) {
 			throw new IllegalArgumentException("The suffix must not be null");
 		}
@@ -64,7 +64,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @param suffixes the suffixes to allow, must not be null
 	 * @throws IllegalArgumentException if the suffix array is null
 	 */
-	public SuffixFileFilter(String[] suffixes) {
+	public SuffixPathFilter(String[] suffixes) {
 		this(suffixes, null);
 	}
 
@@ -78,7 +78,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
 	 * @throws IllegalArgumentException if the suffix array is null
 	 */
-	public SuffixFileFilter(String[] suffixes, IOCase caseSensitivity) {
+	public SuffixPathFilter(String[] suffixes, IOCase caseSensitivity) {
 		if (suffixes == null) {
 			throw new IllegalArgumentException("The array of suffixes must not be null");
 		}
@@ -94,7 +94,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @throws IllegalArgumentException if the suffix list is null
 	 * @throws ClassCastException if the list does not contain Strings
 	 */
-	public SuffixFileFilter(List<String> suffixes) {
+	public SuffixPathFilter(List<String> suffixes) {
 		this(suffixes, null);
 	}
 
@@ -106,7 +106,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @throws IllegalArgumentException if the suffix list is null
 	 * @throws ClassCastException if the list does not contain Strings
 	 */
-	public SuffixFileFilter(List<String> suffixes, IOCase caseSensitivity) {
+	public SuffixPathFilter(List<String> suffixes, IOCase caseSensitivity) {
 		if (suffixes == null) {
 			throw new IllegalArgumentException("The list of suffixes must not be null");
 		}
@@ -117,14 +117,14 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	/**
 	 * Checks to see if the filename ends with the suffix.
 	 * 
-	 * @param dir the File directory
-	 * @param name the filename
+	 * @param file the File to check
 	 * @return true if the filename ends with one of our suffixes
 	 */
 	@Override
-	public boolean accept(File dir, String name) {
+	public boolean accept(File file) {
+		String path = file.getPath();
 		for (String suffix : this.suffixes) {
-			if (caseSensitivity.checkEndsWith(name, suffix)) {
+			if (caseSensitivity.checkEndsWith(path, suffix)) {
 				return true;
 			}
 		}

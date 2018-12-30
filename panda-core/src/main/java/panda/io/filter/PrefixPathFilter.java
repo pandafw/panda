@@ -6,23 +6,23 @@ import java.util.List;
 import panda.io.IOCase;
 
 /**
- * Filters filenames for a certain prefix.
+ * Filters file paths for a certain prefix.
  * <p>
  * For example, to print all files and directories in the current directory whose name starts with
  * <code>Test</code>:
  * 
  * <pre>
  * File dir = new File(&quot;.&quot;);
- * String[] files = dir.list(new PrefixFileFilter(&quot;Test&quot;));
+ * String[] files = dir.list(new PrefixPathFilter(&quot;Test&quot;));
  * for (int i = 0; i &lt; files.length; i++) {
  * 	System.out.println(files[i]);
  * }
  * </pre>
  * 
- * @see FileFilters#prefixFileFilter(String...)
- * @see FileFilters#prefixFileFilter(IOCase, String...)
+ * @see FileFilters#prefixPathFilter(String...)
+ * @see FileFilters#prefixPathFilter(IOCase, String...)
  */
-public class PrefixFileFilter extends AbstractFileFilter {
+public class PrefixPathFilter extends AbstractFileFilter {
 
 	/** The filename prefixes to search for */
 	private final String[] prefixes;
@@ -36,7 +36,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
 	 * @param prefix the prefix to allow, must not be null
 	 * @throws IllegalArgumentException if the prefix is null
 	 */
-	public PrefixFileFilter(String prefix) {
+	public PrefixPathFilter(String prefix) {
 		this(prefix, IOCase.SENSITIVE);
 	}
 
@@ -47,7 +47,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
 	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
 	 * @throws IllegalArgumentException if the prefix is null
 	 */
-	public PrefixFileFilter(String prefix, IOCase caseSensitivity) {
+	public PrefixPathFilter(String prefix, IOCase caseSensitivity) {
 		if (prefix == null) {
 			throw new IllegalArgumentException("The prefix must not be null");
 		}
@@ -64,7 +64,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
 	 * @param prefixes the prefixes to allow, must not be null
 	 * @throws IllegalArgumentException if the prefix array is null
 	 */
-	public PrefixFileFilter(String[] prefixes) {
+	public PrefixPathFilter(String[] prefixes) {
 		this(prefixes, IOCase.SENSITIVE);
 	}
 
@@ -79,7 +79,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
 	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
 	 * @throws IllegalArgumentException if the prefix is null
 	 */
-	public PrefixFileFilter(String[] prefixes, IOCase caseSensitivity) {
+	public PrefixPathFilter(String[] prefixes, IOCase caseSensitivity) {
 		if (prefixes == null) {
 			throw new IllegalArgumentException("The array of prefixes must not be null");
 		}
@@ -95,7 +95,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
 	 * @throws IllegalArgumentException if the prefix list is null
 	 * @throws ClassCastException if the list does not contain Strings
 	 */
-	public PrefixFileFilter(List<String> prefixes) {
+	public PrefixPathFilter(List<String> prefixes) {
 		this(prefixes, IOCase.SENSITIVE);
 	}
 
@@ -107,7 +107,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
 	 * @throws IllegalArgumentException if the prefix list is null
 	 * @throws ClassCastException if the list does not contain Strings
 	 */
-	public PrefixFileFilter(List<String> prefixes, IOCase caseSensitivity) {
+	public PrefixPathFilter(List<String> prefixes, IOCase caseSensitivity) {
 		if (prefixes == null) {
 			throw new IllegalArgumentException("The list of prefixes must not be null");
 		}
@@ -119,12 +119,30 @@ public class PrefixFileFilter extends AbstractFileFilter {
 	 * Checks to see if the filename starts with the prefix.
 	 * 
 	 * @param file the File to check
-	 * @return true if the file path starts with one of our prefixes
+	 * @return true if the filename starts with one of our prefixes
 	 */
 	@Override
 	public boolean accept(File file) {
+		String path = file.getPath();
+		for (String prefix : this.prefixes) {
+			if (caseSensitivity.checkStartsWith(path, prefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks to see if the filename starts with the prefix.
+	 * 
+	 * @param dir the File directory
+	 * @param name the filename
+	 * @return true if the filename starts with one of our prefixes
+	 */
+	@Override
+	public boolean accept(File dir, String name) {
 		for (String prefix : prefixes) {
-			if (caseSensitivity.checkStartsWith(file.getPath(), prefix)) {
+			if (caseSensitivity.checkStartsWith(name, prefix)) {
 				return true;
 			}
 		}

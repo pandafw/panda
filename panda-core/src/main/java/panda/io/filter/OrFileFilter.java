@@ -100,9 +100,9 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean accept(final File file, final String name) {
+	public boolean accept(final File dir, final String name) {
 		for (IOFileFilter fileFilter : fileFilters) {
-			if (fileFilter.accept(file, name)) {
+			if (fileFilter.accept(dir, name)) {
 				return true;
 			}
 		}

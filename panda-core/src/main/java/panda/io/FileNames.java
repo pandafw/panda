@@ -815,10 +815,7 @@ public abstract class FileNames {
 	 * @return the updated path
 	 */
 	public static String separatorsToUnix(String path) {
-		if (path == null || path.indexOf(WINDOWS_SEPARATOR) == -1) {
-			return path;
-		}
-		return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+		return Strings.replaceChars(path, WINDOWS_SEPARATOR, UNIX_SEPARATOR);
 	}
 
 	/**
@@ -828,10 +825,7 @@ public abstract class FileNames {
 	 * @return the updated path
 	 */
 	public static String separatorsToWindows(String path) {
-		if (path == null || path.indexOf(UNIX_SEPARATOR) == -1) {
-			return path;
-		}
-		return path.replace(UNIX_SEPARATOR, WINDOWS_SEPARATOR);
+		return Strings.replaceChars(path, UNIX_SEPARATOR, WINDOWS_SEPARATOR);
 	}
 
 	/**
@@ -1982,8 +1976,12 @@ public abstract class FileNames {
 	}
 	
 	public static String trimFileName(String name) {
+		return trimFileName(name, MAX_FILENAME_LENGTH);
+	}
+
+	public static String trimFileName(String name, int length) {
 		name = Strings.removeChars(name, FILENAME_ILLEGAL_CHARS);
-		name = Strings.right(name, MAX_FILENAME_LENGTH);
+		name = Strings.right(name, length);
 		return name;
 	}
 
