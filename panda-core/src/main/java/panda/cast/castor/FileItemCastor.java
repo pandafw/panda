@@ -5,11 +5,11 @@ import java.io.IOException;
 import panda.cast.CastContext;
 import panda.lang.Strings;
 import panda.vfs.FileItem;
-import panda.vfs.FilePool;
+import panda.vfs.FileStore;
 
 
 public class FileItemCastor extends AnySingleCastor<FileItem> {
-	public static final String KEY = FilePool.class.getName();
+	public static final String KEY = FileStore.class.getName();
 	
 	public FileItemCastor() {
 		super(FileItem.class);
@@ -33,13 +33,13 @@ public class FileItemCastor extends AnySingleCastor<FileItem> {
 			return defaultValue();
 		}
 
-		FilePool fp = (FilePool)context.get(KEY);
-		if (fp == null) {
-			throw new NullPointerException("Null FilePool!");
+		FileStore fs = (FileStore)context.get(KEY);
+		if (fs == null) {
+			throw new NullPointerException("Null " + KEY);
 		}
 
 		try {
-			return fp.findFile(id);
+			return fs.getFile(id);
 		}
 		catch (IOException e) {
 			return castError(value, context, e);
