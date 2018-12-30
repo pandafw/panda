@@ -9,10 +9,10 @@
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
 			<li><@p.text name="step-bdelete"/></li>
-			<li class="active"><@p.text name="step-bdelete-success"/></li>
+			<li class="active"><@p.text name="step-bdelete-confirm"/></li>
 		</ol>
 	</div>
-<#assign _well = a.getText("well-bdelete-success", "")/>
+<#assign _well = a.getText("well-bdelete", "")/>
 <#if _well?has_content>
 	<div class="p-well">${_well}</div>
 </#if>
@@ -32,13 +32,13 @@
 			"header": a.getText("listview-th-rownum", ""),
 			"fixed": true
 		}, {
-			"name": "id",
-			"header": a.getFieldLabel("id"),
-			"display": a.displayField("id"),
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("id")
+			"name": "_check_",
+			"type": "check",
+			"fixed": true
 		}, {
 			"name": "name",
+			"pkey" : true,
+			"value": true,
 			"header": a.getFieldLabel("name"),
 			"display": a.displayField("name"),
 			"sortable": false,
@@ -64,16 +64,27 @@
 		}] />
 
 
-	<@p.listview id="filepool_bdelete"
+	<@p.listview id="fileitem_bdelete"
+		action="~/bdelete.execute" method="post"
 		list=result columns=_columns_
 		cssTable="table-hover table-striped"
 	/>
 	
 	<br/>
 	<div class="p-tcenter" focusme="true">
-	<#if a.canAccess("~/list")>
-		<@p.a action="~/list" btn="default" icon="icon-list" label="#(btn-list)"/>
-	</#if>
+		<@p.submit onclick="return fileitem_bdelete_submit();" icon="icon-bdelete-execute" label="#(btn-bdelete-execute)"/>
+
+		<@p.a href="javascript:window.history.back()" btn="default" icon="icon-back" label="#(btn-back)"/>
+
+		<script type="text/javascript"><!--
+			function fileitem_bdelete_submit() {
+				return plv_submitCheckedKeys('fileitem_bdelete');
+			}
+			
+			function onPageLoad() {
+				plv_checkAll('fileitem_bdelete');
+			}
+		--></script>
 	</div>
 <#else>
 	<div class="p-tcenter">

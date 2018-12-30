@@ -1,4 +1,4 @@
-title=File Pool
+title=File Store
 
 icon=fa fa-file-o
 

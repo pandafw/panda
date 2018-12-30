@@ -91,7 +91,7 @@ icon-admin-tag=fa fa-bookmark
 navi-super=System
 
 navi-super-media=Media
-navi-super-filepool=File Pool
+navi-super-fileitem=File Store
 navi-super-property=Property
 navi-super-resource=Resource
 navi-super-template=Template
@@ -114,7 +114,7 @@ navi-super-sysdump=System Dump
 icon-super=fa fa-wrench
 
 icon-super-media=fa fa-picture-o
-icon-super-filepool=fa fa-file-o
+icon-super-fileitem=fa fa-file-o
 icon-super-property=fa fa-file-text-o
 icon-super-resource=fa fa-file-text-o
 icon-super-template=fa fa-file-code-o

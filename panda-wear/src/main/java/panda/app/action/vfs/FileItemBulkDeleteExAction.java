@@ -1,4 +1,4 @@
-package panda.app.action.filepool;
+package panda.app.action.vfs;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,31 +12,31 @@ import panda.lang.Exceptions;
 import panda.lang.mutable.MutableInt;
 import panda.mvc.annotation.At;
 import panda.vfs.FileItem;
-import panda.vfs.FilePool;
-import panda.vfs.dao.DaoFilePool;
+import panda.vfs.FileStore;
+import panda.vfs.dao.DaoFileStore;
 import panda.vfs.dao.FileDataQuery;
 
-@At("${super_path}/filepool")
+@At("${super_path}/fileitem")
 @Auth(AUTH.SUPER)
 @IocBean(singleton=false, create="initialize")
-public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
+public class FileItemBulkDeleteExAction extends FileItemBulkDeleteAction {
 	@IocInject
-	private FilePool filePool;
+	private FileStore fileStore;
 
 	public void initialize() {
-		setType(filePool.getItemType());
+		setType(fileStore.getItemType());
 	}
 
 	@Override
 	protected List<FileItem> selectDataList(List<FileItem> dataList, boolean filter) {
-		if (filePool instanceof DaoFilePool) {
+		if (fileStore instanceof DaoFileStore) {
 			return super.selectDataList(dataList, filter);
 		}
 
 		try {
 			List<FileItem> fis = new ArrayList<FileItem>();
 			for (FileItem a : dataList) {
-				FileItem fi = filePool.findFile(a.getId());
+				FileItem fi = fileStore.getFile(a.getName());
 				if (fi != null && fi.isExists()) {
 					fis.add(fi);
 				}
@@ -55,7 +55,7 @@ public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
 	 */
 	@Override
 	protected void execBulkDelete(final List<FileItem> dataList, final MutableInt count) {
-		if (filePool instanceof DaoFilePool) {
+		if (fileStore instanceof DaoFileStore) {
 			super.execBulkDelete(dataList, count);
 			return;
 		}
@@ -66,14 +66,14 @@ public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
 
 	@Override
 	protected void deleteDataList(List<FileItem> dataList, MutableInt count) {
-		if (filePool instanceof DaoFilePool) {
-			List<String> ids = new ArrayList<String>(dataList.size());
+		if (fileStore instanceof DaoFileStore) {
+			List<String> nms = new ArrayList<String>(dataList.size());
 			for (FileItem f : dataList) {
-				ids.add(f.getId());
+				nms.add(f.getName());
 			}
 
 			FileDataQuery fdq = new FileDataQuery();
-			fdq.fid().in(ids);
+			fdq.fnm().in(nms);
 			getDao().deletes(fdq);
 		}
 		
@@ -82,7 +82,7 @@ public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
 
 	@Override
 	protected int deleteData(FileItem data) {
-		if (filePool instanceof DaoFilePool) {
+		if (fileStore instanceof DaoFileStore) {
 			return super.deleteData(data);
 		}
 		

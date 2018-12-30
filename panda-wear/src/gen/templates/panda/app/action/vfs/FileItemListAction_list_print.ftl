@@ -24,13 +24,6 @@
 			"fixed": true,
 			"header": a.getText("listview-th-number", "")
 		}, {
-			"name": "id",
-			"value": false,
-			"header": a.getFieldLabel("id"),
-			"display": a.displayField("id"),
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("id")
-		}, {
 			"name": "name",
 			"value": false,
 			"header": a.getFieldLabel("name"),
@@ -60,7 +53,7 @@
 		}] />
 
 
-	<@p.listview id="filepool_list_print" action="~/list.print" 
+	<@p.listview id="fileitem_list_print" action="~/list.print" 
 		list=result columns=_columns_
 		cssTable="table-striped"
 	/>

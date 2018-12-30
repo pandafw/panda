@@ -50,7 +50,7 @@ navi-admin-tag=タグ管理
 navi-super=システム管理
 
 navi-super-media=メディア
-navi-super-filepool=ファイルプール
+navi-super-fileitem=ファイルストア
 navi-super-property=プロパティ
 navi-super-resource=リソース
 navi-super-template=テンプレート

@@ -1,4 +1,4 @@
-package panda.app.action.filepool;
+package panda.app.action.vfs;
 
 import panda.app.action.base.BaseTempFileAction;
 import panda.app.auth.Auth;
@@ -8,13 +8,13 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${super_path}/filepool")
+@At("${super_path}/fileitem")
 @Auth(AUTH.SUPER)
-public class FilePoolViewAction extends BaseTempFileAction {
+public class FileItemViewAction extends BaseTempFileAction {
 	/**
 	 * Constructor
 	 */
-	public FilePoolViewAction() {
+	public FileItemViewAction() {
 	}
 
 	/**

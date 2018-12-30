@@ -1,4 +1,4 @@
-package panda.app.action.filepool;
+package panda.app.action.vfs;
 
 import panda.app.action.crud.GenericListAction;
 import panda.mvc.annotation.At;
@@ -9,14 +9,14 @@ import panda.mvc.bean.Queryer;
 import panda.mvc.view.Views;
 import panda.vfs.FileItem;
 
-public abstract class FilePoolListAction extends GenericListAction<FileItem> {
+public abstract class FileItemListAction extends GenericListAction<FileItem> {
 
 	/**
 	 * Constructor
 	 */
-	public FilePoolListAction() {
+	public FileItemListAction() {
 		setType(FileItem.class);
-		addDisplayFields(FileItem.ID, FileItem.NAME, FileItem.SIZE, FileItem.DATE);
+		addDisplayFields(FileItem.NAME, FileItem.SIZE, FileItem.DATE);
 	}
 
 

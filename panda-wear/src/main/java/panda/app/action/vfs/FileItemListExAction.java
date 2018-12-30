@@ -1,4 +1,4 @@
-package panda.app.action.filepool;
+package panda.app.action.vfs;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,23 +17,23 @@ import panda.mvc.annotation.At;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Sorter;
 import panda.vfs.FileItem;
-import panda.vfs.FilePool;
-import panda.vfs.dao.DaoFilePool;
+import panda.vfs.FileStore;
+import panda.vfs.dao.DaoFileStore;
 
-@At("${super_path}/filepool")
+@At("${super_path}/fileitem")
 @Auth(AUTH.SUPER)
 @IocBean(singleton=false, create="initialize")
-public class FilePoolListExAction extends FilePoolListAction {
+public class FileItemListExAction extends FileItemListAction {
 	@IocInject
-	private FilePool filePool;
+	private FileStore fileStore;
 
 	public void initialize() {
-		setType(filePool.getItemType());
+		setType(fileStore.getItemType());
 	}
 
 	@Override
 	protected void queryList(Queryer qr, long defLimit, long maxLimit) {
-		if (filePool instanceof DaoFilePool) {
+		if (fileStore instanceof DaoFileStore) {
 			super.queryList(qr, defLimit, maxLimit);
 			return;
 		}
@@ -42,7 +42,7 @@ public class FilePoolListExAction extends FilePoolListAction {
 
 		List<FileItem> ds;
 		try {
-			ds = filePool.listFiles();
+			ds = fileStore.listFiles();
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);

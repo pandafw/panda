@@ -43,7 +43,7 @@
 	<#if a.canAccess("~/copy")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/copy",
-			"params": { "id": "%{top.id}" },
+			"params": { "name": "%{top.name}" },
 			"icon": a.getText("icon-copy"),
 			"label": a.getText("lbl-copy", ""),
 			"tooltip": a.getText("tip-copy", "")
@@ -52,7 +52,7 @@
 	<#if a.canAccess("~/edit")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/edit",
-			"params": { "id": "%{top.id}" },
+			"params": { "name": "%{top.name}" },
 			"icon": a.getText("icon-edit"),
 			"label": a.getText("lbl-edit", ""),
 			"tooltip": a.getText("tip-edit", "")
@@ -61,7 +61,7 @@
 	<#if a.canAccess("~/delete")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/delete",
-			"params": { "id": "%{top.id}" },
+			"params": { "name": "%{top.name}" },
 			"icon": a.getText("icon-delete"),
 			"label": a.getText("lbl-delete", ""),
 			"tooltip": a.getText("tip-delete", "")
@@ -92,20 +92,9 @@
 	</#if>
 
 	<#assign _columns_ = _columns_ + [{
-			"name" : "id",
+			"name" : "name",
 			"pkey" : true,
 			"value": true,
-			"header": a.getFieldLabel("id"),
-			"display": a.displayField("id"),
-			"filterable": a.filterField("id"),
-			"filter": {
-				"type": "string"
-			},
-			"link": true,
-			"sortable": true,
-			"tooltip": a.getFieldTooltip("id")
-		}, {
-			"name" : "name",
 			"header": a.getFieldLabel("name"),
 			"display": a.displayField("name"),
 			"filterable": a.filterField("name"),
@@ -152,24 +141,24 @@
 	</#if>
 	<@p.set var="lvtools">
 		<#if a.canAccess("~/bdelete")>
-			<@p.b onclick="return filepool_list_bdelete();" icon="icon-bdelete" label="#(btn-bdelete)"/>
+			<@p.b onclick="return fileitem_list_bdelete();" icon="icon-bdelete" label="#(btn-bdelete)"/>
 		</#if>
 	</@p.set>
 
-	<@p.queryer id="filepool_list_qr" action="~/list"
+	<@p.queryer id="fileitem_list_qr" action="~/list"
 		columns=_columns_
 	/>
 
-	<@p.listview id="filepool_list" action="~/list"
+	<@p.listview id="fileitem_list" action="~/list"
 		list=result columns=_columns_
 		cssTable="table-hover table-striped"
-		link={ "action": "~/view", "params": { "id": "%{top.id}" } }
+		link={ "action": "~/view", "params": { "name": "%{top.name}" } }
 		tools="%{vars.lvtools}"
 	/>
 
 	<script type="text/javascript"><!--
-		function filepool_list_bdelete() {
-			return plv_submitCheckedKeys('filepool_list', '<@p.url action="~/bdelete"/>', null, "");
+		function fileitem_list_bdelete() {
+			return plv_submitCheckedKeys('fileitem_list', '<@p.url action="~/bdelete"/>', null, "");
 		}
 	--></script>
 </div>

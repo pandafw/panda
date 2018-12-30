@@ -1,4 +1,4 @@
-package panda.app.action.filepool;
+package panda.app.action.vfs;
 
 import java.util.Map;
 import panda.app.action.crud.GenericBulkAction;
@@ -8,14 +8,14 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.vfs.FileItem;
 
-public abstract class FilePoolBulkDeleteAction extends GenericBulkAction<FileItem> {
+public abstract class FileItemBulkDeleteAction extends GenericBulkAction<FileItem> {
 
 	/**
 	 * Constructor
 	 */
-	public FilePoolBulkDeleteAction() {
+	public FileItemBulkDeleteAction() {
 		setType(FileItem.class);
-		addDisplayFields(FileItem.ID, FileItem.NAME, FileItem.SIZE, FileItem.DATE);
+		addDisplayFields(FileItem.NAME, FileItem.SIZE, FileItem.DATE);
 	}
 
 
