@@ -20,13 +20,6 @@ public class FileItemQuery extends EntityQuery<DaoFileItem, FileItemQuery> {
 	// field conditions
 	//----------------------------------------------------------------------
 	/**
-	 * @return condition of id
-	 */
-	public ComparableCondition<FileItemQuery, String> id() {
-		return new ComparableCondition<FileItemQuery, String>(this, DaoFileItem.ID);
-	}
-
-	/**
 	 * @return condition of name
 	 */
 	public StringCondition<FileItemQuery> name() {

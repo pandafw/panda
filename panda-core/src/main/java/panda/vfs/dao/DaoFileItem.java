@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import panda.dao.entity.annotation.Column;
-import panda.dao.entity.annotation.Id;
+import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.Table;
 import panda.io.MimeTypes;
 import panda.lang.Objects;
@@ -23,22 +23,18 @@ public class DaoFileItem implements FileItem, Serializable {
 	 * Constants
 	 *----------------------------------------------------------------------*/
 	public static final String[] COLUMNS = new String[] {
-			ID,
 			NAME,
 			SIZE,
 			DATE
 		};
 
-	private DaoFilePool daoFilePool;
+	private DaoFileStore daoFileStore;
 	private byte[] data;
 	
 	/*----------------------------------------------------------------------*
 	 * Properties
 	 *----------------------------------------------------------------------*/
-	@Id
-	@Column(notNull=true, size=32)
-	protected String id;
-
+	@PK
 	@Column(notNull=true, size=255)
 	protected String name;
 
@@ -58,32 +54,17 @@ public class DaoFileItem implements FileItem, Serializable {
 	}
 
 	/**
-	 * @return the daoFilePool
+	 * @return the daoFileStore
 	 */
-	protected DaoFilePool getDaoFilePool() {
-		return daoFilePool;
+	protected DaoFileStore getDaoFileStore() {
+		return daoFileStore;
 	}
 
 	/**
-	 * @param daoFilePool the daoFilePool to set
+	 * @param daoFileStore the daoFileStore to set
 	 */
-	protected void setDaoFilePool(DaoFilePool daoFilePool) {
-		this.daoFilePool = daoFilePool;
-	}
-
-	/**
-	 * @return the id
-	 */
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
+	protected void setDaoFileStore(DaoFileStore daoFileStore) {
+		this.daoFileStore = daoFileStore;
 	}
 
 	/**
@@ -160,7 +141,7 @@ public class DaoFileItem implements FileItem, Serializable {
 	@Override
 	public byte[] data() throws IOException {
 		if (data == null) {
-			data = daoFilePool.readFile(this);
+			data = daoFileStore.readFile(this);
 		}
 		return data;
 	}
@@ -185,7 +166,7 @@ public class DaoFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public void save(byte[] data) throws IOException {
-		daoFilePool.saveFile(this, data);
+		daoFileStore.saveFile(this, data);
 	}
 	
 	/**
@@ -193,12 +174,12 @@ public class DaoFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public void save(InputStream data) throws IOException {
-		daoFilePool.saveFile(this, data);
+		daoFileStore.saveFile(this, data);
 	}
 
 	@Override
 	public void delete() throws IOException {
-		daoFilePool.deleteFile(this);
+		daoFileStore.deleteFile(this);
 	}
 
 	/**
@@ -207,11 +188,9 @@ public class DaoFileItem implements FileItem, Serializable {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
-				.append(ID, id)
 				.append(NAME, name)
 				.append(SIZE, size)
 				.append(DATE, date)
-				.append("data", data)
 				.toString();
 	}
 
@@ -220,7 +199,7 @@ public class DaoFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return ((id == null) ? 0 : id.hashCode());
+		return ((name == null) ? 0 : name.hashCode());
 	}
 
 	/**
@@ -240,12 +219,12 @@ public class DaoFileItem implements FileItem, Serializable {
 		}
 		
 		DaoFileItem other = (DaoFileItem)obj;
-		if (id == null) {
-			if (other.id != null) {
+		if (name == null) {
+			if (other.name != null) {
 				return false;
 			}
 		}
-		else if (!id.equals(other.id)) {
+		else if (!name.equals(other.name)) {
 			return false;
 		}
 
@@ -260,7 +239,6 @@ public class DaoFileItem implements FileItem, Serializable {
 	public DaoFileItem clone() {
 		DaoFileItem copy = new DaoFileItem();
 		
-		copy.id = this.id;
 		copy.name = this.name;
 		copy.size = this.size;
 		copy.date = this.date;

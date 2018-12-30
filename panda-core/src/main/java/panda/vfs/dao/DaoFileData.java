@@ -17,13 +17,13 @@ public class DaoFileData implements Serializable {
 	/*----------------------------------------------------------------------*
 	 * Constants
 	 *----------------------------------------------------------------------*/
-	public static final String FID = "fid";
+	public static final String FNM = "fnm";
 	public static final String BNO = "bno";
 	public static final String SIZE = "size";
 	public static final String DATA = "data";
 
 	public static final String[] COLUMNS = new String[] {
-			FID,
+			FNM,
 			BNO,
 			SIZE,
 			DATA
@@ -34,8 +34,8 @@ public class DaoFileData implements Serializable {
 	 *----------------------------------------------------------------------*/
 	@PK
 	@FK(target=DaoFileItem.class)
-	@Column(notNull=true, size=64)
-	protected String fid;
+	@Column(notNull=true, size=255)
+	protected String fnm;
 	
 	@PK
 	@Column(notNull=true)
@@ -55,17 +55,17 @@ public class DaoFileData implements Serializable {
 	}
 
 	/**
-	 * @return the fileId
+	 * @return the file name
 	 */
-	public String getFid() {
-		return fid;
+	public String getFnm() {
+		return fnm;
 	}
 
 	/**
-	 * @param fileId the fileId to set
+	 * @param fnm the file name to set
 	 */
-	public void setFid(String fileId) {
-		this.fid = fileId;
+	public void setFnm(String fnm) {
+		this.fnm = fnm;
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class DaoFileData implements Serializable {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
-				.append(FID, fid)
+				.append(FNM, fnm)
 				.append(BNO, bno)
 				.append(SIZE, size)
 				.append(DATA, data)
@@ -130,7 +130,7 @@ public class DaoFileData implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(fid, bno);
+		return Objects.hashCodes(fnm, bno);
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class DaoFileData implements Serializable {
 		
 		DaoFileData rhs = (DaoFileData)obj;
 		return Objects.equalsBuilder()
-				.append(fid, rhs.fid)
+				.append(fnm, rhs.fnm)
 				.append(bno, rhs.bno)
 				.append(size, rhs.size)
 				.append(data, rhs.data)

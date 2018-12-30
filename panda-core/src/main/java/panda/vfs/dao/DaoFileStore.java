@@ -10,24 +10,17 @@ import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
 import panda.dao.DaoIterator;
-import panda.io.FileNames;
 import panda.io.Streams;
-import panda.lang.Collections;
+import panda.lang.Arrays;
 import panda.lang.Strings;
-import panda.lang.mutable.MutableInt;
 import panda.lang.time.DateTimes;
 import panda.vfs.FileItem;
-import panda.vfs.FilePool;
+import panda.vfs.FileStore;
 
-public class DaoFilePool implements FilePool {
+public class DaoFileStore implements FileStore {
 	private DaoClient daoClient;
 
 	private int blockSize = Integer.MAX_VALUE;
-
-	/**
-	 * milliseconds since last modified. (default: 1 day) 
-	 */
-	private long expires = DateTimes.MS_DAY;
 
 	/**
 	 * @return the daoClient
@@ -57,48 +50,17 @@ public class DaoFilePool implements FilePool {
 		this.blockSize = blockSize;
 	}
 
-	/**
-	 * @return the maxAge
-	 */
-	public int getMaxAge() {
-		return (int)(expires / 1000);
-	}
-
-	/**
-	 * @param maxage the maxage to set
-	 */
-	public void setMaxAge(int maxage) {
-		this.expires = maxage * 1000L;
-	}
-
 	@Override
 	public Class<? extends FileItem> getItemType() {
 		return DaoFileItem.class;
 	}
 	
-	@Override
-	public FileItem saveFile(String name, final InputStream data) throws IOException {
-		return saveFile(name, Streams.toByteArray(data));
-	}
-	
-	@Override
-	public FileItem saveFile(String name, final byte[] data) throws IOException {
-		name = Strings.right(name, FileNames.MAX_FILENAME_LENGTH);
-
-		final DaoFileItem fi = new DaoFileItem();
-		fi.setName(name);
-		fi.setExists(false);
-
-		saveFile(fi, data);
-		return fi;
-	}
-
 	protected void saveFile(DaoFileItem file, InputStream body) throws IOException {
 		saveFile(file, Streams.toByteArray(body));
 	}
 	
 	protected void saveFile(final DaoFileItem fi, final byte[] data) throws IOException {
-		fi.setDaoFilePool(this);
+		fi.setDaoFileStore(this);
 		fi.setDate(DateTimes.getDate());
 		fi.setData(data);
 		fi.setSize(data.length);
@@ -111,7 +73,7 @@ public class DaoFilePool implements FilePool {
 						dao.update(fi);
 
 						FileDataQuery fdq = new FileDataQuery();
-						fdq.fid().eq(fi.getId());
+						fdq.fnm().eq(fi.getName());
 						dao.deletes(fdq);
 					}
 					else {
@@ -123,7 +85,7 @@ public class DaoFilePool implements FilePool {
 			fi.setExists(true);
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to save file [" + fi.getId() + "] " + fi.getName(), e);
+			throw new IOException("Failed to save file " + fi.getName(), e);
 		}
 	}
 
@@ -131,7 +93,7 @@ public class DaoFilePool implements FilePool {
 		int len = data.length;
 		for (int i = 0; i < len; i += blockSize) {
 			DaoFileData fd = new DaoFileData();
-			fd.setFid(fi.getId());
+			fd.setFnm(fi.getName());
 			fd.setBno(i);
 			int bs = blockSize;
 			if (i + bs > len) {
@@ -155,40 +117,55 @@ public class DaoFilePool implements FilePool {
 	}
 
 	@Override
-	public FileItem findFile(String id) throws IOException {
+	public FileItem getFile(String name) throws IOException {
 		try {
 			Dao dao = getDaoClient().getDao();
-			DaoFileItem fi = dao.fetch(DaoFileItem.class, id);
+			DaoFileItem fi = dao.fetch(DaoFileItem.class, name);
 			if (fi == null) {
 				fi = new DaoFileItem();
-				fi.setId(id);
-				fi.setName("noname");
+				fi.setName(name);
 				fi.setExists(false);
 				fi.setSize(0);
-				fi.setData(new byte[0]);
+				fi.setData(Arrays.EMPTY_BYTE_ARRAY);
 			}
-			fi.setDaoFilePool(this);
+			fi.setDaoFileStore(this);
 			return fi;
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to find file: " + id, e);
+			throw new IOException("Failed to find file " + name, e);
 		}
 	}
 
 	@Override
 	public List<FileItem> listFiles() throws IOException {
+		return listFiles();
+	}
+	
+	@Override
+	public List<FileItem> listFiles(String prefix, Date before) throws IOException {
 		try {
 			Dao dao = getDaoClient().getDao();
+
+			FileItemQuery fiq = new FileItemQuery();
+			if (Strings.isNotEmpty(prefix)) {
+				fiq.name().leftMatch(prefix);
+			}
+			if (before != null) {
+				fiq.date().lt(before);
+			}
+
 			List<FileItem> list = new ArrayList<FileItem>();
-			try (DaoIterator<DaoFileItem> it = dao.iterate(DaoFileItem.class)) {
+			try (DaoIterator<DaoFileItem> it = dao.iterate(fiq)) {
 				while (it.hasNext()) {
-					list.add(it.next());
+					DaoFileItem fi = it.next();
+					fi.setDaoFileStore(this);
+					list.add(fi);
 				}
 			}
 			return list;
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to list files", e);
+			throw new IOException("Failed to list files (" + prefix + ", " + before + ")", e);
 		}
 	}
 	
@@ -200,7 +177,7 @@ public class DaoFilePool implements FilePool {
 				Dao dao = getDaoClient().getDao();
 				FileDataQuery fdq = new FileDataQuery();
 				
-				fdq.fid().eq(fi.getId()).bno().asc();
+				fdq.fnm().eq(fi.getName()).bno().asc();
 				
 				DaoIterator<DaoFileData> it = dao.iterate(fdq);
 				try {
@@ -221,35 +198,24 @@ public class DaoFilePool implements FilePool {
 			return buf;
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to read file: " + fi.getId(), e);
+			throw new IOException("Failed to read file " + fi.getName(), e);
 		}
 	}
 
 	private static class DeleteFile implements Runnable {
 		private Dao dao;
 		private FileItem file;
-		private MutableInt count;
 		
 		public DeleteFile(Dao dao, FileItem file) {
 			this.dao = dao;
 			this.file = file;
 		}
 		
-		public DeleteFile(Dao dao, FileItem file, MutableInt count) {
-			this.dao = dao;
-			this.file = file;
-			this.count = count;
-		}
-		
 		public void run() {
 			FileDataQuery fdq = new FileDataQuery();
-			fdq.fid().eq(file.getId());
+			fdq.fnm().eq(file.getName());
 			dao.deletes(fdq);
-			
-			int cnt = dao.delete(file);
-			if (count != null) {
-				count.add(cnt);
-			}
+			dao.delete(file);
 		}
 	}
 
@@ -262,32 +228,7 @@ public class DaoFilePool implements FilePool {
 			file.setData(null);
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to delete file: " + file.getId(), e);
+			throw new IOException("Failed to delete file " + file.getName(), e);
 		}
-	}
-	
-	@Override
-	public int clean() throws IOException {
-		final Dao dao = getDaoClient().getDao();
-		final Date time = new Date(System.currentTimeMillis() - expires);
-		
-		FileItemQuery fiq = new FileItemQuery();
-		fiq.date().lt(time);
-		
-		final List<DaoFileItem> fis = dao.select(fiq);
-		if (Collections.isEmpty(fis)) {
-			return 0;
-		}
-		
-		MutableInt cnt = new MutableInt();
-		for (DaoFileItem fi : fis) {
-			try {
-				dao.exec(new DeleteFile(dao, fi, cnt));
-			}
-			catch (DaoException e) {
-				throw new IOException("Failed to delete file: " + fi.getId(), e);
-			}
-		}
-		return cnt.intValue();
 	}
 }
