@@ -6,6 +6,7 @@ import java.util.Map;
 
 import panda.bind.json.JsonObject;
 import panda.doc.html.HTMLEntities;
+import panda.io.FileNames;
 import panda.lang.Collections;
 import panda.lang.Numbers;
 import panda.lang.Strings;
@@ -108,7 +109,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		 .disabled(tag);
 		if (tag.getName() != null) {
 			a.name(tag.getName());
-			a.value(Strings.defaultString(fi.getId()));
+			a.value(Strings.defaultString(fi.getName()));
 		}
 		xtag("input", a);
 
@@ -122,16 +123,16 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 				if (ps == null) {
 					ps = new HashMap<String, Object>();
 				}
-				ps.put(pdn, fi.getId());
+				ps.put(pdn, fi.getName());
 				
 				durl = URLBuilder.buildURL(pdl, ps, true);
 				
-				writeLabel(durl, html(fi.getName()) + " " + filesize(fi.getSize()), isImg);
+				writeLabel(durl, html(FileNames.getName(fi.getName())) + " " + filesize(fi.getSize()), isImg);
 			}
 			else {
 				write("<span>");
 				write(xicon("icon-check p-uploader-icon"));
-				write(html(fi.getName()));
+				write(html(FileNames.getName(fi.getName())));
 				write(" ");
 				write(filesize(fi.getSize()));
 				write("</span>");

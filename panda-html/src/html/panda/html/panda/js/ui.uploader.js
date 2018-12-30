@@ -35,8 +35,15 @@
 			return sz;
 		}
 
+		function _filename(fn) {
+			var u = fn.lastIndexOf('/');
+			var w = fn.lastIndexOf('\\');
+			var i = u > w ? u : w;
+			return fn.substr(i + 1);
+		}
+		
 		function _info(fi) {
-			var fid = fi.id, fnm = fi.name, fsz = fi.size, fct = fi.type;
+			var fid = fi.name, fnm = _filename(fi.name), fsz = fi.size, fct = fi.type;
 			var pdl = $u.data('dnloadLink');
 			var pdn = $u.data('dnloadName');
 			var pdd = JSON.sparse($u.data('dnloadData'));
