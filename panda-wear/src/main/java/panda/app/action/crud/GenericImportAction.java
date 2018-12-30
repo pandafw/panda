@@ -42,7 +42,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.util.Escapes;
 import panda.vfs.FileItem;
-import panda.vfs.FilePools;
+import panda.vfs.FileStores;
 
 /**
  * @param <T> data type
@@ -238,7 +238,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 		finally {
 			Streams.safeClose((Closeable)reader);
-			FilePools.safeDelete(arg.file);
+			FileStores.safeDelete(arg.file);
 		}
 	}
 

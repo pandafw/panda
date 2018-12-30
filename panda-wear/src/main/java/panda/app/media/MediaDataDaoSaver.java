@@ -14,7 +14,7 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.vfs.FilePools;
+import panda.vfs.FileStores;
 
 @IocBean(type=MediaDataSaver.class)
 public class MediaDataDaoSaver implements MediaDataSaver {
@@ -72,7 +72,7 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 			md.setData(m.getFile().data());
 			dao.save(md);
 
-			FilePools.safeDelete(m.getFile());
+			FileStores.safeDelete(m.getFile());
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);
