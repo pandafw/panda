@@ -96,7 +96,7 @@
 					<param name="uploadAction" value="%{b.files_path + '/upload'}"/>
 					<param name="uploadName" value="file"/>
 					<param name="dnloadAction" value="%{b.files_path + '/download'}"/>
-					<param name="dnloadName" value="id"/>
+					<param name="dnloadName" value="file"/>
 					<param name="defaultAction" value="media"/>
 					<param name="defaultParams" value="!{'id': '%{r.id}'}"/>
 					<param name="defaultEnable" value="%{r.id != null &amp;&amp; r.size > 0}"/>

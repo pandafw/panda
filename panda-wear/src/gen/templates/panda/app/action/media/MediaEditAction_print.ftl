@@ -68,7 +68,7 @@
 				uploadAction="%{b.files_path + '/upload'}"
 				uploadName="file"
 				dnloadAction="%{b.files_path + '/download'}"
-				dnloadName="id"
+				dnloadName="file"
 				defaultAction="media"
 				defaultParams="!{'id': '%{r.id}'}"
 				defaultEnable="%{r.id != null && r.size > 0}"
