@@ -82,6 +82,10 @@ public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 			.commons(tag)
 			.events(tag);
 
+		attrs.data("mediaHref", tag.getMediaHref())
+			.data("mediaIcon", tag.getMediaIcon())
+			.data("mediaText", tag.getMediaText());
+		
 		if ("cleditor".equalsIgnoreCase(tag.getEditor())) {
 			attrs.css(this, "p-htmleditor p-cleditor");
 			attrs.data("cleditorJs", cleditorJs());

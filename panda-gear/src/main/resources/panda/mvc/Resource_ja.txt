@@ -291,6 +291,7 @@ btn-layout-mb=モバイルサイトに切り替える
 btn-list=一覧
 btn-login=ログイン
 btn-logout=ログアウト
+btn-media=メディア
 btn-new=新規
 btn-next=次へ
 btn-pdf=PDF出力

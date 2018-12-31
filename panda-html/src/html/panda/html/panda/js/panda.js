@@ -2290,6 +2290,44 @@ if (typeof String.formatSize != "function") {
 })(jQuery);
 (function($) {
 	var langs = {};
+	
+	function initSummerNotePlugins() {
+		$.extend($.summernote.plugins, {
+			/**
+			 * @param {Object}
+			 *            context - context object has status of editor.
+			 */
+			'media': function (context) {
+				// ui has renders to build ui elements.
+				// - you can create a button with `ui.button`
+				var ui = $.summernote.ui;
+				var $n = context.$note;
+
+				// add plugin button
+				context.memo('button.media', function() {
+					// create button
+					var button = ui.button({
+						contents: '<i class="' + ($n.data('mediaIcon') || 'fa fa-list-alt') + '"/>',
+						tooltip: $n.data('mediaText') || 'Media Browser',
+						click: function() {
+							alert($n.data('mediaHref'));
+						}
+					});
+
+					// create jQuery object from button instance.
+					return button.render();
+				});
+
+				// This methods will be called when editor is destroyed by $('..').summernote('destroy');
+				// You should remove elements on `initialize`.
+				this.destroy = function() {
+					this.$panel.remove();
+					this.$panel = null;
+				};
+			}
+		});
+	}
+	
 	function initSummerNote() {
 		if (typeof($.fn.summernote) == 'undefined') {
 			setTimeout(initSummerNote, 100);
@@ -2302,9 +2340,24 @@ if (typeof String.formatSize != "function") {
 			}
 		}
 
+		initSummerNotePlugins();
+		
 		$('textarea.p-htmleditor.p-summernote').each(function() {
 			var $t = $(this);
-			var o = $t.data('summernoteOptions') || {};
+			var o = {};
+			var p = [ 'toolbar', 'popover', 'fontNames', 'fontNamesIgnoreCheck' ];
+			for (var i = 0; i < p.length; i++) {
+				var v = $t.attr(p[i]);
+				if (v) {
+					try {
+						o[p[i]] = JSON.parse(v);
+					}
+					catch (e) {
+					}
+				}
+			}
+			$.extend(o, $t.data('summernoteOptions'));
+
 			var l = $t.data('summernoteLang');
 			if (l) {
 				o.lang = l;
@@ -2315,13 +2368,18 @@ if (typeof String.formatSize != "function") {
 				$t.summernote($.extend(o, { toolbar: false })).summernote('disable');
 			}
 			else {
+				var ms = [ 'picture', 'video' ];
+				if ($t.data('mediaHref')) {
+					ms.push('media');
+				}
 				$t.summernote($.extend({
-					followingToolbar: false,
+					height: $t.attr('height'),
+					followingToolbar: $t.attr('followingToolbar') || false,
 					toolbar: [
 						[ 'style', [ 'style', 'fontname', 'fontsize', 'color' ] ],
 						[ 'text', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript' ] ],
 						[ 'para', [ /*'height', */'paragraph', 'ol', 'ul', 'hr', 'table', 'link' ] ],
-						[ 'media', [ 'picture', 'video' ] ],
+						[ 'media', ms ],
 						[ 'edit', [ 'undo', 'redo', 'clear' ] ], 
 						[ 'misc', [ 'codeview', 'fullscreen', 'help' ] ],
 					]

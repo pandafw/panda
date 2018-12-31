@@ -3,9 +3,11 @@ package panda.mvc.view.tag.ui;
 import java.util.Locale;
 
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.mvc.Mvcs;
 import panda.mvc.SetConstants;
+import panda.mvc.util.MvcURLBuilder;
 
 
 /**
@@ -25,6 +27,21 @@ public class HtmlEditor extends TextArea {
 	protected Locale locale;
 	protected Boolean cdn;
 	protected Boolean debug;
+	
+	protected MvcURLBuilder mediaUrl;
+
+	protected String mediaHref;
+	protected String mediaIcon;
+	protected String mediaText;
+
+	/**
+	 * @param urlbuilder the urlbuilder to set
+	 */
+	@IocInject
+	protected void setMediaUrl(MvcURLBuilder urlbuilder) {
+		this.mediaUrl = urlbuilder;
+		urlbuilder.setEscapeAmp(true);
+	}
 
 	/**
 	 * Evaluate extra parameters
@@ -44,6 +61,18 @@ public class HtmlEditor extends TextArea {
 		}
 		if (Strings.isEmpty(editor)) {
 			editor = context.getSettings().getProperty(SetConstants.MVC_TAG_HTML_EDITOR, "summernote");
+		}
+
+		if (mediaHref == null) {
+			mediaHref = mediaUrl.build();
+		}
+
+		if (Strings.isEmpty(mediaIcon)) {
+			mediaIcon = context.getText().getText("icon-media", "fa fa-list-alt");
+		}
+		
+		if (Strings.isEmpty(mediaText)) {
+			mediaText = context.getText().getText("btn-media", "Media");
 		}
 	}
 
@@ -116,4 +145,33 @@ public class HtmlEditor extends TextArea {
 	public void setDebug(Boolean debug) {
 		this.debug = debug;
 	}
+
+	public void setMediaAction(String mediaAction) {
+		this.mediaUrl.setAction(mediaAction);
+	}
+
+	public String getMediaHref() {
+		return mediaHref;
+	}
+
+	public void setMediaHref(String mediaHref) {
+		this.mediaHref = mediaHref;
+	}
+
+	public String getMediaIcon() {
+		return mediaIcon;
+	}
+
+	public void setMediaIcon(String mediaIcon) {
+		this.mediaIcon = mediaIcon;
+	}
+
+	public String getMediaText() {
+		return mediaText;
+	}
+
+	public void setMediaText(String mediaText) {
+		this.mediaText = mediaText;
+	}
+	
 }
