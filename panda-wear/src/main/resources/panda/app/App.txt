@@ -24,10 +24,11 @@ ui-list-countable=true
 navi-top=TOP
 navi-home=Home
 
+navi-language=Languages
+navi-media=Media
 navi-search=Search
 navi-tag=Tag
 navi-theme=Theme
-navi-language=Languages
 
 navi-help=Help
 navi-help-company=Company

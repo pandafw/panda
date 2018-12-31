@@ -3,10 +3,11 @@
 #-----------------------------------------------------------------------------
 navi-home=ホーム
 
+navi-language=言語
+navi-media=メディア
 navi-search=検索
 navi-tag=タグ
 navi-theme=テーマ
-navi-language=言語
 
 navi-help=ヘルプ
 navi-help-company=会社情報

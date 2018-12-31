@@ -3,10 +3,11 @@
 #-----------------------------------------------------------------------------
 navi-home=主页
 
+navi-language=语言
+navi-media=媒体
 navi-search=检索
 navi-tag=标签
 navi-theme=主题
-navi-language=语言
 
 navi-help=帮助
 navi-help-company=公司简介
