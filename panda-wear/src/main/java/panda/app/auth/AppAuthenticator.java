@@ -1,12 +1,12 @@
 package panda.app.auth;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 
 import panda.app.constant.AUTH;
 import panda.app.constant.MVC;
-import panda.app.constant.REQ;
 import panda.app.constant.SES;
 import panda.app.constant.VAL;
 import panda.bind.json.JsonDeserializer;
@@ -94,12 +94,10 @@ public class AppAuthenticator extends UserAuthenticator {
 	}
 
 	@Override
-	public boolean isSecureAuthenticatedUser(Object su) {
-		if (su instanceof ILogin) {
-			Long lt = ((ILogin)su).getLoginTime();
-			if (lt != null) {
-				return System.currentTimeMillis() - lt < secureUserAge * 1000;
-			}
+	public boolean isSecureAuthenticatedUser(ActionContext ac, Object su) {
+		Date lt = (Date)ac.getSes().get(SES.USER_LOGIN_TIME);
+		if (lt != null) {
+			return System.currentTimeMillis() - lt.getTime() < secureUserAge * 1000;
 		}
 		return false;
 	}
@@ -109,7 +107,7 @@ public class AppAuthenticator extends UserAuthenticator {
 	protected Object getAuthenticatedUser(ActionContext ac) {
 		Object u = getUserFromParameter(ac);
 		if (u != null) {
-			saveUserToContext(ac, u);
+			saveUserToContext(ac, u, null);
 			return u;
 		}
 
@@ -120,28 +118,9 @@ public class AppAuthenticator extends UserAuthenticator {
 
 		u = getUserFromClient(ac);
 		if (u != null) {
-			saveUserToContext(ac, u);
+			saveUserToContext(ac, u, null);
 		}
 		return u;
-	}
-
-	/**
-	 * setAuthenticatedUser
-	 * @param ac action context
-	 * @param user user object
-	 */
-	public void setAuthenticatedUser(ActionContext ac, Object user) {
-		saveUserToContext(ac, user);
-		saveUserToClient(ac, user);
-	}
-
-	/**
-	 * removeAuthenticatedUser
-	 * @param ac action context
-	 */
-	public void removeAuthenticatedUser(ActionContext ac) {
-		removeUserFromContext(ac);
-		removeUserFromClient(ac);
 	}
 
 	//------------------------------------------------------------------------
@@ -203,31 +182,32 @@ public class AppAuthenticator extends UserAuthenticator {
 	 * @return user object
 	 */
 	public IUser getLoginUser(ActionContext ac) {
-		return (IUser)ac.getRequest().getAttribute(REQ.USER);
+		return (IUser)ac.getSes().get(SES.USER);
 	}
 
 	//------------------------------------------------------
-	protected void saveUserToContext(ActionContext ac, Object user) {
-		ac.getRequest().setAttribute(REQ.USER, user);
+	/**
+	 * save user to context
+	 * @param ac action context
+	 * @param user user object
+	 * @param time login time
+	 */
+	public void saveUserToContext(ActionContext ac, Object user, Date time) {
+		ac.getSes().put(SES.USER, user);
+		if (time != null) {
+			ac.getSes().put(SES.USER_LOGIN_TIME, user);
+		}
 	}
 
-	protected void removeUserFromContext(ActionContext ac) {
-		ac.getReq().remove(REQ.USER);
+	public void removeUserFromContext(ActionContext ac) {
 		ac.getSes().remove(SES.USER);
+		ac.getSes().remove(SES.USER_LOGIN_TIME);
 	}
 
 	//-------------------------------------------------------------
 	// overrideable method 
 	//
 	protected Integer getCookieAge(ActionContext ac, Object user) {
-		if (user instanceof ILogin) {
-			ILogin iu = (ILogin)user;
-			iu.setLoginTime(System.currentTimeMillis());
-			if (!Boolean.TRUE.equals(iu.getAutoLogin())) {
-				// expired when browser close
-				return -1;
-			}
-		}
 		return cookieAge;
 	}
 	
@@ -387,7 +367,7 @@ public class AppAuthenticator extends UserAuthenticator {
 	 * @param ac action context
 	 * @param user user object
 	 */
-	protected void saveUserToClient(ActionContext ac, Object user) {
+	public void saveUserToClient(ActionContext ac, Object user) {
 		saveUserToCookie(ac, user);
 	}
 
@@ -401,10 +381,10 @@ public class AppAuthenticator extends UserAuthenticator {
 	}
 
 	/**
-	 * get user object from client
+	 * remove user object from client
 	 * @param ac action context
 	 */
-	protected void removeUserFromClient(ActionContext ac) {
+	public void removeUserFromClient(ActionContext ac) {
 		removeUserFromCookie(ac);
 	}
 

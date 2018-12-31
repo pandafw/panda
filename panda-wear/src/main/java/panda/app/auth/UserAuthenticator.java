@@ -5,11 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import panda.app.constant.AUTH;
 import panda.app.constant.MVC;
-import panda.app.constant.REQ;
 import panda.app.constant.SES;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
@@ -107,24 +105,14 @@ public class UserAuthenticator {
 	}
 	
 	protected Object getUserFromContext(ActionContext ac) {
-		Object u = ac.getRequest().getAttribute(REQ.USER);
-		if (u == null) {
-			HttpSession session = ac.getRequest().getSession(false);
-			if (session != null) {
-				u = session.getAttribute(SES.USER);
-				if (u != null) {
-					ac.getRequest().setAttribute(REQ.USER, u);
-				}
-			}
-		}
-		return u;
+		return ac.getSes().get(SES.USER);
 	}
 
 	protected List<String> getUserPermissions(Object su) {
 		return null;
 	}
 
-	protected boolean isSecureAuthenticatedUser(Object su) {
+	protected boolean isSecureAuthenticatedUser(ActionContext ac, Object su) {
 		return false;
 	}
 
@@ -224,7 +212,7 @@ public class UserAuthenticator {
 		}
 
 		if (AUTH.SECURE.equals(define)) {
-			return isSecureAuthenticatedUser(su) ? OK : UNSECURE;
+			return isSecureAuthenticatedUser(ac, su) ? OK : UNSECURE;
 		}
 
 		return Collections.contains(uperms, define) ? OK : (su == null ? UNLOGIN : DENIED);

@@ -191,16 +191,34 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	/**
 	 * setLoginUser
 	 * @param user user
+	 * @param time login time
+	 */
+	public void setLoginUser(IUser user, Date time) {
+		authenticator.saveUserToContext(context, user, time);
+	}
+
+	/**
+	 * setLoginUser
+	 * @param user user
 	 */
 	public void setLoginUser(IUser user) {
-		authenticator.setAuthenticatedUser(context, user);
+		authenticator.saveUserToContext(context, user, null);
+	}
+
+	/**
+	 * save user object to client
+	 * @param user user object
+	 */
+	public void saveUserToClient(IUser user) {
+		authenticator.saveUserToClient(context, user);
 	}
 
 	/**
 	 * removeLoginUser
 	 */
 	public void removeLoginUser() {
-		authenticator.removeAuthenticatedUser(context);
+		authenticator.removeUserFromContext(context);
+		authenticator.removeUserFromClient(context);
 	}
 
 	/**
@@ -256,6 +274,19 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		}
 	}
 
+
+	/**
+	 * initialize IUpdatedBy fields of data
+	 * @param data input data
+	 */
+	public void initUpdatedByFields(Object data) {
+		if (data instanceof IUpdatedBy) {
+			IUpdatedBy ub = (IUpdatedBy)data;
+
+			ub.setUpdatedBy(getLoginUserId());
+			ub.setUpdatedAt(DateTimes.getDate());
+		}
+	}
 	
 	/**
 	 * initialize IUpdatedBy fields of data
@@ -271,12 +302,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 			cb.setCreatedAt(sb.getCreatedAt());
 		}
 		
-		if (data instanceof IUpdatedBy) {
-			IUpdatedBy ub = (IUpdatedBy)data;
-
-			ub.setUpdatedBy(getLoginUserId());
-			ub.setUpdatedAt(DateTimes.getDate());
-		}
+		initUpdatedByFields(data);
 	}
 	
 	//-------------------------------------------------------------
