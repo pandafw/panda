@@ -1604,7 +1604,7 @@ public abstract class AbstractDao implements Dao {
 	/**
 	 * check the identity value
 	 * @param id identity
-	 * @return true if id != null && id != 0
+	 * @return true if id != null && id != ''
 	 */
 	@Override
 	public boolean isValidIdentity(Object id) {
@@ -1613,7 +1613,7 @@ public abstract class AbstractDao implements Dao {
 		}
 		
 		if (id instanceof Number) {
-			return ((Number)id).longValue() > 0;
+			return true;
 		}
 
 		if (id instanceof CharSequence) {
