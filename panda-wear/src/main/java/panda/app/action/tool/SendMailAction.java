@@ -3,8 +3,10 @@ package panda.app.action.tool;
 import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
+import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.annotation.At;
@@ -17,8 +19,11 @@ import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
+import panda.net.mail.EmailAttachment;
+import panda.net.mail.JavaMailClient;
 import panda.net.mail.MailClient;
 import panda.net.mail.SmtpMailClient;
+import panda.vfs.FileItem;
 
 
 @At("${super_path}/sendmail")
@@ -28,6 +33,7 @@ public class SendMailAction extends AbstractAction {
 	private static final Log log = Logs.getLog(SendMailAction.class);
 	
 	public static class Arg {
+		private String client = "auto";
 		private String host;
 		private Integer port;
 		private String username;
@@ -41,8 +47,20 @@ public class SendMailAction extends AbstractAction {
 		private EmailAddress cc;
 		private String subject;
 		private String message;
-		private boolean html;
+		private FileItem[] files;
 
+		/**
+		 * @return the client
+		 */
+		public String getClient() {
+			return client;
+		}
+		/**
+		 * @param client the client to set
+		 */
+		public void setClient(String client) {
+			this.client = Strings.stripToNull(client);
+		}
 		/**
 		 * @return the host
 		 */
@@ -222,16 +240,16 @@ public class SendMailAction extends AbstractAction {
 			this.message = message;
 		}
 		/**
-		 * @return the html
+		 * @return the files
 		 */
-		public boolean isHtml() {
-			return html;
+		public FileItem[] getFiles() {
+			return files;
 		}
 		/**
-		 * @param html the html to set
+		 * @param files the files to set
 		 */
-		public void setHtml(boolean html) {
-			this.html = html;
+		public void setFiles(FileItem[] files) {
+			this.files = files;
 		}
 	}
 	
@@ -265,15 +283,15 @@ public class SendMailAction extends AbstractAction {
 			email.addTo(arg.getTo());
 			email.addCc(arg.getCc());
 			email.setSubject(arg.getSubject());
-			if (arg.isHtml()) {
-				email.setHtmlMsg(arg.getMessage());
-			}
-			else {
-				email.setTextMsg(arg.getMessage());
+			email.setHtmlMsg(arg.getMessage());
+			if (Arrays.isNotEmpty(arg.getFiles())) {
+				for (FileItem fi : arg.getFiles()) {
+					email.addAttachment(new EmailAttachment(fi));
+				}
 			}
 			email.signWithDomainKey(arg.getFrom().getDomain(), arg.getDkimSelector(), arg.getDkimPrivateKey());
 			
-			MailClient client = new SmtpMailClient();
+			MailClient client = createMailClient(arg);
 			client.setHost(arg.getHost());
 			if (arg.getPort() != null) {
 				client.setPort(arg.getPort());
@@ -296,4 +314,15 @@ public class SendMailAction extends AbstractAction {
 		}
 	}
 
+	protected MailClient createMailClient(Arg arg) {
+		if (Strings.equalsIgnoreCase("java", arg.client)) {
+			return new JavaMailClient();
+		}
+		
+		if (Strings.equalsIgnoreCase("smtp", arg.client)) {
+			return new SmtpMailClient();
+		}
+
+		return Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
+	}
 }

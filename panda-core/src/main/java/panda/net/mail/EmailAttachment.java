@@ -4,6 +4,7 @@ import java.io.File;
 
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.vfs.FileItem;
 
 public class EmailAttachment {
 	private String cid;
@@ -14,6 +15,10 @@ public class EmailAttachment {
 		this(null, file.getName(), file);
 	}
 
+	public EmailAttachment(FileItem file) throws EmailException {
+		this(null, file.getName(), file);
+	}
+	
 	public EmailAttachment(String name, Object data) throws EmailException {
 		this(null, name, data);
 	}

@@ -2,6 +2,7 @@ icon=fa fa-envelope-o
 
 title=Send Mail
 
+p.client=Client
 p.host=Host
 p.port=Port
 p.username=User name
@@ -15,6 +16,6 @@ p.to=To
 p.cc=Cc
 p.subject=Subject
 p.message=Message
-p.html=HTML
+p.files=Attachments
 
 success-mail-sent=The email is successfully sent.
