@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import panda.args.Argument;
 import panda.args.Option;
-import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
@@ -13,8 +12,9 @@ import panda.lang.Numbers;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
 import panda.net.mail.EmailAttachment;
-import panda.net.mail.EmailClient;
 import panda.net.mail.EmailException;
+import panda.net.mail.MailClient;
+import panda.net.mail.SmtpMailClient;
 import panda.tool.AbstractCommandTool;
 
 /**
@@ -36,7 +36,7 @@ public class SendMail extends AbstractCommandTool {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected EmailClient client = new EmailClient();
+	protected MailClient client = new SmtpMailClient();
 	protected Email email = new Email();
 
 	/**
@@ -172,7 +172,7 @@ public class SendMail extends AbstractCommandTool {
 	@Argument(name="attachments", usage="Attachments")
 	public void setAttachments(String[] attachs) throws EmailException {
 		for (String a : attachs) {
-			EmailAttachment ea = new EmailAttachment(FileNames.getName(a), a);
+			EmailAttachment ea = new EmailAttachment(new File(a));
 			email.addAttachment(ea);
 		}
 	}

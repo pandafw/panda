@@ -13,7 +13,7 @@ import panda.log.impl.ConsoleLog;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
 import panda.net.mail.EmailException;
-import panda.net.mail.MailClient;
+import panda.net.mail.SmtpMailClient;
 
 public class SmtpLogAppender extends AbstractAppender {
 	/** subject layout */
@@ -56,7 +56,7 @@ public class SmtpLogAppender extends AbstractAppender {
 	private boolean smtpSsl;
 	private boolean smtpDebug = false;
 
-	private MailClient client;
+	private SmtpMailClient client;
 	private Email email;
 
 	/**
@@ -121,8 +121,8 @@ public class SmtpLogAppender extends AbstractAppender {
 	 * 
 	 * @return mail client, may not be null.
 	 */
-	protected MailClient createClient() {
-		MailClient mc = new MailClient();
+	protected SmtpMailClient createClient() {
+		SmtpMailClient mc = new SmtpMailClient();
 		
 		mc.setHost(smtpHost);
 		if (smtpPort > 0) {

@@ -98,7 +98,24 @@ public class Email {
 	 * @throws EmailException if an error occurs
 	 */
 	public void setSender(String addr) throws EmailException {
-		this.sender = new EmailAddress(addr);
+		this.sender = EmailAddress.parse(addr);
+	}
+
+	/**
+	 * @param addr the sender address to set
+	 * @param name the sender name
+	 * @throws EmailException if an error occurs
+	 */
+	public void setSender(String addr, String name) throws EmailException {
+		this.sender = new EmailAddress(addr, name);
+	}
+
+	/**
+	 * @param addr the sender to set
+	 * @throws EmailException if an error occurs
+	 */
+	public void setSender(EmailAddress addr) throws EmailException {
+		this.sender = addr;
 	}
 	
 	/**
@@ -202,7 +219,7 @@ public class Email {
 	 * @return the tos
 	 */
 	public List<EmailAddress> getTos() {
-		return Collections.unmodifiableList(tos);
+		return tos;
 	}
 	
 	/**
@@ -273,7 +290,7 @@ public class Email {
 	 * @return the ccs
 	 */
 	public List<EmailAddress> getCcs() {
-		return Collections.unmodifiableList(ccs);
+		return ccs;
 	}
 
 	/**
@@ -344,7 +361,7 @@ public class Email {
 	 * @return the bccs
 	 */
 	public List<EmailAddress> getBccs() {
-		return Collections.unmodifiableList(bccs);
+		return bccs;
 	}
 
 	/**
@@ -402,7 +419,7 @@ public class Email {
 	 * @return the replyTos
 	 */
 	public List<EmailAddress> getReplyTos() {
-		return Collections.unmodifiableList(replyTos);
+		return replyTos;
 	}
 
 	/**
@@ -541,7 +558,7 @@ public class Email {
 	 * @return the attachments
 	 */
 	public List<EmailAttachment> getAttachments() {
-		return Collections.unmodifiableList(attachments);
+		return attachments;
 	}
 	
 	public boolean hasAttachments() {

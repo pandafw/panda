@@ -17,7 +17,8 @@ import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
-import panda.net.mail.EmailClient;
+import panda.net.mail.MailClient;
+import panda.net.mail.SmtpMailClient;
 
 
 @At("${super_path}/sendmail")
@@ -272,7 +273,7 @@ public class SendMailAction extends AbstractAction {
 			}
 			email.signWithDomainKey(arg.getFrom().getDomain(), arg.getDkimSelector(), arg.getDkimPrivateKey());
 			
-			EmailClient client = new EmailClient();
+			MailClient client = new SmtpMailClient();
 			client.setHost(arg.getHost());
 			if (arg.getPort() != null) {
 				client.setPort(arg.getPort());

@@ -1,5 +1,7 @@
 package panda.net.mail;
 
+import java.io.File;
+
 import panda.lang.Objects;
 import panda.lang.Strings;
 
@@ -8,6 +10,10 @@ public class EmailAttachment {
 	private String name;
 	private Object data;
 	
+	public EmailAttachment(File file) throws EmailException {
+		this(null, file.getName(), file);
+	}
+
 	public EmailAttachment(String name, Object data) throws EmailException {
 		this(null, name, data);
 	}

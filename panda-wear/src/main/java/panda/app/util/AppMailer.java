@@ -8,11 +8,14 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.mvc.ActionContext;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.net.mail.Email;
-import panda.net.mail.EmailClient;
 import panda.net.mail.EmailException;
+import panda.net.mail.JavaMailClient;
+import panda.net.mail.MailClient;
+import panda.net.mail.SmtpMailClient;
 
 @IocBean(scope=Scope.REQUEST)
 public class AppMailer {
@@ -24,6 +27,10 @@ public class AppMailer {
 
 	@IocInject
 	protected FreemarkerHelper freemarker;
+	
+	public MailClient getMailClient() {
+		return Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
+	}
 	
 	//-------------------------------------------------------------
 	// Template mail
@@ -89,7 +96,7 @@ public class AppMailer {
 			email.setCharset(charset);
 		}
 
-		EmailClient client = new EmailClient();
+		MailClient client = getMailClient();
 		String helo = getMailSetting(SET.MAIL_SMTP_HELO, null);
 		if (Strings.isNotEmpty(helo)) {
 			client.setHelo(helo);
@@ -105,13 +112,9 @@ public class AppMailer {
 			client.setPort(port);
 		}
 
-		if (getMailSettingAsBoolean(SET.MAIL_SMTP_SSL, false)) {
-			client.setSsl(true);
-		}
-
-		if (!getMailSettingAsBoolean(SET.MAIL_SMTP_TLS, true)) {
-			client.setTls(false);
-		}
+		client.setDebug(getMailSettingAsBoolean(SET.MAIL_DEBUG, false));
+		client.setSsl(getMailSettingAsBoolean(SET.MAIL_SMTP_SSL, false));
+		client.setStartTls(getMailSettingAsBoolean(SET.MAIL_SMTP_STARTTLS, true));
 
 		int timeout = getMailSettingAsInt(SET.MAIL_SMTP_CONN_TIMEOUT, 0);
 		if (timeout > 0) {
@@ -123,8 +126,6 @@ public class AppMailer {
 			client.setDefaultTimeout(timeout);
 		}
 
-//		client.setTLS(getMailSettingAsBoolean(SC.MAIL_SMTP_TLS, false));
-		
 		String username = getMailSetting(SET.MAIL_SMTP_USER, null);
 		if (Strings.isNotEmpty(username)) {
 			client.setUsername(username);
@@ -133,7 +134,7 @@ public class AppMailer {
 		
 		String bounce = getMailSetting(SET.MAIL_SMTP_BOUNCE, null);
 		if (Strings.isNotEmpty(bounce)) {
-//			email.setBounceAddress(bounce);
+			email.setSender(bounce);
 		}
 
 		client.send(email);

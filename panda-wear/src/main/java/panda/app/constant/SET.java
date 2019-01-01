@@ -106,9 +106,9 @@ public interface SET extends SetConstants {
 	public static final String MAIL_SMTP_SSL = "mail-smtp-ssl";
 	
 	/**
-	 * MAIL_SMTP_TLS = "mail-smtp-tls";
+	 * MAIL_SMTP_STARTTLS = "mail-smtp-starttls";
 	 */
-	public static final String MAIL_SMTP_TLS = "mail-smtp-tls";
+	public static final String MAIL_SMTP_STARTTLS = "mail-smtp-starttls";
 
 	/**
 	 * MAIL_SMTP_CONN_TIMEOUT = "mail-smtp-conn-timeout";
