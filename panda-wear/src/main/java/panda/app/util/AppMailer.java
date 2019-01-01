@@ -28,10 +28,6 @@ public class AppMailer {
 	@IocInject
 	protected FreemarkerHelper freemarker;
 	
-	public MailClient getMailClient() {
-		return Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
-	}
-	
 	//-------------------------------------------------------------
 	// Template mail
 	//
@@ -138,6 +134,19 @@ public class AppMailer {
 		}
 
 		client.send(email);
+	}
+	
+	protected MailClient getMailClient() {
+		String c = getMailSetting(SET.MAIL_CLIENT, null);
+		if (Strings.equalsIgnoreCase("java", c)) {
+			return new JavaMailClient();
+		}
+		
+		if (Strings.equalsIgnoreCase("smtp", c)) {
+			return new SmtpMailClient();
+		}
+
+		return Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
 	}
 	
 	protected String getMailSetting(String key, String def) {

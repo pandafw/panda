@@ -81,6 +81,11 @@ public interface SET extends SetConstants {
 	// mail properties
 	//
 	/**
+	 * MAIL_CLIENT = "mail-client";
+	 */
+	public static final String MAIL_CLIENT = "mail-client";
+
+	/**
 	 * MAIL_DEBUG = "mail-debug";
 	 */
 	public static final String MAIL_DEBUG = "mail-debug";
