@@ -6,6 +6,7 @@ import java.util.Map;
 import panda.lang.Booleans;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
+import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.LogEvent;
@@ -54,12 +55,14 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 */
 	private List<EmailAddress> replyTos;
 
+	private String smtpClient;
 	private String smtpHost;
 	private int smtpPort;
 	private String smtpUsername;
 	private String smtpPassword;
 	private boolean smtpSsl;
-	private boolean smtpDebug = false;
+	private boolean smtpStartTls;
+	private boolean smtpDebug;
 
 	private MailClient client;
 
@@ -88,23 +91,29 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 		else if ("subject".equalsIgnoreCase(name)) {
 			setSubject(value);
 		}
+		else if ("smtpClient".equalsIgnoreCase(name)) {
+			setSmtpClient(value);
+		}
 		else if ("smtpHost".equalsIgnoreCase(name)) {
-			setSMTPHost(value);
+			setSmtpHost(value);
 		}
 		else if ("smtpPort".equalsIgnoreCase(name)) {
-			setSMTPPort(Numbers.toInt(value, -1));
+			setSmtpPort(Numbers.toInt(value, -1));
 		}
 		else if ("smtpUsername".equalsIgnoreCase(name)) {
-			setSMTPUsername(value);
+			setSmtpUsername(value);
 		}
 		else if ("smtpPassword".equalsIgnoreCase(name)) {
-			setSMTPPassword(value);
+			setSmtpPassword(value);
 		}
 		else if ("smtpSSL".equalsIgnoreCase(name)) {
-			setSMTPSsl(Booleans.toBoolean(value));
+			setSmtpSsl(Booleans.toBoolean(value));
+		}
+		else if ("smtpStartTls".equalsIgnoreCase(name)) {
+			setSmtpStartTls(Booleans.toBoolean(value));
 		}
 		else if ("smtpDebug".equalsIgnoreCase(name)) {
-			setSMTPDebug(Booleans.toBoolean(value));
+			setSmtpDebug(Booleans.toBoolean(value));
 		}
 		else {
 			super.setProperty(name, value);
@@ -124,7 +133,17 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * @return mail client, may not be null.
 	 */
 	private MailClient createClient() {
-		MailClient mc = Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
+		MailClient mc = null;
+		
+		if (Strings.equalsIgnoreCase("java", smtpClient)) {
+			mc = new JavaMailClient();
+		}
+		else if (Strings.equalsIgnoreCase("smtp", smtpClient)) {
+			mc = new SmtpMailClient();
+		}
+		else {
+			mc = Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
+		}
 		
 		mc.setHost(smtpHost);
 		if (smtpPort > 0) {
@@ -303,19 +322,33 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	}
 
 	/**
-	 * @return the value of the <b>SMTPHost</b> option.
+	 * @return the smtpClient
 	 */
-	public String getSMTPHost() {
+	public String getSmtpClient() {
+		return smtpClient;
+	}
+
+	/**
+	 * @param smtpClient the smtpClient to set
+	 */
+	public void setSmtpClient(String smtpClient) {
+		this.smtpClient = smtpClient;
+	}
+
+	/**
+	 * @return the value of the <b>SmtpHost</b> option.
+	 */
+	public String getSmtpHost() {
 		return smtpHost;
 	}
 
 	/**
-	 * The <b>SMTPHost</b> option takes a string value which should be a the host name of the SMTP
+	 * The <b>SmtpHost</b> option takes a string value which should be a the host name of the Smtp
 	 * server that will send the e-mail message.
 	 * 
 	 * @param smtpHost the smtp server
 	 */
-	public void setSMTPHost(String smtpHost) {
+	public void setSmtpHost(String smtpHost) {
 		this.smtpHost = smtpHost;
 	}
 
@@ -324,7 +357,7 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * 
 	 * @return port, negative values indicate use of default ports for protocol.
 	 */
-	public final int getSMTPPort() {
+	public final int getSmtpPort() {
 		return smtpPort;
 	}
 
@@ -333,16 +366,16 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * 
 	 * @param val port, negative values indicate use of default ports for protocol.
 	 */
-	public final void setSMTPPort(final int val) {
+	public final void setSmtpPort(final int val) {
 		smtpPort = val;
 	}
 
 	/**
-	 * Get SMTP user name.
+	 * Get Smtp user name.
 	 * 
-	 * @return SMTP user name, may be null.
+	 * @return Smtp user name, may be null.
 	 */
-	public String getSMTPUsername() {
+	public String getSmtpUsername() {
 		return smtpUsername;
 	}
 
@@ -352,16 +385,16 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * 
 	 * @param username user name, may be null.
 	 */
-	public void setSMTPUsername(final String username) {
+	public void setSmtpUsername(final String username) {
 		this.smtpUsername = username;
 	}
 
 	/**
-	 * Get SMTP password.
+	 * Get Smtp password.
 	 * 
-	 * @return SMTP password, may be null.
+	 * @return Smtp password, may be null.
 	 */
-	public String getSMTPPassword() {
+	public String getSmtpPassword() {
 		return smtpPassword;
 	}
 
@@ -371,32 +404,46 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * 
 	 * @param password password, may be null.
 	 */
-	public void setSMTPPassword(final String password) {
+	public void setSmtpPassword(final String password) {
 		this.smtpPassword = password;
 	}
 
 	/**
-	 * Get SMTP ssl.
+	 * Get Smtp ssl.
 	 * 
-	 * @return SMTP ssl flag.
+	 * @return Smtp ssl flag.
 	 */
-	public boolean getSMTPSsl() {
+	public boolean getSmtpSsl() {
 		return smtpSsl;
 	}
 
 	/**
 	 * @param ssl ssl flag.
 	 */
-	public void setSMTPSsl(final boolean ssl) {
+	public void setSmtpSsl(final boolean ssl) {
 		this.smtpSsl = ssl;
 	}
 
 	/**
-	 * Get SMTP debug.
-	 * 
-	 * @return SMTP debug flag.
+	 * @return the smtpStartTls
 	 */
-	public boolean getSMTPDebug() {
+	public boolean isSmtpStartTls() {
+		return smtpStartTls;
+	}
+
+	/**
+	 * @param smtpStartTls the smtpStartTls to set
+	 */
+	public void setSmtpStartTls(boolean smtpStartTls) {
+		this.smtpStartTls = smtpStartTls;
+	}
+
+	/**
+	 * Get Smtp debug.
+	 * 
+	 * @return Smtp debug flag.
+	 */
+	public boolean getSmtpDebug() {
 		return smtpDebug;
 	}
 
@@ -407,12 +454,12 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * 
 	 * @param debug debug flag.
 	 */
-	public void setSMTPDebug(final boolean debug) {
+	public void setSmtpDebug(final boolean debug) {
 		this.smtpDebug = debug;
 	}
 
 	/**
-	 * SMTP log
+	 * Smtp log
 	 */
 	protected static class SmtpLog extends AbstractLog {
 		protected SmtpLogAdapter adapter;
