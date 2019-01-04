@@ -64,6 +64,8 @@ public class Form extends UIBean {
 	protected MvcURLBuilder urlbuilder;
 
 	protected String labelClass;
+	protected String labelSeparator = ":";
+	protected String labelPosition;
 	protected String inputClass;
 	protected Boolean hideDescrip;
 
@@ -232,6 +234,20 @@ public class Form extends UIBean {
 	}
 
 	/**
+	 * @return the labelSeparator
+	 */
+	public String getLabelSeparator() {
+		return labelSeparator;
+	}
+
+	/**
+	 * @param labelSeparator the labelSeparator to set
+	 */
+	public void setLabelSeparator(String labelSeparator) {
+		this.labelSeparator = labelSeparator;
+	}
+
+	/**
 	 * @return the labelClass
 	 */
 	public String getLabelClass() {
@@ -243,6 +259,20 @@ public class Form extends UIBean {
 	 */
 	public void setLabelClass(String labelClass) {
 		this.labelClass = labelClass;
+	}
+
+	/**
+	 * @return the labelPosition
+	 */
+	public String getLabelPosition() {
+		return labelPosition;
+	}
+
+	/**
+	 * @param labelPosition the labelPosition to set
+	 */
+	public void setLabelPosition(String labelPosition) {
+		this.labelPosition = labelPosition;
 	}
 
 	/**

@@ -36,7 +36,7 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 	}
 
 	protected void writeSeparator() throws IOException {
-		write(defs(tag.getLabelSeparator(), ":"));
+		write(tag.getLabelSeparator());
 	}
 
 	protected void writeDescrip() throws IOException {

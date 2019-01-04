@@ -12,8 +12,8 @@ public abstract class InputUIBean extends UIBean {
 
 	protected String label;
 	protected String labelPosition;
-	protected String labelSeparator = ":";
-	
+	protected String labelSeparator;
+
 	protected String labelClass;
 	protected String inputClass;
 	
@@ -75,17 +75,24 @@ public abstract class InputUIBean extends UIBean {
 		evaluateNameValue();
 
 		Form form = findForm();
-
 		if (form != null) {
 			if (id == null) {
 				// create HTML id element
 				populateComponentHtmlId(form);
 			}
-			
+
 			if (labelClass == null) {
 				labelClass = form.getLabelClass();
 			}
 		
+			if (labelSeparator == null) {
+				labelSeparator = form.getLabelSeparator();
+			}
+			
+			if (labelPosition == null) {
+				labelPosition = form.getLabelPosition();
+			}
+			
 			if (inputClass == null) {
 				inputClass = form.getInputClass();
 			}
@@ -211,14 +218,6 @@ public abstract class InputUIBean extends UIBean {
 	 */
 	public void setLabelSeparator(String labelseparator) {
 		this.labelSeparator = labelseparator;
-	}
-
-	/**
-	 * Define label position of form element (top/left) 
-	 * @param labelPosition the labelPosition to set
-	 */
-	public void setLabelposition(String labelPosition) {
-		this.labelPosition = labelPosition;
 	}
 
 	/** 
