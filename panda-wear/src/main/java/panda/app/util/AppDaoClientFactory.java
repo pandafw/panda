@@ -104,7 +104,7 @@ public class AppDaoClientFactory {
 						sqlDaoClient.setDataSource(jds);
 					}
 					catch (Exception e) {
-						throw new DaoException("Failed to lookup jndc data source: " + jndi);
+						throw new DaoException("Failed to lookup jndi data source: " + jndi, e);
 					}
 					return sqlDaoClient;
 				}
@@ -117,7 +117,7 @@ public class AppDaoClientFactory {
 			}
 			catch (Exception e) {
 				if (i < dss.length) {
-					log.warn("Failed to build DaoClient for [" + ds + "]: " + e.getMessage());
+					log.warn("Failed to build DaoClient for [" + ds + "]: " + e.getMessage(), e);
 				}
 				else {
 					log.error("Failed to build DaoClient for [" + ds + "]", e);
