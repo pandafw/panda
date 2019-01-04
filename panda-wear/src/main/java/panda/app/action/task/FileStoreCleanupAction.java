@@ -7,6 +7,7 @@ import panda.app.action.work.GenericSyncWorkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.time.DateTimes;
 import panda.mvc.MvcConstants;
@@ -43,11 +44,13 @@ public class FileStoreCleanupAction extends GenericSyncWorkAction {
 			Date before = DateTimes.addSeconds(DateTimes.getDate(), - maxage);
 			
 			List<FileItem> fis = fileStore.listFiles(tmpdir + '/', before);
-			status.total = fis.size();
-			for (FileItem fi : fis) {
-				fi.delete();
-				status.count++;
-				printInfo("Delete " + fi.getName());
+			if (Collections.isNotEmpty(fis)) {
+				status.total = fis.size();
+				for (FileItem fi : fis) {
+					fi.delete();
+					status.count++;
+					printInfo("Delete " + fi.getName());
+				}
 			}
 		}
 		catch (Exception e) {
