@@ -36,9 +36,9 @@ public interface VAL {
 	// USER
 	//----------------------------------------------------
 	/**
-	 * SYSTEM_UID = 0L;
+	 * SYSTEM_UID = 1L;
 	 */
-	public final static Long SYSTEM_UID = 0L;
+	public final static Long SYSTEM_UID = 1L;
 
 	
 	//----------------------------------------------------

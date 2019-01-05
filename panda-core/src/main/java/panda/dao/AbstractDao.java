@@ -1613,7 +1613,7 @@ public abstract class AbstractDao implements Dao {
 		}
 		
 		if (id instanceof Number) {
-			return true;
+			return ((Number)id).longValue() > 0;
 		}
 
 		if (id instanceof CharSequence) {
