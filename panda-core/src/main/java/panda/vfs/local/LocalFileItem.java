@@ -124,7 +124,7 @@ public class LocalFileItem implements FileItem, Serializable {
 
 	@Override
 	public void delete() {
-		File root = new File(localFileStore.path);
+		File root = new File(localFileStore.getPath());
 
 		File f = file;
 		while (f.delete()) {

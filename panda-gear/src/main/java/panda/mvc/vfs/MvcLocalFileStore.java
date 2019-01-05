@@ -13,12 +13,13 @@ import panda.mvc.MvcConstants;
 import panda.vfs.FileStore;
 import panda.vfs.local.LocalFileStore;
 
-@IocBean(type=FileStore.class, create="initialize")
+@IocBean(type=FileStore.class)
 public class MvcLocalFileStore extends LocalFileStore {
 	@IocInject(required=false)
 	private ServletContext servlet;
-	
-	public void initialize() {
+
+	@Override
+	public String getPath() {
 		if (Strings.isEmpty(path)) {
 			String sub = null;
 			if (servlet != null) {
@@ -29,6 +30,7 @@ public class MvcLocalFileStore extends LocalFileStore {
 			}
 			path = new File(Files.getTempDirectory(), sub).getPath();
 		}
+		return path;
 	}
 	
 	/**

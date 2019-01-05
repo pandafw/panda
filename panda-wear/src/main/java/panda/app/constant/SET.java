@@ -53,6 +53,9 @@ public interface SET extends SetConstants {
 	//--------------------------------------------------------
 	public static final String LUCENE_LOCATION = "lucene.location";
 
+	/* File Store */
+	public static final String FILESTORE_LOCAL_PATH = "filestore.local.path";
+
 	//------------------------------------------------
 	// temporary file cleanup
 	//
