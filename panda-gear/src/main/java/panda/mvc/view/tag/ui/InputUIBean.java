@@ -39,7 +39,7 @@ public abstract class InputUIBean extends UIBean {
 	
 	protected void evaluateDescriptionParam() {
 		if (description == null) {
-			// lookup the placeholder from a TextProvider (default value is the key)
+			// lookup the description from a TextProvider (default value is the key)
 			description = context.getText().getText("p." + key + "-dip", null);
 			if (description == null) {
 				description = context.getText().getText(key + "-dip", null);
