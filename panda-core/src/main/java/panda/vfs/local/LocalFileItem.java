@@ -32,7 +32,6 @@ public class LocalFileItem implements FileItem, Serializable {
 	 * Constructor
 	 * 
 	 * @param localFileStore local file store
-	 * @param id file id
 	 * @param file the local file
 	 */
 	public LocalFileItem(LocalFileStore localFileStore, File file) {
