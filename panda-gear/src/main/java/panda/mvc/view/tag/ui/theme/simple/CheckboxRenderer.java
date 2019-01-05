@@ -16,10 +16,12 @@ public class CheckboxRenderer extends AbstractEndRenderer<Checkbox> {
 
 	@Override
 	protected void render() throws IOException {
-		write("<label class=\"checkbox-inline\">");
-
 		Attributes attrs = new Attributes();
-		attrs.add("type", "checkbox")
+		attrs.css(this, "checkbox-inline");
+		stag("label", attrs);
+		
+		attrs.clear()
+			.add("type", "checkbox")
 			.id(tag)
 			.name(tag)
 			.css(this, "p-checkbox")
