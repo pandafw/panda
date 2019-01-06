@@ -87,8 +87,11 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 								stag("ul", as);
 								ul = true;
 							}
-							write("<li class=\"text-danger\"><i class=\"fa-li fa fa-exclamation-circle\"></i>");
+							write("<li class=\"text-danger\">");
+							write("<i class=\"fa-li fa fa-exclamation-circle\"></i>");
+							write("<span>");
 							write(phtml(fe));
+							write("</span>");
 							write("</li>");
 						}
 					}

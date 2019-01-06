@@ -80,8 +80,10 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 					}
 					write("\">");
 					write(icon(ICON_CLASS));
+					write("<span>");
 					write(label);
 					write(Escapes.escape(fieldError, tag.getEscape()));
+					write("</span>");
 					etag("li");
 				}
 			}

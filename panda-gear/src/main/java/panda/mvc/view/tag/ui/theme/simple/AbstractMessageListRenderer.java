@@ -45,7 +45,9 @@ public abstract class AbstractMessageListRenderer<T extends EscapeUIBean> extend
 
 					// img for error
 					write(icon(getDefaultIconClass()));
+					write("<span>");
 					write(Escapes.escape(msg, tag.getEscape()));
+					write("</span>");
 
 					etag("li");
 				}
