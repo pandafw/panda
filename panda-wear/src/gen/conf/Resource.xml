@@ -67,6 +67,7 @@
 			<column name="source" hidden="true" sortable="true" link="false">
 				<filter type="string"/>
 			</column>
+			<param name="options" value="${slist.options}"/>
 		</list>
 		<list name="basicBulk" extend="basicList">
 			<param name="toolbar" value="${bulk.toolbar}"/>
@@ -111,8 +112,14 @@
 		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
-	<action name="resource" auth="${super.auth}" path="${super.path}" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="resource" auth="${super.auth}" path="${super.path}" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
 	<action name="resource" auth="${super.auth}" path="${super.path}" extend="action.Resource" actionClass="${action.package}.resource.ResourceEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">

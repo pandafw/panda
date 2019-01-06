@@ -64,6 +64,7 @@
 					<param name="list" value="consts.localeCountryMap"/>
 				</filter>
 			</column>
+			<param name="options" value="${slist.options}"/>
 		</list>
 		<list name="basicBulk" extend="basicList">
 			<param name="toolbar" value="${bulk.toolbar}"/>
@@ -108,8 +109,14 @@
 		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
-	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="template" extend="action.Template" actionClass="${action.package}.template.TemplateBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="template" extend="action.Template" actionClass="${action.package}.template.TemplateBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
 	<action name="template" extend="action.Template" actionClass="${action.package}.template.TemplateEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">

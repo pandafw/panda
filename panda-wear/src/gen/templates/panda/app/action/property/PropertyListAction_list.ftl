@@ -83,7 +83,7 @@
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
-	<#if action.canAccess("~/bdelete")>
+	<#if action.canAccess("~/bdelete") || action.canAccess("~/benable") || action.canAccess("~/bdisable")>
 		<#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
@@ -253,6 +253,12 @@
 		<#if a.canAccess("~/bdelete")>
 			<@p.b onclick="return property_list_bdelete();" icon="icon-bdelete" label="#(btn-bdelete)"/>
 		</#if>
+		<#if a.canAccess("~/benable")>
+			<@p.b onclick="return property_list_benable();" icon="icon-benable" label="#(btn-benable)"/>
+		</#if>
+		<#if a.canAccess("~/bdisable")>
+			<@p.b onclick="return property_list_bdisable();" icon="icon-bdisable" label="#(btn-bdisable)"/>
+		</#if>
 	</@p.set>
 
 	<@p.queryer id="property_list_qr" action="~/list"
@@ -269,6 +275,12 @@
 	<script type="text/javascript"><!--
 		function property_list_bdelete() {
 			return plv_submitCheckedKeys('property_list', '<@p.url action="~/bdelete"/>', null, "");
+		}
+		function property_list_benable() {
+			return plv_submitCheckedKeys('property_list', '<@p.url action="~/benable"/>', null, "");
+		}
+		function property_list_bdisable() {
+			return plv_submitCheckedKeys('property_list', '<@p.url action="~/bdisable"/>', null, "");
 		}
 	--></script>
 </div>

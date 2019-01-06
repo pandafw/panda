@@ -1,25 +1,25 @@
-package panda.app.action.template;
+package panda.app.action.resource;
 
 import java.util.Map;
 import panda.app.action.crud.GenericBulkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.app.entity.Template;
+import panda.app.entity.Resource;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${super_path}/template")
+@At("${super_path}/resource")
 @Auth(AUTH.SUPER)
-public class TemplateBulkAction extends GenericBulkAction<Template> {
+public class ResourceBulkDeleteAction extends GenericBulkAction<Resource> {
 
 	/**
 	 * Constructor
 	 */
-	public TemplateBulkAction() {
-		setType(Template.class);
-		addDisplayFields(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY, Template.UPDATED_BY_USER);
+	public ResourceBulkDeleteAction() {
+		setType(Resource.class);
+		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY, Resource.UPDATED_BY_USER);
 	}
 
 

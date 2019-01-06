@@ -12,12 +12,12 @@ import panda.mvc.view.Views;
 
 @At("${super_path}/property")
 @Auth(AUTH.SUPER)
-public class PropertyBulkAction extends GenericBulkAction<Property> {
+public class PropertyBulkDeleteAction extends GenericBulkAction<Property> {
 
 	/**
 	 * Constructor
 	 */
-	public PropertyBulkAction() {
+	public PropertyBulkDeleteAction() {
 		setType(Property.class);
 		addDisplayFields(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY, Property.UPDATED_BY_USER);
 	}
