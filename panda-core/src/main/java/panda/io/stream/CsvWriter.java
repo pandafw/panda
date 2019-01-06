@@ -157,7 +157,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 					}
 					writer.append(escapechar).append(c);
 				}
-				else if (c == Chars.CR || c == Chars.LF) {
+				else if (c == Chars.CR || c == Chars.LF || c == separator) {
 					if (!quoted) {
 						quoted = true;
 						writer.append(quotechar);
