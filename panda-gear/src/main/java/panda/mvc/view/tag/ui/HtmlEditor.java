@@ -63,16 +63,16 @@ public class HtmlEditor extends TextArea {
 			editor = context.getSettings().getProperty(SetConstants.MVC_TAG_HTML_EDITOR, "summernote");
 		}
 
-		if (mediaHref == null) {
+		if (mediaHref == null && Strings.isNotEmpty(mediaUrl.getAction())) {
 			mediaHref = mediaUrl.build();
 		}
 
 		if (Strings.isEmpty(mediaIcon)) {
-			mediaIcon = context.getText().getText("icon-media", "fa fa-list-alt");
+			mediaIcon = context.getText().getText("icon-media-browser", "fa fa-list-alt");
 		}
 		
 		if (Strings.isEmpty(mediaText)) {
-			mediaText = context.getText().getText("btn-media", "Media");
+			mediaText = context.getText().getText("btn-media-browser", "Media");
 		}
 	}
 

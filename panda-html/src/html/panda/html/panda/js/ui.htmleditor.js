@@ -15,12 +15,25 @@
 
 				// add plugin button
 				context.memo('button.media', function() {
+					function popup_callback(d) {
+						$.popup().hide();
+					}
+					
 					// create button
 					var button = ui.button({
 						contents: '<i class="' + ($n.data('mediaIcon') || 'fa fa-list-alt') + '"/>',
 						tooltip: $n.data('mediaText') || 'Media Browser',
 						click: function() {
-							alert($n.data('mediaHref'));
+							var url = $n.data('mediaHref');
+							var id = 'media_popup_' + url.hashCode();
+							$.popup({
+									id: id,
+									url: url
+								})
+								.show({
+									id: id,
+									callback: popup_callback
+								});
 						}
 					});
 
@@ -88,7 +101,8 @@
 					toolbar: [
 						[ 'style', [ 'style', 'fontname', 'fontsize', 'color' ] ],
 						[ 'text', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript' ] ],
-						[ 'para', [ /*'height', */'paragraph', 'ol', 'ul', 'hr', 'table', 'link' ] ],
+						[ 'para', [ /*'height', */'paragraph', 'ol', 'ul' ] ],
+						[ 'insert', [ 'hr', 'table', 'link' ] ],
 						[ 'media', ms ],
 						[ 'edit', [ 'undo', 'redo', 'clear' ] ], 
 						[ 'misc', [ 'codeview', 'fullscreen', 'help' ] ],

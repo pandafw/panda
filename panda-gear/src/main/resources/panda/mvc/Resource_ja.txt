@@ -292,6 +292,7 @@ btn-list=一覧
 btn-login=ログイン
 btn-logout=ログアウト
 btn-media=メディア
+btn-media-browser=メディア
 btn-new=新規
 btn-next=次へ
 btn-pdf=PDF出力

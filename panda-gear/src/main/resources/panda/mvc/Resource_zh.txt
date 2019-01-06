@@ -286,6 +286,7 @@ btn-list=浏览
 btn-login=登录
 btn-logout=退出
 btn-media=媒体
+btn-media-browser=媒体浏览
 btn-new=新建
 btn-next=下一步
 btn-pdf=PDF打印
