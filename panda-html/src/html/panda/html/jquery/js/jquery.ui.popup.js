@@ -15,13 +15,11 @@
 				+ ($.browser.msie && parseInt($.browser.version, 10) < 7 ?
 						'<iframe src="javascript:false;" frameborder="0"></iframe>' : '')
 				+ '</div>').appendTo('body');
-			$('<div id="ui_popup_closer" class="ui-icon ui-icon-circle-close" style="display:none"></div>')
+			$('<i id="ui_popup_closer" class="fa fa-times-circle" style="display:none"></i>')
 				.appendTo('body')
 				.mousedown(__mousedown);
 
 			$(document).mousedown(__mousedown);
-			
-			setInterval(__shadow, 50);
 		}
 	}
 
@@ -33,10 +31,24 @@
 			}, 200);
 		}
 	}
-	
+
+	function __center($p) {
+		var $w = $(window);
+		$p.css({
+			top: ($w.scrollTop() + 30) + "px",
+			left: ($w.scrollLeft() + 30) + "px",
+			width: ($.browser.width() - 60) + "px",
+			height: ($.browser.height() - 60) + "px"
+		});
+	}
+
 	function __shadow() {
 		if (__active) {
-			var p = $('#' + __active).get(0);
+			var $p = $('#' + __active);
+			if ($p.hasClass('ui-popup-center')) {
+				__center($p);
+			}
+			var p = $p[0];
 			$('#ui_popup_shadow').css({
 				top: p.offsetTop + 'px',
 				left: p.offsetLeft + 'px',
@@ -52,6 +64,7 @@
 				left: p.offsetLeft + p.offsetWidth - 12 + 'px',
 				display: 'block'
 			})
+			setTimeout(__shadow, 50);
 		}
 		else {
 			$('#ui_popup_shadow, #ui_popup_closer').css('display', 'none');
@@ -84,26 +97,28 @@
 		}
 	}
 	
-	function __alignTo($t, $el) {
-		var p = { top: 0, left: 0 };
-		if ($t.length > 0) {
-			p = $t.offset();
+	function __align($t, $el) {
+		if ($t.length) {
+			var p = $t.offset();
 			p.top += $t.outerHeight();
-		}
-	
-		var bw = $.browser.width();
-		var ow = $el.outerWidth();
-		if (p.left + ow > bw) {
-			p.left = bw - ow - 20;
-			if (p.left < 0) {
-				p.left = 0;
+
+			var bw = $.browser.width();
+			var ow = $el.outerWidth();
+			if (p.left + ow > bw) {
+				p.left = bw - ow - 20;
+				if (p.left < 0) {
+					p.left = 0;
+				}
 			}
-		} 
-	
-		$el.css({
-			top: p.top + "px",
-			left: p.left + "px"
-		});
+			
+			$el.css({
+				top: p.top + "px",
+				left: p.left + "px"
+			}).removeClass('ui-popup-center');
+		}
+		else {
+			$el.addClass('ui-popup-center');
+		}
 	}
 	
 	function __activeTarget($t) {
@@ -151,8 +166,12 @@
 			top : "0px",
 			left : "0px",
 		}).addClass('ui-popup-opacity0').show();
-		__alignTo($(c.target || c.trigger), $pc.parent());
+
+		__align($(c.target || c.trigger), $pc.parent(), true);
+		
 		$pc.hide().removeClass('ui-popup-opacity0').slideDown('fast');
+		
+		__shadow();
 	}
 	
 	function _show(c) {
@@ -219,6 +238,7 @@
 				__activeTarget($(c.target || c.trigger));
 			}
 		}
+		$('body').removeClass('ui-popop-over');
 		return this;
 	}
 
@@ -250,7 +270,7 @@
 	function _load(c) {
 		c = $.extend({ id: __active }, c);
 		if (c.id) {
-			__alignTo($(c.target || c.trigger), $("#ui_popup_loader").show());
+			__align($(c.target || c.trigger), $("#ui_popup_loader").show(), false);
 
 			var $pc = null;
 			$.ajax({
@@ -271,7 +291,7 @@
 								__popup($pc, c);
 							}
 							else {
-								__alignTo($(c.target || c.trigger), $pc.parent());
+								__align($(c.target || c.trigger), $pc.parent(), true);
 							}
 						}
 					}
