@@ -1,19 +1,10 @@
 //------------------------------------------------------
 function s_onpageload() {
-	//invoke onPageLoad function
-	if (window.onPageLoad) {
-		window.onPageLoad();
-		window.onPageLoad = null;
-	}
-
-	for (var i = 1; ; i++) {
-		var f = 'onPageLoad' + i;
-		if (window[f]) {
-			window[f]();
-			window[f] = null;
-		}
-		else {
-			break;
+	// invoke onPageLoad function
+	for (var i in window) {
+		if (i.startsWith('onPageLoad') && typeof(window[i]) == 'function') {
+			window[i]();
+			window[i] = null;
 		}
 	}
 }
@@ -260,6 +251,7 @@ function s_decorate(selector) {
 	});
 	
 	$(window).trigger('load');
+	s_onpageload();
 }
 
 function s_init(c) {

@@ -2306,12 +2306,25 @@ if (typeof String.formatSize != "function") {
 
 				// add plugin button
 				context.memo('button.media', function() {
+					function popup_callback(d) {
+						$.popup().hide();
+					}
+					
 					// create button
 					var button = ui.button({
 						contents: '<i class="' + ($n.data('mediaIcon') || 'fa fa-list-alt') + '"/>',
 						tooltip: $n.data('mediaText') || 'Media Browser',
 						click: function() {
-							alert($n.data('mediaHref'));
+							var url = $n.data('mediaHref');
+							var id = 'media_popup_' + url.hashCode();
+							$.popup({
+									id: id,
+									url: url
+								})
+								.show({
+									id: id,
+									callback: popup_callback
+								});
 						}
 					});
 
@@ -2379,7 +2392,8 @@ if (typeof String.formatSize != "function") {
 					toolbar: [
 						[ 'style', [ 'style', 'fontname', 'fontsize', 'color' ] ],
 						[ 'text', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript' ] ],
-						[ 'para', [ /*'height', */'paragraph', 'ol', 'ul', 'hr', 'table', 'link' ] ],
+						[ 'para', [ /*'height', */'paragraph', 'ol', 'ul' ] ],
+						[ 'insert', [ 'hr', 'table', 'link' ] ],
 						[ 'media', ms ],
 						[ 'edit', [ 'undo', 'redo', 'clear' ] ], 
 						[ 'misc', [ 'codeview', 'fullscreen', 'help' ] ],
@@ -2988,20 +3002,11 @@ function _plv_onTBodyMouseOut(evt) {
 
 //------------------------------------------------------
 function s_onpageload() {
-	//invoke onPageLoad function
-	if (window.onPageLoad) {
-		window.onPageLoad();
-		window.onPageLoad = null;
-	}
-
-	for (var i = 1; ; i++) {
-		var f = 'onPageLoad' + i;
-		if (window[f]) {
-			window[f]();
-			window[f] = null;
-		}
-		else {
-			break;
+	// invoke onPageLoad function
+	for (var i in window) {
+		if (i.startsWith('onPageLoad') && typeof(window[i]) == 'function') {
+			window[i]();
+			window[i] = null;
 		}
 	}
 }
@@ -3248,6 +3253,7 @@ function s_decorate(selector) {
 	});
 	
 	$(window).trigger('load');
+	s_onpageload();
 }
 
 function s_init(c) {
