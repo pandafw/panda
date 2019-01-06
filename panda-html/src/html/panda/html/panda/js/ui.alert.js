@@ -7,7 +7,7 @@
 	}
 
 	function msg_li(tc, ic, m) {
-		return $('<li>').addClass(tc).append($('<i>').addClass(ic)).append($('<span>').text(m));
+		return $('<li>').addClass(tc).append($('<i>').addClass(ic)).append($('<span>').html(m.escapePhtml()));
 	}
 
 	function addMsg($p, s, m, t) {

@@ -157,13 +157,7 @@
 				}
 			}
 			else {
-				if (d.alerts) {
-					$ue.palert('add', d.alerts);
-				}
-				if (d.exception) {
-					var e = d.exception;
-					$ue.palert('error', (e.message + (e.stackTrace ? ("\n" + e.stackTrace) : "")).escapePhtml());
-				}
+				$ue.palert('actionError', d);
 				$ue.slideDown();
 			}
 		}

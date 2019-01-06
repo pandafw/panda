@@ -1970,7 +1970,7 @@ if (typeof String.formatSize != "function") {
 	}
 
 	function msg_li(tc, ic, m) {
-		return $('<li>').addClass(tc).append($('<i>').addClass(ic)).append($('<span>').text(m));
+		return $('<li>').addClass(tc).append($('<i>').addClass(ic)).append($('<span>').html(m.escapePhtml()));
 	}
 
 	function addMsg($p, s, m, t) {
@@ -3479,13 +3479,7 @@ s_setbase({
 				}
 			}
 			else {
-				if (d.alerts) {
-					$ue.palert('add', d.alerts);
-				}
-				if (d.exception) {
-					var e = d.exception;
-					$ue.palert('error', (e.message + (e.stackTrace ? ("\n" + e.stackTrace) : "")).escapePhtml());
-				}
+				$ue.palert('actionError', d);
 				$ue.slideDown();
 			}
 		}
