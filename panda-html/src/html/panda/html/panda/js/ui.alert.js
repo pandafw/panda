@@ -98,11 +98,10 @@
 	};
 	
 	var palert = function($c, s) {
-		s = $.extend({}, $.palert, s);
+		if (s) {
+			$c.data('palert', s);
+		}
 		return {
-			api: function() {
-				return this;
-			},
 			clear: function() {
 				$c.children('.alert').remove();
 				return this;
@@ -129,7 +128,9 @@
 					$p.append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
 					a = true;
 				}
-				
+
+				var s = $.extend({}, $c.data('palert'), $.palert);
+
 				addAlerts($p, s, m, t);
 
 				if (a) { 
@@ -174,13 +175,13 @@
 		}
 	};
 	
-	$.fn.palert = function(option) {
+	$.fn.palert = function(opt) {
+		var ops = typeof opt === 'object' && opt;
 		var args = Array.prototype.slice.call(arguments, 1);
-		return this.each(function () {
-			var ops = typeof option === 'object' && option;
+		return this.each(function() {
 			var pa = palert($(this), ops);
-			if (typeof option === 'string') {
-				pa[option].apply(pa, args);
+			if (typeof opt === 'string') {
+				pa[opt].apply(pa, args);
 			}
 		});
 	};
