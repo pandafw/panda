@@ -46,7 +46,7 @@
 		<#include "/action-alert.ftl"/>
 	</div>
 	
-	<@p.form id="media_form" action="browse" theme="bs3">
+	<@p.form id="media_form" action="./" theme="bs3">
 		<@p.datepicker
 			cssClass="media-ds"
 			name="ds"
@@ -82,7 +82,7 @@
 		accept="image/*,video/*,audio/*"
 		size="30"
 		multiple="true"
-		uploadAction="uploads"
+		uploadAction="./uploads"
 		uploadName="files"
 		dataOnUploaded="media_on_uploaded"
 	/>
@@ -93,16 +93,18 @@
 </div>
 
 <script>
-	var media_items = <#if result?has_content>${assist.toJson(result)}<#else>[]</#if>;
-	var media_limit = ${a.mediaPageLimit};
-	var media_date_format = null;
+	var media_base = '';
+	var media_date_format = '';
 	var media_has_next = false;
 	var media_loading = false;
-	
-	function onPageLoad() {
+	var media_limit = ${a.mediaPageLimit};
+	var media_items = <#if result?has_content>${assist.toJson(result)}<#else>[]</#if>;
+
+	function onPageLoadMediaBrowser() {
 		$.jcss('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>css?v=${assist.appVersion}');
 		$.jscript('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>js?v=${assist.appVersion}');
 
+		media_base = $('#media_form').attr('action');
 		media_date_format = new DateFormat("<@p.text name='date-format-datetime'/>");
 
 		media_has_next = (media_items.length >= media_limit);
@@ -158,9 +160,9 @@
 
 	function media_create(m) {
 		return $('<a class="media-thumb img-thumbnail" href="#">')
-			.append($('<img src="thumb/' + m.id + '"/>').attr('alt', m.name))
+			.append($('<img src="' + media_base + 'thumb/' + m.id + '"/>').attr('alt', m.name))
 			.attr({
-				'href': 'media/' + m.id,
+				'href': media_base + 'media/' + m.id,
 				'title': media_title(m)
 			})
 			.data('mid', m.id)
@@ -204,7 +206,7 @@
 		
 		media_ajax_start();
 		$.ajax({
-			url: 'deletes',
+			url: media_base + 'deletes',
 			method: 'POST',
 			data: ps,
 			dataType: 'json',
@@ -230,7 +232,7 @@
 		
 		media_ajax_start();
 		$.ajax({
-			url: 'browse',
+			url: media_base + 'browse',
 			method: 'POST',
 			data: ps,
 			dataType: 'json',

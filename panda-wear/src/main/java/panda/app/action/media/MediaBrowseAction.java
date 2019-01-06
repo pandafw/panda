@@ -130,6 +130,12 @@ public class MediaBrowseAction extends AbstractAction {
 	}
 	
 	@At
+	@To(Views.SFTL)
+	public Object browse_popup(@Param Arg arg) {
+		return browse(arg);
+	}
+
+	@At
 	@To(Views.SJSON)
 	public Object browse(@Param Arg arg) {
 		Dao dao = getDaoClient().getDao();
