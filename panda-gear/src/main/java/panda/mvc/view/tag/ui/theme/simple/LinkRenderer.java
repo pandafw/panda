@@ -154,7 +154,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 					writeCdnJs("//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond");
 				}
 				else {
-					writeStaticJs("/respondjs/respondjs");
+					writeStaticJs("/respondjs/respond");
 				}
 			}
 		}
