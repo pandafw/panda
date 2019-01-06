@@ -155,6 +155,10 @@ btn-benable=有効
 btn-benable-execute=有効
 btn-brecover=復元
 btn-brecover-execute=復元
+btn-bresume=利用再開
+btn-bresume-execute=利用再開
+btn-bsuspend=利用停止
+btn-bsuspend-execute=利用停止
 btn-btrash=削除
 btn-btrash-execute=削除
 btn-bupdate=編集
@@ -183,6 +187,8 @@ title-bdelete=${top.title} - 削除
 title-bdisable=${top.title} - 無効
 title-benable=${top.title} - 有効
 title-brecover=${top.title} - 復元
+title-bresume=${top.title} - 利用再開
+title-bsuspend=${top.title} - 利用停止
 title-btrash=${top.title} - 削除
 title-bupdate=${top.title} - 編集
 
@@ -238,6 +244,12 @@ step-benable-success=完了
 step-brecover=復元
 step-brecover-confirm=確認
 step-brecover-success=完了
+step-bresume=利用再開
+step-bresume-confirm=確認
+step-bresume-success=完了
+step-bsuspend=利用停止
+step-bsuspend-confirm=確認
+step-bsuspend-success=完了
 step-btrash=削除
 step-btrash-confirm=確認
 step-btrash-success=完了
@@ -275,6 +287,14 @@ action-success-insert=該当データを登録しました。
 action-confirm-recover=該当データを復元して宜しいでしょうか？
 action-failed-recover=システムエラーが発生したため、該当データを復元できませんでした。${top}
 action-success-recover=該当データを復元しました。
+
+action-confirm-bresume=該当${top}件のデータを利用再開して宜しいでしょうか？
+action-failed-bresume=システムエラーが発生したため、該当データを利用再開できませんでした。${top}
+action-success-bresume=${top}件のデータを利用再開しました。
+
+action-confirm-bsuspend=該当${top}件のデータを利用停止して宜しいでしょうか？
+action-failed-bsuspend=システムエラーが発生したため、該当データを利用停止できませんでした。${top}
+action-success-bsuspend=${top}件のデータを利用停止しました。
 
 action-confirm-trash=該当データを削除して宜しいでしょうか？
 action-failed-trash=システムエラーが発生したため、該当データを削除できませんでした。${top}

@@ -152,6 +152,10 @@ btn-benable=激活
 btn-benable-execute=激活
 btn-brecover=恢复
 btn-brecover-execute=恢复
+btn-bresume=恢复使用
+btn-bresume-execute=恢复使用
+btn-bsuspend=停止使用
+btn-bsuspend-execute=停止使用
 btn-btrash=删除
 btn-btrash-execute=删除
 btn-bupdate=修改
@@ -181,6 +185,8 @@ title-bdelete=${top.title} - 删除
 title-bdisable=${top.title} - 禁用
 title-benable=${top.title} - 激活
 title-brecover=${top.title} - 恢复
+title-bresume=${top.title} - 恢复使用
+title-bsuspend=${top.title} - 停止使用
 title-btrash=${top.title} - 删除
 title-bupdate=${top.title} - 变更
 
@@ -236,6 +242,12 @@ step-benable-success=完成
 step-brecover=恢复
 step-brecover-confirm=确认
 step-brecover-success=完成
+step-bresume=恢复使用
+step-bresume-confirm=確認
+step-bresume-success=完了
+step-bsuspend=停止使用
+step-bsuspend-confirm=確認
+step-bsuspend-success=完了
 step-btrash=删除
 step-btrash-confirm=确认
 step-btrash-success=完成
@@ -303,6 +315,14 @@ action-success-benable=${top}件数据被成功激活。
 action-confirm-brecover=您确定恢复这${top}件数据吗？
 action-failed-brecover=系统错误发生，数据恢复失败。${top}
 action-success-brecover=${top}件数据被成功恢复。
+
+action-confirm-bresume=您确定恢复使用这${top}件数据吗？
+action-failed-bresume=系统错误发生，数据恢复使用失败。${top}
+action-success-bresume=${top}件数据被成功恢复使用。
+
+action-confirm-bsuspend=您确定停止使用这${top}件数据吗？
+action-failed-bsuspend=系统错误发生，数据停止使用失败。${top}
+action-success-bsuspend=${top}件数据被成功停止使用。
 
 action-confirm-btrash=您确定删除这${top}件数据吗？
 action-failed-btrash=系统错误发生，数据删除失败。${top}
