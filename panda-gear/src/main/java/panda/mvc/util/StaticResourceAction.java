@@ -38,7 +38,11 @@ public class StaticResourceAction extends ActionSupport {
 	@At("(.*)$")
 	@To(Views.RES)
 	public Object execute(String path) {
-		return findResource(path);
+		Object r = findResource(path);
+		if (r == null) {
+			return Views.scNotFound(context);
+		}
+		return r;
 	}
 	
 	protected File findFile(String path) {

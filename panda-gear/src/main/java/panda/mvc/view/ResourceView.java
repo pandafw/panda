@@ -12,6 +12,7 @@ import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
+import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
@@ -60,6 +61,11 @@ public class ResourceView extends AbstractView {
 			else {
 				throw new RuntimeException("Invalid result for " + getClass().getName() + ": " + file);
 			}
+		}
+
+		if (Strings.isEmpty(path)) {
+			ac.getResponse().setStatus(HttpStatus.SC_NOT_FOUND);
+			return;
 		}
 
 		file = findResource(ac, path);
