@@ -44,36 +44,6 @@ public class MediaBrowseAction extends AbstractAction {
 		public String sn;
 	}
 
-	private void find(String id, String sc, int sz) throws IOException {
-		if (Strings.isNotEmpty(id)) {
-			Dao dao = getDaoClient().getDao();
-			Media m = dao.fetch(Media.class, id);
-
-			if (m != null) {
-				int maxage = getSettings().getPropertyAsInt(SET.MEDIA_CACHE_MAXAGE, Medias.DEFAULT_CACHE_MAXAGE);
-
-				if (HttpServlets.checkAndSetNotModified(getRequest(), getResponse(), m.getUpdatedAt(), maxage)) {
-					return;
-				}
-				
-				MediaData md = null;
-				if (sc == null) {
-					md = mds.find(id);
-				}
-				else {
-					sz = getSettings().getPropertyAsInt(sc, sz);
-					md = mds.find(id, sz); 
-				}
-				if (md != null) {
-					write(m, md, maxage);
-					return;
-				}
-			}
-		}
-
-		getResponse().setStatus(HttpStatus.SC_NOT_FOUND);
-	}
-
 	@At("media/(.*)$")
 	public void media2(String id) throws Exception {
 		media(id);
@@ -104,24 +74,6 @@ public class MediaBrowseAction extends AbstractAction {
 		find(id, SET.MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
 	}
 
-	private void write(Media m, MediaData md, int maxage) throws IOException {
-		String filename = m.getName();
-		if (Strings.isEmpty(filename)) { 
-			filename = "media-" + m.getId() + ".jpg";
-		}
-		if (md.getMsz() != Medias.ORIGINAL) {
-			filename = FileNames.addSuffix(filename, "-" + md.getMsz());
-		}
-
-		HttpServletResponser hsrs = new HttpServletResponser(getRequest(), getResponse());
-		hsrs.setFileName(filename);
-		hsrs.setContentType(MimeTypes.getMimeType(hsrs.getFileName()));
-		hsrs.setContentLength(md.getSize());
-		hsrs.setMaxAge(maxage);
-		hsrs.writeHeader();
-		hsrs.writeStream(md.open());
-	}
-	
 	@At("")
 	@To(Views.SFTL)
 	@Redirect(toslash=true)
@@ -218,5 +170,54 @@ public class MediaBrowseAction extends AbstractAction {
 		}
 		return medias;
 	}
+
+	private void find(String id, String sc, int sz) throws IOException {
+		if (Strings.isNotEmpty(id)) {
+			Dao dao = getDaoClient().getDao();
+			Media m = dao.fetch(Media.class, id);
+
+			if (m != null) {
+				int maxage = getSettings().getPropertyAsInt(SET.MEDIA_CACHE_MAXAGE, Medias.DEFAULT_CACHE_MAXAGE);
+
+				if (HttpServlets.checkAndSetNotModified(getRequest(), getResponse(), m.getUpdatedAt(), maxage)) {
+					return;
+				}
+				
+				MediaData md = null;
+				if (sc == null) {
+					md = mds.find(id);
+				}
+				else {
+					sz = getSettings().getPropertyAsInt(sc, sz);
+					md = mds.find(id, sz); 
+				}
+				if (md != null) {
+					write(m, md, maxage);
+					return;
+				}
+			}
+		}
+
+		getResponse().setStatus(HttpStatus.SC_NOT_FOUND);
+	}
+
+	private void write(Media m, MediaData md, int maxage) throws IOException {
+		String filename = m.getName();
+		if (Strings.isEmpty(filename)) { 
+			filename = "media-" + m.getId() + ".jpg";
+		}
+		if (md.getMsz() != Medias.ORIGINAL) {
+			filename = FileNames.addSuffix(filename, "-" + md.getMsz());
+		}
+
+		HttpServletResponser hsrs = new HttpServletResponser(getRequest(), getResponse());
+		hsrs.setFileName(filename);
+		hsrs.setContentType(MimeTypes.getMimeType(hsrs.getFileName()));
+		hsrs.setContentLength(md.getSize());
+		hsrs.setMaxAge(maxage);
+		hsrs.writeHeader();
+		hsrs.writeStream(md.open());
+	}
+	
 }
 

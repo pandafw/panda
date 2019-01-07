@@ -73,6 +73,7 @@
 		<div id="media_tool" class="form-group">
 			<@p.a id="media_btn_upload" btn="default" icon="upload" label="#(btn-upload)"/>
 			<@p.a id="media_btn_delete" btn="warning" icon="trash" label="#(btn-delete)" cssClass="p-hidden"/>
+			<@p.a id="media_btn_select" btn="primary" icon="select" label="#(btn-select)" cssClass="p-hidden"/>
 		</div>
 	</@p.form>
 
@@ -93,6 +94,7 @@
 </div>
 
 <script>
+	var media_popup = ${methodName?ends_with('popup')?string};
 	var media_base = '';
 	var media_date_format = '';
 	var media_has_next = false;
@@ -121,6 +123,10 @@
 			e.preventDefault();
 			media_delete();
 		});
+		$('#media_btn_select').click(function(e) {
+			e.preventDefault();
+			media_select();
+		});
 		$('#media_form').submit(media_on_change);
 		$('#media_form div.p-datepicker').on('changeDate', media_on_change);
 		$('#meida_form_ds, #media_form_de, #media_form_qs').change(media_on_change);
@@ -133,13 +139,18 @@
 			setTimeout(media_lightbox, 100);
 			return;
 		}
-		$('#media_browser .media-thumb').lightbox({bindEvent: 'dblclick contextmenu'});
+		$('#media_browser .media-thumb').lightbox({bindEvent: 'dblclick'});
 	}
 	
 	function media_on_click(e) {
 		e.preventDefault();
 		$(this).toggleClass('media-select');
-		$('#media_btn_delete')[$('#media_browser .media-select').size() ? 'removeClass' : 'addClass']('p-hidden');
+		
+		var i = $('#media_browser .media-select').size() ? 'removeClass' : 'addClass';
+		$('#media_btn_delete')[i]('p-hidden');
+		if (media_popup) {
+			$('#media_btn_select')[i]('p-hidden');
+		}
 		return false;
 	}
 	
@@ -197,6 +208,16 @@
 		media_loading = false;
 		$('#media_browser').unloadmask();
 	}
+
+	function media_select() {
+		var ms = [];
+		$('#media_browser .media-select').each(function() {
+				ms.push({name: $(this).find('img').attr('alt'), href: $(this).attr('href')});
+			})
+			.removeClass('media-select');
+		$('#media_btn_delete, #media_btn_select').addClass('p-hidden');
+		$.popup().callback(ms);
+	}
 	
 	function media_delete() {
 		var ps = [];
@@ -217,7 +238,8 @@
 				}
 
 				$('#media_browser .media-select').remove();
-				$('#media_btn_delete').addClass('p-hidden');
+				$('#media_btn_delete, #media_btn_select').addClass('p-hidden');
+				media_lightbox();
 			},
 			error: media_ajax_error,
 			complete: media_ajax_end

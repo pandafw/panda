@@ -244,7 +244,7 @@ tip-insert=登录
 tip-new=新建
 tip-recover=恢复
 tip-select-all=全部选择
-tip-select-none=不选择任何项目
+tip-select-none=取消选择
 tip-trash=删除
 tip-update=变更
 
@@ -299,6 +299,7 @@ btn-reset=重置
 btn-resume=恢复使用
 btn-save=保存
 btn-search=检索
+btn-select=选择
 btn-select-all=全部选择
 btn-select-none=取消选择
 btn-select-file=选择文件...

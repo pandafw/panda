@@ -1954,7 +1954,7 @@ jQuery.jcookie = function(name, value, options) {
 				left: p.offsetLeft + p.offsetWidth - 12 + 'px',
 				display: 'block'
 			})
-			setTimeout(__shadow, 50);
+			setTimeout(__shadow, 100);
 		}
 		else {
 			$('#ui_popup_shadow, #ui_popup_closer').css('display', 'none');

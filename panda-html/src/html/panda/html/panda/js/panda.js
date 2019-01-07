@@ -2306,10 +2306,15 @@ if (typeof String.formatSize != "function") {
 
 				// add plugin button
 				context.memo('button.media', function() {
-					function popup_callback(d) {
+					function popup_callback(ms) {
 						$.popup().hide();
+						if (ms) {
+							for (var i = 0; i < ms.length; i++) {
+								$n.summernote('insertImage', ms[i].href, ms[i].name);
+							}
+						}
 					}
-					
+
 					// create button
 					var button = ui.button({
 						contents: '<i class="' + ($n.data('mediaIcon') || 'fa fa-list-alt') + '"/>',

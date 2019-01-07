@@ -5,6 +5,7 @@ import java.io.IOException;
 import panda.app.entity.Media;
 import panda.image.ImageWrapper;
 import panda.image.Images;
+import panda.io.FileNames;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
@@ -43,7 +44,7 @@ public class Medias {
 		
 		m.setSize(m.getFile().getSize());
 		if (Strings.isEmpty(m.getName())) {
-			m.setName(Strings.right(m.getFile().getName(), Medias.MAX_FILENAME_LENGTH));
+			m.setName(Strings.right(FileNames.getName(m.getFile().getName()), Medias.MAX_FILENAME_LENGTH));
 		}
 
 		try {

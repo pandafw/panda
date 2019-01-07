@@ -253,7 +253,7 @@ tip-insert=新規
 tip-new=新規
 tip-recover=復元
 tip-select-all=すべて選択
-tip-select-none=未選択の状態にします
+tip-select-none=選択解除
 tip-trash=削除
 tip-update=変更
 
@@ -305,6 +305,7 @@ btn-reset=リセット
 btn-resume=利用再開
 btn-save=保存
 btn-search=検索
+btn-select=選択
 btn-select-all=全選択
 btn-select-none=全解除
 btn-select-file=ファイルを選択...
