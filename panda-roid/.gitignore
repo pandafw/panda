@@ -1,5 +1,9 @@
 ._*
+/.classpath
+/.project
+/.settings
 /bin
 /build
 /libs
 /gen
+/out

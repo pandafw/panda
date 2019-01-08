@@ -1,4 +1,7 @@
 ._*
+/.classpath
+/.project
+/.settings
+/*.log
 /lib
 /out
-/*.log

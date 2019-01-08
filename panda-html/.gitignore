@@ -1,5 +1,6 @@
 ._*
-/dist
+/.classpath
+/.project
+/.settings
 /lib
 /out
-/tools

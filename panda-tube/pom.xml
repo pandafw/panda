@@ -1,48 +1,61 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+							 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.pandafw</groupId>
+	<parent>
+		<groupId>com.github.pandafw</groupId>
+		<artifactId>panda</artifactId>
+		<version>1.2.0</version>
+	</parent>
+
 	<artifactId>panda-tube</artifactId>
-	<version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>Panda Tube</name>
-	<description>Web Service API Java Wrapper for (WordPress XML-RPC)</description>
-	<url>https://github.com/pandafw/panda/tree/master/panda-tube</url>
+	<description>Panda Tube is a Web Service API client for WordPress XML-RPC, Google Vision API, etc.</description>
 
-	<licenses>
-		<license>
-			<name>Apache 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+	<build>
+		<plugins>
+			<!-- git commit id -->
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+				</configuration>
+			</plugin>
 
-	<scm>
-		<connection>scm:git:git@github.com:pandafw/panda.git</connection>
-		<developerConnection>scm:git:git@github.com:pandafw/panda.git</developerConnection>
-		<url>git@github.com:pandafw/panda.git</url>
-	</scm>
+			<!-- jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Version>${project.version}</Version>
+							<Revision>${git.commit.id.abbrev}</Revision>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
+		<!-- Panda -->
 		<dependency>
-			<groupId>com.github.pandafw</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-core</artifactId>
-			<version>1.2.0</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
-
-	<developers>
-		<developer>
-			<id>yf.frank.wang</id>
-			<name>Frank Wang</name>
-			<email>yf.frank.wang@outlook.com</email>
-		</developer>
-	</developers>
-
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
 </project>

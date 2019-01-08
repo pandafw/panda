@@ -1,3 +1,6 @@
 ._*
-/out
+/.classpath
+/.project
+/.settings
 /lib
+/out

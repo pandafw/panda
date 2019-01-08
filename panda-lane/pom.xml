@@ -1,53 +1,222 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+							 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.pandafw</groupId>
-	<artifactId>panda-lane</artifactId>
-	<version>1.2.0</version>
+	<parent>
+		<groupId>com.github.pandafw</groupId>
+		<artifactId>panda</artifactId>
+		<version>1.3.0</version>
+	</parent>
+
+	<artifactId>panda-wear</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Lane</name>
-	<description>Panda Extra Modules for Web Application</description>
-	<url>https://github.com/pandafw/panda/tree/master/panda-lane</url>
+	<name>Panda Wear</name>
+	<description>Panda Wear is a extension module of the Panda development framework for web applications. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
 
-	<licenses>
-		<license>
-			<name>Apache 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/templates</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/gen/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/gen/templates</directory>
+			</resource>
+		</resources>
 
-	<scm>
-		<connection>scm:git:git@github.com:pandafw/panda.git</connection>
-		<developerConnection>scm:git:git@github.com:pandafw/panda.git</developerConnection>
-		<url>git@github.com:pandafw/panda.git</url>
-	</scm>
+		<plugins>
+			<!-- add source folder (src/gen) -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.basedir}/src/gen/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- ant build -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>codegen</id>
+						<configuration>
+							<target>
+								<ant antfile="build.xml">
+									<target name="gen-all" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>build</id>
+						<configuration>
+							<target>
+								<ant antfile="build.xml">
+									<target name="${ant.target}" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- git commit id -->
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Version>${project.version}</Version>
+							<Revision>${git.commit.id.abbrev}</Revision>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
+		<!-- Panda -->
 		<dependency>
-			<groupId>com.github.pandafw</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-core</artifactId>
-			<version>1.2.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.pandafw</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-gear</artifactId>
-			<version>1.2.0</version>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>panda-tool</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.3.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- POI -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.13</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.13</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- LUCENE -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>5.5.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queries</artifactId>
+			<version>5.5.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>5.5.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>5.5.5</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- GAE -->
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>1.9.42</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-labs</artifactId>
+			<version>1.9.42</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- EZCache -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.6.9</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
-	<developers>
-		<developer>
-			<id>yf.frank.wang</id>
-			<name>Frank Wang</name>
-			<email>yf.frank.wang@outlook.com</email>
-		</developer>
-	</developers>
-
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
 </project>
