@@ -1,9 +1,10 @@
 package panda.el.opt.object;
 
 import java.lang.reflect.Array;
-import java.util.Map;
 
+import panda.bean.Beans;
 import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -18,15 +19,17 @@ public class ArrayOpt extends AbstractTwoOpt {
 		Object lval = getLeft(ec);
 		Object rval = getRight(ec);
 
-		// @ JKTODO 这里要不要与, AccessOpt 里面相同的代码合并呢?
-		if (lval instanceof Map) {
-			Map<?, ?> om = (Map<?, ?>)lval;
-			if (om.containsKey(right.toString())) {
-				return om.get(right.toString());
+		if (lval == null) {
+			if (ec.strict()) {
+				throw new ELException("obj is NULL, can't call obj['" + rval + "']");
 			}
+			return null;
 		}
 
-		return Array.get(lval, (Integer)rval);
+		if (lval.getClass().isArray()) {
+			return Array.get(lval, (Integer)rval);
+		}
+		return Beans.getProperty(lval, rval.toString());
 	}
 
 	public String operator() {
