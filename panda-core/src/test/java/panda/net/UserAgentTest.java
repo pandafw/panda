@@ -10,20 +10,33 @@ public class UserAgentTest {
 
 	@Test
 	public void test01() {
-		UserAgent b = new UserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0");
-		Assert.assertTrue(b.isFirefox());
+		UserAgent ua = new UserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0");
+		Assert.assertTrue(ua.isFirefox());
 		
-		b = new UserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Safari/534.30");
-		Assert.assertTrue(b.isSafari());
+		ua = new UserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Safari/534.30");
+		Assert.assertTrue(ua.isSafari());
 		
-		b = new UserAgent("iPhone/4.2 Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30");
-		Assert.assertTrue(b.isChrome());
-		Assert.assertFalse(b.isSafari());
-		Assert.assertTrue(b.isIos());
-		Assert.assertTrue(b.isIphone());
+		ua = new UserAgent("iPhone/4.2 Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30");
+		Assert.assertTrue(ua.isChrome());
+		Assert.assertFalse(ua.isSafari());
+		Assert.assertTrue(ua.isIos());
+		Assert.assertTrue(ua.isIphone());
 		
-		System.out.println(b.toSimpleString());
-		Assert.assertTrue(Strings.contains(b.toSimpleString(), "iphone"));
-		Assert.assertTrue(Strings.contains(b.toSimpleString(), "chrome"));
+		System.out.println(ua.toMajorString());
+		System.out.println(ua.toSimpleString());
+		Assert.assertTrue(Strings.contains(ua.toSimpleString(), "iphone"));
+		Assert.assertTrue(Strings.contains(ua.toSimpleString(), "chrome"));
+	}
+	
+	@Test
+	public void test02() {
+		UserAgent ua = new UserAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1");
+
+		Assert.assertTrue(ua.isSafari());
+		Assert.assertTrue(ua.isIos());
+		Assert.assertTrue(ua.isIphone());
+		
+		System.out.println(ua.toMajorString());
+		System.out.println(ua.toSimpleString());
 	}
 }

@@ -273,7 +273,8 @@ public class UserAgent {
 			return false;
 		}
 
-		for (i += client.length(); i < userAgent.length(); i++) {
+		int len = userAgent.length();
+		for (i += client.length(); i < len; i++) {
 			char c = userAgent.charAt(i);
 			if (Character.isDigit(c)) {
 				break;
@@ -281,20 +282,20 @@ public class UserAgent {
 		}
 		
 		int j = i;
-		for (; j < userAgent.length(); j++) {
+		for (; j < len; j++) {
 			char c = userAgent.charAt(j);
-			if (!Character.isDigit(c) && c != '.') {
+			if (!Character.isDigit(c) && c != '.' && c != '_') {
 				break;
 			}
 		}
 		
 		String ver = "";
-		if (i < userAgent.length()) {
+		if (i < len) {
 			ver = userAgent.substring(i, j);
 		}
 
 		if (major == 0) {
-			major = this.parseMajorVersion(ver);
+			major = parseMajorVersion(ver);
 		}
 		browsers.put(alias, new Version(ver, major, 0));
 		return true;
@@ -311,7 +312,7 @@ public class UserAgent {
 	
 	private int parseMajorVersion(String ver) {
 		if (ver != null) {
-			int i = ver.indexOf('.');
+			int i = Strings.indexOfAny(ver, '.', '_');
 			if (i > 0) {
 				return Numbers.toInt(ver.substring(0, i), 0);
 			}
