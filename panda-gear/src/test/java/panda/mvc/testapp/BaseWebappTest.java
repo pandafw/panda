@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Before;
 
 import panda.io.MimeTypes;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
+import panda.lang.Threads;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
@@ -19,59 +19,72 @@ import panda.net.http.HttpRequest;
 import panda.net.http.HttpResponse;
 
 /**
- * 需要Jetty 7.3.1 的jar包
+ * webapp-runner required
  */
 public abstract class BaseWebappTest {
 
-	protected static Server server;
+	private static final String SERVER_URL = "http://localhost:9999";
+	private static final String CONTEXT = "/mvctest";
 
+	private static Thread server;
+	private static Throwable error;
+	
 	protected static HttpResponse resp;
-
-	private static final String serverURL = "http://localhost:9999";
 
 	@Before
 	public void startServer() throws Throwable {
+		if (server != null) {
+			return;
+		}
+		
+		if (error != null) {
+			throw error;
+		}
+		
 		try {
-			if (server == null) {
-				String xml = "WEB-INF/web.xml";
-				URL url = BaseWebappTest.class.getResource(xml);
-				String path = url.toExternalForm();
-				System.err.println(url);
-
-				server = new Server(9999);
-				
-				String war = path.substring(0, path.length() - xml.length());
-				WebAppContext wac = new WebAppContext();
-				wac.setResourceBase(war);
-				wac.setContextPath(getContextPath());
-
-				//wac.setAttribute("javax.servlet.context.tempdir", war + "WEB-INF/tmp");
-
-				server.setHandler(wac);
-				server.start();
-			}
+			server = Threads.start(new Runnable() {
+				@Override
+				public void run() {
+					String xml = "WEB-INF/web.xml";
+					URL url = BaseWebappTest.class.getResource(xml);
+					String path = url.toExternalForm();
+					String war = path.substring(0, path.length() - xml.length());
+					war = Strings.removeStart(war, "file:");
+					try {
+						System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow", "|{}&");
+						webapp.runner.launch.Main.main(new String[] { 
+								"--port", "9999", 
+								"--path", CONTEXT, 
+								"--temp-directory", "out/tomcat",
+								war });
+					}
+					catch (Exception e) {
+						error = e;
+					}
+				}
+			});
+			Threads.safeSleep(10000);
 		}
 		catch (Throwable e) {
-			if (server != null) {
-				server.stop();
-				server = null;
-			}
-			throw e;
+			server = null;
+			error = e;
 		}
-	}
 
-	public void shutdownServer() throws Throwable {
-		if (server != null) {
-			server.stop();
+		if (error != null) {
+			throw error;
 		}
 	}
 
 	public String getContextPath() {
-		return "/mvctest";
+		return CONTEXT;
 	}
 
+	public String getServerURL() {
+		return SERVER_URL;
+	}
+	
 	public String getBaseURL() {
-		return serverURL + getContextPath();
+		return SERVER_URL + getContextPath();
 	}
 
 	public HttpResponse get(String path) {
