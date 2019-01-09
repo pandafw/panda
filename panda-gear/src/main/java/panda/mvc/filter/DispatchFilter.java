@@ -35,7 +35,6 @@ import panda.mvc.ServletChain;
 import panda.mvc.ServletFilter;
 import panda.mvc.SetConstants;
 import panda.mvc.impl.ActionDispatcher;
-import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.ioc.IocSessionListener;
 import panda.mvc.ioc.RequestIocContext;
 import panda.mvc.ioc.RequestObjectProxy;
@@ -156,25 +155,20 @@ public class DispatchFilter implements ServletFilter {
 		RequestIocContext ric = null;
 
 		if (ioc instanceof DefaultIoc) {
-			if (IocRequestListener.isRequestScopeEnable || IocSessionListener.isSessionScopeEnable) {
-				DefaultIoc di = ((DefaultIoc)ioc).clone();
+			// create a combo ioc context for request/session scope
+			DefaultIoc di = ((DefaultIoc)ioc).clone();
 
-				ComboIocContext ctx = new ComboIocContext();
-				if (IocRequestListener.isRequestScopeEnable) {
-					ric = RequestIocContext.get(req);
-					ctx.addContext(ric);
-				}
-				
-				if (IocSessionListener.isSessionScopeEnable) {
-					SessionIocContext sic = SessionIocContext.get(req);
-					ctx.addContext(sic);
-				}
-				
-				ctx.addContext(di.getContext());
-				di.setContext(ctx);
-				
-				ioc = di;
+			ComboIocContext ctx = new ComboIocContext();
+			ric = RequestIocContext.get(req);
+			ctx.addContext(ric);
+			
+			if (IocSessionListener.isSessionScopeEnable) {
+				ctx.addContext(SessionIocContext.get(req));
 			}
+
+			ctx.addContext(di.getContext());
+			di.setContext(ctx);
+			ioc = di;
 		}
 		
 		try {

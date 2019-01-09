@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequestEvent;
 
 import panda.dao.Dao;
 import panda.dao.DaoClient;
@@ -15,7 +14,6 @@ import panda.ioc.Ioc;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.ioc.IocRequestListener;
 import panda.net.http.HttpMethod;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
@@ -118,16 +116,8 @@ public class MvcConsole {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		//response.setOutputStream(new ConsoleServletOutputStream());
 		
-		IocRequestListener irl = new IocRequestListener();
-		ServletRequestEvent sre = new ServletRequestEvent(servlet, request);
-		try {
-			irl.requestInitialized(sre);
-			service(request, response);
-			return response;
-		}
-		finally {
-			irl.requestDestroyed(sre);
-		}
+		service(request, response);
+		return response;
 	}
 	
 	public MockHttpServletResponse doRequest(String uri, String method, Map<String, Object> params) throws ServletException, IOException {

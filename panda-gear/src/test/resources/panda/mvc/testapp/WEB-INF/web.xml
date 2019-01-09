@@ -6,10 +6,6 @@
 	<listener>
 		<listener-class>panda.mvc.ioc.IocSessionListener</listener-class>
 	</listener>
-	
-	<listener>
-		<listener-class>panda.mvc.ioc.IocRequestListener</listener-class>
-	</listener>
 
 	<!-- filter -->
 	<filter>

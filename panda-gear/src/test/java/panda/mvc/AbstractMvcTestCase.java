@@ -5,7 +5,6 @@ import javax.servlet.ServletException;
 import org.junit.After;
 import org.junit.Before;
 
-import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.mock.Mock;
 import panda.servlet.mock.MockHttpServletRequest;
 import panda.servlet.mock.MockHttpServletResponse;
@@ -26,14 +25,11 @@ public abstract class AbstractMvcTestCase {
 	protected MockServletContext servletContext;
 
 	protected MockServletConfig servletConfig;
-	
-	protected IocRequestListener iocRequestListener;
 
 	@Before
 	public void init() {
 		servletContext = Mock.servletContext();
 		servletConfig = Mock.servletConfig(servletContext, "test");
-		iocRequestListener = new IocRequestListener();
 		
 		initServletConfig();
 		servlet = new MvcServlet();
