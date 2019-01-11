@@ -268,7 +268,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 				else if (c == '~') {
 					// resolve URL ( ~/xxx = ./xxx)
 					String self = context.getPath();
-					String path = Strings.stripStart(action.substring(1), '/');
+					String path = '.' + action.substring(1);
 					uri = URLHelper.resolveURL(self, path);
 					if (includeContext) {
 						uri = context.getBase() + uri;
