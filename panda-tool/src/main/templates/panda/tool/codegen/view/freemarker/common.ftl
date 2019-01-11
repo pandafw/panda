@@ -2,49 +2,53 @@
 <#assign e = ">"/>
 <#assign d = "$"/>
 <#if ui??>
-	<#if ui.params.actionList??><#assign actionList = ui.params.actionList/></#if>
-	<#if ui.params.actionCopy??><#assign actionCopy = ui.params.actionCopy/></#if>
-	<#if ui.params.actionView??><#assign actionView = ui.params.actionView/></#if>
-	<#if ui.params.actionPrint??><#assign actionPrint = ui.params.actionPrint/></#if>
-	<#if ui.params.actionInsert??><#assign actionInsert = ui.params.actionInsert/></#if>
-	<#if ui.params.actionUpdate??><#assign actionUpdate = ui.params.actionUpdate/></#if>
-	<#if ui.params.actionDelete??><#assign actionDelete = ui.params.actionDelete/></#if>
-	<#list action.listUIList as ui><#if ui.template?? && ui.generate!false>
-		<#if ui.template == ("list")>
-			<#assign actionList = ui.name/>
-		<#elseif ui.template == ("bdelete") 
-			|| ui.template == ("bupdate")
-			|| ui.template == ("bedit")>
-			<#assign actionBulkNames = (actionBulkNames![]) + [ ui.name ]/>
-		</#if>
-	</#if></#list>
-	<#list action.inputUIList as ui><#if ui.template?? && ui.generate!false>
-		<#if ui.template == ("view")>
-			<#if !(actionView??)>
-				<#assign actionView = '~/' + ui.name/>
+	<#if ui.params.actionList?has_content><#assign actionList = ui.params.actionList/></#if>
+	<#if ui.params.actionCopy?has_content><#assign actionCopy = ui.params.actionCopy/></#if>
+	<#if ui.params.actionView?has_content><#assign actionView = ui.params.actionView/></#if>
+	<#if ui.params.actionPrint?has_content><#assign actionPrint = ui.params.actionPrint/></#if>
+	<#if ui.params.actionInsert?has_content><#assign actionInsert = ui.params.actionInsert/></#if>
+	<#if ui.params.actionUpdate?has_content><#assign actionUpdate = ui.params.actionUpdate/></#if>
+	<#if ui.params.actionDelete?has_content><#assign actionDelete = ui.params.actionDelete/></#if>
+	<#macro detectAction a>
+		<#list a.listUIList as ui><#if ui.template?? && ui.generate!false>
+			<#if ui.template == ("list")>
+				<#assign actionList = ui.name/>
+			<#elseif ui.template == ("bdelete") 
+				|| ui.template == ("bupdate")
+				|| ui.template == ("bedit")>
+				<#assign actionBulkNames = (actionBulkNames![]) + [ ui.name ]/>
 			</#if>
-		<#elseif ui.template == ("print")>
-			<#if !(actionPrint??)>
-				<#assign actionPrint = '~/' + ui.name/>
+		</#if></#list>
+		<#list a.inputUIList as ui><#if ui.template?? && ui.generate!false>
+			<#if ui.template == ("view")>
+				<#if !(actionView?has_content)>
+					<#assign actionView = './' + ui.name/>
+				</#if>
+			<#elseif ui.template == ("print")>
+				<#if !(actionPrint?has_content)>
+					<#assign actionPrint = './' + ui.name/>
+				</#if>
+			<#elseif ui.template == ("insert")>
+				<#if !(actionInsert?has_content)>
+					<#assign actionInsert = './' + ui.name/>
+				</#if>
+			<#elseif ui.template == ("copy")>
+				<#if !(actionCopy?has_content)>
+					<#assign actionCopy = './' + ui.name/>
+				</#if>
+			<#elseif ui.template == ("update")>
+				<#if !(actionUpdate?has_content)>
+					<#assign actionUpdate = './' + ui.name/>
+				</#if>
+			<#elseif ui.template == ("delete")>
+				<#if !(actionDelete?has_content)>
+					<#assign actionDelete = './' + ui.name/>
+				</#if>
 			</#if>
-		<#elseif ui.template == ("insert")>
-			<#if !(actionInsert??)>
-				<#assign actionInsert = '~/' + ui.name/>
-			</#if>
-		<#elseif ui.template == ("copy")>
-			<#if !(actionCopy??)>
-				<#assign actionCopy = '~/' + ui.name/>
-			</#if>
-		<#elseif ui.template == ("update")>
-			<#if !(actionUpdate??)>
-				<#assign actionUpdate = '~/' + ui.name/>
-			</#if>
-		<#elseif ui.template == ("delete")>
-			<#if !(actionDelete??)>
-				<#assign actionDelete = '~/' + ui.name/>
-			</#if>
-		</#if>
-	</#if></#list>
+		</#if></#list>
+	</#macro>
+	<@detectAction a=action/>
+	<#list module.actionList as a><#if a.name == action.name><@detectAction a=a/></#if></#list>
 	<#macro header>
 <html>
 <head>
