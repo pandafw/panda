@@ -18,11 +18,11 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/add")><li><@p.a action="~/add" icon="icon-new" label="#(btn-new)"/>
-</li></#if><#if a.canAccess("~/list.print")><li><@p.a action="~/list.print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
-</li></#if><#if a.canAccess("~/expo.csv")><li><@p.a action="~/expo.csv" includeParams="all" icon="icon-csv" label="#(btn-csv)" target="_blank"/>
-</li></#if><#if a.canAccess("~/list.json")><li><@p.a action="~/list.json" includeParams="all" icon="icon-json" label="#(btn-json)" target="_blank"/>
-</li></#if><#if a.canAccess("~/list.xml")><li><@p.a action="~/list.xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
+<#if a.canAccess("./add")><li><@p.a action="./add" icon="icon-new" label="#(btn-new)"/>
+</li></#if><#if a.canAccess("./list.print")><li><@p.a action="./list.print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
+</li></#if><#if a.canAccess("./expo.csv")><li><@p.a action="./expo.csv" includeParams="all" icon="icon-csv" label="#(btn-csv)" target="_blank"/>
+</li></#if><#if a.canAccess("./list.json")><li><@p.a action="./list.json" includeParams="all" icon="icon-json" label="#(btn-json)" target="_blank"/>
+</li></#if><#if a.canAccess("./list.xml")><li><@p.a action="./list.xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -36,31 +36,31 @@
 
 	<#assign _actions_ = [] />
 	<#assign _ash_ = "" />
-	<#if a.canAccess("~/add")>
-		<@p.url var='_u_' action='~/add' escapeAmp='true'/>
+	<#if a.canAccess("./add")>
+		<@p.url var='_u_' action='./add' escapeAmp='true'/>
 		<#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('lbl-new', '') + '</a>'/>
 	</#if>
-	<#if a.canAccess("~/copy")>
+	<#if a.canAccess("./copy")>
 		<#assign _actions_ = _actions_ + [{
-			"action": "~/copy",
+			"action": "./copy",
 			"params": { "id": "%{top.id}" },
 			"icon": a.getText("icon-copy"),
 			"label": a.getText("lbl-copy", ""),
 			"tooltip": a.getText("tip-copy", "")
 		}] />
 	</#if>
-	<#if a.canAccess("~/edit")>
+	<#if a.canAccess("./edit")>
 		<#assign _actions_ = _actions_ + [{
-			"action": "~/edit",
+			"action": "./edit",
 			"params": { "id": "%{top.id}" },
 			"icon": a.getText("icon-edit"),
 			"label": a.getText("lbl-edit", ""),
 			"tooltip": a.getText("tip-edit", "")
 		}] />
 	</#if>
-	<#if a.canAccess("~/delete")>
+	<#if a.canAccess("./delete")>
 		<#assign _actions_ = _actions_ + [{
-			"action": "~/delete",
+			"action": "./delete",
 			"params": { "id": "%{top.id}" },
 			"icon": a.getText("icon-delete"),
 			"label": a.getText("lbl-delete", ""),
@@ -83,7 +83,7 @@
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
-	<#if action.canAccess("~/bdelete") || action.canAccess("~/benable") || action.canAccess("~/bdisable")>
+	<#if action.canAccess("./bdelete") || action.canAccess("./benable") || action.canAccess("./bdisable")>
 		<#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
@@ -213,37 +213,37 @@
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 	<@p.set var="lvtools">
-		<#if a.canAccess("~/bdelete")>
+		<#if a.canAccess("./bdelete")>
 			<@p.b onclick="return template_list_bdelete();" icon="icon-bdelete" label="#(btn-bdelete)"/>
 		</#if>
-		<#if a.canAccess("~/benable")>
+		<#if a.canAccess("./benable")>
 			<@p.b onclick="return template_list_benable();" icon="icon-benable" label="#(btn-benable)"/>
 		</#if>
-		<#if a.canAccess("~/bdisable")>
+		<#if a.canAccess("./bdisable")>
 			<@p.b onclick="return template_list_bdisable();" icon="icon-bdisable" label="#(btn-bdisable)"/>
 		</#if>
 	</@p.set>
 
-	<@p.queryer id="template_list_qr" action="~/list"
+	<@p.queryer id="template_list_qr" action="./list"
 		columns=_columns_
 	/>
 
-	<@p.listview id="template_list" action="~/list"
+	<@p.listview id="template_list" action="./list"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
-		link={ "action": "~/view", "params": { "id": "%{top.id}" } }
+		link={ "action": "./view", "params": { "id": "%{top.id}" } }
 		tools="%{vars.lvtools}"
 	/>
 
 	<script type="text/javascript"><!--
 		function template_list_bdelete() {
-			return plv_submitCheckedKeys('template_list', '<@p.url action="~/bdelete"/>', null, "");
+			return plv_submitCheckedKeys('template_list', '<@p.url action="./bdelete"/>', null, "");
 		}
 		function template_list_benable() {
-			return plv_submitCheckedKeys('template_list', '<@p.url action="~/benable"/>', null, "");
+			return plv_submitCheckedKeys('template_list', '<@p.url action="./benable"/>', null, "");
 		}
 		function template_list_bdisable() {
-			return plv_submitCheckedKeys('template_list', '<@p.url action="~/bdisable"/>', null, "");
+			return plv_submitCheckedKeys('template_list', '<@p.url action="./bdisable"/>', null, "");
 		}
 	--></script>
 </div>

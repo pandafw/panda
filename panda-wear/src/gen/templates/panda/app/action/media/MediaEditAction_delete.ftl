@@ -116,11 +116,11 @@
 	</#if>
 		<#assign _buttons_ = [{
 			"icon": "icon-delete-execute",
-			"action": "~/delete.execute",
+			"action": "./delete.execute",
 			"text": "btn-delete-execute"
 		}]/>
-			<#if a.canAccess('~/list')>
-				<@p.url var="_u_" action="~/list"/>
+			<#if a.canAccess('./list')>
+				<@p.url var="_u_" action="./list"/>
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",
 					"text": "btn-list",

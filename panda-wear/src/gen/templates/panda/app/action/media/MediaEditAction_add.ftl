@@ -18,7 +18,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/list")><li><@p.a action="~/list" icon="icon-list" label="#(btn-list)"/>
+<#if a.canAccess("./list")><li><@p.a action="./list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -122,18 +122,18 @@
 	<#if a.inputConfirm>
 		<#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-add-confirm",
-			"action": "~/add.confirm",
+			"action": "./add.confirm",
 			"text": "btn-add-confirm"
 		}]/>
 	<#else>
 		<#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-add-execute",
-			"action": "~/add.execute",
+			"action": "./add.execute",
 			"text": "btn-add-execute"
 		}]/>
 	</#if>
-			<#if a.canAccess('~/list')>
-				<@p.url var="_u_" action="~/list"/>
+			<#if a.canAccess('./list')>
+				<@p.url var="_u_" action="./list"/>
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",
 					"text": "btn-list",

@@ -19,7 +19,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/list")><li><@p.a action="~/list" icon="icon-list" label="#(btn-list)"/>
+<#if a.canAccess("./list")><li><@p.a action="./list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -150,7 +150,7 @@
 
 
 	<@p.listview id="media_bdelete"
-		action="~/bdelete.execute" method="post"
+		action="./bdelete.execute" method="post"
 		list=result columns=_columns_
 		cssTable="table-hover table-striped"
 	/>

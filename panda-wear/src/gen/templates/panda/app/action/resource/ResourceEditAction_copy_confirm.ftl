@@ -19,7 +19,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/list")><li><@p.a action="~/list" icon="icon-list" label="#(btn-list)"/>
+<#if a.canAccess("./list")><li><@p.a action="./list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -87,8 +87,8 @@
 			/>
 	</#if>
 		<@p.div cssClass="p-buttons">
-			<@p.submit action="~/copy.execute" icon="icon-copy-execute" label="#(btn-copy-execute)"/>
-			<@p.submit action="~/copy.input" icon="icon-back" label="#(btn-back)"/>
+			<@p.submit action="./copy.execute" icon="icon-copy-execute" label="#(btn-copy-execute)"/>
+			<@p.submit action="./copy.input" icon="icon-back" label="#(btn-back)"/>
 		</@p.div>
 	</@p.form>
 <#else>

@@ -129,7 +129,7 @@
 		}] />
 
 
-	<@p.listview id="property_list_print" action="~/list.print" 
+	<@p.listview id="property_list_print" action="./list.print" 
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-striped"
 	/>

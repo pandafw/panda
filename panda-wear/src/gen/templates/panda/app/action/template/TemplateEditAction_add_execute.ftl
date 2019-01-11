@@ -19,9 +19,9 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if r?? && a.canAccessData("~/print", r)><li><@p.a action="~/print" icon="icon-print" label="#(btn-print)" target="_blank"><@p.param name="id" value="%{r.id}"/></@p.a>
-</li></#if><#if a.canAccess("~/add")><li><@p.a action="~/add" icon="icon-new" label="#(btn-new)"/>
-</li></#if><#if a.canAccess("~/list")><li><@p.a action="~/list" icon="icon-list" label="#(btn-list)"/>
+<#if r?? && a.canAccessData("./print", r)><li><@p.a action="./print" icon="icon-print" label="#(btn-print)" target="_blank"><@p.param name="id" value="%{r.id}"/></@p.a>
+</li></#if><#if a.canAccess("./add")><li><@p.a action="./add" icon="icon-new" label="#(btn-new)"/>
+</li></#if><#if a.canAccess("./list")><li><@p.a action="./list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -89,8 +89,8 @@
 			/>
 	</#if>
 			<#assign _buttons_ = [] />
-			<#if r?? && a.canAccessData('~/edit', r)>
-				<@p.url var="_u_" action="~/edit" escapeAmp="false">
+			<#if r?? && a.canAccessData('./edit', r)>
+				<@p.url var="_u_" action="./edit" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
 				</@p.url>
 				<#assign _buttons_ = _buttons_ + [{
@@ -99,8 +99,8 @@
 					"onclick": "location.href='${vars._u_?js_string}'; return false;"
 				}]/>
 			</#if>
-			<#if r?? && a.canAccessData('~/copy', r)>
-				<@p.url var="_u_" action="~/copy" escapeAmp="false">
+			<#if r?? && a.canAccessData('./copy', r)>
+				<@p.url var="_u_" action="./copy" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
 				</@p.url>
 				<#assign _buttons_ = _buttons_ + [{
@@ -109,8 +109,8 @@
 					"onclick": "location.href='${vars._u_?js_string}'; return false;"
 				}]/>
 			</#if>
-			<#if r?? && a.canAccessData('~/delete', r)>
-				<@p.url var="_u_" action="~/delete" escapeAmp="false">
+			<#if r?? && a.canAccessData('./delete', r)>
+				<@p.url var="_u_" action="./delete" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
 				</@p.url>
 				<#assign _buttons_ = _buttons_ + [{
@@ -119,8 +119,8 @@
 					"onclick": "location.href='${vars._u_?js_string}'; return false;"
 				}]/>
 			</#if>
-			<#if a.canAccess('~/list')>
-				<@p.url var="_u_" action="~/list"/>
+			<#if a.canAccess('./list')>
+				<@p.url var="_u_" action="./list"/>
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",
 					"text": "btn-list",

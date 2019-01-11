@@ -148,7 +148,7 @@
 		}] />
 
 
-	<@p.listview id="media_list_print" action="~/list.print" 
+	<@p.listview id="media_list_print" action="./list.print" 
 		list=result columns=_columns_
 		cssTable="table-striped"
 	/>
