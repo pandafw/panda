@@ -167,11 +167,11 @@
 	${s}/@p.set>
 </#if>
 
-	${s}@p.queryer id="${action.name}_${gen.trimUiName(ui.name)}_qr" action="~/${ui.name}"<#if ui.params.method?has_content> method="${ui.params.method}"</#if><#if ui.params.target?has_content> target="${ui.params.target}"</#if>
+	${s}@p.queryer id="${action.name}_${gen.trimUiName(ui.name)}_qr" action="./${ui.name}"<#if ui.params.method?has_content> method="${ui.params.method}"</#if><#if ui.params.target?has_content> target="${ui.params.target}"</#if>
 		columns=_columns_<#if ui.params.fsexpand?has_content> expand="${ui.params.fsexpand}"</#if>
 	/>
 
-	${s}@p.listview id="${action.name}_${gen.trimUiName(ui.name)}" action="~/${ui.name}"<#if ui.params.method?has_content> method="${ui.params.method}"</#if><#if ui.params.target?has_content> target="${ui.params.target}"</#if>
+	${s}@p.listview id="${action.name}_${gen.trimUiName(ui.name)}" action="./${ui.name}"<#if ui.params.method?has_content> method="${ui.params.method}"</#if><#if ui.params.target?has_content> target="${ui.params.target}"</#if>
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		cssTable="table-hover table-striped"
 	<#if actionView?has_content>

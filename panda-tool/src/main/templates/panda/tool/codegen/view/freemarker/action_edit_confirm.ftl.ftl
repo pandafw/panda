@@ -14,8 +14,8 @@ ${s}#if r??>
 	${s}@p.form cssClass="p-cform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>"${gen.focusme(ui)} method="post"<#if ui.theme?has_content> theme="${ui.theme}"</#if>>
 		<#include "edit-view-fields.ftl"/>
 		${s}@p.div cssClass="p-buttons">
-			${s}@p.submit action="~/${ui.name}${props['ui.action.seperator']!'.'}execute" icon="icon-${ui.name}-execute" label="#(btn-${ui.name}-execute)"/>
-			${s}@p.submit action="~/${ui.name}${props['ui.action.seperator']!'.'}input" icon="icon-back" label="#(btn-back)"/>
+			${s}@p.submit action="./${ui.name}${props['ui.action.seperator']!'.'}execute" icon="icon-${ui.name}-execute" label="#(btn-${ui.name}-execute)"/>
+			${s}@p.submit action="./${ui.name}${props['ui.action.seperator']!'.'}input" icon="icon-back" label="#(btn-back)"/>
 		${s}/@p.div>
 	${s}/@p.form>
 ${s}#else>
