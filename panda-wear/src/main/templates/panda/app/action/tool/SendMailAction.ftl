@@ -10,7 +10,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="sendmail" cssClass="p-eform" method="post" action="~/send" theme="bs3h" loadmask="true">
+	<@p.form id="sendmail" cssClass="p-eform" method="post" action="./send" theme="bs3h" loadmask="true">
 		<@p.radio key="client" list="!['auto', 'smtp', 'java']"/>
 		<@p.textfield key="host"/>
 		<@p.textfield key="port"/>
