@@ -6,6 +6,7 @@ import java.util.Date;
 
 import panda.io.stream.StringBuilderWriter;
 import panda.ioc.annotation.IocBean;
+import panda.lang.Iterators;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.mvc.view.util.Escapes;
@@ -106,89 +107,101 @@ public class Property extends ContextBean {
 	}
 
 	public String formatValue() {
-		String ev = null;
-		
 		if (name == null) {
 			name = "top";
 		}
 
+		Object a = value != null ? value : findValue(name);
+		if (a == null) {
+			return null;
+		}
+		
+		if (Iterators.isIterable(a)) {
+			StringBuilder sb = new StringBuilder();
+			for (Object v : Iterators.asIterable(a)) {
+				String s = formatValue(v);
+				if (Strings.isNotEmpty(s)) {
+					if (sb.length() > 0) {
+						sb.append(' ');
+					}
+					sb.append(s);
+				}
+			}
+			return sb.toString();
+		}
+
+		return formatValue(a);
+	}
+
+	protected String formatValue(Object v) {
+		if (v == null) {
+			return null;
+		}
+
+		String s;
 		if (Strings.isEmpty(format) && Strings.isEmpty(pattern)) {
-			ev = escape(getStringValue());
+			s = escape(castString(v));
+		}
+		else if ("password".equalsIgnoreCase(format)) {
+			s = context.getText().getText(PASSWORD_FORMAT, DEFAULT_PASSWORD_FORMAT);
+		}
+		else if ("link".equalsIgnoreCase(format)) {
+			s = StringEscapes.escapeHtml(v.toString());
+			if (Strings.isNotEmpty(s)) {
+				s = "<a href=\"" + s + "\">" + s + "</a>";
+			}
+		}
+		else if ("extlink".equalsIgnoreCase(format)) {
+			s = StringEscapes.escapeHtml(v.toString());
+			if (Strings.isNotEmpty(s)) {
+				s = "<a target=\"_blank\" href=\"" + s + "\">" + s + "</a>";
+			}
 		}
 		else {
-			Object av = value != null ? value : findValue(name);
-
-			if (av == null) {
-			}
-			else if ("password".equalsIgnoreCase(format)) {
-				ev = context.getText().getText(PASSWORD_FORMAT, DEFAULT_PASSWORD_FORMAT);
-			}
-			else if ("link".equalsIgnoreCase(format)) {
-				String s = StringEscapes.escapeHtml(av.toString());
-				if (Strings.isNotEmpty(s)) {
-					ev = "<a href=\"" + s + "\">" + s + "</a>";
+			if (v instanceof Boolean) {
+				StringBuilderWriter sw = new StringBuilderWriter();
+				if (cbool == null) {
+					cbool = newComponent(CBoolean.class);
 				}
+				cbool.setValue((Boolean)v);
+				cbool.setPattern(pattern);
+				cbool.setFormat(format);
+				cbool.start(sw);
+				cbool.end(sw, "");
+				s = sw.toString();
 			}
-			else if ("extlink".equalsIgnoreCase(format)) {
-				String s = StringEscapes.escapeHtml(av.toString());
-				if (Strings.isNotEmpty(s)) {
-					ev = "<a target=\"_blank\" href=\"" + s + "\">" + s + "</a>";
+			else if (v instanceof Date || v instanceof Calendar) {
+				StringBuilderWriter sw = new StringBuilderWriter();
+				if (cdate == null) {
+					cdate = newComponent(CDate.class);
 				}
+				cdate.setValue(v instanceof Calendar ? ((Calendar)v).getTime() : (Date)v);
+				cdate.setPattern(pattern);
+				cdate.setFormat(format);
+				cdate.start(sw);
+				cdate.end(sw, "");
+				s = sw.toString();
+			}
+			else if (v instanceof Number) {
+				StringBuilderWriter sw = new StringBuilderWriter();
+				if (cnumber == null) {
+					cnumber = newComponent(CNumber.class);
+				}
+				cnumber.setValue((Number)v);
+				cnumber.setPattern(pattern);
+				cnumber.setFormat(format);
+				cnumber.start(sw);
+				cnumber.end(sw, "");
+				s = sw.toString();
+			}
+			else if (v instanceof String) {
+				s = escape((String)v);
 			}
 			else {
-				if (av instanceof Boolean) {
-					StringBuilderWriter sw = new StringBuilderWriter();
-					if (cbool == null) {
-						cbool = newComponent(CBoolean.class);
-					}
-					cbool.setValue((Boolean)av);
-					cbool.setPattern(pattern);
-					cbool.setFormat(format);
-					cbool.start(sw);
-					cbool.end(sw, "");
-					ev = sw.toString();
-				}
-				else if (av instanceof Date || av instanceof Calendar) {
-					StringBuilderWriter sw = new StringBuilderWriter();
-					if (cdate == null) {
-						cdate = newComponent(CDate.class);
-					}
-					cdate.setValue(av instanceof Calendar ? ((Calendar)av).getTime() : (Date)av);
-					cdate.setPattern(pattern);
-					cdate.setFormat(format);
-					cdate.start(sw);
-					cdate.end(sw, "");
-					ev = sw.toString();
-				}
-				else if (av instanceof Number) {
-					StringBuilderWriter sw = new StringBuilderWriter();
-					if (cnumber == null) {
-						cnumber = newComponent(CNumber.class);
-					}
-					cnumber.setValue((Number)av);
-					cnumber.setPattern(pattern);
-					cnumber.setFormat(format);
-					cnumber.start(sw);
-					cnumber.end(sw, "");
-					ev = sw.toString();
-				}
-				else if (av instanceof String) {
-					ev = escape((String)av);
-				}
-				else {
-					ev = escape(castString(av));
-				}
+				s = escape(castString(v));
 			}
 		}
-		return ev;
-	}
-	
-	private String getStringValue() {
-		if (value != null) {
-			return castString(value);
-		}
-
-		return Strings.defaultString(findString(name));
+		return s;
 	}
 
 	private String escape(String value) {
