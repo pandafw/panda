@@ -125,15 +125,14 @@ public class TagBean extends Component {
 	 * @param clazz the class to look for, or if assignable from.
 	 * @return the component if found, <tt>null</tt> if not.
 	 */
-	@SuppressWarnings("unchecked")
-	protected TagBean findAncestor(Class clazz) {
+	protected TagBean findAncestor(Class<? extends TagBean> clazz) {
 		List<Object> cs = context.getTops();
 		int p = cs.indexOf(this);
 		if (p >= 0) {
 			for (int i = p - 1; i >= 0; i--) {
-				TagBean c = (TagBean)cs.get(i);
-				if (clazz.isAssignableFrom(c.getClass()) && c != this) {
-					return c;
+				Object o = cs.get(i);
+				if (o != this && clazz.isAssignableFrom(o.getClass())) {
+					return (TagBean)o;
 				}
 			}
 		}
