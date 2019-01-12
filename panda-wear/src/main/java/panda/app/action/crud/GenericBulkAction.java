@@ -12,6 +12,7 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.DataQuery;
 import panda.lang.Collections;
+import panda.lang.Objects;
 import panda.lang.mutable.MutableInt;
 import panda.log.Log;
 import panda.log.Logs;
@@ -424,8 +425,9 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				if (filter) {
 					addQueryFilters(dq);
 				}
-				dataList = getDao().select(dq);
-				dataList = trimDataList(dataList);
+				List<T> result = getDao().select(dq);
+				result = trimDataList(result);
+				dataList = sortDataList(result, dataList);
 			}
 			else {
 				dataList = null;
@@ -436,6 +438,63 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 	protected List<T> trimDataList(List<T> ds) {
 		return ds;
+	}
+
+	protected List<T> sortDataList(List<T> ds, List<T> ks) {
+		Entity<T> entity = getEntity();
+		List<EntityField> keys = entity.getPrimaryKeys();
+
+		if (keys.size() < 1) {
+			return ds;
+		}
+
+		List<T> rs = new ArrayList<T>(ds.size());
+		if (keys.size() == 1) {
+			EntityField pk = keys.get(0);
+			for (int n = 0; n < ks.size(); n++) {
+				Object k = pk.getValue(ks.get(n));
+				for (int i = 0; i < ds.size(); i++) {
+					T o = ds.get(i);
+					Object v = pk.getValue(o);
+					if (Objects.equals(k, v)) {
+						rs.add(o);
+						ds.remove(i);
+						break;
+					}
+				}
+			}
+		}
+		else {
+			for (int n = 0; n < ks.size(); n++) {
+				T d = ks.get(n);
+				for (int m = 0; m < ds.size(); m++) {
+					T o = ds.get(m);
+					
+					boolean e = true;
+					for (int i = 0; i < keys.size(); i++) {
+						EntityField ef = keys.get(i);
+						Object k = ef.getValue(d);
+						Object v = ef.getValue(o);
+						if (!Objects.equals(k, v)) {
+							e = false;
+							break;
+						}
+					}
+
+					if (e) {
+						rs.add(o);
+						ds.remove(m);
+						break;
+					}
+				}
+			}
+		}
+
+		if (Collections.isNotEmpty(ds)) {
+			log.warn(ds.size() + " invalid data remained after sortDataList()");
+			rs.addAll(ds);
+		}
+		return rs;
 	}
 
 	//------------------------------------------------------------
