@@ -1,4 +1,4 @@
-package panda.net;
+package panda.net.dns;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

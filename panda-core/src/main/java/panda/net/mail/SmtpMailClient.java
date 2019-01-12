@@ -47,6 +47,9 @@ import panda.vfs.FileItem;
 public class SmtpMailClient extends MailClient {
 	private static Log LOG = Logs.getLog(SmtpMailClient.class);
 
+	/**
+	 * Constructor
+	 */
 	public SmtpMailClient() {
 		setLog(LOG);
 	}
@@ -95,7 +98,7 @@ public class SmtpMailClient extends MailClient {
 	private void send(String domain, Collection<EmailAddress> rcpts, Email email) throws EmailException {
 		List<String> hosts;
 		try {
-			Class mxlookup = Classes.getClass("panda.net.MXLookup");
+			Class mxlookup = Classes.getClass("panda.net.dns.MXLookup");
 			hosts = (List<String>)Methods.invokeStaticMethod(mxlookup, "lookup", domain);
 		}
 		catch (Throwable e) {

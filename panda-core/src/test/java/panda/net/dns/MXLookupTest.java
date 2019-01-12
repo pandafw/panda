@@ -1,9 +1,9 @@
-package panda.net;
+package panda.net.dns;
 
 import java.util.List;
 
-import panda.net.MXLookup;
 import junit.framework.TestCase;
+import panda.net.dns.MXLookup;
 
 /**
  * test class for MXLookup

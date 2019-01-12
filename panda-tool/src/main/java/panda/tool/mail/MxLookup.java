@@ -2,7 +2,7 @@ package panda.tool.mail;
 
 import java.util.List;
 
-import panda.net.MXLookup;
+import panda.net.dns.MXLookup;
 
 public class MxLookup {
 
