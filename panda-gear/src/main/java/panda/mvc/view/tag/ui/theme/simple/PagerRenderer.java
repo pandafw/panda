@@ -54,6 +54,8 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 			.data("count", defs(count))
 			.data("limit", defs(limit))
 			.data("total", defs(total))
+			.data("pages", defs(pages))
+			.data("style", tag.getPagerStyle())
 			.data("click", tag.getOnLinkClick())
 			.data("spy", "ppager")
 			.cssStyle(tag);
@@ -197,14 +199,12 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		write("\"><a href=\"");
 		write(getLinkHref(1));
 		write('"');
-		write(" data-pageno=\"1");
-		if (page > 1) {
-			write("\" title=\"");
-			write(tag.getFirstTooltip());
-			write('"');
-		}
-		else {
-			write("\" onclick=\"return false\"");
+		write(" pageno=\"1");
+		write("\" title=\"");
+		write(tag.getFirstTooltip());
+		write('"');
+		if (page <= 1) {
+			write(" onclick=\"return false\"");
 		}
 		write('>');
 		write(tag.getFirstText());
@@ -212,21 +212,24 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	}
 	
 	private void writePagerLinkPrev(boolean hidden) throws IOException {
+		int p = page - 1;
+		if (p < 1) {
+			p = 1;
+		}
+
 		write("<li class=\"p-pager-prev");
 		if (page <= 1) {
 			write(hidden? " hidden" : " disabled");
 		}
 		write("\"><a href=\"");
-		write(getLinkHref(page - 1));
-		write("\" data-pageno=\"");
-		write(String.valueOf(page - 1));
-		if (page > 1) {
-			write("\" title=\"");
-			write(tag.getPrevTooltip());
-			write('"');
-		}
-		else {
-			write("\" onclick=\"return false\"");
+		write(getLinkHref(p));
+		write("\" pageno=\"");
+		write(String.valueOf(p));
+		write("\" title=\"");
+		write(tag.getPrevTooltip());
+		write('"');
+		if (page <= 1) {
+			write(" onclick=\"return false\"");
 		}
 		write('>');
 		write(tag.getPrevText());
@@ -241,15 +244,13 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		}
 		write("\"><a href=\"");
 		write(getLinkHref(page + 1));
-		write("\" data-pageno=\"");
+		write("\" pageno=\"");
 		write(String.valueOf(page + 1));
-		if (hasNext) {
-			write("\" title=\"");
-			write(tag.getNextTooltip());
-			write('"');
-		}
-		else {
-			write("\" onclick=\"return false\"");
+		write("\" title=\"");
+		write(tag.getNextTooltip());
+		write('"');
+		if (!hasNext) {
+			write(" onclick=\"return false\"");
 		}
 		write('>');
 		write(tag.getNextText());
@@ -263,15 +264,13 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		}
 		write("\"><a href=\"");
 		write(getLinkHref(pages));
-		write("\" data-pageno=\"");
+		write("\" pageno=\"");
 		write(pages.toString());
-		if (page < pages) {
-			write("\" title=\"");
-			write(tag.getLastTooltip());
-			write('"');
-		}
-		else {
-			write("\" onclick=\"return false\"");
+		write("\" title=\"");
+		write(tag.getLastTooltip());
+		write('"');
+		if (page >= pages) {
+			write(" onclick=\"return false\"");
 		}
 		write('>');
 		write(tag.getLastText());
@@ -279,7 +278,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	}
 
 	private void writePagerLinkNums() throws IOException {
-		boolean ep = Strings.contains(tag.getPagerStyle(),  '.');
+		boolean pe = Strings.contains(tag.getPagerStyle(),  '.');
 		boolean p1 = Strings.contains(tag.getPagerStyle(),  '1');
 		boolean px = Strings.contains(tag.getPagerStyle(),  'x');
 
@@ -288,13 +287,13 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		if (p1) {
 			linkMax += 2;
 		}
-		else if (ep) {
+		else if (pe) {
 			linkMax++;
 		}
 		if (px) {
 			linkMax += 2;
 		}
-		else if (ep) {
+		else if (pe) {
 			linkMax++;
 		}
 
@@ -317,65 +316,61 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		}
 
 
-		if (p > 1 && p1) {
-			linkp(1);
-		}
-		
 		if (p1) {
+			if (p > 1) {
+				linkp(1);
+			}
+			
 			if (p == 3) {
 				linkp(2);
 			}
 			else if (p > 3) {
-				ellipsis();
+				ellipsis(true, true);
 			}
 		}
-		else if (ep && p > 2) {
-			ellipsis();
+		else {
+			ellipsis(true, pe && p > 2);
 		}
 
 		for (int i = 0; i < linkSize && p <= pages; i++, p++) {
 			linkp(p);
 		}
-		
-		if (p < pages - 1) {
-			if (ep || px) {
-				ellipsis();
-			}
-			if (px) {
+
+		if (px) {
+			if (p < pages - 1) {
+				ellipsis(false, pe);
 				linkp(pages);
 			}
-		}
-		else if (p == pages - 1) {
-			if (px) {
+			else if (p == pages - 1) {
 				linkp(p);
 				linkp(pages);
 			}
-			else if (ep) {
-				ellipsis();
-			}
-		}
-		else if (p == pages) {
-			if (px) {
+			else if (p == pages) {
 				linkp(pages);
 			}
-			else if (ep) {
-				ellipsis();
-			}
+		}
+		else {
+			ellipsis(false, pe && p < pages);
 		}
 	}
 
-	private void ellipsis() throws IOException {
-		write("<li class=\"p-pager-ellipsis\"><span>&hellip;</span></li>");
+	private void ellipsis(boolean left, boolean show) throws IOException {
+		write("<li class=\"p-pager-ellipsis-");
+		write(left ? "left" : "right");
+		if (!show) {
+			write(" hidden");
+		}
+		write("\"><span>&hellip;</span></li>");
 	}
 
 	private void linkp(int p) throws IOException {
-		write("<li");
+		write("<li class=\"p-pager-page");
 		if (page == p) {
-			write(" class=\"active\"");
+			write(" active");
 		}
-		write("><a href=\"");
+		write("\"><a href=\"");
 		write(getLinkHref(p));
-		write("\" data-pageno=\"");
+		write("\" pageno=\"");
 		write(String.valueOf(p));
 		write("\">");
 		write(String.valueOf(p));

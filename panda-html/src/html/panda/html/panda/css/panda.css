@@ -737,23 +737,12 @@ tbody.p-lv-tbody > tr > td:first-child {
 	border-bottom: 3px solid #337ab7;
 }
 
-.p-pager > .pagination > li.p-pager-ellipsis > span {
+.p-pager > .pagination > li.p-pager-ellipsis-left > span,
+.p-pager > .pagination > li.p-pager-ellipsis-right > span {
 	border: 0 none;
 	border-bottom: 3px solid transparent;
 	padding-left: 8px;
 	padding-right: 8px;
-}
-.p-pager > .pagination > li.p-pager-first > a,
-.p-pager > .pagination > li.p-pager-first > span {
-}
-.p-pager > .pagination > li.p-pager-prev > a,
-.p-pager > .pagination > li.p-pager-prev > span {
-}
-.p-pager > .pagination > li.p-pager-next > a,
-.p-pager > .pagination > li.p-pager-next > span {
-}
-.p-pager > .pagination > li.p-pager-last > a,
-.p-pager > .pagination > li.p-pager-last > span {
 }
 
 .p-pager > .pagination > .active > a,

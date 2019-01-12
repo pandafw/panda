@@ -5,26 +5,75 @@
 			evt.preventDefault();
 		}
 		else {
-			var pn = $el.data("pageno");
+			var pn = $el.attr("pageno");
 			if (pn >= 0) {
 				var $pg = $el.closest(".p-pager");
 				var js = $pg.data("click");
-				if (js.contains('#')) {
+				if (js) {
 					evt.preventDefault();
+					js = js.replace("$", pn);
 					js = js.replace("#", (pn - 1) * $pg.data("limit"));
+					eval(js);
 				}
-				eval(js);
 			}
+		}
+	}
+
+	function _setActivePage($p, n) {
+		var $u = $p.find('ul.pagination');
+		$u.find('li.active').removeClass('active');
+
+		var $n = $u.find('li.p-pager-page');
+
+		var m = $p.data('pages');
+		var b = n - Math.floor($n.size() / 2);
+		if (b + $n.size() > m) b = m - $n.size() + 1;
+		if (b < 1) b = 1;
+
+		var s = $p.data('style');
+		if (n > 1) {
+			$u.find('.p-pager-first, .p-pager-prev').removeClass('hidden disabled');
+			$u.find('.p-pager-prev>a').attr('pageno', n - 1);
+		}
+		else {
+			$u.find('.p-pager-first').addClass(s.contains('F') ? 'disabled' : 'hidden');
+			$u.find('.p-pager-prev').addClass(s.contains('P') ? 'disabled' : 'hidden');
+		}
+
+		$u.find('.p-pager-ellipsis-left')[b > 1 ? 'removeClass' : 'addClass']('hidden');
+		$n.each(function() {
+			var $a = $(this).find('a');
+			$a.attr('pageno', b).text(b);
+			if (b == n) {
+				$(this).addClass('active');
+			}
+			b++;
+		});
+		$u.find('.p-pager-ellipsis-right')[b <= m ? 'removeClass' : 'addClass']('hidden');
+
+		if (n < m) {
+			$u.find('.p-pager-next, .p-pager-last').removeClass('hidden disabled');
+			$u.find('.p-pager-next>a').attr('pageno', n + 1);
+		}
+		else {
+			$u.find('.p-pager-next').addClass(s.contains('N') ? 'disabled' : 'hidden');
+			$u.find('.p-pager-last').addClass(s.contains('L') ? 'disabled' : 'hidden');
 		}
 	}
 	
 	$.fn.ppager = function(api, pno) {
+		if (api == 'getActivePage') {
+			return this.find('ul.pagination>li.active>a').attr('pageno');
+		}
+		if (api == 'setActivePage') {
+			return this.each(function() { _setActivePage($(this), pno); });
+		}
 		return this.each(function() {
 			var $p = $(this);
 			if ($p.attr("ppager") != "true") {
 				$p.attr("ppager", "true");
 				if ($p.data("click")) {
-					$p.find("a[data-pageno]").click(_click);
+					$p.find("a[pageno]").click(_click);
 				}
 			}
 		});
