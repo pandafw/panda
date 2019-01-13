@@ -28,8 +28,6 @@ import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.reflect.Methods;
 import panda.lang.time.DateTimes;
-import panda.log.Log;
-import panda.log.Logs;
 import panda.net.Mimes;
 import panda.net.PrintCommandListener;
 import panda.net.io.CRLFLineWriter;
@@ -45,15 +43,6 @@ import panda.vfs.FileItem;
  * a class for send mail
  */
 public class SmtpMailClient extends MailClient {
-	private static Log LOG = Logs.getLog(SmtpMailClient.class);
-
-	/**
-	 * Constructor
-	 */
-	public SmtpMailClient() {
-		setLog(LOG);
-	}
-
 	/**
 	 * @param email email
 	 * @throws EmailException if an error occurs

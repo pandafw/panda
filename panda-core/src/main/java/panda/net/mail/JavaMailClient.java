@@ -25,8 +25,6 @@ import panda.io.Streams;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
 import panda.net.Mimes;
 import panda.vfs.FileItem;
 
@@ -34,12 +32,6 @@ import panda.vfs.FileItem;
  * a class for send mail
  */
 public class JavaMailClient extends MailClient {
-	private static Log LOG = Logs.getLog(JavaMailClient.class);
-
-	public JavaMailClient() {
-		setLog(LOG);
-	}
-
 	/**
 	 * @param email email
 	 * @throws EmailException if an error occurs

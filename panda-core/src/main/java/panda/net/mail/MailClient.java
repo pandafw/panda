@@ -1,11 +1,14 @@
 package panda.net.mail;
 
 import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * a interface for send mail
  */
 public abstract class MailClient {
+	private static Log LOG;
+	
 	protected Log log;
 
 	protected String helo = "localhost";
@@ -116,6 +119,19 @@ public abstract class MailClient {
 	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+		if (debug) {
+			if (log == null) {
+				if (LOG == null) {
+					// !IMPORTANT: panda.log.impl.SmtpLogAdapter use this class
+					// do not use static final log instance, it will cause dead loop
+					LOG = Logs.getLog(getClass());
+				}
+				log = LOG;
+			}
+		}
+		else {
+			log = null;
+		}
 	}
 
 	/**

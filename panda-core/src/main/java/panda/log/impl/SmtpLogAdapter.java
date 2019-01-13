@@ -124,7 +124,7 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	public void init(Logs logs, String name, Map<String, String> props) {
 		super.init(logs, name, props);
 		
-		client = createClient();
+		client = getMailClient();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * 
 	 * @return mail client, may not be null.
 	 */
-	private MailClient createClient() {
+	private MailClient getMailClient() {
 		MailClient mc = null;
 		
 		if (Strings.equalsIgnoreCase("java", smtpClient)) {
@@ -153,11 +153,11 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 		mc.setPassword(smtpPassword);
 		mc.setSsl(smtpSsl);
 		if (smtpDebug) {
-			mc.setDebug(smtpDebug);
-
 			ConsoleLog log = new ConsoleLog(logs, getClass().getName());
 			log.setLogLevel(LogLevel.DEBUG);
 			mc.setLog(log);
+
+			mc.setDebug(smtpDebug);
 		}
 		else {
 			mc.setLog(null);
