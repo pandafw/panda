@@ -5,15 +5,16 @@
 			evt.preventDefault();
 		}
 		else {
-			var pn = $el.attr("pageno");
+			var pn = $el.attr('pageno');
 			if (pn >= 0) {
-				var $pg = $el.closest(".p-pager");
-				var js = $pg.data("click");
+				var $pg = $el.closest('.p-pager');
+				var js = $pg.data('click');
 				if (js) {
-					evt.preventDefault();
-					js = js.replace("$", pn);
-					js = js.replace("#", (pn - 1) * $pg.data("limit"));
-					eval(js);
+					js = js.replace('$', pn);
+					js = js.replace('#', (pn - 1) * $pg.data('limit'));
+					if (eval(js) === false) {
+						evt.preventDefault();
+					}
 				}
 			}
 		}
