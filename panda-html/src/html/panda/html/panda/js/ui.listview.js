@@ -245,6 +245,7 @@ function _plv_goto(id, p) {
 		ed.disabled = true;
 	}
 	document.getElementById(id + "_submit").click();
+	return false;
 }
 
 function _plv_limit(id, n) {
