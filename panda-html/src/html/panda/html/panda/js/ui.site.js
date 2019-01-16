@@ -139,6 +139,7 @@ function sl_goto(id, s) {
 
 		sl_submit(id);
 	}
+	return false;
 }
 function sl_limit(id, el) {
 	if (id == '') {
@@ -161,7 +162,7 @@ function sl_submit(id) {
 		d[d.length] = { name: '__inner', value: 'true' };
 		
 		var $p = $i.parent();
-		$p.loadmask({ cssClass: 'p-loader-fountain' });
+		$p.loadmask();
 		$p.load($f.attr('action'), d, function() {
 				$p.unloadmask();
 			});
@@ -189,11 +190,7 @@ function s_copyToClipboard(s) {
 }
 
 function s_loadmask() {
-	$('body').loadmask({
-		cssClass: 'p-loader-fountain',
-		mask: false,
-		window: true
-	});
+	$('body').loadmask({ mask: false, window: true });
 }
 
 function s_getLinkMark() {

@@ -2700,6 +2700,7 @@ function _plv_goto(id, p) {
 		ed.disabled = true;
 	}
 	document.getElementById(id + "_submit").click();
+	return false;
 }
 
 function _plv_limit(id, n) {
@@ -2834,15 +2835,16 @@ function _plv_onTBodyMouseOut(evt) {
 			evt.preventDefault();
 		}
 		else {
-			var pn = $el.attr("pageno");
+			var pn = $el.attr('pageno');
 			if (pn >= 0) {
-				var $pg = $el.closest(".p-pager");
-				var js = $pg.data("click");
+				var $pg = $el.closest('.p-pager');
+				var js = $pg.data('click');
 				if (js) {
-					evt.preventDefault();
-					js = js.replace("$", pn);
-					js = js.replace("#", (pn - 1) * $pg.data("limit"));
-					eval(js);
+					js = js.replace('$', pn);
+					js = js.replace('#', (pn - 1) * $pg.data('limit'));
+					if (eval(js) === false) {
+						evt.preventDefault();
+					}
 				}
 			}
 		}
@@ -3195,6 +3197,7 @@ function sl_goto(id, s) {
 
 		sl_submit(id);
 	}
+	return false;
 }
 function sl_limit(id, el) {
 	if (id == '') {
@@ -3217,7 +3220,7 @@ function sl_submit(id) {
 		d[d.length] = { name: '__inner', value: 'true' };
 		
 		var $p = $i.parent();
-		$p.loadmask({ cssClass: 'p-loader-fountain' });
+		$p.loadmask();
 		$p.load($f.attr('action'), d, function() {
 				$p.unloadmask();
 			});
@@ -3245,11 +3248,7 @@ function s_copyToClipboard(s) {
 }
 
 function s_loadmask() {
-	$('body').loadmask({
-		cssClass: 'p-loader-fountain',
-		mask: false,
-		window: true
-	});
+	$('body').loadmask({ mask: false, window: true });
 }
 
 function s_getLinkMark() {

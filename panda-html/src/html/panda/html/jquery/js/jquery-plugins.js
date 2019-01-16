@@ -1145,13 +1145,18 @@ jQuery.jcookie = function(name, value, options) {
 	});
 })(jQuery);
 (function($) {
-	function maskElement($el, c) {
+	function clearMaskTimeout($el) {
 		//if this element has delayed mask scheduled then remove it and display the new one
-		if ($el.data("_mask_timeout") !== undefined) {
-			clearTimeout($el.data("_mask_timeout"));
+		var t = $el.data("_mask_timeout");
+		if (t) {
+			clearTimeout(t);
 			$el.removeData("_mask_timeout");
 		}
-
+	}
+	
+	function maskElement($el, c) {
+		clearMaskTimeout($el);
+		
 		if ($el.isLoadMasked()) {
 			unmaskElement($el);
 		}
@@ -1188,20 +1193,20 @@ jQuery.jcookie = function(name, value, options) {
 		}
 		$el.append($mb);
 
-		$mb.center();
+		if (c.window) {
+			$mb.addClass('ui-loadmask-fixed');
+		}
+		else {
+			$mb.center();
+		}
 		$mb.show();
 	}
 	
 	function unmaskElement($el) {
-		//if this element has delayed mask scheduled then remove it
-		if ($el.data("_mask_timeout") !== undefined) {
-			clearTimeout($el.data("_mask_timeout"));
-			$el.removeData("_mask_timeout");
-		}
-		
+		clearMaskTimeout($el);
+
 		$el.find(".ui-loadmask-mask, .ui-loadmask").remove();
-		$el.removeClass("ui-loadmasked");
-		$el.removeClass("ui-loadmasked-relative");
+		$el.removeClass("ui-loadmasked ui-loadmasked-relative");
 		$el.find("select").removeClass("ui-loadmasked-hidden");
 	}
  
