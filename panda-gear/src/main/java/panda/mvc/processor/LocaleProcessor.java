@@ -1,7 +1,12 @@
 package panda.mvc.processor;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -55,8 +60,8 @@ public class LocaleProcessor extends AbstractProcessor {
 	@IocInject(value=MvcConstants.LOCALE_COOKIE_MAXAGE, required=false)
 	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
 
-	@IocInject(value=MvcConstants.LOCALE_DOMAINS, required=false)
-	protected Map<String, String> domainLocales;
+	protected Map<String, Locale> domainLocales;
+	protected Map<Pattern, Locale> domainRegexLocales;
 	
 	@IocInject(value=MvcConstants.LOCALE_ACCEPTS, required=false)
 	protected String[] acceptLocales;
@@ -76,23 +81,46 @@ public class LocaleProcessor extends AbstractProcessor {
 	public LocaleProcessor() {
 	}
 
+	/**
+	 * @param domainLocales the domainLocales to set
+	 */
+	@IocInject(value=MvcConstants.LOCALE_DOMAINS, required=false)
+	public void setDomainLocales(Map<String, String> domainLocales) {
+		if (Collections.isEmpty(domainLocales)) {
+			return;
+		}
+		
+		HashMap<String, Locale> domains = new HashMap<String, Locale>();
+		HashMap<Pattern, Locale> regexs = new LinkedHashMap<Pattern, Locale>();
+		for (Entry<String, String> en : domainLocales.entrySet()) {
+			String key = en.getKey();
+			Locale val = Locales.toLocale(en.getValue());
+			if (Strings.endsWithChar(key, '$')) {
+				regexs.put(Pattern.compile(key, Pattern.CASE_INSENSITIVE), val);
+			}
+			else {
+				domains.put(key, val);
+			}
+		}
+		
+		if (Collections.isNotEmpty(domains)) {
+			this.domainLocales = domains;
+		}
+		if (Collections.isNotEmpty(regexs)) {
+			this.domainRegexLocales = regexs;
+		}
+	}
+
 	@Override
 	public void process(ActionContext ac) {
 		boolean saveToSession = this.saveToSession;
 		boolean saveToCookie = this.saveToCookie;
 
-		Locale locale = null;
 		HttpSession session = ac.getRequest().getSession(false);
 
-		if (Collections.isNotEmpty(domainLocales)) {
-			String sn = ac.getRequest().getServerName();
-			String ln = domainLocales.get(sn);
-			if (ln != null) {
-				locale = Locales.toLocale(ln);
-				if (locale != null) {
-					saveToCookie = false;
-				}
-			}
+		Locale locale = getLocaleFromDomain(ac);
+		if (locale != null) {
+			saveToCookie = false;
 		}
 		
 		if (locale == null) {
@@ -148,6 +176,29 @@ public class LocaleProcessor extends AbstractProcessor {
 		}
 		
 		doNext(ac);
+	}
+
+	protected Locale getLocaleFromDomain(ActionContext ac) {
+		if (Collections.isNotEmpty(domainLocales)) {
+			String sn = ac.getRequest().getServerName();
+			Locale locale = domainLocales.get(sn);
+			if (locale != null) {
+				return locale;
+			}
+		}
+		
+		if (Collections.isNotEmpty(domainRegexLocales)) {
+			String sn = ac.getRequest().getServerName();
+			for (Entry<Pattern, Locale> en : domainRegexLocales.entrySet()) {
+				Pattern p = en.getKey();
+				Matcher m = p.matcher(sn);
+				if (m.matches()) {
+					return en.getValue();
+				}
+			}
+		}
+		
+		return null;
 	}
 
 	protected Locale getLocaleFromCookie(ActionContext ac) {
