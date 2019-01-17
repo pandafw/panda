@@ -1,31 +1,42 @@
 package panda.log.impl;
 
-
 import panda.log.Log;
 import panda.log.LogEvent;
 import panda.log.LogLevel;
 import panda.log.Logs;
 
+public class RuntimeLog implements Log {
+	// real log
+	private Log log;
 
-public abstract class AbstractLog implements Log {
-	protected String name;
-	protected LogLevel level;
+	// logs
+	private Logs logs;
+	
+	// log creation time
+	private long time;
+	
+	public RuntimeLog(Log log, Logs logs) {
+		this.log = log;
+		this.logs = logs;
+		this.time = logs.getConfigTime();
+	}
 
-	protected AbstractLog(Logs logs, String name, LogLevel level) {
-		this.name = name;
-		this.level = logs.getLogLevel(name);
-		if (level != null && this.level.isLessOrEqual(level)) {
-			this.level = level;
+	private void reload() {
+		if (time < logs.getConfigTime()) {
+			log = logs.newLogger(getName());
+			time = logs.getConfigTime();
 		}
 	}
 
-	protected abstract void write(LogEvent event);
+	private void write(LogEvent event) {
+		log.log(event);
+	}
 
 	/**
 	 * @return the FQCN
 	 */
 	public String getFQCN() {
-		return AbstractLog.class.getName();
+		return RuntimeLog.class.getName();
 	}
 	
 	/**
@@ -33,7 +44,7 @@ public abstract class AbstractLog implements Log {
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return log.getName();
 	}
 
 	/**
@@ -41,65 +52,66 @@ public abstract class AbstractLog implements Log {
 	 */
 	@Override
 	public LogLevel getLevel() {
-		return level;
+		reload();
+		return log.getLevel();
 	}
 
 	@Override
 	public void log(LogLevel level, String message) {
-		if (level.isGreaterOrEqual(this.level)) {
-			write(new LogEvent(getFQCN(), name, level, message));
+		if (level.isGreaterOrEqual(getLevel())) {
+			write(new LogEvent(getFQCN(), getName(), level, message));
 		}
 	}
 
 	@Override
 	public void log(LogLevel level, String message, Throwable error) {
-		if (level.isGreaterOrEqual(this.level)) {
-			write(new LogEvent(getFQCN(), name, level, message, error));
+		if (level.isGreaterOrEqual(getLevel())) {
+			write(new LogEvent(getFQCN(), getName(), level, message, error));
 		}
 	}
 
 	@Override
 	public void logf(LogLevel level, String message, Object... args) {
-		if (level.isGreaterOrEqual(this.level)) {
-			write(new LogEvent(getFQCN(), name, level, message, args));
+		if (level.isGreaterOrEqual(getLevel())) {
+			write(new LogEvent(getFQCN(), getName(), level, message, args));
 		}
 	}
 
 	@Override
 	public void log(LogEvent event) {
-		if (event.getLevel().isGreaterOrEqual(this.level)) {
+		if (event.getLevel().isGreaterOrEqual(getLevel())) {
 			write(event);
 		}
 	}
 
 	@Override
 	public boolean isFatalEnabled() {
-		return this.level.isLessOrEqual(LogLevel.FATAL);
+		return getLevel().isLessOrEqual(LogLevel.FATAL);
 	}
 
 	@Override
 	public boolean isErrorEnabled() {
-		return this.level.isLessOrEqual(LogLevel.ERROR);
+		return getLevel().isLessOrEqual(LogLevel.ERROR);
 	}
 
 	@Override
 	public boolean isWarnEnabled() {
-		return this.level.isLessOrEqual(LogLevel.WARN);
+		return getLevel().isLessOrEqual(LogLevel.WARN);
 	}
 
 	@Override
 	public boolean isInfoEnabled() {
-		return this.level.isLessOrEqual(LogLevel.INFO);
+		return getLevel().isLessOrEqual(LogLevel.INFO);
 	}
 
 	@Override
 	public boolean isDebugEnabled() {
-		return this.level.isLessOrEqual(LogLevel.DEBUG);
+		return getLevel().isLessOrEqual(LogLevel.DEBUG);
 	}
 
 	@Override
 	public boolean isTraceEnabled() {
-		return this.level.isLessOrEqual(LogLevel.TRACE);
+		return getLevel().isLessOrEqual(LogLevel.TRACE);
 	}
 	
 	@Override

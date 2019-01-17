@@ -11,7 +11,6 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.LogAdapter;
 import panda.log.LogEvent;
-import panda.log.LogLevel;
 import panda.log.LogLog;
 import panda.log.Logs;
 
@@ -110,14 +109,14 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 			return logs.get(0);
 		}
 
-		return new ComboLog(this.logs, name, threshold, logs.toArray(new Log[logs.size()]));
+		return new ComboLog(this, name, logs.toArray(new Log[logs.size()]));
 	}
 
 	private static class ComboLog extends AbstractLog {
 		private Log[] logs;
 		
-		ComboLog(Logs p, String name, LogLevel level, Log[] logs) {
-			super(p, name, level);
+		ComboLog(ComboLogAdapter cla, String name, Log[] logs) {
+			super(cla.logs, name, cla.threshold);
 			this.logs = logs;
 		}
 
