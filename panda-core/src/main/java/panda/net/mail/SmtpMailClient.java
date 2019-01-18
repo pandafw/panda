@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -90,8 +91,12 @@ public class SmtpMailClient extends MailClient {
 			Class mxlookup = Classes.getClass("panda.net.dns.MXLookup");
 			hosts = (List<String>)Methods.invokeStaticMethod(mxlookup, "lookup", domain);
 		}
+		catch (InvocationTargetException e) {
+			Throwable c = e.getCause() == null ? e : e.getCause();
+			throw new EmailException(c.getMessage(), c);
+		}
 		catch (Throwable e) {
-			throw new EmailException(e);
+			throw new EmailException(e.getMessage(), e);
 		}
 		
 		if (Collections.isEmpty(hosts)) {
