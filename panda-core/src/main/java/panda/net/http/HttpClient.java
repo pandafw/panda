@@ -338,6 +338,9 @@ public class HttpClient {
 				log.debug(msg.toString());
 			}
 		}
+		else if (log.isInfoEnabled()) {
+			log.info(response.getStatusLine() + " : " + request.getURL());
+		}
 		return response;
 	}
 
