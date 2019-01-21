@@ -193,34 +193,36 @@ function s_loadmask() {
 	$('body').loadmask({ mask: false, window: true });
 }
 
-function s_getLinkMark() {
-	var i = location.href.lastIndexOf('#');
+function s_getHrefAnchor(u) {
+	u = u || location.href;
+	var i = u.indexOf('#');
 	if (i > 0) {
-		return location.href.substring(i);
+		return u.substring(i);
 	}
 	return "";
 }
 
 function s_setTitle(title) {
-	var d = document.title.indexOf(' - ');
+	var t = document.title, d = t.indexOf(' - ');
 	if (d < 0) {
-		d = document.title.indexOf(' | ');
+		d = t.indexOf(' | ');
 	}
-	document.title = title + (d < 0 ? '' : document.title.substring(d));
+	document.title = title + (d < 0 ? '' : t.substring(d));
 }
 
 function s_setQueryParam(vs) {
-	var ps;
-	var u = location.href, i = u.indexOf('?');
+	var ps = vs;
+	var u = location.href, i = u.indexOf('#');
+	if (i >= 0) {
+		u = u.substring(0, i);
+	}
+
+	i = u.indexOf('?');
 	if (i >= 0) {
 		ps = $.extend(u.queryParams(), vs);
 		u = u.substring(0, i);
 	}
-	else {
-		ps = vs;
-	}
-	var qs = $.param(ps);
-	return u + '?' + qs;
+	return u + '?' + $.param(ps);
 }
 
 function s_setLang(v) {
@@ -230,6 +232,7 @@ function s_setLang(v) {
 
 //------------------------------------------------------
 // site vars
+//
 var site = {
 	statics: '/static'
 };
