@@ -27,11 +27,13 @@ import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Iterators;
 import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.net.Mimes;
 import panda.net.URLBuilder;
+import panda.vfs.FileItem;
 
 public class HttpRequest {
 	// -------------------------------------------------------------
@@ -384,7 +386,7 @@ public class HttpRequest {
 
 	//------------------------------------------------------------
 	private boolean isFile(Object v) {
-		return (v instanceof File);
+		return (v instanceof File) || (v instanceof FileItem);
 	}
 
 	public String getMultipartBoundary() {
@@ -447,55 +449,22 @@ public class HttpRequest {
 			while (it.hasNext()) {
 				Entry<String, Object> en = it.next();
 				
-				dos.writeBytes("--");
-				dos.writeBytes(getMultipartBoundary());
-				dos.writeBytes(Strings.CRLF);
-				
 				String key = en.getKey();
 				Object val = en.getValue();
 
-				File f = null;
-				if (isFile(val)) {
-					f = (File)val;
-				}
-
-				dos.writeBytes(HttpHeader.CONTENT_DISPOSITION);
-				dos.writeBytes(": form-data; name=\"");
-				dos.writeBytes(Mimes.encodeText(key, encoding));
-				dos.writeBytes("\"");
-				if (f != null && f.exists()) {
-					dos.writeBytes("; filename=\"");
-					dos.writeBytes(Mimes.encodeText(f.getPath(), encoding));
-					dos.writeBytes("\"");
-					dos.writeBytes(Strings.CRLF);
-
-					dos.writeBytes(HttpHeader.CONTENT_TYPE);
-					dos.writeBytes(": ");
-					dos.writeBytes(MimeTypes.getMimeType(f));
-
-					dos.writeBytes(Strings.CRLF);
-					dos.writeBytes(Strings.CRLF);
-					if (f.length() > 0) {
-						FileInputStream fis = new FileInputStream(f);
-						try {
-							Streams.copyLarge(fis, dos, 0, limit);
-							dos.writeBytes(Strings.CRLF);
-						}
-						finally {
-							Streams.safeClose(fis);
+				if (Iterators.isIterable(val)) {
+					for (Iterator itv = Iterators.asIterator(val); itv.hasNext(); ) {
+						writeBodyParam(dos, key, itv.next(), limit);
+						if (limit > 0 && dos.size() >= limit) {
+							return false;
 						}
 					}
 				}
 				else {
-					dos.writeBytes(Strings.CRLF);
-					dos.writeBytes(Strings.CRLF);
-					byte[] bs = val.toString().getBytes(encoding);
-					dos.write(bs);
-					dos.writeBytes(Strings.CRLF);
-				}
-				
-				if (limit > 0 && dos.size() >= limit && it.hasNext()) {
-					return false;
+					writeBodyParam(dos, key, val, limit);
+					if (limit > 0 && dos.size() >= limit) {
+						return false;
+					}
 				}
 			}
 
@@ -509,6 +478,81 @@ public class HttpRequest {
 		}
 		dos.flush();
 		return true;
+	}
+
+	protected void writeBodyParam(DataOutputStream dos, String key, Object val, int limit) throws IOException {
+		dos.writeBytes("--");
+		dos.writeBytes(getMultipartBoundary());
+		dos.writeBytes(Strings.CRLF);
+		
+		dos.writeBytes(HttpHeader.CONTENT_DISPOSITION);
+		dos.writeBytes(": form-data; name=\"");
+		dos.writeBytes(Mimes.encodeText(key, encoding));
+		dos.writeBytes("\"");
+
+		if (isFile(val)) {
+			String path = getFilePath(val);
+			dos.writeBytes("; filename=\"");
+			dos.writeBytes(Mimes.encodeText(path, encoding));
+			dos.writeBytes("\"");
+			dos.writeBytes(Strings.CRLF);
+
+			dos.writeBytes(HttpHeader.CONTENT_TYPE);
+			dos.writeBytes(": ");
+			dos.writeBytes(MimeTypes.getMimeType(path));
+
+			dos.writeBytes(Strings.CRLF);
+			dos.writeBytes(Strings.CRLF);
+			long len = getFileLength(val);
+			if (len > 0) {
+				InputStream fis = openFile(val);
+				try {
+					Streams.copyLarge(fis, dos, 0, limit);
+					dos.writeBytes(Strings.CRLF);
+				}
+				finally {
+					Streams.safeClose(fis);
+				}
+			}
+		}
+		else {
+			dos.writeBytes(Strings.CRLF);
+			dos.writeBytes(Strings.CRLF);
+			if (val != null) {
+				dos.write(val.toString().getBytes(encoding));
+			}
+			dos.writeBytes(Strings.CRLF);
+		}
+	}
+	
+	private String getFilePath(Object file) {
+		if (file instanceof File) {
+			return ((File)file).getPath();
+		}
+		if (file instanceof FileItem) {
+			return ((FileItem)file).getName();
+		}
+		return "";
+	}
+	
+	private long getFileLength(Object file) {
+		if (file instanceof File) {
+			return ((File)file).length();
+		}
+		if (file instanceof FileItem) {
+			return ((FileItem)file).getSize();
+		}
+		return 0L;
+	}
+	
+	private InputStream openFile(Object file) throws IOException {
+		if (file instanceof File) {
+			return new FileInputStream((File)file);
+		}
+		if (file instanceof FileItem) {
+			return ((FileItem)file).open();
+		}
+		return null;
 	}
 
 	/**
