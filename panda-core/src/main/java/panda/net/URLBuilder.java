@@ -290,7 +290,7 @@ public class URLBuilder {
 			return;
 		}
 
-		boolean next = false;
+		boolean addAmp = false;
 		boolean noClass = !(params instanceof Map);
 
 		BeanHandler bh = beans.getBeanHandler(params.getClass());
@@ -298,50 +298,39 @@ public class URLBuilder {
 		
 		Iterator iter = Iterators.asIterator(pns);
 		while (iter.hasNext()) {
-			String name = (String) iter.next();
+			String name = (String)iter.next();
 			if (noClass && "class".equals(name)) {
 				continue;
 			}
 
 			Object value = bh.getPropertyValue(params, name);
 			if (Iterators.isIterable(value)) {
-				for (Iterator it = Iterators.asIterator(value); it.hasNext();) {
-					Object pv = it.next();
-					if (pv == null && (suppress & SUPPRESS_NULL) != 0) {
-						continue;
-					}
-					if (Objects.isEmpty(pv) && (suppress & SUPPRESS_EMPTY) != 0) {
-						continue;
-					}
-
-					if (next) {
-						link.append(escapeAmp ? EAMP : AMP);
-					}
-					else {
-						next = true;
-					}
-					appendQueryParameter(link, name, pv);
+				for (Iterator it = Iterators.asIterator(value); it.hasNext(); ) {
+					addAmp = appendQueryParameter(link, name, it.next(), addAmp);
 				}
 			}
 			else {
-				if (value == null && (suppress & SUPPRESS_NULL) != 0) {
-					continue;
-				}
-				if (Objects.isEmpty(value) && (suppress & SUPPRESS_EMPTY) != 0) {
-					continue;
-				}
-
-				if (next) {
-					link.append(escapeAmp ? EAMP : AMP);
-				}
-				else {
-					next = true;
-				}
-				appendQueryParameter(link, name, value);
+				addAmp = appendQueryParameter(link, name, value, addAmp);
 			}
 		}
 	}
 
+	protected boolean appendQueryParameter(StringBuilder url, String name, Object value, boolean addAmp) {
+		if (value == null && (suppress & SUPPRESS_NULL) != 0) {
+			return addAmp;
+		}
+
+		if (Objects.isEmpty(value) && (suppress & SUPPRESS_EMPTY) != 0) {
+			return addAmp;
+		}
+
+		if (addAmp) {
+			url.append(escapeAmp ? EAMP : AMP);
+		}
+		appendQueryParameter(url, name, value);
+		return true;
+	}
+	
 	protected void appendQueryParameter(StringBuilder url, String name, Object value) {
 		url.append(name);
 		url.append('=');
