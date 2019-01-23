@@ -9,13 +9,8 @@ import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
-import panda.vfs.FileItem;
 
 public abstract class MediaEditAction extends GenericEditAction<Media> {
-	/*----------------------------------------------------------------------*
-	 * Properties
-	 *----------------------------------------------------------------------*/
-	protected FileItem file;
 
 	/**
 	 * Constructor
@@ -23,20 +18,6 @@ public abstract class MediaEditAction extends GenericEditAction<Media> {
 	public MediaEditAction() {
 		setType(Media.class);
 		addDisplayFields(Media.ID, Media.TAG, Media.NAME, Media.SIZE, Media.WIDTH, Media.HEIGHT, Media.FILE, Media.CREATED_AT, Media.CREATED_BY, Media.CREATED_BY_USER, Media.UPDATED_AT, Media.UPDATED_BY, Media.UPDATED_BY_USER);
-	}
-
-	/**
-	 * @return the file
-	 */
-	public FileItem getFile() {
-		return file;
-	}
-
-	/**
-	 * @param file the file to set
-	 */
-	public void setFile(FileItem file) {
-		this.file = file;
 	}
 
 

@@ -26,7 +26,6 @@
 
 	<!-- action -->
 	<action name="action.Media" entity="${entity.package}.Media" extend="baseAction">
-		<property name="file" type="FileItem"/>
 		<list name="basicList" extend="cuList">
 			<column name="id" hidden="false" sortable="true" link="true">
 				<filter type="string"/>
