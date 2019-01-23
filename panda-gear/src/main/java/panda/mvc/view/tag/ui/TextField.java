@@ -193,15 +193,15 @@ public class TextField extends Hidden {
 		this.onrclick = onrclick;
 	}
 	
-	public boolean hasTrigger() {
-		return hasLeftTrigger() || hasRightTrigger();
+	public boolean hasAddon() {
+		return hasLeftAddon() || hasRightAddon();
 	}
 	
-	public boolean hasLeftTrigger() {
+	public boolean hasLeftAddon() {
 		return Strings.isNotEmpty(licon) || Strings.isNotEmpty(ltext) || Strings.isNotEmpty(onlclick);
 	}
 	
-	public boolean hasRightTrigger() {
+	public boolean hasRightAddon() {
 		return Strings.isNotEmpty(ricon) || Strings.isNotEmpty(rtext) || Strings.isNotEmpty(onrclick);
 	}
 }

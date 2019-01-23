@@ -18,14 +18,14 @@ public abstract class AbstractTextFieldRenderer<T extends TextField> extends Abs
 
 	@Override
 	protected void render() throws IOException {
-		if (tag.hasTrigger()) {
+		if (tag.hasAddon()) {
 			renderHeader();
 			
-			renderLeftTrigger();
+			renderLeftAddon();
 	
 			renderInput();
 			
-			renderRightTrigger();
+			renderRightAddon();
 			
 			renderFooter();
 		}
@@ -69,8 +69,8 @@ public abstract class AbstractTextFieldRenderer<T extends TextField> extends Abs
 		return null;
 	}
 	
-	protected void renderLeftTrigger() throws IOException {
-		if (tag.hasLeftTrigger()) {
+	protected void renderLeftAddon() throws IOException {
+		if (tag.hasLeftAddon()) {
 			Attributes attr = new Attributes();
 			attr.cssClass("input-group-addon p-" + getName() + "-licon")
 				.onclick(tag.getOnlclick());
@@ -83,8 +83,8 @@ public abstract class AbstractTextFieldRenderer<T extends TextField> extends Abs
 		}
 	}
 	
-	protected void renderRightTrigger() throws IOException {
-		if (tag.hasRightTrigger()) {
+	protected void renderRightAddon() throws IOException {
+		if (tag.hasRightAddon()) {
 			Attributes attr = new Attributes();
 			attr.cssClass("input-group-addon p-" + getName() + "-ricon")
 				.onclick(tag.getOnrclick());
