@@ -8,22 +8,21 @@ Comparing to popular Java application frameworks such as Spring/Struts2/Hibernat
 
 
 ## Features
-1. Automatic generation of the source code
-The Panda Framework Code Generator can automatically generate the source of Action / Dao / Bean / View. The cost of development can be significantly reduced.
+1. Automatic generation of the source code  
+   The Panda Framework Code Generator can automatically generate the source of Action / Dao / Bean / View. The cost of development can be significantly reduced.
 
-2. Writing SQL is not needed 
-Use the API provided by Panda Framework, a programmer does not need to write SQL statements, can easily execute query / insert/ update / delete function based on a database table. It is easy to extend the Panda Framework’s base class to achieve some special purpose. So, it can improve the quality of source code and reduce the bugs. 
+2. Writing SQL is not needed  
+   Use the API provided by Panda Framework, a programmer does not need to write SQL statements, can easily execute query / insert/ update / delete function based on a database table. It is easy to extend the Panda Framework’s base class to achieve some special purpose. So, it can improve the quality of source code and reduce the bugs. 
 
 3. HTML Page ⇒ PDF Convert Feature
+4. Business Logic Development is Easy  
+   Using template class to develop Search/List/View/Add/Update/Delete function is very easy and fast. 
 
-4. Business Logic Development is Easy
-Using template class to develop Search/List/View/Add/Update/Delete function is very easy and fast. 
+5. Improve productivity and source quality  
+   Base on the generated source, the source quality and program productivity can be significantly improved. 
 
-5. Improve productivity and source quality
-Base on the generated source, the source quality and program productivity can be significantly improved. 
-
-6. Easy to use
-We provide a rich set of documents and samples to reduce initial cost from introduction to development.
+6. Easy to use  
+   We provide a rich set of documents and samples to reduce initial cost from introduction to development.
 
 
 ## Panda Framework Applying Effect 

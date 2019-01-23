@@ -12,15 +12,6 @@ Panda is a Java development framework, it can help you quickly create a WEB appl
 
 
 
-Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应用。
-
- - [项目网站](https://pandafw.github.io/panda)
- - [演示网站 Heroku](https://pandademo.herokuapp.com)
- - [演示网站 Google App Engine](https://panda-demo.appspot.com)
- - [技术文档](index_zh.md)
-
-
-
 Pandaフレームワークは企業むけ高品質な Java Web システムを効率的に開発するためのフレームワークである。
 設計、開発、保守全ての開発フェースに対し、開発コストを削減、品質を向上するために設計されています。
 
@@ -30,21 +21,31 @@ Pandaフレームワークは企業むけ高品質な Java Web システムを�
  - [ドキュメント](index_ja.md)
 
 
+
+Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应用。
+
+ - [项目网站](https://pandafw.github.io/panda)
+ - [演示网站 Heroku](https://pandademo.herokuapp.com)
+ - [演示网站 Google App Engine](https://panda-demo.appspot.com)
+ - [技术文档](index_zh.md)
+
+
+
 ## Requirements
  - Java 7
 
 
 ## Versions
- - 1.3.0
+ - 1.3.0  
    In Development.
 
- - 1.2.0 （2018-06-05）
+ - 1.2.0 (2018-06-05)  
    Initial Release.
 
 
 
-Acknowledgements
-----------------
+ Acknowledgements
+-------------------
 
 Panda use or refer the following software packages:
 
@@ -76,3 +77,5 @@ Panda use or refer the following software packages:
 | summernote              | [MIT](https://opensource.org/licenses/MIT)                    | https://summernote.org                                 |
 | tablesorter             | [MIT](https://opensource.org/licenses/MIT)                    | http://tablesorter.com                                 |
 | TinyMCE                 | [LGPL](http://www.gnu.org/licenses/lgpl.html)                 | https://github.com/tinymce/tinymce                     |
+
+
