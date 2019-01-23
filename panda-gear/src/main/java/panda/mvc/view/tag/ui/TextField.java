@@ -34,7 +34,7 @@ public class TextField extends Hidden {
 	protected String mask;
 	protected String placeholder;
 
-	// trigger
+	// addon
 	protected String ltext;
 	protected String licon;
 	protected String onlclick;
@@ -42,6 +42,9 @@ public class TextField extends Hidden {
 	protected String ricon;
 	protected String onrclick;
 
+	// clear icon
+	protected boolean clearholder;
+	
 	@Override
 	protected void evaluateParams() {
 		super.evaluateParams();
@@ -204,4 +207,19 @@ public class TextField extends Hidden {
 	public boolean hasRightAddon() {
 		return Strings.isNotEmpty(ricon) || Strings.isNotEmpty(rtext) || Strings.isNotEmpty(onrclick);
 	}
+
+	/**
+	 * @return the clearholder
+	 */
+	public boolean isClearholder() {
+		return clearholder;
+	}
+
+	/**
+	 * @param clearholder the clearholder to set
+	 */
+	public void setClearholder(boolean clearholder) {
+		this.clearholder = clearholder;
+	}
+
 }

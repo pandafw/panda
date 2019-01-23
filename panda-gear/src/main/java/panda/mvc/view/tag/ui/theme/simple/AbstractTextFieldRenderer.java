@@ -62,6 +62,9 @@ public abstract class AbstractTextFieldRenderer<T extends TextField> extends Abs
 			.events(tag)
 			.datas(getDatas())
 			.dynamics(tag);
+		if (tag.isClearholder()) {
+			attr.data("ptrigger", "true");
+		}
 		xtag("input", attr);
 	}
 

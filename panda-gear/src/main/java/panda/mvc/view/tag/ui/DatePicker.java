@@ -34,7 +34,7 @@ import panda.mvc.Mvcs;
  * 
  */
 @IocBean(singleton=false)
-public class DatePicker extends TriggerField {
+public class DatePicker extends TextField {
 	protected static final Log log = Logs.getLog(DatePicker.class);
 
 	protected static final String DEFAULT_DATE_FORMAT = DateTypeCastor.DATE;
@@ -53,9 +53,9 @@ public class DatePicker extends TriggerField {
 
 	public DatePicker() {
 		ricon = "icon-calendar";
-		
-		// default add ptrigger=true to enable clear icon
-		addParameter("dataPtrigger", "true");
+
+		// default enable clear icon
+		clearholder = true;
 	}
 
 	/**
