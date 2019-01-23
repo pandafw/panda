@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name=&quot;display&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;actionField&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;requiredrefer&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;requiredvalidate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
@@ -65,8 +64,6 @@ public class InputField implements Comparable<InputField> {
 	@XmlAttribute
 	private String label;
 	@XmlAttribute
-	private Boolean actionField = false;
-	@XmlAttribute
 	private Boolean required;
 	@XmlAttribute
 	private String requiredrefer;
@@ -95,7 +92,6 @@ public class InputField implements Comparable<InputField> {
 		this.display = ifd.display;
 		this.tooltip = ifd.tooltip;
 		this.label = ifd.label;
-		this.actionField = ifd.actionField;
 		this.required = ifd.required;
 		this.requiredrefer = ifd.requiredrefer;
 		this.requiredvalidate = ifd.requiredvalidate;
@@ -143,9 +139,6 @@ public class InputField implements Comparable<InputField> {
 		}
 		if (src.label != null) {
 			me.label = src.label;
-		}
-		if (src.actionField != null) {
-			me.actionField = src.actionField;
 		}
 		if (src.required != null) {
 			me.required = src.required;
@@ -298,20 +291,6 @@ public class InputField implements Comparable<InputField> {
 	 */
 	public void setLabel(String label) {
 		this.label = label;
-	}
-
-	/**
-	 * @return the actionField
-	 */
-	public Boolean getActionField() {
-		return actionField;
-	}
-
-	/**
-	 * @param actionField the actionField to set
-	 */
-	public void setActionField(Boolean actionField) {
-		this.actionField = actionField;
 	}
 
 	/**

@@ -21,9 +21,9 @@
 				<#list _popup.fields?keys?sort as fk>
 					<#list ui.fieldList as f2><#if f2.name == fk>
 						<#if f2.editTag?? && f2.editTag.name?ends_with(".viewfield")>
-				panda.viewfield("#${action.name}<#if f2.actionField>_a</#if>_${fk}").val(sd.${_popup.fields[fk]});
+				panda.viewfield("#${action.name}_${fk}").val(sd.${_popup.fields[fk]});
 						<#else>
-				$("#${action.name}<#if f2.actionField>_a</#if>_${fk}").val(sd.${_popup.fields[fk]});
+				$("#${action.name}_${fk}").val(sd.${_popup.fields[fk]});
 						</#if>
 						<#break/>
 					</#if></#list>
@@ -38,9 +38,9 @@
 				<#list _clear as fk>
 					<#list ui.fieldList as f2><#if f2.name == fk>
 						<#if f2.editTag?? && f2.editTag.name?ends_with(".viewfield")>
-				panda.viewfield("#${action.name}<#if f2.actionField>_a</#if>_${fk}").val('');
+				panda.viewfield("#${action.name}_${fk}").val('');
 						<#else>
-				$("#${action.name}<#if f2.actionField>_a</#if>_${fk}").val('');
+				$("#${action.name}_${fk}").val('');
 						</#if>
 						<#break/>
 					</#if></#list>
@@ -57,9 +57,9 @@
 			<#assign pid = ""/>
 			<#if _popup.ref?has_content>
 				<#assign f2 = ui.getFieldByName(_popup.ref)/>
-				<#assign pid = "popup_" + action.name + f2.actionField?string("_a", "") + "_" + f2.name/>
+				<#assign pid = "popup_" + action.name + "_" + f2.name/>
 			<#else>
-				<#assign pid = "popup_" + action.name + f.actionField?string("_a", "") + "_" + f.name/>
+				<#assign pid = "popup_" + action.name + "_" + f.name/>
 				$.popup({
 					id: "${pid}",
 					url: "${s}@p.url action="${_popup.action}" escapeAmp="false"><#rt>
@@ -72,15 +72,15 @@ ${s}/@p.url>"
 				});
 
 			</#if>
-				$('#${action.name}<#if f.actionField>_a</#if>_${f.name}').next().popup({
+				$('#${action.name}_${f.name}').next().popup({
 					id: "${pid}",
-					target: "#${action.name}<#if f.actionField>_a</#if>_${f.name}",
+					target: "#${action.name}_${f.name}",
 					callback: ${action.name}_${f.name}_onPopupCallback
 				});
 			
 			</#if>
 			<#if _clear?has_content>
-				$('#${action.name}<#if f.actionField>_a</#if>_${f.name}').ptrigger({ 'onclick': ${action.name}_${f.name}_onClearClick});
+				$('#${action.name}_${f.name}').ptrigger({ 'onclick': ${action.name}_${f.name}_onClearClick});
 			
 			</#if>
 		</#list>

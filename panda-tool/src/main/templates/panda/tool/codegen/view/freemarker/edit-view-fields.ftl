@@ -14,8 +14,8 @@
 	<#elseif tag?has_content>
 		<#if tag.name?ends_with(".hidden")>
 			${s}@${tag.name}
-				name="<#if f.actionField>a.</#if>${f.name}"
-				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
+				name="${f.name}"
+				value="%{r.${f.name}}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
 				${tp.name}="${tp.value}"
 			<#elseif tp.name?starts_with('*')>
@@ -24,8 +24,8 @@
 			/>
 		<#elseif tag.name?ends_with(".uploader")>
 			${s}@${tag.name}
-				key="<#if f.actionField>a.</#if>${f.name}"
-				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
+				key="${f.name}"
+				value="%{r.${f.name}}"
 				readonly="true"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && (tp.name != "readonly")>
 				${tp.name}="${tp.value}"
@@ -49,8 +49,8 @@
 			</#if>
 		<#elseif f.viewTag?? || tag.name?ends_with(".viewfield")>
 			${s}@${tag.name}
-				key="<#if f.actionField>a.</#if>${f.name}"
-				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
+				key="${f.name}"
+				value="%{r.${f.name}}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
@@ -70,8 +70,8 @@
 				</#if>
 			</#list>
 			${s}@p.viewfield
-				key="<#if f.actionField>a.</#if>${f.name}"
-				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
+				key="${f.name}"
+				value="%{r.${f.name}}"
 			<#if _format?has_content>
 				format="${_format}"
 			<#elseif tag.name?ends_with(".checkbox")>

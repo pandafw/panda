@@ -225,7 +225,6 @@
 		<attribute name="display" type="string"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
-		<attribute name="actionField" type="string" default="false"></attribute>
 		<attribute name="required" type="string"></attribute>
 		<attribute name="requiredrefer" type="string"></attribute>
 		<attribute name="requiredvalidate" type="string"></attribute>

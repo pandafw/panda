@@ -7,8 +7,8 @@
 			${f.content}
 	<#elseif f.editTag?? && f.editTag.name?ends_with(".hidden")>
 			${s}@${f.editTag.name}
-				name="<#if f.actionField>a.</#if>${f.name}"
-				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
+				name="${f.name}"
+				value="%{r.${f.name}}"
 		<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			<#elseif tp.name?starts_with('*')>
@@ -17,11 +17,11 @@
 			/>
 	<#elseif f.editTag??>
 			${s}@${f.editTag.name}
-				key="<#if f.actionField>a.</#if>${f.name}"
+				key="${f.name}"
 			<#if f.editTag.name?ends_with(".file")>
 				value=""
 			<#else>
-				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
+				value="%{r.${f.name}}"
 			</#if>
 			<#if (f.required!false)>
 				required="true"

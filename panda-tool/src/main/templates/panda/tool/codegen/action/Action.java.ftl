@@ -36,7 +36,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 </#if>
 <#assign ifs = action.displayInputUIFields/>
 <#if ifs?has_content>
-		addDisplayFields(<#list ifs as f><#if f.actionField>"${f.name}"<#else>${entity.simpleName}.${f.uname}</#if><#if f_has_next>, </#if></#list>);
+		addDisplayFields(<#list ifs as f>${entity.simpleName}.${f.uname}<#if f_has_next>, </#if></#list>);
 </#if>
 	}
 
