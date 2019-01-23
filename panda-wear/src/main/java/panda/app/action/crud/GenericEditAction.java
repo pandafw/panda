@@ -1,12 +1,14 @@
 package panda.app.action.crud;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import panda.app.BusinessRuntimeException;
 import panda.app.constant.RES;
 import panda.app.entity.Bean;
+import panda.app.entity.ICreatedBy;
 import panda.app.entity.IUpdatedBy;
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
@@ -734,7 +736,24 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return the update fields
 	 */
 	protected Set<String> getUpdateFields(T data, T sdat) {
-		return getDisplayFields();
+		Set<String> fs = getDisplayFields();
+		if (Collections.isEmpty(fs)) {
+			// empty means update all fields
+			return fs;
+		}
+		
+		if (data instanceof ICreatedBy || data instanceof IUpdatedBy) {
+			fs = new LinkedHashSet<String>(fs);
+			if (data instanceof ICreatedBy) {
+				fs.remove(ICreatedBy.CREATED_AT);
+				fs.remove(ICreatedBy.CREATED_BY);
+			}
+			if (data instanceof IUpdatedBy) {
+				fs.add(IUpdatedBy.UPDATED_AT);
+				fs.add(IUpdatedBy.UPDATED_BY);
+			}
+		}
+		return fs;
 	}
 
 	/**

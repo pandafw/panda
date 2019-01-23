@@ -96,7 +96,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		if (Collections.isEmpty(fs)) {
 			return true;
 		}
-		return Collections.contains(fs, field);
+		return fs.contains(field);
 	}
 
 	//------------------------------------------------------------
