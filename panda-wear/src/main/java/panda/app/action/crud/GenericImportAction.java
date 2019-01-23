@@ -537,7 +537,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @param data the input data
 	 */
 	protected void insertData(T data) {
-		assist().initCreatedByFields(data);
+		assist().setCreatedByFields(data);
 		getDao().insert(data);
 	}
 
@@ -548,7 +548,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 */
 	protected void updateData(T data, T sdat) {
 		EntityHelper.copyPrimaryKeyValues(getEntity(), sdat, data);
-		assist().initUpdatedByFields(data, sdat);
+		assist().setUpdatedByFields(data, sdat);
 		getDao().update(data);
 	}
 	

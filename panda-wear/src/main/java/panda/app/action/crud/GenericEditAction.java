@@ -701,7 +701,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return data object
 	 */
 	protected T startInsert(T data) {
-		assist().initCreatedByFields(data);
+		assist().setCreatedByFields(data);
 		return data;
 	}
 
@@ -815,7 +815,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return data object
 	 */
 	protected T startUpdate(T data, T sdat) {
-		assist().initUpdatedByFields(data, sdat);
+		assist().setUpdatedByFields(data, sdat);
 		return data;
 	}
 

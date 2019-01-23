@@ -157,7 +157,7 @@ public class MediaBrowseAction extends AbstractAction {
 							Media m = new Media();
 							m.setFile(fi);
 							Medias.setFileMeta(m);
-							assist().initCreatedByFields(m);
+							assist().setCreatedByFields(m);
 							dao.insert(m);
 							mds.save(m);
 							

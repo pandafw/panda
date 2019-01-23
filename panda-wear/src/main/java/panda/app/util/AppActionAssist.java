@@ -249,10 +249,10 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 
 	//-------------------------------------------------------------
 	/**
-	 * initialize ICreatedBy fields of data
+	 * set ICreatedBy fields of data
 	 * @param data data
 	 */
-	public void initCreatedByFields(Object data) {
+	public void setCreatedByFields(Object data) {
 		if (data instanceof IStatus) {
 			if (((IStatus)data).getStatus() == null) {
 				((IStatus)data).setStatus(VAL.STATUS_ACTIVE);
@@ -276,10 +276,10 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 
 
 	/**
-	 * initialize IUpdatedBy fields of data
+	 * set IUpdatedBy fields of data
 	 * @param data input data
 	 */
-	public void initUpdatedByFields(Object data) {
+	public void setUpdatedByFields(Object data) {
 		if (data instanceof IUpdatedBy) {
 			IUpdatedBy ub = (IUpdatedBy)data;
 
@@ -289,11 +289,11 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	}
 	
 	/**
-	 * initialize IUpdatedBy fields of data
+	 * set IUpdatedBy fields of data, and copy ICreatedBy fields of source data
 	 * @param data input data
 	 * @param sdat source data
 	 */
-	public void initUpdatedByFields(Object data, Object sdat) {
+	public void setUpdatedByFields(Object data, Object sdat) {
 		if (data instanceof ICreatedBy && sdat instanceof ICreatedBy) {
 			ICreatedBy cb = (ICreatedBy)data;
 			ICreatedBy sb = (ICreatedBy)sdat;
@@ -302,7 +302,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 			cb.setCreatedAt(sb.getCreatedAt());
 		}
 		
-		initUpdatedByFields(data);
+		setUpdatedByFields(data);
 	}
 	
 	//-------------------------------------------------------------

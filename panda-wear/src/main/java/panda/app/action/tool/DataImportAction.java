@@ -417,7 +417,7 @@ public class DataImportAction extends AbstractAction {
 	}
 
 	protected void trimData(Object data) {
-		assist().initCreatedByFields(data);
+		assist().setCreatedByFields(data);
 	}
 
 	protected void saveData(Dao dao, Object data) {
