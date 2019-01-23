@@ -68,6 +68,7 @@
 			size="18"
 			ricon="search"
 			placeholder="#(btn-search)"
+			clearholder="true"
 			/>
 		
 		<div id="media_tool" class="form-group">
