@@ -71,7 +71,7 @@ public class SQLiteSqlExpert extends SqlExpert {
 		}
 
 		// append foreign keys
-		this.addForeignKeysConstraint(sb, entity);
+		addForeignKeysConstraint(sb, entity);
 
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());

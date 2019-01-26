@@ -580,6 +580,15 @@ public class SqlDao extends AbstractDao {
 	}
 
 	//-------------------------------------------------------------------------
+	protected String translateSql(Entity<?> entity, String sql) {
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("entity", entity);
+		m.put("view", getViewName(entity));
+		m.put("table", getTableName(entity));
+		m.put("id", entity.getIdentity());
+		return Texts.translate(sql, m);
+	}
+	
 	protected <T> T insertData(Entity<T> entity, T obj) {
 		Sql sql = null;
 
@@ -662,18 +671,18 @@ public class SqlDao extends AbstractDao {
 				post = entity.getPostSql(DB.GENERAL);
 			}
 			
-			if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
+			if (Strings.isEmpty(prep)) {
 				prep = getSqlExpert().prepIdentity(entity);
+			}
+			else {
+				prep = translateSql(entity, prep);
+			}
+
+			if (Strings.isEmpty(post)) {
 				post = getSqlExpert().postIdentity(entity);
 			}
 			else {
-				Map<String, String> m = new HashMap<String, String>();
-				m.put("view", getViewName(entity));
-				m.put("table", getTableName(entity));
-				m.put("field", eid.getName());
-				
-				prep = Texts.translate(prep, m);
-				post = Texts.translate(post, m);
+				post = translateSql(entity, post);
 			}
 
 			if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {

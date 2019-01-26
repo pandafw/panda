@@ -161,11 +161,15 @@ public abstract class SqlExpert {
 	public String identityInsertOn(Entity<?> entity) {
 		return null;
 	}
-	
+
 	public String identityInsertOff(Entity<?> entity) {
 		return null;
 	}
-	
+
+	protected String getSequence(Entity<?> entity) {
+		return client.getTableName(entity) + '_' + entity.getIdentity().getColumn() + "_SEQ";
+	}
+
 	public String prepIdentity(Entity<?> entity) {
 		return null;
 	}
@@ -807,6 +811,13 @@ public abstract class SqlExpert {
 				sql.append(escapeColumn(ef.getColumn())).append(',');
 			}
 			sql.setCharAt(sql.length() - 1, ')');
+			
+			if (Strings.isNotEmpty(fk.getOnUpdate())) {
+				sql.append(" ON UPDATE ").append(fk.getOnUpdate());
+			}
+			if (Strings.isNotEmpty(fk.getOnDelete())) {
+				sql.append(" ON DELETE ").append(fk.getOnDelete());
+			}
 			sql.append(',');
 		}
 	}
@@ -818,26 +829,33 @@ public abstract class SqlExpert {
 		}
 		
 		for (EntityFKey fk: fks) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("ALTER TABLE ")
-			.append(escapeTable(client.getTableName(entity)))
-			.append(" ADD CONSTRAINT ")
-			.append(client.getTableName(entity))
-			.append("_FK_")
-			.append(fk.getName())
-			.append(" FOREIGN KEY (");
+			StringBuilder sql = new StringBuilder();
+			sql.append("ALTER TABLE ")
+				.append(escapeTable(client.getTableName(entity)))
+				.append(" ADD CONSTRAINT ")
+				.append(client.getTableName(entity))
+				.append("_FK_")
+				.append(fk.getName())
+				.append(" FOREIGN KEY (");
 			for (EntityField ef : fk.getFields()) {
-				sb.append(escapeColumn(ef.getColumn())).append(',');
+				sql.append(escapeColumn(ef.getColumn())).append(',');
 			}
-			sb.setCharAt(sb.length() - 1, ')');
+			sql.setCharAt(sql.length() - 1, ')');
 
 			Entity<?> ref = fk.getReference();
-			sb.append(" REFERENCES ").append(escapeTable(client.getTableName(ref))).append(" (");
+			sql.append(" REFERENCES ").append(escapeTable(client.getTableName(ref))).append(" (");
 			for (EntityField ef : ref.getPrimaryKeys()) {
-				sb.append(escapeColumn(ef.getColumn())).append(',');
+				sql.append(escapeColumn(ef.getColumn())).append(',');
 			}
-			sb.setCharAt(sb.length() - 1, ')');
-			sqls.add(sb.toString());
+			sql.setCharAt(sql.length() - 1, ')');
+			if (Strings.isNotEmpty(fk.getOnUpdate())) {
+				sql.append(" ON UPDATE ").append(fk.getOnUpdate());
+			}
+			if (Strings.isNotEmpty(fk.getOnDelete())) {
+				sql.append(" ON DELETE ").append(fk.getOnDelete());
+			}
+
+			sqls.add(sql.toString());
 		}
 	}
 
