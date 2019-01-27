@@ -30,7 +30,7 @@ public class OracleSqlExpert extends SqlExpert {
 		
 		EntityField eid = entity.getIdentity();
 		if (eid != null && eid.isAutoIncrement()) {
-			String sql = "DROP SEQUENCE " + client.getTableName(entity) + '_' + eid.getColumn() + "_SEQ";
+			String sql = "DROP SEQUENCE " + getSequence(entity);
 			sqls.add(sql);
 		}
 		return sqls;
@@ -75,7 +75,7 @@ public class OracleSqlExpert extends SqlExpert {
 		// add sequence
 		EntityField eid = entity.getIdentity();
 		if (eid != null && eid.isAutoIncrement()) {
-			String sql = "CREATE SEQUENCE " + client.getTableName(entity) + '_' + eid.getColumn() + "_SEQ START WITH " + eid.getIdStartWith();
+			String sql = "CREATE SEQUENCE " + getSequence(entity) + " START WITH " + eid.getIdStartWith();
 			sqls.add(sql);
 		}
 
@@ -84,12 +84,6 @@ public class OracleSqlExpert extends SqlExpert {
 		addIndexes(sqls, entity);
 		addForeignKeys(sqls, entity);
 		return sqls;
-	}
-	
-	@Override
-	public String prepIdentity(Entity<?> entity) {
-		EntityField eid = entity.getIdentity();
-		return "SELECT " + client.getTableName(entity) + '_' + eid.getColumn() + "_SEQ.NEXTVAL AS ID FROM DUAL";
 	}
 	
 	@Override
@@ -137,6 +131,11 @@ public class OracleSqlExpert extends SqlExpert {
 	@Override
 	public boolean isSupportAutoIncrement() {
 		return false;
+	}
+	
+	@Override
+	public String prepIdentity(Entity<?> entity) {
+		return "SELECT " + getSequence(entity) + ".NEXTVAL AS ID FROM DUAL";
 	}
 
 	/**

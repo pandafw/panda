@@ -30,8 +30,30 @@ public class PostgreSqlExpert extends SqlExpert {
 	}
 
 	@Override
+	public boolean isSupportAutoIncrement() {
+		return false;
+	}
+	
+	@Override
+	public String prepIdentity(Entity<?> entity) {
+		return "SELECT NEXTVAL('" + getSequence(entity) + "') AS ID";
+	}
+
+	@Override
 	public String dropTable(String tableName) {
 		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
+	}
+
+	@Override
+	public List<String> drop(Entity<?> entity) {
+		List<String> sqls = super.drop(entity);
+		
+		EntityField eid = entity.getIdentity();
+		if (eid != null && eid.isAutoIncrement()) {
+			String sql = "DROP SEQUENCE IF EXISTS " + getSequence(entity);
+			sqls.add(sql);
+		}
+		return sqls;
 	}
 
 	@Override
@@ -47,25 +69,15 @@ public class PostgreSqlExpert extends SqlExpert {
 			sb.append(Streams.LINE_SEPARATOR);
 			sb.append(escapeColumn(ef.getColumn()));
 
-			if (ef.isAutoIncrement()) {
-				if (DaoTypes.BIGINT.equals(ef.getJdbcType())) {
-					sb.append(" BIGSERIAL");
-				}
-				else {
-					sb.append(" SERIAL");
-				}
+			sb.append(' ').append(evalFieldType(ef));
+			if (ef.isUnsigned()) {
+				sb.append(" UNSIGNED");
 			}
-			else {
-				sb.append(' ').append(evalFieldType(ef));
-				if (ef.isUnsigned()) {
-					sb.append(" UNSIGNED");
-				}
-				if (ef.isNotNull()) {
-					sb.append(" NOT NULL");
-				}
-				if (ef.hasDefaultValue()) {
-					sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
-				}
+			if (ef.isNotNull()) {
+				sb.append(" NOT NULL");
+			}
+			if (ef.hasDefaultValue()) {
+				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 			}
 			sb.append(',');
 		}
@@ -75,10 +87,10 @@ public class PostgreSqlExpert extends SqlExpert {
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
-		// alter sequence start value
+		// add sequence
 		EntityField eid = entity.getIdentity();
-		if (eid != null && eid.isAutoIncrement() && eid.getIdStartWith() > 1) {
-			String sql = "ALTER SEQUENCE " + client.getTableName(entity) + '_' + eid.getColumn() + "_SEQ RESTART WITH " + eid.getIdStartWith();
+		if (eid != null && eid.isAutoIncrement()) {
+			String sql = "CREATE SEQUENCE " + getSequence(entity) + " START WITH " + eid.getIdStartWith();
 			sqls.add(sql);
 		}
 

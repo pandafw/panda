@@ -161,11 +161,15 @@ public abstract class SqlExpert {
 	public String identityInsertOn(Entity<?> entity) {
 		return null;
 	}
-	
+
 	public String identityInsertOff(Entity<?> entity) {
 		return null;
 	}
-	
+
+	protected String getSequence(Entity<?> entity) {
+		return client.getTableName(entity) + '_' + entity.getIdentity().getColumn() + "_SEQ";
+	}
+
 	public String prepIdentity(Entity<?> entity) {
 		return null;
 	}
