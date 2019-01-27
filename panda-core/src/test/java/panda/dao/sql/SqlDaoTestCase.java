@@ -132,4 +132,14 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 		Assert.assertEquals(expect.get(0), dao.fetch(Teacher.class, expect.get(0)));
 		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));
 	}
+
+	@Test
+	public void testDeleteCascade() {
+		Student s = Student.create(2);
+		Assert.assertEquals(1, dao.delete(s));
+		
+		DataQuery<Score> q = new DataQuery<Score>(Score.class);
+		q.eq("student", s.getId());
+		Assert.assertEquals(0, dao.count(q));
+	}
 }

@@ -14,7 +14,7 @@ import panda.dao.entity.annotation.PK;
 import panda.lang.Objects;
 
 @Comment("Score of student")
-@ForeignKeys({@FK(target=Student.class, fields={"student"})})
+@ForeignKeys({@FK(target=Student.class, fields={"student"}, onDelete=FK.CASCADE)})
 @Joins({@Join(name="s", target=Student.class, keys={"student"}, refs={"id"})})
 public class Score {
 	@PK

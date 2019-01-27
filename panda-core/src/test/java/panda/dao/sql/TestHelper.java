@@ -9,13 +9,17 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.sql.DataSource;
 
+import panda.dao.sql.dbcp.AbstractDataSource;
 import panda.dao.sql.dbcp.SimpleDataSource;
+import panda.dao.sql.dbcp.ThreadLocalDataSource;
+import panda.io.Settings;
 import panda.io.Streams;
 import panda.lang.Charsets;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
@@ -28,7 +32,7 @@ import panda.mock.sql.MockDataSource;
  */
 public class TestHelper {
 	private static Log log = Logs.getLog(TestHelper.class);
-	private static Properties properties;
+	private static Settings settings;
 	private static Map<String, DataSource> sources = new HashMap<String, DataSource>();
 
 	/**
@@ -95,10 +99,10 @@ public class TestHelper {
 	}
 	
 	public static synchronized DataSource getDataSource(String name) {
-		if (properties == null) {
-			properties = new Properties();
+		if (settings == null) {
+			settings = new Settings();
 			try {
-				properties.load(TestHelper.class.getResourceAsStream("jdbc.properties"));
+				settings.load(TestHelper.class.getResourceAsStream("jdbc.properties"), "test");
 			}
 			catch (IOException e) {
 				throw Exceptions.wrapThrow(e);
@@ -109,22 +113,26 @@ public class TestHelper {
 		if (ds == null) {
 			DriverManager.setLoginTimeout(5);
 
-			SimpleDataSource sds = new SimpleDataSource();
+			AbstractDataSource ads = null;
 			try {
-				sds.getJdbc().setDriver(properties.getProperty(name + ".driver"));
-				sds.getJdbc().setUrl(properties.getProperty(name + ".url"));
-				sds.getJdbc().setUsername(properties.getProperty(name + ".username"));
-				sds.getJdbc().setPassword(properties.getProperty(name + ".password"));
-				sds.initialize();
+				Map<String, String> dps = new TreeMap<String, String>(Collections.subMap(settings, name + '.'));
 
-				log.debug("Connect " + sds.getJdbc().getUrl() + " - " + sds.getJdbc().getUsername());
+				String driver = dps.get("jdbc.driver");
+				if ("org.sqlite.JDBC".equals(driver)) {
+					ads = new ThreadLocalDataSource();
+				}
+				else {
+					ads = new SimpleDataSource();
+				}
+				ads.initialize(dps);
 
-				sds.getConnection();
-
-				ds = sds;
+				log.debug("Connect " + ads.getJdbc().getUrl() + " - " + ads.getJdbc().getUsername());
+				ads.getConnection();
+				
+				ds = ads;
 			}
 			catch (Throwable e) {
-				log.warn("Failed to connect " + sds.getJdbc().getUrl() + " - " + sds.getJdbc().getUsername(), e);
+				log.warn("Failed to connect " + ads.getJdbc().getUrl() + " - " + ads.getJdbc().getUsername(), e);
 				ds = new MockDataSource();
 			}
 			sources.put(name, ds);

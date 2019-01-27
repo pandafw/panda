@@ -433,7 +433,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 
 		if (mi.annFk != null) {
-			evalEntityFKey(entity, mi.annFk.name(), mi.annFk.target(), ef);
+			evalEntityFKey(entity, mi.annFk, ef);
 		}
 		
 		if (mi.annIndex != null) {
@@ -511,16 +511,19 @@ public class AnnotationEntityMaker implements EntityMaker {
 		return entities.getEntity(target);
 	}
 
-	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, String[] fields) {
+	private void evalEntityFKey(Entity<?> en, FK fk) {
 		EntityFKey efk = new EntityFKey();
-		Entity<?> ref = getTargetEntity(en, target);
+		Entity<?> ref = getTargetEntity(en, fk.target());
 		if (ref == null) {
-			throw new IllegalArgumentException("Failed to find target entity for " + target);
+			throw new IllegalArgumentException("Failed to find target entity for " + fk.target());
 		}
 		efk.setReference(ref);
-		efk.setName(Strings.isEmpty(name) ? ref.getTable() : name);
+		efk.setName(Strings.isEmpty(fk.name()) ? ref.getTable() : fk.name());
+		efk.setOnDelete(fk.onDelete());
+		efk.setOnUpdate(fk.onUpdate());
 
-		if (fields == null || fields.length == 0) {
+		String[] fields = fk.fields();
+		if (Arrays.isEmpty(fields)) {
 			throw Exceptions.makeThrow("Empty fields for @FK(%s: %s)", efk.getName(), Strings.join(fields, '|'));
 		}
 		
@@ -550,14 +553,16 @@ public class AnnotationEntityMaker implements EntityMaker {
 		en.addForeignKey(efk);
 	}
 
-	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, EntityField field) {
+	private void evalEntityFKey(Entity<?> en, FK fk, EntityField field) {
 		EntityFKey efk = new EntityFKey();
-		Entity<?> ref = getTargetEntity(en, target);
-		if (null == ref) {
-			throw new IllegalArgumentException("Failed to find target entity for " + target);
+		Entity<?> ref = getTargetEntity(en, fk.target());
+		if (ref == null) {
+			throw new IllegalArgumentException("Failed to find target entity for " + fk.target());
 		}
 		efk.setReference(ref);
-		efk.setName(Strings.isEmpty(name) ? ref.getTable() : name);
+		efk.setName(Strings.isEmpty(fk.name()) ? ref.getTable() : fk.name());
+		efk.setOnDelete(fk.onDelete());
+		efk.setOnUpdate(fk.onUpdate());
 
 		efk.addField(field);
 		en.addForeignKey(efk);
@@ -565,7 +570,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 	private void evalEntityFKeys(Entity<?> en, ForeignKeys fks) {
 		for (FK fk: fks.value()) {
-			evalEntityFKey(en, fk.name(), fk.target(), fk.fields());
+			evalEntityFKey(en, fk);
 		}
 	}
 
