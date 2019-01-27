@@ -574,9 +574,19 @@ public class Entity {
 		
 		String name = null;
 		String target = null;
+		String onUpdate = null;
+		String onDelete = null;
 		for (EntityProperty ep : eps) {
 			name = ep.getForeignKey();
-			target = ep.getForeignEntity();
+			if (Strings.isNotEmpty(ep.getForeignEntity())) {
+				target = ep.getForeignEntity();
+			}
+			if (Strings.isNotEmpty(ep.getForeignKeyOnUpdate())) {
+				onUpdate = ep.getForeignKeyOnUpdate();
+			}
+			if (Strings.isNotEmpty(ep.getForeignKeyOnDelete())) {
+				onDelete = ep.getForeignKeyOnDelete();
+			}
 		}
 		
 		if (Strings.isEmpty(target)) {
@@ -601,6 +611,13 @@ public class Entity {
 		}
 		sb.setLength(sb.length() - 2);
 		sb.append(" }");
+		
+		if (Strings.isNotEmpty(onUpdate)) {
+			sb.append(", onUpdate=FK.").append(Strings.replaceChars(onUpdate, ' ', '_'));
+		}
+		if (Strings.isNotEmpty(onDelete)) {
+			sb.append(", onDelete=FK.").append(Strings.replaceChars(onDelete, ' ', '_'));
+		}
 		
 		return sb.toString();
 	}

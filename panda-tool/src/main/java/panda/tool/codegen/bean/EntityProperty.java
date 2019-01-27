@@ -34,7 +34,9 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;joinName&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;joinEntity&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;foreignEntity&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;foreignName&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;foreignKey&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;foreignKeyOnUpdate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;foreignKeyOnDelete&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;uniqueKey&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;primaryKey&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;defaultValue&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -86,6 +88,10 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	private String foreignEntity;
 	@XmlAttribute
 	private String foreignKey;
+	@XmlAttribute
+	private String foreignKeyOnUpdate;
+	@XmlAttribute
+	private String foreignKeyOnDelete;
 	@XmlAttribute
 	private String uniqueKey;
 	@XmlAttribute
@@ -150,6 +156,8 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		this.joinEntity = property.joinEntity;
 		this.foreignEntity = property.foreignEntity;
 		this.foreignKey = property.foreignKey;
+		this.foreignKeyOnUpdate = property.foreignKeyOnUpdate;
+		this.foreignKeyOnDelete = property.foreignKeyOnDelete;
 		this.uniqueKey = property.uniqueKey;
 		this.primaryKey = property.primaryKey;
 		this.defaultValue = property.defaultValue;
@@ -214,6 +222,12 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		}
 		if (src.foreignKey != null) {
 			me.foreignKey = src.foreignKey;
+		}
+		if (src.foreignKeyOnUpdate != null) {
+			me.foreignKeyOnUpdate = src.foreignKeyOnUpdate;
+		}
+		if (src.foreignKeyOnDelete != null) {
+			me.foreignKeyOnDelete = src.foreignKeyOnDelete;
 		}
 		if (src.uniqueKey != null) {
 			me.uniqueKey = src.uniqueKey;
@@ -495,6 +509,34 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	 */
 	public void setForeignKey(String value) {
 		this.foreignKey = value;
+	}
+
+	/**
+	 * @return the foreignKeyOnUpdate
+	 */
+	public String getForeignKeyOnUpdate() {
+		return foreignKeyOnUpdate;
+	}
+
+	/**
+	 * @param foreignKeyOnUpdate the foreignKeyOnUpdate to set
+	 */
+	public void setForeignKeyOnUpdate(String foreignKeyOnUpdate) {
+		this.foreignKeyOnUpdate = foreignKeyOnUpdate;
+	}
+
+	/**
+	 * @return the foreignKeyOnDelete
+	 */
+	public String getForeignKeyOnDelete() {
+		return foreignKeyOnDelete;
+	}
+
+	/**
+	 * @param foreignKeyOnDelete the foreignKeyOnDelete to set
+	 */
+	public void setForeignKeyOnDelete(String foreignKeyOnDelete) {
+		this.foreignKeyOnDelete = foreignKeyOnDelete;
 	}
 
 	/**

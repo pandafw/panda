@@ -88,6 +88,8 @@
 		<attribute name="joinEntity" type="string"></attribute>
 		<attribute name="foreignEntity" type="string"></attribute>
 		<attribute name="foreignKey" type="string"></attribute>
+		<attribute name="foreignKeyOnUpdate" type="string"></attribute>
+		<attribute name="foreignKeyOnDelete" type="string"></attribute>
 		<attribute name="uniqueKey" type="string"></attribute>
 		<attribute name="primaryKey" type="string"></attribute>
 		<attribute name="defaultValue" type="string"></attribute>
