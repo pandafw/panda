@@ -126,10 +126,6 @@ validation-compare-daterange-to=「终了日期」必须大于「开始日期」
 validation-compare-numberrange-to=数字范围的设定不正确。
 validation-constant=请选择${top.consts}中的内容。
 validation-creditcardnumber=请输入正确的信用卡号码。（例: XXXX-XXXX-XXXX-XXXX）
-validation-datetime-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "之内") : \
-(top.min != null ? (top.min + "之后") : \
-(top.max != null ? (top.max + "之前") : ""))}\
-的日期。
 validation-date-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "之内") : \
 (top.min != null ? (top.min + "之后") : \
 (top.max != null ? (top.max + "之前") : ""))}\
@@ -138,7 +134,6 @@ validation-time-range=请输入${(top.min != null && top.max != null) ? (top.min
 (top.min != null ? (top.min + "之后") : \
 (top.max != null ? (top.max + "之前") : ""))}\
 的时间。
-validation-datetime-to=请输入開始日期之后的日期。
 validation-date-to=请输入開始日期之后的日期。
 validation-time-to=请输入開始时间之后的时间。
 validation-imail=请输入正确的电子邮件地址。（例: user@domain.com）

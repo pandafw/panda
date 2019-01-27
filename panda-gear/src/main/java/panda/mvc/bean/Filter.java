@@ -724,7 +724,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATETIME),
-		@Validate(value=Validators.EL, params="{ el: 'top.parent.value.ev == null || top.value > top.parent.value.ev' }", msgId=Validators.MSGID_DATETIME_TO)
+		@Validate(value=Validators.EL, params="{ el: 'top.parent.value.ev == null || top.value > top.parent.value.ev' }", msgId=Validators.MSGID_DATE_TO)
 	})
 	public Date getEv2() {
 		return getDateTimeValue2();

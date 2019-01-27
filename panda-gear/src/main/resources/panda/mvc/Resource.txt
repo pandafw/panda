@@ -201,11 +201,6 @@ validation-compare-daterange-to=The end date must be after than start date.
 validation-compare-numberrange-to=The number range is incorrect.
 validation-constant=Please input one of the ${top.consts}.
 validation-creditcardnumber=The format of credit card no must be "XXXX-XXXX-XXXX-XXXX".
-validation-datetime-range=The date must be \
-${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
-(top.min != null ? (">= " + top.min) : \
-(top.max != null ? ("<= " + top.max) : ""))}\
-.
 validation-date-range=The date must be \
 ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.min != null ? (">= " + top.min) : \
@@ -216,7 +211,6 @@ ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.min != null ? (">= " + top.min) : \
 (top.max != null ? ("<= " + top.max) : ""))}\
 .
-validation-datetime-to=The date must be larger than start date.
 validation-date-to=The date must be larger than start date.
 validation-time-to=The time must be larger than start time.
 validation-imail=The format of email address must be "user@domain.com".

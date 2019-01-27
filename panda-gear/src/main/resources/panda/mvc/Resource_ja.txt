@@ -135,10 +135,6 @@ validation-compare-daterange-to=「終了日付」が「開始日付」より以
 validation-compare-numberrange-to=数字範囲の設定が正しくありません。
 validation-constant=${top.consts}中の値を選んでください。
 validation-creditcardnumber=正しいクレジットカード番号を入力してください。（例: XXXX-XXXX-XXXX-XXXX）
-validation-datetime-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
-(top.min != null ? (top.min + "以後") : \
-(top.max != null ? (top.max + "以前") : ""))}\
-の日付を入力してください。
 validation-date-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以後") : \
 (top.max != null ? (top.max + "以前") : ""))}\
@@ -147,7 +143,6 @@ validation-time-range=${(top.min != null && top.max != null) ? (top.min + "~" + 
 (top.min != null ? (top.min + "以後") : \
 (top.max != null ? (top.max + "以前") : ""))}\
 の時間を入力してください。
-validation-datetime-to=開始日付より大きい日付を入力してください。
 validation-date-to=開始日付より大きい日付を入力してください。
 validation-time-to=開始時間より大きい時間を入力してください。
 validation-imail=正しいメールアドレスを入力してください。（例: user@domain.com）
