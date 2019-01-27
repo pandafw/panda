@@ -11,6 +11,10 @@ public class CreditCardNoValidator extends AbstractStringValidator {
 	private boolean normalize = true;
 	private char cardType = CreditCardNumberValidator.ALL;
 
+	public CreditCardNoValidator() {
+		setMsgId(Validators.CREDITCARDNO);
+	}
+
 	/**
 	 * @return the normalize
 	 */

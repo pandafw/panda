@@ -35,6 +35,10 @@ public class StringValidator extends AbstractStringValidator {
 	 */
 	private Integer length = null;
 
+	public StringValidator() {
+		setMsgId(Validators.MSGID_STRING_LENTH);
+	}
+
 	/**
 	 * @return the type
 	 */

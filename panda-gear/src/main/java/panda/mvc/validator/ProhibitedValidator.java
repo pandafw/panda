@@ -10,9 +10,6 @@ import panda.mvc.ActionContext;
 @IocBean(singleton=false)
 public class ProhibitedValidator extends ConstantValidator {
 
-	/**
-	 * 
-	 */
 	public ProhibitedValidator() {
 		setMsgId(Validators.MSGID_PROHIBITED);
 	}

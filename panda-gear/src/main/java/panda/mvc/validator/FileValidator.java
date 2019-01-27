@@ -26,6 +26,10 @@ public class FileValidator extends AbstractValidator {
 	 */
 	private Long length = null;
 
+	public FileValidator() {
+		setMsgId(Validators.MSGID_FILE);
+	}
+
 	/**
 	 * @return the maxLength
 	 */

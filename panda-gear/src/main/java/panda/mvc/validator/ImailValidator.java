@@ -10,6 +10,10 @@ import panda.net.mail.EmailException;
  */
 @IocBean(singleton=false)
 public class ImailValidator extends AbstractStringValidator {
+	public ImailValidator() {
+		setMsgId(Validators.MSGID_IMAIL);
+	}
+
 	@Override
 	protected boolean validateString(String value) {
 		try {

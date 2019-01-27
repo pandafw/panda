@@ -10,6 +10,10 @@ public class NumberValidator extends AbstractValidator {
 	private Number max = null;
 	private Number min = null;
 
+	public NumberValidator() {
+		setMsgId(Validators.MSGID_NUMBER_RANGE);
+	}
+
 	/**
 	 * @return the max
 	 */

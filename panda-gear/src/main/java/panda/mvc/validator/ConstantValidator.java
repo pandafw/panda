@@ -16,9 +16,6 @@ public class ConstantValidator extends AbstractValidator {
 	protected Boolean ignoreCase = false;
 	protected Object list;
 
-	/**
-	 * 
-	 */
 	public ConstantValidator() {
 		setMsgId(Validators.MSGID_CONSTANT);
 	}

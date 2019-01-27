@@ -14,7 +14,11 @@ public class CIDRValidator extends AbstractStringValidator {
 	private boolean split;
 	private String error;
 	
-	
+	public CIDRValidator() {
+		setMsgId(Validators.MSGID_CIDR);
+	}
+
+
 	/**
 	 * @return the split
 	 */

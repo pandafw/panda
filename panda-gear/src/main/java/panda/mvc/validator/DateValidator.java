@@ -10,6 +10,10 @@ public class DateValidator extends AbstractRangeValidator<Date> {
 	private Date max;
 	private Date min;
 
+	public DateValidator() {
+		setMsgId(Validators.MSGID_DATE_RANGE);
+	}
+
 	/**
 	 * @return the max
 	 */

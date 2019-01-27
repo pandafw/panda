@@ -37,7 +37,11 @@ public class ImageValidator extends AbstractValidator {
 	 * image height
 	 */
 	private Integer height;
-	
+
+	public ImageValidator() {
+		setMsgId(Validators.MSGID_IMAGE);
+	}
+
 	/**
 	 * @return the width
 	 */
