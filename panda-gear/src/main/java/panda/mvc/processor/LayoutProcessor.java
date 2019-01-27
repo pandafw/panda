@@ -1,11 +1,11 @@
 package panda.mvc.processor;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
+import panda.lang.time.DateTimes;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
 import panda.net.http.UserAgent;
@@ -13,6 +13,11 @@ import panda.servlet.HttpServlets;
 
 @IocBean
 public class LayoutProcessor extends AbstractProcessor {
+
+	/**
+	 * DEFAULT_HEADER = "X-WW-LAYOUT";
+	 */
+	public static final String DEFAULT_HEADER = "X-WW-LAYOUT";
 
 	/**
 	 * DEFAULT_ATTRIBUTE = "WW_LAYOUT";
@@ -32,7 +37,7 @@ public class LayoutProcessor extends AbstractProcessor {
 	/**
 	 * DEFAULT_COOKIE_MAXAGE = 60 * 60 * 24 * 30; //1M
 	 */
-	public static final Integer DEFAULT_COOKIE_MAXAGE = 60 * 60 * 24 * 30; //1M
+	public static final Integer DEFAULT_COOKIE_MAXAGE = DateTimes.SEC_MONTH; //1M
 
 	/**
 	 * PC_LAYOUT = "pc";
@@ -48,6 +53,9 @@ public class LayoutProcessor extends AbstractProcessor {
 	 * DEFAULT_LAYOUT = "pc";
 	 */
 	public static final String DEFAULT_LAYOUT = PC_LAYOUT;
+
+	@IocInject(value=MvcConstants.LAYOUT_HEADER_NAME, required=false)
+	protected String headerName = DEFAULT_HEADER;
 
 	@IocInject(value=MvcConstants.LAYOUT_PARAMETER_NAME, required=false)
 	protected String parameterName = DEFAULT_PARAMETER;
@@ -93,23 +101,25 @@ public class LayoutProcessor extends AbstractProcessor {
 		boolean saveToSession = this.saveToSession;
 		boolean saveToCookie = this.saveToCookie;
 
-		HttpSession session = ac.getRequest().getSession(false);
-
 		String layout = null;
 
-		layout = getLayoutFromParameter(ac, parameterName);
+		layout = getLayoutFromRequest(ac);
+		if (Strings.isNotEmpty(layout)) {
+			saveToSession = false;
+			saveToCookie = false;
+		}
+		
 		if (Strings.isEmpty(layout)) {
-			layout = (String)ac.getRequest().getAttribute(requestName);
-			if (Strings.isNotEmpty(layout)) {
-				saveToSession = false;
-				saveToCookie = false;
-			}
+			layout = getLayoutFromParameter(ac);
 		}
 
-		if (Strings.isEmpty(layout) && session != null) {
-			Object obj = session.getAttribute(sessionName);
-			if (obj != null) {
-				layout = (String)obj;
+		if (Strings.isEmpty(layout)) {
+			layout = getLayoutFromHeader(ac);
+		}
+
+		if (Strings.isEmpty(layout)) {
+			layout = getLayoutFromSession(ac);
+			if (Strings.isNotEmpty(layout)) {
 				saveToSession = false;
 				saveToCookie = false;
 			}
@@ -132,10 +142,10 @@ public class LayoutProcessor extends AbstractProcessor {
 		
 		// save layout
 		if (Strings.isNotEmpty(layout)) {
-			saveLayout(ac, layout);
+			saveLayoutToRequest(ac, layout);
 			
-			if (saveToSession && session != null) {
-				session.setAttribute(sessionName, layout);
+			if (saveToSession) {
+				saveLayoutToSession(ac, layout);
 			}
 			if (saveToCookie && Strings.isNotEmpty(cookieName)) {
 				saveLayoutToCookie(ac, layout);
@@ -144,15 +154,6 @@ public class LayoutProcessor extends AbstractProcessor {
 		
 		doNext(ac);
 	}
-
-	/**
-	 * Save the given layout to the ActionInvocation.
-	 * @param ac action context
-	 * @param layout The layout to save.
-	 */
-	protected void saveLayout(ActionContext ac, String layout) {
-		ac.getRequest().setAttribute(DEFAULT_ATTRIBUTE, layout);
-	}
 	
 	/**
 	 * get context layout
@@ -160,26 +161,33 @@ public class LayoutProcessor extends AbstractProcessor {
 	 * @return layout
 	 */
 	public static String getLayout(ActionContext ac) {
-		String layout = (String)ac.getRequest().getAttribute(DEFAULT_ATTRIBUTE);
+		String layout = null;
+		
+		LayoutProcessor lp = ac.getIoc().getIfExists(LayoutProcessor.class);
+		if (lp != null) {
+			layout = (String)ac.getRequest().getAttribute(lp.requestName);
+		}
 
-		if (layout == null) {
+		if (Strings.isEmpty(layout)) {
 			layout = DEFAULT_LAYOUT;
 		}
 		return layout;
 	}
 
 	protected String getLayoutFromCookie(ActionContext ac) {
-		String layout = HttpServlets.getCookieValue(ac.getRequest(), cookieName);
-		return layout;
+		return HttpServlets.getCookieValue(ac.getRequest(), cookieName);
 	}
 
-	protected String getLayoutFromParameter(ActionContext ac, String parameterName) {
-		Object layout = ac.getRequest().getParameter(parameterName);
-		if (layout != null && layout.getClass().isArray() && ((Object[])layout).length == 1) {
-			layout = ((Object[])layout)[0];
-		}
+	protected String getLayoutFromRequest(ActionContext ac) {
+		return (String)ac.getRequest().getAttribute(requestName);
+	}
 
-		return layout == null ? null : layout.toString();
+	protected String getLayoutFromParameter(ActionContext ac) {
+		return ac.getRequest().getParameter(parameterName);
+	}
+
+	protected String getLayoutFromHeader(ActionContext ac) {
+		return ac.getRequest().getHeader(headerName);
 	}
 
 	protected String getLayoutFromUserAgent(ActionContext ac) {
@@ -190,6 +198,23 @@ public class LayoutProcessor extends AbstractProcessor {
 		return null;
 	}
 
+	protected String getLayoutFromSession(ActionContext ac) {
+		return (String)ac.getSes().get(sessionName);
+	}
+
+	/**
+	 * Save the given layout to the request context.
+	 * @param ac action context
+	 * @param layout The layout to save.
+	 */
+	protected void saveLayoutToRequest(ActionContext ac, String layout) {
+		ac.getRequest().setAttribute(DEFAULT_ATTRIBUTE, layout);
+	}
+
+	protected void saveLayoutToSession(ActionContext ac, String layout) {
+		ac.getSes().put(sessionName, layout);
+	}
+	
 	protected void saveLayoutToCookie(ActionContext ac, String layout) {
 		Cookie c = new Cookie(cookieName, layout);
 		if (Strings.isNotEmpty(cookieDomain)) {

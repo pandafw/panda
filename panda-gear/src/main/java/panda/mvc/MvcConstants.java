@@ -88,6 +88,21 @@ public interface MvcConstants extends IocConstants {
 	/** Custom Servlet Error View */
 	public static final String SERVLET_ERROR_VIEW = "panda.view.servlet.error";
 
+	/** The locale header name */
+	public static final String LOCALE_HEADER_NAME = "panda.locale.header.name";
+
+	/** The locale parameter name */
+	public static final String LOCALE_PARAMETER_NAME = "panda.locale.parameter.name";
+
+	/** The locale request attribute */
+	public static final String LOCALE_REQUEST_ATTR = "panda.locale.request.attr";
+
+	/** The locale session attribute */
+	public static final String LOCALE_SESSION_ATTR = "panda.locale.session.attr";
+
+	/** The locale cookie name */
+	public static final String LOCALE_COOKIE_NAME = "panda.locale.cookie.name";
+
 	/** The locale cookie domain */
 	public static final String LOCALE_COOKIE_DOMAIN = "panda.locale.cookie.domain";
 
@@ -120,6 +135,9 @@ public interface MvcConstants extends IocConstants {
 
 	/** The redirect query name */
 	public static final String REDIRECT_QUERY_NAME = "panda.redirect.query.name";
+
+	/** The layout header name */
+	public static final String LAYOUT_HEADER_NAME = "panda.layout.header.name";
 
 	/** The layout parameter name */
 	public static final String LAYOUT_PARAMETER_NAME = "panda.layout.parameter.name";
