@@ -118,9 +118,9 @@ query-dates={ "bt": "～", "eq": "＝", "ne": "≠" }
 query-numbers={ "bt": "～", 	"eq": "＝", 	"ne": "≠" }
 
 query-strings=\
-	"mt": "contains", \
-	"lm": "starts with", \
-	"rm": "ends with", \
+	"cs": "contains", \
+	"sw": "starts with", \
+	"ew": "ends with", \
 	"eq": "equals", \
 	"ne": "not equals", \
 	"ge": "great equals", \

@@ -68,34 +68,34 @@ public class Filter implements Cloneable, Serializable {
 	public final static String NOT_LIKE = "nk";
 
 	/**
-	 * MATCH = "mt";
+	 * CONTAINS = "cs";
 	 */
-	public final static String MATCH = "mt";
+	public final static String CONTAINS = "cs";
 
 	/**
-	 * NOT_MATCH = "nmt";
+	 * NOT_CONTAINS = "ncs";
 	 */
-	public final static String NOT_MATCH = "nmt";
+	public final static String NOT_CONTAINS = "ncs";
 
 	/**
-	 * LEFT_MATCH = "lm";
+	 * STARTS_WITH = "sw";
 	 */
-	public final static String LEFT_MATCH = "lm";
+	public final static String STARTS_WITH = "sw";
 
 	/**
-	 * NOT_LEFT_MATCH = "nlm";
+	 * NOT_STARTS_WITH = "nsw";
 	 */
-	public final static String NOT_LEFT_MATCH = "nlm";
+	public final static String NOT_STARTS_WITH = "nsw";
 
 	/**
-	 * RIGHT_MATCH = "rm";
+	 * ENDS_WITH = "ew";
 	 */
-	public final static String RIGHT_MATCH = "rm";
+	public final static String ENDS_WITH = "ew";
 
 	/**
-	 * NOT_RIGHT_MATCH = "nrm";
+	 * NOT_ENDS_WITH = "new";
 	 */
-	public final static String NOT_RIGHT_MATCH = "nrm";
+	public final static String NOT_ENDS_WITH = "new";
 
 	/**
 	 * IN = "in";
@@ -103,9 +103,9 @@ public class Filter implements Cloneable, Serializable {
 	public final static String IN = "in";
 
 	/**
-	 * NOT_IN = "nn";
+	 * NOT_IN = "nin";
 	 */
-	public final static String NOT_IN = "nn";
+	public final static String NOT_IN = "nin";
 
 	/**
 	 * BETWEEN = "bt";
@@ -115,7 +115,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * COMPARATORS
 	 */
-	public final static String COMPARATORS = "{list: [ 'eq', 'ne', 'lt', 'le', 'gt', 'ge', 'lk', 'nk', 'mt', 'nmt', 'lm', 'nlm', 'rm', 'nrm', 'in', 'nn', 'bt' ]}";
+	public final static String COMPARATORS = "{list: [ 'eq', 'ne', 'lt', 'le', 'gt', 'ge', 'lk', 'nk', 'cs', 'ncs', 'sw', 'nsw', 'ew', 'new', 'in', 'nin', 'bt' ]}";
 	
 	/**
 	 * VT_BOOLEAN = "b";

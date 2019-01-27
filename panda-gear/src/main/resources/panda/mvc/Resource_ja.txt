@@ -51,9 +51,9 @@ query-lbl-method=検索方法
 query-booleans={ "true":  "はい", "false": "いいえ" }
 
 query-strings=\
-	"mt": "を含む", \
-	"lm": "で始まる", \
-	"rm": "で終わる", \
+	"cs": "を含む", \
+	"sw": "で始まる", \
+	"ew": "で終わる", \
 	"eq": "で一致する", \
 	"ne": "で一致しない", \
 	"ge": "より大きい", \

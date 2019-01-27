@@ -169,23 +169,23 @@ public abstract class DataQueryHelper {
 		else if (Filter.NOT_LIKE.equals(f.getComparator())) {
 			dq.nlike(name, value.toString());
 		}
-		else if (Filter.MATCH.equals(f.getComparator())) {
-			dq.match(name, value.toString());
+		else if (Filter.CONTAINS.equals(f.getComparator())) {
+			dq.contains(name, value.toString());
 		}
-		else if (Filter.NOT_MATCH.equals(f.getComparator())) {
-			dq.nmatch(name, value.toString());
+		else if (Filter.NOT_CONTAINS.equals(f.getComparator())) {
+			dq.ncontains(name, value.toString());
 		}
-		else if (Filter.LEFT_MATCH.equals(f.getComparator())) {
-			dq.lmatch(name, value.toString());
+		else if (Filter.STARTS_WITH.equals(f.getComparator())) {
+			dq.startsWith(name, value.toString());
 		}
-		else if (Filter.NOT_LEFT_MATCH.equals(f.getComparator())) {
-			dq.nlmatch(name, value.toString());
+		else if (Filter.NOT_STARTS_WITH.equals(f.getComparator())) {
+			dq.nstartsWith(name, value.toString());
 		}
-		else if (Filter.RIGHT_MATCH.equals(f.getComparator())) {
-			dq.rmatch(name, value.toString());
+		else if (Filter.ENDS_WITH.equals(f.getComparator())) {
+			dq.endsWith(name, value.toString());
 		}
-		else if (Filter.NOT_RIGHT_MATCH.equals(f.getComparator())) {
-			dq.nrmatch(name, value.toString());
+		else if (Filter.NOT_ENDS_WITH.equals(f.getComparator())) {
+			dq.nendsWith(name, value.toString());
 		}
 		else if (Filter.IN.equals(f.getComparator())) {
 			dq.in(name, values);

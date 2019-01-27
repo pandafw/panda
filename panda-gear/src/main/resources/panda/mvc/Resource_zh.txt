@@ -44,9 +44,9 @@ query-lbl-method=检索方法
 query-booleans={ "true":  "是", "false": "否" }
 
 query-strings=\
-	"mt": "包含", \
-	"lm": "开头", \
-	"rm": "结尾", \
+	"cs": "包含", \
+	"sw": "开头", \
+	"ew": "结尾", \
 	"eq": "相同", \
 	"ne": "不同", \
 	"ge": "大于", \
