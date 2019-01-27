@@ -148,7 +148,7 @@ public class DaoFileStore implements FileStore {
 
 			FileItemQuery fiq = new FileItemQuery();
 			if (Strings.isNotEmpty(prefix)) {
-				fiq.name().leftMatch(prefix);
+				fiq.name().startsWith(prefix);
 			}
 			if (before != null) {
 				fiq.date().lt(before);

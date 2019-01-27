@@ -40,7 +40,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param value value
 	 * @return this
 	 */
-	public E notLike(String value) {
+	public E nlike(String value) {
 		parent.getQuery().nlike(field, value);
 		return parent;
 	}
@@ -51,7 +51,7 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param esc escape char
 	 * @return this
 	 */
-	public E notLike(String value, char esc) {
+	public E nlike(String value, char esc) {
 		parent.getQuery().nlike(field, value, esc);
 		return parent;
 	}
@@ -61,8 +61,8 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param value value
 	 * @return this
 	 */
-	public E match(String value) {
-		parent.getQuery().match(field, value);
+	public E contains(String value) {
+		parent.getQuery().contains(field, value);
 		return parent;
 	}
 
@@ -71,8 +71,8 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param value value
 	 * @return this
 	 */
-	public E notMatch(String value) {
-		parent.getQuery().nmatch(field, value);
+	public E ncontains(String value) {
+		parent.getQuery().ncontains(field, value);
 		return parent;
 	}
 
@@ -81,8 +81,8 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param value value
 	 * @return this
 	 */
-	public E leftMatch(String value) {
-		parent.getQuery().lmatch(field, value);
+	public E startsWith(String value) {
+		parent.getQuery().startsWith(field, value);
 		return parent;
 	}
 
@@ -91,8 +91,8 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param value value
 	 * @return this
 	 */
-	public E notLeftMatch(String value) {
-		parent.getQuery().nlmatch(field, value);
+	public E nstartsWith(String value) {
+		parent.getQuery().nstartsWith(field, value);
 		return parent;
 	}
 
@@ -101,8 +101,8 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param value value
 	 * @return this
 	 */
-	public E rightMatch(String value) {
-		parent.getQuery().rmatch(field, value);
+	public E endsWith(String value) {
+		parent.getQuery().endsWith(field, value);
 		return parent;
 	}
 
@@ -111,8 +111,8 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	 * @param value value
 	 * @return this
 	 */
-	public E notRightMatch(String value) {
-		parent.getQuery().nrmatch(field, value);
+	public E nendsWith(String value) {
+		parent.getQuery().nendsWith(field, value);
 		return parent;
 	}
 }

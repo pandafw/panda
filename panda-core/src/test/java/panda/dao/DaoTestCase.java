@@ -291,11 +291,11 @@ public abstract class DaoTestCase {
 	}
 
 	@Test
-	public void testSelectMatch() {
+	public void testSelectContains() {
 		List<Student> expect = Student.creates(1, 1);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.match("name", "1");
+		q.contains("name", "1");
 		
 		List<Student> actual = dao.select(q);
 		
@@ -303,55 +303,55 @@ public abstract class DaoTestCase {
 	}
 
 	@Test
-	public void testSelectNotMatch() {
+	public void testSelectNotContains() {
 		List<Student> expect = Student.creates(2, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.nmatch("name", "1");
+		q.ncontains("name", "1");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
 
 	@Test
-	public void testSelectLeftMatch() {
+	public void testSelectStartsWith() {
 		List<Student> expect = Student.creates(1, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.match("name", "S");
+		q.startsWith("name", "S");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
 
 	@Test
-	public void testSelectNotLeftMatch() {
+	public void testSelectNotStartsWith() {
 		List<Student> expect = new ArrayList<Student>();
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.nmatch("name", "S");
+		q.nstartsWith("name", "S");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
 
 	@Test
-	public void testSelectRightMatch() {
+	public void testSelectEndsWith() {
 		List<Student> expect = Student.creates(1, 1);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.match("name", "1");
+		q.endsWith("name", "1");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
 
 	@Test
-	public void testSelectNotRightMatch() {
+	public void testSelectNotEndsWith() {
 		List<Student> expect = Student.creates(2, 5);
 		
 		DataQuery<Student> q = new DataQuery<Student>(Student.class);
-		q.nmatch("name", "1");
+		q.nendsWith("name", "1");
 		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
@@ -380,7 +380,7 @@ public abstract class DaoTestCase {
 	}
 
 	@Test
-	public void testSelectMatchEscape() {
+	public void testSelectContainsEscape() {
 		List<Teacher> expect = Teacher.creates(2, 3);
 		expect.get(0).setMemo(expect.get(0).getMemo() + "%u");
 		expect.get(1).setMemo(expect.get(1).getMemo() + "%u");
@@ -389,7 +389,7 @@ public abstract class DaoTestCase {
 		Assert.assertEquals(1, dao.update(expect.get(1)));
 		
 		DataQuery<Teacher> q = new DataQuery<Teacher>(dao.getEntity(Teacher.class));
-		q.clear().match("memo", "%");
+		q.clear().contains("memo", "%");
 		List<Teacher> actual = dao.select(q);
 		Assert.assertEquals(expect, actual);
 	}

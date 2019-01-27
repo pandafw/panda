@@ -101,7 +101,7 @@ public class MediaBrowseAction extends AbstractAction {
 			mq.createdAt().lt(arg.de);
 		}
 		if (Strings.isNotEmpty(arg.qs)) {
-			mq.name().match(arg.qs);
+			mq.name().contains(arg.qs);
 		}
 		if (arg.sn != null) {
 			mq.id().lt(arg.sn);

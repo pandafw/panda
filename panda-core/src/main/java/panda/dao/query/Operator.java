@@ -106,51 +106,51 @@ public enum Operator {
 		}
 	},
 	/**
-	 * MATCH = "~~";
+	 * CONTAINS = "~~";
 	 */
-	MATCH {
+	CONTAINS {
 		public String toString() {
 			return "~~";
 		}
 	},
 	/**
-	 * NOT_MATCH = "!~~";
+	 * NOT_CONTAINS = "!~~";
 	 */
-	NOT_MATCH {
+	NOT_CONTAINS {
 		public String toString() {
 			return "!~~";
 		}
 	},
 	/**
-	 * LEFT_MATCH = "!~=";
+	 * STARTS_WITH = "^=";
 	 */
-	LEFT_MATCH {
+	STARTS_WITH {
 		public String toString() {
-			return "~=";
+			return "^=";
 		}
 	},
 	/**
-	 * NOT_LEFT_MATCH = "!~=";
+	 * NOT_STARTS_WITH = "!^=";
 	 */
-	NOT_LEFT_MATCH {
+	NOT_STARTS_WITH {
 		public String toString() {
-			return "!~=";
+			return "!^=";
 		}
 	},
 	/**
-	 * RIGHT_MATCH = "=~";
+	 * ENDS_WITH = "=$";
 	 */
-	RIGHT_MATCH {
+	ENDS_WITH {
 		public String toString() {
-			return "=~";
+			return "=$";
 		}
 	},
 	/**
-	 * NOT_RIGHT_MATCH = "!=~";
+	 * NOT_ENDS_WITH = "!=$";
 	 */
-	NOT_RIGHT_MATCH {
+	NOT_ENDS_WITH {
 		public String toString() {
-			return "!=~";
+			return "!=$";
 		}
 	};
 	

@@ -803,29 +803,29 @@ public class MongoDao extends AbstractDao {
 			return;
 		}
 		
-		if (op == Operator.MATCH || op == Operator.NOT_MATCH) {
+		if (op == Operator.CONTAINS || op == Operator.NOT_CONTAINS) {
 			String s = StringEscapes.escapeRegex(vf.getValue().toString());
 			String r = ".*" + s + ".*";
 			Pattern p = Pattern.compile(r, Pattern.CASE_INSENSITIVE);
-			Object o = (op == Operator.MATCH ? p : new BasicDBObject("$not", p));
+			Object o = (op == Operator.CONTAINS ? p : new BasicDBObject("$not", p));
 			qs.add(new BasicDBObject(column, o));
 			return;
 		}
 		
-		if (op == Operator.LEFT_MATCH || op == Operator.NOT_LEFT_MATCH) {
+		if (op == Operator.STARTS_WITH || op == Operator.NOT_STARTS_WITH) {
 			String s = StringEscapes.escapeRegex(vf.getValue().toString());
 			String r = "^" + s + ".*";
 			Pattern p = Pattern.compile(r, Pattern.CASE_INSENSITIVE);
-			Object o = (op == Operator.LEFT_MATCH ? p : new BasicDBObject("$not", p));
+			Object o = (op == Operator.STARTS_WITH ? p : new BasicDBObject("$not", p));
 			qs.add(new BasicDBObject(column, o));
 			return;
 		}
 		
-		if (op == Operator.RIGHT_MATCH || op == Operator.NOT_RIGHT_MATCH) {
+		if (op == Operator.ENDS_WITH || op == Operator.NOT_ENDS_WITH) {
 			String s = StringEscapes.escapeRegex(vf.getValue().toString());
 			String r = ".*" + s + "$";
 			Pattern p = Pattern.compile(r, Pattern.CASE_INSENSITIVE);
-			Object o = (op == Operator.RIGHT_MATCH ? p : new BasicDBObject("$not", p));
+			Object o = (op == Operator.ENDS_WITH ? p : new BasicDBObject("$not", p));
 			qs.add(new BasicDBObject(column, o));
 			return;
 		}

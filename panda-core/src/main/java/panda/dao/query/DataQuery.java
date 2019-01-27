@@ -1172,102 +1172,102 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
-	 * add "field LIKE %value%" expression
+	 * contains the value, add "field LIKE %value%" expression
 	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> match(String field, String value) {
-		return addCompareValueExpression(field, Operator.MATCH, value);
+	public DataQuery<T> contains(String field, String value) {
+		return addCompareValueExpression(field, Operator.CONTAINS, value);
 	}
 
 	/**
-	 * add "field NOT LIKE %value%" expression
+	 * not contains the value, add "field NOT LIKE %value%" expression
 	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> nmatch(String field, String value) {
-		return addCompareValueExpression(field, Operator.NOT_MATCH, value);
+	public DataQuery<T> ncontains(String field, String value) {
+		return addCompareValueExpression(field, Operator.NOT_CONTAINS, value);
 	}
 
 	/**
-	 * add "field LIKE value%" expression
+	 * startsWith the value, add "field LIKE value%" expression
 	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> lmatch(String field, String value) {
-		return addCompareValueExpression(field, Operator.LEFT_MATCH, value);
+	public DataQuery<T> startsWith(String field, String value) {
+		return addCompareValueExpression(field, Operator.STARTS_WITH, value);
 	}
 
 	/**
-	 * add "field NOT LIKE value%" expression
+	 * not startsWith the value, add "field NOT LIKE value%" expression
 	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> nlmatch(String field, String value) {
-		return addCompareValueExpression(field, Operator.NOT_LEFT_MATCH, value);
+	public DataQuery<T> nstartsWith(String field, String value) {
+		return addCompareValueExpression(field, Operator.NOT_STARTS_WITH, value);
 	}
 
 	/**
-	 * add "field LIKE %value" expression
+	 * endsWith the value, add "field LIKE %value" expression
 	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> rmatch(String field, String value) {
-		return addCompareValueExpression(field, Operator.RIGHT_MATCH, value);
+	public DataQuery<T> endsWith(String field, String value) {
+		return addCompareValueExpression(field, Operator.ENDS_WITH, value);
 	}
 
 	/**
-	 * add "field NOT LIKE %value" expression
+	 * not endsWith the value, add "field NOT LIKE %value" expression
 	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
-	public DataQuery<T> nrmatch(String field, String value) {
-		return addCompareValueExpression(field, Operator.NOT_RIGHT_MATCH, value);
+	public DataQuery<T> nendsWith(String field, String value) {
+		return addCompareValueExpression(field, Operator.NOT_ENDS_WITH, value);
 	}
 
 	/**
-	 * add "field = compareField" expression
+	 * equals to the compareField, add "field = compareField" expression
 	 * @param field field 
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> eqf(String field, String compareField) {
+	public DataQuery<T> eq2(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.EQUAL, compareField);
 	}
 
 	/**
-	 * add "field &lt;&gt; compareField" expression
+	 * not equals to the compareField, add "field &lt;&gt; compareField" expression
 	 * @param field field 
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> nef(String field, String compareField) {
+	public DataQuery<T> ne2(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.NOT_EQUAL, compareField);
 	}
 
 	/**
-	 * add "field %gt; compareField" expression
+	 * greater than to the compareField, add "field %gt; compareField" expression
 	 * @param field field 
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> gtf(String field, String compareField) {
+	public DataQuery<T> gt2(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_THAN, compareField);
 	}
 
 	/**
-	 * add "field &gt;= compareField" expression
+	 * greater equals to the compareField, add "field &gt;= compareField" expression
 	 * @param field field 
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> gef(String field, String compareField) {
+	public DataQuery<T> ge2(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_EQUAL, compareField);
 	}
 
@@ -1277,7 +1277,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> ltf(String field, String compareField) {
+	public DataQuery<T> lt2(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_THAN, compareField);
 	}
 
@@ -1287,7 +1287,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> lef(String field, String compareField) {
+	public DataQuery<T> le2(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_EQUAL, compareField);
 	}
 

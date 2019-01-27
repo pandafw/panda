@@ -546,27 +546,27 @@ public abstract class SqlExpert {
 			}
 			sql.setCharAt(sql.length() - 1, ')');
 		}
-		else if (op == Operator.MATCH) {
+		else if (op == Operator.CONTAINS) {
 			sql.append("LIKE ? ESCAPE '~'");
 			sql.addParam(Sqls.stringLike(vf.getValue().toString(), '~'));
 		}
-		else if (op == Operator.NOT_MATCH) {
+		else if (op == Operator.NOT_CONTAINS) {
 			sql.append("NOT LIKE ? ESCAPE '~'");
 			sql.addParam(Sqls.stringLike(vf.getValue().toString(), '~'));
 		}
-		else if (op == Operator.LEFT_MATCH) {
+		else if (op == Operator.STARTS_WITH) {
 			sql.append("LIKE ? ESCAPE '~'");
 			sql.addParam(Sqls.startsLike(vf.getValue().toString(), '~'));
 		}
-		else if (op == Operator.NOT_LEFT_MATCH) {
+		else if (op == Operator.NOT_STARTS_WITH) {
 			sql.append("NOT LIKE ? ESCAPE '~'");
 			sql.addParam(Sqls.startsLike(vf.getValue().toString(), '~'));
 		}
-		else if (op == Operator.RIGHT_MATCH) {
+		else if (op == Operator.ENDS_WITH) {
 			sql.append("LIKE ? ESCAPE '~'");
 			sql.addParam(Sqls.endsLike(vf.getValue().toString(), '~'));
 		}
-		else if (op == Operator.NOT_RIGHT_MATCH) {
+		else if (op == Operator.NOT_ENDS_WITH) {
 			sql.append("NOT LIKE ? ESCAPE '~'");
 			sql.addParam(Sqls.endsLike(vf.getValue().toString(), '~'));
 		}

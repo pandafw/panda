@@ -30,8 +30,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E eqf(String otherField) {
-		parent.getQuery().eqf(field, otherField);
+	public E eq2(String otherField) {
+		parent.getQuery().eq2(field, otherField);
 		return parent;
 	}
 
@@ -48,8 +48,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E nef(String otherField) {
-		parent.getQuery().nef(field, otherField);
+	public E ne2(String otherField) {
+		parent.getQuery().ne2(field, otherField);
 		return parent;
 	}
 
@@ -66,8 +66,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E gtf(String otherField) {
-		parent.getQuery().gtf(field, otherField);
+	public E gt2(String otherField) {
+		parent.getQuery().gt2(field, otherField);
 		return parent;
 	}
 
@@ -84,8 +84,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E gef(String otherField) {
-		parent.getQuery().gef(field, otherField);
+	public E ge2(String otherField) {
+		parent.getQuery().ge2(field, otherField);
 		return parent;
 	}
 
@@ -102,8 +102,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E ltf(String otherField) {
-		parent.getQuery().ltf(field, otherField);
+	public E lt2(String otherField) {
+		parent.getQuery().lt2(field, otherField);
 		return parent;
 	}
 
@@ -120,8 +120,8 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E lef(String otherField) {
-		parent.getQuery().lef(field, otherField);
+	public E le2(String otherField) {
+		parent.getQuery().le2(field, otherField);
 		return parent;
 	}
 
