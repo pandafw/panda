@@ -139,7 +139,7 @@ public class Validator {
 	 * @return the msgId
 	 */
 	public String getMsgId() {
-		return msgId == null ? type : msgId;
+		return msgId;
 	}
 
 	/**

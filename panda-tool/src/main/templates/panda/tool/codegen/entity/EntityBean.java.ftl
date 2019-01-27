@@ -111,7 +111,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	<#if p.validatorList?has_content || (p.dbColumn && type != "String" && stype != "byte[]")>
 	@Validates({
 	<#list p.validatorList as v>
-		@Validate(value=${gen.validatorType(v.type)}, <#if v.refer?has_content>refer="${v.refer?j_string}", </#if><#if v.hasParams>params="${v.params}", </#if><#if v.message?has_content>message="${v.message?j_string}"<#else>msgId=${gen.validatorMsgId(v.msgId)}</#if>)<#if v_has_next || type != "String">, </#if>
+		@Validate(value=${gen.validatorType(v.type)}<#if v.refer?has_content>, refer="${v.refer?j_string}"</#if><#if v.hasParams>, params="${v.params}"</#if><#if v.message?has_content>, message="${v.message?j_string}"<#elseif v.msgId?has_content>, msgId=${gen.validatorMsgId(v.msgId)}</#if>)<#if v_has_next || type != "String">, </#if>
 	</#list>
 	<#if type != "String">
 		@Validate(value=${gen.validatorType('cast')}, msgId=${gen.validatorMsgId('cast-' + type)})

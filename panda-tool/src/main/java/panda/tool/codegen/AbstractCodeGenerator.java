@@ -604,7 +604,6 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 
 		vtmap.put("string", "Validators.STRING");
 		vtmap.put("stringlength", "Validators.STRING");
-		vtmap.put("stringrequired", "Validators.STRING");
 		vtmap.put("stringtype", "Validators.STRING");
 
 		vtmap.put("decimal", "Validators.DECIMAL");
@@ -654,19 +653,6 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 		vmmap.put("cast-FileItem", "Validators.MSGID_CAST_FILE");
 		vmmap.put("cast-URL", "Validators.MSGID_CAST_URL");
 
-		vmmap.put("required", "Validators.MSGID_REQUIRED");
-		vmmap.put("stringrequired", "Validators.MSGID_REQUIRED");
-		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
-		vmmap.put("stringtype", "Validators.MSGID_STRING_TYPE");
-		vmmap.put("file", "Validators.MSGID_FILE");
-		vmmap.put("image", "Validators.MSGID_IMAGE");
-		vmmap.put("constant", "Validators.MSGID_CONSTANT");
-		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
-
-		vmmap.put("email", "Validators.MSGID_EMAIL");
-		vmmap.put("imail", "Validators.MSGID_IMAIL");
-		vmmap.put("cidr", "Validators.MSGID_CIDR");
-		vmmap.put("url", "Validators.MSGID_URL");
 		vmmap.put("password", "Validators.MSGID_PASSWORD");
 		vmmap.put("byte", "Validators.MSGID_NUMBER_RANGE");
 		vmmap.put("short", "Validators.MSGID_NUMBER_RANGE");
