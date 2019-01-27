@@ -101,7 +101,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Property data) {
 		return super.add_confirm(data);
@@ -115,7 +115,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Property data) {
 		return super.add_execute(data);
@@ -151,7 +151,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Property data) {
 		return super.copy_confirm(data);
@@ -165,7 +165,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Property data) {
 		return super.copy_execute(data);
@@ -201,7 +201,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~edit")
 	public Object edit_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Property data) {
 		return super.edit_confirm(data);
@@ -215,7 +215,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~edit")
 	public Object edit_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'clazz', 'language', 'country', 'name' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Property data) {
 		return super.edit_execute(data);

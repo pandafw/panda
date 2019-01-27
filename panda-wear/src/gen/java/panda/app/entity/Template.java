@@ -18,7 +18,7 @@ import panda.mvc.validator.Validators;
 })
 public class Template extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -371598792L;
+	private static final long serialVersionUID = -1426545374L;
 
 	/**
 	 * Constructor
@@ -94,7 +94,7 @@ public class Template extends SUBean implements Serializable {
 	 * @return the name
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH)
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }")
 	})
 	public String getName() {
 		return name;
@@ -111,8 +111,8 @@ public class Template extends SUBean implements Serializable {
 	 * @return the language
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }"), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }"), 
 		@Validate(value=Validators.EL, params="{ 'el': 'assist.isValidLocale(top.parent.value.language, top.parent.value.country)' }", msgId="validation-locale-invalid")
 	})
 	public String getLanguage() {
@@ -130,8 +130,8 @@ public class Template extends SUBean implements Serializable {
 	 * @return the country
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }"), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }"), 
 		@Validate(value=Validators.EL, params="{ 'el': 'assist.isValidLocale(top.parent.value.language, top.parent.value.country)' }", msgId="validation-locale-invalid")
 	})
 	public String getCountry() {
@@ -149,7 +149,7 @@ public class Template extends SUBean implements Serializable {
 	 * @return the source
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 50000 }", msgId=Validators.MSGID_STRING_LENTH)
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50000 }")
 	})
 	public String getSource() {
 		return source;

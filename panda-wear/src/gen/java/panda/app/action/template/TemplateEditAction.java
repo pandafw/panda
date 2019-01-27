@@ -97,7 +97,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
 		return super.add_confirm(data);
@@ -111,7 +111,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~add")
 	public Object add_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
 		return super.add_execute(data);
@@ -147,7 +147,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
 		return super.copy_confirm(data);
@@ -161,7 +161,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~copy")
 	public Object copy_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
 		return super.copy_execute(data);
@@ -197,7 +197,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~edit")
 	public Object edit_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
 		return super.edit_confirm(data);
@@ -211,7 +211,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@At
 	@To(value=Views.SFTL, error="sftl:~edit")
 	public Object edit_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
 		return super.edit_execute(data);

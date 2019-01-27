@@ -12,7 +12,7 @@ import panda.vfs.FileItem;
 
 public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = 1412402979L;
+	private static final long serialVersionUID = -748973709L;
 
 	/**
 	 * Constructor
@@ -88,7 +88,7 @@ public class Media extends CUBean implements Serializable {
 	 * @return the tag
 	 */
 	@Validates({
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.mediaTagMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.mediaTagMap}' }")
 	})
 	public String getTag() {
 		return tag;
@@ -105,7 +105,7 @@ public class Media extends CUBean implements Serializable {
 	 * @return the name
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 200 }", msgId=Validators.MSGID_STRING_LENTH)
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 200 }")
 	})
 	public String getName() {
 		return name;
@@ -173,8 +173,8 @@ public class Media extends CUBean implements Serializable {
 	 * @return the file
 	 */
 	@Validates({
-		@Validate(value=Validators.FILE, msgId=Validators.MSGID_FILE), 
-		@Validate(value=Validators.IMAGE, msgId=Validators.MSGID_IMAGE), 
+		@Validate(value=Validators.FILE), 
+		@Validate(value=Validators.IMAGE), 
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_FILE)
 	})
 	public FileItem getFile() {
