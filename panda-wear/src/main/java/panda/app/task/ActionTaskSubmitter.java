@@ -79,7 +79,7 @@ public class ActionTaskSubmitter implements Runnable {
 				hreq.getHeader().putAll(task.getHeaders());
 			}
 			if (task.isToken() && authenticator != null) {
-				hreq.setParam(authenticator.getTokenName(), authenticator.getTokenValue());
+				hreq.setHeader(authenticator.getTokenHeaderName(), authenticator.getTokenValue());
 			}
 			hc.setRequest(hreq);
 			

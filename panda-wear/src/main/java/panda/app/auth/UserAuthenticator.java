@@ -38,8 +38,11 @@ public class UserAuthenticator {
 	@IocInject(value=MVC.AUTH_ALLOW_UNKNOWN_URL, required=false)
 	protected boolean allowUnknownUri = true;
 
-	@IocInject(value=MVC.AUTH_TOKEN_NAME, required=false)
-	private String tokenName = "__token";
+	@IocInject(value=MVC.AUTH_TOKEN_HEADER_NAME, required=false)
+	private String tokenHeaderName = "X-AUTH-TOKEN";
+
+	@IocInject(value=MVC.AUTH_TOKEN_PARAM_NAME, required=false)
+	private String tokenParamName = "__auth_token";
 
 	@IocInject(value=MVC.AUTH_TOKEN_LIFE, required=false)
 	private long tokenLife = 60000;
@@ -78,10 +81,17 @@ public class UserAuthenticator {
 	}
 
 	/**
+	 * @return the tokenHeaderName
+	 */
+	public String getTokenHeaderName() {
+		return tokenHeaderName;
+	}
+
+	/**
 	 * @return token parameter name
 	 */
-	public String getTokenName() {
-		return tokenName;
+	public String getTokenParamName() {
+		return tokenParamName;
 	}
 
 	/**
@@ -202,13 +212,22 @@ public class UserAuthenticator {
 		}
 
 		if (AUTH.TOKEN.equals(define)) {
-			if (Strings.isEmpty(tokenName) || !isValidToken()) {
-				return DENIED;
+			if (isValidToken()) {
+				if (Strings.isNotEmpty(tokenParamName)) {
+					String token = ac.getRequest().getParameter(tokenParamName);
+					if (tokenValue.equals(token)) {
+						return OK;
+					}
+				}
+				if (Strings.isNotEmpty(tokenHeaderName)) {
+					String token = ac.getRequest().getHeader(tokenHeaderName);
+					if (tokenValue.equals(token)) {
+						return OK;
+					}
+				}
 			}
 
-			HttpServletRequest req = ac.getRequest();
-			String token = req.getParameter(tokenName);
-			return tokenValue.equals(token) ? OK : DENIED;
+			return DENIED;
 		}
 
 		if (AUTH.SECURE.equals(define)) {
