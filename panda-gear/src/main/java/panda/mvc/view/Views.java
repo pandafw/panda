@@ -63,10 +63,12 @@ public class Views {
 	public static final String FTL_INPUT = "ftl:~input";
 	public static final String SFTL_INPUT = "sftl:~input";
 
+	public static final String SC_BAD_REQUEST = SC + SEP + HttpStatus.SC_BAD_REQUEST;
 	public static final String SC_FORBIDDEN = SC + SEP + HttpStatus.SC_FORBIDDEN;
 	public static final String SC_NOT_FOUND = SC + SEP + HttpStatus.SC_NOT_FOUND;
 	public static final String SC_INTERNAL_ERROR = SC + SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
 
+	public static final String SE_BAD_REQUEST = ERR + SEP + HttpStatus.SC_BAD_REQUEST;
 	public static final String SE_FORBIDDEN = ERR + SEP + HttpStatus.SC_FORBIDDEN;
 	public static final String SE_NOT_FOUND = ERR + SEP + HttpStatus.SC_NOT_FOUND;
 	public static final String SE_INTERNAL_ERROR = ERR + SEP + HttpStatus.SC_INTERNAL_SERVER_ERROR;
@@ -124,6 +126,10 @@ public class Views {
 		return createView(ac, NONE);
 	}
 
+	public static View scBadRequest(ActionContext ac) {
+		return createView(ac, SC_BAD_REQUEST);
+	}
+
 	public static View scForbidden(ActionContext ac) {
 		return createView(ac, SC_FORBIDDEN);
 	}
@@ -134,6 +140,10 @@ public class Views {
 	
 	public static View scInternalError(ActionContext ac) {
 		return createView(ac, SC_INTERNAL_ERROR);
+	}
+
+	public static View seBadRequest(ActionContext ac) {
+		return createView(ac, SE_BAD_REQUEST);
 	}
 
 	public static View seForbidden(ActionContext ac) {

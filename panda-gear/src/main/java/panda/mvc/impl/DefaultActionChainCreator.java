@@ -23,6 +23,7 @@ import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
 import panda.mvc.processor.PrepareProcessor;
 import panda.mvc.processor.RedirectProcessor;
+import panda.mvc.processor.TokenProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
 
@@ -43,6 +44,7 @@ public class DefaultActionChainCreator implements ActionChainCreator {
 			IocValue.TYPE_REF + AuthenticateProcessor.class.getName(),
 			IocValue.TYPE_REF + AdaptProcessor.class.getName(),
 			IocValue.TYPE_REF + PrepareProcessor.class.getName(),
+			IocValue.TYPE_REF + TokenProcessor.class.getName(),
 			IocValue.TYPE_REF + ValidateProcessor.class.getName(),
 			IocValue.TYPE_REF + InvokeProcessor.class.getName(),
 			IocValue.TYPE_REF + ViewProcessor.class.getName()

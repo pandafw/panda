@@ -172,6 +172,36 @@ public interface MvcConstants extends IocConstants {
 	/** The layout from user agent */
 	public static final String LAYOUT_FROM_USER_AGENT = "panda.layout.from.useragent";
 
+	/** The token header name */
+	public static final String TOKEN_HEADER_NAME = "panda.token.header.name";
+
+	/** The token parameter name */
+	public static final String TOKEN_PARAMETER_NAME = "panda.token.parameter.name";
+
+	/** The token request attribute */
+	public static final String TOKEN_REQUEST_ATTR = "panda.token.request.attr";
+
+	/** The token session attribute */
+	public static final String TOKEN_SESSION_ATTR = "panda.token.session.attr";
+
+	/** The token cookie name */
+	public static final String TOKEN_COOKIE_NAME = "panda.token.cookie.name";
+
+	/** The token cookie domain */
+	public static final String TOKEN_COOKIE_DOMAIN = "panda.token.cookie.domain";
+
+	/** The token cookie path */
+	public static final String TOKEN_COOKIE_PATH = "panda.token.cookie.path";
+
+	/** The token cookie max age */
+	public static final String TOKEN_COOKIE_MAXAGE = "panda.token.cookie.maxage";
+
+	/** The token save to session */
+	public static final String TOKEN_SAVE_TO_SESSION = "panda.token.save.to.session";
+
+	/** The token save to cookie */
+	public static final String TOKEN_SAVE_TO_COOKIE = "panda.token.save.to.cookie";
+
 	/** The sitemesh configuration */
 	public static final String SITEMESH = "panda.sitemesh";
 

@@ -32,6 +32,7 @@ import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
 import panda.mvc.processor.PrepareProcessor;
 import panda.mvc.processor.RedirectProcessor;
+import panda.mvc.processor.TokenProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.ActionAssist;
@@ -133,6 +134,7 @@ import panda.mvc.view.tag.ui.Submit;
 import panda.mvc.view.tag.ui.TextArea;
 import panda.mvc.view.tag.ui.TextField;
 import panda.mvc.view.tag.ui.TimePicker;
+import panda.mvc.view.tag.ui.Token;
 import panda.mvc.view.tag.ui.TriggerField;
 import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.ViewField;
@@ -218,6 +220,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			LocaleProcessor.class,
 			PrepareProcessor.class,
 			RedirectProcessor.class,
+			TokenProcessor.class,
 			ValidateProcessor.class,
 			ViewProcessor.class,
 
@@ -347,6 +350,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			TextArea.class,
 			TextField.class,
 			TimePicker.class,
+			Token.class,
 			TriggerField.class,
 			Uploader.class,
 			ViewField.class,
