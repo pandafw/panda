@@ -79,9 +79,17 @@ public abstract class Randoms {
 	
 	public static String randString(int len, char[] chars) {
 		char buf[] = new char[len];
-		
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] = chars[rand.nextInt(chars.length)];
+		}
+		
+		return new String(buf);
+	}
+	
+	public static String randString(int len, String chars) {
+		char buf[] = new char[len];
+		for (int i = 0; i < buf.length; i++) {
+			buf[i] = chars.charAt(rand.nextInt(chars.length()));
 		}
 		
 		return new String(buf);
