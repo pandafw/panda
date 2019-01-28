@@ -68,6 +68,7 @@ public class Form extends UIBean {
 	protected String labelPosition;
 	protected String inputClass;
 	protected Boolean hideDescrip;
+	protected Boolean token;
 
 	@Override
 	protected void evaluateParams() {
@@ -301,6 +302,20 @@ public class Form extends UIBean {
 	 */
 	public void setHideDescrip(Boolean hideDescrip) {
 		this.hideDescrip = hideDescrip;
+	}
+
+	/**
+	 * @return the token
+	 */
+	public Boolean getToken() {
+		return token;
+	}
+
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(Boolean token) {
+		this.token = token;
 	}
 
 	//----------------------------------------------------------
