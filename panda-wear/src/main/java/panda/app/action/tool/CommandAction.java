@@ -12,6 +12,7 @@ import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
@@ -66,12 +67,14 @@ public class CommandAction extends AbstractAction {
 	}
 
 	@At
+	@TokenProtect
 	@To(Views.SJSON)
 	public Object json(@Param("cmd") String cmd, @Param("wait") int wait) {
 		return exec(cmd, wait);
 	}
 	
 	@At
+	@TokenProtect
 	@To(Views.SXML)
 	public Object xml(@Param("cmd") String cmd, @Param("wait") int wait) {
 		return exec(cmd, wait);

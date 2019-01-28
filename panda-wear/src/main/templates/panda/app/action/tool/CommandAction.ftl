@@ -11,7 +11,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="cmdexec" method="get" theme="simple" action="+/xml" onsubmit="return cmdExecute();">
+	<@p.form id="cmdexec" method="post" theme="simple" action="+/xml" onsubmit="return cmdExecute();">
 	<table width="100%">
 		<tr><td>Command: (Ctrl+Enter to execute)</td>
 			<td align="right">
@@ -46,6 +46,7 @@
 			var $o = $('#cmdexec').loadmask("Executing...");
 			$.ajax({
 				url: $o.attr('action'),
+				method: 'post',
 				data: $o.serializeArray(),
 				dataType: 'text',
 				success: function(data, ts, xhr) {

@@ -7,6 +7,7 @@ import panda.el.EL;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
@@ -20,12 +21,14 @@ public class ELEvaluateAction extends AbstractAction {
 	}
 
 	@At
+	@TokenProtect
 	@To(Views.SJSON)
 	public Object json(@Param("expr") String expr) {
 		return exec(expr);
 	}
 	
 	@At
+	@TokenProtect
 	@To(Views.SXML)
 	public Object xml(@Param("expr") String expr) {
 		return exec(expr);

@@ -11,7 +11,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="eleval" method="get" theme="simple" action="+/xml" onsubmit="return elEvaluate();">
+	<@p.form id="eleval" method="post" theme="simple" action="+/xml" onsubmit="return elEvaluate();">
 	<table width="100%">
 		<tr><td>Expression: (Ctrl+Enter to evaluate)</td></tr>
 		<tr><td><@p.textarea name="expr" rows="8" cssStyle="width:100%" enterfire="#eleval_submit"/></td></tr>
@@ -41,6 +41,7 @@
 			var $o = $('#eleval').loadmask("Evaluating...");
 			$.ajax({
 				url: $o.attr('action'),
+				method: 'post',
 				data: $o.serializeArray(),
 				dataType: 'text',
 				success: function(data, ts, xhr) {

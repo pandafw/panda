@@ -20,7 +20,9 @@ import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.Redirect;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
@@ -181,13 +183,19 @@ public class SqlExecuteAction extends AbstractAction {
 		this.dataSource = dataSource;
 	}
 
+	@At("")
+	@Redirect(toslash=true)
+	public void input(@Param Option o) throws Exception {
+	}
+	
 	/**
 	 * execute
 	 * @param o the input option
 	 * @return results
 	 * @throws Exception if an error occurs
 	 */
-	@At("")
+	@At
+	@TokenProtect
 	public Object execute(@Param Option o) throws Exception {
 		if (Strings.isEmpty(o.sql)) {
 			return null;

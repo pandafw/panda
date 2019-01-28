@@ -10,7 +10,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="sqlexec" method="post" theme="simple" focusme="#sqlexec_sql">
+	<@p.form id="sqlexec" action="./execute" method="post" theme="simple" focusme="#sqlexec_sql">
 	<table class="sqlexec-tb" style="width: 100%">
 		<tr><td>SQL: (Ctrl+Enter to execute)</td>
 			<td align="right">
