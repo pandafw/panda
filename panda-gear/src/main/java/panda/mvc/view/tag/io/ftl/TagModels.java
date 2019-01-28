@@ -43,6 +43,7 @@ import panda.mvc.view.tag.ui.Submit;
 import panda.mvc.view.tag.ui.TextArea;
 import panda.mvc.view.tag.ui.TextField;
 import panda.mvc.view.tag.ui.TimePicker;
+import panda.mvc.view.tag.ui.Token;
 import panda.mvc.view.tag.ui.TriggerField;
 import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.ViewField;
@@ -95,6 +96,7 @@ public class TagModels {
 	protected TagModel textarea;
 	protected TagModel textfield;
 	protected TagModel timepicker;
+	protected TagModel token;
 	protected TagModel triggerfield;
 	protected TagModel uploader;
 	protected TagModel url;
@@ -529,6 +531,16 @@ public class TagModels {
 			timepicker = new TagModel(context, TimePicker.class);
 		}
 		return timepicker;
+	}
+
+	/**
+	 * @return TokenModel
+	 */
+	public TagModel getToken() {
+		if (token == null) {
+			token = new TagModel(context, Token.class);
+		}
+		return token;
 	}
 
 	/**

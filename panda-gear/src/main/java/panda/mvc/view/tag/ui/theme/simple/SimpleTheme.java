@@ -33,6 +33,7 @@ import panda.mvc.view.tag.ui.Submit;
 import panda.mvc.view.tag.ui.TextArea;
 import panda.mvc.view.tag.ui.TextField;
 import panda.mvc.view.tag.ui.TimePicker;
+import panda.mvc.view.tag.ui.Token;
 import panda.mvc.view.tag.ui.TriggerField;
 import panda.mvc.view.tag.ui.UIBean;
 import panda.mvc.view.tag.ui.Uploader;
@@ -79,6 +80,7 @@ public class SimpleTheme extends Theme {
 		rfs.put(TextField.class, TextFieldRenderer.class);
 		rfs.put(TextArea.class, TextAreaRenderer.class);
 		rfs.put(TimePicker.class, TimePickerRenderer.class);
+		rfs.put(Token.class, TokenRenderer.class);
 		rfs.put(TriggerField.class, TriggerFieldRenderer.class);
 		rfs.put(Uploader.class, UploaderRenderer.class);
 		rfs.put(ViewField.class, ViewFieldRenderer.class);

@@ -328,6 +328,14 @@
 	</tag>
 
 	<tag>
+		<description><![CDATA[Render a hidden input field contains csrf token]]></description>
+		<name>token</name>
+		<tag-class>panda.mvc.view.tag.io.jsp.TokenTag</tag-class>
+		<body-content>JSP</body-content>
+		<dynamic-attributes>true</dynamic-attributes>
+	</tag>
+
+	<tag>
 		<description><![CDATA[Render a span and hidden field that displays read-only information]]></description>
 		<name>triggerfield</name>
 		<tag-class>panda.mvc.view.tag.io.jsp.TriggerFieldTag</tag-class>
