@@ -8,8 +8,11 @@ import panda.util.validator.CreditCardNumberValidator;
 
 @IocBean(singleton=false)
 public class CreditCardNoValidator extends AbstractStringValidator {
+	public static final char ALL = CreditCardNumberValidator.ALL;
+
 	private boolean normalize = true;
-	private char cardType = CreditCardNumberValidator.ALL;
+	
+	private char type = ALL;
 
 	public CreditCardNoValidator() {
 		setMsgId(Validators.CREDITCARDNO);
@@ -32,15 +35,15 @@ public class CreditCardNoValidator extends AbstractStringValidator {
 	/**
 	 * @return the cardType
 	 */
-	public char getCardType() {
-		return cardType;
+	public char getType() {
+		return type;
 	}
 
 	/**
-	 * @param cardType the cardType to set
+	 * @param type the cardType to set
 	 */
-	public void setCardType(char cardType) {
-		this.cardType = cardType;
+	public void setType(char type) {
+		this.type = type;
 	}
 
 	/**
@@ -59,7 +62,7 @@ public class CreditCardNoValidator extends AbstractStringValidator {
 			cardno = normalizeCardNumber(value);
 		}
 		
-		CreditCardNumberValidator ccv = new CreditCardNumberValidator(cardType);
+		CreditCardNumberValidator ccv = new CreditCardNumberValidator(type);
 		return ccv.isValid(cardno);
 	}
 }
