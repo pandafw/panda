@@ -11,7 +11,6 @@ import panda.mvc.ValidateException;
 import panda.mvc.ValidateHandler;
 import panda.mvc.View;
 import panda.mvc.adaptor.DefaultParamAdaptor;
-import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
@@ -41,38 +40,24 @@ public class ValidateProcessor extends AbstractProcessor {
 		}
 
 		Method method = ac.getMethod();
-		Validates ma = method.getAnnotation(Validates.class);
-		if (ma != null) {
-			// TODO: plain method validate
-		}
+		// TODO: plain method validate
 
 		Annotation[][] pass = method.getParameterAnnotations();
 		for (int i = 0; i < pass.length; i++) {
 			Param param = null;
-			Validates vs = null;
 
 			Annotation[] pas = pass[i];
 			for (Annotation pa : pas) {
 				if (pa instanceof Param) {
 					param = (Param)pa;
-				}
-				if (pa instanceof Validates) {
-					vs = (Validates)pa;
-				}
-			}
-
-			if (vs == null) {
-				continue;
-			}
-
-			Object obj = ac.getArgs()[i];
-			String name = DefaultParamAdaptor.indexedName(i, param);
-
-			if (!vh.validate(ac, null, name, obj, vs.value())) {
-				if (vs.shortCircuit()) {
 					break;
 				}
 			}
+
+			String name = DefaultParamAdaptor.indexedName(i, param);
+			Object obj = ac.getArgs()[i];
+
+			vh.validate(ac, null, name, obj, pas);
 		}
 	}
 

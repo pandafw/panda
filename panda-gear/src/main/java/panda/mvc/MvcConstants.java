@@ -21,8 +21,6 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String MVC_CHAINS = "panda.mvc.chains";
 
-	public static final String MVC_VALIDATORS = "panda.mvc.validators";
-
 	public static final String MVC_VIEWS = "panda.mvc.views";
 
 	public static final String MVC_RESOURCES = "panda.mvc.resources";

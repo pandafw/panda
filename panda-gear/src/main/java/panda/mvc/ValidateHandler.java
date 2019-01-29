@@ -1,6 +1,6 @@
 package panda.mvc;
 
-import panda.mvc.annotation.Validate;
+import java.lang.annotation.Annotation;
 
 
 public interface ValidateHandler {
@@ -29,9 +29,8 @@ public interface ValidateHandler {
 	 * @param parent parent validator
 	 * @param name field name
 	 * @param value field value
-	 * @param vs validate annotation array
+	 * @param vas validate annotations
 	 * @return validate result
 	 */
-	boolean validate(ActionContext ac, Validator parent, String name, Object value, Validate[] vs);
-	
+	boolean validate(ActionContext ac, Validator parent, String name, Object value, Annotation[] vas);
 }

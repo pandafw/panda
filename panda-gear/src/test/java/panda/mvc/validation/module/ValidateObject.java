@@ -2,67 +2,70 @@ package panda.mvc.validation.module;
 
 import java.util.Date;
 
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
-import panda.mvc.validator.Validators;
+import panda.mvc.annotation.validate.BinaryValidate;
+import panda.mvc.annotation.validate.ConstantValidate;
+import panda.mvc.annotation.validate.CreditCardNoValidate;
+import panda.mvc.annotation.validate.DateValidate;
+import panda.mvc.annotation.validate.ELValidate;
+import panda.mvc.annotation.validate.EmailValidate;
+import panda.mvc.annotation.validate.FilenameValidate;
+import panda.mvc.annotation.validate.NumberValidate;
+import panda.mvc.annotation.validate.ProhibitedValidate;
+import panda.mvc.annotation.validate.RegexValidate;
+import panda.mvc.annotation.validate.StringValidate;
+import panda.mvc.annotation.validate.URLValidate;
 
 public class ValidateObject {
-	@Validates(@Validate(value=Validators.BINARY, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"))
+	@BinaryValidate(minLength=5, maxLength=100, message="${top.length}, ${top.minLength} ~ ${top.maxLength}")
 	public byte[] bin;
 
-	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'a', 'b' ]}", message="${top.value}, ${top.consts}"))
+	@ConstantValidate(list="[ 'a', 'b' ]}", message="${top.value}, ${top.consts}")
 	public String consts;
 	
-	@Validates(@Validate(value=Validators.CREDITCARDNO, message="'${top.value}' is not a card no."))
+	@CreditCardNoValidate(message="'${top.value}' is not a card no.")
 	public String cardno;
 	
-	@Validates(@Validate(value=Validators.DATE, params="{min: '2010-01-01 00:00:00', max: '2010-12-12 12:12:12'}", message="'${top.value.getTime()}', ${top.min.getTime()} ~ ${top.max.getTime()}"))
+	@DateValidate(min="2010-01-01 00:00:00", max="2010-12-12 12:12:12", message="'${top.value.getTime()}', ${top.min.getTime()} ~ ${top.max.getTime()}")
 	public Date date;
 
-	@Validates(@Validate(value=Validators.EL, params="{el: 'top.value == \"ok\"'}", message="'${top.value}', '${top.el}'"))
+	@ELValidate(el="top.value == \"ok\"", message="'${top.value}', '${top.el}'")
 	public String el;
 	
-	@Validates(@Validate(value=Validators.EL, params="{el: 'top.value == top.parent.value.el'}", message="'${top.value}', '${top.el}'"))
+	@ELValidate(el="top.value == top.parent.value.el", message="'${top.value}', '${top.el}'")
 	public String el2;
 	
-	@Validates(@Validate(value=Validators.EMAIL, message="'${top.value}' is not a email."))
+	@EmailValidate(message="'${top.value}' is not a email.")
 	public String email;
 
-	@Validates(@Validate(value=Validators.URL, message="'${top.value}' is not a url."))
+	@URLValidate(message="'${top.value}' is not a url.")
 	public String url;
 
-	@Validates(@Validate(value=Validators.FILENAME, message="'${top.value}' is not a filename."))
+	@FilenameValidate(message="'${top.value}' is not a filename.")
 	public String filename;
 	
-	@Validates(@Validate(value=Validators.NUMBER, params="{min: -100, max: 100}", message="${top.value}, ${top.min} ~ ${top.max}"))
+	@NumberValidate(min="-100", max="100", message="${top.value}, ${top.min} ~ ${top.max}")
 	public int number;
 
-	@Validates(@Validate(value=Validators.PROHIBITED, params="{list: [ 'a', 'b' ]}", message="${top.value}, ${top.consts}"))
+	@ProhibitedValidate(list="[ 'a', 'b' ]", message="${top.value}, ${top.consts}")
 	public String prohibited;
 	
-	@Validates(@Validate(value=Validators.REGEX, params="{regex: 'ok'}", message="'${top.value}', '${top.regex}'"))
+	@RegexValidate(regex="ok", message="'${top.value}', '${top.regex}'")
 	public String regex;
 
-	@Validates(@Validate(value=Validators.REGEX, params="{ regex: '#(regex-telno)' }", message="not a telephone number."))
+	@RegexValidate(regex="#(regex-telno)", message="not a telephone number.")
 	public String telno;
 
-	private final static String SV = "#panda.mvc.validator.StringValidator";
-
-	@Validates(@Validate(value=SV, params="{type:'A'}", message="'${top.value}' is not A."))
+	@StringValidate(type='A', message="'${top.value}' is not A.")
 	public String string;
 
-	@Validates(@Validate(value=SV, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"))
+	@StringValidate(minLength=5, maxLength=100, message="${top.length}, ${top.minLength} ~ ${top.maxLength}")
 	public String strlen;
 	
-	@Validates({
-		@Validate(value=SV, shortCircuit=true, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"),
-		@Validate(value=SV, params="{type: 'A'}", message="'${top.value}' is not A.")
-	})
+	@StringValidate(shortCircuit=true, minLength=5, maxLength=100, message="${top.length}, ${top.minLength} ~ ${top.maxLength}")
+	@RegexValidate(regex="[a-zA-Z]*", message="'${top.value}' is not A.")
 	public String shortCircuitTrue;
 	
-	@Validates({
-		@Validate(value=SV, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"),
-		@Validate(value=SV, params="{type: 'A'}", message="'${top.value}' is not A.")
-	})
+	@StringValidate(minLength=5, maxLength=100, message="${top.length}, ${top.minLength} ~ ${top.maxLength}")
+	@RegexValidate(regex="[a-zA-Z]*", message="'${top.value}' is not A.")
 	public String shortCircuitFalse;
 }

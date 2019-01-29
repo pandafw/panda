@@ -9,17 +9,17 @@
 	"panda.locale.default": "en",
 
 	"javax.sql.DataSource" : {
-		type : "panda.dao.sql.SimpleDataSource",
+		type : "panda.dao.sql.dbcp.SimpleDataSource",
 		events : {
 			depose : 'close'
 		},
-		args : [{
+		fields : {
 			jdbc: {
 				driver : 'org.hsqldb.jdbcDriver',
 				url : 'jdbc:hsqldb:mem:mvc',
 				username : 'sa',
 				password : 'sa'
 			}
-		}]
+		}
 	}
 }

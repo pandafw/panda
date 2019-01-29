@@ -22,10 +22,10 @@ import panda.mvc.filter.LoggingFilter;
 import panda.mvc.impl.DefaultActionChainCreator;
 import panda.mvc.impl.DefaultServletChain;
 import panda.mvc.impl.DefaultValidateHandler;
-import panda.mvc.impl.DefaultValidatorCreator;
 import panda.mvc.impl.DefaultViewCreator;
 import panda.mvc.impl.RegexActionMapping;
 import panda.mvc.processor.AdaptProcessor;
+import panda.mvc.processor.AuthenticateProcessor;
 import panda.mvc.processor.FatalProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
@@ -214,6 +214,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 
 			// processor
 			AdaptProcessor.class,
+			AuthenticateProcessor.class,
 			FatalProcessor.class,
 			InvokeProcessor.class,
 			LayoutProcessor.class,
@@ -240,7 +241,6 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			
 			// validator
 			DefaultValidateHandler.class,
-			DefaultValidatorCreator.class,
 			
 			// validators
 			BinaryValidator.class,

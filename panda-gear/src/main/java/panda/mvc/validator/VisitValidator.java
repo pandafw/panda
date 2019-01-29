@@ -1,5 +1,6 @@
 package panda.mvc.validator;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -19,7 +20,6 @@ import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
 import panda.mvc.ValidateHandler;
 import panda.mvc.Validator;
-import panda.mvc.annotation.Validates;
 
 @IocBean(singleton=false)
 public class VisitValidator extends AbstractValidator {
@@ -162,22 +162,19 @@ public class VisitValidator extends AbstractValidator {
 				continue;
 			}
 			
-			Validates vs = null;
+			Annotation[] vs = null;
 			if (pg instanceof Field) {
-				vs = ((Field)pg).getAnnotation(Validates.class);
+				vs = ((Field)pg).getAnnotations();
 			}
 			else if (pg instanceof Method) {
-				vs = ((Method)pg).getAnnotation(Validates.class);
+				vs = ((Method)pg).getAnnotations();
 			}
 			if (vs == null) {
 				continue;
 			}
 			
 			Object val = en.getValue().getValue(obj);
-			if (!validateHandler.validate(ac, this, fn, val, vs.value())) {
-				if (vs.shortCircuit()) {
-					return false;
-				}
+			if (!validateHandler.validate(ac, this, fn, val, vs)) {
 				r = false;
 			}
 		}
