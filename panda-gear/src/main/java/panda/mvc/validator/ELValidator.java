@@ -7,9 +7,9 @@ import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
 
 @IocBean(singleton=false)
-public class ElValidator extends AbstractValidator {
+public class ELValidator extends AbstractValidator {
 
-	private static final Log log = Logs.getLog(ElValidator.class);
+	private static final Log log = Logs.getLog(ELValidator.class);
 	
 	private String el;
 

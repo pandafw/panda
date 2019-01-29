@@ -50,7 +50,7 @@ import panda.mvc.validator.ConstantValidator;
 import panda.mvc.validator.CreditCardNoValidator;
 import panda.mvc.validator.DateValidator;
 import panda.mvc.validator.DecimalValidator;
-import panda.mvc.validator.ElValidator;
+import panda.mvc.validator.ELValidator;
 import panda.mvc.validator.EmailValidator;
 import panda.mvc.validator.EmptyValidator;
 import panda.mvc.validator.FileValidator;
@@ -250,7 +250,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			CreditCardNoValidator.class,
 			DateValidator.class,
 			DecimalValidator.class,
-			ElValidator.class,
+			ELValidator.class,
 			EmailValidator.class,
 			EmptyValidator.class,
 			FilenameValidator.class,
