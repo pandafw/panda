@@ -68,7 +68,7 @@ public class SingletonObjectProxy implements ObjectProxy {
 
 	@Override
 	public void depose() {
-		if (depose != null) {
+		if (depose != null && object != null) {
 			depose.trigger(object);
 		}
 	}

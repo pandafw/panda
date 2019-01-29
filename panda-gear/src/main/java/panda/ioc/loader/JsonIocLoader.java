@@ -5,14 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.Collection;
 
 import panda.bind.json.JsonObject;
 import panda.io.Files;
 import panda.io.Streams;
+import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -40,8 +41,10 @@ public class JsonIocLoader extends MapIocLoader {
 		}
 		
 		if (log.isDebugEnabled()) {
-			log.debugf("Loaded %d bean define from path=%s --> %s", 
-				beans.size(), Arrays.toString(paths), beans.keySet());
+			log.debug("Loaded " + beans.size() + " bean definitions from " 
+					+ Arrays.toString(paths)
+					+ Streams.EOL + " - "
+					+ Strings.join(beans.keySet(), Streams.EOL + " - "));
 		}
 	}
 

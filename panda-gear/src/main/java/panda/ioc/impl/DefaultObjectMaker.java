@@ -223,7 +223,8 @@ public class DefaultObjectMaker implements ObjectMaker {
 				if (c == null) {
 					c = Constructors.getConstructor(cls, args.length);
 					if (c == null) {
-						throw new IocException("Failed to find constructor of '" + ing.getName() + "': " + Arrays.toString(args));
+						throw new IocException("Failed to find constructor of '" 
+								+ ing.getName() + "' " + cls + ": " + Arrays.toString(args));
 					}
 				}
 				dw.setArgTypes(c.getGenericParameterTypes());
