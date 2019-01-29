@@ -227,6 +227,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
+	@TokenProtect
 	public Object ${gen.trimMethodName(ui.name)}(@Param Arg arg) {
 		return super.importx(arg);
 	}
@@ -248,8 +249,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param args arguments
 	 * @return result or view
 	 */
-	@At${gen.trimAtName(ui.name)}
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
 		return super.bdelete_execute(args);
 	}
@@ -271,8 +273,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param args arguments
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
 		return super.bupdate_execute(args);
 	}
@@ -302,8 +305,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${gen.trimMethodName(ui.name)}_confirm
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error=Views.SFTL)
+	@TokenProtect
 	public Object ${ui.name}_confirm() {
 		return super.bedit_confirm();
 	}
@@ -312,8 +316,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error=Views.SFTL)
+	@TokenProtect
 	public Object ${ui.name}_execute() {
 		return super.bedit_execute();
 	}
@@ -394,8 +399,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.add_confirm(data);
 	}
@@ -405,8 +411,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.add_execute(data);
 	}
@@ -439,8 +446,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.copy_confirm(data);
 	}
@@ -450,8 +458,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.copy_execute(data);
 	}
@@ -484,8 +493,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.edit_confirm(data);
 	}
@@ -495,8 +505,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
+	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.edit_execute(data);
 	}
@@ -518,8 +529,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param key the input key
 	 * @return result or view
 	 */
-	@At
+	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${ui.name}")
+	@TokenProtect
 	public Object ${ui.name}_execute(@Param ${entityBeanClass} key) {
 		return super.delete_execute(key);
 	}

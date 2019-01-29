@@ -14,6 +14,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.Validate;
 import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
@@ -22,6 +23,7 @@ import panda.mvc.bean.QueryerEx;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 import panda.mvc.view.util.ListColumn;
+import panda.net.http.HttpMethod;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
@@ -122,9 +124,13 @@ public class ActionGenerator extends AbstractCodeGenerator {
 				if ("bdelete".equals(s) 
 						|| "bupdate".equals(s)
 						|| "bedit".equals(s)) {
+					imports.add(TokenProtect.class.getName());
+					imports.add(HttpMethod.class.getName());
 					imports.add(Map.class.getName());
 				}
-				
+				if ("import".equals(s)) {
+					imports.add(TokenProtect.class.getName());
+				}
 				
 				if ("list".equals(s) || Strings.startsWith(s, "list_")) {
 					imports.add(Validates.class.getName());
@@ -153,6 +159,12 @@ public class ActionGenerator extends AbstractCodeGenerator {
 						|| Strings.equals(iui.getTemplate(), "edit")
 						|| Strings.equals(iui.getTemplate(), "add")) {
 					imports.add(Validates.class.getName());
+					imports.add(TokenProtect.class.getName());
+					imports.add(HttpMethod.class.getName());
+				}
+				if (Strings.equals(iui.getTemplate(), "delete")) {
+					imports.add(TokenProtect.class.getName());
+					imports.add(HttpMethod.class.getName());
 				}
 			}
 		}
@@ -208,6 +220,17 @@ public class ActionGenerator extends AbstractCodeGenerator {
 			return "(\"import\")";
 		}
 		return "";
+	}
+
+	public String postAtName() {
+		return "(method=HttpMethod.POST)";
+	}
+
+	public String postAtName(String nm) {
+		if ("import".equals(nm)) {
+			return "(value=\"import\", method=HttpMethod.POST)";
+		}
+		return "(method=HttpMethod.POST)";
 	}
 
 	public String trimMethodName(String nm) {
