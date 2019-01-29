@@ -11,23 +11,23 @@ import panda.lang.Strings;
 public class RegexValidator extends AbstractStringValidator {
 
 	private String regex;
-	private boolean caseSensitive = true;
+	private boolean ignoreCase;
 
 	/**
 	 * @return Returns whether the expression should be matched against in a
 	 *         case-sensitive way. Default is <code>true</code>.
 	 */
-	public boolean isCaseSensitive() {
-		return caseSensitive;
+	public boolean isIgnoreCase() {
+		return ignoreCase;
 	}
 
 	/**
 	 * Sets whether the expression should be matched against in a case-sensitive
-	 * way. Default is <code>true</code>.
-	 * @param caseSensitive the caseSensitive to set
+	 * way. Default is <code>false</code>.
+	 * @param ignoreCase the caseSensitive to set
 	 */
-	public void setCaseSensitive(boolean caseSensitive) {
-		this.caseSensitive = caseSensitive;
+	public void setIgnoreCase(boolean ignoreCase) {
+		this.ignoreCase = ignoreCase;
 	}
 
 	/**
@@ -52,11 +52,11 @@ public class RegexValidator extends AbstractStringValidator {
 		// match against expression
 		Pattern pattern;
 		try {
-			if (isCaseSensitive()) {
-				pattern = Pattern.compile(regex);
+			if (isIgnoreCase()) {
+				pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 			}
 			else {
-				pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile(regex);
 			}
 		}
 		catch (PatternSyntaxException e) {
