@@ -74,6 +74,9 @@ public class ImageValidator extends AbstractValidator {
 	 * @param minWidth the minWidth to set
 	 */
 	public void setMinWidth(Integer minWidth) {
+		if (minWidth < 0) {
+			return;
+		}
 		this.minWidth = minWidth;
 	}
 
@@ -88,6 +91,9 @@ public class ImageValidator extends AbstractValidator {
 	 * @param minHeight the minHeight to set
 	 */
 	public void setMinHeight(Integer minHeight) {
+		if (minHeight < 0) {
+			return;
+		}
 		this.minHeight = minHeight;
 	}
 
@@ -102,6 +108,9 @@ public class ImageValidator extends AbstractValidator {
 	 * @param maxWidth the maxWidth to set
 	 */
 	public void setMaxWidth(Integer maxWidth) {
+		if (maxWidth < 0) {
+			return;
+		}
 		this.maxWidth = maxWidth;
 	}
 
@@ -116,6 +125,9 @@ public class ImageValidator extends AbstractValidator {
 	 * @param maxHeight the maxHeight to set
 	 */
 	public void setMaxHeight(Integer maxHeight) {
+		if (maxHeight < 0) {
+			return;
+		}
 		this.maxHeight = maxHeight;
 	}
 

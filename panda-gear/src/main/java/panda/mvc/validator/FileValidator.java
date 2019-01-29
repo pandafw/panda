@@ -41,6 +41,9 @@ public class FileValidator extends AbstractValidator {
 	 * @param maxLength the maxLength to set
 	 */
 	public void setMaxLength(Long maxLength) {
+		if (maxLength < 0) {
+			return;
+		}
 		this.maxLength = maxLength;
 	}
 
@@ -55,6 +58,9 @@ public class FileValidator extends AbstractValidator {
 	 * @param minLength the minLength to set
 	 */
 	public void setMinLength(Long minLength) {
+		if (minLength < 0) {
+			return;
+		}
 		this.minLength = minLength;
 	}
 
