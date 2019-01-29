@@ -7,7 +7,6 @@ import panda.lang.Strings;
 
 @IocBean(singleton=false)
 public class StringValidator extends AbstractStringValidator {
-
 	public static final char ANY = '*';
 	public static final char ALPHA = 'a';
 	public static final char NUMBER = 'n';
@@ -26,9 +25,10 @@ public class StringValidator extends AbstractStringValidator {
 	private char type = ANY;
 
 	private int zenSize = 0;
-	
 	private Integer maxLength = null;
 	private Integer minLength = null;
+
+	private String suggestedMsgId;
 	
 	/**
 	 * string length
@@ -36,7 +36,6 @@ public class StringValidator extends AbstractStringValidator {
 	private Integer length = null;
 
 	public StringValidator() {
-		setMsgId(Validators.MSGID_STRING_LENTH);
 	}
 
 	/**
@@ -78,6 +77,9 @@ public class StringValidator extends AbstractStringValidator {
 	 * @param maxLength the maxLength to set
 	 */
 	public void setMaxLength(Integer maxLength) {
+		if (maxLength < 0) {
+			return;
+		}
 		this.maxLength = maxLength;
 	}
 
@@ -92,6 +94,9 @@ public class StringValidator extends AbstractStringValidator {
 	 * @param minLength the minLength to set
 	 */
 	public void setMinLength(Integer minLength) {
+		if (minLength < 0) {
+			return;
+		}
 		this.minLength = minLength;
 	}
 
@@ -130,41 +135,64 @@ public class StringValidator extends AbstractStringValidator {
 		
 		// only check for a minimum value if the min parameter is set
 		if (minLength != null && length < minLength) {
+			suggestedMsgId = Validators.MSGID_STRING_LENTH;
 			return false;
 		}
 
 		// only check for a maximum value if the max parameter is set
 		if (maxLength != null && length > maxLength) {
+			suggestedMsgId = Validators.MSGID_STRING_LENTH;
 			return false;
 		}
 
 		switch (type) {
 		case ALPHA:
+			suggestedMsgId = Validators.MSGID_ALPHA_STRING;
 			return Strings.isAlpha(value);
 		case NUMBER:
+			suggestedMsgId = Validators.MSGID_NUMERIC_STRING;
 			return Strings.isNumeric(value);
 		case ALPHA_NUMBER:
+			suggestedMsgId = Validators.MSGID_ALPHA_NUMERIC_STRING;
 			return Strings.isAlphanumeric(value);
 		case HANKAKU: 
+			suggestedMsgId = Validators.MSGID_HANKAKU_STRING;
 			return JapanStrings.isHankaku(value);
 		case ZENKAKU:
+			suggestedMsgId = Validators.MSGID_ZENKAKU_STRING;
 			return JapanStrings.isZenkaku(value);
 		case HANKAKU_KATAKANA:
+			suggestedMsgId = Validators.MSGID_HANKAKU_KATAKANA_STRING;
 			return JapanStrings.isHankakuKatakanaSpace(value);
 		case ZENKAKU_KATAKANA:
+			suggestedMsgId = Validators.MSGID_ZENKAKU_KATAKANA_STRING;
 			return JapanStrings.isZenkakuKatakana(value);
 		case ZENKAKU_KATAKANA_SPACE:
+			suggestedMsgId = Validators.MSGID_ZENKAKU_KATAKANA_STRING;
 			return JapanStrings.isZenkakuKatakanaSpace(value);
 		case ZENKAKU_KATAKANA_SPACES:
+			suggestedMsgId = Validators.MSGID_ZENKAKU_KATAKANA_STRING;
 			return JapanStrings.isZenkakuKatakanaSpaces(value);
 		case ZENKAKU_HIRAGANA:
+			suggestedMsgId = Validators.MSGID_ZENKAKU_HIRAGANA_STRING;
 			return JapanStrings.isZenkakuHiragana(value);
 		case ZENKAKU_HIRAGANA_SPACE:
+			suggestedMsgId = Validators.MSGID_ZENKAKU_HIRAGANA_STRING;
 			return JapanStrings.isZenkakuHiraganaSpace(value);
 		case ZENKAKU_HIRAGANA_SPACES:
+			suggestedMsgId = Validators.MSGID_ZENKAKU_HIRAGANA_STRING;
 			return JapanStrings.isZenkakuHiraganaSpaces(value);
 		}
 		
 		return true;
 	}
+
+	public String getMsgId() {
+		String msgId = super.getMsgId();
+		if (Strings.isEmpty(msgId)) {
+			msgId = suggestedMsgId;
+		}
+		return msgId;
+	}
+
 }

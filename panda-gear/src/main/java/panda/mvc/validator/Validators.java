@@ -69,6 +69,18 @@ public class Validators {
 	public static final String MSGID_URL = "validation-url";
 	
 	// -------------------------------------------------------
+	// string type validation message id
+	//
+	public static final String MSGID_ALPHA_STRING = "validation-alphastring";
+	public static final String MSGID_ALPHA_NUMERIC_STRING = "validation-alphanumericstring";
+	public static final String MSGID_NUMERIC_STRING = "validation-numericstring";
+	public static final String MSGID_HANKAKU_STRING = "validation-hankakustring";
+	public static final String MSGID_HANKAKU_KATAKANA_STRING = "validation-hankakukatakanastring";
+	public static final String MSGID_ZENKAKU_STRING = "validation-zenkakustring";
+	public static final String MSGID_ZENKAKU_KATAKANA_STRING = "validation-zenkakukatakanastring";
+	public static final String MSGID_ZENKAKU_HIRAGANA_STRING = "validation-zenkakuhiraganastring";
+
+	// -------------------------------------------------------
 	// extend validation message id
 	//
 	public static final String MSGID_PASSWORD = "validation-password";
