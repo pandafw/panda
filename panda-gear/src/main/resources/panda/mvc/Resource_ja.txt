@@ -160,7 +160,7 @@ validation-image=${top.image ? \
  : "画像ファイルのフォーマットが正しくありません。"}
 validation-incorrect=項目の値が正しくありません。
 validation-integer=整数を入力してください。
-validation-locale-invalid=言語と国・地域の組合せは正しくありません。
+validation-locale=言語と国・地域の組合せは正しくありません。
 validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以上") : \
 (top.max != null ? (top.max + "以下") : ""))}\

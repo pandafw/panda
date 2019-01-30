@@ -23,9 +23,11 @@ public class Validators {
 	public static final String MSGID_EMPTY = "validation-empty";
 	public static final String MSGID_FILE = "validation-file";
 	public static final String MSGID_FILENAME = "validation-filename";
-	public static final String MSGID_INTEGER = "validation-integer";
 	public static final String MSGID_IMAGE = "validation-image";
 	public static final String MSGID_IMAIL = "validation-imail";
+	public static final String MSGID_INCORRECT = "validation-incorrect";
+	public static final String MSGID_INTEGER = "validation-integer";
+	public static final String MSGID_LOCALE = "validation-locale";
 	public static final String MSGID_NUMBER_TO = "validation-number-to";
 	public static final String MSGID_NUMBER_RANGE = "validation-number-range";
 	public static final String MSGID_PROHIBITED = "validation-prohibited";

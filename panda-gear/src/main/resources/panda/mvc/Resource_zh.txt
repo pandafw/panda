@@ -146,7 +146,7 @@ validation-image=${top.image ? ("请指定" + \
 validation-imail=请输入正确的电子邮件地址。（例: user@domain.com）
 validation-incorrect=该项目内容不正确。
 validation-integer=请输入整数字。
-validation-locale-invalid=语言和国家・地区的组合不正确。
+validation-locale=语言和国家・地区的组合不正确。
 validation-number-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以上") : \
 (top.max != null ? (top.max + "以下") : ""))}\

@@ -220,6 +220,7 @@ validation-image=${top.image ? ("The image size " + top.width + "x" + top.height
 validation-imail=The format of email address must be "user@domain.com".
 validation-incorrect=Incorrect value.
 validation-integer=Please input a integer number.
+validation-locale=The locale is invalid.
 validation-number-range=The number must be \
 ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.min != null ? (">= " + top.min) : \
