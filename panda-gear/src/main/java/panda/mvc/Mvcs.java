@@ -29,7 +29,7 @@ import panda.mvc.util.TextProvider;
  * Mvc helper class
  */
 public abstract class Mvcs {
-	public static final String PANDA_CDN = "//pandafw.github.io/repos";
+	public static final String PANDA_CDN = "//pandafw.github.io/repos/static";
 
 	private static Beans beans = Beans.i();
 	private static Castors castors = Castors.i();
