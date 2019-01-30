@@ -178,6 +178,17 @@ public class TypeUtils {
 		return type;
 	}
 
+	public static String getElementType(String value, String name) {
+		String type = getSimpleJavaType(value, name);
+		if (Strings.endsWith(type, "[]")) {
+			return Strings.removeEnd(type, "[]");
+		}
+		if (Strings.endsWithChar(type, '>')) {
+			return Strings.substringBefore(type, '<');
+		}
+		return type;
+	}
+
 	/**
 	 * getSimpleJavaWrapType
 	 * @param value value
@@ -316,11 +327,6 @@ public class TypeUtils {
 
 		ALIAS_MAP.put("fileitem", FileItem.class.getName());
 		ALIAS_MAP.put("FileItem", FileItem.class.getName());
-
-		ALIAS_MAP.put("uploadfile", "panda.exts.fileupload.UploadFile");
-		ALIAS_MAP.put("UploadFile", "panda.exts.fileupload.UploadFile");
-		ALIAS_MAP.put("uploadimage", "panda.exts.fileupload.UploadImage");
-		ALIAS_MAP.put("UploadImage", "panda.exts.fileupload.UploadImage");
 	}
 	private static String classByAlias(String type) {
 		return ALIAS_MAP.get(type);

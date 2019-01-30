@@ -11,7 +11,6 @@ import java.util.TreeSet;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-
 import panda.dao.DaoTypes;
 import panda.dao.entity.Entities;
 import panda.dao.entity.annotation.Column;
@@ -37,12 +36,12 @@ import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
+import panda.mvc.annotation.validate.CastErrorValidate;
 import panda.mvc.validator.Validators;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.EntityProperty;
 import panda.tool.codegen.bean.Module;
+import panda.tool.codegen.bean.Validator;
 
 /**
  * entity source generator
@@ -234,12 +233,14 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		imports.add(Objects.class.getName());
 
 		for (EntityProperty p : entity.getProperties()) {
-			if (Collections.isNotEmpty(p.getValidatorList())
-					|| (p.isDbColumn() && !"String".equals(p.getType()))) {
+			if (this.castErrorType(p.getElementType())) {
 				imports.add(Validators.class.getName());
-				imports.add(Validates.class.getName());
-				imports.add(Validate.class.getName());
-				break;
+				imports.add(CastErrorValidate.class.getName());
+			}
+			if (Collections.isNotEmpty(p.getValidatorList())) {
+				for (Validator v : p.getValidatorList()) {
+					imports.add(CastErrorValidate.class.getPackage().getName() + "." + validatorType(v.getType()));
+				}
 			}
 		}
 

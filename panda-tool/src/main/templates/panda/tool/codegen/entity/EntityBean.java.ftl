@@ -100,24 +100,16 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	 * @return the ${p.name}
 	 */
 <#-- validation -->
-	<#assign stype = p.simpleJavaType/>
-	<#assign type = stype/>
-	<#if type?ends_with('[]')>
-		<#assign type = type?substring(0, type?length - 2)/>
-	<#elseif type?ends_with('>') && type?index_of('<') gt 0> 
-		<#assign ilt = type?index_of('<')/>
-		<#assign type = type?substring(ilt + 1, type?length - 1)/>
-	</#if>
-	<#if p.validatorList?has_content || (p.dbColumn && type != "String" && stype != "byte[]")>
-	@Validates({
-	<#list p.validatorList as v>
-		@Validate(value=${gen.validatorType(v.type)}<#if v.refer?has_content>, refer="${v.refer?j_string}"</#if><#if v.hasParams>, params="${v.params}"</#if><#if v.message?has_content>, message="${v.message?j_string}"<#elseif v.msgId?has_content>, msgId=${gen.validatorMsgId(v.msgId)}</#if>)<#if v_has_next || type != "String">, </#if>
-	</#list>
-	<#if type != "String">
-		@Validate(value=${gen.validatorType('cast')}, msgId=${gen.validatorMsgId('cast-' + type)})
-	</#if>
-	})
-	</#if>
+<#assign stype = p.simpleJavaType/>
+<#assign type = p.elementType/>
+<#if gen.castErrorType(type)>
+	@CastErrorValidate(msgId=${gen.validatorMsgId('cast-' + type)})
+</#if>
+<#if p.validatorList?has_content>
+<#list p.validatorList as v>
+	@${gen.validatorAnnotation(v)}
+</#list>
+</#if>
 <#-- validation -->
 	public ${p.simpleJavaType} <#if p.simpleJavaType == 'boolean'>is<#else>get</#if>${p.name?cap_first}() {
 	<#assign getterTrim = "" />

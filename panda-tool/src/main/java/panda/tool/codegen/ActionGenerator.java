@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import panda.dao.query.DataQuery;
 import panda.lang.Arrays;
 import panda.lang.Collections;
@@ -15,12 +17,11 @@ import panda.lang.Strings;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.TokenProtect;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.validate.RequiredValidate;
+import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.QueryerEx;
-import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 import panda.mvc.view.util.ListColumn;
 import panda.net.http.HttpMethod;
@@ -30,9 +31,6 @@ import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.InputUI;
 import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Module;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 /**
  * action source generator
@@ -133,11 +131,11 @@ public class ActionGenerator extends AbstractCodeGenerator {
 				}
 				
 				if ("list".equals(s) || Strings.startsWith(s, "list_")) {
-					imports.add(Validates.class.getName());
+					imports.add(VisitValidate.class.getName());
 					imports.add(Queryer.class.getName());
 				}
 				if (Strings.startsWith(s, "expo_")) {
-					imports.add(Validates.class.getName());
+					imports.add(VisitValidate.class.getName());
 					imports.add(QueryerEx.class.getName());
 				}
 				
@@ -158,7 +156,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 				if (Strings.equals(iui.getTemplate(), "copy") 
 						|| Strings.equals(iui.getTemplate(), "edit")
 						|| Strings.equals(iui.getTemplate(), "add")) {
-					imports.add(Validates.class.getName());
+					imports.add(VisitValidate.class.getName());
 					imports.add(TokenProtect.class.getName());
 					imports.add(HttpMethod.class.getName());
 				}
@@ -173,10 +171,9 @@ public class ActionGenerator extends AbstractCodeGenerator {
 				if (Strings.equals(iui.getTemplate(), "copy") 
 						|| Strings.equals(iui.getTemplate(), "edit")
 						|| Strings.equals(iui.getTemplate(), "add")) {
-					imports.add(Validates.class.getName());
+					imports.add(VisitValidate.class.getName());
 					if (Collections.isNotEmpty(iui.getRequiredValidateFieldList())) {
-						imports.add(Validate.class.getName());
-						imports.add(Validators.class.getName());
+						imports.add(RequiredValidate.class.getName());
 					}
 				}
 			}

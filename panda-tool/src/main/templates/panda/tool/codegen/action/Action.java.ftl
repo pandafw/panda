@@ -4,10 +4,11 @@ package ${actionPackage};
 <#list imports as i>
 import ${i};
 </#list>
-<#macro validates ui><#if ui.requiredValidateFieldList?has_content>@Validates({
-			@Validate(value=${gen.validatorType('required')}, params="{ ${ui.requiredValidateFields} }"),
-			@Validate(value=${gen.validatorType('visit')})
-			})<#else>@Validates</#if></#macro>
+<#macro validates ui><#if ui.requiredValidateFieldList?has_content>
+
+			@RequiredValidate(${ui.requiredValidateFields})
+			@VisitValidate
+			<#else>@VisitValidate </#if></#macro>
 
 <#if action.path??>
 @At("${action.path}/${action.name}")
@@ -132,7 +133,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer qr) {
 		return super.list(qr);
 	}
 	
@@ -144,7 +145,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer qr) {
 		return super.list_popup(qr);
 	}
 	
@@ -156,7 +157,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer qr) {
 		return super.list_print(qr);
 	}
 	
@@ -168,7 +169,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
 <#list ui.displayColumnList as c>
 		if (displayField("${c.name}")) {
@@ -203,7 +204,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(Views.S${ui.template?keep_after('_')?upper_case})
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
 		return super.${ui.template}(qr);
 	}
 	
@@ -215,7 +216,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
 		return super.${ui.template}(qr);
 	}
 	
@@ -402,7 +403,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
-	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
+	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
 		return super.add_confirm(data);
 	}
 
@@ -414,7 +415,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
-	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
+	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
 		return super.add_execute(data);
 	}
 
@@ -449,7 +450,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
-	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
+	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
 		return super.copy_confirm(data);
 	}
 
@@ -461,7 +462,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
-	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
+	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
 		return super.copy_execute(data);
 	}
 
@@ -496,7 +497,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
-	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
+	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
 		return super.edit_confirm(data);
 	}
 
@@ -508,7 +509,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.postAtName()}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
-	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
+	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
 		return super.edit_execute(data);
 	}
 

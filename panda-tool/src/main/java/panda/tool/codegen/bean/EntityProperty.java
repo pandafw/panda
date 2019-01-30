@@ -316,13 +316,12 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		return TypeUtils.getNativeJavaType(type, name);
 	}
 
-	/**
-	 * Gets the value of the type property.
-	 * 
-	 * @return possible object is {@link String }
-	 */
 	public String getSimpleJavaType() {
 		return TypeUtils.getSimpleJavaType(type, name);
+	}
+
+	public String getElementType() {
+		return TypeUtils.getElementType(type, name);
 	}
 
 	/**

@@ -52,6 +52,9 @@ public class Validator {
 	@XmlAttribute
 	private String msgId;
 
+	@XmlAttribute
+	private String shortCircuit;
+
 	/**
 	 * Constructor
 	 */
@@ -68,6 +71,7 @@ public class Validator {
 		this.refer = validator.refer;
 		this.message = validator.message;
 		this.msgId = validator.msgId;
+		this.shortCircuit = validator.shortCircuit;
 
 		paramList = new LinkedList<Param>();
 		for (Param p : validator.getParamList()) {
@@ -161,5 +165,19 @@ public class Validator {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the shortCircuit
+	 */
+	public String getShortCircuit() {
+		return shortCircuit;
+	}
+
+	/**
+	 * @param shortCircuit the shortCircuit to set
+	 */
+	public void setShortCircuit(String shortCircuit) {
+		this.shortCircuit = shortCircuit;
 	}
 }

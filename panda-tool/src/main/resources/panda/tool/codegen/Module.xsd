@@ -137,6 +137,7 @@
 		<attribute name="refer" type="string"></attribute>
 		<attribute name="message" type="string"></attribute>
 		<attribute name="msgId" type="string"></attribute>
+		<attribute name="shortCircuit" type="string"></attribute>
 	</complexType>
 
 	<complexType name="Param">

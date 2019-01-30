@@ -31,23 +31,47 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
 import panda.args.Option;
 import panda.io.FileNames;
 import panda.io.Settings;
 import panda.io.Streams;
+import panda.lang.Arrays;
 import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.HandledException;
+import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.lang.Texts;
+import panda.mvc.annotation.validate.BinaryValidate;
+import panda.mvc.annotation.validate.CIDRValidate;
+import panda.mvc.annotation.validate.CastErrorValidate;
+import panda.mvc.annotation.validate.ConstantValidate;
+import panda.mvc.annotation.validate.CreditCardNoValidate;
+import panda.mvc.annotation.validate.DateValidate;
+import panda.mvc.annotation.validate.DecimalValidate;
+import panda.mvc.annotation.validate.ELValidate;
+import panda.mvc.annotation.validate.EmailValidate;
+import panda.mvc.annotation.validate.EmptyValidate;
+import panda.mvc.annotation.validate.FileValidate;
+import panda.mvc.annotation.validate.FilenameValidate;
+import panda.mvc.annotation.validate.ImageValidate;
+import panda.mvc.annotation.validate.ImailValidate;
+import panda.mvc.annotation.validate.NumberValidate;
+import panda.mvc.annotation.validate.ProhibitedValidate;
+import panda.mvc.annotation.validate.RegexValidate;
+import panda.mvc.annotation.validate.RequiredValidate;
+import panda.mvc.annotation.validate.StringValidate;
+import panda.mvc.annotation.validate.URLValidate;
+import panda.mvc.annotation.validate.VisitValidate;
 import panda.tool.AbstractCommandTool;
 import panda.tool.codegen.bean.Entity;
+import panda.tool.codegen.bean.EntityProperty;
 import panda.tool.codegen.bean.Module;
-
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
+import panda.tool.codegen.bean.Param;
 
 /**
  * Base class for code generator.
@@ -578,80 +602,194 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 	//---------------------------------------------------------------
 	private static Map<String, String> vtmap = new HashMap<String, String>();
 	static {
-		vtmap.put("cast", "Validators.CAST");
-		vtmap.put("required", "Validators.REQUIRED");
-		vtmap.put("empty", "Validators.EMPTY");
+		vtmap.put("cast", CastErrorValidate.class.getSimpleName());
+		vtmap.put("required", RequiredValidate.class.getSimpleName());
+		vtmap.put("empty", EmptyValidate.class.getSimpleName());
 
-		vtmap.put("el", "Validators.EL");
-		vtmap.put("regex", "Validators.REGEX");
-		vtmap.put("email", "Validators.EMAIL");
-		vtmap.put("imail", "Validators.IMAIL");
-		vtmap.put("url", "Validators.URL");
-		vtmap.put("filename", "Validators.FILENAME");
-		vtmap.put("creditcardno", "Validators.CREDITCARDNO");
+		vtmap.put("el", ELValidate.class.getSimpleName());
+		vtmap.put("regex", RegexValidate.class.getSimpleName());
+		vtmap.put("email", EmailValidate.class.getSimpleName());
+		vtmap.put("imail", ImailValidate.class.getSimpleName());
+		vtmap.put("url", URLValidate.class.getSimpleName());
+		vtmap.put("filename", FilenameValidate.class.getSimpleName());
+		vtmap.put("creditcardno", CreditCardNoValidate.class.getSimpleName());
 
-		vtmap.put("binary", "Validators.BINARY");
-		vtmap.put("cidr", "Validators.CIDR");
-		vtmap.put("date", "Validators.DATE");
+		vtmap.put("binary", BinaryValidate.class.getSimpleName());
+		vtmap.put("cidr", CIDRValidate.class.getSimpleName());
+		vtmap.put("date", DateValidate.class.getSimpleName());
 
-		vtmap.put("byte", "Validators.NUMBER");
-		vtmap.put("short", "Validators.NUMBER");
-		vtmap.put("int", "Validators.NUMBER");
-		vtmap.put("long", "Validators.NUMBER");
-		vtmap.put("float", "Validators.NUMBER");
-		vtmap.put("double", "Validators.NUMBER");
-		vtmap.put("number", "Validators.NUMBER");
+		vtmap.put("byte", NumberValidate.class.getSimpleName());
+		vtmap.put("short", NumberValidate.class.getSimpleName());
+		vtmap.put("int", NumberValidate.class.getSimpleName());
+		vtmap.put("long", NumberValidate.class.getSimpleName());
+		vtmap.put("float", NumberValidate.class.getSimpleName());
+		vtmap.put("double", NumberValidate.class.getSimpleName());
+		vtmap.put("number", NumberValidate.class.getSimpleName());
 
-		vtmap.put("string", "Validators.STRING");
-		vtmap.put("stringlength", "Validators.STRING");
-		vtmap.put("stringtype", "Validators.STRING");
+		vtmap.put("string", StringValidate.class.getSimpleName());
+		vtmap.put("stringlength", StringValidate.class.getSimpleName());
+		vtmap.put("stringtype", StringValidate.class.getSimpleName());
 
-		vtmap.put("decimal", "Validators.DECIMAL");
+		vtmap.put("decimal", DecimalValidate.class.getSimpleName());
 
-		vtmap.put("file", "Validators.FILE");
-		vtmap.put("image", "Validators.IMAGE");
+		vtmap.put("file", FileValidate.class.getSimpleName());
+		vtmap.put("image", ImageValidate.class.getSimpleName());
 
-		vtmap.put("constant", "Validators.CONSTANT");
-		vtmap.put("prohibited", "Validators.PROHIBITED");
+		vtmap.put("constant", ConstantValidate.class.getSimpleName());
+		vtmap.put("prohibited", ProhibitedValidate.class.getSimpleName());
 
-		vtmap.put("visit", "Validators.VISIT");
+		vtmap.put("visit", VisitValidate.class.getSimpleName());
 	}
-	public String validatorType(String alias) {
-		String vt = vtmap.get(alias);
-		if (vt == null) {
-			throw new IllegalArgumentException("Illegal validator type: " + alias);
+
+	private static Set<String> castErrorTypes = Arrays.toSet(
+		"boolean", "Boolean", 
+		"byte", "Byte", 
+		"short", "Short",
+		"int", "Integer",
+		"long", "Long",
+		"float", "Float",
+		"double", "Double",
+		"Number", "BigDecimal", "BigInteger",
+		"Date", "Calendar",
+		"URL", "EmailAddress");
+	
+	public boolean castErrorType(String type) {
+		return castErrorTypes.contains(type);
+	}
+	
+	public boolean castErrorProperty(EntityProperty ep) {
+		return !"byte[]".equals(ep.getSimpleJavaType()) && castErrorType(ep.getElementType());
+	}
+	
+	public String validatorAnnotation(panda.tool.codegen.bean.Validator v) {
+		StringBuilder sb = new StringBuilder();
+		
+		String type = validatorType(v.getType());
+		sb.append(type);
+		
+		sb.append(validatorParams(v, type));
+		return sb.toString();
+	}
+	
+	protected String validatorType(String alias) {
+		if (Strings.endsWith(alias, "Validate")) {
+			return alias;
 		}
+
+		String vt = vtmap.get(alias);
+		if (vt != null) {
+			return vt;
+		}
+		
+		vt = Strings.capitalize(alias);
 		return vt;
 	}
 
+	private String validatorParams(panda.tool.codegen.bean.Validator v, String type) {
+		StringBuilder sb = new StringBuilder();
+		
+		if (Strings.isNotEmpty(v.getRefer())) {
+			sb.append("refer=\"").append(StringEscapes.escapeJava(v.getRefer())).append('"');
+		}
+		if (v.isHasParams()) {
+			for (Param p : v.getParamList()) {
+				if (sb.length() > 0) {
+					sb.append(", ");
+				}
+				sb.append(p.getName()).append('=');
+				String q = quoteValidatorParam(type, p);
+				sb.append(q);
+				sb.append(p.getValue());
+				sb.append(q);
+			}
+		}
+		if (Strings.isNotEmpty(v.getMessage())) {
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append("message=\"").append(StringEscapes.escapeJava(v.getMessage())).append('"');
+		}
+		if (Strings.isNotEmpty(v.getMsgId())) {
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append("msgId=").append(validatorMsgId(v.getMsgId()));
+		}
+		if (Strings.isNotEmpty(v.getShortCircuit())) {
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append("shortCircuit=").append(v.getShortCircuit());
+		}
+		
+		if (sb.length() > 0) {
+			sb.insert(0, '(').append(')');
+		}
+		return sb.toString();
+	}
+
+	private String quoteValidatorParam(String type, Param p) {
+		if (ConstantValidate.class.getSimpleName().equals(type)) {
+			return ("list".equals(p.getName())) ? "\"" : "";
+		}
+		if (CreditCardNoValidate.class.getSimpleName().equals(type)) {
+			return ("list".equals(p.getName())) ? "\"" : "";
+		}
+		if (DateValidate.class.getSimpleName().equals(type)) {
+			return "\"";
+		}
+		if (DecimalValidate.class.getSimpleName().equals(type)) {
+			return ("type".equals(p.getName())) ? "'" : "";
+		}
+		if (ELValidate.class.getSimpleName().equals(type)) {
+			return "\"";
+		}
+		if (NumberValidate.class.getSimpleName().equals(type)) {
+			return "\"";
+		}
+		if (ProhibitedValidate.class.getSimpleName().equals(type)) {
+			return ("list".equals(p.getName())) ? "\"" : "";
+		}
+		if (RegexValidate.class.getSimpleName().equals(type)) {
+			return ("regex".equals(p.getName())) ? "\"" : "";
+		}
+		if (RequiredValidate.class.getSimpleName().equals(type)) {
+			return ("fields".equals(p.getName())) ? "" : "\"";
+		}
+		if (StringValidate.class.getSimpleName().equals(type)) {
+			return ("type".equals(p.getName())) ? "'" : "";
+		}
+		
+		return "";
+	}
+	
 	private static Map<String, String> vmmap = new HashMap<String, String>();
 	static {
-		vmmap.put("cast-boolean", "Validators.MSGID_CAST_BOOLEAN");
-		vmmap.put("cast-Boolean", "Validators.MSGID_CAST_BOOLEAN");
+		vmmap.put("cast-boolean", "Validators.MSGID_BOOLEAN");
+		vmmap.put("cast-Boolean", "Validators.MSGID_BOOLEAN");
 
-		vmmap.put("cast-char", "Validators.MSGID_CAST_CHAR");
-		vmmap.put("cast-Character", "Validators.MSGID_CAST_CHAR");
+		vmmap.put("cast-byte", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-Byte", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-short", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-Short", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-int", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-Integer", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-long", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-Long", "Validators.MSGID_INTEGER");
+		vmmap.put("cast-BigInteger", "Validators.MSGID_INTEGER");
 
-		vmmap.put("cast-byte", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Byte", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-short", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Short", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-int", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Integer", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-long", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Long", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-BigInteger", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-float", "Validators.MSGID_DECIMAL");
+		vmmap.put("cast-Float", "Validators.MSGID_DECIMAL");
+		vmmap.put("cast-double", "Validators.MSGID_DECIMAL");
+		vmmap.put("cast-Double", "Validators.MSGID_DECIMAL");
+		vmmap.put("cast-BigDecimal", "Validators.MSGID_DECIMAL");
 
-		vmmap.put("cast-float", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-Float", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-double", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-Double", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-BigDecimal", "Validators.MSGID_CAST_DECIMAL");
-
-		vmmap.put("cast-Date", "Validators.MSGID_CAST_DATE");
-		vmmap.put("cast-Calendar", "Validators.MSGID_CAST_DATE");
-		vmmap.put("cast-FileItem", "Validators.MSGID_CAST_FILE");
-		vmmap.put("cast-URL", "Validators.MSGID_CAST_URL");
+		vmmap.put("cast-Date", "Validators.MSGID_DATE");
+		vmmap.put("cast-Calendar", "Validators.MSGID_DATE");
+		vmmap.put("cast-File", "Validators.MSGID_FILE");
+		vmmap.put("cast-FileItem", "Validators.MSGID_FILE");
+		vmmap.put("cast-URL", "Validators.MSGID_URL");
+		vmmap.put("cast-Email", "Validators.MSGID_EMAIL");
 
 		vmmap.put("password", "Validators.MSGID_PASSWORD");
 		vmmap.put("byte", "Validators.MSGID_NUMBER_RANGE");
@@ -663,20 +801,40 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 		vmmap.put("decimal", "Validators.MSGID_NUMBER_RANGE");
 		vmmap.put("number", "Validators.MSGID_NUMBER_RANGE");
 
-		vmmap.put("date", "Validators.MSGID_CAST_DATE");
-		vmmap.put("time", "Validators.MSGID_CAST_TIME");
-		vmmap.put("datetime", "Validators.MSGID_CAST_DATETIME");
+		vmmap.put("date", "Validators.MSGID_DATE");
+		vmmap.put("time", "Validators.MSGID_TIME");
+		vmmap.put("datetime", "Validators.MSGID_DATETIME");
+		
+		vmmap.put("locale", "Validators.MSGID_LOCALE");
+		vmmap.put("incorrect", "Validators.MSGID_INCORRECT");
 	}
 
+	public boolean useValidatorsMsgId(String alias) {
+		if (Strings.startsWithChar(alias, '"')) {
+			return false;
+		}
+
+		if (Strings.startsWith(alias, "MSGID_")) {
+			return true;
+		}
+		
+		String vm = vmmap.get(alias);
+		return (vm != null);
+	}
+	
 	public String validatorMsgId(String alias) {
 		if (Strings.startsWithChar(alias, '"')) {
 			return alias;
 		}
+
+		if (Strings.startsWith(alias, "MSGID_")) {
+			return "Validators." + alias;
+		}
 		
 		String vm = vmmap.get(alias);
-		if (vm == null) {
-			throw new IllegalArgumentException("Illegal validator msg: " + alias);
+		if (vm != null) {
+			return vm;
 		}
-		return vm;
+		return '"' + alias + '"';
 	}
 }
