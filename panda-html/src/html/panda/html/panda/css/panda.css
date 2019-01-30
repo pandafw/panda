@@ -216,10 +216,18 @@ ul.p-field-errors i.fa-li {
 .p-form.form-horizontal .checkbox-inline {
 	padding-top: 5px;
 }
+.p-form.form-horizontal .form-control-static {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-bottom: 0;
+}
 
 /** form inputs */
 .p-form label {
 	font-weight: normal;
+}
+.p-radiomap {
+	min-height: 34px;
 }
 .p-checkboxlist.break label.checkbox-inline,
 .p-radiomap.break label.radio-inline {
