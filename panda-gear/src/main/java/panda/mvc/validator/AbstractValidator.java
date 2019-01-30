@@ -37,6 +37,9 @@ public abstract class AbstractValidator implements Validator {
 	 */
 	private String msgId;
 
+	/**
+	 * short circuit next validation process
+	 */
 	private boolean shortCircuit;
 
 	/**
