@@ -2,6 +2,8 @@ package panda.io.resource;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -12,7 +14,6 @@ import java.util.Properties;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.lang.Exceptions;
-import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -27,16 +28,17 @@ public class BeanResourceMaker implements ResourceMaker {
 	protected Map<String, Map<String, Object>> resources = new HashMap<String, Map<String, Object>>();
 
 	protected String classColumn;
-	protected String languageColumn;
-	protected String countryColumn;
-	protected String variantColumn;
+	protected String localeColumn;
 	protected String sourceColumn;
 	protected String nameColumn;
 	protected String valueColumn;
+	protected String timestampColumn;
+
 	protected String emptyString = "*";
 	protected String packageName;
 
-	
+	protected long timestamp;
+
 	public Resource getResource(Resource parent, String baseName, Locale locale, ClassLoader classLoader) throws IOException {
 		Map<String, Object> map = resources.get(Resources.toBundleName(baseName, locale));
 		if (map != null) {
@@ -61,45 +63,17 @@ public class BeanResourceMaker implements ResourceMaker {
 	}
 
 	/**
-	 * @return the languageColumn
+	 * @return the localeColumn
 	 */
-	public String getLanguageColumn() {
-		return languageColumn;
+	public String getLocaleColumn() {
+		return localeColumn;
 	}
 
 	/**
-	 * @param languageColumn the languageColumn to set
+	 * @param localeColumn the localeColumn to set
 	 */
-	public void setLanguageColumn(String languageColumn) {
-		this.languageColumn = languageColumn;
-	}
-
-	/**
-	 * @return the countryColumn
-	 */
-	public String getCountryColumn() {
-		return countryColumn;
-	}
-
-	/**
-	 * @param countryColumn the countryColumn to set
-	 */
-	public void setCountryColumn(String countryColumn) {
-		this.countryColumn = countryColumn;
-	}
-
-	/**
-	 * @return the variantColumn
-	 */
-	public String getVariantColumn() {
-		return variantColumn;
-	}
-
-	/**
-	 * @param variantColumn the variantColumn to set
-	 */
-	public void setVariantColumn(String variantColumn) {
-		this.variantColumn = variantColumn;
+	public void setLocaleColumn(String localeColumn) {
+		this.localeColumn = localeColumn;
 	}
 
 	/**
@@ -145,6 +119,20 @@ public class BeanResourceMaker implements ResourceMaker {
 	}
 
 	/**
+	 * @return the timestampColumn
+	 */
+	public String getTimestampColumn() {
+		return timestampColumn;
+	}
+
+	/**
+	 * @param timestampColumn the timestampColumn to set
+	 */
+	public void setTimestampColumn(String timestampColumn) {
+		this.timestampColumn = timestampColumn;
+	}
+
+	/**
 	 * @return the packageName
 	 */
 	public String getPackageName() {
@@ -172,170 +160,70 @@ public class BeanResourceMaker implements ResourceMaker {
 		this.emptyString = emptyString;
 	}
 
-	protected static class BundleKey {
-		public String baseName;
-		public String language;
-		public String country;
-		public String variant;
-		
-		public String toString() {
-			StringBuilder sb = new StringBuilder();
-			sb.append(baseName);
-			
-			if (Strings.isEmpty(language)) {
-				return sb.toString();
-			}
-			sb.append('_').append(language);
-			
-			if (Strings.isEmpty(country)) {
-				return sb.toString();
-			}
-			sb.append('_').append(country);
+	protected String buildResourceName(String clazz, String locale) {
+		StringBuilder sb = new StringBuilder();
 
-			if (Strings.isEmpty(variant)) {
-				return sb.toString();
-			}
-			sb.append('_').append(variant);
-			
-			return sb.toString();
+		if (Strings.isNotEmpty(packageName)) {
+			sb.append(packageName).append('.');
 		}
-	
-		public Locale toLocale() {
-			if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country) && Strings.isNotEmpty(variant)) {
-				return new Locale(language, country, variant);
-			}
-			else if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country)) {
-				return new Locale(language, country);
-			}
-			else if (Strings.isNotEmpty(language)) {
-				return new Locale(language);
-			}
-			else {
-				return Locale.getDefault();
-			}
-		}
-		
-		public String toMissesKey() {
-			return baseName + "_" + toLocale().toString();
+		sb.append(clazz);
+
+		if (Strings.isNotEmpty(locale) && !locale.equals(emptyString)) {
+			sb.append('_').append(locale);
 		}
 
-		@Override
-		public int hashCode() {
-			return Objects.hashCodes(baseName, country, language, variant);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			
-			BundleKey rhs = (BundleKey) obj;
-			return Objects.equalsBuilder().append(baseName, rhs.baseName)
-					.append(country, rhs.country)
-					.append(language, rhs.language)
-					.append(variant, rhs.variant)
-					.isEquals();
-		}
+		return sb.toString();
 	}
-
-	protected BundleKey buildBundleKey(String clazz, String language, String country, String variant) {
-		BundleKey bk = new BundleKey();
-		
-		if (packageName != null) {
-			bk.baseName = packageName + '.' + clazz;
-		}
-		else {
-			bk.baseName = clazz;
-		}
-		
-		if (emptyString != null && emptyString.equals(language)) {
-			return bk;
-		}
-		else {
-			bk.language = language;
-		}
-
-		if (emptyString != null && emptyString.equals(country)) {
-			return bk;
-		}
-		else {
-			bk.country = country;
-		}
-		
-		if (emptyString != null && emptyString.equals(variant)) {
-			return bk;
-		}
-		else {
-			bk.variant = variant;
-		}
-		
-		return bk;
-	}
-
-//  comment for thread unsafe
-//	/**
-//	 * @param clazz class name
-//	 * @param language language
-//	 * @param country country
-//	 * @param variant variant
-//	 * @param name resource name
-//	 * @param value resource value 
-//	 * @return true if put resource successfully
-//	 */
-//	public boolean putResource(String clazz, String language, String country, String variant, String name, String value) {
-//		BundleKey bk = buildBundleKey(clazz, language, country, variant);
-//		Map<String, String> rm = resources.get(bk.toString());
-//		if (rm != null) {
-//			if (value == null) {
-//				rm.remove(name);
-//			}
-//			else {
-//				rm.put(name, value);
-//			}
-//			return true;
-//		}
-//		return false;
-//	}
 
 	/**
 	 * load resources
 	 * @param resList resource list
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void loadResources(List<?> resList) {
+	public boolean loadResources(List<?> resList) {
 		Map<String, Map<String, Object>> res = new HashMap<String, Map<String, Object>>();
 
-		BundleKey lastBundle = null;
-		Map<String, Object> properties = null;
+		long now = System.currentTimeMillis();
+		boolean modified = false;
 		
+		String last = null;
+		Map<String, Object> properties = null;
+
 		for (Object o : resList) {
 			BeanHandler bh = Beans.i().getBeanHandler(o.getClass());
 			
 			String clazz = null;
-			String language = null;
-			String country = null;
-			String variant = null;
+			String locale = null;
 			
 			clazz = (String)bh.getPropertyValue(o, classColumn);
-			if (Strings.isNotEmpty(languageColumn)) {
-				language = (String)bh.getPropertyValue(o, languageColumn);
+			if (Strings.isNotEmpty(localeColumn)) {
+				locale = (String)bh.getPropertyValue(o, localeColumn);
 			}
-			if (Strings.isNotEmpty(countryColumn)) {
-				country = (String)bh.getPropertyValue(o, countryColumn);
-			}
-			if (Strings.isNotEmpty(variantColumn)) {
-				variant = (String)bh.getPropertyValue(o, variantColumn);
+			if (!modified) {
+				if (Strings.isNotEmpty(timestampColumn)) {
+					Long t = null;
+					Object v = bh.getPropertyValue(o, timestampColumn);
+					if (v instanceof Long) {
+						t = (Long)v;
+					}
+					else if (v instanceof Date) {
+						t = ((Date)v).getTime();
+					}
+					else if (v instanceof Calendar) {
+						t = ((Calendar)v).getTimeInMillis();
+					}
+					
+					if (t > this.timestamp) {
+						modified = true;
+					}
+				}
 			}
 			
-			BundleKey bk = buildBundleKey(clazz, language, country, variant);
-			if (!bk.equals(lastBundle)) {
-				lastBundle = bk;
+			String bk = buildResourceName(clazz, locale);
+			if (!bk.equals(last)) {
+				last = bk;
 				properties = new HashMap<String, Object>();
-				res.put(bk.toString(), properties);
+				res.put(bk, properties);
 			}
 
 			if (Strings.isEmpty(sourceColumn)) {
@@ -357,7 +245,14 @@ public class BeanResourceMaker implements ResourceMaker {
 				}
 			}
 		}
-		
+
 		resources = res;
+		
+		if (timestamp == 0) {
+			timestamp = now;
+			modified = true;
+		}
+		
+		return modified;
 	}
 }

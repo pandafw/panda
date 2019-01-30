@@ -36,18 +36,14 @@ public class SqlTemplateLoader extends ExternalTemplateLoader {
 	public void loadTemplates(DataSource dataSource, String tableName, String whereClause) throws Exception {
 		String sql = "SELECT"
 			+ " " + nameColumn + ", "
-			+ (Strings.isEmpty(languageColumn) ? "" : (" " + languageColumn + ", "))
-			+ (Strings.isEmpty(countryColumn) ? "" : (" " + countryColumn + ", "))
-			+ (Strings.isEmpty(variantColumn) ? "" : (" " + variantColumn + ", "))
+			+ (Strings.isEmpty(localeColumn) ? "" : (" " + localeColumn + ", "))
 			+ (Strings.isEmpty(timestampColumn) ? "" : (" " + timestampColumn + ", "))
 			+ " " + sourceColumn
 			+ " FROM " + tableName
 			+ (Strings.isEmpty(whereClause) ? "" : " WHERE " + whereClause)
 			+ " ORDER BY "
 			+ " " + nameColumn + ", "
-			+ (Strings.isEmpty(languageColumn) ? "" : (" " + languageColumn + ", "))
-			+ (Strings.isEmpty(countryColumn) ? "" : (" " + countryColumn + ", "))
-			+ (Strings.isEmpty(variantColumn) ? "" : (" " + variantColumn + ", "))
+			+ (Strings.isEmpty(localeColumn) ? "" : (" " + localeColumn + ", "))
 			+ " " + sourceColumn;
 
 		Connection conn = dataSource.getConnection();
@@ -70,22 +66,14 @@ public class SqlTemplateLoader extends ExternalTemplateLoader {
 				}
 
 				String name = null;
-				String language = null;
-				String country = null;
-				String variant = null;
+				String locale = null;
 				
 				name = rs.getString(nameColumn);
-				if (Strings.isNotEmpty(languageColumn)) {
-					language = rs.getString(languageColumn);
-				}
-				if (Strings.isNotEmpty(countryColumn)) {
-					country = rs.getString(countryColumn);
-				}
-				if (Strings.isNotEmpty(variantColumn)) {
-					variant = rs.getString(variantColumn);
+				if (Strings.isNotEmpty(localeColumn)) {
+					locale = rs.getString(localeColumn);
 				}
 
-				String templateName = buildTemplateName(name, language, country, variant); 
+				String templateName = buildTemplateName(name, locale); 
 				String templateSource = rs.getString(sourceColumn);
 				templates.put(name, new StringTemplateSource(name, templateSource, lastModified));
 
