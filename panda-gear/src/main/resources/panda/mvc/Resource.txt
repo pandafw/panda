@@ -341,7 +341,6 @@ btn-execute=Execute
 btn-home=Home
 btn-import=Import
 btn-insert=Insert
-btn-json=JSON Export
 btn-layout-pc=PC Layout
 btn-layout-mb=Mobile Layout
 btn-list=List
@@ -351,7 +350,7 @@ btn-media=Media
 btn-media-browser=Media Browser
 btn-new=New
 btn-next=Next
-btn-pdf=PDF Print
+btn-pdf=PDF
 btn-print=Print
 btn-recover=Recover
 btn-refresh=Refresh
@@ -384,11 +383,12 @@ btn-update=Update
 btn-upload=Upload
 btn-view=View
 
-btn-csv=CSV Export
-btn-tsv=TSV Export
-btn-xls=XLS Export
-btn-xlsx=XLSX Export
-btn-xml=XML Export
+btn-csv=CSV
+btn-tsv=TSV
+btn-xls=XLS
+btn-xlsx=XLSX
+btn-json=JSON
+btn-xml=XML
 
 
 #-----------------------------------------------------------------------------

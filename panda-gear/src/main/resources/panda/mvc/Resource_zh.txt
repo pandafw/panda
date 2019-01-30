@@ -271,7 +271,6 @@ btn-export=导出
 btn-home=主页
 btn-import=数据导入
 btn-insert=追加
-btn-json=JSON导出
 btn-layout-pc=PC版显示
 btn-layout-mb=手机版显示
 btn-list=浏览
@@ -319,6 +318,7 @@ btn-csv=CSV导出
 btn-tsv=TSV导出
 btn-xls=XLS导出
 btn-xlsx=XLSX导出
+btn-json=JSON导出
 btn-xml=XML导出
 
 

@@ -277,7 +277,6 @@ btn-execute=実行
 btn-home=ホーム
 btn-import=インポート
 btn-insert=新規
-btn-json=JSON出力
 btn-layout-pc=PCサイトに切り替える
 btn-layout-mb=モバイルサイトに切り替える
 btn-list=一覧
@@ -325,6 +324,7 @@ btn-csv=CSV出力
 btn-tsv=TSV出力
 btn-xls=XLS出力
 btn-xlsx=XLSX出力
+btn-json=JSON出力
 btn-xml=XML出力
 
 
