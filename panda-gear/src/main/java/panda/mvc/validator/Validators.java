@@ -74,6 +74,7 @@ public class Validators {
 	public static final String MSGID_PASSWORD = "validation-password";
 	public static final String MSGID_PASSWORD_NOT_SAME = "validation-password-notsame";
 	public static final String MSGID_PASSWORD_INCORRECT = "validation-password-incorrect";
+	public static final String MSGID_CREDITCARDNO = "validation-creditcardnumber";
 	
 
 	/**
