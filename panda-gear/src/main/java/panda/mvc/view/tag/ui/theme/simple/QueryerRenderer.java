@@ -126,22 +126,12 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 				}
 				
 				String _fn = _pf + c.name;
-	
-				boolean _hfe = false;
-				if (Collections.isNotEmpty(fes)) {
-					String _fn_d = _fn + '.';
-					for (Entry<String, List<String>> en2 : fes.entrySet()) {
-						if (en2.getKey().startsWith(_fn_d)) {
-							_hfe = true;
-							break;
-						}
-					}
-				}
+				boolean _hfe = hasFieldError(fes, _fn);
 	
 				Filter qf = (qfs == null ? null : qfs.get(c.name));
 				if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
 					fsinputs.add(c.name);
-					if (!qf.isEmpty()) {
+					if (_hfe || !qf.isEmpty()) {
 						fsinput = true;
 					}
 				}
@@ -161,6 +151,20 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		}
 	}
 
+	private boolean hasFieldError(Map<String, List<String>> fes, String fn) {
+		boolean _hfe = false;
+		if (Collections.isNotEmpty(fes)) {
+			String _fn_d = fn + '.';
+			for (Entry<String, List<String>> en2 : fes.entrySet()) {
+				if (en2.getKey().startsWith(_fn_d)) {
+					_hfe = true;
+					break;
+				}
+			}
+		}
+		return _hfe;
+	}
+	
 	public static boolean isFiltered(ListFilter cf, Filter qf) {
 		boolean r = false;
 
@@ -286,16 +290,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 			String _fn = _pf + _name;
 			String _ifn = id + "_fsf_" + _name;
 			boolean _fd = fsinputs.contains(_name);
-
-			boolean _hfe = false;
-			if (Collections.isNotEmpty(fieldErrors)) {
-				for (Entry<String, List<String>> en2 : fieldErrors.entrySet()) {
-					if (en2.getKey().startsWith(_fn + '.')) {
-						_hfe = true;
-						break;
-					}
-				}
-			}
+			boolean _hfe = hasFieldError(fieldErrors, _fn);
 
 			write("<div class=\"p-qr-fsi-" 
 					+ _hname
