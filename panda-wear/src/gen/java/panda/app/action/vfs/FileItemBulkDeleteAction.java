@@ -4,8 +4,10 @@ import java.util.Map;
 import panda.app.action.crud.GenericBulkAction;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
+import panda.net.http.HttpMethod;
 import panda.vfs.FileItem;
 
 public abstract class FileItemBulkDeleteAction extends GenericBulkAction<FileItem> {
@@ -38,8 +40,9 @@ public abstract class FileItemBulkDeleteAction extends GenericBulkAction<FileIte
 	 * @param args arguments
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~bdelete")
+	@TokenProtect
 	public Object bdelete_execute(@Param Map<String, String[]> args) {
 		return super.bdelete_execute(args);
 	}

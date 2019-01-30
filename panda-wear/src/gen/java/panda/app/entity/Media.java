@@ -5,14 +5,17 @@ import panda.app.entity.CUBean;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Id;
 import panda.lang.Objects;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
+import panda.mvc.annotation.validate.CastErrorValidate;
+import panda.mvc.annotation.validate.ConstantValidate;
+import panda.mvc.annotation.validate.FileValidate;
+import panda.mvc.annotation.validate.ImageValidate;
+import panda.mvc.annotation.validate.StringValidate;
 import panda.mvc.validator.Validators;
 import panda.vfs.FileItem;
 
 public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = -748973709L;
+	private static final long serialVersionUID = -1790967583L;
 
 	/**
 	 * Constructor
@@ -87,9 +90,7 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the tag
 	 */
-	@Validates({
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.mediaTagMap}' }")
-	})
+	@ConstantValidate(list="%{consts.mediaTagMap}")
 	public String getTag() {
 		return tag;
 	}
@@ -104,9 +105,7 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the name
 	 */
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 200 }")
-	})
+	@StringValidate(maxLength=200)
 	public String getName() {
 		return name;
 	}
@@ -121,9 +120,7 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the size
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
+	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
 	public Integer getSize() {
 		return size;
 	}
@@ -138,9 +135,7 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the width
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
+	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
 	public Integer getWidth() {
 		return width;
 	}
@@ -155,9 +150,7 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the height
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
+	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
 	public Integer getHeight() {
 		return height;
 	}
@@ -172,11 +165,8 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the file
 	 */
-	@Validates({
-		@Validate(value=Validators.FILE), 
-		@Validate(value=Validators.IMAGE), 
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_FILE)
-	})
+	@FileValidate
+	@ImageValidate
 	public FileItem getFile() {
 		return file;
 	}

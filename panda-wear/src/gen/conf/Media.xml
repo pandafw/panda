@@ -7,7 +7,7 @@
 		<property name="id" type="String" size="32" notNull="true" primaryKey="true"/>
 		<property name="tag" type="String" size="10">
 			<validator type="constant">
-				<param name="list" value="'%{consts.mediaTagMap}'"/>
+				<param name="list" value="%{consts.mediaTagMap}"/>
 			</validator>
 		</property>
 		<property name="name" type="String" size="200">

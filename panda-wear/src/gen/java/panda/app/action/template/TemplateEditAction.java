@@ -4,11 +4,12 @@ import panda.app.action.crud.GenericEditAction;
 import panda.app.entity.Template;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
+import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.validator.Validators;
+import panda.mvc.annotation.validate.RequiredValidate;
+import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.view.Views;
+import panda.net.http.HttpMethod;
 
 public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
@@ -94,12 +95,13 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~add")
-	public Object add_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
+	@TokenProtect
+	public Object add_confirm(@Param 
+			@RequiredValidate(fields={ "name", "language", "country" })
+			@VisitValidate
+			Template data) {
 		return super.add_confirm(data);
 	}
 
@@ -108,12 +110,13 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~add")
-	public Object add_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
+	@TokenProtect
+	public Object add_execute(@Param 
+			@RequiredValidate(fields={ "name", "language", "country" })
+			@VisitValidate
+			Template data) {
 		return super.add_execute(data);
 	}
 
@@ -144,12 +147,13 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~copy")
-	public Object copy_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
+	@TokenProtect
+	public Object copy_confirm(@Param 
+			@RequiredValidate(fields={ "name", "language", "country" })
+			@VisitValidate
+			Template data) {
 		return super.copy_confirm(data);
 	}
 
@@ -158,12 +162,13 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~copy")
-	public Object copy_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
+	@TokenProtect
+	public Object copy_execute(@Param 
+			@RequiredValidate(fields={ "name", "language", "country" })
+			@VisitValidate
+			Template data) {
 		return super.copy_execute(data);
 	}
 
@@ -194,12 +199,13 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~edit")
-	public Object edit_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
+	@TokenProtect
+	public Object edit_confirm(@Param 
+			@RequiredValidate(fields={ "name", "language", "country" })
+			@VisitValidate
+			Template data) {
 		return super.edit_confirm(data);
 	}
 
@@ -208,12 +214,13 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~edit")
-	public Object edit_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="{ fields: [ 'name', 'language', 'country' ] }"),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
+	@TokenProtect
+	public Object edit_execute(@Param 
+			@RequiredValidate(fields={ "name", "language", "country" })
+			@VisitValidate
+			Template data) {
 		return super.edit_execute(data);
 	}
 
@@ -233,8 +240,9 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * @param key the input key
 	 * @return result or view
 	 */
-	@At
+	@At(method=HttpMethod.POST)
 	@To(value=Views.SFTL, error="sftl:~delete")
+	@TokenProtect
 	public Object delete_execute(@Param Template key) {
 		return super.delete_execute(key);
 	}

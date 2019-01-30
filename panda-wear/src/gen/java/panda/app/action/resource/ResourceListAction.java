@@ -6,8 +6,8 @@ import panda.app.constant.AUTH;
 import panda.app.entity.Resource;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
-import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.bean.Queryer;
 import panda.mvc.view.Views;
 
@@ -34,7 +34,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	@At
 	@To(value=Views.SFTL, error=Views.SFTL)
-	public Object list(@Param @Validates Queryer qr) {
+	public Object list(@Param @VisitValidate Queryer qr) {
 		return super.list(qr);
 	}
 	
@@ -45,7 +45,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	@At
 	@To(value=Views.SFTL, error=Views.SFTL)
-	public Object list_print(@Param @Validates Queryer qr) {
+	public Object list_print(@Param @VisitValidate Queryer qr) {
 		return super.list_print(qr);
 	}
 	
@@ -56,7 +56,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	@At
 	@To(Views.SJSON)
-	public Object list_json(@Param @Validates Queryer qr) {
+	public Object list_json(@Param @VisitValidate Queryer qr) {
 		return super.list_json(qr);
 	}
 	
@@ -67,7 +67,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	@At
 	@To(Views.SXML)
-	public Object list_xml(@Param @Validates Queryer qr) {
+	public Object list_xml(@Param @VisitValidate Queryer qr) {
 		return super.list_xml(qr);
 	}
 	

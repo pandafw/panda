@@ -8,8 +8,10 @@ import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
 import panda.dao.entity.annotation.Indexes;
 import panda.lang.Objects;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
+import panda.mvc.annotation.validate.CastErrorValidate;
+import panda.mvc.annotation.validate.ConstantValidate;
+import panda.mvc.annotation.validate.ELValidate;
+import panda.mvc.annotation.validate.StringValidate;
 import panda.mvc.validator.Validators;
 
 @Indexes({
@@ -17,7 +19,7 @@ import panda.mvc.validator.Validators;
 })
 public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -106133534L;
+	private static final long serialVersionUID = -150761943L;
 
 	/**
 	 * Constructor
@@ -87,9 +89,7 @@ public class Property extends SUBean implements Serializable {
 	/**
 	 * @return the id
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
+	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
 	public Long getId() {
 		return id;
 	}
@@ -104,9 +104,7 @@ public class Property extends SUBean implements Serializable {
 	/**
 	 * @return the clazz
 	 */
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }")
-	})
+	@StringValidate(maxLength=100)
 	public String getClazz() {
 		return clazz;
 	}
@@ -121,11 +119,9 @@ public class Property extends SUBean implements Serializable {
 	/**
 	 * @return the language
 	 */
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }"), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }"), 
-		@Validate(value=Validators.EL, params="{ 'el': 'assist.isValidLocale(top.parent.value.language, top.parent.value.country)' }", msgId="validation-locale-invalid")
-	})
+	@StringValidate(maxLength=2)
+	@ConstantValidate(list="%{consts.localeLanguageMap}")
+	@ELValidate(el="assist.isValidLocale(top.parent.value.language, top.parent.value.country)", msgId=Validators.MSGID_LOCALE)
 	public String getLanguage() {
 		return language;
 	}
@@ -140,11 +136,9 @@ public class Property extends SUBean implements Serializable {
 	/**
 	 * @return the country
 	 */
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }"), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }"), 
-		@Validate(value=Validators.EL, params="{ 'el': 'assist.isValidLocale(top.parent.value.language, top.parent.value.country)' }", msgId="validation-locale-invalid")
-	})
+	@StringValidate(maxLength=2)
+	@ConstantValidate(list="%{consts.localeCountryMap}")
+	@ELValidate(el="assist.isValidLocale(top.parent.value.language, top.parent.value.country)", msgId=Validators.MSGID_LOCALE)
 	public String getCountry() {
 		return country;
 	}
@@ -159,9 +153,7 @@ public class Property extends SUBean implements Serializable {
 	/**
 	 * @return the name
 	 */
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }")
-	})
+	@StringValidate(maxLength=50)
 	public String getName() {
 		return name;
 	}
@@ -176,9 +168,7 @@ public class Property extends SUBean implements Serializable {
 	/**
 	 * @return the value
 	 */
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }")
-	})
+	@StringValidate(maxLength=5000)
 	public String getValue() {
 		return value;
 	}
@@ -193,9 +183,7 @@ public class Property extends SUBean implements Serializable {
 	/**
 	 * @return the memo
 	 */
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }")
-	})
+	@StringValidate(maxLength=1000)
 	public String getMemo() {
 		return memo;
 	}
