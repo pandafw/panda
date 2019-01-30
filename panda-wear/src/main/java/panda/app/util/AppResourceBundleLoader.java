@@ -52,10 +52,9 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			BeanResourceMaker mrbm = new BeanResourceMaker();
 
 			mrbm.setClassColumn(Resource.CLAZZ);
-			mrbm.setLanguageColumn(Resource.LANGUAGE);
-			mrbm.setCountryColumn(Resource.COUNTRY);
-			//databaseResourceLoader.setVariantColumn("variant");
+			mrbm.setLocaleColumn(Resource.LOCALE);
 			mrbm.setSourceColumn(Resource.SOURCE);
+			mrbm.setTimestampColumn(Resource.UPDATED_AT);
 			mrbm.setPackageName(getClass().getPackage().getName());
 
 			databaseResourceLoader = mrbm;
@@ -65,11 +64,10 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			BeanResourceMaker mrbm = new BeanResourceMaker();
 
 			mrbm.setClassColumn(Property.CLAZZ);
-			mrbm.setLanguageColumn(Property.LANGUAGE);
-			mrbm.setCountryColumn(Property.COUNTRY);
-			//databaseResourceLoader.setVariantColumn("variant");
+			mrbm.setLocaleColumn(Property.LOCALE);
 			mrbm.setNameColumn(Property.NAME);
 			mrbm.setValueColumn(Property.VALUE);
+			mrbm.setTimestampColumn(Property.UPDATED_AT);
 			mrbm.setPackageName(getClass().getPackage().getName());
 
 			databaseResourceLoader = mrbm;
@@ -83,9 +81,9 @@ public class AppResourceBundleLoader extends ResourceLoader {
 	 * reload external resources
 	 * @throws Exception if an error occurs
 	 */
-	public void reload() throws Exception {
+	public boolean reload() throws Exception {
 		if (databaseResourceLoader == null) {
-			return;
+			return false;
 		}
 		
 		if (resource) {
@@ -95,16 +93,19 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			ResourceQuery rq = new ResourceQuery();
 			rq.status().eq(VAL.STATUS_ACTIVE);
 			List<Resource> list = dao.select(rq);
-			databaseResourceLoader.loadResources(list);
+			return databaseResourceLoader.loadResources(list);
 		}
-		else if (property) {
+		
+		if (property) {
 			log.info("Loading database properties ...");
 
 			Dao dao = daoClient.getDao();
 			PropertyQuery pq = new PropertyQuery();
 			pq.status().eq(VAL.STATUS_ACTIVE);
 			List<Property> list = dao.select(pq);
-			databaseResourceLoader.loadResources(list);
+			return databaseResourceLoader.loadResources(list);
 		}
+		
+		return false;
 	}
 }

@@ -20,13 +20,13 @@ public class ResourceLoadAction extends BaseLoadAction {
 			super.doExecute();
 		}
 	}
-	
+
 	@Override
 	protected boolean doLoad() throws Exception {
-		((ActionTextProvider)getText()).clearResourceBundlesCache();
+		if (arbLoader.reload()) {
+			((ActionTextProvider)getText()).clearResourceBundlesCache();
+		}
 
-		arbLoader.reload();
-		
 		return true;
 	}
 }

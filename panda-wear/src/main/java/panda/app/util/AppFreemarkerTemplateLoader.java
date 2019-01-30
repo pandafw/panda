@@ -44,9 +44,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 			ExternalTemplateLoader etl = new ExternalTemplateLoader();
 			
 			etl.setNameColumn(Template.NAME);
-			etl.setLanguageColumn(Template.LANGUAGE);
-			etl.setCountryColumn(Template.COUNTRY);
-			//dtl.setVariantColumn("variant");
+			etl.setLocaleColumn(Template.LOCALE);
 			etl.setSourceColumn(Template.SOURCE);
 			etl.setTimestampColumn(Template.UPDATED_AT);
 	
