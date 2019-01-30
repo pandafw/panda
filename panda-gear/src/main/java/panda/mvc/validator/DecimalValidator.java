@@ -8,13 +8,16 @@ import panda.mvc.ActionContext;
 
 @IocBean(singleton=false)
 public class DecimalValidator extends AbstractValidator {
-
 	public static final char TYPE_DB = 'd';
 	public static final char TYPE_JAVA = 'j';
 
 	private Integer precision = null;
 	private Integer scale = 0;
 	private char type = TYPE_DB;
+
+	public DecimalValidator() {
+		setMsgId(Validators.MSGID_DECIMAL_PRECISION);
+	}
 
 	/**
 	 * @return precision

@@ -171,25 +171,13 @@ multipart-file-size-exceeded=The request was rejected because the size (${top.di
 #-----------------------------------------------------------------------------
 # validation error message
 #-----------------------------------------------------------------------------
-validation-alphanumericstring=Please input alphabet or number.
-validation-alphastring=Please input alphabet.
 validation-binary-length=The binary size (${top.binSize}) must be \
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize) : \
 (top.minLength != null ? (">= " + top.minBinSize) : \
 (top.maxLength != null ? ("<= " + top.maxBinSize) : ""))}\
 .
 validation-cast=Invalid value.
-validation-cast-boolean=Please input "true" or "false".
-validation-cast-char=Please input a character.
-validation-cast-date=Please input "yyyy-MM-dd" date string.
-validation-cast-datetime=Please input "yyyy-MM-dd HH:mm:ss" date string.
-validation-cast-datehhmm=Please input "yyyy-MM-dd HH:mm" date string.
-validation-cast-decimal=Please input a decimal number.
-validation-cast-file=Please select a file.
-validation-cast-number=Please input a number.
-validation-cast-time=Please input "HH:mm:ss" date string.
-validation-cast-hhmm=Please input "HH:mm" date string.
-validation-cast-url=Please input a correct URL. (ex: "http://www.domain.com")
+validation-boolean=Please input "true" or "false".
 validation-cidr=${top.error == null ? "Please input a correct IP or CIDR." : (top.error + " is a incorrect IP or CIDR.")} (ex: 192.168.1.1/32)
 validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
@@ -200,20 +188,14 @@ validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \
 validation-compare-daterange-to=The end date must be after than start date.
 validation-compare-numberrange-to=The number range is incorrect.
 validation-constant=Please input one of the ${top.consts}.
-validation-creditcardnumber=The format of credit card no must be "XXXX-XXXX-XXXX-XXXX".
+validation-creditcardno=Please input correct credit card no. (ex: "XXXX-XXXX-XXXX-XXXX").
+validation-date=Please input "yyyy-MM-dd" date string.
+validation-datetime=Please input "yyyy-MM-dd HH:mm:ss" date string.
+validation-datehhmm=Please input "yyyy-MM-dd HH:mm" date string.
 validation-date-range=The date must be \
-${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
-(top.min != null ? (">= " + top.min) : \
-(top.max != null ? ("<= " + top.max) : ""))}\
-.
-validation-time-range=The time must be \
-${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
-(top.min != null ? (">= " + top.min) : \
-(top.max != null ? ("<= " + top.max) : ""))}\
-.
 validation-date-to=The date must be larger than start date.
-validation-time-to=The time must be larger than start time.
-validation-imail=The format of email address must be "user@domain.com".
+validation-decimal=Please input a decimal number.
+validation-decimal-precision=Please input with this format "Integer${top.precision - top.scale}.Decimal${top.scale}".
 validation-email=The format of email address must be "user@domain.com".
 validation-email-notsame=The confirm email is not same as you input.
 validation-empty=This field should be empty.
@@ -235,16 +217,16 @@ validation-image=${top.image ? ("The image size " + top.width + "x" + top.height
  (top.minHeight != null ? ("height >= " + top.minHeight + "px)") : \
  (top.maxHeight != null ? ("height <= " + top.maxHeight + "px)") : ""))))\
  : "The image format is not correct"}.
+validation-imail=The format of email address must be "user@domain.com".
 validation-incorrect=Incorrect value.
+validation-integer=Please input a integer number.
 validation-number-range=The number must be \
 ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.min != null ? (">= " + top.min) : \
 (top.max != null ? ("<= " + top.max) : ""))}\
 .
 validation-number-to=The number must be larger than start number.
-validation-numericstring=Please input number.
 validation-passeddate=The past date is not allowed.
-validation-precision=Please input with this format "Integer${top.precision - top.scale}.Decimal${top.scale}".
 validation-prohibited=The value of ${top.consts} is not allowed.
 validation-regex=The value dos not match the regular expression "${top.regex}".
 validation-required=This field is required.
@@ -256,11 +238,26 @@ validation-string-length=The string length ${top.length != null ? ("(" + top.len
 (top.minLength != null ? (">= " + top.minLength) : \
 (top.maxLength != null ? ("<= " + top.maxLength) : ""))\
 } characters.
+validation-string-alphanumeric=Please input alphabet or number.
+validation-string-alpha=Please input alphabet.
+validation-string-numeric=Please input number.
+validation-string-zenkaku=Please input full character.
+validation-string-zenkakukatakana=Please input full katakana character.
+validation-string-zenkakuhiragana=Please input full hiragana character.
 validation-telno=Please input a correct telephone number (ex: "12-3456-7890").
+validation-time=Please input "HH:mm:ss" date string.
+validation-timehhmm=Please input "HH:mm" date string.
+${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
+(top.min != null ? (">= " + top.min) : \
+(top.max != null ? ("<= " + top.max) : ""))}\
+.
+validation-time-range=The time must be \
+${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
+(top.min != null ? (">= " + top.min) : \
+(top.max != null ? ("<= " + top.max) : ""))}\
+.
+validation-time-to=The time must be larger than start time.
 validation-url=Please input a correct URL (ex: "http://www.domain.com").
-validation-zenkakustring=Please input full character.
-validation-zenkakukatakanastring=Please input full katakana character.
-validation-zenkakuhiraganastring=Please input full hiragana character.
 validation-zipcode=Please input a corrent zipcode (ex: "123-4567").
 
 

@@ -105,25 +105,13 @@ multipart-file-size-exceeded=ファイル(${top.fileName})のサイズ(${top.dis
 #-----------------------------------------------------------------------------
 # validation error message
 #-----------------------------------------------------------------------------
-validation-alphastring=英文字を入力してください。
-validation-alphanumericstring=英数字を入力してください。
 validation-binary-length=\
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
 (top.minLength != null ? (top.minBinSize + "以上") : \
 (top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
 のバイトを入力してください。（入力バイト数: ${top.binSize}）
 validation-cast=項目の値が正しくありません。
-validation-cast-boolean=trueまたはfalseを入力してください。
-validation-cast-char=文字を入力してください。
-validation-cast-date=日付形式"yyyy/MM/dd"で入力してください。
-validation-cast-datetime=日付形式"yyyy/MM/dd HH:mm:ss"で入力してください。
-validation-cast-datehhmm=日付形式"yyyy/MM/dd HH:mm"で入力してください。
-validation-cast-decimal=数字を入力してください。
-validation-cast-number=整数を入力してください。
-validation-cast-file=フィアルを選択してください。
-validation-cast-time=時間形式"HH:mm:ss"で入力してください。
-validation-cast-hhmm=時間形式"HH:mm"で入力してください。
-validation-cast-url=正しいURLを入力してください。（例: http://www.domain.com）
+validation-boolean=trueまたはfalseを入力してください。
 validation-cidr=${top.error == null ? "正しいIPまたはCIDRを入力してください。" : (top.error + "が正しいIPまたはCIDRではありません。")}（例: 192.168.1.1/32）
 validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
@@ -134,17 +122,17 @@ validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
 validation-compare-daterange-to=「終了日付」が「開始日付」より以後の日付を設定してください。
 validation-compare-numberrange-to=数字範囲の設定が正しくありません。
 validation-constant=${top.consts}中の値を選んでください。
-validation-creditcardnumber=正しいクレジットカード番号を入力してください。（例: XXXX-XXXX-XXXX-XXXX）
+validation-creditcardno=正しいクレジットカード番号を入力してください。（例: XXXX-XXXX-XXXX-XXXX）
+validation-date=日付形式"yyyy/MM/dd"で入力してください。
+validation-datetime=日付形式"yyyy/MM/dd HH:mm:ss"で入力してください。
+validation-datehhmm=日付形式"yyyy/MM/dd HH:mm"で入力してください。
 validation-date-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以後") : \
 (top.max != null ? (top.max + "以前") : ""))}\
 の日付を入力してください。
-validation-time-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
-(top.min != null ? (top.min + "以後") : \
-(top.max != null ? (top.max + "以前") : ""))}\
-の時間を入力してください。
 validation-date-to=開始日付より大きい日付を入力してください。
-validation-time-to=開始時間より大きい時間を入力してください。
+validation-decimal=数字を入力してください。
+validation-decimal-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
 validation-imail=正しいメールアドレスを入力してください。（例: user@domain.com）
 validation-email=正しいメールアドレスを入力してください。（例: user@domain.com）
 validation-email-notsame=メールアドレスが一致していません。
@@ -171,18 +159,17 @@ validation-image=${top.image ? \
 ("の画像ファイルを指定してください。（該当画像サイズ: " + top.width + "x" + top.height + "）"))\
  : "画像ファイルのフォーマットが正しくありません。"}
 validation-incorrect=項目の値が正しくありません。
+validation-integer=整数を入力してください。
 validation-locale-invalid=言語と国・地域の組合せは正しくありません。
 validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以上") : \
 (top.max != null ? (top.max + "以下") : ""))}\
 の数字を入力してください。
 validation-number-to=開始数字より大きい数字を入力してください。
-validation-numericstring=数字を入力してください。
 validation-password=パスワードが英数字で入力してください。
 validation-password-notsame=パスワードが一致していません。
 validation-password-incorrect=パスワードが正しくありません。
 validation-passeddate=過去の日付を入力できません。
-validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
 validation-prohibited=${top.consts}中の値が入力できません。
 validation-regex=項目の値が正規表現式"${top.regex}"にマーチできません。
 validation-required=必須項目です。
@@ -194,11 +181,21 @@ validation-string-length=${\
 (top.minLength != null ? (top.minLength + "桁以上") : \
 (top.maxLength != null ? (top.maxLength + "桁以下") : ""))\
 }の文字を入力してください。${top.length != null ? ("（入力文字数: " + top.length + "）") : ""}
+validation-string-alpha=英文字を入力してください。
+validation-string-alphanumeric=英数字を入力してください。
+validation-string-numeric=数字を入力してください。
+validation-string-zenkaku=全角文字を入力してください。
+validation-string-zenkakukatakana=全角カタカナを入力してください。
+validation-string-zenkakuhiragana=全角ひらかなを入力してください。
 validation-telno=正しい電話番号を入力してください。（例: 03-1234-5678）
+validation-time=時間形式"HH:mm:ss"で入力してください。
+validation-timehhmm=時間形式"HH:mm"で入力してください。
+validation-time-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以後") : \
+(top.max != null ? (top.max + "以前") : ""))}\
+の時間を入力してください。
+validation-time-to=開始時間より大きい時間を入力してください。
 validation-url=正しいURLを入力してください。（例: http://www.domain.com）
-validation-zenkakustring=全角文字を入力してください。
-validation-zenkakukatakanastring=全角カタカナを入力してください。
-validation-zenkakuhiraganastring=全角ひらかなを入力してください。
 validation-zipcode=正しい郵便番号を入力してください。（例: 123-4567）
 
 

@@ -15,7 +15,7 @@ public class CreditCardNoValidator extends AbstractStringValidator {
 	private char type = ALL;
 
 	public CreditCardNoValidator() {
-		setMsgId(Validators.CREDITCARDNO);
+		setMsgId(Validators.MSGID_CREDITCARDNO);
 	}
 
 	/**
