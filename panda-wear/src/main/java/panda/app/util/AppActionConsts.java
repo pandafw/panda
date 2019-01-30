@@ -53,19 +53,11 @@ public class AppActionConsts extends ActionConsts {
 	}
 
 	/**
-	 * get locale language map
+	 * get app locale map
 	 * @return map
 	 */
-	public Map<String, String> getLocaleLanguageMap() {
-		return getTextAsMap(RES.LOCALE_LANGUAGES);
-	}
-
-	/**
-	 * get locale country map
-	 * @return map
-	 */
-	public Map<String, String> getLocaleCountryMap() {
-		return getTextAsMap(RES.LOCALE_COUNTRIES);
+	public Map<String, String> getAppLocaleMap() {
+		return getTextAsMap(RES.APP_LOCALES);
 	}
 
 	/**

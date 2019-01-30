@@ -15,14 +15,9 @@ public interface RES {
 	public final static String DATA_STATUS_MAP = "data-statusMap";
 
 	/**
-	 * LOCALE_LANGUAGES = "locale-languages";
+	 * APP_LOCALES = "app-locales";
 	 */
-	public final static String LOCALE_LANGUAGES = "locale-languages";
-
-	/**
-	 * LOCALE_COUNTRIES = "locale-countries";
-	 */
-	public final static String LOCALE_COUNTRIES = "locale-countries";
+	public final static String APP_LOCALES = "app-locales";
 
 	/**
 	 *  MEDIA_TAGS = "media-tags";
