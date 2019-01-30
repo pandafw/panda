@@ -1,8 +1,6 @@
 clazz=クラス名
 
-language=言語
-
-country=国・地域
+locale=言語・地域
 
 source=内容
 

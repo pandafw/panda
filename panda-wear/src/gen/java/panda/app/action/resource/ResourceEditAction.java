@@ -22,7 +22,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 */
 	public ResourceEditAction() {
 		setType(Resource.class);
-		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY, Resource.UPDATED_BY_USER);
+		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY, Resource.UPDATED_BY_USER);
 	}
 
 
@@ -103,7 +103,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@To(value=Views.SFTL, error="sftl:~add")
 	@TokenProtect
 	public Object add_confirm(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country" })
+			@RequiredValidate(fields={ "clazz", "locale" })
 			@VisitValidate
 			Resource data) {
 		return super.add_confirm(data);
@@ -118,7 +118,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@To(value=Views.SFTL, error="sftl:~add")
 	@TokenProtect
 	public Object add_execute(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country" })
+			@RequiredValidate(fields={ "clazz", "locale" })
 			@VisitValidate
 			Resource data) {
 		return super.add_execute(data);
@@ -155,7 +155,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@To(value=Views.SFTL, error="sftl:~copy")
 	@TokenProtect
 	public Object copy_confirm(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country" })
+			@RequiredValidate(fields={ "clazz", "locale" })
 			@VisitValidate
 			Resource data) {
 		return super.copy_confirm(data);
@@ -170,7 +170,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@To(value=Views.SFTL, error="sftl:~copy")
 	@TokenProtect
 	public Object copy_execute(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country" })
+			@RequiredValidate(fields={ "clazz", "locale" })
 			@VisitValidate
 			Resource data) {
 		return super.copy_execute(data);
@@ -207,7 +207,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@To(value=Views.SFTL, error="sftl:~edit")
 	@TokenProtect
 	public Object edit_confirm(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country" })
+			@RequiredValidate(fields={ "clazz", "locale" })
 			@VisitValidate
 			Resource data) {
 		return super.edit_confirm(data);
@@ -222,7 +222,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@To(value=Views.SFTL, error="sftl:~edit")
 	@TokenProtect
 	public Object edit_execute(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country" })
+			@RequiredValidate(fields={ "clazz", "locale" })
 			@VisitValidate
 			Resource data) {
 		return super.edit_execute(data);

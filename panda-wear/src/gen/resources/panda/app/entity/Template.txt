@@ -1,8 +1,6 @@
 name=Name
 
-language=Language
-
-country=Country
+locale=Locale
 
 source=Source
 

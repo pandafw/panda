@@ -17,7 +17,7 @@ public abstract class PropertyBulkDisableAction extends GenericBulkAction<Proper
 	 */
 	public PropertyBulkDisableAction() {
 		setType(Property.class);
-		addDisplayFields(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY, Property.UPDATED_BY_USER);
+		addDisplayFields(Property.ID, Property.CLAZZ, Property.LOCALE, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY, Property.UPDATED_BY_USER);
 	}
 
 

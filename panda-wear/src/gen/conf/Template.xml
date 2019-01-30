@@ -5,31 +5,17 @@
 	<!-- entity -->
 	<entity name="${entity.package}.Template" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001" generate="true">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
-		<property name="name" type="String" size="100" notNull="true" uniqueKey="NLC" comment="file name">
+		<property name="name" type="String" size="100" notNull="true" uniqueKey="NL" comment="file name">
 			<validator type="stringlength">
 				<param name="maxLength" value="100"/>
 			</validator>
 		</property>
-		<property name="language" type="String" size="2" notNull="true" uniqueKey="NLC" comment="language code">
+		<property name="locale" type="String" size="10" notNull="true" uniqueKey="NL" comment="locale">
 			<validator type="stringlength">
-				<param name="maxLength" value="2"/>
+				<param name="maxLength" value="10"/>
 			</validator>
 			<validator type="constant">
-				<param name="list" value="%{consts.localeLanguageMap}"/>
-			</validator>
-			<validator type="el" msgId="&quot;validation-locale-invalid&quot;">
-				<param name="el" value="assist.isValidLocale(top.parent.value.language, top.parent.value.country)"/>
-			</validator>
-		</property>
-		<property name="country" type="String" size="2" notNull="true" uniqueKey="NLC" comment="country code">
-			<validator type="stringlength">
-				<param name="maxLength" value="2"/>
-			</validator>
-			<validator type="constant">
-				<param name="list" value="%{consts.localeCountryMap}"/>
-			</validator>
-			<validator type="el" msgId="&quot;validation-locale-invalid&quot;">
-				<param name="el" value="assist.isValidLocale(top.parent.value.language, top.parent.value.country)"/>
+				<param name="list" value="%{consts.appLocaleMap}"/>
 			</validator>
 		</property>
 		<property name="source" type="String" size="50000" jdbcType="CLOB" setterTrim="" comment="template source">
@@ -48,20 +34,12 @@
 			<column name="name" hidden="false" sortable="true" link="true">
 				<filter type="string" fixed="true"/>
 			</column>
-			<column name="language" hidden="false" sortable="true" link="false">
+			<column name="locale" hidden="false" sortable="true" link="false">
 				<format type="code">
-					<param name="codemap" value="consts.localeLanguageMap"/>
+					<param name="codemap" value="consts.appLocaleMap"/>
 				</format>
 				<filter type="select" fixed="true">
-					<param name="list" value="consts.localeLanguageMap"/>
-				</filter>
-			</column>
-			<column name="country" hidden="false" sortable="true" link="false">
-				<format type="code">
-					<param name="codemap" value="consts.localeCountryMap"/>
-				</format>
-				<filter type="select" fixed="true">
-					<param name="list" value="consts.localeCountryMap"/>
+					<param name="list" value="consts.appLocaleMap"/>
 				</filter>
 			</column>
 			<param name="options" value="${slist.options}"/>
@@ -80,16 +58,10 @@
 					<param name="size" value="${tag.textfield.size}"/>
 				</editTag>
 			</field>
-			<field name="language" required="true">
+			<field name="locale" required="true">
 				<editTag name="${tag.select}">
 					<param name="emptyOption" value="false"/>
-					<param name="list" value="%{consts.localeLanguageMap}"/>
-				</editTag>
-			</field>
-			<field name="country" required="true">
-				<editTag name="${tag.select}">
-					<param name="emptyOption" value="false"/>
-					<param name="list" value="%{consts.localeCountryMap}"/>
+					<param name="list" value="%{consts.appLocaleMap}"/>
 				</editTag>
 			</field>
 			<field name="source">
@@ -106,8 +78,12 @@
 	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
-		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
-		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
+		<list name="expo.csv" extend="basicList" template="${template.expo_csv}" generate="true"/>
+		<list name="expo.json" extend="basicList" template="${template.expo_json}" generate="true"/>
+		<list name="expo.xml" extend="basicList" template="${template.expo_xml}" generate="true"/>
+	</action>
+	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+		<list name="import" extend="basicList" template="${template.import}" generate="true"/>
 	</action>
 	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
@@ -137,8 +113,7 @@
 	<resource>
 		<entity name="${entity.package}.Template">
 			<property name="name" label="Name"/>
-			<property name="language" label="Language"/>
-			<property name="country" label="Country"/>
+			<property name="locale" label="Locale"/>
 			<property name="source" label="Source"/>
 		</entity>
 		<action name="template" title="Template">
@@ -148,8 +123,7 @@
 	<resource locale="ja">
 		<entity name="${entity.package}.Template">
 			<property name="name" label="名称"/>
-			<property name="language" label="言語"/>
-			<property name="country" label="国・地域"/>
+			<property name="locale" label="言語・地域"/>
 			<property name="source" label="内容"/>
 		</entity>
 		<action name="template" title="テンプレート"/>
@@ -157,8 +131,7 @@
 	<resource locale="zh">
 		<entity name="${entity.package}.Template">
 			<property name="name" label="名称"/>
-			<property name="language" label="语言"/>
-			<property name="country" label="国家・地区"/>
+			<property name="locale" label="语言・地区"/>
 			<property name="source" label="内容"/>
 		</entity>
 		<action name="template" title="模板"/>

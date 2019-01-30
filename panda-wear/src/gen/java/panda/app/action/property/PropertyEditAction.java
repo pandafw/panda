@@ -22,7 +22,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	 */
 	public PropertyEditAction() {
 		setType(Property.class);
-		addDisplayFields(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY, Property.UPDATED_BY_USER);
+		addDisplayFields(Property.ID, Property.CLAZZ, Property.LOCALE, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY, Property.UPDATED_BY_USER);
 	}
 
 
@@ -103,7 +103,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@To(value=Views.SFTL, error="sftl:~add")
 	@TokenProtect
 	public Object add_confirm(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country", "name" })
+			@RequiredValidate(fields={ "clazz", "locale", "name" })
 			@VisitValidate
 			Property data) {
 		return super.add_confirm(data);
@@ -118,7 +118,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@To(value=Views.SFTL, error="sftl:~add")
 	@TokenProtect
 	public Object add_execute(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country", "name" })
+			@RequiredValidate(fields={ "clazz", "locale", "name" })
 			@VisitValidate
 			Property data) {
 		return super.add_execute(data);
@@ -155,7 +155,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@To(value=Views.SFTL, error="sftl:~copy")
 	@TokenProtect
 	public Object copy_confirm(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country", "name" })
+			@RequiredValidate(fields={ "clazz", "locale", "name" })
 			@VisitValidate
 			Property data) {
 		return super.copy_confirm(data);
@@ -170,7 +170,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@To(value=Views.SFTL, error="sftl:~copy")
 	@TokenProtect
 	public Object copy_execute(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country", "name" })
+			@RequiredValidate(fields={ "clazz", "locale", "name" })
 			@VisitValidate
 			Property data) {
 		return super.copy_execute(data);
@@ -207,7 +207,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@To(value=Views.SFTL, error="sftl:~edit")
 	@TokenProtect
 	public Object edit_confirm(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country", "name" })
+			@RequiredValidate(fields={ "clazz", "locale", "name" })
 			@VisitValidate
 			Property data) {
 		return super.edit_confirm(data);
@@ -222,7 +222,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	@To(value=Views.SFTL, error="sftl:~edit")
 	@TokenProtect
 	public Object edit_execute(@Param 
-			@RequiredValidate(fields={ "clazz", "language", "country", "name" })
+			@RequiredValidate(fields={ "clazz", "locale", "name" })
 			@VisitValidate
 			Property data) {
 		return super.edit_execute(data);

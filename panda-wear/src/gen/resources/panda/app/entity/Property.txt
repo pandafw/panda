@@ -1,8 +1,6 @@
 clazz=Class
 
-language=Language
-
-country=Country
+locale=Locale
 
 name=Name
 

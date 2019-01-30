@@ -10,16 +10,16 @@ import panda.dao.entity.annotation.Indexes;
 import panda.lang.Objects;
 import panda.mvc.annotation.validate.CastErrorValidate;
 import panda.mvc.annotation.validate.ConstantValidate;
-import panda.mvc.annotation.validate.ELValidate;
 import panda.mvc.annotation.validate.StringValidate;
 import panda.mvc.validator.Validators;
 
 @Indexes({
-	@Index(name="CLCN", fields={ "clazz", "language", "country", "name" }, unique=true)
+	@Index(name="CLCN", fields={ "clazz", "name" }, unique=true),
+	@Index(name="NL", fields={ "locale" }, unique=true)
 })
 public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -150761943L;
+	private static final long serialVersionUID = 317759536L;
 
 	/**
 	 * Constructor
@@ -33,8 +33,7 @@ public class Property extends SUBean implements Serializable {
 	 *----------------------------------------------------------------------*/
 	public static final String ID = "id";
 	public static final String CLAZZ = "clazz";
-	public static final String LANGUAGE = "language";
-	public static final String COUNTRY = "country";
+	public static final String LOCALE = "locale";
 	public static final String NAME = "name";
 	public static final String VALUE = "value";
 	public static final String MEMO = "memo";
@@ -42,8 +41,7 @@ public class Property extends SUBean implements Serializable {
 	public static final String[] _COLUMNS_ = new String[] {
 			ID,
 			CLAZZ,
-			LANGUAGE,
-			COUNTRY,
+			LOCALE,
 			NAME,
 			VALUE,
 			MEMO
@@ -62,13 +60,9 @@ public class Property extends SUBean implements Serializable {
 	@Comment("class name")
 	protected String clazz;
 
-	@Column(size=2, notNull=true)
-	@Comment("language code")
-	protected String language;
-
-	@Column(size=2, notNull=true)
-	@Comment("country code")
-	protected String country;
+	@Column(size=10, notNull=true)
+	@Comment("locale")
+	protected String locale;
 
 	@Column(size=50, notNull=true)
 	@Comment("property name")
@@ -117,37 +111,19 @@ public class Property extends SUBean implements Serializable {
 	}
 
 	/**
-	 * @return the language
+	 * @return the locale
 	 */
-	@StringValidate(maxLength=2)
-	@ConstantValidate(list="%{consts.localeLanguageMap}")
-	@ELValidate(el="assist.isValidLocale(top.parent.value.language, top.parent.value.country)", msgId=Validators.MSGID_LOCALE)
-	public String getLanguage() {
-		return language;
+	@StringValidate(maxLength=10)
+	@ConstantValidate(list="%{consts.appLocaleMap}")
+	public String getLocale() {
+		return locale;
 	}
 
 	/**
-	 * @param language the language to set
+	 * @param locale the locale to set
 	 */
-	public void setLanguage(String language) {
-		this.language = panda.lang.Strings.stripToNull(language);
-	}
-
-	/**
-	 * @return the country
-	 */
-	@StringValidate(maxLength=2)
-	@ConstantValidate(list="%{consts.localeCountryMap}")
-	@ELValidate(el="assist.isValidLocale(top.parent.value.language, top.parent.value.country)", msgId=Validators.MSGID_LOCALE)
-	public String getCountry() {
-		return country;
-	}
-
-	/**
-	 * @param country the country to set
-	 */
-	public void setCountry(String country) {
-		this.country = panda.lang.Strings.stripToNull(country);
+	public void setLocale(String locale) {
+		this.locale = panda.lang.Strings.stripToNull(locale);
 	}
 
 	/**
@@ -203,8 +179,7 @@ public class Property extends SUBean implements Serializable {
 	public void copy(Property src) {
 		this.id = src.id;
 		this.clazz = src.clazz;
-		this.language = src.language;
-		this.country = src.country;
+		this.locale = src.locale;
 		this.name = src.name;
 		this.value = src.value;
 		this.memo = src.memo;
@@ -265,8 +240,7 @@ public class Property extends SUBean implements Serializable {
 		return Objects.toStringBuilder()
 				.append(ID, id)
 				.append(CLAZZ, clazz)
-				.append(LANGUAGE, language)
-				.append(COUNTRY, country)
+				.append(LOCALE, locale)
 				.append(NAME, name)
 				.append(VALUE, value)
 				.append(MEMO, memo)

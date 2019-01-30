@@ -17,7 +17,7 @@ public abstract class ResourceBulkDisableAction extends GenericBulkAction<Resour
 	 */
 	public ResourceBulkDisableAction() {
 		setType(Resource.class);
-		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY, Resource.UPDATED_BY_USER);
+		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY, Resource.UPDATED_BY_USER);
 	}
 
 

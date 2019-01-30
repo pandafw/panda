@@ -41,17 +41,10 @@ public class PropertyQuery extends SUQuery<Property, PropertyQuery> {
 	}
 
 	/**
-	 * @return condition of language
+	 * @return condition of locale
 	 */
-	public StringCondition<PropertyQuery> language() {
-		return new StringCondition<PropertyQuery>(this, Property.LANGUAGE);
-	}
-
-	/**
-	 * @return condition of country
-	 */
-	public StringCondition<PropertyQuery> country() {
-		return new StringCondition<PropertyQuery>(this, Property.COUNTRY);
+	public StringCondition<PropertyQuery> locale() {
+		return new StringCondition<PropertyQuery>(this, Property.LOCALE);
 	}
 
 	/**

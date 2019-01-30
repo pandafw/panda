@@ -41,17 +41,10 @@ public class TemplateQuery extends SUQuery<Template, TemplateQuery> {
 	}
 
 	/**
-	 * @return condition of language
+	 * @return condition of locale
 	 */
-	public StringCondition<TemplateQuery> language() {
-		return new StringCondition<TemplateQuery>(this, Template.LANGUAGE);
-	}
-
-	/**
-	 * @return condition of country
-	 */
-	public StringCondition<TemplateQuery> country() {
-		return new StringCondition<TemplateQuery>(this, Template.COUNTRY);
+	public StringCondition<TemplateQuery> locale() {
+		return new StringCondition<TemplateQuery>(this, Template.LOCALE);
 	}
 
 	/**

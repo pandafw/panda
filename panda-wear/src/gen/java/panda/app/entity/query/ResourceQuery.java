@@ -41,17 +41,10 @@ public class ResourceQuery extends SUQuery<Resource, ResourceQuery> {
 	}
 
 	/**
-	 * @return condition of language
+	 * @return condition of locale
 	 */
-	public StringCondition<ResourceQuery> language() {
-		return new StringCondition<ResourceQuery>(this, Resource.LANGUAGE);
-	}
-
-	/**
-	 * @return condition of country
-	 */
-	public StringCondition<ResourceQuery> country() {
-		return new StringCondition<ResourceQuery>(this, Resource.COUNTRY);
+	public StringCondition<ResourceQuery> locale() {
+		return new StringCondition<ResourceQuery>(this, Resource.LOCALE);
 	}
 
 	/**

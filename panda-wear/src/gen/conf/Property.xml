@@ -10,26 +10,12 @@
 				<param name="maxLength" value="100"/>
 			</validator>
 		</property>
-		<property name="language" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="language code">
+		<property name="locale" type="String" size="10" notNull="true" uniqueKey="NL" comment="locale">
 			<validator type="stringlength">
-				<param name="maxLength" value="2"/>
+				<param name="maxLength" value="10"/>
 			</validator>
 			<validator type="constant">
-				<param name="list" value="%{consts.localeLanguageMap}"/>
-			</validator>
-			<validator type="el" msgId="locale">
-				<param name="el" value="assist.isValidLocale(top.parent.value.language, top.parent.value.country)"/>
-			</validator>
-		</property>
-		<property name="country" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="country code">
-			<validator type="stringlength">
-				<param name="maxLength" value="2"/>
-			</validator>
-			<validator type="constant">
-				<param name="list" value="%{consts.localeCountryMap}"/>
-			</validator>
-			<validator type="el" msgId="locale">
-				<param name="el" value="assist.isValidLocale(top.parent.value.language, top.parent.value.country)"/>
+				<param name="list" value="%{consts.appLocaleMap}"/>
 			</validator>
 		</property>
 		<property name="name" type="String" size="50" notNull="true" uniqueKey="CLCN" comment="property name">
@@ -58,20 +44,12 @@
 			<column name="clazz" hidden="false" sortable="true" link="false">
 				<filter type="string" fixed="true"/>
 			</column>
-			<column name="language" hidden="false" sortable="true" link="false">
+			<column name="locale" hidden="false" sortable="true" link="false">
 				<format type="code">
-					<param name="codemap" value="consts.localeLanguageMap"/>
+					<param name="codemap" value="consts.appLocaleMap"/>
 				</format>
 				<filter type="select" fixed="true">
-					<param name="list" value="consts.localeLanguageMap"/>
-				</filter>
-			</column>
-			<column name="country" hidden="false" sortable="true" link="false">
-				<format type="code">
-					<param name="codemap" value="consts.localeCountryMap"/>
-				</format>
-				<filter type="select" fixed="true">
-					<param name="list" value="consts.localeCountryMap"/>
+					<param name="list" value="consts.appLocaleMap"/>
 				</filter>
 			</column>
 			<column name="name" hidden="false" sortable="true" link="false">
@@ -99,16 +77,10 @@
 					<param name="size" value="${tag.textfield.size}"/>
 				</editTag>
 			</field>
-			<field name="language" required="true">
+			<field name="locale" required="true">
 				<editTag name="${tag.select}">
 					<param name="emptyOption" value="false"/>
-					<param name="list" value="%{consts.localeLanguageMap}"/>
-				</editTag>
-			</field>
-			<field name="country" required="true">
-				<editTag name="${tag.select}">
-					<param name="emptyOption" value="false"/>
-					<param name="list" value="%{consts.localeCountryMap}"/>
+					<param name="list" value="%{consts.appLocaleMap}"/>
 				</editTag>
 			</field>
 			<field name="name" required="true">
@@ -138,8 +110,12 @@
 	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.property.PropertyListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
-		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
-		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
+		<list name="expo.csv" extend="basicList" template="${template.expo_csv}" generate="true"/>
+		<list name="expo.json" extend="basicList" template="${template.expo_json}" generate="true"/>
+		<list name="expo.xml" extend="basicList" template="${template.expo_xml}" generate="true"/>
+	</action>
+	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.property.PropertyImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+		<list name="import" extend="basicList" template="${template.import}" generate="true"/>
 	</action>
 	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.property.PropertyBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
@@ -169,8 +145,7 @@
 	<resource>
 		<entity name="${entity.package}.Property">
 			<property name="clazz" label="Class"/>
-			<property name="language" label="Language"/>
-			<property name="country" label="Country"/>
+			<property name="locale" label="Locale"/>
 			<property name="name" label="Name"/>
 			<property name="value" label="Value"/>
 			<property name="memo" label="Memo"/>
@@ -182,8 +157,7 @@
 	<resource locale="ja">
 		<entity name="${entity.package}.Property">
 			<property name="clazz" label="クラス名"/>
-			<property name="language" label="言語"/>
-			<property name="country" label="国・地域"/>
+			<property name="locale" label="言語・地域"/>
 			<property name="name" label="項目名"/>
 			<property name="value" label="内容"/>
 			<property name="memo" label="備考"/>
@@ -194,8 +168,7 @@
 		<entity name="${entity.package}.Property">
 			<property name="clazz" label="类名"/>
 			<property name="language" label="语言"/>
-			<property name="country" label="国家・地区"/>
-			<property name="name" label="项目名"/>
+			<property name="locale" label="语言・地区"/>
 			<property name="value" label="内容"/>
 			<property name="memo" label="备注"/>
 		</entity>

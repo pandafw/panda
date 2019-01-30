@@ -18,7 +18,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 */
 	public TemplateEditAction() {
 		setType(Template.class);
-		addDisplayFields(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.SOURCE, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY, Template.UPDATED_BY_USER);
+		addDisplayFields(Template.ID, Template.NAME, Template.LOCALE, Template.SOURCE, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY, Template.UPDATED_BY_USER);
 	}
 
 
@@ -99,7 +99,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@To(value=Views.SFTL, error="sftl:~add")
 	@TokenProtect
 	public Object add_confirm(@Param 
-			@RequiredValidate(fields={ "name", "language", "country" })
+			@RequiredValidate(fields={ "name", "locale" })
 			@VisitValidate
 			Template data) {
 		return super.add_confirm(data);
@@ -114,7 +114,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@To(value=Views.SFTL, error="sftl:~add")
 	@TokenProtect
 	public Object add_execute(@Param 
-			@RequiredValidate(fields={ "name", "language", "country" })
+			@RequiredValidate(fields={ "name", "locale" })
 			@VisitValidate
 			Template data) {
 		return super.add_execute(data);
@@ -151,7 +151,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@To(value=Views.SFTL, error="sftl:~copy")
 	@TokenProtect
 	public Object copy_confirm(@Param 
-			@RequiredValidate(fields={ "name", "language", "country" })
+			@RequiredValidate(fields={ "name", "locale" })
 			@VisitValidate
 			Template data) {
 		return super.copy_confirm(data);
@@ -166,7 +166,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@To(value=Views.SFTL, error="sftl:~copy")
 	@TokenProtect
 	public Object copy_execute(@Param 
-			@RequiredValidate(fields={ "name", "language", "country" })
+			@RequiredValidate(fields={ "name", "locale" })
 			@VisitValidate
 			Template data) {
 		return super.copy_execute(data);
@@ -203,7 +203,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@To(value=Views.SFTL, error="sftl:~edit")
 	@TokenProtect
 	public Object edit_confirm(@Param 
-			@RequiredValidate(fields={ "name", "language", "country" })
+			@RequiredValidate(fields={ "name", "locale" })
 			@VisitValidate
 			Template data) {
 		return super.edit_confirm(data);
@@ -218,7 +218,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	@To(value=Views.SFTL, error="sftl:~edit")
 	@TokenProtect
 	public Object edit_execute(@Param 
-			@RequiredValidate(fields={ "name", "language", "country" })
+			@RequiredValidate(fields={ "name", "locale" })
 			@VisitValidate
 			Template data) {
 		return super.edit_execute(data);

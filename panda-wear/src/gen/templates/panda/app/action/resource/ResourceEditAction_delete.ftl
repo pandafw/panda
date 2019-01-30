@@ -34,18 +34,11 @@
 				value="%{r.clazz}"
 			/>
 	</#if>
-	<#if a.displayField("language")>
+	<#if a.displayField("locale")>
 			<@p.viewfield
-				key="language"
-				value="%{r.language}"
-				list="%{consts.localeLanguageMap}"
-			/>
-	</#if>
-	<#if a.displayField("country")>
-			<@p.viewfield
-				key="country"
-				value="%{r.country}"
-				list="%{consts.localeCountryMap}"
+				key="locale"
+				value="%{r.locale}"
+				list="%{consts.appLocaleMap}"
 			/>
 	</#if>
 	<#if a.displayField("source")>

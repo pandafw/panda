@@ -40,29 +40,17 @@
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("clazz")
 		}, {
-			"name": "language",
+			"name": "locale",
 			"value": false,
-			"header": a.getFieldLabel("language"),
-			"display": a.displayField("language"),
+			"header": a.getFieldLabel("locale"),
+			"display": a.displayField("locale"),
 			"format": {
-				"codemap": consts.localeLanguageMap,
+				"codemap": consts.appLocaleMap,
 				"type": "code"
 			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("language")
-		}, {
-			"name": "country",
-			"value": false,
-			"header": a.getFieldLabel("country"),
-			"display": a.displayField("country"),
-			"format": {
-				"codemap": consts.localeCountryMap,
-				"type": "code"
-			},
-			"hidden": false,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("country")
+			"tooltip": a.getFieldTooltip("locale")
 		}, {
 			"name": "source",
 			"value": false,

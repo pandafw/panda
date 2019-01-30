@@ -39,22 +39,13 @@
 				size="60"
 			/>
 	</#if>
-	<#if a.displayField("language")>
+	<#if a.displayField("locale")>
 			<@p.select
-				key="language"
-				value="%{r.language}"
+				key="locale"
+				value="%{r.locale}"
 				required="true"
 				emptyOption="false"
-				list="%{consts.localeLanguageMap}"
-			/>
-	</#if>
-	<#if a.displayField("country")>
-			<@p.select
-				key="country"
-				value="%{r.country}"
-				required="true"
-				emptyOption="false"
-				list="%{consts.localeCountryMap}"
+				list="%{consts.appLocaleMap}"
 			/>
 	</#if>
 	<#if a.displayField("source")>

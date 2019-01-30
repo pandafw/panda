@@ -21,7 +21,7 @@ public class TemplateBulkDeleteAction extends GenericBulkAction<Template> {
 	 */
 	public TemplateBulkDeleteAction() {
 		setType(Template.class);
-		addDisplayFields(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY, Template.UPDATED_BY_USER);
+		addDisplayFields(Template.ID, Template.NAME, Template.LOCALE, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY, Template.UPDATED_BY_USER);
 	}
 
 

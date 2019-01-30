@@ -52,27 +52,16 @@
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("name")
 		}, {
-			"name": "language",
-			"header": a.getFieldLabel("language"),
-			"display": a.displayField("language"),
+			"name": "locale",
+			"header": a.getFieldLabel("locale"),
+			"display": a.displayField("locale"),
 			"format": {
-				"codemap": consts.localeLanguageMap,
+				"codemap": consts.appLocaleMap,
 				"type": "code"
 			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("language")
-		}, {
-			"name": "country",
-			"header": a.getFieldLabel("country"),
-			"display": a.displayField("country"),
-			"format": {
-				"codemap": consts.localeCountryMap,
-				"type": "code"
-			},
-			"hidden": false,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("country")
+			"tooltip": a.getFieldTooltip("locale")
 		}, {
 			"name": "status",
 			"header": a.getFieldLabel("status"),

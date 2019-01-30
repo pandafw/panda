@@ -11,16 +11,16 @@ import panda.dao.entity.annotation.Indexes;
 import panda.lang.Objects;
 import panda.mvc.annotation.validate.CastErrorValidate;
 import panda.mvc.annotation.validate.ConstantValidate;
-import panda.mvc.annotation.validate.ELValidate;
 import panda.mvc.annotation.validate.StringValidate;
 import panda.mvc.validator.Validators;
 
 @Indexes({
-	@Index(name="CLC", fields={ "clazz", "language", "country" }, unique=true)
+	@Index(name="CLC", fields={ "clazz" }, unique=true),
+	@Index(name="NL", fields={ "locale" }, unique=true)
 })
 public class Resource extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = 802270934L;
+	private static final long serialVersionUID = 555442799L;
 
 	/**
 	 * Constructor
@@ -34,15 +34,13 @@ public class Resource extends SUBean implements Serializable {
 	 *----------------------------------------------------------------------*/
 	public static final String ID = "id";
 	public static final String CLAZZ = "clazz";
-	public static final String LANGUAGE = "language";
-	public static final String COUNTRY = "country";
+	public static final String LOCALE = "locale";
 	public static final String SOURCE = "source";
 
 	public static final String[] _COLUMNS_ = new String[] {
 			ID,
 			CLAZZ,
-			LANGUAGE,
-			COUNTRY,
+			LOCALE,
 			SOURCE
 		};
 
@@ -59,13 +57,9 @@ public class Resource extends SUBean implements Serializable {
 	@Comment("class name")
 	protected String clazz;
 
-	@Column(size=2, notNull=true)
-	@Comment("language code")
-	protected String language;
-
-	@Column(size=2, notNull=true)
-	@Comment("country code")
-	protected String country;
+	@Column(size=10, notNull=true)
+	@Comment("locale")
+	protected String locale;
 
 	@Column(type=DaoTypes.CLOB, size=50000)
 	@Comment("resource source")
@@ -106,37 +100,19 @@ public class Resource extends SUBean implements Serializable {
 	}
 
 	/**
-	 * @return the language
+	 * @return the locale
 	 */
-	@StringValidate(maxLength=2)
-	@ConstantValidate(list="%{consts.localeLanguageMap}")
-	@ELValidate(el="assist.isValidLocale(top.parent.value.language, top.parent.value.country)", msgId=Validators.MSGID_LOCALE)
-	public String getLanguage() {
-		return language;
+	@StringValidate(maxLength=10)
+	@ConstantValidate(list="%{consts.appLocaleMap}")
+	public String getLocale() {
+		return locale;
 	}
 
 	/**
-	 * @param language the language to set
+	 * @param locale the locale to set
 	 */
-	public void setLanguage(String language) {
-		this.language = panda.lang.Strings.stripToNull(language);
-	}
-
-	/**
-	 * @return the country
-	 */
-	@StringValidate(maxLength=2)
-	@ConstantValidate(list="%{consts.localeCountryMap}")
-	@ELValidate(el="assist.isValidLocale(top.parent.value.language, top.parent.value.country)", msgId=Validators.MSGID_LOCALE)
-	public String getCountry() {
-		return country;
-	}
-
-	/**
-	 * @param country the country to set
-	 */
-	public void setCountry(String country) {
-		this.country = panda.lang.Strings.stripToNull(country);
+	public void setLocale(String locale) {
+		this.locale = panda.lang.Strings.stripToNull(locale);
 	}
 
 	/**
@@ -162,8 +138,7 @@ public class Resource extends SUBean implements Serializable {
 	public void copy(Resource src) {
 		this.id = src.id;
 		this.clazz = src.clazz;
-		this.language = src.language;
-		this.country = src.country;
+		this.locale = src.locale;
 		this.source = src.source;
 		super.copy(src);
 	}
@@ -222,8 +197,7 @@ public class Resource extends SUBean implements Serializable {
 		return Objects.toStringBuilder()
 				.append(ID, id)
 				.append(CLAZZ, clazz)
-				.append(LANGUAGE, language)
-				.append(COUNTRY, country)
+				.append(LOCALE, locale)
 				.append(SOURCE, source)
 				.appendSuper(super.toString())
 				.toString();
