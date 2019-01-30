@@ -45,8 +45,8 @@ import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
-import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 import panda.vfs.FileItem;
@@ -102,7 +102,7 @@ public class DataImportAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
-	public Object execute(@Param @Validates Arg arg) throws Exception {
+	public Object execute(@Param @VisitValidate Arg arg) throws Exception {
 		this.arg = arg;
 		if (arg.file == null) {
 			return null;

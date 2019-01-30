@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 import panda.lang.Objects;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
+import panda.mvc.annotation.validate.CastErrorValidate;
+import panda.mvc.annotation.validate.ELValidate;
 import panda.mvc.validator.Validators;
 
 /**
  * DateRange
  */
-@SuppressWarnings("serial")
 public class DateRange implements Cloneable, Serializable {
+	private static final long serialVersionUID = 2L;
 
 	private Date from;
 	private Date to;
@@ -51,9 +51,7 @@ public class DateRange implements Cloneable, Serializable {
 	/**
 	 * @return the from
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE)
-	})
+	@CastErrorValidate(msgId=Validators.MSGID_DATE)
 	public Date getF() {
 		return from;
 	}
@@ -68,10 +66,8 @@ public class DateRange implements Cloneable, Serializable {
 	/**
 	 * @return the to
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE),
-		@Validate(value=Validators.EL, params="{ el: 'top.parent.value.f == null || top.value > top.parent.value.f' }", msgId=Validators.MSGID_DATE_TO)
-	})
+	@CastErrorValidate(msgId=Validators.MSGID_DATE)
+	@ELValidate(el="top.parent.value.f == null || top.value > top.parent.value.f", msgId=Validators.MSGID_DATE_TO)
 	public Date getT() {
 		return to;
 	}

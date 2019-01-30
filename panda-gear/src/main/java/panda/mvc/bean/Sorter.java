@@ -5,9 +5,7 @@ import java.io.Serializable;
 import panda.lang.Objects;
 import panda.lang.Order;
 import panda.lang.Strings;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
-import panda.mvc.validator.Validators;
+import panda.mvc.annotation.validate.ConstantValidate;
 
 
 /**
@@ -91,7 +89,7 @@ public class Sorter implements Cloneable, Serializable {
 	/**
 	 * @return the direction
 	 */
-	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'asc', 'desc' ]}", msgId=Validators.MSGID_CONSTANT))
+	@ConstantValidate(list="[ 'asc', 'desc' ]")
 	public String getD() {
 		return getDirection();
 	}

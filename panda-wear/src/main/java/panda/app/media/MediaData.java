@@ -8,8 +8,7 @@ import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.PK;
 import panda.lang.Objects;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
+import panda.mvc.annotation.validate.CastErrorValidate;
 import panda.mvc.validator.Validators;
 
 public class MediaData {
@@ -79,9 +78,7 @@ public class MediaData {
 	/**
 	 * @return the msz
 	 */
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
+	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
 	public Integer getMsz() {
 		return msz;
 	}

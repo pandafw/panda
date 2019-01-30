@@ -6,9 +6,8 @@ import java.util.Map;
 
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
-import panda.mvc.validator.Validators;
+import panda.mvc.annotation.validate.ConstantValidate;
+import panda.mvc.annotation.validate.VisitValidate;
 
 /**
  * Query bean object
@@ -199,7 +198,7 @@ public class Queryer implements Cloneable, Serializable {
 	/**
 	 * @return the method
 	 */
-	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'and', 'or' ]}", msgId=Validators.MSGID_CONSTANT))
+	@ConstantValidate(list="['and', 'or' ]")
 	public String getM() {
 		return method;
 	}
@@ -214,7 +213,7 @@ public class Queryer implements Cloneable, Serializable {
 	/**
 	 * @return the filters
 	 */
-	@Validates
+	@VisitValidate
 	public Map<String, Filter> getF() {
 		return filters;
 	}

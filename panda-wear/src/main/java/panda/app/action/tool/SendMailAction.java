@@ -12,9 +12,11 @@ import panda.log.Logs;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Redirect;
 import panda.mvc.annotation.To;
-import panda.mvc.annotation.Validate;
-import panda.mvc.annotation.Validates;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.validate.CastErrorValidate;
+import panda.mvc.annotation.validate.NumberValidate;
+import panda.mvc.annotation.validate.RequiredValidate;
+import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 import panda.net.mail.Email;
@@ -76,10 +78,8 @@ public class SendMailAction extends AbstractAction {
 		/**
 		 * @return the port
 		 */
-		@Validates({
-			@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-			@Validate(value=Validators.NUMBER, params="{min: 0, max: 65535}", msgId=Validators.MSGID_NUMBER_RANGE)
-		})
+		@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
+		@NumberValidate(min="0", max="65535")
 		public Integer getPort() {
 			return port;
 		}
@@ -123,20 +123,16 @@ public class SendMailAction extends AbstractAction {
 		/**
 		 * @param connTimeout the connTimeout to set
 		 */
-		@Validates({
-			@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-			@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_RANGE)
-		})
+		@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
+		@NumberValidate(min="0")
 		public void setConnTimeout(Integer connTimeout) {
 			this.connTimeout = connTimeout;
 		}
 		/**
 		 * @return the readTimeout
 		 */
-		@Validates({
-			@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-			@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_RANGE)
-		})
+		@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
+		@NumberValidate(min="0")
 		public Integer getReadTimeout() {
 			return readTimeout;
 		}
@@ -173,9 +169,7 @@ public class SendMailAction extends AbstractAction {
 		/**
 		 * @return the from
 		 */
-		@Validates({
-			@Validate(value=Validators.CAST, msgId=Validators.MSGID_EMAIL)
-		})
+		@CastErrorValidate(msgId=Validators.MSGID_EMAIL)
 		public EmailAddress getFrom() {
 			return from;
 		}
@@ -188,9 +182,7 @@ public class SendMailAction extends AbstractAction {
 		/**
 		 * @return the to
 		 */
-		@Validates({
-			@Validate(value=Validators.CAST, msgId=Validators.MSGID_EMAIL)
-		})
+		@CastErrorValidate(msgId=Validators.MSGID_EMAIL)
 		public EmailAddress getTo() {
 			return to;
 		}
@@ -203,9 +195,7 @@ public class SendMailAction extends AbstractAction {
 		/**
 		 * @return the cc
 		 */
-		@Validates({
-			@Validate(value=Validators.CAST, msgId=Validators.MSGID_EMAIL)
-		})
+		@CastErrorValidate(msgId=Validators.MSGID_EMAIL)
 		public EmailAddress getCc() {
 			return cc;
 		}
@@ -272,10 +262,10 @@ public class SendMailAction extends AbstractAction {
 	 * @param arg the input argument
 	 */
 	@At
-	public void send(@Param @Validates({
-		@Validate(value=Validators.REQUIRED, params="{ fields: [ 'from', 'to' ] }", msgId=Validators.MSGID_REQUIRED),
-		@Validate(value=Validators.VISIT)
-		}) Arg arg) {
+	public void send(@Param
+			@RequiredValidate(fields={ "from", "to" })
+			@VisitValidate
+		Arg arg) {
 
 		try {
 			Email email = new Email();
