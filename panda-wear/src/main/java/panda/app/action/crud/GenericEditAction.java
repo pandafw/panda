@@ -1141,6 +1141,9 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			else {
 				EntityHelper.clearIdentityValue(getEntity(), data);
 			}
+
+			assist().clearCreateByFields(data);
+			assist().clearUpdateByFields(data);
 		}
 	}
 }

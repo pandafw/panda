@@ -274,7 +274,6 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		}
 	}
 
-
 	/**
 	 * set IUpdatedBy fields of data
 	 * @param data input data
@@ -303,6 +302,32 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		}
 		
 		setUpdatedByFields(data);
+	}
+
+	/**
+	 * clear ICreatedBy fields of data
+	 * @param data ICreateBy data
+	 */
+	public void clearCreateByFields(Object data) {
+		if (data instanceof ICreatedBy) {
+			ICreatedBy cb = (ICreatedBy)data;
+			cb.setCreatedAt(null);
+			cb.setCreatedBy(null);
+			cb.setCreatedByName(null);
+		}
+	}
+	
+	/**
+	 * clear IUpdatedBy fields of data
+	 * @param data IUpdateBy data
+	 */
+	public void clearUpdateByFields(Object data) {
+		if (data instanceof IUpdatedBy) {
+			IUpdatedBy ub = (IUpdatedBy)data;
+			ub.setUpdatedAt(null);
+			ub.setUpdatedBy(null);
+			ub.setUpdatedByName(null);
+		}
 	}
 	
 	//-------------------------------------------------------------
