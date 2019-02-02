@@ -1,9 +1,11 @@
 package panda.dao.sql.expert;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
+import panda.dao.DaoTypes;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
@@ -82,6 +84,23 @@ public class HsqldbSqlExpert extends SqlExpert {
 		addIndexes(sqls, entity);
 		addForeignKeys(sqls, entity);
 		return sqls;
+	}
+	
+	@Override
+	protected String evalFieldType(EntityField ef) {
+		if (Strings.isNotEmpty(ef.getNativeType())) {
+			return super.evalFieldType(ef);
+		}
+		
+		int jdbcType = DaoTypes.getType(ef.getJdbcType());
+		switch (jdbcType) {
+		case Types.FLOAT:
+			return "FLOAT";
+		case Types.DOUBLE:
+			return "DOUBLE";
+		default:
+			return super.evalFieldType(ef);
+		}
 	}
 
 	/**
