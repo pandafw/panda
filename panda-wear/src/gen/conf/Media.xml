@@ -5,12 +5,12 @@
 	<!-- entity -->
 	<entity name="${entity.package}.Media" baseBeanClass="${entity.cuBeanClass}" baseQueryClass="${entity.cuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
 		<property name="id" type="String" size="32" notNull="true" primaryKey="true"/>
-		<property name="tag" type="String" size="10">
+		<property name="tag" type="String" size="10" indexKey="TAG">
 			<validator type="constant">
 				<param name="list" value="%{consts.mediaTagMap}"/>
 			</validator>
 		</property>
-		<property name="name" type="String" size="200">
+		<property name="name" type="String" size="200" indexKey="NAME">
 			<validator type="stringlength">
 				<param name="maxLength" value="200"/>
 			</validator>
@@ -22,6 +22,7 @@
 			<validator type="file"/>
 			<validator type="image"/>
 		</property>
+		<property name="createdAt" property="false" type="String" notNull="true" indexKey="CA"/>
 	</entity>
 
 	<!-- action -->

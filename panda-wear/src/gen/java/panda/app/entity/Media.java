@@ -4,6 +4,8 @@ import java.io.Serializable;
 import panda.app.entity.CUBean;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Id;
+import panda.dao.entity.annotation.Index;
+import panda.dao.entity.annotation.Indexes;
 import panda.lang.Objects;
 import panda.mvc.annotation.validate.CastErrorValidate;
 import panda.mvc.annotation.validate.ConstantValidate;
@@ -13,9 +15,14 @@ import panda.mvc.annotation.validate.StringValidate;
 import panda.mvc.validator.Validators;
 import panda.vfs.FileItem;
 
+@Indexes({
+	@Index(name="CA", fields={ "createdAt" }),
+	@Index(name="NAME", fields={ "name" }),
+	@Index(name="TAG", fields={ "tag" })
+})
 public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = -1790967583L;
+	private static final long serialVersionUID = 1692718689L;
 
 	/**
 	 * Constructor
