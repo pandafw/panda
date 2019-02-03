@@ -37,6 +37,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;foreignKey&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;foreignKeyOnUpdate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;foreignKeyOnDelete&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;indexKey&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;uniqueKey&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;primaryKey&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;defaultValue&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -92,6 +93,8 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	private String foreignKeyOnUpdate;
 	@XmlAttribute
 	private String foreignKeyOnDelete;
+	@XmlAttribute
+	private String indexKey;
 	@XmlAttribute
 	private String uniqueKey;
 	@XmlAttribute
@@ -158,6 +161,7 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		this.foreignKey = property.foreignKey;
 		this.foreignKeyOnUpdate = property.foreignKeyOnUpdate;
 		this.foreignKeyOnDelete = property.foreignKeyOnDelete;
+		this.indexKey = property.indexKey;
 		this.uniqueKey = property.uniqueKey;
 		this.primaryKey = property.primaryKey;
 		this.defaultValue = property.defaultValue;
@@ -228,6 +232,9 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		}
 		if (src.foreignKeyOnDelete != null) {
 			me.foreignKeyOnDelete = src.foreignKeyOnDelete;
+		}
+		if (src.indexKey != null) {
+			me.indexKey = src.indexKey;
 		}
 		if (src.uniqueKey != null) {
 			me.uniqueKey = src.uniqueKey;
@@ -536,6 +543,29 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	 */
 	public void setForeignKeyOnDelete(String foreignKeyOnDelete) {
 		this.foreignKeyOnDelete = foreignKeyOnDelete;
+	}
+
+	/**
+	 * @return the indexKey
+	 */
+	public String getIndexKey() {
+		return indexKey;
+	}
+
+	/**
+	 * Gets the value of the indexKey property.
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String[] getIndexKeys() {
+		return Strings.split(indexKey, " ,");
+	}
+
+	/**
+	 * @param indexKey the indexKey to set
+	 */
+	public void setIndexKey(String indexKey) {
+		this.indexKey = indexKey;
 	}
 
 	/**

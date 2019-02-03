@@ -18,8 +18,11 @@ import ${i};
 </#list>
 })
 </#if>
-<#if entity.uniqueKeyMap?has_content>
+<#if entity.indexKeyMap?has_content || entity.uniqueKeyMap?has_content>
 @Indexes({
+<#list entity.indexKeyMap?keys as k>
+	@Index(name="${k}", fields={ <#list entity.indexKeyMap[k] as p>"${p.name}"<#if p_has_next>, </#if></#list> })<#if k_has_next || entity.uniqueKeyMap?has_content>,</#if>
+</#list>
 <#list entity.uniqueKeyMap?keys as k>
 	@Index(name="${k}", fields={ <#list entity.uniqueKeyMap[k] as p>"${p.name}"<#if p_has_next>, </#if></#list> }, unique=true)<#if k_has_next>,</#if>
 </#list>

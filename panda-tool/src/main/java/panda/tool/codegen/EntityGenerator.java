@@ -212,7 +212,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 			imports.add(ForeignKeys.class.getName());
 			imports.add(FK.class.getName());
 		}
-		if (!entity.getUniqueKeyMap().isEmpty()) {
+		if (Collections.isNotEmpty(entity.getUniqueKeyMap()) || Collections.isNotEmpty(entity.getIndexKeyMap())) {
 			imports.add(Indexes.class.getName());
 			imports.add(Index.class.getName());
 		}

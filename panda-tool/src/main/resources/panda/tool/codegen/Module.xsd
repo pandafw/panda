@@ -91,6 +91,7 @@
 		<attribute name="foreignKeyOnUpdate" type="string"></attribute>
 		<attribute name="foreignKeyOnDelete" type="string"></attribute>
 		<attribute name="uniqueKey" type="string"></attribute>
+		<attribute name="indexKey" type="string"></attribute>
 		<attribute name="primaryKey" type="string"></attribute>
 		<attribute name="defaultValue" type="string"></attribute>
 		<attribute name="notNull" type="string"></attribute>

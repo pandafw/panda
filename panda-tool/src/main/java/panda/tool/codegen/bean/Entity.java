@@ -88,6 +88,7 @@ public class Entity {
 	private List<EntityProperty> propertyList;
 	private EntityProperty identityProperty;
 	private List<EntityProperty> primaryKeyList;
+	private Map<String, List<EntityProperty>> indexKeyMap;
 	private Map<String, List<EntityProperty>> uniqueKeyMap;
 	private Map<String, List<EntityProperty>> foreignKeyMap;
 	private List<EntityProperty> columnList;
@@ -159,6 +160,7 @@ public class Entity {
 					"Illegal Identity Primary Key definition: " + getName());
 		}
 		
+		prepareIndexKeyMap();
 		prepareUniqueKeyMap();
 		prepareForeignKeyMap();
 		prepareColumnList();
@@ -517,6 +519,29 @@ public class Entity {
 		}
 	}
 
+	private void prepareIndexKeyMap() {
+		indexKeyMap = new TreeMap<String, List<EntityProperty>>();
+
+		Set<String> us = new HashSet<String>();
+		for (EntityProperty p : getProperties()) {
+			if (p.getIndexKeys() != null) {
+				for (String uk : p.getIndexKeys()) {
+					us.add(uk);
+				}
+			}
+		}
+
+		for (String u : us) {
+			List<EntityProperty> list = new ArrayList<EntityProperty>();
+			for (EntityProperty p : getProperties()) {
+				if (Arrays.contains(p.getIndexKeys(), u)) {
+					list.add(p);
+				}
+			}
+			indexKeyMap.put(u, list);
+		}
+	}
+
 	private void prepareUniqueKeyMap() {
 		uniqueKeyMap = new TreeMap<String, List<EntityProperty>>();
 
@@ -538,6 +563,15 @@ public class Entity {
 			}
 			uniqueKeyMap.put(u, list);
 		}
+	}
+	
+	public boolean hasComplexIndexKey() {
+		for (List<EntityProperty> eps : indexKeyMap.values()) {
+			if (eps.size() > 1) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean hasComplexUniqueKey() {
@@ -768,6 +802,13 @@ public class Entity {
 		return sb.toString();
 	}
 	
+	/**
+	 * @return the indexKeyMap
+	 */
+	public Map<String, List<EntityProperty>> getIndexKeyMap() {
+		return indexKeyMap;
+	}
+
 	/**
 	 * @return the uniqueKeyMap
 	 */
