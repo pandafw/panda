@@ -89,8 +89,8 @@ public abstract class Bs3HorizontalInputWrapper<T extends InputUIBean> extends B
 		}
 
 		protected void renderHeader() throws Exception {
-			addCss("form-control-static");
 			super.renderHeader();
+			addCss("form-control-static");
 		}
 	}
 
