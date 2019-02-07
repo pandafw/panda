@@ -20,6 +20,7 @@ public class DecodingFilter implements ServletFilter {
 	@Override
 	public boolean doFilter(HttpServletRequest req, HttpServletResponse res, ServletChain sc) {
 		FilteredHttpServletRequestWrapper freq = new FilteredHttpServletRequestWrapper(req);
+		freq.setDefaultEncoding(encoding);
 		FilteredHttpServletResponseWrapper fres = new FilteredHttpServletResponseWrapper(res);
 		return sc.doNext(freq, fres);
 	}
