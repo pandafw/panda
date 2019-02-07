@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class Regexs {
-	public static final String REGEX_URL = "(https?://)?([\\w\\.\\-]+)\\.([a-z\\.]{2,6})(/[\\w\\.\\-\\+&%=\\?]*)*";
-	public static final String REGEX_EMAIL = "([\\w\\.\\+\\-]+)@([\\w\\.\\-]+)\\.([a-zA-Z\\.]{2,6})";
+	public static final String REGEX_URL = "(https?://)?([\\w\\.\\-]+)\\.([a-z\\.]{2,})(/[\\w\\.\\-\\+&%=\\?]*)*";
+	public static final String REGEX_EMAIL = "([\\w\\.\\+\\-]+)@([\\w\\.\\-]+)\\.([a-zA-Z\\.]{2,})";
 	public static final String REGEX_FILENAME = "[^\\\\/:*?\"<>|]*";
 
 	public static final Pattern PATTERN_URL = Pattern.compile(REGEX_URL, Pattern.CASE_INSENSITIVE);
