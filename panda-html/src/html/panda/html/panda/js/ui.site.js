@@ -10,9 +10,17 @@ function s_onpageload() {
 }
 
 function s_totop() {
-	$('.p-totop').click(function() {
-		$('html,body').animate({ scrollTop: 0 }, 'slow');
-	});
+	var $t = $('.p-totop');
+	if ($t.size() > 0) {
+		$t.click(function() {
+			$('html,body').animate({ scrollTop: 0 }, 'slow');
+		});
+
+		var $w = $(window);
+		$w.scroll(function() {
+			$t[$w.scrollTop() > $w.height() ? 'show' : 'hide']();
+		});
+	}
 }
 
 function s_preload() {
