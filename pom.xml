@@ -9,6 +9,7 @@
 	<version>1.2.0</version>
 
 	<name>Panda Framework</name>
+	<description>Panda Framework is a Java development framework, it can help you quickly create a WEB application.</description>
 	<url>https://github.com/pandafw/panda/</url>
 
 	<licenses>
