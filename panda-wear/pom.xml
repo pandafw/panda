@@ -13,7 +13,7 @@
 	<packaging>jar</packaging>
 
 	<name>Panda Wear</name>
-	<description>Panda Wear is a extension module of the Panda development framework for web applications. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
+	<description>Panda Wear is a module of the Panda Framework for quickly develop web application. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
 
 	<build>
 		<resources>
@@ -114,6 +114,20 @@
 						</manifestEntries>
 					</archive>
 				</configuration>
+			</plugin>
+
+			<!-- gpg sign -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

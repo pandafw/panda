@@ -13,7 +13,7 @@
 	<packaging>jar</packaging>
 
 	<name>Panda Gear</name>
-	<description>Panda Gear is a module of the Panda development framework for web applications (Servlet), similar to Spring-MVC, Struts2, contains some commonly used Taglib.</description>
+	<description>Panda Gear is a module of the Panda Framework for quickly develop web application, similar to Spring-MVC, Struts2, contains some commonly used Taglib.</description>
 
 	<build>
 		<resources>
@@ -55,6 +55,20 @@
 						</manifestEntries>
 					</archive>
 				</configuration>
+			</plugin>
+
+			<!-- gpg sign -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
