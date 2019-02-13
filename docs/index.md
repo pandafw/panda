@@ -8,6 +8,7 @@ Panda is a Java development framework, it can help you quickly create a WEB appl
  - [Project Site](https://pandafw.github.io/panda)
  - [Demo Site on Heroku](https://pandademo.herokuapp.com)
  - [Demo Site on Google App Engine](https://panda-demo.appspot.com)
+ - [Demo Site Source Code](https://github.com/pandafw/panda-demo)
  - [Document](index_en.md)
 
 
@@ -18,6 +19,7 @@ Pandaフレームワークは企業むけ高品質な Java Web システムを�
  - [プロジェクトサイト](https://pandafw.github.io/panda)
  - [デモサイト Heroku](https://pandademo.herokuapp.com)
  - [デモサイト Google App Engine](https://panda-demo.appspot.com)
+ - [デモサイトソース](https://github.com/pandafw/panda-demo)
  - [ドキュメント](index_ja.md)
 
 
@@ -27,12 +29,13 @@ Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应�
  - [项目网站](https://pandafw.github.io/panda)
  - [演示网站 Heroku](https://pandademo.herokuapp.com)
  - [演示网站 Google App Engine](https://panda-demo.appspot.com)
+ - [演示网站源码](https://github.com/pandafw/panda-demo)
  - [技术文档](index_zh.md)
 
 
 
 ## Requirements
- - Java 7
+ - Java 7 ~
 
 
 ## Versions
