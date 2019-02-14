@@ -520,8 +520,7 @@ public class GaeDao extends AbstractDao {
 				fo = FilterOperator.NOT_EQUAL;
 			}
 			else if (op == Operator.IN) {
-				// GAE SQL does not support IN operator
-				// fo = FilterOperator.IN;
+				fo = FilterOperator.IN;
 			}
 
 			if (fo == null) {
