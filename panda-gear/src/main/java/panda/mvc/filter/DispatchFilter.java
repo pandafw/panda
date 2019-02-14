@@ -159,7 +159,7 @@ public class DispatchFilter implements ServletFilter {
 			DefaultIoc di = ((DefaultIoc)ioc).clone();
 
 			ComboIocContext ctx = new ComboIocContext();
-			ric = RequestIocContext.get(req);
+			ric = new RequestIocContext();
 			ctx.addContext(ric);
 			
 			if (IocSessionListener.isSessionScopeEnable) {
@@ -217,7 +217,7 @@ public class DispatchFilter implements ServletFilter {
 		}
 		finally {
 			if (ric != null) {
-				RequestIocContext.depose(req);
+				ric.depose();
 			}
 			
 			// remove action context from request
