@@ -13,7 +13,6 @@ import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.executor.JdbcSqlManager;
 import panda.dao.sql.expert.SqlExpert;
 import panda.dao.sql.expert.SqlExpertConfig;
-import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -119,7 +118,7 @@ public class SqlDaoClient extends DaoClient {
 
 		SqlExpert se = sqlExpertConfig.matchExpert(db);
 		if (se == null) {
-			throw Exceptions.makeThrow("Failed to find SqlExpert for database '%s %s'", name, version);
+			throw new RuntimeException("Failed to find SqlExpert for database '" + db + "'");
 		}
 		se.setOptions(sqlExpertConfig.getOptions());
 		se.setClient(this);

@@ -3,7 +3,6 @@ package panda.ioc.impl;
 import panda.ioc.IocEventTrigger;
 import panda.ioc.IocMaking;
 import panda.ioc.ObjectProxy;
-import panda.lang.Exceptions;
 
 /**
  * ObjectProxy for singleton bean
@@ -56,7 +55,7 @@ public class SingletonObjectProxy implements ObjectProxy {
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> type, IocMaking imak) {
 		if (object == null) {
-			throw Exceptions.makeThrow("Null '%s' Object for SingletonObjectProxy", imak.getName());
+			throw new RuntimeException("Null '" + imak.getName() + "' Object for SingletonObjectProxy");
 		}
 
 		if (fetch != null) {

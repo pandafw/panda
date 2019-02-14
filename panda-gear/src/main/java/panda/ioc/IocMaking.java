@@ -5,7 +5,6 @@ import java.util.Map;
 import panda.bind.json.Jsons;
 import panda.ioc.aop.MirrorFactory;
 import panda.ioc.meta.IocValue;
-import panda.lang.Exceptions;
 
 public class IocMaking {
 
@@ -62,8 +61,9 @@ public class IocMaking {
 			return vp;
 		}
 		
-		throw Exceptions.makeThrow("Unknown value {'%s':%s} for object [%s]", 
-			iv.getType(), Jsons.toJson(iv.getValue()), name);
+		throw new RuntimeException(String.format(
+			"Unknown value {'%s':%s} for object [%s]", 
+			iv.getType(), Jsons.toJson(iv.getValue()), name));
 	}
 
 }

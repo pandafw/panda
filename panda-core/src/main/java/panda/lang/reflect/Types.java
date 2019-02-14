@@ -25,7 +25,6 @@ import java.util.Set;
 import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Classes;
-import panda.lang.Exceptions;
 
 /**
  * Static methods for working with types.
@@ -145,44 +144,47 @@ public abstract class Types {
 	}
 	
 	/**
-	 * 获取一个类的泛型参数数组，如果这个类没有泛型参数，返回 null
+	 * recursively find ParameterizedType arguments type, if the cls is not ParameterizedType, return null.
 	 * @param cls the class
 	 * @return the type array
 	 */
 	public static Type[] getDeclaredGenericTypeParams(Class<?> cls) {
-		if (cls == null)
+		if (cls == null) {
 			return null;
+		}
 
-		// 看看父类
+		// check super class
 		Type sc = cls.getGenericSuperclass();
-		if (null != sc && sc instanceof ParameterizedType)
+		if (sc != null && sc instanceof ParameterizedType) {
 			return ((ParameterizedType)sc).getActualTypeArguments();
-
-		// 看看接口
+		}
+		
+		// check interface
 		Type[] interfaces = cls.getGenericInterfaces();
 		for (Type inf : interfaces) {
 			if (inf instanceof ParameterizedType) {
 				return ((ParameterizedType)inf).getActualTypeArguments();
 			}
 		}
+
 		return getDeclaredGenericTypeParams(cls.getSuperclass());
 	}
 	
 	/**
-	 * 获取一个类的某个一个泛型参数
+	 * recursively find ParameterizedType argument type, if the cls is not ParameterizedType, return null.
 	 * 
-	 * @param klass 类
-	 * @param index 参数下标 （从 0 开始）
-	 * @return 泛型参数类型
+	 * @param klass class
+	 * @param index argument index
+	 * @return the argument type
 	 */
-//	@SuppressWarnings("unchecked")
-//	public static <T> Class<T> getDeclaredGenericTypeParam(Class<?> klass, int index) {
-//	}
-	
 	public static Type getDeclaredGenericTypeParam(Class<?> klass, int index) {
 		Type[] types = getDeclaredGenericTypeParams(klass);
+		if (types == null) {
+			return null;
+		}
+
 		if (index < 0 || index >= types.length) {
-			throw Exceptions.makeThrow("Class type param out of range %d/%d", index, types.length);
+			return null;
 		}
 
 		return types[index];

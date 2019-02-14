@@ -94,7 +94,7 @@ public class ForwardView extends AbstractView {
 		
 		RequestDispatcher rd = req.getRequestDispatcher(path);
 		if (rd == null) {
-			throw Exceptions.makeThrow("Fail to find Forward '%s'", path);
+			throw new ServletException("Fail to find Forward " + path);
 		}
 		
 		rd.forward(req, res);

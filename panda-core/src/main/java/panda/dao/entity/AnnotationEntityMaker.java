@@ -37,7 +37,6 @@ import panda.dao.entity.annotation.View;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
-import panda.lang.Exceptions;
 import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.reflect.Fields;
@@ -340,10 +339,10 @@ public class AnnotationEntityMaker implements EntityMaker {
 				return null;
 			}
 
-//			String name = Beans.getBeanName(method);
 			if (Strings.isEmpty(name)) {
-				throw Exceptions.makeThrow("Method '%s'(%s) can not add '@Column', it MUST be a setter or getter!",
-					method.getName(), method.getDeclaringClass().getName());
+				throw new RuntimeException(String.format(
+					"Method '%s'(%s) can not add '@Column', it MUST be a setter or getter!",
+					method.getName(), method.getDeclaringClass().getName()));
 			}
 
 			mi.name = name;
@@ -484,14 +483,14 @@ public class AnnotationEntityMaker implements EntityMaker {
 		ei.setReal(idx.real());
 		ei.setName(Strings.isEmpty(idx.name()) ? Strings.join(idx.fields(), '_') : idx.name());
 		if (Arrays.isEmpty(idx.fields())) {
-			throw Exceptions.makeThrow("Empty fields for @Index(%s: %s)", 
-				ei.getName(), Strings.join(idx.fields(), '|'));
+			throw new IllegalArgumentException("Empty fields for @Index(" + ei.getName() + ": " + Strings.join(idx.fields(), '|') + ")");
 		}
+		
 		for (String in : idx.fields()) {
 			EntityField ef = en.getField(in);
 			if (null == ef) {
-				throw Exceptions.makeThrow("Failed to find field '%s' in '%s' for @Index(%s: %s)", 
-					in, en.getType(), ei.getName(), Strings.join(idx.fields(), '|'));
+				throw new IllegalArgumentException(String.format("Failed to find field '%s' in '%s' for @Index(%s: %s)", 
+					in, en.getType(), ei.getName(), Strings.join(idx.fields(), '|')));
 			}
 			ei.addField(ef);
 		}
@@ -524,12 +523,12 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 		String[] fields = fk.fields();
 		if (Arrays.isEmpty(fields)) {
-			throw Exceptions.makeThrow("Empty fields for @FK(%s: %s)", efk.getName(), Strings.join(fields, '|'));
+			throw new IllegalArgumentException("Empty fields for @FK(" + efk.getName() + ": " + Strings.join(fields, '|') + ")");
 		}
 		
 		List<EntityField> rpks = ref.getPrimaryKeys();
 		if (fields.length != rpks.size()) {
-			throw Exceptions.makeThrow("Invalid fields for @FK(%s: %s)", efk.getName(), Strings.join(fields, '|'));
+			throw new IllegalArgumentException("Invalid fields for @FK(" + efk.getName() + ": " + Strings.join(fields, '|') + ")");
 		}
 		
 		for (int i = 0; i < fields.length; i++) {
@@ -537,16 +536,19 @@ public class AnnotationEntityMaker implements EntityMaker {
 			
 			EntityField ef = en.getField(fn);
 			if (ef == null) {
-				throw Exceptions.makeThrow("Failed to find field '%s' in '%s' for @FK(%s: %s)", 
-					fn, en.getType(), efk.getName(), Strings.join(fields, '|'));
+				throw new IllegalArgumentException(
+					String.format(
+						"Failed to find field '%s' in '%s' for @FK(%s: %s)",
+						fn, en.getType(), efk.getName(), Strings.join(fields, '|')));
 			}
 			
 			EntityField rf = rpks.get(i);
 			
 			if (!Types.equals(ef.getType(), rf.getType())) {
-				throw Exceptions.makeThrow(
-					"The type '%s' of field '%s' is not equals to the field '%s' of reference entity '%s' for '%s'@FK(%s: %s)", 
-					ef.getType(), fn, rf.getName(), ref.getType(), en.getType(), efk.getName(), Strings.join(fields, '|'));
+				throw new IllegalArgumentException(
+					String.format(
+						"The type '%s' of field '%s' is not equals to the field '%s' of reference entity '%s' for '%s'@FK(%s: %s)", 
+						ef.getType(), fn, rf.getName(), ref.getType(), en.getType(), efk.getName(), Strings.join(fields, '|')));
 			}
 			efk.addField(ef);
 		}
@@ -586,15 +588,15 @@ public class AnnotationEntityMaker implements EntityMaker {
 		ej.setTarget(ref);
 
 		if (keys == null || keys.length == 0) {
-			throw Exceptions.makeThrow("Empty keys for @Join(%s: %s)", ej.getName(), Strings.join(keys, '|'));
+			throw new IllegalArgumentException("Empty keys for @Join(" + ej.getName() + ": " + Strings.join(keys, '|') + ")");
 		}
 
 		if (refs == null || refs.length == 0) {
-			throw Exceptions.makeThrow("Empty refs for @Join(%s: %s)", ej.getName(), Strings.join(refs, '|'));
+			throw new IllegalArgumentException("Empty refs for @Join(" + ej.getName() + ": " + Strings.join(refs, '|') + ")");
 		}
 
 		if (keys.length != refs.length) {
-			throw Exceptions.makeThrow("keys & refs for @Join(%s: %s, %s) is not valid", ej.getName(), Strings.join(keys, '|'), Strings.join(refs, '|'));
+			throw new IllegalArgumentException(String.format("keys & refs for @Join(%s: %s, %s) is not valid", ej.getName(), Strings.join(keys, '|'), Strings.join(refs, '|')));
 		}
 		
 		for (int i = 0; i < keys.length; i++) {
@@ -614,10 +616,11 @@ public class AnnotationEntityMaker implements EntityMaker {
 			}
 			
 			if (!Types.equals(ef.getType(), rf.getType())) {
-				throw Exceptions.makeThrow(
-					"The type '%s' of field '%s' is not equals to the field '%s' of target entity '%s' for '%s'@Join(%s: %s, %s)", 
-					ef.getType(), kn, rf.getName(), ref.getType(), en.getType(), ej.getName(), 
-					Strings.join(keys, '|'), Strings.join(refs, '|'));
+				throw new IllegalArgumentException(
+					String.format(
+						"The type '%s' of field '%s' is not equals to the field '%s' of target entity '%s' for '%s'@Join(%s: %s, %s)", 
+						ef.getType(), kn, rf.getName(), ref.getType(), en.getType(), ej.getName(), 
+						Strings.join(keys, '|'), Strings.join(refs, '|')));
 			}
 			
 			ej.addKeyField(ef);

@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import panda.ioc.IocContext;
 import panda.ioc.ObjectProxy;
-import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -22,8 +21,8 @@ public class ScopeIocContext implements IocContext {
 	}
 
 	private void checkBuffer() {
-		if (null == proxys) {
-			throw Exceptions.makeThrow("Context '%s' had been deposed!", scope);
+		if (proxys == null) {
+			throw new IllegalStateException("IocContext '" + scope + "' had been deposed!");
 		}
 	}
 
@@ -90,7 +89,7 @@ public class ScopeIocContext implements IocContext {
 	public void depose() {
 		if (proxys == null) {
 			if (log.isWarnEnabled()) {
-				log.warnf("%s IocContext already deposed", scope);
+				log.warn(scope + " IocContext already deposed");
 			}
 			return;
 		}
