@@ -169,8 +169,10 @@ public final class Logs {
 	protected void init(Map<String, String> props) {
 		// java logging redirect
 		String v = props.get("panda.java.logging.redirect");
-		JavaLogRedirectHandler.redirect(Booleans.toBoolean(v));
-
+		if (Booleans.toBoolean(v)) {
+			JavaLogRedirectHandler.redirect();
+		}
+		
 		// level settings
 		initLogLevels(props);
 		

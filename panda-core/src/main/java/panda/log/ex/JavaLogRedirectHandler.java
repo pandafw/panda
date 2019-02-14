@@ -13,10 +13,9 @@ import panda.log.LogLog;
 import panda.log.Logs;
 
 public class JavaLogRedirectHandler extends Handler {
-	public static void redirect(boolean redirect) {
-		String CONFIG = "handlers = " + JavaLogRedirectHandler.class.getName() + "\n.level = " + (redirect ? "ALL" : "OFF");
-
+	public static void redirect() {
 		try {
+			String CONFIG = "handlers = " + JavaLogRedirectHandler.class.getName() + "\n.level = ALL";
 			LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(CONFIG.getBytes()));
 		}
 		catch (Throwable e) {
