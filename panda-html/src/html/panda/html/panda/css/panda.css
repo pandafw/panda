@@ -48,30 +48,6 @@ ul.p-field-errors i.fa-li {
 .p-field-errors-caret {
 	font-size: 80%;
 }
-.p-loading {
-}
-
-.p-loading:after {
-	overflow: hidden;
-	display: inline-block;
-	vertical-align: bottom;
-	content: "......";
-	width: 0px;
-	animation: pkf-ellipsis steps(8,end) 1s infinite;
-	-webkit-animation: pkf-ellipsis steps(8,end) 1s infinite;
-}
-
-@keyframes pkf-ellipsis {
-	to {
-		width: 2em;
-	}
-}
-
-@-webkit-keyframes pkf-ellipsis {
-	to {
-		width: 2em;
-	}
-}
 /** disable bootstrap not-allowed cursor */
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
 	cursor: auto;
@@ -275,46 +251,6 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 .note-editor .modal-body > .form-group {
 	margin: 0 0 15px 0;
 }
-/* LOADER */
-.p-loader-fading-squares {
-	background: url("../img/loader/fading-squares.gif") center center no-repeat;
-	width: 160px;
-	height: 24px;
-}
-.p-loader-fading-balls {
-	background: url("../img/loader/fading-balls.gif") center center no-repeat;
-	width: 64px;
-	height: 64px;
-}
-.p-loader-fountain {
-	background: url("../img/loader/fountain.gif") center center no-repeat;
-	width: 160px;
-	height: 20px;
-}
-.p-loader-snake {
-	background: url("../img/loader/snake.gif") center center no-repeat;
-	width: 16px;
-	height: 16px;
-}
-.p-loader-snake-big {
-	background: url("../img/loader/snake-big.gif") center center no-repeat;
-	width: 24px;
-	height: 24px;
-}
-.p-loader-squares-circle {
-	background: url("../img/loader/squares-circle.gif") center center no-repeat;
-	width: 31px;
-	height: 31px;
-}
-
-/* background-image */
-.p-bimg-magnifier24 {
-	background-image: url("../img/magnifier-24.png");
-}
-.p-bimg-magnifier32 {
-	background-image: url("../img/magnifier-32.png");
-}
-
 /*--------------------------------------------------
  * section
 --------------------------------------------------*/
@@ -671,6 +607,39 @@ tbody.p-lv-tbody > tr > td:first-child {
 	text-decoration: line-through;
 	background-image: linear-gradient(to bottom, transparent, transparent 45%, #666 46%, transparent 47%, transparent 50%, #666 51%, transparent 52%, transparent);
 }
+
+/* LOADER */
+.p-loader-fading-squares {
+	background: url("../img/loader/fading-squares.gif") center center no-repeat;
+	width: 160px;
+	height: 24px;
+}
+.p-loader-fading-balls {
+	background: url("../img/loader/fading-balls.gif") center center no-repeat;
+	width: 64px;
+	height: 64px;
+}
+.p-loader-fountain {
+	background: url("../img/loader/fountain.gif") center center no-repeat;
+	width: 160px;
+	height: 20px;
+}
+.p-loader-snake {
+	background: url("../img/loader/snake.gif") center center no-repeat;
+	width: 16px;
+	height: 16px;
+}
+.p-loader-snake-big {
+	background: url("../img/loader/snake-big.gif") center center no-repeat;
+	width: 24px;
+	height: 24px;
+}
+.p-loader-squares-circle {
+	background: url("../img/loader/squares-circle.gif") center center no-repeat;
+	width: 31px;
+	height: 31px;
+}
+
 
 /**
  * ui-loadmask hack
