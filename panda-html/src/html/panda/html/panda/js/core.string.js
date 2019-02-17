@@ -123,16 +123,16 @@ if (typeof String.prototype.format != "function") {
 		});
 	};
 }
-if (typeof String.prototype.size != 'function') {
-	String.prototype.size = function(s) {
-		var sz = 0;
-		for (var i = 0; i < this.length; i++) {
-			sz++;
-			if (this.charCodeAt(i) > 0xFF) {
-				sz++;
-			}
-		}
-		return sz;
+if (typeof String.prototype.substrAfter != 'function') {
+	String.prototype.substrAfter = function(c) {
+		var s = this, i = s.indexOf(c);
+		return (i >= 0) ? s.substring(i + 1) : "";
+	};
+}
+if (typeof String.prototype.substrBefore != 'function') {
+	String.prototype.substrBefore = function(c) {
+		var s = this, i = s.indexOf(c);
+		return (i >= 0) ? s.substring(0, i) : s;
 	};
 }
 if (typeof String.prototype.ellipsis != 'function') {
@@ -318,43 +318,6 @@ if (typeof String.prototype.decodeBase64 != "function") {
 	};
 }
 
-if (typeof String.prototype.queryArrays != "function") {
-	String.prototype.queryArrays = function(f) {
-		var qs = [], s = this, i = s.indexOf('?');
-		if (i >= 0) {
-			s = s.substring(i + 1);
-		}
-		var ss = s.split('&');
-		for (i = 0; i < ss.length; i++) {
-			var pv = ss[i].split('=');
-			var n = decodeURIComponent(pv[0]);
-			if (f == null || f == n) {
-				qs.push({
-					name: n,
-					value: pv.length > 1 ? decodeURIComponent(pv[1]) : ''
-				});
-			}
-		}
-		return qs;
-	};
-}
-
-if (typeof String.prototype.queryParams != "function") {
-	String.prototype.queryParams = function() {
-		var qs = {}, s = this, i = s.indexOf('?');
-		if (i >= 0) {
-			s = s.substring(i + 1);
-		}
-		var ss = s.split('&');
-		for (i = 0; i < ss.length; i++) {
-			var pv = ss[i].split('=');
-			var n = decodeURIComponent(pv[0]);
-			qs[n] = pv.length > 1 ? decodeURIComponent(pv[1]) : '';
-		}
-		return qs;
-	};
-}
-
 //-----------------------------------
 //  Static functions
 //-----------------------------------
@@ -396,6 +359,21 @@ if (typeof String.startsWith != "function") {
 if (typeof String.endsWith != "function") {
 	String.endsWith = function(s, w) {
 		return s != null ? String(s).endsWith(w) : false;
+	};
+}
+if (typeof String.substrAfter != "function") {
+	String.substrAfter = function(s, c) {
+		return s != null ? String(s).substrAfter(c) : "";
+	};
+}
+if (typeof String.substrBefore != "function") {
+	String.substrBefore = function(s, c) {
+		return s != null ? String(s).substrBefore(c) : "";
+	};
+}
+if (typeof String.ellipsis != "function") {
+	String.ellipsis = function(s, l) {
+		return s != null ? String(s).ellipsis(l) : "";
 	};
 }
 if (typeof String.ellipsis != "function") {
@@ -456,11 +434,6 @@ if (typeof String.decodeBase64 != 'function') {
 if (typeof String.escapeRegExp != 'function') {
 	String.escapeRegExp = function(s) {
 		return s != null ? String(s).escapeRegExp() : "";
-	};
-}
-if (typeof String.queryParams != "function") {
-	String.queryParams = function(s) {
-		return s != null ? String(s).queryParams(s) : [];
 	};
 }
 if (typeof String.formatSize != "function") {
