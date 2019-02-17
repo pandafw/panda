@@ -1,4 +1,4 @@
-(function() {
+(function($) {
 	$.fn.ptrigger = function(option) {
 		option = $.extend({ 'icon' : 'fa fa-remove' }, option);
 		return this.each(function() {
@@ -34,4 +34,4 @@
 	$(window).on('load', function () {
 		$('[data-ptrigger]').ptrigger();
 	});
-})();
+})(jQuery);
