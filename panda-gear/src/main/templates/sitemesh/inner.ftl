@@ -2,6 +2,6 @@
 <div class="p-inner">${body}</div>
 <script type="text/javascript">
 	$(function() {
-		s_decorate(".p-inner");
+		$(window).trigger('load');
 	});
 </script>

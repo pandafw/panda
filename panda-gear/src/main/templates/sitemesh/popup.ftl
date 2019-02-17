@@ -2,6 +2,6 @@
 <div class="p-popup">${body}</div>
 <script type="text/javascript">
 	$(function() {
-		s_decorate(".p-popup");
+		$(window).trigger('load');
 	});
 </script>
