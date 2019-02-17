@@ -11,5 +11,14 @@
 		$('body').append(s);
 		return true;
 	};
+	
+	// enable script cache
+	$.enableScriptCache = function() {
+		$.ajaxPrefilter(function(options, org, xhr) {
+			if (options.dataType == 'script' || org.dataType == 'script') {
+				options.cache = true;
+			}
+		});
+	}
 })(jQuery);
 
