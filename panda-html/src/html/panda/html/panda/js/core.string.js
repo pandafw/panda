@@ -437,28 +437,29 @@ if (typeof String.escapeRegExp != 'function') {
 	};
 }
 if (typeof String.formatSize != "function") {
-	var KB = 1024;
-	var MB = KB * KB;
-	var GB = MB * KB;
-	var TB = GB * KB;
-	var PB = TB * KB;
+	var KB = 1024,
+		MB = KB * KB,
+		GB = MB * KB,
+		TB = GB * KB,
+		PB = TB * KB;
 	
-	String.formatSize = function(n) {
+	String.formatSize = function(n, p) {
+		p = Math.pow(10, p || 2);
 		var sz = "";
 		if (n >= PB) {
-			sz = Math.round(n / PB) + ' PB';
+			sz = Math.round(n * p / PB) / p + ' PB';
 		}
 		else if (n >= TB) {
-			sz = Math.round(n / TB) + ' TB';
+			sz = Math.round(n * p / TB) / p + ' TB';
 		}
 		else if (n >= GB) {
-			sz = Math.round(n / GB) + ' GB';
+			sz = Math.round(n * p / GB) / p + ' GB';
 		}
 		else if (n >= MB) {
-			sz = Math.round(n / MB) + ' MB';
+			sz = Math.round(n * p / MB) / p + ' MB';
 		}
 		else if (n >= KB) {
-			sz = Math.round(n / KB) + ' KB';
+			sz = Math.round(n * p / KB) / p + ' KB';
 		}
 		else if (n != '') {
 			sz = n + ' bytes';
