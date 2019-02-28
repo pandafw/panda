@@ -2,7 +2,6 @@ package panda.mvc.annotation.validate;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -13,7 +12,6 @@ import panda.mvc.validator.EmptyValidator;
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Inherited
 public @interface EmptyValidate {
 	/**
 	 * The referred field name to show error message.
