@@ -51,9 +51,10 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public String getName() {
-		String path = FileNames.separatorsToUnix(file.getPath());
-		String name = Strings.removeStart(path, localFileStore.getPath());
-		return Strings.stripStart(name, '/');
+		String name = Strings.removeStart(file.getPath(), localFileStore.getPath());
+		name = FileNames.separatorsToUnix(name);
+		name = Strings.stripStart(name, '/');
+		return name;
 	}
 
 	/**

@@ -21,6 +21,7 @@ import com.google.appengine.tools.cloudstorage.ListResult;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 
 import panda.io.Streams;
+import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.vfs.FileItem;
 import panda.vfs.FileStore;
@@ -152,10 +153,10 @@ public class GaeFileStore implements FileStore {
 				}
 				
 				GaeFileItem gfi = new GaeFileItem(this);
+				gfi.setName(Strings.removeStart(i.getName(), this.prefix));
 				gfi.setSize((int)i.getLength());
 				gfi.setDate(i.getLastModified());
 				gfi.setExists(true);
-	
 				fis.add(gfi);
 			}
 	

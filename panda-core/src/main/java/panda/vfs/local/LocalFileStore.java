@@ -56,15 +56,13 @@ public class LocalFileStore implements FileStore {
 	
 	@Override
 	public List<FileItem> listFiles(String prefix, Date before) throws IOException {
-		String path = getPath();
-		
-		File root = new File(path);
-		
-		if (!root.exists()) {
-			return null;
-		}
-		
 		List<FileItem> fis = new ArrayList<FileItem>();
+
+		String path = getPath();
+		File root = new File(path);
+		if (!root.exists()) {
+			return fis;
+		}
 		
 		IOFileFilter fil = null;
 		if (Strings.isNotEmpty(prefix)) {

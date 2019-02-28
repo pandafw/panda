@@ -205,6 +205,8 @@ public class GaeFileItem implements FileItem, Serializable {
 		copy.name = name;
 		copy.size = size;
 		copy.date = date;
+		copy.data = data;
+		copy.exists = exists;
 		return copy;
 	}
 }

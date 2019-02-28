@@ -27,6 +27,7 @@
 				<format type="timestamp"/>
 				<filter type="datetime" fixed="true"/>
 			</column>
+			<param name="actionView" value="./view"/>
 		</list>
 		<list name="basicBulk" extend="basicList">
 			<param name="toolbar" value="${bulk.toolbar}"/>

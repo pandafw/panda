@@ -238,11 +238,13 @@ public class DaoFileItem implements FileItem, Serializable {
 	@Override
 	public DaoFileItem clone() {
 		DaoFileItem copy = new DaoFileItem();
-		
-		copy.name = this.name;
-		copy.size = this.size;
-		copy.date = this.date;
-		copy.data = this.data;
+
+		copy.daoFileStore = daoFileStore;
+		copy.name = name;
+		copy.size = size;
+		copy.date = date;
+		copy.data = data;
+		copy.exists = exists;
 
 		return copy;
 	}

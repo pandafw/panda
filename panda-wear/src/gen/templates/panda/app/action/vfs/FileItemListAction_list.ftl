@@ -156,6 +156,7 @@
 	<@p.listview id="fileitem_list" action="./list"
 		list=result columns=_columns_
 		cssTable="table-hover table-striped"
+		link={ "action": "./view", "params": { "name": "%{top.name}" } }
 		tools="%{vars.lvtools}"
 	/>
 

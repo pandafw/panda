@@ -7,6 +7,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
+import panda.vfs.FileItem;
 
 @At("${super_path}/fileitem")
 @Auth(AUTH.SUPER)
@@ -19,14 +20,14 @@ public class FileItemViewAction extends BaseTempFileAction {
 
 	/**
 	 * view
-	 * @param id id
+	 * @param name name
 	 * @return view
 	 * 
 	 * @throws Exception if an error occurs
 	 */
 	@At
 	@To(Views.RAW)
-	public Object view(@Param("id") String id) throws Exception {
-		return download(id);
+	public Object view(@Param(FileItem.NAME) String name) throws Exception {
+		return download(name);
 	}
 }

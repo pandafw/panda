@@ -3,12 +3,15 @@ package panda.app.action.vfs;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Arrays;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.lang.mutable.MutableInt;
 import panda.mvc.annotation.At;
 import panda.vfs.FileItem;
@@ -28,17 +31,24 @@ public class FileItemBulkDeleteExAction extends FileItemBulkDeleteAction {
 	}
 
 	@Override
-	protected List<FileItem> selectDataList(List<FileItem> dataList, boolean filter) {
+	protected List<FileItem> selectDataList(Map<String, String[]> args, boolean filter) {
 		if (fileStore instanceof DaoFileStore) {
-			return super.selectDataList(dataList, filter);
+			return super.selectDataList(args, filter);
 		}
 
 		try {
+			String[] ns = args.get(FileItem.NAME);
 			List<FileItem> fis = new ArrayList<FileItem>();
-			for (FileItem a : dataList) {
-				FileItem fi = fileStore.getFile(a.getName());
-				if (fi != null && fi.isExists()) {
-					fis.add(fi);
+			if (Arrays.isNotEmpty(ns)) {
+				for (String n : ns) {
+					if (Strings.isEmpty(n)) {
+						continue;
+					}
+					
+					FileItem fi = fileStore.getFile(n);
+					if (fi != null && fi.isExists()) {
+						fis.add(fi);
+					}
 				}
 			}
 			return fis;
