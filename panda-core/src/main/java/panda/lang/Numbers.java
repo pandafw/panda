@@ -2261,8 +2261,8 @@ public class Numbers {
 	}
 
 	// -----------------------------------------------------------------------
-	private static String _formatSize(final double size) {
-		return cutFormat(size, 2);
+	private static String _formatSize(final double size, int frac) {
+		return cutFormat(size, frac);
 	}
 	
 	/**
@@ -2280,11 +2280,30 @@ public class Numbers {
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
 	public static String formatSize(final BigInteger size) {
+		return formatSize(size, 2);
+	}
+
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @param frac maximum fraction digits
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final BigInteger size, int frac) {
 		if (size == null) {
 			return Strings.EMPTY;
 		}
 
-		return formatSize(new BigDecimal(size));
+		return formatSize(new BigDecimal(size), frac);
 	}
 	
 	/**
@@ -2302,19 +2321,38 @@ public class Numbers {
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
 	public static String formatSize(final BigDecimal size) {
+		return formatSize(size, 2);
+	}
+	
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @param frac maximum fraction digits
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final BigDecimal size, int frac) {
 		if (size == null) {
 			return Strings.EMPTY;
 		}
 
 		String sz;
 		if (size.compareTo(Numbers.BD_YB) > 0) {
-			sz = _formatSize(size.divide(BD_YB).doubleValue()) + " YB";
+			sz = _formatSize(size.divide(BD_YB).doubleValue(), frac) + " YB";
 		}
 		else if (size.compareTo(BD_ZB) > 0) {
-			sz = _formatSize(size.divide(BD_ZB).doubleValue()) + " ZB";
+			sz = _formatSize(size.divide(BD_ZB).doubleValue(), frac) + " ZB";
 		}
 		else {
-			sz = formatSize(size.longValue());
+			sz = formatSize(size.longValue(), frac);
 		}
 		return sz;
 	}
@@ -2334,11 +2372,30 @@ public class Numbers {
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
 	public static String formatSize(final Number size) {
+		return formatSize(size, 2);
+	}
+	
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @param frac maximum fraction digits
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final Number size, int frac) {
 		if (size == null) {
 			return Strings.EMPTY;
 		}
 
-		return formatSize(size.doubleValue());
+		return formatSize(size.doubleValue(), frac);
 	}
 
 	/**
@@ -2356,9 +2413,27 @@ public class Numbers {
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
 	public static String formatSize(final long size) {
-		return formatSize((double)size);
+		return formatSize(size, 2);
 	}
 	
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @param frac maximum fraction digits
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final long size, int frac) {
+		return formatSize((double)size, frac);
+	}
 
 	/**
 	 * Returns a human-readable version of the file size, where the input represents a specific
@@ -2375,27 +2450,45 @@ public class Numbers {
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
 	public static String formatSize(final double size) {
+		return formatSize(size, 2);
+	}
+
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String formatSize(final double size, int frac) {
 		String sz;
 		if (size >= EB) {
-			sz = _formatSize(size / EB) + " EB";
+			sz = _formatSize(size / EB, frac) + " EB";
 		}
 		else if (size >= PB) {
-			sz = _formatSize(size / PB) + " PB";
+			sz = _formatSize(size / PB, frac) + " PB";
 		}
 		else if (size >= TB) {
-			sz = _formatSize(size / TB) + " TB";
+			sz = _formatSize(size / TB, frac) + " TB";
 		}
 		else if (size >= GB) {
-			sz = _formatSize(size / GB) + " GB";
+			sz = _formatSize(size / GB, frac) + " GB";
 		}
 		else if (size >= MB) {
-			sz = _formatSize(size / MB) + " MB";
+			sz = _formatSize(size / MB, frac) + " MB";
 		}
 		else if (size >= KB) {
-			sz = _formatSize(size / KB) + " KB";
+			sz = _formatSize(size / KB, frac) + " KB";
 		}
 		else {
-			sz = _formatSize(size) + " bytes";
+			sz = _formatSize(size, frac) + " bytes";
 		}
 		return sz;
 	}
