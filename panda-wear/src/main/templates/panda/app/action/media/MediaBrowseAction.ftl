@@ -238,8 +238,17 @@
 					return;
 				}
 
-				$('#media_browser .media-select').remove();
-				$('#media_btn_delete, #media_btn_select').addClass('p-hidden');
+				if (d.result) {
+					$('#media_browser .media-select').each(function() {
+						var $t = $(this);
+						if (d.result[$t.data('mid')] == true) {
+							$t.remove();
+						}
+					});
+				}
+				if ($('#media_browser .media-select').size() == 0) {
+					$('#media_btn_delete, #media_btn_select').addClass('p-hidden');
+				}
 				media_lightbox();
 			},
 			error: media_ajax_error,

@@ -3,7 +3,9 @@ package panda.app.action.media;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;
@@ -15,12 +17,15 @@ import panda.app.media.MediaData;
 import panda.app.media.MediaDataStore;
 import panda.app.media.Medias;
 import panda.dao.Dao;
+import panda.dao.entity.EntityDao;
 import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Redirect;
 import panda.mvc.annotation.To;
@@ -35,6 +40,8 @@ import panda.vfs.FileStores;
 @At("${super_path}/media")
 @Auth(AUTH.SUPER)
 public class MediaBrowseAction extends AbstractAction {
+	private static final Log log = Logs.getLog(MediaBrowseAction.class);
+	
 	@IocInject
 	private MediaDataStore mds;
 
@@ -125,16 +132,27 @@ public class MediaBrowseAction extends AbstractAction {
 	
 	@At
 	@To(Views.SJSON)
-	public void deletes(final @Param("id") String[] ids) {
+	public Object deletes(final @Param("id") String[] ids) {
 		if (Arrays.isEmpty(ids)) {
-			return;
+			return null;
+		}
+
+		Map<String, Object> r = new HashMap<String, Object>();
+
+		EntityDao<Media> edao = getDaoClient().getEntityDao(Media.class);
+		for (String id : ids) {
+			try {
+				edao.delete(id);
+				mds.delete(id);
+				r.put(id, true);
+			}
+			catch (Exception e) {
+				log.warn("Failed to delete media " + id, e);
+				r.put(id, e.getMessage());
+			}
 		}
 		
-		MediaQuery mq = new MediaQuery();
-		mq.id().in(ids);
-		getDaoClient().getDao().deletes(mq);
-		
-		mds.delete(ids);
+		return r;
 	}
 	
 	/**
