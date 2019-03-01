@@ -5,7 +5,7 @@ import java.util.List;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.entity.Media;
-import panda.app.media.MediaDataDaoSaver;
+import panda.app.media.MediaDataDaoStore;
 import panda.app.media.Medias;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
@@ -15,7 +15,7 @@ import panda.mvc.annotation.At;
 public class MediaBulkDeleteExAction extends MediaBulkDeleteAction {
 
 	@IocInject
-	private MediaDataDaoSaver mds;
+	private MediaDataDaoStore mds;
 	
 	public String getMediaLink(Media m) {
 		return Medias.getMediaIcon(m);

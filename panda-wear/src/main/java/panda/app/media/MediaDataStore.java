@@ -4,10 +4,10 @@ import panda.app.entity.Media;
 import panda.ioc.annotation.IocBean;
 
 @IocBean
-public interface MediaDataSaver {
-	public MediaData find(String id);
+public interface MediaDataStore {
+	public MediaData find(Media m);
 
-	public MediaData find(String id, int sz);
+	public MediaData find(Media m, int sz);
 
 	public void save(Media m);
 	

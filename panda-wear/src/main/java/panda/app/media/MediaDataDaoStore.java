@@ -10,32 +10,24 @@ import panda.image.Images;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.vfs.FileStores;
 
-@IocBean(type=MediaDataSaver.class)
-public class MediaDataDaoSaver implements MediaDataSaver {
-	private static final Log log = Logs.getLog(MediaDataDaoSaver.class);
+@IocBean(type=MediaDataStore.class)
+public class MediaDataDaoStore extends AbstractMediaDataStore {
+	private static final Log log = Logs.getLog(MediaDataDaoStore.class);
 
 	@IocInject
 	private DaoClient daoClient;
-	
 
 	@Override
-	public MediaData find(String id) {
-		return daoClient.getDao().fetch(MediaData.class, id, Medias.ORIGINAL);
-	}
-
-	@Override
-	public MediaData find(String id, int sz) {
+	public MediaData find(Media m, int sz) {
 		Dao dao = daoClient.getDao();
 
-		MediaData md = dao.fetch(MediaData.class, id, sz);
-		if (md == null) {
-			MediaData mo = dao.fetch(MediaData.class, id, Medias.ORIGINAL);
+		MediaData md = dao.fetch(MediaData.class, m.getId(), sz);
+		if (md == null && sz != Medias.ORIGINAL) {
+			MediaData mo = dao.fetch(MediaData.class, m.getId(), Medias.ORIGINAL);
 			if (mo == null) {
 				return null;
 			}
@@ -48,19 +40,20 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 
 				// save
 				md = new MediaData();
-				md.setMid(id);
+				md.setMid(m.getId());
 				md.setMsz(sz);
 				md.setSize(data.length);
 				md.setData(data);
 				dao.insert(md);
 			}
 			catch (Exception e) {
-				log.error("Failed to save data of media [" + id + "] (" + sz + ")", e);
+				log.error("Failed to save data of media [" + m.getId() + "] (" + sz + ")", e);
 			}
 		}
 		return md;
 	}
 
+	@Override
 	public void save(Media m) {
 		try {
 			Dao dao = daoClient.getDao();
@@ -71,11 +64,9 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 			md.setSize(m.getFile().getSize());
 			md.setData(m.getFile().data());
 			dao.save(md);
-
-			FileStores.safeDelete(m.getFile());
 		}
 		catch (IOException e) {
-			throw Exceptions.wrapThrow(e);
+			throw new RuntimeException("Failed to save media data of [" + m.getId() + "]", e);
 		}
 	}
 
@@ -95,19 +86,5 @@ public class MediaDataDaoSaver implements MediaDataSaver {
 		catch (Exception e) {
 			log.error("Failed to delete media data for " + Strings.join(mids, ", "), e);
 		}
-	}
-
-	@Override
-	public void delete(Media... ms) {
-		if (Arrays.isEmpty(ms)) {
-			return;
-		}
-		
-		String[] ids = new String[ms.length];
-		for (int i = 0; i < ms.length; i++) {
-			ids[i] = ms[i].getId();
-		}
-
-		delete(ids);
 	}
 }

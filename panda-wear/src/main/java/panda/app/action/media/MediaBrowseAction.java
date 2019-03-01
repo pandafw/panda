@@ -12,7 +12,7 @@ import panda.app.constant.SET;
 import panda.app.entity.Media;
 import panda.app.entity.query.MediaQuery;
 import panda.app.media.MediaData;
-import panda.app.media.MediaDataSaver;
+import panda.app.media.MediaDataStore;
 import panda.app.media.Medias;
 import panda.dao.Dao;
 import panda.io.FileNames;
@@ -30,12 +30,13 @@ import panda.net.http.HttpStatus;
 import panda.servlet.HttpServletResponser;
 import panda.servlet.HttpServlets;
 import panda.vfs.FileItem;
+import panda.vfs.FileStores;
 
 @At("${super_path}/media")
 @Auth(AUTH.SUPER)
 public class MediaBrowseAction extends AbstractAction {
 	@IocInject
-	private MediaDataSaver mds;
+	private MediaDataStore mds;
 
 	public static class Arg {
 		public Date ds;
@@ -161,6 +162,7 @@ public class MediaBrowseAction extends AbstractAction {
 							dao.insert(m);
 							mds.save(m);
 							
+							FileStores.safeDelete(fi);
 							m.setFile(null);
 							medias.add(m);
 						}
@@ -185,11 +187,11 @@ public class MediaBrowseAction extends AbstractAction {
 				
 				MediaData md = null;
 				if (sc == null) {
-					md = mds.find(id);
+					md = mds.find(m);
 				}
 				else {
 					sz = getSettings().getPropertyAsInt(sc, sz);
-					md = mds.find(id, sz); 
+					md = mds.find(m, sz); 
 				}
 				if (md != null) {
 					write(m, md, maxage);
