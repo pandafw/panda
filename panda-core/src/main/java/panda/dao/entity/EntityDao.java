@@ -394,7 +394,7 @@ public class EntityDao<T> {
 	 * @return deleted count
 	 */
 	public int delete(Object ... keys) {
-		return dao.delete(keys);
+		return dao.delete(entity, keys);
 	}
 
 	/**
