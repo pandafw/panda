@@ -2,7 +2,6 @@ package panda.image;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,9 +55,7 @@ public abstract class Images {
 	 * @throws FileNotFoundException if file not found
 	 * @throws IOException if read error
 	 */
-	public ImageWrapper read(File file) throws IOException {
-		return read(new FileInputStream(file));
-	}
+	public abstract ImageWrapper read(File file) throws IOException;
 
 	/**
 	 * @param data image data

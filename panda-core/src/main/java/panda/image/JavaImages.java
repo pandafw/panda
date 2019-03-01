@@ -20,6 +20,22 @@ import javax.imageio.stream.ImageOutputStream;
  */
 public class JavaImages extends Images {
 	@Override
+	public ImageWrapper read(File file) {
+		BufferedImage bi;
+		try {
+			bi = ImageIO.read(file);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		if (bi == null) {
+			throw new IllegalArgumentException("Invalid image file " + file);
+		}
+		return new JavaImageWrapper(bi);
+	}
+
+	@Override
 	public ImageWrapper read(InputStream is) {
 		BufferedImage bi;
 		try {
