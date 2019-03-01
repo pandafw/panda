@@ -22,7 +22,7 @@ import panda.vfs.FileItem;
 })
 public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = 1692718689L;
+	private static final long serialVersionUID = -924712325L;
 
 	/**
 	 * Constructor
@@ -56,7 +56,7 @@ public class Media extends CUBean implements Serializable {
 	/*----------------------------------------------------------------------*
 	 * Properties
 	 *----------------------------------------------------------------------*/
-	@Id(start=1001)
+	@Id
 	protected String id;
 
 	@Column(size=10)

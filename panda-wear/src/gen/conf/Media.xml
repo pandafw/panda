@@ -3,7 +3,7 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="${entity.package}.Media" baseBeanClass="${entity.cuBeanClass}" baseQueryClass="${entity.cuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
+	<entity name="${entity.package}.Media" baseBeanClass="${entity.cuBeanClass}" baseQueryClass="${entity.cuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id">
 		<property name="id" type="String" size="32" notNull="true" primaryKey="true"/>
 		<property name="tag" type="String" size="10" indexKey="TAG">
 			<validator type="constant">
