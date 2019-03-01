@@ -224,6 +224,12 @@
 			<version>1.9.42</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.appengine.tools</groupId>
+			<artifactId>appengine-gcs-client</artifactId>
+			<version>0.8</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<!-- EZCache -->
 		<dependency>

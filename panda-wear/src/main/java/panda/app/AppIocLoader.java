@@ -6,7 +6,7 @@ import panda.app.auth.AppAuthenticator;
 import panda.app.auth.UserAuthenticateProcessor;
 import panda.app.index.gae.RevisionedGaeIndexes;
 import panda.app.index.lucene.RevisionedLuceneIndexes;
-import panda.app.media.MediaDataDaoSaver;
+import panda.app.media.MediaDataFileStore;
 import panda.app.task.ActionTaskSubmitter;
 import panda.app.task.gae.GaeTaskExecutor;
 import panda.app.task.gae.GaeTaskScheduler;
@@ -54,7 +54,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 				AppLocalFileStore.class,
 				AppResourceBundleLoader.class,
 				AppSettings.class,
-				MediaDataDaoSaver.class,
+				MediaDataFileStore.class,
 				UserAuthenticateProcessor.class,
 				WkHtml2Pdf.class);
 			
