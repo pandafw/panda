@@ -9,6 +9,7 @@ import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.mvc.SetConstants;
 
 @IocBean(type=Settings.class, create="initialize")
@@ -18,7 +19,7 @@ public class MvcSettings extends RuntimeSettings {
 	private ServletContext servlet;
 
 	public void initialize() throws IOException {
-		String dir = "";
+		String dir = Systems.getUserDir().getAbsolutePath();
 		if (servlet != null) {
 			dir = servlet.getRealPath("/");
 			if (Strings.endsWithChars(dir, "\\/")) {
