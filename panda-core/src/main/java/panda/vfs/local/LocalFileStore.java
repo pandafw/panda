@@ -16,26 +16,26 @@ import panda.vfs.FileItem;
 import panda.vfs.FileStore;
 
 public class LocalFileStore implements FileStore {
-	protected String path;
+	protected String location;
 
 	public LocalFileStore() {
 	}
 
 	/**
-	 * @return the path
+	 * @return the location
 	 */
-	public String getPath() {
-		if (Strings.isEmpty(path)) {
-			path = new File(Files.getTempDirectory(), "files").getPath();
+	public String getLocation() {
+		if (Strings.isEmpty(location)) {
+			location = new File(Files.getTempDirectory(), "files").getPath();
 		}
-		return path;
+		return location;
 	}
 
 	/**
-	 * @param path the path to set
+	 * @param location the path to set
 	 */
-	public void setPath(String path) {
-		this.path = path;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class LocalFileStore implements FileStore {
 	
 	@Override
 	public FileItem getFile(String name) {
-		File file = new File(getPath(), name);
+		File file = new File(getLocation(), name);
 		return new LocalFileItem(this, file);
 	}
 	
@@ -58,7 +58,7 @@ public class LocalFileStore implements FileStore {
 	public List<FileItem> listFiles(String prefix, Date before) throws IOException {
 		List<FileItem> fis = new ArrayList<FileItem>();
 
-		String path = getPath();
+		String path = getLocation();
 		File root = new File(path);
 		if (!root.exists()) {
 			return fis;

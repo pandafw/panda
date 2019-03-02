@@ -24,12 +24,6 @@ public class LocalFileItem implements FileItem, Serializable {
 	
 	/**
 	 * Constructor
-	 */
-	public LocalFileItem() {
-	}
-
-	/**
-	 * Constructor
 	 * 
 	 * @param localFileStore local file store
 	 * @param file the local file
@@ -51,7 +45,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public String getName() {
-		String name = Strings.removeStart(file.getPath(), localFileStore.getPath());
+		String name = Strings.removeStart(file.getPath(), localFileStore.getLocation());
 		name = FileNames.separatorsToUnix(name);
 		name = Strings.stripStart(name, '/');
 		return name;
@@ -125,7 +119,7 @@ public class LocalFileItem implements FileItem, Serializable {
 
 	@Override
 	public void delete() {
-		File root = new File(localFileStore.getPath());
+		File root = new File(localFileStore.getLocation());
 
 		File f = file;
 		while (f.delete()) {

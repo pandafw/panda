@@ -35,7 +35,7 @@ public interface MvcConstants extends IocConstants {
 	public static final String CRYPTO_KEY_DECODE = "panda.crypto.key.decode";
 
 	/* File Store */
-	public static final String FILESTORE_LOCAL_PATH = "panda.filestore.local.path";
+	public static final String FILESTORE_LOCATION = "panda.filestore.location";
 	public static final String FILESTORE_DAO_BLOCK_SIZE = "panda.filestore.dao.block.size";
 	public static final String FILESTORE_GCS_BUCKET = "panda.filestore.gcs.bucket";
 	public static final String FILESTORE_GCS_PREFIX = "panda.filestore.gcs.prefix";
