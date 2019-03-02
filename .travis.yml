@@ -1,0 +1,16 @@
+sudo: false
+language: java
+jdk:
+  - openjdk7
+services:
+  - docker
+git:
+  depth: 3
+branches:
+  only:
+  - master
+cache:
+  directories:
+  - "$HOME/.cache"
+install: true
+script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -DskipTests=true clean source:jar javadoc:jar deploy"
