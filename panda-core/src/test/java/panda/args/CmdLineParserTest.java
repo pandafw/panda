@@ -140,31 +140,33 @@ public class CmdLineParserTest {
 			Assert.fail();
 		}
 		catch (CmdLineException e) {
-			Assert.assertEquals("The option -s,--ss is required", e.getMessage());
+			Assert.assertEquals("The option -s,--ss is required!", e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testRequiredArgument() {
+	public void testRequiredArgumentA0() {
 		CmdLineParser clp = new CmdLineParser(this);
 		try {
 			clp.parse(new String[] { "--ss=sa" });
+			clp.validate();
 			Assert.fail();
 		}
 		catch (CmdLineException e) {
-			Assert.assertEquals("The arguments is required", e.getMessage());
+			Assert.assertEquals("The argument <A0> is required!", e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testRequiredArgument2() {
+	public void testRequiredArgumentA1() {
 		CmdLineParser clp = new CmdLineParser(this);
 		try {
 			clp.parse(new String[] { "--ss=sa", "aa0" });
+			clp.validate();
 			Assert.fail();
 		}
 		catch (CmdLineException e) {
-			Assert.assertEquals("The argument <A1> is required", e.getMessage());
+			Assert.assertEquals("The argument <A1> is required!", e.getMessage());
 		}
 	}
 	

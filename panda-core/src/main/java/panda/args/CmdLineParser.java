@@ -288,9 +288,6 @@ public class CmdLineParser {
 		int idx = -1;
 		for (Argument a : argInjectors.keySet()) {
 			int i = a.index();
-			if (a.required() && i >= as.size()) {
-				throw new CmdLineException("The argument <" + a.name() + "> is required");
-			}
 			if (i >= 0 && i < as.size()) {
 				inject(a, as.get(i));
 			}
