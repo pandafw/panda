@@ -13,11 +13,15 @@ import org.junit.Test;
 
 import panda.lang.Randoms;
 import panda.lang.time.StopWatch;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * test class for Encrypts
  */
 public class SecretCryptorTest {
+	private static final Log log = Logs.getLog(SecretCryptorTest.class);
+	
 	private void encdec(String text, String algo) {
 		encdec(text, null, algo);
 	}
@@ -60,7 +64,7 @@ public class SecretCryptorTest {
 				encdec(samples.get(i), key, algo);
 			}
 		}
-		System.out.println(algo + ": " + sw);
+		log.debug(algo + ": " + sw);
 	}
 
 	@Test
@@ -95,17 +99,18 @@ public class SecretCryptorTest {
 		for (int i = 0; i < defaultCiphers.length; ++i)
 			ciphers.put(defaultCiphers[i], Boolean.TRUE);
 
-		System.out.println("Default\tCipher");
+		log.debug("Default\tCipher");
 		for (Iterator i = ciphers.entrySet().iterator(); i.hasNext();) {
 			Map.Entry cipher = (Map.Entry)i.next();
 
+			StringBuilder sb = new StringBuilder();
 			if (Boolean.TRUE.equals(cipher.getValue()))
-				System.out.print('*');
+				sb.append('*');
 			else
-				System.out.print(' ');
+				sb.append(' ');
 
-			System.out.print('\t');
-			System.out.println(cipher.getKey());
+			sb.append('\t').append(cipher.getKey());
+			log.debug(sb.toString());
 		}
 	}
 }

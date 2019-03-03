@@ -32,7 +32,6 @@ public abstract class DaoTestCase {
 	@Before
 	public void setUp() {
 		if (getDaoClient() == null) {
-			log.warn("SKIP: " + this.getClass().getName());
 			Assume.assumeTrue(false);
 		}
 		dao = getDaoClient().getDao();

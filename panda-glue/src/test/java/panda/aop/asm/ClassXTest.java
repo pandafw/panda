@@ -17,9 +17,13 @@ import panda.aop.matcher.MethodMatcherFactory;
 import panda.aop.matcher.RegexMethodMatcher;
 import panda.lang.Classes;
 import panda.lang.reflect.Types;
+import panda.log.Log;
+import panda.log.Logs;
 
 public class ClassXTest {
 
+	private static final Log log = Logs.getLog(ClassXTest.class);
+	
 	ClassAgent classAgent;
 
 	@Before
@@ -142,7 +146,7 @@ public class ClassXTest {
 	private <T> T getNewInstance(Class<T> klass) {
 		Class<T> newClass = classAgent.define(DefaultClassDefiner.create(), klass);
 		T obj = Classes.born(newClass, "AoP", String.class);
-		System.out.println(obj.getClass().getSuperclass());
+		log.debug(obj.getClass().getSuperclass().toString());
 		return obj;
 	}
 
@@ -155,7 +159,7 @@ public class ClassXTest {
 	@Test
 	public void test_signature() throws Throwable {
 		Class<?> clazz = classAgent.define(DefaultClassDefiner.create(), Aop7.class);
-		System.out.println(clazz.newInstance());
+		log.debug(clazz.newInstance().toString());
 		Assert.assertTrue(Aop1.class.equals(Types.getRawType(Types.getDeclaredGenericTypeParam(clazz, 0))));
 	}
 }

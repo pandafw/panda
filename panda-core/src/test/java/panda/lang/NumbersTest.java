@@ -13,10 +13,14 @@ import java.text.DecimalFormat;
 import org.junit.Test;
 
 import panda.lang.time.StopWatch;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  */
 public class NumbersTest {
+	private static final Log log = Logs.getLog(NumbersTest.class);
+	
 	// ---------------------------------------------------------------------
 	/**
 	 * Test for {@link Numbers#toInt(String)}.
@@ -1358,25 +1362,25 @@ public class NumbersTest {
 		for (int i = 0; i < c; i++) {
 			testDecFormat();
 		}
-		System.out.println("decFormat - " + sw);
+		log.debug("decFormat - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
 			testCutFormat1();
 		}
-		System.out.println("cutFormat1 - " + sw);
+		log.debug("cutFormat1 - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
 			testCutFormat2();
 		}
-		System.out.println("cutFormat2 - " + sw);
+		log.debug("cutFormat2 - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
 			testCutFormat3();
 		}
-		System.out.println("DecimalFormat - " + sw);
+		log.debug("DecimalFormat - " + sw);
 	}
 
 	
@@ -1389,7 +1393,7 @@ public class NumbersTest {
 		for (int i = 0; i < c; i++) {
 			Numbers.format(i);
 		}
-		System.out.println("Thread Format - " + sw);
+		log.debug("Thread Format - " + sw);
 
 		DecimalFormat df = new DecimalFormat("#");
 		df.setMaximumFractionDigits(340);
@@ -1397,7 +1401,7 @@ public class NumbersTest {
 		for (int i = 0; i < c; i++) {
 			df.format(i);
 		}
-		System.out.println("Static Format - " + sw);
+		log.debug("Static Format - " + sw);
 
 		df.setMaximumFractionDigits(340);
 		sw.restart();
@@ -1405,7 +1409,7 @@ public class NumbersTest {
 			DecimalFormat df2 = new DecimalFormat("#");
 			df2.format(i);
 		}
-		System.out.println("Dynamic Format - " + sw);
+		log.debug("Dynamic Format - " + sw);
 	}
 	
 	// -----------------------------------------------------------------------

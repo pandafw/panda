@@ -4,9 +4,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import panda.lang.Strings;
-import panda.net.CIDR;
+import panda.log.Log;
+import panda.log.Logs;
 
 public class CIDRTest {
+	private static final Log log = Logs.getLog(CIDRTest.class);
 
 	protected void matchAddress(String aAddress, String aCIDR, String aSubnet) {
 		matchAddress(aAddress, aCIDR, aSubnet, true);
@@ -316,7 +318,7 @@ public class CIDRTest {
 
 	private void illegal(String s) {
 		try {
-			System.out.println("illegal: " + s);
+			log.debug("illegal: " + s);
 			new CIDR(s);
 			Assert.fail(s + " should be a illegal cidr");
 		}

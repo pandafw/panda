@@ -7,9 +7,12 @@ import javax.swing.JFrame;
 import panda.bind.json.Jsons;
 import panda.lang.Exceptions;
 import panda.log.Log;
+import panda.log.Logs;
 
 public class Aop1 {
 
+	private static final Log LOG = Logs.getLog(Aop1.class);
+	
 	private String name;
 
 	public Aop1(String name) {
@@ -26,7 +29,7 @@ public class Aop1 {
 	 * 无参数,无返回
 	 */
 	public void nonArgsVoid() {
-		System.out.println("My - " + name + " >> nonArgsVoid");
+		LOG.debug("My - " + name + " >> nonArgsVoid");
 	}
 
 	protected void voidZ() {
@@ -36,21 +39,21 @@ public class Aop1 {
 	 * 有一个参数,无返回
 	 */
 	public void argsVoid(String x) {
-		System.out.println("My - " + name + " >> argsVoid");
+		LOG.debug("My - " + name + " >> argsVoid");
 	}
 
 	/*
 	 * 有多个参数,无返回
 	 */
 	public void mixObjectsVoid(String x, Object obj, Integer i, JFrame f) {
-		System.out.println("My - " + name + " >> mixObjectsVoid");
+		LOG.debug("My - " + name + " >> mixObjectsVoid");
 	}
 
 	/*
 	 * 有多个参数,无返回
 	 */
 	public void mixArgsVoid(String x, Object obj, int yy, char xp, long... z) {
-		System.out.println("My - " + name + " >> mixArgsVoid" + " 我的参数"
+		LOG.debug("My - " + name + " >> mixArgsVoid" + " 我的参数"
 				+ Jsons.toJson(new Object[] { x, obj, yy, xp, z }));
 		// new Throwable().printStackTrace();
 	}
@@ -60,7 +63,7 @@ public class Aop1 {
 	 */
 	public void mixArgsVoid2(String x, Object obj, int yy, char xp, long bb, boolean ser, char xzzz, String ppp,
 			StringBuffer sb, Log log, long... z) throws Throwable {
-		System.out.println("My - " + name + " >> mixArgsVoid2");
+		LOG.debug("My - " + name + " >> mixArgsVoid2");
 	}
 
 	public void x() {

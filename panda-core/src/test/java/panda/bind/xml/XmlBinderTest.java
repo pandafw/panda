@@ -131,7 +131,7 @@ public class XmlBinderTest {
 		a.setMap(am);
 
 		String xml = Xmls.toXml(a, true);
-		System.out.println(xml);
+//		System.out.println(xml);
 		
 		A a2 = Xmls.fromXml(xml, A.class);
 		Assert.assertEquals(a, a2);
@@ -260,7 +260,7 @@ public class XmlBinderTest {
 		m.put("m2", l2);
 		
 		String s = Xmls.toXml(m, true);
-		System.out.println(s);
+//		System.out.println(s);
 	
 		// NOTE: <m0></m0> -> null
 		m.put("m0", null);

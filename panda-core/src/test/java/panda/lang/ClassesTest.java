@@ -25,7 +25,7 @@ public class ClassesTest {
 	// -------------------------------------------------------------------------
 	@Test
 	public void testScan() {
-		String[] pkgs = new String[] { "org.apache.log4j.jdbc", "panda.log.log4j" };
+		String[] pkgs = new String[] { "org.apache.log4j.jdbc", "panda.log.impl" };
 		
 		List<Class<?>> clss = Classes.scan(pkgs);
 		Assert.assertNotNull(clss);

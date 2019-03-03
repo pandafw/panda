@@ -47,7 +47,7 @@ public class HttpClientTest {
 		Map<String, Object> params = new LinkedHashMap<String, Object>();
 		params.put("class", new String[] { "a", "b"} );
 		params.put("version", Panda.VERSION);
-		String response = HttpClient.post("http://panda-demo.appspot.com/debug/json", params).getContentText();
+		String response = HttpClient.post("http://panda-demo.appspot.com/test/json", params).getContentText();
 		
 		assertNotNull(response);
 		assertTrue(response.length() > 0);
@@ -68,9 +68,9 @@ public class HttpClientTest {
 		hc.getRequest().setDefault();
 		hc.getRequest().setContentEncoding(HttpHeader.CONTENT_ENCODING_GZIP);
 		hc.getRequest().setParams(params);
-//		hc.getRequest().setUrl("http://panda-demo.azurewebsites.net/debug/json");
-		hc.getRequest().setUrl("http://panda-demo.appspot.com/debug/json");
-//		hc.getRequest().setUrl("http://localhost:8080/debug/json");
+		hc.getRequest().setUrl("http://panda-demo.azurewebsites.net/test/json");
+//		hc.getRequest().setUrl("http://panda-demo.appspot.com/test/json");
+//		hc.getRequest().setUrl("http://localhost:8080/test/json");
 		String response = hc.doPost().getContentText();
 		
 		assertNotNull(response);
@@ -122,6 +122,5 @@ public class HttpClientTest {
 		HttpResponse response = hc.doGet();
 
 		assertTrue(response.getStatusCode() == 200);
-//		assertTrue(response.getContentText().indexOf("github.com") >= 0);
 	}
 }

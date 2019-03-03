@@ -1,9 +1,15 @@
 package panda.aop.asm.test;
 
-public class ZZZ {
-    public ZZZ(String name) {}
+import panda.log.Log;
+import panda.log.Logs;
 
-    public void p(@AX AX x) {
-        System.out.println("==========================================================");
-    }
+public class ZZZ {
+	private static final Log log = Logs.getLog(ZZZ.class);
+	
+	public ZZZ(String name) {
+	}
+
+	public void p(@AX AX x) {
+		log.debug("==========================================================");
+	}
 }

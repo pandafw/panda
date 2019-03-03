@@ -1,13 +1,12 @@
 package panda.net.pop3;
 
-import junit.framework.TestCase;
-
 import java.io.Reader;
 
-import panda.net.pop3.POP3;
-import panda.net.pop3.POP3Client;
-import panda.net.pop3.POP3Command;
-import panda.net.pop3.POP3MessageInfo;
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Test;
+
+import panda.lang.Strings;
 
 /**
  * The POP3* tests all presume the existence of the following parameters: mailserver: localhost
@@ -18,99 +17,102 @@ import panda.net.pop3.POP3MessageInfo;
  * Your mileage may vary based on the POP3 server you run the tests against. Some servers are more
  * standards-compliant than others.
  */
-public class POP3ConstructorTest extends TestCase {
+public class POP3ConstructorTest {
 	String user = POP3Constants.user;
 	String emptyUser = POP3Constants.emptyuser;
 	String password = POP3Constants.password;
-	String mailhost = POP3Constants.mailhost;
-
-	public POP3ConstructorTest(String name) {
-		super(name);
-	}
+	String mailhost = POP3Constants.getMailhost();
 
 	/*
 	 * This test will ensure that the constants are not inadvertently changed. If the constants are
 	 * changed in panda.net.pop3 for some reason, this test will have to be updated.
 	 */
+	@Test
 	public void testConstants() {
 		// From POP3
-		assertEquals(110, POP3.DEFAULT_PORT);
-		assertEquals(-1, POP3.DISCONNECTED_STATE);
-		assertEquals(0, POP3.AUTHORIZATION_STATE);
-		assertEquals(1, POP3.TRANSACTION_STATE);
-		assertEquals(2, POP3.UPDATE_STATE);
+		Assert.assertEquals(110, POP3.DEFAULT_PORT);
+		Assert.assertEquals(-1, POP3.DISCONNECTED_STATE);
+		Assert.assertEquals(0, POP3.AUTHORIZATION_STATE);
+		Assert.assertEquals(1, POP3.TRANSACTION_STATE);
+		Assert.assertEquals(2, POP3.UPDATE_STATE);
 
 		// From POP3Command
-		assertEquals(0, POP3Command.USER);
-		assertEquals(1, POP3Command.PASS);
-		assertEquals(2, POP3Command.QUIT);
-		assertEquals(3, POP3Command.STAT);
-		assertEquals(4, POP3Command.LIST);
-		assertEquals(5, POP3Command.RETR);
-		assertEquals(6, POP3Command.DELE);
-		assertEquals(7, POP3Command.NOOP);
-		assertEquals(8, POP3Command.RSET);
-		assertEquals(9, POP3Command.APOP);
-		assertEquals(10, POP3Command.TOP);
-		assertEquals(11, POP3Command.UIDL);
+		Assert.assertEquals(0, POP3Command.USER);
+		Assert.assertEquals(1, POP3Command.PASS);
+		Assert.assertEquals(2, POP3Command.QUIT);
+		Assert.assertEquals(3, POP3Command.STAT);
+		Assert.assertEquals(4, POP3Command.LIST);
+		Assert.assertEquals(5, POP3Command.RETR);
+		Assert.assertEquals(6, POP3Command.DELE);
+		Assert.assertEquals(7, POP3Command.NOOP);
+		Assert.assertEquals(8, POP3Command.RSET);
+		Assert.assertEquals(9, POP3Command.APOP);
+		Assert.assertEquals(10, POP3Command.TOP);
+		Assert.assertEquals(11, POP3Command.UIDL);
 	}
 
+	@Test
 	public void testPOP3DefaultConstructor() {
 		POP3 pop = new POP3();
 
-		assertEquals(110, pop.getDefaultPort());
-		assertEquals(POP3.DISCONNECTED_STATE, pop.getState());
-		assertNull(pop._reader);
-		assertNotNull(pop._replyLines);
+		Assert.assertEquals(110, pop.getDefaultPort());
+		Assert.assertEquals(POP3.DISCONNECTED_STATE, pop.getState());
+		Assert.assertNull(pop._reader);
+		Assert.assertNotNull(pop._replyLines);
 	}
 
+	@Test
 	public void testPOP3ClientStateTransition() throws Exception {
 		POP3Client pop = new POP3Client();
 
 		// Initial state
-		assertEquals(110, pop.getDefaultPort());
-		assertEquals(POP3.DISCONNECTED_STATE, pop.getState());
-		assertNull(pop._reader);
-		assertNotNull(pop._replyLines);
+		Assert.assertEquals(110, pop.getDefaultPort());
+		Assert.assertEquals(POP3.DISCONNECTED_STATE, pop.getState());
+		Assert.assertNull(pop._reader);
+		Assert.assertNotNull(pop._replyLines);
 
 		// Now connect
+		if (Strings.isEmpty(mailhost)) {
+			Assume.assumeTrue(false);
+		}
+
 		pop.connect(mailhost);
-		assertEquals(POP3.AUTHORIZATION_STATE, pop.getState());
+		Assert.assertEquals(POP3.AUTHORIZATION_STATE, pop.getState());
 
 		// Now authenticate
 		pop.login(user, password);
-		assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+		Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 		// Now do a series of commands and make sure the state stays as it should
 		pop.noop();
-		assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+		Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 		pop.status();
-		assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+		Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 		// Make sure we have at least one message to test
 		POP3MessageInfo[] msg = pop.listMessages();
 
 		if (msg.length > 0) {
 			pop.deleteMessage(1);
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			pop.reset();
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			pop.listMessage(1);
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			pop.listMessages();
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			pop.listUniqueIdentifier(1);
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			pop.listUniqueIdentifiers();
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			Reader r = pop.retrieveMessage(1);
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			// Add some sleep here to handle network latency
 			while (!r.ready()) {
@@ -120,7 +122,7 @@ public class POP3ConstructorTest extends TestCase {
 			r = null;
 
 			r = pop.retrieveMessageTop(1, 10);
-			assertEquals(POP3.TRANSACTION_STATE, pop.getState());
+			Assert.assertEquals(POP3.TRANSACTION_STATE, pop.getState());
 
 			// Add some sleep here to handle network latency
 			while (!r.ready()) {
@@ -133,6 +135,6 @@ public class POP3ConstructorTest extends TestCase {
 
 		// Now logout
 		pop.logout();
-		assertEquals(POP3.UPDATE_STATE, pop.getState());
+		Assert.assertEquals(POP3.UPDATE_STATE, pop.getState());
 	}
 }

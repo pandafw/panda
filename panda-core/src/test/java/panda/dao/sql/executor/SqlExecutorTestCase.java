@@ -51,7 +51,7 @@ public abstract class SqlExecutorTestCase {
 	public void setUp() throws Exception {
 		Connection c = getConnection();
 		if (c instanceof MockConnection) {
-			log.warn("SKIP: " + this.getClass().getName());
+			log.debug("SKIP: " + this.getClass().getName());
 			Assume.assumeTrue(false);
 		}
 		executor = createExecutor(c);

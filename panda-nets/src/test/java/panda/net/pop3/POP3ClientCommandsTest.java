@@ -1,14 +1,15 @@
 package panda.net.pop3;
 
-import junit.framework.TestCase;
-
-import java.net.InetAddress;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.InetAddress;
 
-import panda.net.pop3.POP3;
-import panda.net.pop3.POP3Client;
-import panda.net.pop3.POP3MessageInfo;
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
+
+import panda.lang.Strings;
 
 /**
  * The POP3* tests all presume the existence of the following parameters: mailserver: localhost
@@ -19,16 +20,19 @@ import panda.net.pop3.POP3MessageInfo;
  * Your mileage may vary based on the POP3 server you run the tests against. Some servers are more
  * standards-compliant than others.
  */
-public class POP3ClientCommandsTest extends TestCase {
+public class POP3ClientCommandsTest {
 	POP3Client p = null;
 
 	String user = POP3Constants.user;
 	String emptyUser = POP3Constants.emptyuser;
 	String password = POP3Constants.password;
-	String mailhost = POP3Constants.mailhost;
+	String mailhost = POP3Constants.getMailhost();
 
-	public POP3ClientCommandsTest(String name) {
-		super(name);
+	@Before
+	public void setUp() {
+		if (Strings.isEmpty(mailhost)) {
+			Assume.assumeTrue(false);
+		}
 	}
 
 	private void reset() throws IOException {
@@ -45,54 +49,56 @@ public class POP3ClientCommandsTest extends TestCase {
 
 	private void connect() throws Exception {
 		p.connect(InetAddress.getByName(mailhost));
-		assertTrue(p.isConnected());
-		assertEquals(POP3.AUTHORIZATION_STATE, p.getState());
+		Assert.assertTrue(p.isConnected());
+		Assert.assertEquals(POP3.AUTHORIZATION_STATE, p.getState());
 	}
 
 	private void login() throws Exception {
-		assertTrue(p.login(user, password));
-		assertEquals(POP3.TRANSACTION_STATE, p.getState());
+		Assert.assertTrue(p.login(user, password));
+		Assert.assertEquals(POP3.TRANSACTION_STATE, p.getState());
 	}
 
+	@Test
 	public void testNoopCommand() throws Exception {
 		reset();
 		connect();
 
 		// Should fail before authorization
-		assertFalse(p.noop());
+		Assert.assertFalse(p.noop());
 
 		// Should pass in transaction state
 		login();
-		assertTrue(p.noop());
+		Assert.assertTrue(p.noop());
 
 		// Should fail in update state
 		p.setState(POP3.UPDATE_STATE);
-		assertFalse(p.noop());
+		Assert.assertFalse(p.noop());
 	}
 
+	@Test
 	public void testStatus() throws Exception {
 		reset();
 		connect();
 
 		// Should fail in authorization state
-		assertNull(p.status());
+		Assert.assertNull(p.status());
 
 		// Should pass on a mailbox with mail in it
 		login();
 		POP3MessageInfo msg = p.status();
-		assertTrue(msg.number > 0);
-		assertTrue(msg.size > 0);
-		assertNull(msg.identifier);
+		Assert.assertTrue(msg.number > 0);
+		Assert.assertTrue(msg.size > 0);
+		Assert.assertNull(msg.identifier);
 		p.logout();
 
 		// Should also pass on a mailbox with no mail in it
 		reset();
 		connect();
-		assertTrue(p.login(emptyUser, password));
+		Assert.assertTrue(p.login(emptyUser, password));
 		POP3MessageInfo msg2 = p.status();
-		assertEquals(0, msg2.number);
-		assertEquals(0, msg2.size);
-		assertNull(msg2.identifier);
+		Assert.assertEquals(0, msg2.number);
+		Assert.assertEquals(0, msg2.size);
+		Assert.assertNull(msg2.identifier);
 		p.logout();
 
 		// Should fail in the 'update' state
@@ -100,30 +106,32 @@ public class POP3ClientCommandsTest extends TestCase {
 		connect();
 		login();
 		p.setState(POP3.UPDATE_STATE);
-		assertNull(p.status());
+		Assert.assertNull(p.status());
 	}
 
+	@Test
 	public void testListMessagesOnFullMailbox() throws Exception {
 		reset();
 		connect();
 		login();
 
 		POP3MessageInfo[] msg = p.listMessages();
-		assertTrue(msg.length > 0);
+		Assert.assertTrue(msg.length > 0);
 
 		for (int i = 0; i < msg.length; i++) {
-			assertNotNull(msg[i]);
-			assertEquals(i + 1, msg[i].number);
-			assertTrue(msg[i].size > 0);
-			assertNull(msg[i].identifier);
+			Assert.assertNotNull(msg[i]);
+			Assert.assertEquals(i + 1, msg[i].number);
+			Assert.assertTrue(msg[i].size > 0);
+			Assert.assertNull(msg[i].identifier);
 		}
 
 		// Now test from the update state
 		p.setState(POP3.UPDATE_STATE);
 		msg = p.listMessages();
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testListMessageOnFullMailbox() throws Exception {
 		reset();
 		connect();
@@ -131,73 +139,77 @@ public class POP3ClientCommandsTest extends TestCase {
 
 		// The first message is always at index 1
 		POP3MessageInfo msg = p.listMessage(1);
-		assertNotNull(msg);
-		assertEquals(1, msg.number);
-		assertTrue(msg.size > 0);
-		assertNull(msg.identifier);
+		Assert.assertNotNull(msg);
+		Assert.assertEquals(1, msg.number);
+		Assert.assertTrue(msg.size > 0);
+		Assert.assertNull(msg.identifier);
 
 		// Now retrieve a message from index 0
 		msg = p.listMessage(0);
-		assertNull(msg);
+		Assert.assertNull(msg);
 
 		// Now retrieve a msg that is not there
 		msg = p.listMessage(100000);
-		assertNull(msg);
+		Assert.assertNull(msg);
 
 		// Now retrieve a msg with a negative index
 		msg = p.listMessage(-2);
-		assertNull(msg);
+		Assert.assertNull(msg);
 
 		// Now try to get a valid message from the update state
 		p.setState(POP3.UPDATE_STATE);
 		msg = p.listMessage(1);
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testListMessagesOnEmptyMailbox() throws Exception {
 		reset();
 		connect();
-		assertTrue(p.login(emptyUser, password));
+		Assert.assertTrue(p.login(emptyUser, password));
 
 		POP3MessageInfo[] msg = p.listMessages();
-		assertEquals(0, msg.length);
+		Assert.assertEquals(0, msg.length);
 
 		// Now test from the update state
 		p.setState(POP3.UPDATE_STATE);
 		msg = p.listMessages();
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testListMessageOnEmptyMailbox() throws Exception {
 		reset();
 		connect();
-		assertTrue(p.login(emptyUser, password));
+		Assert.assertTrue(p.login(emptyUser, password));
 
 		// The first message is always at index 1
 		POP3MessageInfo msg = p.listMessage(1);
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testListUniqueIDsOnFullMailbox() throws Exception {
 		reset();
 		connect();
 		login();
 
 		POP3MessageInfo[] msg = p.listUniqueIdentifiers();
-		assertTrue(msg.length > 0);
+		Assert.assertTrue(msg.length > 0);
 
 		for (int i = 0; i < msg.length; i++) {
-			assertNotNull(msg[i]);
-			assertEquals(i + 1, msg[i].number);
-			assertNotNull(msg[i].identifier);
+			Assert.assertNotNull(msg[i]);
+			Assert.assertEquals(i + 1, msg[i].number);
+			Assert.assertNotNull(msg[i].identifier);
 		}
 
 		// Now test from the update state
 		p.setState(POP3.UPDATE_STATE);
 		msg = p.listUniqueIdentifiers();
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testListUniqueIDOnFullMailbox() throws Exception {
 		reset();
 		connect();
@@ -205,52 +217,55 @@ public class POP3ClientCommandsTest extends TestCase {
 
 		// The first message is always at index 1
 		POP3MessageInfo msg = p.listUniqueIdentifier(1);
-		assertNotNull(msg);
-		assertEquals(1, msg.number);
-		assertNotNull(msg.identifier);
+		Assert.assertNotNull(msg);
+		Assert.assertEquals(1, msg.number);
+		Assert.assertNotNull(msg.identifier);
 
 		// Now retrieve a message from index 0
 		msg = p.listUniqueIdentifier(0);
-		assertNull(msg);
+		Assert.assertNull(msg);
 
 		// Now retrieve a msg that is not there
 		msg = p.listUniqueIdentifier(100000);
-		assertNull(msg);
+		Assert.assertNull(msg);
 
 		// Now retrieve a msg with a negative index
 		msg = p.listUniqueIdentifier(-2);
-		assertNull(msg);
+		Assert.assertNull(msg);
 
 		// Now try to get a valid message from the update state
 		p.setState(POP3.UPDATE_STATE);
 		msg = p.listUniqueIdentifier(1);
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testListUniqueIDsOnEmptyMailbox() throws Exception {
 		reset();
 		connect();
-		assertTrue(p.login(emptyUser, password));
+		Assert.assertTrue(p.login(emptyUser, password));
 
 		POP3MessageInfo[] msg = p.listUniqueIdentifiers();
-		assertEquals(0, msg.length);
+		Assert.assertEquals(0, msg.length);
 
 		// Now test from the update state
 		p.setState(POP3.UPDATE_STATE);
 		msg = p.listUniqueIdentifiers();
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testListUniqueIdentifierOnEmptyMailbox() throws Exception {
 		reset();
 		connect();
-		assertTrue(p.login(emptyUser, password));
+		Assert.assertTrue(p.login(emptyUser, password));
 
 		// The first message is always at index 1
 		POP3MessageInfo msg = p.listUniqueIdentifier(1);
-		assertNull(msg);
+		Assert.assertNull(msg);
 	}
 
+	@Test
 	public void testRetrieveMessageOnFullMailbox() throws Exception {
 		reset();
 		connect();
@@ -259,12 +274,12 @@ public class POP3ClientCommandsTest extends TestCase {
 		int actualSize = 0;
 
 		POP3MessageInfo[] msg = p.listMessages();
-		assertTrue(msg.length > 0);
+		Assert.assertTrue(msg.length > 0);
 
 		for (int i = msg.length; i > 0; i--) {
 			reportedSize = msg[i - 1].size;
 			Reader r = p.retrieveMessage(i);
-			assertNotNull(r);
+			Assert.assertNotNull(r);
 
 			int delaycount = 0;
 			if (!r.ready()) {
@@ -286,36 +301,39 @@ public class POP3ClientCommandsTest extends TestCase {
 			// size may vary slightly. On Win2KPro, the
 			// actual size is 2 bytes larger than the reported
 			// size.
-			assertTrue(actualSize >= reportedSize);
+			Assert.assertTrue(actualSize >= reportedSize);
 		}
 	}
 
+	@Test
 	public void testRetrieveMessageOnEmptyMailbox() throws Exception {
 		reset();
 		connect();
-		assertTrue(p.login(emptyUser, password));
-		assertNull(p.retrieveMessage(1));
+		Assert.assertTrue(p.login(emptyUser, password));
+		Assert.assertNull(p.retrieveMessage(1));
 	}
 
+	@Test
 	public void testRetrieveMessageShouldFails() throws Exception {
 		reset();
 		connect();
 		login();
 
 		// Try to get message 0
-		assertNull(p.retrieveMessage(0));
+		Assert.assertNull(p.retrieveMessage(0));
 
 		// Try to get a negative message
-		assertNull(p.retrieveMessage(-2));
+		Assert.assertNull(p.retrieveMessage(-2));
 
 		// Try to get a message that is not there
-		assertNull(p.retrieveMessage(100000));
+		Assert.assertNull(p.retrieveMessage(100000));
 
 		// Change states and try to get a valid message
 		p.setState(POP3.UPDATE_STATE);
-		assertNull(p.retrieveMessage(1));
+		Assert.assertNull(p.retrieveMessage(1));
 	}
 
+	@Test
 	public void testRetrieveMessageTopOnFullMailbox() throws Exception {
 		reset();
 		connect();
@@ -323,16 +341,17 @@ public class POP3ClientCommandsTest extends TestCase {
 		int numLines = 10;
 
 		POP3MessageInfo[] msg = p.listMessages();
-		assertTrue(msg.length > 0);
+		Assert.assertTrue(msg.length > 0);
 
 		for (int i = 0; i < msg.length; i++) {
 			Reader r = p.retrieveMessageTop(i + 1, numLines);
-			assertNotNull(r);
+			Assert.assertNotNull(r);
 			r.close();
 			r = null;
 		}
 	}
 
+	@Test
 	public void testRetrieveOverSizedMessageTopOnFullMailbox() throws Exception {
 		reset();
 		connect();
@@ -345,7 +364,7 @@ public class POP3ClientCommandsTest extends TestCase {
 
 		// Now try to retrieve more lines than exist in the message
 		Reader r = p.retrieveMessageTop(1, 100000);
-		assertNotNull(r);
+		Assert.assertNotNull(r);
 
 		int delaycount = 0;
 		while (!r.ready()) {
@@ -367,35 +386,38 @@ public class POP3ClientCommandsTest extends TestCase {
 		// size may vary slightly. On Win2KPro, the
 		// actual size is 2 bytes larger than the reported
 		// size.
-		assertTrue(actualSize >= reportedSize);
+		Assert.assertTrue(actualSize >= reportedSize);
 	}
 
+	@Test
 	public void testRetrieveMessageTopOnEmptyMailbox() throws Exception {
 		reset();
 		connect();
-		assertTrue(p.login(emptyUser, password));
-		assertNull(p.retrieveMessageTop(1, 10));
+		Assert.assertTrue(p.login(emptyUser, password));
+		Assert.assertNull(p.retrieveMessageTop(1, 10));
 	}
 
+	@Test
 	public void testRetrieveMessageTopShouldFails() throws Exception {
 		reset();
 		connect();
 		login();
 
 		// Try to get message 0
-		assertNull(p.retrieveMessageTop(0, 10));
+		Assert.assertNull(p.retrieveMessageTop(0, 10));
 
 		// Try to get a negative message
-		assertNull(p.retrieveMessageTop(-2, 10));
+		Assert.assertNull(p.retrieveMessageTop(-2, 10));
 
 		// Try to get a message that is not there
-		assertNull(p.retrieveMessageTop(100000, 10));
+		Assert.assertNull(p.retrieveMessageTop(100000, 10));
 
 		// Change states and try to get a valid message
 		p.setState(POP3.UPDATE_STATE);
-		assertNull(p.retrieveMessageTop(1, 10));
+		Assert.assertNull(p.retrieveMessageTop(1, 10));
 	}
 
+	@Test
 	public void testDeleteWithReset() throws Exception {
 		reset();
 		connect();
@@ -411,7 +433,7 @@ public class POP3ClientCommandsTest extends TestCase {
 			numDeleted++;
 		}
 		// Check to see that they are marked as deleted
-		assertEquals(numMessages, (numDeleted + 1));
+		Assert.assertEquals(numMessages, (numDeleted + 1));
 
 		// Now reset to unmark the messages as deleted
 		p.reset();
@@ -425,9 +447,10 @@ public class POP3ClientCommandsTest extends TestCase {
 		// Get the new number of messages, because of
 		// reset, new number should match old number
 		msg = p.listMessages();
-		assertEquals(numMessages, msg.length);
+		Assert.assertEquals(numMessages, msg.length);
 	}
 
+	@Test
 	public void testDelete() throws Exception {
 		reset();
 		connect();
@@ -443,7 +466,7 @@ public class POP3ClientCommandsTest extends TestCase {
 			numDeleted++;
 		}
 		// Check to see that they are marked as deleted
-		assertEquals(numMessages, (numDeleted + 3));
+		Assert.assertEquals(numMessages, (numDeleted + 3));
 
 		// Logout and come back in
 		p.logout();
@@ -454,17 +477,18 @@ public class POP3ClientCommandsTest extends TestCase {
 		// Get the new number of messages, because of
 		// reset, new number should match old number
 		msg = p.listMessages();
-		assertEquals(numMessages - numDeleted, msg.length);
+		Assert.assertEquals(numMessages - numDeleted, msg.length);
 	}
 
+	@Test
 	public void testResetAndDeleteShouldFails() throws Exception {
 		reset();
 		connect();
 		login();
 
 		p.setState(POP3.UPDATE_STATE);
-		assertFalse(p.reset());
+		Assert.assertFalse(p.reset());
 
-		assertFalse(p.deleteMessage(1));
+		Assert.assertFalse(p.deleteMessage(1));
 	}
 }

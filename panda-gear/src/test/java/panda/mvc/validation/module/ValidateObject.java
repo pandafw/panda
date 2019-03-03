@@ -16,6 +16,9 @@ import panda.mvc.annotation.validate.StringValidate;
 import panda.mvc.annotation.validate.URLValidate;
 
 public class ValidateObject {
+	public static final String DATE_MIN = "2010-01-01 00:00:00";
+	public static final String DATE_MAX = "2010-12-12 12:12:12";
+	
 	@BinaryValidate(minLength=5, maxLength=100, message="${top.length}, ${top.minLength} ~ ${top.maxLength}")
 	public byte[] bin;
 
@@ -25,7 +28,7 @@ public class ValidateObject {
 	@CreditCardNoValidate(message="'${top.value}' is not a card no.")
 	public String cardno;
 	
-	@DateValidate(min="2010-01-01 00:00:00", max="2010-12-12 12:12:12", message="'${top.value.getTime()}', ${top.min.getTime()} ~ ${top.max.getTime()}")
+	@DateValidate(min=DATE_MIN, max=DATE_MAX, message="'${top.value.getTime()}', ${top.min.getTime()} ~ ${top.max.getTime()}")
 	public Date date;
 
 	@ELValidate(el="top.value == \"ok\"", message="'${top.value}', '${top.el}'")

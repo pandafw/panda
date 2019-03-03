@@ -3,20 +3,23 @@ package panda.lang;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.lang.JapanChars;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * test class for AsiaCharUtils
  */
 public class JapanCharsTest {
+	private static final Log log = Logs.getLog(JapanCharsTest.class);
+	
 	private void print(String name, String zen, String han) {
 		Assert.assertEquals(name, zen.length(), han.length());
 		
-		System.out.println(Strings.center(name, 40, '/'));
+		log.debug(Strings.center(name, 40, '/'));
 		for (int i = 0; i < zen.length(); i++) {
 			char z = zen.charAt(i);
 			char h = han.charAt(i);
-			System.out.println("{ 0x" + Strings.leftPad(Integer.toString(z, 16), 4, '0') 
+			log.debug("{ 0x" + Strings.leftPad(Integer.toString(z, 16), 4, '0') 
 				+ ", 0x" + Strings.leftPad(Integer.toString(h, 16), 4, '0') + " },  //"
 				+ z + " --> " + h + ' ');
 		}
@@ -24,28 +27,28 @@ public class JapanCharsTest {
 	
 	@Test
 	public void printLine() {
-		System.out.println("HANKAKU_DIGIT:    " + JapanChars.HANKAKU_DIGIT);
-		System.out.println("ZENKAKU_DIGIT:    " + JapanChars.ZENKAKU_DIGIT);
-		System.out.println("HANKAKU_LETTER:   " + JapanChars.HANKAKU_LETTER);
-		System.out.println("ZENKAKU_LETTER:   " + JapanChars.ZENKAKU_LETTER);
-		System.out.println("HANKAKU_SYMBOL:   " + JapanChars.HANKAKU_SYMBOL);
-		System.out.println("ZENKAKU_SYMBOL:   " + JapanChars.ZENKAKU_SYMBOL);
-		System.out.println("HANKAKU_ASCII:    " + JapanChars.HANKAKU_ASCII);
-		System.out.println("ZENKAKU_ASCII:    " + JapanChars.ZENKAKU_ASCII);
-		System.out.println("HANKAKU_MARK:     " + JapanChars.HANKAKU_MARK);
-		System.out.println("ZENKAKU_MARK:     " + JapanChars.ZENKAKU_MARK);
-		System.out.println("HANKAKU_AYATU:    " + JapanChars.HANKAKU_AYATU);
-		System.out.println("ZENKAKU_AYATU:    " + JapanChars.ZENKAKU_AYATU);
-		System.out.println("HANKAKU_ANAMAYARA:" + JapanChars.HANKAKU_ANAMAYARA);
-		System.out.println("ZENKAKU_ANAMAYARA:" + JapanChars.ZENKAKU_ANAMAYARA);
-		System.out.println("HANKAKU_KASATAHA: " + JapanChars.HANKAKU_KASATAHA);
-		System.out.println("ZENKAKU_KASATAHA: " + JapanChars.ZENKAKU_KASATAHA);
-		System.out.println("ZENKAKU_GAZADABA: " + JapanChars.ZENKAKU_GAZADABA);
-		System.out.println("HANKAKU_WAOU:     " + JapanChars.HANKAKU_WAOU);
-		System.out.println("ZENKAKU_WAOU:     " + JapanChars.ZENKAKU_WAOU);
-		System.out.println("ZENKAKU_VAVO:     " + JapanChars.ZENKAKU_VAVO);
-		System.out.println("HANKAKU_HANDAKU:  " + JapanChars.HANKAKU_HANDAKU);
-		System.out.println("ZENKAKU_HANDAKU:  " + JapanChars.ZENKAKU_HANDAKU);
+		log.debug("HANKAKU_DIGIT:    " + JapanChars.HANKAKU_DIGIT);
+		log.debug("ZENKAKU_DIGIT:    " + JapanChars.ZENKAKU_DIGIT);
+		log.debug("HANKAKU_LETTER:   " + JapanChars.HANKAKU_LETTER);
+		log.debug("ZENKAKU_LETTER:   " + JapanChars.ZENKAKU_LETTER);
+		log.debug("HANKAKU_SYMBOL:   " + JapanChars.HANKAKU_SYMBOL);
+		log.debug("ZENKAKU_SYMBOL:   " + JapanChars.ZENKAKU_SYMBOL);
+		log.debug("HANKAKU_ASCII:    " + JapanChars.HANKAKU_ASCII);
+		log.debug("ZENKAKU_ASCII:    " + JapanChars.ZENKAKU_ASCII);
+		log.debug("HANKAKU_MARK:     " + JapanChars.HANKAKU_MARK);
+		log.debug("ZENKAKU_MARK:     " + JapanChars.ZENKAKU_MARK);
+		log.debug("HANKAKU_AYATU:    " + JapanChars.HANKAKU_AYATU);
+		log.debug("ZENKAKU_AYATU:    " + JapanChars.ZENKAKU_AYATU);
+		log.debug("HANKAKU_ANAMAYARA:" + JapanChars.HANKAKU_ANAMAYARA);
+		log.debug("ZENKAKU_ANAMAYARA:" + JapanChars.ZENKAKU_ANAMAYARA);
+		log.debug("HANKAKU_KASATAHA: " + JapanChars.HANKAKU_KASATAHA);
+		log.debug("ZENKAKU_KASATAHA: " + JapanChars.ZENKAKU_KASATAHA);
+		log.debug("ZENKAKU_GAZADABA: " + JapanChars.ZENKAKU_GAZADABA);
+		log.debug("HANKAKU_WAOU:     " + JapanChars.HANKAKU_WAOU);
+		log.debug("ZENKAKU_WAOU:     " + JapanChars.ZENKAKU_WAOU);
+		log.debug("ZENKAKU_VAVO:     " + JapanChars.ZENKAKU_VAVO);
+		log.debug("HANKAKU_HANDAKU:  " + JapanChars.HANKAKU_HANDAKU);
+		log.debug("ZENKAKU_HANDAKU:  " + JapanChars.ZENKAKU_HANDAKU);
 	}
 
 	@Test

@@ -5,8 +5,10 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import panda.codec.binary.Base64;
+import panda.lang.time.DateTimes;
 import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.validation.module.ValidateModule;
+import panda.mvc.validation.module.ValidateObject;
 
 public class ValidateTest extends AbstractMvcTestCase {
 
@@ -100,7 +102,11 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.setRequestURI("/visitOne");
 		request.addParameter("one.date", "2000-01-01 00:00:00");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.date\":[\"'946652400000', 1262271600000 ~ 1292123532000\"]}}},\"params\":{\"one.date\":\"2000-01-01 00:00:00\"}}", response.getContentAsString());
+		
+		long var = DateTimes.isoDatetimeNotFormat().parse("2000-01-01 00:00:00").getTime();
+		long min = DateTimes.isoDatetimeNotFormat().parse(ValidateObject.DATE_MIN).getTime();
+		long max = DateTimes.isoDatetimeNotFormat().parse(ValidateObject.DATE_MAX).getTime();
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.date\":[\"'" + var + "', " + min + " ~ " + max + "\"]}}},\"params\":{\"one.date\":\"2000-01-01 00:00:00\"}}", response.getContentAsString());
 	}
 
 	@Test

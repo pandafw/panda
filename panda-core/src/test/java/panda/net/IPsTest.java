@@ -5,12 +5,14 @@ import java.net.InetAddress;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.net.IPs;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  */
 public class IPsTest {
-
+	private static final Log log = Logs.getLog(IPsTest.class);
+	
 	@Test
 	public void testIsIpV4() throws Exception {
 		Assert.assertTrue(IPs.isIPv4("0.2.255.0"));
@@ -27,14 +29,14 @@ public class IPsTest {
 	@Test
 	public void testLocalhost() throws Exception {
 		InetAddress localhost = InetAddress.getLocalHost();
-		System.out.println(localhost);
+		log.debug(String.valueOf(localhost));
 	}
 
 	@Test
 	public void testGetAllByName() throws Exception {
 		InetAddress[] ias = InetAddress.getAllByName("www.google.com");
 		for (InetAddress ia : ias) {
-			System.out.println(ia);
+			log.debug(String.valueOf(ia));
 		}
 	}
 

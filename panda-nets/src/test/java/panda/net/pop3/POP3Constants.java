@@ -14,9 +14,11 @@ public class POP3Constants {
 	public static final String emptyuser = "alwaysempty";
 	public static final String password = "password";
 
-	public static final String mailhost = "localhost";
-
 	// Cannot be instantiated
 	private POP3Constants() {
+	}
+	
+	public static String getMailhost() {
+		return System.getenv("PANDA.NET.POP3.HOST");
 	}
 }

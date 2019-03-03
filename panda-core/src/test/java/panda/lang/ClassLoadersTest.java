@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ClassLoadersTest {
 	@Test
 	public void testGetResourceAsURL() {
-		Assert.assertNotNull(ClassLoaders.getResourceAsURL("panda-logging.properties"));
+		Assert.assertNotNull(ClassLoaders.getResourceAsURL("log.properties"));
 	}
 
 }

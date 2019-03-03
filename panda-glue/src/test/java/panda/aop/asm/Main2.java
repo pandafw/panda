@@ -11,26 +11,30 @@ import panda.aop.asm.test.Aop1;
 import panda.aop.asm.test.MyMethodInterceptor;
 import panda.aop.matcher.MethodMatcherFactory;
 import panda.lang.Classes;
+import panda.log.Log;
+import panda.log.Logs;
 
 public class Main2 {
 
+	private static final Log log = Logs.getLog(Main2.class);
+	
 	public static void main(String[] args) throws Throwable {
 
 		ClassAgent agent = new AsmClassAgent();
 		agent.addInterceptor(MethodMatcherFactory.matcher(".*"), new MyMethodInterceptor());
 		Class<Aop1> classZ = agent.define(DefaultClassDefiner.create(), Aop1.class);
-		System.out.println(classZ);
+		log.debug(classZ.toString());
 		Field[] fields = classZ.getDeclaredFields();
 		for (Field field : fields) {
-			System.out.println("找到一个Field: " + field);
+			log.debug("找到一个Field: " + field);
 		}
 		Method methods[] = classZ.getDeclaredMethods();
 		for (Method method : methods) {
-			System.out.println("找到一个Method: " + method);
+			log.debug("找到一个Method: " + method);
 		}
 		Constructor<?>[] constructors = classZ.getDeclaredConstructors();
 		for (Constructor<?> constructor : constructors) {
-			System.out.println("找个一个Constructor: " + constructor);
+			log.debug("找个一个Constructor: " + constructor);
 		}
 		Aop1 a1 = Classes.born(classZ, "Wendal");
 		a1.nonArgsVoid();
@@ -39,7 +43,7 @@ public class Main2 {
 		a1.mixArgsVoid("XX", "WendalXXX", 0, 'c', 1L, 9090L);
 		a1.mixArgsVoid2("Aop1", Boolean.TRUE, 8888, 'p', 34L, false, 'b', "Gp", null, null, 23L, 90L, 78L);
 		String result = (String)a1.mixArgsVoid4("WendalXXX");
-		System.out.println("返回值: " + result);
+		log.debug("返回值: " + result);
 		try {
 			a1.x();
 		}
@@ -60,7 +64,7 @@ public class Main2 {
 			a1.throwError();
 		}
 		catch (Throwable e) {
-			System.out.println("抓住你：");
+			log.debug("抓住你：");
 			e.printStackTrace(System.out);
 		}
 		a1.returnObjectArray();
@@ -73,12 +77,12 @@ public class Main2 {
 		{
 			// 带异常的构造函数
 			Constructor<?> constructor = a1.getClass().getConstructor(new Class<?>[] { Object.class, Object.class });
-			System.out.println("构造方法:" + constructor + " \n带有的异常:"
+			log.debug("构造方法:" + constructor + " \n带有的异常:"
 					+ Arrays.toString(constructor.getExceptionTypes()));
 		}
 		a1.getRunnable();
 		a1.getEnum();
-		System.out.println("-Demo Over-");
+		log.debug("-Demo Over-");
 	}
 
 }

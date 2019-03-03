@@ -1,13 +1,15 @@
 package panda.net.mail;
 
-import org.junit.Test;
-
 import panda.lang.Randoms;
 
 
 public class MailClientTest {
 	public static void main(String[] args) throws Exception {
 		MailClientTest sct = new MailClientTest();
+		
+		sct.sendTextEmail();
+		sct.sendTextEmailA();
+		sct.sendHtmlEmail();
 		sct.sendHtmlEmailA();
 	}
 
@@ -24,7 +26,6 @@ public class MailClientTest {
 		client.send(email);
 	}
 
-	@Test
 	public void sendTextEmail() throws Exception {
 		Email email = new Email();
 
@@ -33,7 +34,6 @@ public class MailClientTest {
 		sendEmail(email);
 	}
 
-	@Test
 	public void sendTextEmailA() throws Exception {
 		Email email = new Email();
 
@@ -44,7 +44,6 @@ public class MailClientTest {
 		sendEmail(email);
 	}
 
-	@Test
 	public void sendHtmlEmail() throws Exception {
 		Email email = new Email();
 
@@ -53,7 +52,6 @@ public class MailClientTest {
 		sendEmail(email);
 	}
 
-	@Test
 	public void sendHtmlEmailA() throws Exception {
 		Email email = new Email();
 

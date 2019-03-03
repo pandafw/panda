@@ -5,45 +5,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import panda.lang.Collections;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
-/**
- */
-public class CollectionsTest extends TestCase {
-
-	/**
-	 */
+public class CollectionsTest {
+	@Test
 	public void testRemoveNullCol() {
-		List<String> tl = new ArrayList<String>();
+		List<String> act = new ArrayList<String>();
 		
-		tl.add(null);
-		tl.add("t1");
-		tl.add(null);
-		tl.add("t2");
+		act.add(null);
+		act.add("t1");
+		act.add(null);
+		act.add("t2");
 		
-		System.out.println(tl);
-		
-		Collections.removeNull(tl);
+		Collections.removeNull(act);
 
-		System.out.println(tl);
+		List<String> exp = Arrays.toList("t1", "t2");
+		
+		Assert.assertEquals(exp, act);
 	}
 
-	/**
-	 */
+	@Test
 	public void testRemoveNullMap() {
-		Map<String, String> m = new HashMap<String, String>();
+		Map<String, String> act = new HashMap<String, String>();
 		
-		m.put("1", null);
-		m.put("2", "t1");
-		m.put("3", null);
-		m.put("4", "t2");
+		act.put("1", null);
+		act.put("2", "t1");
+		act.put("3", null);
+		act.put("4", "t2");
 		
-		System.out.println(m);
-		
-		Collections.removeNull(m);
+		Collections.removeNull(act);
 
-		System.out.println(m);
+		Map<String, String> exp = Arrays.toMap("2", "t1", "4", "t2");
+		
+		Assert.assertEquals(exp, act);
 	}
 
 }

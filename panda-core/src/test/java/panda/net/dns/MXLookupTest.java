@@ -3,14 +3,16 @@ package panda.net.dns;
 import java.util.List;
 
 import junit.framework.TestCase;
-import panda.net.dns.MXLookup;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * test class for MXLookup
  * @see MXLookup
  */
 public class MXLookupTest extends TestCase {
-
+	private static final Log log = Logs.getLog(MXLookupTest.class);
+	
 	/**
 	 * @see MXLookup#lookup(String)
 	 */
@@ -23,7 +25,7 @@ public class MXLookupTest extends TestCase {
 				List<String> hosts = MXLookup.lookup(args[i]);
 				assertTrue(hosts.size() > 0);
 				for (int j = 0; j < hosts.size(); j++) {
-					System.out.println(args[i] + "[" + j + "]: " + hosts.get(j));
+					log.debug(args[i] + "[" + j + "]: " + hosts.get(j));
 				}
 			}
 			catch (Exception e) {

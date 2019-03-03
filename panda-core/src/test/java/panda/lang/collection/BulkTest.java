@@ -57,6 +57,9 @@ public class BulkTest extends TestCase implements Cloneable {
         this.verboseName = getClass().getName();
     }
 
+    public void testDummy() {
+    	
+    }
 
     /**
      *  Creates a clone of this <code>BulkTest</code>.<P>

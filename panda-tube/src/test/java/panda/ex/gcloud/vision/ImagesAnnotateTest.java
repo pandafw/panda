@@ -19,7 +19,7 @@ public class ImagesAnnotateTest {
 	@Before
 	public void setUp() {
 		if (Strings.isEmpty(getApiKey())) {
-			log.warn("SKIP: " + this.getClass().getName());
+			log.info("SKIP: " + this.getClass().getName());
 			Assume.assumeTrue(false);
 		}
 	}

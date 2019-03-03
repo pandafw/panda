@@ -23,7 +23,7 @@ import panda.net.io.Util;
 public class DownloadListings extends FTPClient {
 
 	// Also used by MLDSComparison
-	static final String DOWNLOAD_DIR = "target/ftptest";
+	static final String DOWNLOAD_DIR = "out/ftptest";
 
 	private PrintCommandListener listener;
 	private PrintWriter out;

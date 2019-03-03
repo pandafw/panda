@@ -1,7 +1,5 @@
 package panda.net;
 
-import junit.framework.TestCase;
-
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
@@ -12,7 +10,7 @@ import panda.net.ftp.FTPClient;
  * A simple functional test class for SocketClients. Requires a Java-compatible SOCK proxy server on
  * 127.0.0.1:9050 and access to ftp.gnu.org.
  */
-public class SocketClientFunctionalTest extends TestCase {
+public class SocketClientFunctionalTest {
 	// any subclass will do, but it should be able to connect to the destination host
 	SocketClient sc = new FTPClient();
 	private static final String PROXY_HOST = "127.0.0.1";
@@ -20,13 +18,9 @@ public class SocketClientFunctionalTest extends TestCase {
 	private static final String DEST_HOST = "ftp.gnu.org";
 	private static final int DEST_PORT = 21;
 
-	/**
-	 * The constructor for this test case.
-	 * 
-	 * @param name passed to TestCase
-	 */
-	public SocketClientFunctionalTest(String name) {
-		super(name);
+	public static void main(String[] argv) throws Exception {
+		SocketClientFunctionalTest scft = new SocketClientFunctionalTest();
+		scft.testProxySettings();
 	}
 
 	/**
@@ -39,7 +33,7 @@ public class SocketClientFunctionalTest extends TestCase {
 		Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(PROXY_HOST, PROXY_PORT));
 		sc.setProxy(proxy);
 		sc.connect(DEST_HOST, DEST_PORT);
-		assertTrue(sc.isConnected());
+		System.out.println("Proxy connect: " + sc.isConnected());
 		sc.disconnect();
 	}
 }

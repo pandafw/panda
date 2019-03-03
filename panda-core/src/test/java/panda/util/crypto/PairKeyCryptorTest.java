@@ -6,9 +6,12 @@ import java.security.KeyPairGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.util.crypto.Cryptor;
+import panda.log.Log;
+import panda.log.Logs;
 
 public class PairKeyCryptorTest {
+	private static final Log log = Logs.getLog(PairKeyCryptorTest.class);
+	
 	@Test
 	public void testRsa() throws Exception {
 		testPKI("RSA", "RSA");
@@ -29,7 +32,7 @@ public class PairKeyCryptorTest {
 		String ed = pc.encrypt(text);
 		String dd = pc.decrypt(ed);
 		
-		System.out.println("PKI " + algorithm + ": " + ed);
+		log.debug("PKI " + algorithm + ": " + ed);
 		Assert.assertEquals(dd, text);
 	}
 }

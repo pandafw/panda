@@ -111,7 +111,7 @@ public class TestHelper {
 
 		DataSource ds = sources.get(name);
 		if (ds == null) {
-			DriverManager.setLoginTimeout(5);
+			DriverManager.setLoginTimeout(10);
 
 			AbstractDataSource ads = null;
 			try {
@@ -132,7 +132,7 @@ public class TestHelper {
 				ds = ads;
 			}
 			catch (Throwable e) {
-				log.warn("Failed to connect " + ads.getJdbc().getUrl() + " - " + ads.getJdbc().getUsername(), e);
+				log.warn("Failed to connect " + ads.getJdbc().getUrl() + " - " + ads.getJdbc().getUsername() + ": " + e.getMessage());
 				ds = new MockDataSource();
 			}
 			sources.put(name, ds);

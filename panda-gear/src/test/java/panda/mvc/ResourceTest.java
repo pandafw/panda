@@ -10,10 +10,14 @@ import panda.el.ELTemplate;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.reflect.Fields;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.validator.ImageValidator;
 
 public class ResourceTest {
 
+	private static final Log log = Logs.getLog(ResourceTest.class);
+	
 	private Object top;
 	
 	/**
@@ -84,7 +88,7 @@ public class ResourceTest {
 
 		Fields.writeField(iv, "image", false, true);
 		String actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
+		log.debug(actual);
 		
 		////
 		Fields.writeField(iv, "image", true, true);
@@ -94,17 +98,17 @@ public class ResourceTest {
 		Fields.writeField(iv, "maxWidth", 30, true);
 		Fields.writeField(iv, "minWidth", null, true);
 		actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
+		log.debug(actual);
 
 		Fields.writeField(iv, "maxWidth", null, true);
 		Fields.writeField(iv, "minWidth", 20, true);
 		actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
+		log.debug(actual);
 
 		Fields.writeField(iv, "maxWidth", 30, true);
 		Fields.writeField(iv, "minWidth", 20, true);
 		actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
+		log.debug(actual);
 
 		////
 		Fields.writeField(iv, "maxWidth", null, true);
@@ -113,17 +117,17 @@ public class ResourceTest {
 		Fields.writeField(iv, "maxHeight", 30, true);
 		Fields.writeField(iv, "minHeight", null, true);
 		actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
+		log.debug(actual);
 
 		Fields.writeField(iv, "maxHeight", null, true);
 		Fields.writeField(iv, "minHeight", 20, true);
 		actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
+		log.debug(actual);
 
 		Fields.writeField(iv, "maxHeight", 30, true);
 		Fields.writeField(iv, "minHeight", 20, true);
 		actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
+		log.debug(actual);
 
 		////
 		Fields.writeField(iv, "maxWidth", 30, true);
@@ -131,7 +135,6 @@ public class ResourceTest {
 		Fields.writeField(iv, "maxHeight", 30, true);
 		Fields.writeField(iv, "minHeight", 20, true);
 		actual = ELTemplate.evaluate(s, this, true);
-		System.out.println(actual);
-
+		log.debug(actual);
 	}
 }

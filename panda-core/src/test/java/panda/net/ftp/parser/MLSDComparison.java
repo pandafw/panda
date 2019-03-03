@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.TimeZone;
 
+import org.junit.Assume;
 import org.junit.Test;
 
 import panda.net.ftp.FTP;
@@ -36,6 +37,10 @@ public class MLSDComparison {
 	@Test
 	public void testFile() throws Exception {
 		File path = new File(DownloadListings.DOWNLOAD_DIR);
+		if (!path.exists()) {
+			Assume.assumeTrue(false);
+		}
+		
 		FilenameFilter filter = new FilenameFilter() {
 			// @Override
 			public boolean accept(File dir, String name) {

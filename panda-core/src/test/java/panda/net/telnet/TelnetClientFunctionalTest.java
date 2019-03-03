@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import panda.io.Streams;
 import panda.net.telnet.TelnetClient;
 
 /***
@@ -55,8 +56,8 @@ public class TelnetClientFunctionalTest extends TestCase {
 		}
 
 		assertTrue(testresult);
-		os.close();
-		is.close();
+		Streams.safeClose(os);
+		Streams.safeClose(is);
 	}
 
 	/*
