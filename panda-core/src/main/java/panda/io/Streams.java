@@ -164,7 +164,7 @@ public class Streams {
 				closeable.close();
 			}
 		}
-		catch (IOException ioe) {
+		catch (Exception ioe) {
 			// ignore
 		}
 	}

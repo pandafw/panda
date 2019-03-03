@@ -196,7 +196,7 @@ public abstract class Sqls {
 				resultSet.close();
 			}
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			log.warn("Failed to close ResultSet", e);
 		}
 	}
@@ -211,7 +211,7 @@ public abstract class Sqls {
 				resultSet.close();
 			}
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			log.warn("Failed to close SqlResultSet", e);
 		}
 	}
@@ -226,7 +226,7 @@ public abstract class Sqls {
 				statement.close();
 			}
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			log.warn("Failed to close Statement", e);
 		}
 	}
@@ -241,7 +241,7 @@ public abstract class Sqls {
 				connection.close();
 			}
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			log.warn("Failed to close Connection", e);
 		}
 	}
@@ -256,7 +256,7 @@ public abstract class Sqls {
 				connection.rollback();
 			}
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			log.warn("Failed to rollback", e);
 		}
 	}
