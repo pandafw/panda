@@ -117,6 +117,23 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	/**
 	 * Checks to see if the filename ends with the suffix.
 	 * 
+	 * @param file the File to check
+	 * @return true if the filename ends with one of our suffixes
+	 */
+	@Override
+	public boolean accept(File file) {
+		String name = file.getName();
+		for (String suffix : this.suffixes) {
+			if (caseSensitivity.checkEndsWith(name, suffix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks to see if the filename ends with the suffix.
+	 * 
 	 * @param dir the File directory
 	 * @param name the filename
 	 * @return true if the filename ends with one of our suffixes

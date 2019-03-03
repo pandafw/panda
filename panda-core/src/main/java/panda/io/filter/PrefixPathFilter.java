@@ -119,30 +119,13 @@ public class PrefixPathFilter extends AbstractFileFilter {
 	 * Checks to see if the filename starts with the prefix.
 	 * 
 	 * @param file the File to check
-	 * @return true if the filename starts with one of our prefixes
+	 * @return true if the file path starts with one of our prefixes
 	 */
 	@Override
 	public boolean accept(File file) {
 		String path = file.getPath();
 		for (String prefix : this.prefixes) {
 			if (caseSensitivity.checkStartsWith(path, prefix)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Checks to see if the filename starts with the prefix.
-	 * 
-	 * @param dir the File directory
-	 * @param name the filename
-	 * @return true if the filename starts with one of our prefixes
-	 */
-	@Override
-	public boolean accept(File dir, String name) {
-		for (String prefix : prefixes) {
-			if (caseSensitivity.checkStartsWith(name, prefix)) {
 				return true;
 			}
 		}

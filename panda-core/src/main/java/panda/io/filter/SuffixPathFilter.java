@@ -118,7 +118,7 @@ public class SuffixPathFilter extends AbstractFileFilter {
 	 * Checks to see if the filename ends with the suffix.
 	 * 
 	 * @param file the File to check
-	 * @return true if the filename ends with one of our suffixes
+	 * @return true if the file path ends with one of our suffixes
 	 */
 	@Override
 	public boolean accept(File file) {

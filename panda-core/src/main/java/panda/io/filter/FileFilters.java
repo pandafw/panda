@@ -257,7 +257,7 @@ public class FileFilters {
 	}
 
 	/**
-	 * Returns a filter that returns true if the filename starts with the specified text.
+	 * Returns a filter that returns true if the file path starts with the specified text.
 	 * 
 	 * @param prefix the file path prefix
 	 * @return a prefix checking filter
@@ -268,7 +268,7 @@ public class FileFilters {
 	}
 
 	/**
-	 * Returns a filter that returns true if the filename starts with the specified text.
+	 * Returns a filter that returns true if the file path starts with the specified text.
 	 * 
 	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
 	 * @param prefix the filename prefix
