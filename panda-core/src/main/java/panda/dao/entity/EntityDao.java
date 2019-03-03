@@ -242,7 +242,7 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return the record object collection
 	 */
-	public Collection<?> coll(Collection<?> coll, Query<?> query, String prop) {
+	public Collection<?> coll(Collection<?> coll, Query<T> query, String prop) {
 		return dao.coll(coll, query, prop);
 	}
 
@@ -265,7 +265,7 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record value list
 	 */
-	public List<?> list(Query<?> query, String prop) {
+	public List<?> list(Query<T> query, String prop) {
 		return dao.list(query, prop);
 	}
 
@@ -288,7 +288,7 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record value set
 	 */
-	public Set<?> set(Query<?> query, String prop) {
+	public Set<?> set(Query<T> query, String prop) {
 		return dao.set(query, prop);
 	}
 
@@ -527,7 +527,7 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public int updates(T obj, Query<?> query) {
+	public int updates(T obj, Query<T> query) {
 		return dao.updates(obj, query);
 	}
 
@@ -539,7 +539,7 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public int updatesIgnoreNull(T obj, Query<?> query) {
+	public int updatesIgnoreNull(T obj, Query<T> query) {
 		return dao.updatesIgnoreNull(obj, query);
 	}
 
