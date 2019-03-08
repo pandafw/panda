@@ -162,11 +162,13 @@ public class HttpRequest {
 	}
 
 	public HttpRequest setUrl(String url) {
-		if (url != null && url.indexOf("://") < 0)
+		if (url != null && url.indexOf("://") < 0) {
 			// default http protocol
 			this.url = "http://" + url;
-		else
+		}
+		else {
 			this.url = url;
+		}
 		return this;
 	}
 	
@@ -368,12 +370,20 @@ public class HttpRequest {
 		return this;
 	}
 
+	public String getAuthentication() {
+		return getHeader().getAuthentication();
+	}
+
+	public HttpRequest setAuthentication(String value) {
+		getHeader().setAuthentication(value);
+		return this;
+	}
+
 	public HttpRequest setBasicAuthentication(String username, String password, String separator) {
 		try {
 			byte[] b = (username + separator + password).getBytes(encoding);
-			String v = "Basic " + Base64.encodeBase64String(b);
-			getHeader().set(HttpHeader.AUTHORIZATION, v);
-			return this;
+			String v = Base64.encodeBase64String(b);
+			return setAuthentication("Basic " + v);
 		}
 		catch (UnsupportedEncodingException e) {
 			throw Exceptions.wrapThrow(e);

@@ -147,6 +147,14 @@ public class HttpHeader extends InternetHeader implements Cloneable, Serializabl
 		return (HttpHeader)set(CONTENT_TYPE, type);
 	}
 	
+	public String getAuthentication() {
+		return getString(AUTHORIZATION);
+	}
+	
+	public HttpHeader setAuthentication(String auth) {
+		return (HttpHeader)set(AUTHORIZATION, auth);
+	}
+	
 	public boolean isKeepAlive() {
 		return "keep-alive".equalsIgnoreCase(getString(CONNECTION));
 	}
