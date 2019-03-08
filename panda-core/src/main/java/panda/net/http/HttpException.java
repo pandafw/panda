@@ -1,7 +1,8 @@
 package panda.net.http;
 
+import java.io.IOException;
 
-public class HttpException extends RuntimeException {
+public class HttpException extends IOException {
 
 	private static final long serialVersionUID = 4035188583429445028L;
 
@@ -12,6 +13,38 @@ public class HttpException extends RuntimeException {
 	public static final HttpException BAD_GATEWAY = new HttpException(HttpStatus.SC_BAD_GATEWAY);
 
 	private int status;
+	private String content;
+
+	public HttpException() {
+		super();
+	}
+
+	public HttpException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public HttpException(String message) {
+		super(message);
+	}
+
+	public HttpException(Throwable cause) {
+		super(cause);
+	}
+
+	public HttpException(int status) {
+		this.status = status;
+	}
+
+	public HttpException(int status, String message) {
+		super(message);
+		this.status = status;
+	}
+
+	public HttpException(int status, String message, String content) {
+		super(message);
+		this.status = status;
+		this.content = content;
+	}
 
 	public int getStatus() {
 		return status;
@@ -21,13 +54,18 @@ public class HttpException extends RuntimeException {
 		this.status = status;
 	}
 
-	public HttpException(int status) {
-		this.status = status;
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
 	}
 
-	public HttpException(int status, String fmt, Object... args) {
-		super(String.format(fmt, args));
-		this.status = status;
+	/**
+	 * @param content the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 }

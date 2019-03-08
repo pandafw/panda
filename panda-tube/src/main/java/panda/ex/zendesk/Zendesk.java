@@ -237,7 +237,7 @@ public class Zendesk {
 				return ulr;
 			}
 			
-			throw new ZendeskException("Failed to list users: " + hr.getStatusLine() + "\n" + hr.getContentText());
+			throw new ZendeskException(hr.getStatusCode(), "Failed to list users: " + hr.getStatusLine(), hr.getContentText());
 		}
 		catch (ZendeskException e) {
 			throw e;
@@ -265,7 +265,7 @@ public class Zendesk {
 				return tlr;
 			}
 			
-			throw new ZendeskException("Failed to list tickets: " + hr.getStatusLine() + "\n" + hr.getContentText());
+			throw new ZendeskException(hr.getStatusCode(), "Failed to list tickets: " + hr.getStatusLine(), hr.getContentText());
 		}
 		catch (ZendeskException e) {
 			throw e;
@@ -288,7 +288,7 @@ public class Zendesk {
 				return tr.getTicket();
 			}
 			
-			throw new ZendeskException("Failed to get ticket: " + hr.getStatusLine() + "\n" + hr.getContentText());
+			throw new ZendeskException(hr.getStatusCode(), "Failed to get ticket: " + hr.getStatusLine(), hr.getContentText());
 		}
 		catch (ZendeskException e) {
 			throw e;
@@ -312,7 +312,7 @@ public class Zendesk {
 				return tlr.getTickets();
 			}
 			
-			throw new ZendeskException("Failed to get tickets: " + hr.getStatusLine() + "\n" + hr.getContentText());
+			throw new ZendeskException(hr.getStatusCode(), "Failed to get tickets: " + hr.getStatusLine(), hr.getContentText());
 		}
 		catch (ZendeskException e) {
 			throw e;
@@ -338,7 +338,7 @@ public class Zendesk {
 				return td.getTicket();
 			}
 			
-			throw new ZendeskException("Failed to create ticket: " + hr.getStatusLine() + "\n" + hr.getContentText());
+			throw new ZendeskException(hr.getStatusCode(), "Failed to create ticket: " + hr.getStatusLine(), hr.getContentText());
 		}
 		catch (ZendeskException e) {
 			throw e;

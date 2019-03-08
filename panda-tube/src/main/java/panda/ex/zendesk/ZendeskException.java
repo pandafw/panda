@@ -1,38 +1,37 @@
 package panda.ex.zendesk;
 
-import java.io.IOException;
+import panda.net.http.HttpException;
 
-public class ZendeskException extends IOException {
+public class ZendeskException extends HttpException {
 	
 	private static final long serialVersionUID = 5512289367718068512L;
 
-	/**
-	 * 
-	 */
 	public ZendeskException() {
 		super();
 	}
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
 	public ZendeskException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	/**
-	 * @param message
-	 */
 	public ZendeskException(String message) {
 		super(message);
 	}
 
-	/**
-	 * @param cause
-	 */
 	public ZendeskException(Throwable cause) {
 		super(cause);
+	}
+
+	public ZendeskException(int status, String message, String content) {
+		super(status, message, content);
+	}
+
+	public ZendeskException(int status, String message) {
+		super(status, message);
+	}
+
+	public ZendeskException(int status) {
+		super(status);
 	}
 
 }

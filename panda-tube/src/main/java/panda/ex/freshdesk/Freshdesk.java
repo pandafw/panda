@@ -234,11 +234,18 @@ public class Freshdesk {
 			}
 			
 			if (MimeTypes.APP_JSON.equalsIgnoreCase(hr.getContentType())) {
-				ErrorResult er = deserialize(hr.getContentText(), ErrorResult.class);
-				throw new FreshException("Failed to create ticket: " + er.getDescription(), er);
+				ErrorResult er = null;
+				try {
+					er = deserialize(hr.getContentText(), ErrorResult.class);
+				}
+				catch (Exception e) {
+					throw new FreshException(hr.getStatusCode(), "Failed to create ticket: " + hr.getStatusLine(), hr.getContentText());
+				}
+
+				throw new FreshException(hr.getStatusCode(), "Failed to create ticket: " + hr.getStatusLine(), er);
 			}
 			
-			throw new FreshException("Failed to create ticket: " + hr.getContentText());
+			throw new FreshException(hr.getStatusCode(), "Failed to create ticket: " + hr.getStatusLine(), hr.getContentText());
 		}
 		catch (FreshException e) {
 			throw e;

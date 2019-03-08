@@ -1,8 +1,8 @@
 package panda.ex.freshdesk;
 
-import java.io.IOException;
+import panda.net.http.HttpException;
 
-public class FreshException extends IOException {
+public class FreshException extends HttpException {
 	
 	private static final long serialVersionUID = 5512289367718068512L;
 
@@ -52,6 +52,23 @@ public class FreshException extends IOException {
 	public FreshException(String message, ErrorResult error) {
 		super(message);
 		this.error = error;
+	}
+
+	public FreshException(int status, String message, ErrorResult error) {
+		super(status, message);
+		this.error = error;
+	}
+
+	public FreshException(int status, String message, String content) {
+		super(status, message, content);
+	}
+
+	public FreshException(int status, String message) {
+		super(status, message);
+	}
+
+	public FreshException(int status) {
+		super(status);
 	}
 
 	/**
