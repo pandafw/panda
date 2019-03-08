@@ -48,6 +48,53 @@ ul.p-field-errors i.fa-li {
 .p-field-errors-caret {
 	font-size: 80%;
 }
+/** grid fix */
+.container {
+	width: 100%;
+}
+@media (min-width: 576px) {
+	.container {
+		max-width: 540px;
+		width: 100%;
+	}
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 720px;
+		width: 100%;
+	}
+}
+@media (min-width: 992px) {
+	.container {
+		max-width: 960px;
+		width: 100%;
+	}
+}
+@media (min-width: 1200px) {
+	.container {
+		max-width: 1140px;
+		width: 100%;
+	}
+}
+@media (min-width: 1400px) {
+	.container {
+		max-width: 1330px;
+		width: 100%;
+	}
+}
+@media (min-width: 1600px) {
+	.container {
+		max-width: 1520px;
+		width: 100%;
+	}
+}
+@media (min-width: 1800px) {
+	.container {
+		max-width: 1710px;
+		width: 100%;
+	}
+}
+
 /** disable bootstrap not-allowed cursor */
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
 	cursor: auto;
