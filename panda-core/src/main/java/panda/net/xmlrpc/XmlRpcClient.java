@@ -1,6 +1,7 @@
 package panda.net.xmlrpc;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -18,13 +19,14 @@ import panda.net.http.HttpClient;
 import panda.net.http.HttpRequest;
 import panda.net.http.HttpResponse;
 
-
+/**
+ * A client for XML-RPC.
+ * !! thread safe !!
+ */
 public class XmlRpcClient {
 	private static final Log log = Logs.getLog(XmlRpcClient.class);
 	
 	private Castors castors;
-	
-	private HttpClient http;
 	
 	private String url;
 	
@@ -36,7 +38,6 @@ public class XmlRpcClient {
 	public XmlRpcClient(String url) {
 		this.url = url;
 		castors = Castors.i();
-		http = new HttpClient();
 	}
 
 	/**
@@ -83,51 +84,60 @@ public class XmlRpcClient {
 		xreq.setParams(pls);
 		String xbody = XmlRpcs.toXml(xreq, true, log.isDebugEnabled());
 
-		HttpRequest hreq = HttpRequest.post(url);
+		HttpClient http = new HttpClient();
+		
+		HttpRequest hreq = http.getRequest();
+		hreq.setUrl(url);
 		hreq.setDefault().setContentType(MimeTypes.TEXT_XML);
 		if (Strings.isNotEmpty(userAgent)) {
 			hreq.setUserAgent(userAgent);
 		}
 		hreq.setBody(xbody);
 		
-		http.setRequest(hreq);
-		
 		if (log.isDebugEnabled()) {
 			log.debug("XML-RPC Call> " + url + " [" + method + "]: " + Streams.EOL + xbody);
 		}
 
 		StopWatch sw = new StopWatch();
-		HttpResponse hres = http.send();
-		
-		XmlRpcDocument<Object> xres;
-		if (hres.isOK()) {
-			if (log.isDebugEnabled()) {
-				log.debug("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() 
+
+		HttpResponse hres = http.doPost();
+		if (!hres.isOK()) {
+			if (log.isWarnEnabled()) {
+				log.warn("XML-RPC Call Failed> " + url + " [" + method + "]: " + hres.getStatusLine() 
 					+ Streams.EOL
 					+ hres.getContentText());
-				xres = XmlRpcs.fromXml(hres.getReader(), XmlRpcDocument.class);
-				log.debug("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() + " (" + sw + ")");
-			}
-			else if (log.isInfoEnabled()) {
-				xres = XmlRpcs.fromXml(hres.getReader(), XmlRpcDocument.class);
-				log.info("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() + " (" + sw + ")");
-			}
-			else {
-				xres = XmlRpcs.fromXml(hres.getReader(), XmlRpcDocument.class);
 			}
 			
-			if (xres.getFault() != null) {
-				throw new XmlRpcFaultException(xres.getFault());
-			}
-			
-			T ores = castors.cast(xres.getParams(), resultType);
-			return ores;
+			throw new XmlRpcFaultException(hres.getStatusCode(), hres.getStatusReason());
 		}
-
-		log.warn("XML-RPC Call Failed> " + url + " [" + method + "]: " + hres.getStatusLine() 
-			+ Streams.EOL
-			+ hres.getContentText());
-
-		throw new XmlRpcFaultException(hres.getStatusCode(), hres.getStatusReason());
+		
+		XmlRpcDocument<Object> xres;
+		if (log.isDebugEnabled()) {
+			String content = hres.getContentText();
+			log.debug("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() 
+				+ Streams.EOL
+				+ content);
+			xres = XmlRpcs.fromXml(content, XmlRpcDocument.class);
+			log.debug("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() + " (" + sw + ")");
+		}
+		else {
+			Reader r = hres.getReader();
+			try {
+				xres = XmlRpcs.fromXml(r, XmlRpcDocument.class);
+				if (log.isInfoEnabled()) {
+					log.info("XML-RPC Call> " + url + " [" + method + "]: " + hres.getStatusLine() + " (" + sw + ")");
+				}
+			}
+			finally {
+				Streams.safeClose(r);
+			}
+		}
+		
+		if (xres.getFault() != null) {
+			throw new XmlRpcFaultException(xres.getFault());
+		}
+		
+		T ores = castors.cast(xres.getParams(), resultType);
+		return ores;
 	}
 }
