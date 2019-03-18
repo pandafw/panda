@@ -2064,28 +2064,29 @@ jQuery.jcookie = function(name, value, options) {
 		}
 	}
 	
-	function __align($t, $el) {
-		if ($t.length) {
-			var p = $t.offset();
-			p.top += $t.outerHeight();
-
-			var bw = $.browser.width();
-			var ow = $el.outerWidth();
-			if (p.left + ow > bw) {
-				p.left = bw - ow - 20;
-				if (p.left < 0) {
-					p.left = 0;
-				}
-			}
-			
-			$el.css({
-				top: p.top + "px",
-				left: p.left + "px"
-			}).removeClass('ui-popup-center');
-		}
-		else {
+	function __align(c, $el) {
+		var $t = $(c.target || c.trigger);
+		if (c.popover || $t.length < 1) {
 			$el.addClass('ui-popup-center');
+			return;
 		}
+
+		var p = $t.offset();
+		p.top += $t.outerHeight();
+
+		var bw = $.browser.width();
+		var ow = $el.outerWidth();
+		if (p.left + ow > bw) {
+			p.left = bw - ow - 20;
+			if (p.left < 0) {
+				p.left = 0;
+			}
+		}
+		
+		$el.css({
+			top: p.top + "px",
+			left: p.left + "px"
+		}).removeClass('ui-popup-center');
 	}
 	
 	function __activeTarget($t) {
@@ -2134,7 +2135,7 @@ jQuery.jcookie = function(name, value, options) {
 			left : "0px",
 		}).addClass('ui-popup-opacity0').show();
 
-		__align($(c.target || c.trigger), $pc.parent(), true);
+		__align(c, $pc.parent(), true);
 		
 		$pc.hide().removeClass('ui-popup-opacity0').slideDown('fast');
 		
@@ -2237,7 +2238,7 @@ jQuery.jcookie = function(name, value, options) {
 	function _load(c) {
 		c = $.extend({ id: __active }, c);
 		if (c.id) {
-			__align($(c.target || c.trigger), $("#ui_popup_loader").show(), false);
+			__align(c, $("#ui_popup_loader").show(), false);
 
 			var $pc = null;
 			$.ajax({
@@ -2258,7 +2259,7 @@ jQuery.jcookie = function(name, value, options) {
 								__popup($pc, c);
 							}
 							else {
-								__align($(c.target || c.trigger), $pc.parent(), true);
+								__align(c, $pc.parent(), true);
 							}
 						}
 					}
