@@ -55,8 +55,8 @@
 			<@initpc f=f/>
 			<#if _popup?has_content>
 			<#assign pid = ""/>
-			<#if _popup.ref?has_content>
-				<#assign f2 = ui.getFieldByName(_popup.ref)/>
+			<#if _popup.refer?has_content>
+				<#assign f2 = ui.getFieldByName(_popup.refer)/>
 				<#assign pid = "popup_" + action.name + "_" + f2.name/>
 			<#else>
 				<#assign pid = "popup_" + action.name + "_" + f.name/>
@@ -75,6 +75,9 @@ ${s}/@p.url>"
 				$('#${action.name}_${f.name}').next().popup({
 					id: "${pid}",
 					target: "#${action.name}_${f.name}",
+<#if _popup.popover??><#if _popup.popover>
+					popover: true,
+</#if></#if>
 					callback: ${action.name}_${f.name}_onPopupCallback
 				});
 			
