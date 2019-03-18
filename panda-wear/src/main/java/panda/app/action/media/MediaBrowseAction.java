@@ -94,6 +94,12 @@ public class MediaBrowseAction extends AbstractAction {
 	public Object browse_popup(@Param Arg arg) {
 		return browse(arg);
 	}
+	
+	@At
+	@To(Views.SFTL)
+	public Object select_popup(@Param Arg arg) {
+		return browse(arg);
+	}
 
 	@At
 	@To(Views.SJSON)

@@ -26,17 +26,6 @@ public class Medias {
 
 	public static final int DEFAULT_CACHE_MAXAGE = 30 * DateTimes.SEC_DAY;
 
-	public static String getMediaIcon(Media m) {
-		return "<img class=\"p-mwh32px\" src=\"icon/" + m.getId() + "\">";
-	}
-	
-	public static String getMediaLink(Media m) {
-		if (m == null || m.getSize() <= 0) {
-			return "";
-		}
-		return "<a href=\"view?id=" + m.getId() + "\">" + getMediaIcon(m) + "</a>";
-	}
-
 	public static void setFileMeta(Media m) {
 		if (m.getFile() == null || !m.getFile().isExists()) {
 			return;

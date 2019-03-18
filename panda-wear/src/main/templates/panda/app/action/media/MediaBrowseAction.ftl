@@ -94,8 +94,8 @@
 	</div>
 </div>
 
-<script>
-	var media_popup = ${methodName?ends_with('popup')?string};
+<script type="text/javascript">
+	var media_method = '${methodName!}';
 	var media_base = '';
 	var media_date_format = '';
 	var media_has_next = false;
@@ -143,14 +143,32 @@
 		$('#media_browser .media-thumb').lightbox({bindEvent: 'dblclick'});
 	}
 	
+	function media_set_method(m) {
+		if (media_method != m) {
+			$('#media_browser .media-select').removeClass('media-select');
+			$('#media_btn_select').addClass('p-hidden');
+		}
+		media_method = m;
+	}
+	
 	function media_on_click(e) {
 		e.preventDefault();
-		$(this).toggleClass('media-select');
-		
-		var i = $('#media_browser .media-select').size() ? 'removeClass' : 'addClass';
-		$('#media_btn_delete')[i]('p-hidden');
-		if (media_popup) {
-			$('#media_btn_select')[i]('p-hidden');
+
+		var $t = $(this);
+		if (media_method == 'select_popup') {
+			$('#media_btn_select').addClass('p-hidden');
+			$('#media_browser .media-select').removeClass('media-select');
+			$t.addClass('media-select');
+			var s = { id: $t.data('mid'), name: $t.find('img').attr('alt'), href: $t.attr('href') };
+			$.popup().callback(s);
+		}
+		else {
+			$t.toggleClass('media-select');
+			var i = $('#media_browser .media-select').size() ? 'removeClass' : 'addClass';
+			$('#media_btn_delete')[i]('p-hidden');
+			if (media_method == 'browse_popup') {
+				$('#media_btn_select')[i]('p-hidden');
+			}
 		}
 		return false;
 	}
@@ -213,7 +231,8 @@
 	function media_select() {
 		var ms = [];
 		$('#media_browser .media-select').each(function() {
-				ms.push({name: $(this).find('img').attr('alt'), href: $(this).attr('href')});
+				var $t = $(this);
+				ms.push({id: $t.data('mid'), name: $t.find('img').attr('alt'), href: $t.attr('href')});
 			})
 			.removeClass('media-select');
 		$('#media_btn_delete, #media_btn_select').addClass('p-hidden');
