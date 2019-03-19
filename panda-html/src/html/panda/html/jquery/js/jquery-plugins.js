@@ -868,6 +868,16 @@ jQuery.jcookie = function(name, value, options) {
 		});
 	};
 })(jQuery);
+(function($) {
+	$.fn.changeValue = function(v) {
+		var o = this.val();
+		
+		this.val(v);
+		if (o != v) {
+			this.trigger('change');
+		}
+	};
+})(jQuery);
 /**
  * jQuery Editable Select
  * Indri Muska <indrimuska@gmail.com>
