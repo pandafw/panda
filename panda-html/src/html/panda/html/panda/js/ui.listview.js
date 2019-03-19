@@ -268,9 +268,9 @@ function _plv_selectRow(tr, c) {
 
 function _plv_toggleRow($tr, ts) {
 	var $lv = $tr.closest("div.p-lv");
-	if ($lv.data('singleSelect') == "true") {
+	if ($lv.data('singleSelect')) {
 		if ($tr.hasClass("p-lv-selected")) {
-			if (ts || !($lv.data("untoggleSelect") == "true")) {
+			if (ts || !$lv.data("untoggleSelect")) {
 				_plv_selectRow($tr, false);
 			}
 		}
