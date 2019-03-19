@@ -70,7 +70,7 @@
 
 	${s}@p.listview id="${action.name}_${gen.trimUiName(ui.name)}" action="./${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-		headPager="true" singleSelect="true" toggleSelect="false"
+		headPager="true" singleSelect="true" untoggleSelect="true"
 		cssClass="p-lv-clickable" cssTable="table-hover table-striped"
 		onrowclick="$.popup().callback(plv_getRowData(this));"
 	/>
