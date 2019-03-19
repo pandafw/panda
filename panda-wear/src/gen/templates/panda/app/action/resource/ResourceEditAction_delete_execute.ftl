@@ -25,7 +25,7 @@
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
-	<@p.form cssClass="p-sform" id="resource" focusme="true" method="post" theme="bs3h">
+	<@p.form cssClass="p-sform" id="resource" method="post">
 	<#if a.displayField("id")>
 			<@p.viewfield
 				key="id"

@@ -19,15 +19,15 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if r?? && a.canAccessData("./print", r)><li><@p.a action="./print" icon="icon-print" label="#(btn-print)" target="_blank"><@p.param name="id" value="%{r.id}"/></@p.a>
-</li></#if><#if a.canAccess("./add")><li><@p.a action="./add" icon="icon-new" label="#(btn-new)"/>
+<#if a.canAccess("./add")><li><@p.a action="./add" icon="icon-new" label="#(btn-new)"/>
+</li></#if><#if r?? && a.canAccessData("./print", r)><li><@p.a action="./print" icon="icon-print" label="#(btn-print)" target="_blank"><@p.param name="id" value="%{r.id}"/></@p.a>
 </li></#if><#if a.canAccess("./list")><li><@p.a action="./list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
-	<@p.form cssClass="p-sform" id="media" focusme="true" method="post" theme="bs3h">
+	<@p.form cssClass="p-sform" id="media" method="post">
 	<#if a.displayField("id")>
 			<@p.viewfield
 				key="id"

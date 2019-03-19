@@ -19,7 +19,7 @@
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
-	<@p.form cssClass="p-vform" id="property" theme="bs3h">
+	<@p.form cssClass="p-vform" id="property">
 	<#if a.displayField("id")>
 			<@p.viewfield
 				key="id"
