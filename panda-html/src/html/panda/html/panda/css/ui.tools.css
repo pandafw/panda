@@ -75,6 +75,18 @@
 	                                not supported by any browser */
 }
 
+.p-frame {
+	margin: 5px;
+	padding: 5px;
+	border: solid 1px #ccc;
+}
+.p-frame-radius {
+	margin: 5px;
+	padding: 5px;
+	border: solid 1px #ccc;
+	border-radius: 5px;
+}
+
 .p-corner {
 	border: solid 1px #eee;
 	border-radius: 20px;
