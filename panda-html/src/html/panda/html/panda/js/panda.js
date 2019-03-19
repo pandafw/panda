@@ -3502,14 +3502,17 @@ if (typeof(panda) == "undefined") { panda = {}; }
 panda.viewfield = function(o) {
 	var api = {
 		el: $(o),
-		val: function(v) {
+		val: function(v, t) {
 			if (typeof(v) == 'undefined') {
 				return this.el.val();
 			}
-			else {
-				this.el.val(v).next('.p-viewfield').text(v == '' ? '\u3000' : v);
-				return this;
+
+			var o = this.el.val();
+			this.el.val(v).next('.p-viewfield').text(v == '' ? '\u3000' : v);
+			if (t && o != v) {
+				this.el.trigger('change');
 			}
+			return this;
 		}
 	};
 	
