@@ -2147,7 +2147,7 @@ jQuery.jcookie = function(name, value, options) {
 
 		__align(c, $pc.parent(), true);
 		
-		$pc.hide().removeClass('ui-popup-opacity0').slideDown('fast');
+		$pc.hide().removeClass('ui-popup-opacity0').slideDown('fast', c.onpopup);
 		
 		__shadow();
 	}
@@ -2172,12 +2172,7 @@ jQuery.jcookie = function(name, value, options) {
 	
 		var $p = $("#" + c.id), $pc = $p.children(".ui-popup-content");
 
-		c = $.extend($p.data('popup'), {
-			silent: null,
-			target: null,
-			trigger: null,
-			callback: null
-		}, c);
+		c = $.extend($p.data('popup'), { slient: null, trigger: null }, c);
 
 		if (c.autoClear) {
 			c.loaded = null;
@@ -2206,14 +2201,15 @@ jQuery.jcookie = function(name, value, options) {
 				top : "-999999px",
 				left : "-999999px"
 			});
-		
-			c = $.extend($p.data('popup'), {
-				silent: null,
-				callback: null
-			}, c);
 
-			if (c.silent != true) {
+			c = $.extend($p.data('popup'), c);
+
+			if (c.silent !== true) {
 				__activeTarget($(c.target || c.trigger));
+			}
+
+			if (typeof(c.onhide) == 'function') {
+				c.onhide();
 			}
 		}
 		$('body').removeClass('ui-popop-over');
