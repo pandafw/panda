@@ -20,13 +20,13 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 
 	@Override
 	protected void render() throws IOException {
-		Attributes a = null;
+		Attributes a = new Attributes();
 
 		Object value = tag.getValue();
 		if (Iterators.isIterable(value)) {
 			for (Object item : Iterators.asIterable(value)) {
-				a = new Attributes();
-				a.type("hidden")
+				a.clear()
+				 .type("hidden")
 				 .id(tag)
 				 .name(tag)
 				 .disabled(tag)
@@ -35,8 +35,8 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 			}
 		}
 		else {
-			a = new Attributes();
-			a.type("hidden")
+			a.clear()
+			 .type("hidden")
 			 .id(tag)
 			 .name(tag)
 			 .disabled(tag)
@@ -44,8 +44,8 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 			xtag("input", a);
 		}
 		
-		a = new Attributes();
-		a.css(this, "p-viewfield")
+		a.clear()
+		 .css(this, "p-viewfield")
 		 .tooltip(tag)
 		 .commons(tag)
 		 .data("format", tag.getFormat())
