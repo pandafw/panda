@@ -32,6 +32,7 @@ public class FormRenderer extends AbstractTagRenderer<Form> {
 			.onreset(tag)
 			.addIfExists("hooked", tag.getHooked())
 			.addIfExists("loadmask", tag.getLoadmask())
+			.addIfExists("focusme", tag.getFocusme())
 			.cssStyle(tag)
 			.commons(tag)
 			.events(tag)

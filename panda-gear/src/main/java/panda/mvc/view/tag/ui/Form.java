@@ -56,7 +56,7 @@ public class Form extends UIBean {
 	protected String method;
 	protected String acceptcharset;
 
-	protected String focusElement;
+	protected String focusme;
 	
 	protected Boolean hooked;
 	protected Boolean loadmask;
@@ -84,8 +84,17 @@ public class Form extends UIBean {
 			action = urlbuilder.build();
 		}
 		
+		if (theme == null) {
+			theme = (String)context.getReq().get("theme");
+			if (Strings.isEmpty(theme)) {
+				theme = context.getText().getText("form-theme", "bs3h");
+			}
+		}
 		if (loadmask == null) {
-			loadmask = context.getText().getTextAsBoolean("form-load-mask");
+			loadmask = context.getText().getTextAsBoolean("form-loadmask");
+		}
+		if (focusme == null) {
+			focusme = context.getText().getText("form-focusme");
 		}
 		
 		if (labelClass == null) {
@@ -172,10 +181,10 @@ public class Form extends UIBean {
 	}
 
 	/**
-	 * @return the focusElement
+	 * @return the focusme
 	 */
-	public String getFocusElement() {
-		return focusElement;
+	public String getFocusme() {
+		return focusme;
 	}
 
 	/**
@@ -223,8 +232,8 @@ public class Form extends UIBean {
 		this.acceptcharset = acceptcharset;
 	}
 
-	public void setFocusElement(String focusElement) {
-		this.focusElement = focusElement;
+	public void setFocusme(String focusElement) {
+		this.focusme = focusElement;
 	}
 
 	/**
