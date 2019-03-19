@@ -233,12 +233,12 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		String f = null;
 		if (ui instanceof ListUI) {
 			f = ((ListUI)ui).getFocusme();
+			if (f == null) {
+				f = module.getProps().get("ui.input.focusme");
+			}
 		}
 		else if (ui instanceof InputUI) {
 			f = ((InputUI)ui).getFocusme();
-		}
-		if (f == null) {
-			f = module.getProps().get("ui.input.focusme");
 		}
 		if (Strings.isNotEmpty(f)) {
 			return " focusme=\"" + f + "\"";

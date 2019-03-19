@@ -222,7 +222,7 @@ public class TextGenerator extends AbstractCodeGenerator {
 			}
 			
 			if (Strings.isNotEmpty(action.getActionClass())) {
-				processLocaleAction(action, locale);
+				processLocaleAction(module, action, locale, null);
 				continue;
 			}
 
@@ -230,7 +230,7 @@ public class TextGenerator extends AbstractCodeGenerator {
 			for (Action a : module.getActionList()) {
 				if (action.getName().equals(a.getName())) {
 					action.setActionClass(a.getActionClass());
-					processLocaleAction(action, locale);
+					processLocaleAction(module, action, locale, a);
 					gened = true;
 				}
 			}
@@ -281,7 +281,7 @@ public class TextGenerator extends AbstractCodeGenerator {
 		}
 	}	
 	
-	protected void processLocaleAction(Action action, String locale) throws Exception {
+	protected void processLocaleAction(Module module, Action action, String locale, Action real) throws Exception {
 		print2("Processing text of action - " + action.getActionClass() + locale);
 
 		PrintWriter pwabp = null;
@@ -367,6 +367,20 @@ public class TextGenerator extends AbstractCodeGenerator {
 					}
 				}
 			}
+			
+			if (real != null && Strings.isEmpty(locale)) {
+				String focusme = module.getProps().getProperty("ui.input.focusme");
+				if (Strings.isNotEmpty(focusme)) {
+					for (InputUI inputui : real.getInputUIList()) {
+						if (Boolean.TRUE.equals(inputui.getGenerate())) {
+							saveProperty(pwabp, "form-focusme", focusme);
+							pwabp.print('\n');
+							break;
+						}
+					}
+				}
+			}
+			
 			pwabp.print('\n');
 			pwabp.flush();
 
