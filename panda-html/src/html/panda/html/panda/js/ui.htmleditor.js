@@ -30,13 +30,20 @@
 						tooltip: $n.data('mediaText') || 'Media Browser',
 						click: function() {
 							var url = $n.data('mediaHref');
-							var id = 'media_popup_' + url.hashCode();
+							var id = $n.data('mediaPopupId');
+							if (!id) {
+								id = ($n.attr('id') || $n.attr('name') || url.hashCode()) + '_media_popup';
+							}
 							$.popup({
 									id: id,
 									url: url
 								})
 								.show({
 									id: id,
+									trigger: this,
+									popover: true,
+									onpopup: null,
+									onhide: null,
 									callback: popup_callback
 								});
 						}
