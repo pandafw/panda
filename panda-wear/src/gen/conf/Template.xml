@@ -121,7 +121,7 @@
 	</resource>
 	<resource locale="ja">
 		<entity name="${entity.package}.Template">
-			<property name="name" label="名称"/>
+			<property name="name" label="ファイル名"/>
 			<property name="locale" label="言語・地域"/>
 			<property name="source" label="内容"/>
 		</entity>
@@ -129,7 +129,7 @@
 	</resource>
 	<resource locale="zh">
 		<entity name="${entity.package}.Template">
-			<property name="name" label="名称"/>
+			<property name="name" label="文件名"/>
 			<property name="locale" label="语言・地区"/>
 			<property name="source" label="内容"/>
 		</entity>

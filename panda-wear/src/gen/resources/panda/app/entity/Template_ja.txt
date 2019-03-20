@@ -1,4 +1,4 @@
-name=名称
+name=ファイル名
 
 locale=言語・地域
 
