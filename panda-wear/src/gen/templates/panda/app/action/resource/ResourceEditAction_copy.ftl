@@ -36,7 +36,6 @@
 				value="%{r.clazz}"
 				required="true"
 				maxlength="100"
-				size="60"
 			/>
 	</#if>
 	<#if a.displayField("locale")>
@@ -53,7 +52,7 @@
 				key="source"
 				value="%{r.source}"
 				maxlength="50000"
-				cols="60"
+				cols=""
 				rows="20"
 				cssClass="p-code"
 			/>

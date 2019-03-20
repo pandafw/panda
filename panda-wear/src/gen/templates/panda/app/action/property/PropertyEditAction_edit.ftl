@@ -37,7 +37,6 @@
 				value="%{r.clazz}"
 				required="true"
 				maxlength="100"
-				size="60"
 			/>
 	</#if>
 	<#if a.displayField("locale")>
@@ -55,7 +54,6 @@
 				value="%{r.name}"
 				required="true"
 				maxlength="50"
-				size="60"
 			/>
 	</#if>
 	<#if a.displayField("value")>
@@ -63,7 +61,7 @@
 				key="value"
 				value="%{r.value}"
 				maxlength="5000"
-				cols="60"
+				cols=""
 				rows="8"
 				cssClass="p-code"
 			/>
@@ -73,7 +71,7 @@
 				key="memo"
 				value="%{r.memo}"
 				maxlength="1000"
-				cols="60"
+				cols=""
 				rows="5"
 			/>
 	</#if>
