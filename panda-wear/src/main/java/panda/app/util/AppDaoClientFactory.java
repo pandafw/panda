@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import panda.app.constant.MVC;
 import panda.app.constant.SET;
+import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
 import panda.dao.gae.GaeDaoClient;
@@ -42,7 +43,7 @@ public class AppDaoClientFactory {
 	protected Settings settings;
 
 	@IocInject(value=MVC.DATA_QUERY_TIMEOUT, required=false)
-	protected int timeout;
+	protected int timeout = Dao.DEFAULT_TIMEOUT;
 	
 	protected DaoClient daoClient;
 	

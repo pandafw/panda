@@ -140,6 +140,8 @@ public class SqlDaoClient extends DaoClient {
 	 * @return a new dao instance
 	 */
 	public Dao getDao() {
-		return new SqlDao(this);
+		SqlDao dao = new SqlDao(this);
+		dao.setTimeout(getTimeout());
+		return dao;
 	}
 }

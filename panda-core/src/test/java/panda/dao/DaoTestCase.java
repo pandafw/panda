@@ -16,6 +16,7 @@ import panda.dao.entity.Student;
 import panda.dao.entity.Teacher;
 import panda.dao.query.DataQuery;
 import panda.lang.Exceptions;
+import panda.lang.Threads;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -44,15 +45,11 @@ public abstract class DaoTestCase {
 		}
 	}
 
-	protected void drop(Class clazz) {
-		dao.drop(clazz);
-	}
-
 	protected void init() {
-		drop(Score.class);
-		drop(Klass.class);
-		drop(Student.class);
-		drop(Teacher.class);
+		dao.drop(Score.class);
+		dao.drop(Klass.class);
+		dao.drop(Student.class);
+		dao.drop(Teacher.class);
 
 		dao.create(Teacher.class);
 		dao.create(Student.class);
@@ -627,5 +624,51 @@ public abstract class DaoTestCase {
 
 		Score actual2 = dao.fetch(Score.class, expect2);
 		Assert.assertNull(actual2);
+	}
+	
+	class TeacherTask implements Runnable {
+		public Exception error;
+
+		@Override
+		public void run() {
+			Dao dao = getDaoClient().getDao();
+			try {
+				int base = (int)Thread.currentThread().getId() * 1000;
+				for (int i = 0; i < 100; i++) {
+					Teacher t = Teacher.create(base + i);
+					log.debug("insert> " + t);
+					dao.insert(t);
+				}
+			}
+			catch (Exception e) {
+				log.error("error", e);
+				error = e;
+			}
+		}
+	}
+
+	@Test
+	public void testMultithreads() {
+		List<TeacherTask> ss = new ArrayList<TeacherTask>();
+		List<Thread> ts = new ArrayList<Thread>();
+		for (int i = 0; i < 5; i++) {
+			TeacherTask s = new TeacherTask();
+			ss.add(s);
+			
+			Thread t = new Thread(s);
+			ts.add(t);
+			log.debug("Start thread: " + t.getId());
+			t.start();
+		}
+		
+		for (Thread t : ts) {
+			Threads.safeJoin(t);
+		}
+		
+		for (TeacherTask s : ss) {
+			if (s.error != null) {
+				Assert.fail(Exceptions.getStackTrace(s.error));
+			}
+		}
 	}
 }

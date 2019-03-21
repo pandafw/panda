@@ -33,6 +33,7 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 			SqlDaoClient sdc = new SqlDaoClient();
 			try {
 				sdc.setDataSource(ds);
+				sdc.setTimeout(30);
 			}
 			catch (SQLException e) {
 				log.error("Failed to set data source", e);

@@ -27,6 +27,7 @@ public abstract class DaoClient {
 		entities = Entities.i();
 		castors = Castors.i();
 		beans = castors.getBeans();
+		timeout = Dao.DEFAULT_TIMEOUT;
 	}
 
 	/**

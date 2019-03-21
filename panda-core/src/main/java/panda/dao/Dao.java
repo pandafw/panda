@@ -14,6 +14,11 @@ import panda.dao.query.Query;
  */
 public interface Dao {
 	/**
+	 * default timeout: 1 hour
+	 */
+	public static final int DEFAULT_TIMEOUT = 3600;
+	
+	/**
 	 * @return the DaoClient
 	 */
 	DaoClient getDaoClient();

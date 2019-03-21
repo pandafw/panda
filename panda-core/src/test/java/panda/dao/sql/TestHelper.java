@@ -127,8 +127,8 @@ public class TestHelper {
 				ads.initialize(dps);
 
 				log.debug("Connect " + ads.getJdbc().getUrl() + " - " + ads.getJdbc().getUsername());
-				ads.getConnection();
-				
+				ads.getConnection().close();
+
 				ds = ads;
 			}
 			catch (Throwable e) {

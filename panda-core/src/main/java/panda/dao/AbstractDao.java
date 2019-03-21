@@ -34,6 +34,7 @@ public abstract class AbstractDao implements Dao {
 	
 	public AbstractDao(DaoClient daoClient) {
 		this.daoClient = daoClient;
+		timeout = DEFAULT_TIMEOUT;
 	}
 
 	/**
