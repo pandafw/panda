@@ -1,3 +1,5 @@
 title=メディア
 
 lbl-date=日付
+
+media-save-failed=メディアファイル(${top})の保存が失敗しました。

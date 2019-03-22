@@ -3,14 +3,20 @@ package panda.app.media;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import panda.app.entity.Media;
 import panda.dao.DaoTypes;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
+import panda.dao.entity.annotation.FK;
+import panda.dao.entity.annotation.ForeignKeys;
 import panda.dao.entity.annotation.PK;
 import panda.lang.Objects;
 import panda.mvc.annotation.validate.CastErrorValidate;
 import panda.mvc.validator.Validators;
 
+@ForeignKeys({
+	@FK(target=Media.class, fields={ "mid" }, onUpdate=FK.CASCADE, onDelete=FK.CASCADE)
+})
 public class MediaData {
 
 	/**
@@ -51,10 +57,11 @@ public class MediaData {
 	protected Integer msz;
 
 	@Column(notNull=true)
+	@Comment("file size")
 	protected Integer size;
 
 	@Column(type=DaoTypes.BLOB, notNull=true)
-	@Comment("media data")
+	@Comment("file data")
 	protected byte[] data;
 
 

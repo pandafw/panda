@@ -19,6 +19,7 @@ import com.google.appengine.tools.cloudstorage.RetryParams;
 
 import panda.app.constant.MVC;
 import panda.app.entity.Media;
+import panda.dao.Dao;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.io.FileNames;
@@ -125,7 +126,7 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public MediaData find(Media m, int sz) {
+	public MediaData find(Dao dao, Media m, int sz) {
 		byte[] data = null;
 		
 		GcsFilename gfn = toGcsFilename(m, sz);
@@ -180,7 +181,7 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 	}
 	
 	@Override
-	public void save(Media m) {
+	public void save(Dao dao, Media m) {
 		GcsFilename gfn = toGcsFilename(m, Medias.ORIGINAL);
 
 		try {
@@ -194,7 +195,7 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void delete(String... mids) {
+	public void delete(Dao dao, String... mids) {
 		if (Arrays.isEmpty(mids)) {
 			return;
 		}

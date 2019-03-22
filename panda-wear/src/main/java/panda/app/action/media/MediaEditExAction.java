@@ -3,7 +3,7 @@ package panda.app.action.media;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.entity.Media;
-import panda.app.media.MediaDataDaoStore;
+import panda.app.media.MediaDataStore;
 import panda.app.media.Medias;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
@@ -14,7 +14,7 @@ import panda.vfs.FileStores;
 public class MediaEditExAction extends MediaEditAction {
 
 	@IocInject
-	private MediaDataDaoStore mds;
+	private MediaDataStore mds;
 	
 	@Override
 	protected Media startInsert(Media data) {
@@ -28,14 +28,14 @@ public class MediaEditExAction extends MediaEditAction {
 	protected void insertData(Media data) {
 		super.insertData(data);
 
-		mds.save(data);
-		FileStores.safeDelete(data.getFile());
+		mds.save(getDao(), data);
 	}
 
 	@Override
-	protected void afterInsert(Media data) {
-		super.afterInsert(data);
+	protected void finalInsert(Media data) {
+		super.finalInsert(data);
 
+		FileStores.safeDelete(data.getFile());
 		data.setFile(null);
 	}
 
@@ -49,25 +49,25 @@ public class MediaEditExAction extends MediaEditAction {
 
 	@Override
 	protected int updateData(Media udat, Media sdat) {
+		int cnt = super.updateData(udat, sdat);
 		if (udat.getFile() != null && udat.getFile().isExists()) {
-			mds.save(udat);
-			FileStores.safeDelete(udat.getFile());
+			mds.save(getDao(), udat);
 		}
-		return super.updateData(udat, sdat);
+		return cnt;
 	}
 
 	@Override
-	protected void afterUpdate(Media data, Media sd) {
-		super.afterUpdate(data, sd);
+	protected void finalUpdate(Media data, Media sd) {
+		super.finalUpdate(data, sd);
 		
+		FileStores.safeDelete(data.getFile());
 		data.setFile(null);
 	}
 
 	@Override
-	protected void afterDelete(Media data) {
-		mds.delete(data);
-
-		super.afterDelete(data);
+	protected void deleteData(Media data) {
+		super.deleteData(data);
+		mds.delete(getDao(), data);
 	}
 
 }

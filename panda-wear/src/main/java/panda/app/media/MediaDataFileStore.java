@@ -7,6 +7,7 @@ import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.entity.Media;
 import panda.app.util.AppSettings;
+import panda.dao.Dao;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.io.FileNames;
@@ -57,7 +58,7 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 	}
 	
 	@Override
-	public MediaData find(Media m, int sz) {
+	public MediaData find(Dao dao, Media m, int sz) {
 		File dir = getDir(m.getId());
 		
 		File file = new File(dir, getName(m, sz));
@@ -107,7 +108,7 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void save(Media m) {
+	public void save(Dao dao, Media m) {
 		try {
 			File dir = getDir(m.getId());
 			Files.makeDirs(dir);
@@ -122,7 +123,7 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void delete(String... mids) {
+	public void delete(Dao dao, String... mids) {
 		if (Arrays.isEmpty(mids)) {
 			return;
 		}

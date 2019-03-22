@@ -1,16 +1,17 @@
 package panda.app.media;
 
 import panda.app.entity.Media;
+import panda.dao.Dao;
 import panda.lang.Arrays;
 
 public abstract class AbstractMediaDataStore implements MediaDataStore {
 	@Override
-	public MediaData find(Media m) {
-		return find(m, Medias.ORIGINAL);
+	public MediaData find(Dao dao, Media m) {
+		return find(dao, m, Medias.ORIGINAL);
 	}
 
 	@Override
-	public void delete(Media... ms) {
+	public void delete(Dao dao, Media... ms) {
 		if (Arrays.isEmpty(ms)) {
 			return;
 		}
@@ -20,6 +21,6 @@ public abstract class AbstractMediaDataStore implements MediaDataStore {
 			ids[i] = ms[i].getId();
 		}
 
-		delete(ids);
+		delete(dao, ids);
 	}
 }

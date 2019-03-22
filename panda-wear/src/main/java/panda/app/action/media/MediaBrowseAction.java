@@ -17,7 +17,6 @@ import panda.app.media.MediaData;
 import panda.app.media.MediaDataStore;
 import panda.app.media.Medias;
 import panda.dao.Dao;
-import panda.dao.entity.EntityDao;
 import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.ioc.annotation.IocInject;
@@ -143,14 +142,19 @@ public class MediaBrowseAction extends AbstractAction {
 			return null;
 		}
 
-		Map<String, Object> r = new HashMap<String, Object>();
+		final Map<String, Object> r = new HashMap<String, Object>();
 
-		EntityDao<Media> edao = getDaoClient().getEntityDao(Media.class);
-		for (String id : ids) {
+		final Dao dao = getDaoClient().getDao();
+		for (final String id : ids) {
 			try {
-				edao.delete(id);
-				mds.delete(id);
-				r.put(id, true);
+				dao.exec(new Runnable() {
+					@Override
+					public void run() {
+						dao.delete(Media.class, id);
+						mds.delete(dao, id);
+						r.put(id, true);
+					}
+				});
 			}
 			catch (Exception e) {
 				log.warn("Failed to delete media " + id, e);
@@ -174,25 +178,37 @@ public class MediaBrowseAction extends AbstractAction {
 		
 		if (Arrays.isNotEmpty(files)) {
 			final Dao dao = getDaoClient().getDao();
-			dao.exec(new Runnable() {
-				@Override
-				public void run() {
-					for (FileItem fi : files) {
-						if (fi != null && fi.isExists()) {
-							Media m = new Media();
-							m.setFile(fi);
-							Medias.setFileMeta(m);
-							assist().setCreatedByFields(m);
-							dao.insert(m);
-							mds.save(m);
-							
-							FileStores.safeDelete(fi);
-							m.setFile(null);
-							medias.add(m);
+			for (final FileItem fi : files) {
+				if (fi != null && fi.isExists()) {
+					try {
+						dao.exec(new Runnable() {
+							@Override
+							public void run() {
+								Media m = new Media();
+								m.setFile(fi);
+								Medias.setFileMeta(m);
+								assist().setCreatedByFields(m);
+								dao.insert(m);
+								mds.save(dao, m);
+
+								m.setFile(null);
+								medias.add(m);
+							}
+						});
+					}
+					catch (Exception e) {
+						log.error("Failed to save media " + fi.getName(), e);
+						String msg = getText("media-save-failed", "Failed to save media file ${top}.", FileNames.getName(fi.getName()));
+						if (getContext().isAppDebug()) {
+							msg += "\n" + e.getMessage();
 						}
+						addActionWarning(msg);
+					}
+					finally {
+						FileStores.safeDelete(fi);
 					}
 				}
-			});
+			}
 		}
 		return medias;
 	}
@@ -211,11 +227,11 @@ public class MediaBrowseAction extends AbstractAction {
 				
 				MediaData md = null;
 				if (sc == null) {
-					md = mds.find(m);
+					md = mds.find(dao, m);
 				}
 				else {
 					sz = getSettings().getPropertyAsInt(sc, sz);
-					md = mds.find(m, sz); 
+					md = mds.find(dao, m, sz); 
 				}
 				if (md != null) {
 					write(m, md, maxage);

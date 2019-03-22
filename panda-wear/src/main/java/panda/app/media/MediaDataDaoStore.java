@@ -4,11 +4,9 @@ import java.io.IOException;
 
 import panda.app.entity.Media;
 import panda.dao.Dao;
-import panda.dao.DaoClient;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.log.Log;
@@ -18,13 +16,8 @@ import panda.log.Logs;
 public class MediaDataDaoStore extends AbstractMediaDataStore {
 	private static final Log log = Logs.getLog(MediaDataDaoStore.class);
 
-	@IocInject
-	private DaoClient daoClient;
-
 	@Override
-	public MediaData find(Media m, int sz) {
-		Dao dao = daoClient.getDao();
-
+	public MediaData find(Dao dao, Media m, int sz) {
 		MediaData md = dao.fetch(MediaData.class, m.getId(), sz);
 		if (md == null && sz != Medias.ORIGINAL) {
 			MediaData mo = dao.fetch(MediaData.class, m.getId(), Medias.ORIGINAL);
@@ -54,10 +47,8 @@ public class MediaDataDaoStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void save(Media m) {
+	public void save(Dao dao, Media m) {
 		try {
-			Dao dao = daoClient.getDao();
-
 			MediaData md = new MediaData();
 			md.setMid(m.getId());
 			md.setMsz(Medias.ORIGINAL);
@@ -71,14 +62,12 @@ public class MediaDataDaoStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void delete(String... mids) {
+	public void delete(Dao dao, String... mids) {
 		if (Arrays.isEmpty(mids)) {
 			return;
 		}
 		
 		try {
-			Dao dao = daoClient.getDao();
-
 			MediaDataQuery mdq = new MediaDataQuery();
 			mdq.mid().in(mids);
 			dao.deletes(mdq);

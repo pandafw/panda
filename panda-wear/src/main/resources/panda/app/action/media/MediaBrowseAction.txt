@@ -3,3 +3,5 @@ icon=fa fa-picture-o
 title=Media
 
 lbl-date=Date
+
+media-save-failed=Failed to save media file ${top}.
