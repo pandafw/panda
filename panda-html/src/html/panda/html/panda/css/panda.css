@@ -911,7 +911,7 @@ tbody.p-lv-tbody > tr > td:first-child {
 .p-dblock		{ display: block; }
 .p-dinline		{ display: inline; }
 .p-diblock		{ display: inline-block; }
-.p-hidden		{ display: none; }
+.p-hidden, input[type="file"].p-hidden { display: none; }
 .p-dispear		{ position: absolute; top: -999999px; left: -999999px; }
 
 .p-opacity0		{ opacity: 0; filter: Alpha(Opacity=0); }
@@ -1006,9 +1006,6 @@ tbody.p-lv-tbody > tr > td:first-child {
 .p-form input.form-control.p-has-trigger, 
 .p-form select.form-control.p-has-trigger {
 	padding-right: 20px;
-}
-.p-uploader-file, input.p-uploader-file, input[type="file"].p-uploader-file {
-	display: none;
 }
 .p-uploader-btn {
 	margin-right: 20px;

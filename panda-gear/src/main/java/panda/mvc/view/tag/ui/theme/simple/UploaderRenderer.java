@@ -11,19 +11,19 @@ import panda.lang.Collections;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.Uploader;
-import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
+import panda.mvc.view.tag.ui.theme.AbstractTagRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 import panda.net.URLBuilder;
 import panda.vfs.FileItem;
 
-public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
+public class UploaderRenderer extends AbstractTagRenderer<Uploader> {
 	public UploaderRenderer(RenderingContext context) {
 		super(context);
 	}
 
 	@Override
-	protected void render() throws IOException {
+	public void renderStart() throws IOException {
 		Attributes attr = new Attributes();
 		
 		String pul = tag.getUploadLink();
@@ -53,16 +53,17 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		}
 		stag("div", attr);
 
-		Attributes a = new Attributes();
-		a.type("file").css(this, "p-uploader-file");
-		a.add("name", "")
-		 .add("value", "")
-		 .disabled(tag)
-		 .size(tag)
-		 .accept(tag)
-		 .multiple(tag)
-		 .tabindex(tag);
-		xtag("input", a);
+		attr.clear()
+			.type("file")
+			.css(this, "p-uploader-file p-hidden")
+			.add("name", "")
+			.add("value", "")
+			.disabled(tag)
+			.size(tag)
+			.accept(tag)
+			.multiple(tag)
+			.tabindex(tag);
+		xtag("input", attr);
 
 		if (!(tag.isReadonly() || tag.isDisabled())) {
 			write("<a class=\"btn btn-sm btn-default p-uploader-btn\">");
@@ -96,7 +97,10 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 				writeFileItem(fi, pdn, pdl, pdd);
 			}
 		}
-		
+	}
+	
+	@Override
+	public void renderEnd() throws IOException {
 		etag("div");
 	}
 	

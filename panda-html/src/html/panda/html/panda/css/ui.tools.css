@@ -42,7 +42,7 @@
 .p-dblock		{ display: block; }
 .p-dinline		{ display: inline; }
 .p-diblock		{ display: inline-block; }
-.p-hidden		{ display: none; }
+.p-hidden, input[type="file"].p-hidden { display: none; }
 .p-dispear		{ position: absolute; top: -999999px; left: -999999px; }
 
 .p-opacity0		{ opacity: 0; filter: Alpha(Opacity=0); }

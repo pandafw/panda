@@ -3238,14 +3238,16 @@ panda.meta_props = function() {
 		var $uf = $u.children('.p-uploader-file');
 		var $ub = $u.children('.p-uploader-btn');
 		var $us = $u.children('.p-uploader-sep');
+		var $ue = $u.children('.p-uploader-error');
 
 		var $up = $('<div class="p-uploader-progress progress progress-striped" style="display: none"><div class="progress-bar progress-bar-info" style="width: 0%"></div></div>');
 		$up.insertAfter($ub.length > 0 ? $ub : $uf);
 
-		var $ue = $('<div class="p-uploader-error"></div>');
-		$ue.insertAfter($up);
-
-		if ($us.length) {
+		if ($ue.length < 1) {
+			$ue = $('<div class="p-uploader-error"></div>').insertAfter($up);
+		}
+		
+		if ($us.length < 1) {
 			$us = $('<div class="p-uploader-sep"></div>').insertAfter($ue);
 		}
 
@@ -3312,15 +3314,15 @@ panda.meta_props = function() {
 		
 		function _remove() {
 			$(this).closest('.p-uploader-item').fadeOut(function() { $(this).remove(); });
-			$ue.hide().empty();
+			$ue.empty();
 		}
 
 		function _start_upload() {
 			loading = true;
 			progress = 0;
 
-			$ub.length ? $ub.hide() : $uf.hide();
-			$ue.hide().empty();
+			($ub.length ? $ub : $uf).addClass('p-hidden');
+			$ue.empty();
 
 			_set_progress(0);
 			$up.show();
@@ -3344,7 +3346,7 @@ panda.meta_props = function() {
 			_set_progress(100);
 			$up.hide();
 			$uf.val("");
-			$ub.length ? $ub.show() : $uf.show();
+			($ub.length ? $ub : $uf).removeClass('p-hidden');
 			loading = false;
 		}
 
@@ -3360,6 +3362,8 @@ panda.meta_props = function() {
 			_end_upload();
 
 			if (d.success) {
+				$ue.palert('actionError', d);
+
 				if (_on_success_uploaded(d)) {
 					return;
 				}
@@ -3380,14 +3384,12 @@ panda.meta_props = function() {
 			}
 			else {
 				$ue.palert('actionError', d);
-				$ue.slideDown();
 			}
 		}
 
 		function _upload_on_error(xhr, status, e) {
 			_end_upload();
 			$ue.palert('error', (e ? (e + "").escapePhtml() : (xhr ? xhr.responseText : status)));
-			$ue.slideDown();
 		}
 		
 		function _upload_on_change() {
@@ -3463,7 +3465,7 @@ panda.meta_props = function() {
 		}
 
 		// event handler
-		$uf.change(function() { 
+		$uf.change(function() {
 			setTimeout(_upload_on_change, 10);
 		});
 		
