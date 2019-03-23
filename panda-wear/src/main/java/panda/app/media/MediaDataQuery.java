@@ -28,8 +28,8 @@ public class MediaDataQuery extends EntityQuery<MediaData, MediaDataQuery> {
 	/**
 	 * @return condition of mid
 	 */
-	public ComparableCondition<MediaDataQuery, String> mid() {
-		return new ComparableCondition<MediaDataQuery, String>(this, MediaData.MID);
+	public ComparableCondition<MediaDataQuery, Long> mid() {
+		return new ComparableCondition<MediaDataQuery, Long>(this, MediaData.MID);
 	}
 
 	/**

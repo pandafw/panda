@@ -25,8 +25,19 @@
 	background-color: #6495ED;
 }
 #media_uploader {
-	display: none;
 	margin: 10px 0;
+	min-height: 400px;
+}
+#media_uploader.p-uploader-draggable {
+	padding: 0;
+	outline: 0;
+}
+#media_uploader.p-uploader-dragover {
+	outline: 2px dashed #ccc;
+	outline-offset: 10px;
+}
+#media_uploader .p-uploader-btn {
+	display: none;
 }
 #media_browser {
 	margin: 15px 0;
@@ -72,8 +83,8 @@
 			/>
 		
 		<div id="media_tool" class="form-group">
-			<@p.a id="media_btn_upload" btn="default" icon="upload" label="#(btn-upload)"/>
-			<@p.a id="media_btn_delete" btn="warning" icon="trash" label="#(btn-delete)" cssClass="p-hidden"/>
+			<@p.a id="media_btn_upload" btn="default" icon="upload" title="#(btn-upload)"/>
+			<@p.a id="media_btn_delete" btn="warning" icon="trash" title="#(btn-delete)" cssClass="p-hidden"/>
 			<@p.a id="media_btn_select" btn="primary" icon="select" label="#(btn-select)" cssClass="p-hidden"/>
 		</div>
 	</@p.form>
@@ -87,14 +98,16 @@
 		uploadAction="./uploads"
 		uploadName="files"
 		dataOnUploaded="media_on_uploaded"
-	/>
-	
-	<div id="media_browser">
-		<div id="media_end"></div>
-	</div>
+	>
+		<div class="p-uploader-error"></div>
+		<div id="media_browser">
+			<div id="media_end"></div>
+		</div>
+	</@p.uploader>
 </div>
 
 <script type="text/javascript">
+	var media_active = null;
 	var media_method = '${methodName!}';
 	var media_base = '';
 	var media_date_format = '';
@@ -118,7 +131,7 @@
 
 		$('#media_btn_upload').click(function(e) {
 			e.preventDefault();
-			$('#media_uploader').slideToggle();
+			$('#media_uploader .p-uploader-btn').trigger('click');
 		});
 		$('#media_btn_delete').click(function(e) {
 			e.preventDefault();
@@ -159,11 +172,31 @@
 			$('#media_btn_select').addClass('p-hidden');
 			$('#media_browser .media-select').removeClass('media-select');
 			$t.addClass('media-select');
-			var s = { id: $t.data('mid'), name: $t.find('img').attr('alt'), href: $t.attr('href') };
+			var s = {
+				id: $t.data('mid'),
+				slug: $t.data('slug'),
+				name: $t.find('img').attr('alt'),
+				href: $t.attr('href')
+			};
 			$.popup().callback(s);
 		}
 		else {
-			$t.toggleClass('media-select');
+			if (e.shiftKey) {
+				var s = $t.hasClass('media-select') ? 'removeClass' : 'addClass';
+				var d = (media_active || $('#media_browser a.media-thumb:first')).data('mid');
+				var m = $t.data('mid') > d ? 'next' : 'prev';
+				for (var $n = $t; $n.size(); $n = $n[m]()) {
+					$n[s]('media-select');
+					if ($n.data('mid') == d) {
+						break;
+					}
+				}
+			}
+			else {
+				media_active = $t;
+				$t.toggleClass('media-select');
+			}
+
 			var i = $('#media_browser .media-select').size() ? 'removeClass' : 'addClass';
 			$('#media_btn_delete')[i]('p-hidden');
 			if (media_method == 'browse_popup') {
@@ -190,12 +223,13 @@
 
 	function media_create(m) {
 		return $('<a class="media-thumb img-thumbnail" href="#">')
-			.append($('<img src="' + media_base + 'thumb/' + m.id + '"/>').attr('alt', m.name))
+			.append($('<img src="' + media_base + 'thumb/' + m.slug + '"/>').attr('alt', m.name))
 			.attr({
-				'href': media_base + 'media/' + m.id,
+				'href': media_base + 'media/' + m.slug,
 				'title': media_title(m)
 			})
 			.data('mid', m.id)
+			.data('slug', m.slug)
 			.click(media_on_click);
 	}
 	
@@ -232,10 +266,16 @@
 		var ms = [];
 		$('#media_browser .media-select').each(function() {
 				var $t = $(this);
-				ms.push({id: $t.data('mid'), name: $t.find('img').attr('alt'), href: $t.attr('href')});
+				ms.push({
+					id: $t.data('mid'),
+					slug: $t.data('slug'),
+					name: $t.find('img').attr('alt'),
+					href: $t.attr('href')
+				});
 			})
 			.removeClass('media-select');
 		$('#media_btn_delete, #media_btn_select').addClass('p-hidden');
+		media_active = null;
 		$.popup().callback(ms);
 	}
 	
@@ -252,10 +292,7 @@
 			data: ps,
 			dataType: 'json',
 			success: function(d) {
-				if (!d.success) {
-					media_action_error(d);
-					return;
-				}
+				media_action_error(d);
 
 				if (d.result) {
 					$('#media_browser .media-select').each(function() {
@@ -268,6 +305,7 @@
 				if ($('#media_browser .media-select').size() == 0) {
 					$('#media_btn_delete, #media_btn_select').addClass('p-hidden');
 				}
+				media_active = null;
 				media_lightbox();
 			},
 			error: media_ajax_error,
@@ -278,7 +316,7 @@
 	function media_search(last) {
 		var ps = $('#media_form').serializeArray();
 		if (last) {
-			ps.push({ name: 'sn', value: last });
+			ps.push({ name: 'si', value: last });
 		}
 		
 		media_ajax_start();
@@ -313,8 +351,8 @@
 	function media_on_scroll() {
 		var $w = $(window);
 		if (media_has_next && !media_loading && $w.scrollTop() + $w.height() > $("#media_end").offset().top) {
-			var sn = $('#media_browser a.media-thumb:last').data('mid');
-			media_search(sn);
+			var mid = $('#media_browser a.media-thumb:last').data('mid');
+			media_search(mid);
 		}
 	}
 

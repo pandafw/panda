@@ -12,7 +12,5 @@ public interface MediaDataStore {
 
 	public void save(Dao dao, Media m);
 	
-	public void delete(Dao dao, String... mid);
-
 	public void delete(Dao dao, Media... m);
 }

@@ -18,11 +18,12 @@ import panda.vfs.FileItem;
 @Indexes({
 	@Index(name="CA", fields={ "createdAt" }),
 	@Index(name="NAME", fields={ "name" }),
-	@Index(name="TAG", fields={ "tag" })
+	@Index(name="TAG", fields={ "tag" }),
+	@Index(name="S", fields={ "slug" }, unique=true)
 })
 public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = -924712325L;
+	private static final long serialVersionUID = -125232196L;
 
 	/**
 	 * Constructor
@@ -35,6 +36,7 @@ public class Media extends CUBean implements Serializable {
 	 * Constants
 	 *----------------------------------------------------------------------*/
 	public static final String ID = "id";
+	public static final String SLUG = "slug";
 	public static final String TAG = "tag";
 	public static final String NAME = "name";
 	public static final String SIZE = "size";
@@ -44,6 +46,7 @@ public class Media extends CUBean implements Serializable {
 
 	public static final String[] _COLUMNS_ = new String[] {
 			ID,
+			SLUG,
 			TAG,
 			NAME,
 			SIZE,
@@ -57,7 +60,10 @@ public class Media extends CUBean implements Serializable {
 	 * Properties
 	 *----------------------------------------------------------------------*/
 	@Id
-	protected String id;
+	protected Long id;
+
+	@Column(size=32, notNull=true)
+	protected String slug;
 
 	@Column(size=10)
 	protected String tag;
@@ -83,15 +89,30 @@ public class Media extends CUBean implements Serializable {
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
+	public Long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
-		this.id = panda.lang.Strings.stripToNull(id);
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the slug
+	 */
+	public String getSlug() {
+		return slug;
+	}
+
+	/**
+	 * @param slug the slug to set
+	 */
+	public void setSlug(String slug) {
+		this.slug = panda.lang.Strings.stripToNull(slug);
 	}
 
 	/**
@@ -192,6 +213,7 @@ public class Media extends CUBean implements Serializable {
 	 */
 	public void copy(Media src) {
 		this.id = src.id;
+		this.slug = src.slug;
 		this.tag = src.tag;
 		this.name = src.name;
 		this.size = src.size;
@@ -254,6 +276,7 @@ public class Media extends CUBean implements Serializable {
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append(ID, id)
+				.append(SLUG, slug)
 				.append(TAG, tag)
 				.append(NAME, name)
 				.append(SIZE, size)

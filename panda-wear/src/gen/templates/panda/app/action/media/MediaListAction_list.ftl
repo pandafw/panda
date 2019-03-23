@@ -102,12 +102,24 @@
 			"display": a.displayField("id"),
 			"filterable": a.filterField("id"),
 			"filter": {
-				"type": "string"
+				"type": "number"
 			},
 			"hidden": false,
 			"link": true,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("id")
+		}, {
+			"name" : "slug",
+			"header": a.getFieldLabel("slug"),
+			"display": a.displayField("slug"),
+			"filterable": a.filterField("slug"),
+			"filter": {
+				"type": "string"
+			},
+			"hidden": false,
+			"link": true,
+			"sortable": true,
+			"tooltip": a.getFieldTooltip("slug")
 		}, {
 			"name" : "tag",
 			"header": a.getFieldLabel("tag"),

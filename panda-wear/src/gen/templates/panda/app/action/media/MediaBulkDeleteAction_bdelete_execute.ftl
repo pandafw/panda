@@ -39,6 +39,13 @@
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("id")
 		}, {
+			"name": "slug",
+			"header": a.getFieldLabel("slug"),
+			"display": a.displayField("slug"),
+			"hidden": false,
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("slug")
+		}, {
 			"name": "tag",
 			"header": a.getFieldLabel("tag"),
 			"display": a.displayField("tag"),

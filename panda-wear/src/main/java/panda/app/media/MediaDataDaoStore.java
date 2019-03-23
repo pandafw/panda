@@ -1,6 +1,8 @@
 package panda.app.media;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import panda.app.entity.Media;
 import panda.dao.Dao;
@@ -62,12 +64,23 @@ public class MediaDataDaoStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void delete(Dao dao, String... mids) {
-		if (Arrays.isEmpty(mids)) {
+	public void delete(Dao dao, Media... ms) {
+		if (Arrays.isEmpty(ms)) {
+			return;
+		}
+
+		List<Long> mids = new ArrayList<Long>();
+		for (Media m : ms) {
+			if (m != null) {
+				mids.add(m.getId());
+			}
+		}
+		if (mids.isEmpty()) {
 			return;
 		}
 		
 		try {
+			
 			MediaDataQuery mdq = new MediaDataQuery();
 			mdq.mid().in(mids);
 			dao.deletes(mdq);

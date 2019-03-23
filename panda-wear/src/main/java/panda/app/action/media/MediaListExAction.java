@@ -12,6 +12,6 @@ public class MediaListExAction extends MediaListAction {
 		if (m == null || m.getSize() <= 0) {
 			return "";
 		}
-		return "<a href=\"view?id=" + m.getId() + "\"><img class=\"p-mwh32px\" src=\"icon/" + m.getId() + "\"></a>";
+		return "<a href=\"view/?id=" + m.getId() + "\"><img class=\"p-mwh32px\" src=\"icon/" + m.getSlug() + "\"></a>";
 	}
 }

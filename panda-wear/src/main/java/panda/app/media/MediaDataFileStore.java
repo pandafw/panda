@@ -45,9 +45,9 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 		return loc;
 	}
 
-	protected File getDir(String id) {
+	protected File getDir(Long id, String slug) {
 		String loc = getLocation();
-		String sub = Strings.leftPad(String.valueOf(Math.abs(id.hashCode()) % 10000), 4, '0') + '/' + id;
+		String sub = Strings.leftPad(String.valueOf(id % 10000), 4, '0') + '/' + slug;
 		return new File(loc, sub);
 	}
 	
@@ -59,7 +59,7 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 	
 	@Override
 	public MediaData find(Dao dao, Media m, int sz) {
-		File dir = getDir(m.getId());
+		File dir = getDir(m.getId(), m.getSlug());
 		
 		File file = new File(dir, getName(m, sz));
 		
@@ -110,7 +110,7 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 	@Override
 	public void save(Dao dao, Media m) {
 		try {
-			File dir = getDir(m.getId());
+			File dir = getDir(m.getId(), m.getSlug());
 			Files.makeDirs(dir);
 			
 			File file = new File(dir, getName(m, Medias.ORIGINAL));
@@ -123,19 +123,23 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void delete(Dao dao, String... mids) {
-		if (Arrays.isEmpty(mids)) {
+	public void delete(Dao dao, Media... ms) {
+		if (Arrays.isEmpty(ms)) {
 			return;
 		}
 
-		for (String mid : mids) {
+		for (Media m : ms) {
+			if (m == null) {
+				continue;
+			}
+			
+			File dir = getDir(m.getId(), m.getSlug());
 			try {
-				File dir = getDir(mid);
 				Files.deleteDir(dir);
 				dir.getParentFile().delete();
 			}
 			catch (Exception e) {
-				log.error("Failed to delete media data for [" + mid + "]", e);
+				log.error("Failed to delete media data for [" + dir + "]", e);
 			}
 		}
 	}

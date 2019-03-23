@@ -6,6 +6,7 @@ import panda.app.entity.Media;
 import panda.app.media.MediaDataStore;
 import panda.app.media.Medias;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Randoms;
 import panda.mvc.annotation.At;
 import panda.vfs.FileStores;
 
@@ -19,6 +20,7 @@ public class MediaEditExAction extends MediaEditAction {
 	@Override
 	protected Media startInsert(Media data) {
 		data = super.startInsert(data);
+		data.setSlug(Randoms.randUUID32());
 		data.setSize(0);
 		Medias.setFileMeta(data);
 		return data;
@@ -42,6 +44,7 @@ public class MediaEditExAction extends MediaEditAction {
 	@Override
 	protected Media startUpdate(Media data, Media sd) {
 		data = super.startUpdate(data, sd);
+		data.setSlug(sd.getSlug());
 		data.setSize(sd.getSize());
 		Medias.setFileMeta(data);
 		return data;

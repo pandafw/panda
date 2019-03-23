@@ -20,7 +20,8 @@ import panda.dao.Dao;
 import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.ioc.annotation.IocInject;
-import panda.lang.Arrays;
+import panda.lang.Collections;
+import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
@@ -48,37 +49,37 @@ public class MediaBrowseAction extends AbstractAction {
 		public Date ds;
 		public Date de;
 		public String qs;
-		public String sn;
+		public Long si;
 	}
 
 	@At("media/(.*)$")
-	public void media2(String id) throws Exception {
-		media(id);
+	public void media2(String slug) throws Exception {
+		media(slug);
 	}
 
 	@At("thumb/(.*)$")
-	public void thumb2(String id) throws Exception {
-		thumb(id);
+	public void thumb2(String slug) throws Exception {
+		thumb(slug);
 	}
 
 	@At("icon/(.*)$")
-	public void icon2(String id) throws Exception {
-		icon(id);
+	public void icon2(String slug) throws Exception {
+		icon(slug);
 	}
 
 	@At
-	public void media(@Param("id") String id) throws Exception {
-		find(id, null, 0);
+	public void media(@Param("slug") String slug) throws Exception {
+		find(slug, null, 0);
 	}
 
 	@At
-	public void thumb(@Param("id") String id) throws Exception {
-		find(id, SET.MEDIA_THUMB_SIZE, Medias.DEFAULT_THUMB_SIZE);
+	public void thumb(@Param("slug") String slug) throws Exception {
+		find(slug, SET.MEDIA_THUMB_SIZE, Medias.DEFAULT_THUMB_SIZE);
 	}
 
 	@At
-	public void icon(@Param("id") String id) throws Exception {
-		find(id, SET.MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
+	public void icon(@Param("slug") String slug) throws Exception {
+		find(slug, SET.MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
 	}
 
 	@At("")
@@ -116,10 +117,10 @@ public class MediaBrowseAction extends AbstractAction {
 		if (Strings.isNotEmpty(arg.qs)) {
 			mq.name().contains(arg.qs);
 		}
-		if (arg.sn != null) {
-			mq.id().lt(arg.sn);
+		if (arg.si != null) {
+			mq.id().lt(arg.si);
 		}
-		mq.orderBy(Media.ID, false);
+		mq.id().desc();
 		mq.limit(getMediaPageLimit());
 		
 		addFilters(mq);
@@ -137,28 +138,31 @@ public class MediaBrowseAction extends AbstractAction {
 	
 	@At
 	@To(Views.SJSON)
-	public Object deletes(final @Param("id") String[] ids) {
-		if (Arrays.isEmpty(ids)) {
+	public Object deletes(final @Param("id") List<Long> ids) {
+		if (Collections.isEmpty(ids)) {
 			return null;
 		}
 
-		final Map<String, Object> r = new HashMap<String, Object>();
-
 		final Dao dao = getDaoClient().getDao();
-		for (final String id : ids) {
+		MediaQuery mq = new MediaQuery();
+		mq.id().in(ids);
+		List<Media> ms = dao.select(mq);
+		
+		final Map<Long, Object> r = new HashMap<Long, Object>();
+		for (final Media m : ms) {
 			try {
 				dao.exec(new Runnable() {
 					@Override
 					public void run() {
-						dao.delete(Media.class, id);
-						mds.delete(dao, id);
-						r.put(id, true);
+						dao.delete(m);
+						mds.delete(dao, m);
 					}
 				});
+				r.put(m.getId(), true);
 			}
 			catch (Exception e) {
-				log.warn("Failed to delete media " + id, e);
-				r.put(id, e.getMessage());
+				log.warn("Failed to delete media " + m.getId(), e);
+				r.put(m.getId(), e.getMessage());
 			}
 		}
 		
@@ -173,10 +177,10 @@ public class MediaBrowseAction extends AbstractAction {
 	 */
 	@At
 	@To(Views.SJSON)
-	public List<Media> uploads(final @Param("files") FileItem[] files) {
+	public List<Media> uploads(final @Param("files") List<FileItem> files) {
 		final List<Media> medias = new ArrayList<Media>();
 		
-		if (Arrays.isNotEmpty(files)) {
+		if (Collections.isNotEmpty(files)) {
 			final Dao dao = getDaoClient().getDao();
 			for (final FileItem fi : files) {
 				if (fi != null && fi.isExists()) {
@@ -185,6 +189,7 @@ public class MediaBrowseAction extends AbstractAction {
 							@Override
 							public void run() {
 								Media m = new Media();
+								m.setSlug(Randoms.randUUID32());
 								m.setFile(fi);
 								Medias.setFileMeta(m);
 								assist().setCreatedByFields(m);
@@ -213,11 +218,14 @@ public class MediaBrowseAction extends AbstractAction {
 		return medias;
 	}
 
-	private void find(String id, String sc, int sz) throws IOException {
-		if (Strings.isNotEmpty(id)) {
+	protected void find(String slug, String sc, int sz) throws IOException {
+		if (Strings.isNotEmpty(slug)) {
 			Dao dao = getDaoClient().getDao();
-			Media m = dao.fetch(Media.class, id);
 
+			MediaQuery mq = new MediaQuery();
+			mq.slug().eq(slug);
+			
+			Media m = dao.fetch(mq);
 			if (m != null) {
 				int maxage = getSettings().getPropertyAsInt(SET.MEDIA_CACHE_MAXAGE, Medias.DEFAULT_CACHE_MAXAGE);
 
@@ -243,7 +251,7 @@ public class MediaBrowseAction extends AbstractAction {
 		getResponse().setStatus(HttpStatus.SC_NOT_FOUND);
 	}
 
-	private void write(Media m, MediaData md, int maxage) throws IOException {
+	protected void write(Media m, MediaData md, int maxage) throws IOException {
 		String filename = m.getName();
 		if (Strings.isEmpty(filename)) { 
 			filename = "media-" + m.getId() + ".jpg";

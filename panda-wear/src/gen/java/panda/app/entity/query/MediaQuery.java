@@ -29,8 +29,15 @@ public class MediaQuery extends CUQuery<Media, MediaQuery> {
 	/**
 	 * @return condition of id
 	 */
-	public StringCondition<MediaQuery> id() {
-		return new StringCondition<MediaQuery>(this, Media.ID);
+	public ComparableCondition<MediaQuery, Long> id() {
+		return new ComparableCondition<MediaQuery, Long>(this, Media.ID);
+	}
+
+	/**
+	 * @return condition of slug
+	 */
+	public StringCondition<MediaQuery> slug() {
+		return new StringCondition<MediaQuery>(this, Media.SLUG);
 	}
 
 	/**

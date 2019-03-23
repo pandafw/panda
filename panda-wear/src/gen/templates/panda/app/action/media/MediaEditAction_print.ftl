@@ -26,6 +26,12 @@
 				value="%{r.id}"
 			/>
 	</#if>
+	<#if a.displayField("slug")>
+			<@p.viewfield
+				key="slug"
+				value="%{r.slug}"
+			/>
+	</#if>
 	<#if a.displayField("tag")>
 			<@p.viewfield
 				key="tag"

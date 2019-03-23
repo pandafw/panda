@@ -81,10 +81,14 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 		this.prefix = prefix;
 	}
 
+	protected String getFilePath(Media m) {
+		return prefix + Strings.leftPad(String.valueOf(m.getId() % 10000), 4, '0') + '/' + m.getSlug() + '/';
+	}
+	
 	protected String getFileName(Media m, int sz) {
 		StringBuilder name = new StringBuilder();
 		
-		name.append(prefix).append(m.getId()).append('/');
+		name.append(getFilePath(m));
 		if (sz == Medias.ORIGINAL) {
 			name.append(m.getName());
 		}
@@ -195,15 +199,19 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 	}
 
 	@Override
-	public void delete(Dao dao, String... mids) {
-		if (Arrays.isEmpty(mids)) {
+	public void delete(Dao dao, Media... ms) {
+		if (Arrays.isEmpty(ms)) {
 			return;
 		}
 		
-		for (String mid : mids) {
+		for (Media m : ms) {
+			if (m == null) {
+				continue;
+			}
+			
 			try {
 				ListOptions.Builder lob = new ListOptions.Builder();
-				ListResult lr = gcsService.list(bucket, lob.setPrefix(prefix + mid + '/').setRecursive(true).build());
+				ListResult lr = gcsService.list(bucket, lob.setPrefix(getFilePath(m)).setRecursive(true).build());
 				while (lr.hasNext()) {
 					ListItem i = lr.next();
 
@@ -212,7 +220,7 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 				}
 			}
 			catch (Exception e) {
-				log.error("Failed to delete media data for [" + mid + "]", e);
+				log.error("Failed to delete media data for [" + m.getSlug() + "]", e);
 			}
 		}
 	}

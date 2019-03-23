@@ -1,3 +1,5 @@
+slug=Slug
+
 tag=Tag
 
 name=Media Name
