@@ -37,6 +37,7 @@ import panda.dao.query.Filter.SimpleFilter;
 import panda.dao.query.Filter.ValueFilter;
 import panda.dao.query.Operator;
 import panda.dao.query.Query;
+import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Iterators.SingleIterator;
 import panda.lang.Logical;
@@ -526,7 +527,13 @@ public class GaeDao extends AbstractDao {
 			if (fo == null) {
 				throw Exceptions.unsupported("GQL operator " + op + " is not supported by Google App Engine.");
 			}
-			return new FilterPredicate(column, fo, convertValueToGae(evc.getValue()));
+			
+			Object v = convertValueToGae(evc.getValue());
+			if (v != null && v instanceof Object[] && fo == FilterOperator.IN) {
+				// FilterOperator.IN does not support array type value
+				v = Arrays.asList((Object[])v);
+			}
+			return new FilterPredicate(column, fo, v);
 		}
 	}
 
