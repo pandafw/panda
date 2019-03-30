@@ -71,7 +71,7 @@
 }
 #lightbox-txt-prev, #lightbox-txt-next {
 	background-color: #fff;
-	display: block;
+	display: none;
 	font-family: "Courier New",sans-serif;
 	font-size: 22px;
 	line-height: 1;
@@ -80,6 +80,12 @@
 	top: 30%;
 	opacity: 0.8;
 	filter: Alpha(Opacity=80);
+}
+#lightbox-nav.lightbox-fixed #lightbox-btn-prev.lightbox-has-prev #lightbox-txt-prev, 
+#lightbox-nav.lightbox-fixed #lightbox-btn-next.lightbox-has-next #lightbox-txt-next,
+#lightbox-btn-prev.lightbox-has-prev:hover #lightbox-txt-prev, 
+#lightbox-btn-next.lightbox-has-next:hover #lightbox-txt-next {
+	display: block;
 }
 #lightbox-txt-prev {
 	float: left;

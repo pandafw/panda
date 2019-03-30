@@ -16,10 +16,11 @@
 
 		// Configuration related to navigation
 		fixedNavigation:		false,		// (boolean) Boolean that informs if the navigation (next and prev button) will be fixed or not in the interface.
+		loopNavigation:			false,		// (boolean) Boolean that loop the navigation.
 
 		// Configuration related to images
-		textBtnPrev:			'&lsaquo;',			// (string) the text of prev button
-		textBtnNext:			'&rsaquo;',			// (string) the text of next button
+		textBtnPrev:			'&lsaquo;',		// (string) the text of prev button
+		textBtnNext:			'&rsaquo;',		// (string) the text of next button
 		textBtnClose:			'&times;',		// (string) the text of close button
 
 		// Configuration related to container image box
@@ -104,8 +105,12 @@
 						+ '<div id="lightbox-imagebox">'
 							+ '<img id="lightbox-image">'
 							+ '<div style="" id="lightbox-nav">'
-								+ '<a href="#" id="lightbox-btn-prev"></a>'
-								+ '<a href="#" id="lightbox-btn-next"></a>'
+								+ '<a href="#" id="lightbox-btn-prev">'
+									+ '<span id="lightbox-txt-prev">' + settings.textBtnPrev + '</span>'
+								+ '</a>'
+								+ '<a href="#" id="lightbox-btn-next">'
+									+ '<span id="lightbox-txt-next">' + settings.textBtnNext + '</span>'
+								+ '</a>'
 							+ '</div>'
 							+ '<a href="#" id="lightbox-loading"></a>'
 						+ '</div>'
@@ -126,18 +131,20 @@
 			_on_resize();
 
 			// Assigning click events in elements to close overlay
-			$('#lightbox-overlay,#lightbox-lightbox').click(function() {
-				_finish();
-			});
+			$('#lightbox-overlay, #lightbox-lightbox').click(_finish);
 
 			// Assign the _finish function to lightbox-loading and lightbox-btn-close objects
-			$('#lightbox-loading,#lightbox-btn-close').click(function() {
-				_finish();
-				return false;
-			});
+			$('#lightbox-loading, #lightbox-btn-close').click(_finish);
+
+			// Assign the prev/next handler to prev/next button
+			$('#lightbox-btn-prev').click(_on_prev);
+			$('#lightbox-btn-next').click(_on_next);
 
 			// If window was resized, calculate the new overlay dimensions
 			$(window).bind('resize', _on_resize);
+
+			// Enable keyboard navigation
+			$(document).keydown(_keyboard_action);
 		}
 		
 		/**
@@ -146,21 +153,56 @@
 		function _on_resize() {
 			$('#lightbox-imagebox').css('line-height', ($('#lightbox-imagebox').innerHeight() - 2) + 'px');
 		}
+
+		/**
+		 * navigate to prev image
+		 */
+		function _on_prev() {
+			if (settings.images.length < 1) {
+				return true;
+			}
+			
+			if (settings.active > 0) {
+				settings.active--;
+				_set_image_to_view();
+				return false;
+			}
+			if (settings.loopNavigation) {
+				settings.active = settings.images.length - 1;
+				_set_image_to_view();
+				return false;
+			}
+		}
+
+		/**
+		 * navigate to next image
+		 */
+		function _on_next() {
+			if (settings.images.length < 1) {
+				return true;
+			}
+			
+			if (settings.active < settings.images.length - 1) {
+				settings.active++;
+				_set_image_to_view();
+				return false;
+			}
+			if (settings.loopNavigation) {
+				settings.active = 0;
+				_set_image_to_view();
+				return false;
+			}
+		}
 		
 		/**
 		 * Prepares image exibition; doing a image's preloader to calculate it's size
 		 */
-		function _set_image_to_view() { // show the loading
+		function _set_image_to_view() {
 			// Show the loading
 			$('#lightbox-loading').show();
-			if (settings.fixedNavigation) {
-				$('#lightbox-image,#lightbox-statusbox').hide();
-			}
-			else {
-				// Hide some elements
-				$('#lightbox-image,#lightbox-nav,#lightbox-btn-prev,#lightbox-btn-next,#lightbox-statusbox').hide();
-			}
-			
+			$('#lightbox-image, #lightbox-statusbox').hide();
+			$('#lightbox-nav')[settings.fixedNavigation ? 'addClass' : 'removeClass']('lightbox-fixed');
+
 			// Image preload process
 			var img = new Image();
 			img.onload = function() {
@@ -192,7 +234,7 @@
 		 * Show the image information
 		 */
 		function _show_image_data() {
-			if (settings.images.length > 1) {
+			if (settings.images.length > 0) {
 				$('#lightbox-image-caption').html(settings.images[settings.active][1]);
 				$('#lightbox-image-number').html(settings.txtImage + ' ' + ( settings.active + 1 ) + ' ' + settings.txtOf + ' ' + settings.images.length);
 			}
@@ -203,116 +245,37 @@
 		 * Display the button navigations
 		 */
 		function _set_navigation() {
-			$('#lightbox-nav').show();
-
-			$('#lightbox-btn-prev,#lightbox-btn-next').empty();
-			
 			// Show the prev button, if not the first image in set
-			if (settings.active > 0) {
-				var $p = $('#lightbox-btn-prev')
-					.html('<span id="lightbox-txt-prev">' + settings.textBtnPrev + '</span>')
-					.unbind()
-					.bind('click', function() {
-						settings.active--;
-						_set_image_to_view();
-						return false;
-					});
-
-				if (!settings.fixedNavigation) {
-					// Show the images button for Next buttons
-					$p.show()
-						.mouseenter(function() {
-							$(this).html('<span id="lightbox-txt-prev">' + settings.textBtnPrev + '</span>');
-						})
-						.mouseleave(function() {
-							$(this).empty();
-						});
-				}
-			}
+			$('#lightbox-btn-prev')[((settings.loopNavigation && settings.images.length > 1) || settings.active > 0) ? 'addClass' : 'removeClass']('lightbox-has-prev');
 			
 			// Show the next button, if not the last image in set
-			if (settings.active < settings.images.length - 1) {
-				var $n = $('#lightbox-btn-next')
-					.html('<span id="lightbox-txt-next">' + settings.textBtnNext + '</span>')
-					.unbind()
-					.bind('click',function() {
-						settings.active++;
-						_set_image_to_view();
-						return false;
-					});
-				if (!settings.fixedNavigation) {
-					// Show the images button for Next buttons
-					$n.show()
-						.mouseenter(function() {
-							$(this).html('<span id="lightbox-txt-next">' + settings.textBtnNext + '</span>');
-						})
-						.mouseleave(function() {
-							$(this).empty();
-						});
-				}
-			}
-
-			// Enable keyboard navigation
-			_enable_keyboard_navigation();
-		}
-
-		/**
-		 * Enable a support to keyboard navigation
-		 */
-		function _enable_keyboard_navigation() {
-			$(document).keydown(function(objEvent) {
-				_keyboard_action(objEvent);
-			});
-		}
-
-		/**
-		 * Disable the support to keyboard navigation
-		 */
-		function _disable_keyboard_navigation() {
-			$(document).unbind();
+			$('#lightbox-btn-next')[((settings.loopNavigation && settings.images.length > 1) || settings.active < settings.images.length - 1) ? 'addClass' : 'removeClass']('lightbox-has-next');
 		}
 
 		/**
 		 * Perform the keyboard actions
 		 */
-		function _keyboard_action(objEvent) {
-			// To ie
-			if (objEvent == null) {
-				keycode = event.keyCode;
-				escapeKey = 27;
-			// To Mozilla
-			}
-			else {
-				keycode = objEvent.keyCode;
-				escapeKey = objEvent.DOM_VK_ESCAPE;
-			}
+		function _keyboard_action(evt) {
+			evt = evt || event;
+			var keycode = evt.keyCode;
+			var escapeKey = evt.DOM_VK_ESCAPE || 27;
 
 			// Get the key in lower case form
 			key = String.fromCharCode(keycode).toLowerCase();
 
 			// Verify the keys to close the ligthBox
 			if (( key == settings.keyToClose ) || ( key == 'x' ) || ( keycode == escapeKey )) {
-				_finish();
+				return _finish();
 			}
 
 			// Verify the key to show the previous image
 			if (( key == settings.keyToPrev ) || ( keycode == 37 )) {
-				// If we're not showing the first image, call the previous
-				if (settings.active != 0) {
-					settings.active = settings.active - 1;
-					_set_image_to_view();
-					_disable_keyboard_navigation();
-				}
+				return _on_prev();
 			}
 
 			// Verify the key to show the next image
 			if (( key == settings.keyToNext ) || ( keycode == 39 )) {
-				// If we're not showing the last image, call the next
-				if (settings.active != ( settings.images.length - 1 )) {
-					settings.active = settings.active + 1;
-					_set_image_to_view();
-					_disable_keyboard_navigation();
-				}
+				return _on_next();
 			}
 		}
 
@@ -333,6 +296,7 @@
 		 * Remove jQuery lightbox plugin HTML markup
 		 */
 		function _finish() {
+			$(document).unbind('keydown', _keyboard_action);
 			$(window).unbind('resize', _on_resize);
 
 			$('#lightbox-lightbox').remove();
@@ -342,6 +306,7 @@
 			$('embed, object, select').css({ 'visibility' : 'visible' });
 
 			$('body').removeClass('lightbox-open');
+			return false;
 		}
 
 		// Return the jQuery object for chaining. The unbind method is used to avoid click conflict when the plugin is called more than once
