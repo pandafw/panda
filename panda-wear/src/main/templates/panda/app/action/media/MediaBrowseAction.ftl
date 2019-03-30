@@ -84,6 +84,7 @@
 		
 		<div id="media_tool" class="form-group">
 			<@p.a id="media_btn_upload" btn="default" icon="upload" title="#(btn-upload)"/>
+			<@p.a id="media_btn_slides" btn="default" icon="play" title="#(btn-slides)" cssClass="p-hidden"/>
 			<@p.a id="media_btn_delete" btn="warning" icon="trash" title="#(btn-delete)" cssClass="p-hidden"/>
 			<@p.a id="media_btn_select" btn="primary" icon="select" label="#(btn-select)" cssClass="p-hidden"/>
 		</div>
@@ -133,6 +134,10 @@
 			e.preventDefault();
 			$('#media_uploader .p-uploader-btn').trigger('click');
 		});
+		$('#media_btn_slides').click(function(e) {
+			e.preventDefault();
+			(media_active || $('#media_browser a.media-thumb:first')).trigger('dblclick');
+		});
 		$('#media_btn_delete').click(function(e) {
 			e.preventDefault();
 			media_delete();
@@ -153,7 +158,12 @@
 			setTimeout(media_lightbox, 100);
 			return;
 		}
-		$('#media_browser .media-thumb').lightbox({bindEvent: 'dblclick'});
+		var $ms = $('#media_browser .media-thumb');
+		$ms.lightbox({
+			fixedNavigation: ${((userAgent.mobile)!false)?c},
+			bindEvent: 'dblclick'
+		});
+		$('#media_btn_slides')[$ms.length ? 'removeClass' : 'addClass']('p-hidden');
 	}
 	
 	function media_set_method(m) {

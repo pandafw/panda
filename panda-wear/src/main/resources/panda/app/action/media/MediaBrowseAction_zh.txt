@@ -2,4 +2,6 @@ title=多媒体
 
 lbl-date=日期
 
+btn-slides=幻灯片
+
 media-save-failed=多媒体文件(${top})保存失敗。

@@ -4,4 +4,6 @@ title=Media
 
 lbl-date=Date
 
+btn-slides=Slideshow
+
 media-save-failed=Failed to save media file ${top}.
