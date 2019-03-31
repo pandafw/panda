@@ -28,7 +28,7 @@ import panda.net.mail.SmtpMailClient;
 import panda.vfs.FileItem;
 
 
-@At("${super_path}/sendmail")
+@At("${!!super_path|||'/super'}/sendmail")
 @Auth(AUTH.SUPER)
 @To(value=Views.SFTL, error=Views.SFTL)
 public class SendMailAction extends AbstractAction {

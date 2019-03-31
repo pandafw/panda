@@ -9,7 +9,7 @@ import panda.app.media.MediaDataStore;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 
-@At("${super_path}/media")
+@At("${!!super_path|||'/super'}/media")
 @Auth(AUTH.SUPER)
 public class MediaBulkDeleteExAction extends MediaBulkDeleteAction {
 

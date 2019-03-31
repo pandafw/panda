@@ -9,7 +9,7 @@ import panda.app.entity.Resource;
 import panda.dao.query.DataQuery;
 import panda.mvc.annotation.At;
 
-@At("${super_path}/resource")
+@At("${!!super_path|||'/super'}/resource")
 @Auth(AUTH.SUPER)
 public class ResourceBulkDisableExAction extends ResourceBulkDisableAction {
 

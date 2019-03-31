@@ -26,7 +26,7 @@ import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletResponser;
 import panda.servlet.ServletRequestHeaderMap;
 
-@At("${super_path}/html2pdf")
+@At("${!!super_path|||'/super'}/html2pdf")
 @Auth(AUTH.SUPER)
 public class Html2PdfAction extends AbstractAction {
 	private static final Log log = Logs.getLog(Html2PdfAction.class);

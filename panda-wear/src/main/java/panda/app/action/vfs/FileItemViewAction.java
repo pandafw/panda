@@ -9,7 +9,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.vfs.FileItem;
 
-@At("${super_path}/fileitem")
+@At("${!!super_path|||'/super'}/fileitem")
 @Auth(AUTH.SUPER)
 public class FileItemViewAction extends BaseTempFileAction {
 	/**

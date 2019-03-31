@@ -27,7 +27,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
 
-@At("${super_path}/sql")
+@At("${!!super_path|||'/super'}/sql")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class SqlExecuteAction extends AbstractAction {

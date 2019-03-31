@@ -38,7 +38,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.view.Views;
 import panda.servlet.HttpServletResponser;
 
-@At("${super_path}/dataexp")
+@At("${!!super_path|||'/super'}/dataexp")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class DataExportAction extends AbstractAction {

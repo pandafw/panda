@@ -13,7 +13,7 @@ import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 
-@At("${super_path}/resource")
+@At("${!!super_path|||'/super'}/resource")
 @Auth(AUTH.SUPER)
 public class ResourceEditAction extends GenericEditAction<Resource> {
 

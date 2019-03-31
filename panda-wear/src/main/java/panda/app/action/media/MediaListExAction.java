@@ -5,7 +5,7 @@ import panda.app.constant.AUTH;
 import panda.app.entity.Media;
 import panda.mvc.annotation.At;
 
-@At("${super_path}/media")
+@At("${!!super_path|||'/super'}/media")
 @Auth(AUTH.SUPER)
 public class MediaListExAction extends MediaListAction {
 	public String getMediaLink(Media m) {

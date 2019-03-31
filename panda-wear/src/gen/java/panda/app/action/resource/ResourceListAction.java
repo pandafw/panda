@@ -15,7 +15,7 @@ import panda.mvc.bean.QueryerEx;
 import panda.mvc.view.Views;
 import panda.mvc.view.util.ListColumn;
 
-@At("${super_path}/resource")
+@At("${!!super_path|||'/super'}/resource")
 @Auth(AUTH.SUPER)
 public class ResourceListAction extends GenericListAction<Resource> {
 

@@ -9,7 +9,7 @@ import panda.app.entity.Property;
 import panda.dao.query.DataQuery;
 import panda.mvc.annotation.At;
 
-@At("${super_path}/property")
+@At("${!!super_path|||'/super'}/property")
 @Auth(AUTH.SUPER)
 public class PropertyBulkEnableExAction extends PropertyBulkEnableAction {
 	public PropertyBulkEnableExAction() {

@@ -52,7 +52,7 @@ import panda.mvc.view.Views;
 import panda.vfs.FileItem;
 import panda.vfs.FileStores;
 
-@At("${super_path}/dataimp")
+@At("${!!super_path|||'/super'}/dataimp")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class DataImportAction extends AbstractAction {

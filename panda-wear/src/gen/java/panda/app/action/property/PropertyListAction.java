@@ -15,7 +15,7 @@ import panda.mvc.bean.QueryerEx;
 import panda.mvc.view.Views;
 import panda.mvc.view.util.ListColumn;
 
-@At("${super_path}/property")
+@At("${!!super_path|||'/super'}/property")
 @Auth(AUTH.SUPER)
 public class PropertyListAction extends GenericListAction<Property> {
 

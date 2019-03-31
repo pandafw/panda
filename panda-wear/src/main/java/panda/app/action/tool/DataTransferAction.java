@@ -22,7 +22,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.view.Views;
 
-@At("${super_path}/datacpy")
+@At("${!!super_path|||'/super'}/datacpy")
 @Auth(AUTH.SUPER)
 public class DataTransferAction extends GenericSyncWorkAction {
 	public static class Arg {

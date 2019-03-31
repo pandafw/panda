@@ -14,7 +14,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.util.crypto.Digests;
 
-@At("${super_path}/pwdhash")
+@At("${!!super_path|||'/super'}/pwdhash")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class PasswordHashAction extends AbstractAction {

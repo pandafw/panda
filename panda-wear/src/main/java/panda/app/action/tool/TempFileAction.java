@@ -6,7 +6,7 @@ import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 
 
-@At("${super_path}/tmp")
+@At("${!!super_path|||'/super'}/tmp")
 @Auth(AUTH.SUPER)
 public class TempFileAction extends BaseTempFileAction {
 }

@@ -10,7 +10,7 @@ import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${super_path}/property")
+@At("${!!super_path|||'/super'}/property")
 @Auth(AUTH.SUPER)
 public class PropertyImportAction extends GenericImportAction<Property> {
 

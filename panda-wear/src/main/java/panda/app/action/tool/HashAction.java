@@ -19,7 +19,7 @@ import panda.util.crypto.Digests;
 import panda.vfs.FileItem;
 
 
-@At("${super_path}/hash")
+@At("${!!super_path|||'/super'}/hash")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class HashAction extends AbstractAction {

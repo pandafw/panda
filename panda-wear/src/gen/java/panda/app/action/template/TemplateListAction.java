@@ -15,7 +15,7 @@ import panda.mvc.bean.QueryerEx;
 import panda.mvc.view.Views;
 import panda.mvc.view.util.ListColumn;
 
-@At("${super_path}/template")
+@At("${!!super_path|||'/super'}/template")
 @Auth(AUTH.SUPER)
 public class TemplateListAction extends GenericListAction<Template> {
 

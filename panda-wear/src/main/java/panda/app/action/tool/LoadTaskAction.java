@@ -16,7 +16,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.view.Views;
 
 
-@At("${super_path}/loadtask")
+@At("${!!super_path|||'/super'}/loadtask")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class LoadTaskAction extends AbstractAction {

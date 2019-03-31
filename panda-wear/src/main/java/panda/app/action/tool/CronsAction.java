@@ -12,7 +12,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.view.Views;
 
-@At("${super_path}/crons")
+@At("${!!super_path|||'/super'}/crons")
 @Auth(AUTH.SUPER)
 public class CronsAction extends AbstractAction {
 	@IocInject(value=MVC.SCHEDULER_CRONS, required=false)

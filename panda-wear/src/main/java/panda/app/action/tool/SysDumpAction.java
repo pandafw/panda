@@ -10,7 +10,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${super_path}/sysdump")
+@At("${!!super_path|||'/super'}/sysdump")
 @Auth(AUTH.SUPER)
 public class SysDumpAction extends AbstractAction {
 	@At("")

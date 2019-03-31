@@ -8,7 +8,7 @@ import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.app.action.template.TemplateEditAction;
 import panda.app.entity.Template;
 
-@At("${super_path}/template")
+@At("${!!super_path|||'/super'}/template")
 @Auth(AUTH.SUPER)
 public class TemplateEditExAction extends TemplateEditAction {
 

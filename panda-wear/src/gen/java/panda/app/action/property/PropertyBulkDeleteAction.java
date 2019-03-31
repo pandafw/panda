@@ -12,7 +12,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 
-@At("${super_path}/property")
+@At("${!!super_path|||'/super'}/property")
 @Auth(AUTH.SUPER)
 public class PropertyBulkDeleteAction extends GenericBulkAction<Property> {
 

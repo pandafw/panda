@@ -18,7 +18,7 @@ import panda.mvc.view.Views;
 
 
 @Auth(AUTH.SUPER)
-@At("${super_path}/cmd")
+@At("${!!super_path|||'/super'}/cmd")
 @To(Views.SFTL)
 public class CommandAction extends AbstractAction {
 	public static class Result {

@@ -12,7 +12,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 
-@At("${super_path}/resource")
+@At("${!!super_path|||'/super'}/resource")
 @Auth(AUTH.SUPER)
 public class ResourceBulkDeleteAction extends GenericBulkAction<Resource> {
 

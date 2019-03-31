@@ -10,7 +10,7 @@ import panda.lang.Randoms;
 import panda.mvc.annotation.At;
 import panda.vfs.FileStores;
 
-@At("${super_path}/media")
+@At("${!!super_path|||'/super'}/media")
 @Auth(AUTH.SUPER)
 public class MediaEditExAction extends MediaEditAction {
 

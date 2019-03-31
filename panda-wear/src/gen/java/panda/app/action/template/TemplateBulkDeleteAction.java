@@ -12,7 +12,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 
-@At("${super_path}/template")
+@At("${!!super_path|||'/super'}/template")
 @Auth(AUTH.SUPER)
 public class TemplateBulkDeleteAction extends GenericBulkAction<Template> {
 

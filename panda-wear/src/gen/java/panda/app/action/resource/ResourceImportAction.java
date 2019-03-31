@@ -10,7 +10,7 @@ import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${super_path}/resource")
+@At("${!!super_path|||'/super'}/resource")
 @Auth(AUTH.SUPER)
 public class ResourceImportAction extends GenericImportAction<Resource> {
 

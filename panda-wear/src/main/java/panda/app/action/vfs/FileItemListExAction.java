@@ -20,7 +20,7 @@ import panda.vfs.FileItem;
 import panda.vfs.FileStore;
 import panda.vfs.dao.DaoFileStore;
 
-@At("${super_path}/fileitem")
+@At("${!!super_path|||'/super'}/fileitem")
 @Auth(AUTH.SUPER)
 @IocBean(singleton=false, create="initialize")
 public class FileItemListExAction extends FileItemListAction {

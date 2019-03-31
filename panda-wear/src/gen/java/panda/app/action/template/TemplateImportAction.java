@@ -10,7 +10,7 @@ import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${super_path}/template")
+@At("${!!super_path|||'/super'}/template")
 @Auth(AUTH.SUPER)
 public class TemplateImportAction extends GenericImportAction<Template> {
 

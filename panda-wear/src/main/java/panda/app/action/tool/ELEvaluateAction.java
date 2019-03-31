@@ -11,7 +11,7 @@ import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${super_path}/el")
+@At("${!!super_path|||'/super'}/el")
 @Auth(AUTH.SUPER)
 public class ELEvaluateAction extends AbstractAction {
 

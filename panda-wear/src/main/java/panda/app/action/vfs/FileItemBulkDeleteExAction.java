@@ -19,7 +19,7 @@ import panda.vfs.FileStore;
 import panda.vfs.dao.DaoFileStore;
 import panda.vfs.dao.FileDataQuery;
 
-@At("${super_path}/fileitem")
+@At("${!!super_path|||'/super'}/fileitem")
 @Auth(AUTH.SUPER)
 @IocBean(singleton=false, create="initialize")
 public class FileItemBulkDeleteExAction extends FileItemBulkDeleteAction {
