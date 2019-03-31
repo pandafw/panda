@@ -114,7 +114,7 @@
 	var media_date_format = '';
 	var media_has_next = false;
 	var media_loading = false;
-	var media_limit = ${a.mediaPageLimit};
+	var media_limit = ${a.mediaIndexLimit};
 	var media_items = <#if result?has_content>${assist.toJson(result)}<#else>[]</#if>;
 
 	function onPageLoadMediaBrowser() {

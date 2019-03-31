@@ -121,7 +121,7 @@ public class MediaBrowseAction extends AbstractAction {
 			mq.id().lt(arg.si);
 		}
 		mq.id().desc();
-		mq.limit(getMediaPageLimit());
+		mq.limit(getMediaIndexLimit());
 		
 		addFilters(mq);
 
@@ -132,8 +132,8 @@ public class MediaBrowseAction extends AbstractAction {
 	protected void addFilters(MediaQuery mq) {
 	}
 
-	public int getMediaPageLimit() {
-		return getSettings().getPropertyAsInt(SET.MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
+	public int getMediaIndexLimit() {
+		return getSettings().getPropertyAsInt(SET.MEDIA_INDEX_LIMIT, Medias.DEFAULT_INDEX_LIMIT);
 	}
 	
 	@At
@@ -264,6 +264,7 @@ public class MediaBrowseAction extends AbstractAction {
 		hsrs.setFileName(filename);
 		hsrs.setContentType(MimeTypes.getMimeType(hsrs.getFileName()));
 		hsrs.setContentLength(md.getSize());
+		hsrs.setLastModified(m.getUpdatedAt());
 		hsrs.setMaxAge(maxage);
 		hsrs.writeHeader();
 		hsrs.writeStream(md.open());
