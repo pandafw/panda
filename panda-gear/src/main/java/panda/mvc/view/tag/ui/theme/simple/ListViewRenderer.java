@@ -12,7 +12,6 @@ import java.util.Set;
 
 import panda.bean.Beans;
 import panda.lang.Arrays;
-import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.Strings;
@@ -546,7 +545,9 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 									}
 								}
 								else if ("eval".equals(c.format.type)) {
-									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+									if (Strings.isEmpty(c.format.expr)) {
+										throw new IllegalArgumentException("The expression of [" + c.name + "] is empty");
+									}
 									Object v = Mvcs.evaluate(context, c.format.expr, d);
 									if (v != null) {
 										v = tag.castString(v);
@@ -554,14 +555,18 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 									}
 								}
 								else if ("expr".equals(c.format.type)) {
-									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+									if (Strings.isEmpty(c.format.expr)) {
+										throw new IllegalArgumentException("The expression of [" + c.name + "] is empty");
+									}
 									String v = tag.findString(c.format.expr, d);
 									if (Strings.isNotEmpty(v)) {
 										write(Escapes.escape(v, c.format.escape));
 									}
 								}
 								else if ("tran".equals(c.format.type)) {
-									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+									if (Strings.isEmpty(c.format.expr)) {
+										throw new IllegalArgumentException("The expression of [" + c.name + "] is empty");
+									}
 									String v = Mvcs.translate(context, c.format.expr, d);
 									if (Strings.isNotEmpty(v)) {
 										write(Escapes.escape(v, c.format.escape));

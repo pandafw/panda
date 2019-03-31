@@ -9,7 +9,6 @@ import java.util.Map;
 
 import panda.bean.Beans;
 import panda.io.stream.ListWriter;
-import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.Strings;
@@ -130,18 +129,24 @@ public class ListExporter extends Component {
 						}
 					}
 					else if ("eval".equals(c.format.type)) {
-						Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+						if (Strings.isEmpty(c.format.expr)) {
+							throw new IllegalArgumentException("The expression of [" + c.name + "] is empty");
+						}
 						Object v = Mvcs.evaluate(context, c.format.expr);
 						if (v != null) {
 							value = castString(v);
 						}
 					}
 					else if ("expr".equals(c.format.type)) {
-						Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+						if (Strings.isEmpty(c.format.expr)) {
+							throw new IllegalArgumentException("The expression of [" + c.name + "] is empty");
+						}
 						value = findString(c.format.expr, d);
 					}
 					else if ("tran".equals(c.format.type)) {
-						Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+						if (Strings.isEmpty(c.format.expr)) {
+							throw new IllegalArgumentException("The expression of [" + c.name + "] is empty");
+						}
 						value = Mvcs.translate(context, c.format.expr);
 					}
 					else {
