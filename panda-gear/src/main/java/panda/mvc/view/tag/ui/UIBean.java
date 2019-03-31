@@ -11,6 +11,7 @@ import panda.mvc.MvcConstants;
 import panda.mvc.view.tag.TagBean;
 import panda.mvc.view.tag.ui.theme.RendererEngine;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
+import panda.mvc.view.tag.ui.theme.simple.SimpleTheme;
 
 
 public abstract class UIBean extends TagBean {
@@ -52,7 +53,7 @@ public abstract class UIBean extends TagBean {
 	protected String tooltip;
 
 	@IocInject(value=MvcConstants.TAG_THEME, required=false)
-	protected String defaultUITheme = "simple";
+	protected String defaultUITheme = SimpleTheme.NAME;
 
 	@IocInject
 	protected RendererEngine rendererEngine;

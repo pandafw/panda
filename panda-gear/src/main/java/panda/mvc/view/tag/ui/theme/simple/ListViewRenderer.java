@@ -184,6 +184,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		form.setOnsubmit(tag.getOnsubmit());
 		form.setOnreset(tag.getOnreset());
 		form.setLoadmask(false);
+		form.setTheme(SimpleTheme.NAME);
 
 		form.start(writer);
 
@@ -435,6 +436,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		form.setOnsubmit(tag.getOnsubmit());
 		form.setOnreset(tag.getOnreset());
 		form.setLoadmask(false);
+		form.setTheme(SimpleTheme.NAME);
 
 		form.start(writer);
 

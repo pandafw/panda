@@ -43,10 +43,12 @@ import panda.mvc.view.tag.ui.theme.TagRenderer;
 import panda.mvc.view.tag.ui.theme.Theme;
 
 public class SimpleTheme extends Theme {
+	public static final String NAME = "simple";
+	
 	private Map<Class<? extends UIBean>, Class<? extends TagRenderer>> rfs;
 
 	public SimpleTheme() {
-		setName("simple");
+		setName(NAME);
 
 		rfs = new HashMap<Class<? extends UIBean>, Class<? extends TagRenderer>>();
 

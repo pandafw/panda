@@ -224,6 +224,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		form.setOnsubmit(tag.getOnsubmit());
 		form.setOnreset(tag.getOnreset());
 		form.setLoadmask(false);
+		form.setTheme(SimpleTheme.NAME);
 		if (tag.isExpandNone()
 				|| (tag.isExpandDefault() && !fsinput)
 				|| (tag.isExpandFixed() && !fsinput && !fsfixed)) {

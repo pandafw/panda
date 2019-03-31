@@ -43,10 +43,12 @@ import panda.mvc.view.tag.ui.theme.simple.UploaderRenderer;
 import panda.mvc.view.tag.ui.theme.simple.ViewFieldRenderer;
 
 public class Bs3Theme extends WrapTheme {
+	public static final String NAME = "bs3";
+	
 	public Bs3Theme(Theme defaultTheme) {
 		super(defaultTheme);
 		
-		setName("bs3");
+		setName(NAME);
 
 		addWrapper(Form.class, new RendererWrapperFactory(Bs3FormWrapper.class, FormRenderer.class));
 

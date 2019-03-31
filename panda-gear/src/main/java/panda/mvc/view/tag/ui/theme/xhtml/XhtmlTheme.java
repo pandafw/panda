@@ -43,10 +43,12 @@ import panda.mvc.view.tag.ui.theme.simple.UploaderRenderer;
 import panda.mvc.view.tag.ui.theme.simple.ViewFieldRenderer;
 
 public class XhtmlTheme extends WrapTheme {
+	public static final String NAME = "xhtml";
+	
 	public XhtmlTheme(Theme defaultTheme) {
 		super(defaultTheme);
 
-		setName("xhtml");
+		setName(NAME);
 
 		addWrapper(Form.class, new RendererWrapperFactory(XFormWrapper.class, FormRenderer.class));
 
