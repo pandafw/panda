@@ -1,5 +1,3 @@
-![Panda](https://pandademo.herokuapp.com/site/logo/panda-16.png) ![Panda](https://pandademo.herokuapp.com/site/logo/panda-32.png) ![Panda](https://pandademo.herokuapp.com/site/logo/panda-48.png) ![Panda](https://pandademo.herokuapp.com/site/logo/panda-64.png) 
-
  Panda Framework
 =====================================================================
 
