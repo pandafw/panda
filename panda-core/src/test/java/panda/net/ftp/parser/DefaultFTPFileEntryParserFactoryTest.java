@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import panda.net.ftp.FTPClientConfig;
 import panda.net.ftp.FTPFileEntryParser;
+import panda.net.ftp.FTPFileEntryParserImpl;
 import panda.net.ftp.parser.CompositeFileEntryParser;
 import panda.net.ftp.parser.DefaultFTPFileEntryParserFactory;
 import panda.net.ftp.parser.EnterpriseUnixFTPEntryParser;
@@ -92,16 +93,16 @@ public class DefaultFTPFileEntryParserFactoryTest extends TestCase {
 
 		try {
 			// Class exists, but is an interface
-			factory.createFileEntryParser("panda.net.ftp.parser.FTPFileEntryParserFactory");
+			factory.createFileEntryParser(FTPFileEntryParserFactory.class.getName());
 			fail("ParserInitializationException should have been thrown.");
 		}
 		catch (ParserInitializationException pie) {
 			Throwable root = pie.getCause();
-			assertTrue(root instanceof InstantiationException);
+			assertTrue(root instanceof NoSuchMethodException);
 		}
 		try {
 			// Class exists, but is abstract
-			factory.createFileEntryParser("panda.net.ftp.FTPFileEntryParserImpl");
+			factory.createFileEntryParser(FTPFileEntryParserImpl.class.getName());
 			fail("ParserInitializationException should have been thrown.");
 		}
 		catch (ParserInitializationException pie) {

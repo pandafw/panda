@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -125,8 +126,8 @@ public abstract class Types {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T newInstance(Type type) throws InstantiationException, IllegalAccessException {
-		return (T)getRawType(type).newInstance();
+	public static <T> T newInstance(Type type) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		return (T)getRawType(type).getDeclaredConstructor().newInstance();
 	}
 
 	/**

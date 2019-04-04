@@ -56,7 +56,7 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 	
 	private void addAdapter(String name, String impl) {
 		try {
-			LogAdapter adapter = (LogAdapter)Classes.getClass(impl).newInstance();
+			LogAdapter adapter = (LogAdapter)Classes.newInstance(impl);
 			adapters.put(name, adapter);
 		}
 		catch (Throwable e) {

@@ -555,16 +555,13 @@ public abstract class Collections {
 	 * 
 	 * @param collection the collection to get the input from, may be null
 	 * @return null elements removed collection
-	 * @throws IllegalAccessException Class.newInstance
-	 * @throws InstantiationException Class.newInstance
 	 */
-	public static Collection copyNotNull(Collection collection) throws InstantiationException,
-			IllegalAccessException {
+	public static Collection copyNotNull(Collection collection) {
 		if (collection == null) {
 			return null;
 		}
 
-		Collection nc = collection.getClass().newInstance();
+		Collection nc = Classes.born(collection.getClass());
 		for (Iterator it = collection.iterator(); it.hasNext();) {
 			Object o = it.next();
 			if (o != null) {

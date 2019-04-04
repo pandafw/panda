@@ -20,6 +20,7 @@ import panda.ioc.annotation.IocInject;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.impl.SingletonObjectProxy;
+import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Regexs;
@@ -172,7 +173,7 @@ public class DispatchFilter implements ServletFilter {
 		}
 		
 		try {
-			ActionContext ac = acClass.newInstance();
+			ActionContext ac = Classes.newInstance(acClass);
 			
 			ac.setIoc(ioc);
 			ac.setServlet(servlet);

@@ -47,12 +47,7 @@ public class SqlExpertConfig {
 	public SqlExpert matchExpert(String name) {
 		for (Entry<Pattern, Class<? extends SqlExpert>> entry : experts.entrySet()) {
 			if (entry.getKey().matcher(name).find()) {
-				try {
-					return entry.getValue().newInstance();
-				}
-				catch (Exception e) {
-					throw new RuntimeException(e);
-				}
+				return Classes.born(entry.getValue());
 			}
 		}
 		return null;

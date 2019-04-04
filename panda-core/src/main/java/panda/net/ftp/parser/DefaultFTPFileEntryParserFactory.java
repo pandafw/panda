@@ -74,17 +74,14 @@ public class DefaultFTPFileEntryParserFactory implements FTPFileEntryParserFacto
 			try {
 				Class<?> parserClass = Class.forName(key);
 				try {
-					parser = (FTPFileEntryParser)parserClass.newInstance();
+					parser = (FTPFileEntryParser)parserClass.getDeclaredConstructor().newInstance();
 				}
 				catch (ClassCastException e) {
 					throw new ParserInitializationException(parserClass.getName()
 							+ " does not implement the interface " + "panda.net.ftp.FTPFileEntryParser.",
 						e);
 				}
-				catch (Exception e) {
-					throw new ParserInitializationException("Error initializing parser", e);
-				}
-				catch (ExceptionInInitializerError e) {
+				catch (Throwable e) {
 					throw new ParserInitializationException("Error initializing parser", e);
 				}
 			}

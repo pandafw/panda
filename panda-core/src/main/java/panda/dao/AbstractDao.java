@@ -21,6 +21,7 @@ import panda.dao.query.Join;
 import panda.dao.query.Query;
 import panda.lang.Arrays;
 import panda.lang.Asserts;
+import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
 
@@ -130,7 +131,7 @@ public abstract class AbstractDao implements Dao {
 	@SuppressWarnings("unchecked")
 	protected <T> T createEntityData(Entity<T> en) throws DaoException {
 		try {
-			return en == null ? (T)(new HashMap<String, Object>()) : en.getType().newInstance();
+			return en == null ? (T)(new HashMap<String, Object>()) : Classes.newInstance(en.getType());
 		}
 		catch (Exception e) {
 			throw new DaoException(e);

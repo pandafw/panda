@@ -1267,9 +1267,13 @@ public abstract class Classes {
 	 * @return object instance
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
 	 */
-	public static <T> T newInstance(Class<T> cls) throws InstantiationException, IllegalAccessException {
-		return cls.newInstance();
+	public static <T> T newInstance(Class<T> cls) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		return cls.getDeclaredConstructor().newInstance();
 	}
 
 	/**
@@ -1279,9 +1283,13 @@ public abstract class Classes {
 	 * @throws ClassNotFoundException if class not found
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
 	 */
 	public static Object newInstance(String className) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException {
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		return newInstance(getClass(className));
 	}
 
@@ -1412,7 +1420,7 @@ public abstract class Classes {
 	 */
 	public static <T> T born(Class<T> cls) {
 		try {
-			return cls.newInstance();
+			return newInstance(cls);
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
@@ -1426,7 +1434,7 @@ public abstract class Classes {
 	 */
 	public static Object born(String className) {
 		try {
-			return getClass(className).newInstance();
+			return newInstance(getClass(className));
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);

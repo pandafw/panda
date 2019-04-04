@@ -49,10 +49,7 @@ public abstract class AbstractCastor<S, T> implements Castor<S, T> {
 		try {
 			return Types.newInstance(Types.getDefaultImplType(toType));
 		}
-		catch (InstantiationException e) {
-			throw new CastException(e);
-		}
-		catch (IllegalAccessException e) {
+		catch (Throwable e) {
 			throw new CastException(e);
 		}
 	}
