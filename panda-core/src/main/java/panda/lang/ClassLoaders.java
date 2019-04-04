@@ -2,6 +2,7 @@ package panda.lang;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
@@ -24,6 +25,19 @@ public class ClassLoaders {
 						continue;
 					}
 					urls.add(url);
+				}
+			}
+		}
+		
+		if (urls.isEmpty()) {
+			String[] ss = Strings.split(Systems.JAVA_CLASS_PATH, File.pathSeparatorChar);
+			if (Arrays.isNotEmpty(ss)) {
+				for (String s : ss) {
+					try {
+						urls.add(new URL("file://" + s));
+					}
+					catch (MalformedURLException e) {
+					}
 				}
 			}
 		}
