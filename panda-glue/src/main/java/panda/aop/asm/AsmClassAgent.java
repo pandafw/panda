@@ -25,11 +25,14 @@ public class AsmClassAgent extends AbstractClassAgent {
 	protected static final String MethodInterceptorList_FieldName = "_$$AopMethodInterceptorList";
 
 	static {
-		if (Systems.IS_JAVA_1_6) {
+		if (Systems.JAVA_MAJOR_VERSION == 6) {
 			CLASS_LEVEL = Opcodes.V1_6;
 		}
-		else if (Systems.IS_JAVA_1_7) {
+		else if (Systems.JAVA_MAJOR_VERSION == 7) {
 			CLASS_LEVEL = Opcodes.V1_7;
+		}
+		else if (Systems.JAVA_MAJOR_VERSION >= 8) {
+			CLASS_LEVEL = Opcodes.V1_8;
 		}
 		log.debug("AsmClassAgent will define class in Version " + CLASS_LEVEL);
 	}

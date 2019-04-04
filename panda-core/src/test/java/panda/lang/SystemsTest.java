@@ -66,67 +66,43 @@ public class SystemsTest {
 	public void testIS_JAVA() {
 		final String javaVersion = System.getProperty("java.version");
 		if (javaVersion == null) {
-			assertFalse(Systems.IS_JAVA_1_1);
-			assertFalse(Systems.IS_JAVA_1_2);
-			assertFalse(Systems.IS_JAVA_1_3);
-			assertFalse(Systems.IS_JAVA_1_4);
-			assertFalse(Systems.IS_JAVA_1_5);
-			assertFalse(Systems.IS_JAVA_1_6);
-			assertFalse(Systems.IS_JAVA_1_7);
+			assertEquals(0, Systems.JAVA_MAJOR_VERSION);
 		}
 		else if (javaVersion.startsWith("1.1")) {
-			assertTrue(Systems.IS_JAVA_1_1);
-			assertFalse(Systems.IS_JAVA_1_2);
-			assertFalse(Systems.IS_JAVA_1_3);
-			assertFalse(Systems.IS_JAVA_1_4);
-			assertFalse(Systems.IS_JAVA_1_5);
-			assertFalse(Systems.IS_JAVA_1_6);
-			assertFalse(Systems.IS_JAVA_1_7);
+			assertEquals(1, Systems.JAVA_MAJOR_VERSION);
 		}
 		else if (javaVersion.startsWith("1.2")) {
-			assertFalse(Systems.IS_JAVA_1_1);
-			assertTrue(Systems.IS_JAVA_1_2);
-			assertFalse(Systems.IS_JAVA_1_3);
-			assertFalse(Systems.IS_JAVA_1_4);
-			assertFalse(Systems.IS_JAVA_1_5);
-			assertFalse(Systems.IS_JAVA_1_6);
-			assertFalse(Systems.IS_JAVA_1_7);
+			assertEquals(2, Systems.JAVA_MAJOR_VERSION);
 		}
 		else if (javaVersion.startsWith("1.3")) {
-			assertFalse(Systems.IS_JAVA_1_1);
-			assertFalse(Systems.IS_JAVA_1_2);
-			assertTrue(Systems.IS_JAVA_1_3);
-			assertFalse(Systems.IS_JAVA_1_4);
-			assertFalse(Systems.IS_JAVA_1_5);
-			assertFalse(Systems.IS_JAVA_1_6);
-			assertFalse(Systems.IS_JAVA_1_7);
+			assertEquals(3, Systems.JAVA_MAJOR_VERSION);
 		}
 		else if (javaVersion.startsWith("1.4")) {
-			assertFalse(Systems.IS_JAVA_1_1);
-			assertFalse(Systems.IS_JAVA_1_2);
-			assertFalse(Systems.IS_JAVA_1_3);
-			assertTrue(Systems.IS_JAVA_1_4);
-			assertFalse(Systems.IS_JAVA_1_5);
-			assertFalse(Systems.IS_JAVA_1_6);
-			assertFalse(Systems.IS_JAVA_1_7);
+			assertEquals(4, Systems.JAVA_MAJOR_VERSION);
 		}
 		else if (javaVersion.startsWith("1.5")) {
-			assertFalse(Systems.IS_JAVA_1_1);
-			assertFalse(Systems.IS_JAVA_1_2);
-			assertFalse(Systems.IS_JAVA_1_3);
-			assertFalse(Systems.IS_JAVA_1_4);
-			assertTrue(Systems.IS_JAVA_1_5);
-			assertFalse(Systems.IS_JAVA_1_6);
-			assertFalse(Systems.IS_JAVA_1_7);
+			assertEquals(5, Systems.JAVA_MAJOR_VERSION);
 		}
 		else if (javaVersion.startsWith("1.6")) {
-			assertFalse(Systems.IS_JAVA_1_1);
-			assertFalse(Systems.IS_JAVA_1_2);
-			assertFalse(Systems.IS_JAVA_1_3);
-			assertFalse(Systems.IS_JAVA_1_4);
-			assertFalse(Systems.IS_JAVA_1_5);
-			assertTrue(Systems.IS_JAVA_1_6);
-			assertFalse(Systems.IS_JAVA_1_7);
+			assertEquals(6, Systems.JAVA_MAJOR_VERSION);
+		}
+		else if (javaVersion.startsWith("1.7")) {
+			assertEquals(7, Systems.JAVA_MAJOR_VERSION);
+		}
+		else if (javaVersion.startsWith("1.8")) {
+			assertEquals(8, Systems.JAVA_MAJOR_VERSION);
+		}
+		else if (javaVersion.startsWith("9")) {
+			assertEquals(9, Systems.JAVA_MAJOR_VERSION);
+		}
+		else if (javaVersion.startsWith("10")) {
+			assertEquals(10, Systems.JAVA_MAJOR_VERSION);
+		}
+		else if (javaVersion.startsWith("11")) {
+			assertEquals(11, Systems.JAVA_MAJOR_VERSION);
+		}
+		else if (javaVersion.startsWith("12")) {
+			assertEquals(12, Systems.JAVA_MAJOR_VERSION);
 		}
 		else {
 			System.out.println("Can't test IS_JAVA value: " + javaVersion);
@@ -180,127 +156,6 @@ public class SystemsTest {
 		else {
 			System.out.println("Can't test IS_OS value: " + osName);
 		}
-	}
-
-	@Test
-	public void testJavaVersionMatches() {
-		String javaVersion = null;
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.0";
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.1";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.2";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.3.0";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.3.1";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.4.0";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.4.1";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.4.2";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.5.0";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.6.0";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.7"));
-		javaVersion = "1.7.0";
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.0"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.1"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.2"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.3"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.4"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.5"));
-		assertFalse(Systems.isJavaVersionMatch(javaVersion, "1.6"));
-		assertTrue(Systems.isJavaVersionMatch(javaVersion, "1.7"));
 	}
 
 	@Test

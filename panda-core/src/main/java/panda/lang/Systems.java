@@ -439,6 +439,17 @@ public class Systems {
 	public static final String JAVA_SPECIFICATION_VERSION = getProperty("java.specification.version");
 
 	/**
+	 * This is value is inilialized by {@link #JAVA_SPECIFICATION_VERSION}
+	 * 1.1 -> 1
+	 * 1.x -> x
+	 * 1.8 -> 8
+	 * 9 -> 9
+	 * ..
+	 * 12 -> 12
+	 */
+	public static final int JAVA_MAJOR_VERSION = getJavaMajorVersion();
+	
+	/**
 	 * <p>
 	 * The {@code java.util.prefs.PreferencesFactory} System Property. A class name.
 	 * </p>
@@ -865,104 +876,6 @@ public class Systems {
 	 * 
 	 */
 	public static final String USER_TIMEZONE = getProperty("user.timezone");
-
-	// Java version checks
-	// -----------------------------------------------------------------------
-	// These MUST be declared after those above as they depend on the
-	// values being set up
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.1 (also 1.1.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 */
-	public static final boolean IS_JAVA_1_1 = getJavaVersionMatches("1.1");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.2 (also 1.2.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 */
-	public static final boolean IS_JAVA_1_2 = getJavaVersionMatches("1.2");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.3 (also 1.3.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 */
-	public static final boolean IS_JAVA_1_3 = getJavaVersionMatches("1.3");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.4 (also 1.4.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 */
-	public static final boolean IS_JAVA_1_4 = getJavaVersionMatches("1.4");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.5 (also 1.5.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 */
-	public static final boolean IS_JAVA_1_5 = getJavaVersionMatches("1.5");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.6 (also 1.6.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 */
-	public static final boolean IS_JAVA_1_6 = getJavaVersionMatches("1.6");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.7 (also 1.7.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 * 
-	 */
-	public static final boolean IS_JAVA_1_7 = getJavaVersionMatches("1.7");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 1.8 (also 1.8.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 * 
-	 */
-	public static final boolean IS_JAVA_1_8 = getJavaVersionMatches("1.8");
-
-	/**
-	 * <p>
-	 * Is {@code true} if this is Java version 9 (also 9.x versions).
-	 * </p>
-	 * <p>
-	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
-	 * </p>
-	 * 
-	 */
-	public static final boolean IS_JAVA_9 = getJavaVersionMatches("9");
 
 	// Operating system checks
 	// -----------------------------------------------------------------------
@@ -1477,8 +1390,20 @@ public class Systems {
 	 * @param versionPrefix the prefix for the java version
 	 * @return true if matches, or false if not or can't determine
 	 */
-	private static boolean getJavaVersionMatches(final String versionPrefix) {
-		return isJavaVersionMatch(JAVA_SPECIFICATION_VERSION, versionPrefix);
+	private static int getJavaMajorVersion() {
+		if (JAVA_SPECIFICATION_VERSION == null || JAVA_SPECIFICATION_VERSION.length() == 0) {
+			return 0;
+		}
+		try {
+			if (JAVA_SPECIFICATION_VERSION.length() >= 3 && JAVA_SPECIFICATION_VERSION.startsWith("1.")) {
+				return Integer.parseInt(JAVA_SPECIFICATION_VERSION.substring(2, 3));
+			}
+			return Integer.parseInt(JAVA_SPECIFICATION_VERSION);
+		}
+		catch (Exception e) {
+			System.err.println("Failed to getJavaMajorVersion for " + JAVA_SPECIFICATION_VERSION);
+			return 0;
+		}
 	}
 
 	/**
@@ -1634,25 +1559,6 @@ public class Systems {
 	 */
 	public static boolean isJavaAwtHeadless() {
 		return Boolean.TRUE.toString().equals(JAVA_AWT_HEADLESS);
-	}
-
-	/**
-	 * <p>
-	 * Decides if the Java version matches.
-	 * </p>
-	 * <p>
-	 * This method is package private instead of private to support unit test invocation.
-	 * </p>
-	 * 
-	 * @param version the actual Java version
-	 * @param versionPrefix the prefix for the expected Java version
-	 * @return true if matches, or false if not or can't determine
-	 */
-	static boolean isJavaVersionMatch(final String version, final String versionPrefix) {
-		if (version == null) {
-			return false;
-		}
-		return version.startsWith(versionPrefix);
 	}
 
 	/**

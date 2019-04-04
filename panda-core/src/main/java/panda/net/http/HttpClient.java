@@ -89,7 +89,7 @@ public class HttpClient {
 	protected String[] sslProtocols;
 	
 	static {
-		if (Systems.IS_JAVA_1_6) {
+		if (Systems.JAVA_MAJOR_VERSION < 7) {
 			// fix error: java.net.ProtocolException: Server redirected too many times (JDK1.6)
 			// see http://stackoverflow.com/questions/11022934/getting-java-net-protocolexception-server-redirected-too-many-times-error
 			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));

@@ -195,13 +195,13 @@ public class JavaBeanHandlerTest {
 				Types.subTypeOf(Object.class), 
 				Types.subTypeOf(Number.class)));
 
-		if (Systems.IS_JAVA_1_6) {
+		if (Systems.JAVA_MAJOR_VERSION == 6) {
 			testGetType(a, "intArrayMap", 
 				Types.paramTypeOf(Map.class, 
 					Types.subTypeOf(Object.class), 
 					Types.arrayTypeOf(int.class)));
 		}
-		else if (Systems.IS_JAVA_1_7) {
+		else if (Systems.JAVA_MAJOR_VERSION == 7) {
 			//FIXME
 			testGetTypeStr(a, "intArrayMap", 
 				Types.paramTypeOf(Map.class, 
