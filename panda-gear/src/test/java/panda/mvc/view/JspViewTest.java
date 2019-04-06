@@ -39,7 +39,7 @@ public class JspViewTest {
 	public void test_req_path3() throws Exception {
 		MockActionContext ac = Mock.actionContext();
 		ac.setPath("/abc/bcd");
-		JspView fv = new JspView("  \r\n\t  ");
+		JspView fv = new JspView();
 		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
 	}

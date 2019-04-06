@@ -1,8 +1,5 @@
 package panda.mvc.adaptor;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -10,9 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -22,9 +16,9 @@ import panda.io.MimeTypes;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Classes;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
 import panda.log.Log;
@@ -38,8 +32,8 @@ import panda.mvc.adaptor.ejector.MultiPartParamEjector;
 import panda.mvc.adaptor.ejector.XmlParamEjector;
 import panda.mvc.annotation.param.Attr;
 import panda.mvc.annotation.param.Header;
-import panda.mvc.annotation.param.IocObj;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.param.PathArg;
 import panda.net.http.HttpMethod;
 import panda.servlet.ServletRequestHeaderMap;
 
@@ -135,91 +129,74 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		Class<?>[] clazs = method.getParameterTypes();
 		Type[] types = method.getGenericParameterTypes();
 
-		if (pass.length == 1 && !hasParam(pass[0])) {
-			Object o = adaptByParamType(ac, clazs[0]);
-			if (o == null) {
-				// adapt by path arguments
-				o = adaptByPathArg(ac, "0", types[0], 0);
-				if (o == null) {
-					o = ejectByAll(ac, types[0], null);
-				}
-			}
-			
-			ac.setArgs(new Object[] { o });
-			ac.setParams(o);
-			return;
-		}
-
+		int idxPathArg = 0;
 		LinkedHashMap<String, Object> args = new LinkedHashMap<String, Object>(types.length);
-		int p = 0;
 		for (int i = 0; i < pass.length; i++) {
 			Annotation[] pas = pass[i];
 			Param param = null;
 			Attr attr = null;
-			IocObj ioco = null;
+			IocInject ioci = null;
 			Header reqh = null;
+			PathArg patha = null;
 
 			// find @Param & @Attr & @IocObj in current annotations
 			for (Annotation pa : pas) {
 				if (pa instanceof Param) {
 					param = (Param)pa;
-					break;
 				}
 				else if (pa instanceof Attr) {
 					attr = (Attr)pa;
-					break;
 				}
-				else if (pa instanceof IocObj) {
-					ioco = (IocObj)pa;
-					break;
+				else if (pa instanceof IocInject) {
+					ioci = (IocInject)pa;
 				}
 				else if (pa instanceof Header) {
 					reqh = (Header)pa;
-					break;
+				}
+				else if (pa instanceof PathArg) {
+					patha = (PathArg)pa;
 				}
 			}
 			
 			String name = indexedName(i, param);
 			
 			// If has @Attr
-			if (null != attr) {
+			if (attr != null) {
 				addArg(args, name, adaptByAttr(ac, attr));
 				continue;
 			}
 
-			// If has @IocObj
-			if (null != ioco) {
-				addArg(args, name, adaptByIoc(ac, clazs[i], ioco.value()));
+			// If has @IocInject
+			if (ioci != null) {
+				addArg(args, name, adaptByIocInject(ac, clazs[i], ioci));
 				continue;
 			}
 
-			if (null != reqh) {
+			// If has @Header
+			if (reqh != null) {
 				addArg(args, name, adaptByReqHeader(ac, types[i], reqh.value()));
 				continue;
 			}
 			
-			// Adapt by @param annotation
+			// Adapt by @Param annotation
 			if (param != null) {
 				Object o = adaptByParamAnno(ac, name, types[i], param);
 				addArg(args, name, o);
 				continue;
 			}
 
-			// And adapt by default support types
-			Object o = adaptByParamType(ac, clazs[i]);
-			if (o != null) {
-				addArg(args, name, o);
-				continue;
-			}
-			
-			o = adaptByPathArg(ac, name, types[i], p++);
-			if (o != null) {
-				addArg(args, name, o);
-				continue;
+			// Adapt by @PathArg annotation
+			if (patha != null) {
+				int p = patha.value() < 0 ? idxPathArg++ : patha.value();
+				Object o = adaptByPathArg(ac, name, types[i], p);
+				if (o != null) {
+					addArg(args, name, o);
+					continue;
+				}
 			}
 			
 			// if argument type is primitive, we should cast null to default primitive value
-			o = cast(ac, name, null, types[i], null);
+			Object o = cast(ac, name, null, types[i], null);
 			addArg(args, name, o);
 		}
 		
@@ -271,16 +248,17 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		return ac.getServlet().getAttribute(name);
 	}
 
-	protected Object adaptByIoc(ActionContext ac, Class<?> cls, String name) {
+	protected Object adaptByIocInject(ActionContext ac, Class<?> cls, IocInject ioci) {
 		Ioc ioc = ac.getIoc();
-		if (null == ioc) {
+		if (ioc == null) {
 			throw new RuntimeException("You need define @IocBy in main module!!!");
 		}
-		
-		if (Strings.isBlank(name)) {
-			return ioc.get(cls);
+
+		if (ioci.type() != Object.class) {
+			cls = ioci.type();
 		}
-		return ioc.get(cls, name);
+		
+		return ioci.required() ? ioc.get(cls, ioci.value()) : ioc.getIfExists(cls, ioci.value());
 	}
 
 	protected Object adaptByReqHeader(ActionContext ac, Type type, String name) {
@@ -294,60 +272,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		}
 
 		return cast(ac, '^' + name, val, type, null);
-	}
-
-	protected Object adaptByParamType(ActionContext ac, Class<?> type) {
-		// Request
-		if (ServletRequest.class.isAssignableFrom(type)) {
-			return ac.getRequest();
-		}
-
-		// Response
-		if (ServletResponse.class.isAssignableFrom(type)) {
-			return ac.getResponse();
-		}
-
-		// Session
-		if (HttpSession.class.isAssignableFrom(type)) {
-			return ac.getRequest().getSession(true);
-		}
-		
-		// ServletContext
-		if (ServletContext.class.isAssignableFrom(type)) {
-			return ac.getServlet();
-		}
-
-		// ActionContext
-		if (ActionContext.class.isAssignableFrom(type)) {
-			return ac;
-		}
-		
-		// Ioc
-		if (Ioc.class.isAssignableFrom(type)) {
-			return ac.getIoc();
-		}
-
-		// InputStream
-		if (InputStream.class.isAssignableFrom(type)) {
-			try {
-				return ac.getRequest().getInputStream();
-			}
-			catch (IOException e) {
-				throw Exceptions.wrapThrow(e);
-			}
-		}
-
-		// Reader
-		if (Reader.class.isAssignableFrom(type)) {
-			try {
-				return ac.getRequest().getReader();
-			}
-			catch (IOException e) {
-				throw Exceptions.wrapThrow(e);
-			}
-		}
-
-		return null;
 	}
 
 	protected Object adaptByParamAnno(ActionContext ac, String name, Type type, Param param) {

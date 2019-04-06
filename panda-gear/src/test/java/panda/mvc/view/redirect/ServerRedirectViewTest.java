@@ -17,8 +17,7 @@ public class ServerRedirectViewTest extends AbstractMvcTestCase {
 	public void testRender() throws Throwable {
 		request.setRequestURI("/register");
 		servlet.service(request, response);
-		System.out.println(response.getHeader("Location"));
-		assertTrue(response.getHeader("Location").endsWith("/jsp/user/information.do?id=373"));
+		assertEquals("/jsp/user/information.do?id=373", response.getHeader("Location"));
 	}
 
 	@Test
@@ -27,7 +26,6 @@ public class ServerRedirectViewTest extends AbstractMvcTestCase {
 		request.addParameter("name", "panda");
 		request.addParameter("password", "123456");
 		servlet.service(request, response);
-		System.out.println(response.getHeader("Location"));
-		assertTrue(response.getHeader("Location").endsWith("/jsp/user/panda"));
+		assertEquals("/jsp/user/panda", response.getHeader("Location"));
 	}
 }

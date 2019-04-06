@@ -1,14 +1,11 @@
 package panda.mvc.testapp.classes.action.adaptor;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
-import panda.io.Streams;
 import panda.mvc.adaptor.meta.Pet;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
@@ -23,16 +20,6 @@ public class AdaptorTestModule extends BaseWebappTest {
 	@At("edate")
 	public String getDate(@Param(value="d", format="yyyyMMdd") Date d) throws IOException {
 		return String.valueOf(d.getTime());
-	}
-
-	@At("reader")
-	public String getInputStream(Reader reader) throws IOException {
-		return Streams.toString(reader);
-	}
-
-	@At("ins")
-	public String getInputStream2(InputStream ins) throws IOException {
-		return new String(Streams.toByteArray(ins));
 	}
 
 	@At("json/pet/array")

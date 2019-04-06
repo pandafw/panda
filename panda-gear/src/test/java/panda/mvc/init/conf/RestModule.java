@@ -2,6 +2,7 @@ package panda.mvc.init.conf;
 
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.param.PathArg;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 
@@ -35,7 +36,7 @@ public class RestModule {
 	}
 
 	@At("/a/(.*)/b/(.+?)/c/(.*)$")
-	public String pathArgs_01(int a, int b, String c) {
+	public String pathArgs_01(@PathArg int a, @PathArg int b, @PathArg String c) {
 		return c + "?a=" + a + "&b=" + b;
 	}
 

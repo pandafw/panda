@@ -11,6 +11,7 @@ import panda.log.Logs;
 import panda.mvc.SetConstants;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.param.PathArg;
 import panda.mvc.view.Views;
 
 
@@ -37,7 +38,7 @@ public class StaticResourceAction extends ActionSupport {
 
 	@At("(.*)$")
 	@To(Views.RES)
-	public Object execute(String path) {
+	public Object execute(@PathArg String path) {
 		Object r = findResource(path);
 		if (r == null) {
 			return Views.scNotFound(context);

@@ -20,7 +20,7 @@ public class JsonModule {
 
 	@At("map")
 	@To(Views.RAW)
-	public int jsonMap(Map map) {
+	public int jsonMap(@Param Map map) {
 		return map.size();
 	}
 

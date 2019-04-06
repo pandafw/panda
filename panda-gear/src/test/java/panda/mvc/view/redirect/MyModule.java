@@ -1,8 +1,5 @@
 package panda.mvc.view.redirect;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
@@ -11,7 +8,7 @@ import panda.mvc.annotation.param.Param;
 public class MyModule {
 	@At("/register")
 	@To("redirect:/jsp/user/information.do?id=${r.id}")
-	public User register(HttpServletRequest request, HttpSession session) {
+	public User register() {
 		User user = new User();
 		user.setId(373);
 		return user;

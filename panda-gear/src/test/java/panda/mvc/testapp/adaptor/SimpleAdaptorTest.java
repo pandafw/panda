@@ -28,20 +28,4 @@ public class SimpleAdaptorTest extends BaseWebappTest {
 		resp = post("/adaptor/json/type", "{'abc': 123456}", MimeTypes.TEXT_JSON);
 		assertEquals(200, resp.getStatusCode());
 	}
-
-	@Test
-	public void test_inputstream_as_string() throws IOException {
-		resp = post("/adaptor/ins", "I am abc");
-
-		assertEquals(200, resp.getStatusCode());
-		assertEquals("I am abc", resp.getContentText());
-	}
-
-	@Test
-	public void test_reader_as_string() throws IOException {
-		resp = post("/adaptor/reader", "I am abc");
-
-		assertEquals(200, resp.getStatusCode());
-		assertEquals("I am abc", resp.getContentText());
-	}
 }
