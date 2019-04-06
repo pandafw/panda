@@ -30,6 +30,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.Redirect;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.param.PathArg;
 import panda.mvc.view.Views;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServletResponser;
@@ -53,17 +54,17 @@ public class MediaBrowseAction extends AbstractAction {
 	}
 
 	@At("media/(.*)$")
-	public void media2(String slug) throws Exception {
+	public void media2(@PathArg String slug) throws Exception {
 		media(slug);
 	}
 
 	@At("thumb/(.*)$")
-	public void thumb2(String slug) throws Exception {
+	public void thumb2(@PathArg String slug) throws Exception {
 		thumb(slug);
 	}
 
 	@At("icon/(.*)$")
-	public void icon2(String slug) throws Exception {
+	public void icon2(@PathArg String slug) throws Exception {
 		icon(slug);
 	}
 
