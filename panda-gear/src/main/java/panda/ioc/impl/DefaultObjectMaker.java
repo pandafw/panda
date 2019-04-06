@@ -251,7 +251,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 	@SuppressWarnings({ "unchecked" })
 	private IocEventTrigger<Object> createTrigger(Class<?> mirror, String str) {
-		if (Strings.isBlank(str)) {
+		if (Strings.isEmpty(str)) {
 			return null;
 		}
 		

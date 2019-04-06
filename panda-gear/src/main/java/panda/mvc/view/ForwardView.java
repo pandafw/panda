@@ -55,7 +55,7 @@ public class ForwardView extends AbstractView {
 
 		String ext = getExtension();
 		
-		if (Strings.isBlank(path)) {
+		if (Strings.isEmpty(path)) {
 			path = ac.getPath();
 			path = "/WEB-INF" + (Strings.startsWithChar(path, '/') ? "" : "/") + FileNames.removeExtension(path) +  ext;
 		}

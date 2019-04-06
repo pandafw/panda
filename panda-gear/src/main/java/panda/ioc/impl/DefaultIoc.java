@@ -124,7 +124,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	}
 
 	public <T> T getIfExists(Class<T> type, String name) throws IocException {
-		if (name == null) {
+		if (Strings.isEmpty(name)) {
 			name = getBeanName(type);
 		}
 		
@@ -139,7 +139,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	}
 
 	public <T> T get(Class<T> type, String name) throws IocException {
-		if (name == null) {
+		if (Strings.isEmpty(name)) {
 			name = getBeanName(type);
 		}
 
@@ -181,7 +181,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 						}
 						
 						// 检查对象级别
-						if (Strings.isBlank(iobj.getScope())) {
+						if (Strings.isEmpty(iobj.getScope())) {
 							iobj.setScope(defaultScope);
 						}
 

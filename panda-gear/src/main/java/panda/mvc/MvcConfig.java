@@ -18,7 +18,7 @@ public class MvcConfig {
 		this.servlet = servlet;
 
 		String name = Strings.trim(mainModule);
-		if (Strings.isBlank(name)) {
+		if (Strings.isEmpty(name)) {
 			throw new IllegalArgumentException(
 				"You need declare 'modules' parameter in your context configuration file or web.xml!");
 		}

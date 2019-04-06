@@ -80,21 +80,21 @@ public abstract class Loaders {
 		else if (it.getEvents() != null) {
 			IocEventSet eventSet = it.getEvents();
 			IocEventSet myEventSet = me.getEvents();
-			if (Strings.isBlank(myEventSet.getCreate())) {
+			if (Strings.isEmpty(myEventSet.getCreate())) {
 				myEventSet.setCreate(eventSet.getCreate());
 			}
 			
-			if (Strings.isBlank(myEventSet.getDepose())) {
+			if (Strings.isEmpty(myEventSet.getDepose())) {
 				myEventSet.setDepose(eventSet.getDepose());
 			}
 			
-			if (Strings.isBlank(myEventSet.getFetch())) {
+			if (Strings.isEmpty(myEventSet.getFetch())) {
 				myEventSet.setFetch(eventSet.getFetch());
 			}
 		}
 
 		// merge scope
-		if (Strings.isBlank(me.getScope())) {
+		if (Strings.isEmpty(me.getScope())) {
 			me.setScope(it.getScope());
 		}
 

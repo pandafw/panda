@@ -258,7 +258,7 @@ public abstract class BindView extends DataView {
 	
 	protected List<String> toList(String str) {
 		List<String> list = new ArrayList<String>();
-		if (!Strings.isBlank(str)) {
+		if (Strings.isNotEmpty(str)) {
 			String[] ss = Strings.split(str, SEPERATOR);
 			for (String s : ss) {
 				s = Strings.stripToNull(s);

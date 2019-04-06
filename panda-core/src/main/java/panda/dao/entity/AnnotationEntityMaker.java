@@ -407,12 +407,12 @@ public class AnnotationEntityMaker implements EntityMaker {
 			ef.setReadonly(true);
 		}
 		else {
-			if (Strings.isBlank(ef.getColumn())) {
+			if (Strings.isEmpty(ef.getColumn())) {
 				ef.setColumn(javaName2ColumnName(mi.name));
 			}
 		}
 		
-		if (Strings.isBlank(ef.getJdbcType())) {
+		if (Strings.isEmpty(ef.getJdbcType())) {
 			guessEntityFieldJdbcType(ef);
 		}
 

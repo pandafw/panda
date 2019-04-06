@@ -254,7 +254,7 @@ public class Strings {
 			return true;
 		}
 		for (int i = 0; i < strLen; i++) {
-			if (Chars.isSpace(cs.charAt(i)) == false) {
+			if (!Chars.isSpace(cs.charAt(i))) {
 				return false;
 			}
 		}

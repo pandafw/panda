@@ -138,7 +138,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		iocObject.setType(clazz);
 
 		iocObject.setSingleton(iocBean.singleton());
-		if (!Strings.isBlank(iocBean.scope())) {
+		if (!Strings.isEmpty(iocBean.scope())) {
 			iocObject.setScope(iocBean.scope());
 		}
 
@@ -228,7 +228,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 			IocInject inject = field.getAnnotation(IocInject.class);
 
 			IocValue iocValue;
-			if (Strings.isBlank(inject.value())) {
+			if (Strings.isEmpty(inject.value())) {
 				iocValue = new IocValue(IocValue.TYPE_REF);
 				iocValue.setValue(Object.class.equals(inject.type()) ? field.getType() : inject.type());
 			}
@@ -258,7 +258,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 				}
 				
 				IocValue iocValue;
-				if (Strings.isBlank(inject.value())) {
+				if (Strings.isEmpty(inject.value())) {
 					iocValue = new IocValue(IocValue.TYPE_REF);
 					iocValue.setValue(Strings.uncapitalize(methodName.substring(3)));
 					iocValue.setValue(Object.class.equals(inject.type()) ? method.getParameterTypes()[0] : inject.type());

@@ -135,7 +135,7 @@ public class MapIocLoader extends AbstractIocLoader {
 			// type
 			try {
 				String typeName = (String)v;
-				if (!Strings.isBlank(typeName)) {
+				if (!Strings.isEmpty(typeName)) {
 					iobj.setType(Classes.getClass(typeName, false));
 				}
 			}
@@ -202,7 +202,7 @@ public class MapIocLoader extends AbstractIocLoader {
 			
 			// factory方法
 			v = map.get("factory");
-			if (v != null && !Strings.isBlank(v.toString())) {
+			if (v != null && Strings.isNotEmpty(v.toString())) {
 				iobj.setFactory(v.toString());
 			}
 		}
