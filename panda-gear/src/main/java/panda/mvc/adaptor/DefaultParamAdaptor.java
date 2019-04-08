@@ -8,13 +8,11 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.io.MimeTypes;
 import panda.ioc.Ioc;
-import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
@@ -30,7 +28,6 @@ import panda.mvc.adaptor.ejector.FormParamEjector;
 import panda.mvc.adaptor.ejector.JsonParamEjector;
 import panda.mvc.adaptor.ejector.MultiPartParamEjector;
 import panda.mvc.adaptor.ejector.XmlParamEjector;
-import panda.mvc.annotation.param.Attr;
 import panda.mvc.annotation.param.Header;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.param.PathArg;
@@ -134,7 +131,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		for (int i = 0; i < pass.length; i++) {
 			Annotation[] pas = pass[i];
 			Param param = null;
-			Attr attr = null;
 			IocInject ioci = null;
 			Header reqh = null;
 			PathArg patha = null;
@@ -143,9 +139,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			for (Annotation pa : pas) {
 				if (pa instanceof Param) {
 					param = (Param)pa;
-				}
-				else if (pa instanceof Attr) {
-					attr = (Attr)pa;
 				}
 				else if (pa instanceof IocInject) {
 					ioci = (IocInject)pa;
@@ -160,12 +153,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			
 			String name = indexedName(i, param);
 			
-			// If has @Attr
-			if (attr != null) {
-				addArg(args, name, adaptByAttr(ac, attr));
-				continue;
-			}
-
 			// If has @IocInject
 			if (ioci != null) {
 				addArg(args, name, adaptByIocInject(ac, clazs[i], ioci));
@@ -214,38 +201,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			ac.setParams(params);
 		}
 		ac.setArgs(args.values().toArray());
-	}
-
-	protected Object adaptByAttr(ActionContext ac, Attr attr) {
-		String name = attr.value();
-		if (Scope.APP.equals(attr.scope())) {
-			return ac.getServlet().getAttribute(name);
-		}
-		if (Scope.SESSION.equals(attr.scope())) {
-			HttpSession session = ac.getRequest().getSession(false);
-			if (session == null) {
-				return null;
-			}
-			return session.getAttribute(name);
-		}
-		if (Scope.REQUEST.equals(attr.scope())) {
-			return ac.getRequest().getAttribute(name);
-		}
-		
-		Object re = ac.getRequest().getAttribute(name);
-		if (null != re) {
-			return re;
-		}
-		
-		HttpSession session = ac.getRequest().getSession(false);
-		if (session != null) {
-			re = session.getAttribute(name);
-			if (null != re) {
-				return re;
-			}
-		}
-
-		return ac.getServlet().getAttribute(name);
 	}
 
 	protected Object adaptByIocInject(ActionContext ac, Class<?> cls, IocInject ioci) {
