@@ -1,7 +1,9 @@
 ._*
 /.classpath
+/.factorypath
 /.project
 /.settings
+/.vscode
 /*.log
 /lib
 /out
