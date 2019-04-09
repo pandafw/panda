@@ -251,7 +251,7 @@ public class Queryer implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(name, pager, sorter, method, filters);
+		return Objects.hash(name, pager, sorter, method, filters);
 	}
 
 	/**

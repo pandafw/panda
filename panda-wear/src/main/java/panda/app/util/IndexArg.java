@@ -167,7 +167,7 @@ public class IndexArg {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(pager, sorter, key, cat, tag);
+		return Objects.hash(pager, sorter, key, cat, tag);
 	}
 
 	/**

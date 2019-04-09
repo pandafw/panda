@@ -934,7 +934,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(name, comparator, values, type);
+		return Objects.hash(name, comparator, values, type);
 	}
 
 	/**

@@ -164,7 +164,7 @@ public class MediaData {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(mid,msz);
+		return Objects.hash(mid,msz);
 	}
 
 	/**

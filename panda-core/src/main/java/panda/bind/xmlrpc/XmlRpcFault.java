@@ -52,7 +52,7 @@ public class XmlRpcFault {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(faultCode, faultString);
+		return Objects.hash(faultCode, faultString);
 	}
 
 	@Override

@@ -80,28 +80,28 @@ public class ObjectsTest {
 	@Test
 	public void testHashCodeMulti_multiple_emptyArray() {
 		final Object[] array = new Object[0];
-		assertEquals(1, Objects.hashCodes(array));
+		assertEquals(1, Objects.hash(array));
 	}
 
 	@Test
 	public void testHashCodeMulti_multiple_nullArray() {
 		final Object[] array = null;
-		assertEquals(0, Objects.hashCodes(array));
+		assertEquals(0, Objects.hash(array));
 	}
 
 	@Test
 	public void testHashCodeMulti_multiple_likeList() {
 		final List<Object> list0 = new ArrayList<Object>(Arrays.asList());
-		assertEquals(list0.hashCode(), Objects.hashCodes());
+		assertEquals(list0.hashCode(), Objects.hash());
 
 		final List<Object> list1 = new ArrayList<Object>(Arrays.asList("a"));
-		assertEquals(list1.hashCode(), Objects.hashCodes("a"));
+		assertEquals(list1.hashCode(), Objects.hash("a"));
 
 		final List<Object> list2 = new ArrayList<Object>(Arrays.asList("a", "b"));
-		assertEquals(list2.hashCode(), Objects.hashCodes("a", "b"));
+		assertEquals(list2.hashCode(), Objects.hash("a", "b"));
 
 		final List<Object> list3 = new ArrayList<Object>(Arrays.asList("a", "b", "c"));
-		assertEquals(list3.hashCode(), Objects.hashCodes("a", "b", "c"));
+		assertEquals(list3.hashCode(), Objects.hash("a", "b", "c"));
 	}
 
 	// /**

@@ -200,7 +200,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(<#list entity.primaryKeyList as p>${p.name}<#if p_has_next>,</#if></#list>);
+		return Objects.hash(<#list entity.primaryKeyList as p>${p.name}<#if p_has_next>,</#if></#list>);
 	}
 
 	/**

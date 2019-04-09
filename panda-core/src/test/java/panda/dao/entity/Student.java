@@ -78,7 +78,7 @@ public class Student {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(id, name, birthday, dummy);
+		return Objects.hash(id, name, birthday, dummy);
 	}
 
 	@Override

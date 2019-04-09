@@ -20,7 +20,7 @@ import panda.mvc.validator.Validators;
 })
 public class Resource extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = 555442799L;
+	private static final long serialVersionUID = -1205290123L;
 
 	/**
 	 * Constructor
@@ -164,7 +164,7 @@ public class Resource extends SUBean implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(id);
+		return Objects.hash(id);
 	}
 
 	/**

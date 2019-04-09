@@ -382,7 +382,7 @@ public class Pager implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(start, limit, count, total);
+		return Objects.hash(start, limit, count, total);
 	}
 
 	/**

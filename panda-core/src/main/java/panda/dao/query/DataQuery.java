@@ -1403,7 +1403,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(target, distinct, start, limit, columns, joins, filters, orders, groups);
+		return Objects.hash(target, distinct, start, limit, columns, joins, filters, orders, groups);
 	}
 
 	/**

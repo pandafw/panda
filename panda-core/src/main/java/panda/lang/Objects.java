@@ -179,17 +179,17 @@ public abstract class Objects {
 	 * </p>
 	 * 
 	 * <pre>
-	 * hashCodes((Object[]) null)  = 0
-	 * hashCodes(new Object[0])    = 1
-	 * hashCodes(a)                = 31 + a.hashCode()
-	 * hashCodes(a,b)              = (31 + a.hashCode()) * 31 + b.hashCode()
-	 * hashCodes(a,b,c)            = ((31 + a.hashCode()) * 31 + b.hashCode()) * 31 + c.hashCode()
+	 * hash((Object[]) null)  = 0
+	 * hash(new Object[0])    = 1
+	 * hash(a)                = 31 + a.hashCode()
+	 * hash(a,b)              = (31 + a.hashCode()) * 31 + b.hashCode()
+	 * hash(a,b,c)            = ((31 + a.hashCode()) * 31 + b.hashCode()) * 31 + c.hashCode()
 	 * </pre>
 	 * 
 	 * @param a the objects to obtain the hash code of, may be {@code null}
 	 * @return the hash code of the objects, or zero if null
 	 */
-	public static int hashCodes(final Object... a) {
+	public static int hash(final Object... a) {
 		if (a == null) {
 			return 0;
 		}

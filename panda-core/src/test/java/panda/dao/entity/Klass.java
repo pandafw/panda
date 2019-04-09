@@ -81,7 +81,7 @@ public class Klass {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(name, alias, teacherName, price, closed);
+		return Objects.hash(name, alias, teacherName, price, closed);
 	}
 
 	@Override

@@ -91,7 +91,7 @@ public class Score {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(student, klass, key, score);
+		return Objects.hash(student, klass, key, score);
 	}
 
 	@Override

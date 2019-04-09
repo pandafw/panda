@@ -68,7 +68,7 @@ public class KeyValue<K, V> implements Entry<K, V> {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(key, value);
+		return Objects.hash(key, value);
 	}
 
 	/**

@@ -130,7 +130,7 @@ public class DaoFileData implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(fnm, bno);
+		return Objects.hash(fnm, bno);
 	}
 
 	/**

@@ -76,7 +76,7 @@ public class Teacher {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(name, memo, all, key, data);
+		return Objects.hash(name, memo, all, key, data);
 	}
 
 	@Override

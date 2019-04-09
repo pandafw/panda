@@ -253,7 +253,7 @@ public class CIDR implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(addr, mask);
+		return Objects.hash(addr, mask);
 	}
 
 	/**

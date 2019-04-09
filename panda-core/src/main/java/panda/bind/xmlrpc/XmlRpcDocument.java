@@ -55,7 +55,7 @@ public class XmlRpcDocument<T> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(methodName, fault, params);
+		return Objects.hash(methodName, fault, params);
 	}
 
 	@Override

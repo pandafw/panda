@@ -95,7 +95,7 @@ public class DateRange implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(from, to);
+		return Objects.hash(from, to);
 	}
 
 	/**

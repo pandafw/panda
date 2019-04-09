@@ -123,7 +123,7 @@ public class Sorter implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(column, direction);
+		return Objects.hash(column, direction);
 	}
 
 	/**
