@@ -125,24 +125,6 @@ public abstract class Objects {
 		return object1.equals(object2);
 	}
 
-	public static boolean stringEquals(final Object object1, final Object object2) {
-		if (object1 == object2) {
-			return true;
-		}
-		if (object1 == null || object2 == null) {
-			return false;
-		}
-		if (object1.equals(object2)) {
-			return true;
-		}
-
-		if ((object1 instanceof String) && (object2 instanceof String)) {
-			return false;
-		}
-
-		return object1.toString().equals(object2.toString());
-	}
-
 	/**
 	 * <p>
 	 * Compares two objects for inequality, where either one or both objects may be {@code null}.
@@ -676,80 +658,5 @@ public abstract class Objects {
 	 */
 	public static CompareToBuilder compareToBuilder() {
 		return new CompareToBuilder();
-	}
-
-	/**
-	 * Determine if <code>obj2</code> exists in <code>obj1</code>.
-	 * <table borer="1">
-	 * <tr>
-	 * <td>Type Of obj1</td>
-	 * <td>Comparison type</td>
-	 * </tr>
-	 * <tr>
-	 * <td>null
-	 * <td>
-	 * <td>always return false</td>
-	 * </tr>
-	 * <tr>
-	 * <td>Map</td>
-	 * <td>Map containsKey(obj2)</td>
-	 * </tr>
-	 * <tr>
-	 * <td>Collection</td>
-	 * <td>Collection contains(obj2)</td>
-	 * </tr>
-	 * <tr>
-	 * <td>Array</td>
-	 * <td>there's an array element (e) where e.equals(obj2)</td>
-	 * </tr>
-	 * <tr>
-	 * <td>Object</td>
-	 * <td>obj1.equals(obj2)</td>
-	 * </tr>
-	 * </table>
-	 * 
-	 * @param obj1 the source object(collection or string)
-	 * @param obj2 the object to check
-	 * @return true if obj1 contains obj2
-	 */
-	public static boolean contains(Object obj1, Object obj2) {
-		if (obj1 == null || obj2 == null) {
-			return false;
-		}
-
-		String s2 = null;
-		if (!(obj2 instanceof String)) {
-			s2 = obj2.toString();
-		}
-
-		if (obj1 instanceof Map) {
-			if (((Map<?, ?>)obj1).containsKey(obj2) || (s2 != null && ((Map<?, ?>)obj1).containsKey(s2))) {
-				return true;
-			}
-			return false;
-		}
-		
-		if (obj1 instanceof Iterable) {
-			for (Object value : ((Iterable<?>)obj1)) {
-				if (obj2.equals(value) || stringEquals(s2, value)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		if (obj1.getClass().isArray()) {
-			int len = Array.getLength(obj1);
-			for (int i = 0; i < len; i++) {
-				Object value = Array.get(obj1, i);
-
-				if (obj2.equals(value) || stringEquals(s2, value)) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		return stringEquals(obj1, obj2);
 	}
 }

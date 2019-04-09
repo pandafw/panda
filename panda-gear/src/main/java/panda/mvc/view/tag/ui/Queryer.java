@@ -5,7 +5,6 @@ import java.util.Map;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Collections;
-import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.view.util.ListColumn;
 import panda.mvc.view.util.ListFilter;
@@ -170,15 +169,6 @@ public class Queryer extends UIBean {
 		if (labelBtnQuery == null) {
 			labelBtnQuery = context.getText().getText("query-btn-search", "Search");
 		}
-	}
-
-	/**
-	 * @param obj1 object 1
-	 * @param obj2 object 2
-	 * @return true if obj2 exists in obj1
-	 */
-	public boolean contains(Object obj1, Object obj2) {
-		return Objects.contains(obj1, obj2);
 	}
 
 	/**

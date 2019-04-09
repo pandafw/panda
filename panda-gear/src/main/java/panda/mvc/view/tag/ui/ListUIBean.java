@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import panda.lang.Iterators;
-import panda.lang.Objects;
 import panda.lang.collection.KeyValue;
 
 /**
@@ -45,10 +44,6 @@ public abstract class ListUIBean extends InputUIBean {
 		else {
 			throw new IllegalArgumentException("The list value is not a Collection/Map/Array object: " + (list instanceof String ? list : list.getClass()));
 		}
-	}
-
-	public boolean contains(Object obj1, Object obj2) {
-		return Objects.contains(obj1, obj2);
 	}
 
 	public boolean isEmptyList() {
