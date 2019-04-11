@@ -1,11 +1,11 @@
 id=ID
 status=Status
 createdAt=Create Date
-createdBy=Create UID
+createdBy=Create User
 createdByName=Create User
 createdByUser=Create User
 updatedAt=Update Date
-updatedBy=Update UID
+updatedBy=Update User
 updatedByName=Update User
 updatedByUser=Update User
 
