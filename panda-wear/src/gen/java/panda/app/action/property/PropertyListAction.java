@@ -24,7 +24,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 	 */
 	public PropertyListAction() {
 		setType(Property.class);
-		addDisplayFields(Property.ID, Property.CLAZZ, Property.LOCALE, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY, Property.UPDATED_BY_USER);
+		addDisplayFields(Property.ID, Property.CLAZZ, Property.LOCALE, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY);
 	}
 
 
@@ -133,14 +133,11 @@ public class PropertyListAction extends GenericListAction<Property> {
 			ListColumn lc = new ListColumn();
 			lc.name = "updatedBy";
 			lc.header = getFieldLabel("updatedBy");
-			lc.hidden = true;
-			columns.add(lc);
-		}
-		if (displayField("updatedByUser")) {
-			ListColumn lc = new ListColumn();
-			lc.name = "updatedByUser";
-			lc.header = getFieldLabel("updatedByUser");
 			lc.hidden = false;
+			ListColumn.Format lcf = new ListColumn.Format();
+			lcf.type = "expr";
+			lcf.expr = "top.updatedByUser";
+			lc.format = lcf;
 			columns.add(lc);
 		}
 		return super.expo_csv(qr, columns);

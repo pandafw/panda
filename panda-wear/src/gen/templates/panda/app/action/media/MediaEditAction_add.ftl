@@ -99,6 +99,12 @@
 				value="%{r.createdBy}"
 			/>
 	</#if>
+	<#if a.displayField("createdByName")>
+			<@p.hidden
+				name="createdByName"
+				value="%{r.createdByName}"
+			/>
+	</#if>
 	<#if a.displayField("createdByUser")>
 			<@p.viewfield
 				key="createdByUser"
@@ -116,6 +122,12 @@
 			<@p.hidden
 				name="updatedBy"
 				value="%{r.updatedBy}"
+			/>
+	</#if>
+	<#if a.displayField("updatedByName")>
+			<@p.hidden
+				name="updatedByName"
+				value="%{r.updatedByName}"
 			/>
 	</#if>
 	<#if a.displayField("updatedByUser")>

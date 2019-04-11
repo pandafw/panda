@@ -17,7 +17,7 @@ public abstract class TemplateBulkEnableAction extends GenericBulkAction<Templat
 	 */
 	public TemplateBulkEnableAction() {
 		setType(Template.class);
-		addDisplayFields(Template.ID, Template.NAME, Template.LOCALE, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY, Template.UPDATED_BY_USER);
+		addDisplayFields(Template.ID, Template.NAME, Template.LOCALE, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY);
 	}
 
 

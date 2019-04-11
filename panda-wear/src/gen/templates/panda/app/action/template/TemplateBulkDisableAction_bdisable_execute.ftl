@@ -81,16 +81,13 @@
 			"name": "updatedBy",
 			"header": a.getFieldLabel("updatedBy"),
 			"display": a.displayField("updatedBy"),
-			"hidden": true,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("updatedBy")
-		}, {
-			"name": "updatedByUser",
-			"header": a.getFieldLabel("updatedByUser"),
-			"display": a.displayField("updatedByUser"),
+			"format": {
+				"expr": "top.updatedByUser",
+				"type": "expr"
+			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("updatedByUser")
+			"tooltip": a.getFieldTooltip("updatedBy")
 		}] />
 
 

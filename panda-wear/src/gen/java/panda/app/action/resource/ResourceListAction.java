@@ -24,7 +24,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	public ResourceListAction() {
 		setType(Resource.class);
-		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY, Resource.UPDATED_BY_USER);
+		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY);
 	}
 
 
@@ -119,14 +119,11 @@ public class ResourceListAction extends GenericListAction<Resource> {
 			ListColumn lc = new ListColumn();
 			lc.name = "updatedBy";
 			lc.header = getFieldLabel("updatedBy");
-			lc.hidden = true;
-			columns.add(lc);
-		}
-		if (displayField("updatedByUser")) {
-			ListColumn lc = new ListColumn();
-			lc.name = "updatedByUser";
-			lc.header = getFieldLabel("updatedByUser");
 			lc.hidden = false;
+			ListColumn.Format lcf = new ListColumn.Format();
+			lcf.type = "expr";
+			lcf.expr = "top.updatedByUser";
+			lc.format = lcf;
 			columns.add(lc);
 		}
 		return super.expo_csv(qr, columns);

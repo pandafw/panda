@@ -115,17 +115,13 @@
 			"value": false,
 			"header": a.getFieldLabel("createdBy"),
 			"display": a.displayField("createdBy"),
-			"hidden": true,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("createdBy")
-		}, {
-			"name": "createdByUser",
-			"value": false,
-			"header": a.getFieldLabel("createdByUser"),
-			"display": a.displayField("createdByUser"),
+			"format": {
+				"expr": "top.createdByUser",
+				"type": "expr"
+			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("createdByUser")
+			"tooltip": a.getFieldTooltip("createdBy")
 		}, {
 			"name": "updatedAt",
 			"value": false,
@@ -142,17 +138,13 @@
 			"value": false,
 			"header": a.getFieldLabel("updatedBy"),
 			"display": a.displayField("updatedBy"),
-			"hidden": true,
-			"sortable": false,
-			"tooltip": a.getFieldTooltip("updatedBy")
-		}, {
-			"name": "updatedByUser",
-			"value": false,
-			"header": a.getFieldLabel("updatedByUser"),
-			"display": a.displayField("updatedByUser"),
+			"format": {
+				"expr": "top.updatedByUser",
+				"type": "expr"
+			},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getFieldTooltip("updatedByUser")
+			"tooltip": a.getFieldTooltip("updatedBy")
 		}] />
 
 

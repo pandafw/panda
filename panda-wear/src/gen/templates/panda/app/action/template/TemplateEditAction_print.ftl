@@ -67,6 +67,12 @@
 				value="%{r.updatedBy}"
 			/>
 	</#if>
+	<#if a.displayField("updatedByName")>
+			<@p.hidden
+				name="updatedByName"
+				value="%{r.updatedByName}"
+			/>
+	</#if>
 	<#if a.displayField("updatedByUser")>
 			<@p.viewfield
 				key="updatedByUser"
