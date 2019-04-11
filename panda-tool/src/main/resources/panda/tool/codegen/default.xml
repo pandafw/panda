@@ -47,10 +47,12 @@
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
-			<column name="createdBy" hidden="true" sortable="true" link="false" order="100300">
+			<column name="createdBy" hidden="false" sortable="true" link="false" order="100300">
 				<filter type="number"/>
+				<format type="expr">
+					<param name="expr" value="&quot;top.createdByUser&quot;"/>
+				</format>
 			</column>
-			<column name="createdByUser" hidden="false" sortable="true" link="false" order="100400"/>
 		</list>
 		<list name="chList" extend="baseList">
 			<column name="createdAt" hidden="true" sortable="false" link="false" order="100200">
@@ -66,10 +68,12 @@
 				<format type="datetime"/>
 				<filter type="datetime"/>
 			</column>
-			<column name="updatedBy" hidden="true" sortable="true" link="false" order="100600">
+			<column name="updatedBy" hidden="false" sortable="true" link="false" order="100600">
 				<filter type="number"/>
+				<format type="expr">
+					<param name="expr" value="&quot;top.updatedByUser&quot;"/>
+				</format>
 			</column>
-			<column name="updatedByUser" hidden="false" sortable="true" link="false" order="100700"/>
 		</list>
 		<list name="uhList" extend="baseList">
 			<column name="updatedAt" hidden="true" sortable="false" link="false" order="100500">
@@ -136,7 +140,10 @@
 			<field name="createdBy" order="100300">
 				<editTag name="${tag.hidden}"/>
 			</field>
-			<field name="createdByUser" order="100400">
+			<field name="createdByName" order="100400">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="createdByUser" order="100500">
 				<editTag name="${tag.viewfield}"/>
 			</field>
 		</input>
@@ -162,7 +169,10 @@
 			<field name="updatedBy" order="100600">
 				<editTag name="${tag.hidden}"/>
 			</field>
-			<field name="updatedByUser" order="100700">
+			<field name="updatedByName" order="100700">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="updatedByUser" order="100800">
 				<editTag name="${tag.viewfield}"/>
 			</field>
 		</input>
