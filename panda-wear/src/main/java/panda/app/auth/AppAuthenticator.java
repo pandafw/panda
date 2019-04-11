@@ -177,6 +177,15 @@ public class AppAuthenticator extends UserAuthenticator {
 	}
 
 	/**
+	 * @param ac action context
+	 * @return login user ID or SYSTEM_UID
+	 */
+	public String getLoginUserName(ActionContext ac) {
+		IUser user = getLoginUser(ac);
+		return user == null ? VAL.SYSTEM_UNM : user.getName();
+	}
+
+	/**
 	 * get Login User From Request Attributes
 	 * @param ac action context
 	 * @return user object

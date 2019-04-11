@@ -40,6 +40,11 @@ public interface VAL {
 	 */
 	public final static Long SYSTEM_UID = 1L;
 
+	/**
+	 * SYSTEM_UNM = "SYSTEM";
+	 */
+	public final static String SYSTEM_UNM = "SYSTEM";
+
 	
 	//----------------------------------------------------
 	// List

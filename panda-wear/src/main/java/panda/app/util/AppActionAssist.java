@@ -180,6 +180,10 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		return authenticator.getLoginUserId(context);
 	}
 
+	public String getLoginUserName() {
+		return authenticator.getLoginUserName(context);
+	}
+
 	/**
 	 * getLoginUser
 	 * @return user
@@ -262,15 +266,16 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		Date now = DateTimes.getDate();
 		if (data instanceof ICreatedBy) {
 			ICreatedBy cb = (ICreatedBy)data;
-			cb.setCreatedBy(getLoginUserId());
 			cb.setCreatedAt(now);
+			cb.setCreatedBy(getLoginUserId());
+			cb.setCreatedByName(getLoginUserName());
 		}
 		
 		if (data instanceof IUpdatedBy) {
 			IUpdatedBy ub = (IUpdatedBy)data;
-	
-			ub.setUpdatedBy(getLoginUserId());
 			ub.setUpdatedAt(now);
+			ub.setUpdatedBy(getLoginUserId());
+			ub.setUpdatedByName(getLoginUserName());
 		}
 	}
 
@@ -281,9 +286,9 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	public void setUpdatedByFields(Object data) {
 		if (data instanceof IUpdatedBy) {
 			IUpdatedBy ub = (IUpdatedBy)data;
-
-			ub.setUpdatedBy(getLoginUserId());
 			ub.setUpdatedAt(DateTimes.getDate());
+			ub.setUpdatedBy(getLoginUserId());
+			ub.setUpdatedByName(getLoginUserName());
 		}
 	}
 	
@@ -297,8 +302,9 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 			ICreatedBy cb = (ICreatedBy)data;
 			ICreatedBy sb = (ICreatedBy)sdat;
 	
-			cb.setCreatedBy(sb.getCreatedBy());
 			cb.setCreatedAt(sb.getCreatedAt());
+			cb.setCreatedBy(sb.getCreatedBy());
+			cb.setCreatedByName(sb.getCreatedByName());
 		}
 		
 		setUpdatedByFields(data);
