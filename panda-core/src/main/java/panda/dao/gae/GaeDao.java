@@ -564,7 +564,10 @@ public class GaeDao extends AbstractDao {
 		else {
 			for (Entry<String, Order> en : query.getOrders().entrySet()) {
 				EntityField ef = getEntityField(entity, en.getKey(), "order");
-				gq.addSort(ef.getColumn(), getSortDirection(en.getValue()));
+				if (Strings.isNotEmpty(ef.getColumn())) {
+					// disable sort non-persistence field
+					gq.addSort(ef.getColumn(), getSortDirection(en.getValue()));
+				}
 			}
 		}
 	}
