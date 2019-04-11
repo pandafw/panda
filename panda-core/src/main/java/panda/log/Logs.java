@@ -144,6 +144,7 @@ public final class Logs {
 	
 	protected Logs() {
 		adapter = new ConsoleLogAdapter();
+		adapter.init(this, "console", new HashMap<String, String>());
 	}
 
 	protected Logs(Map<String, String> props) {
