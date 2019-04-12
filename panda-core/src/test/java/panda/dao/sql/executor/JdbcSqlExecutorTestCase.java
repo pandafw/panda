@@ -84,7 +84,7 @@ public abstract class JdbcSqlExecutorTestCase extends SqlExecutorTestCase {
 
 	@Override
 	protected SqlExecutor createExecutor(Connection c) throws Exception {
-		return new JdbcSqlManager().getExecutor(c);
+		return new JdbcSqlExecutors().getExecutor(c);
 	}
 	
 	/**

@@ -20,17 +20,17 @@ public class FreemarkerSqlExecutor extends SimpleSqlExecutor {
 
 	/**
 	 * Constructor
-	 * @param sqlManager sqlManager
+	 * @param sqlExecutors sqlExecutors
 	 */
-	protected FreemarkerSqlExecutor(FreemarkerSqlManager sqlManager) {
-		super(sqlManager);
+	protected FreemarkerSqlExecutor(FreemarkerSqlExecutors sqlExecutors) {
+		super(sqlExecutors);
 	}
 
 	/**
-	 * @return the sqlManager
+	 * @return the freemarker sql executors
 	 */
-	public FreemarkerSqlManager getFreemarkerSqlManager() {
-		return (FreemarkerSqlManager)getSqlManager();
+	public FreemarkerSqlExecutors getFreemarkerSqlExecutors() {
+		return (FreemarkerSqlExecutors)getSqlExecutors();
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class FreemarkerSqlExecutor extends SimpleSqlExecutor {
 	protected String parseSqlStatement(String sql, Object parameterObject, List<JdbcSqlParameter> sqlParams) {
 		StringBuilderWriter sw = new StringBuilderWriter();
 		try {
-			Template template = getFreemarkerSqlManager().getConfiguration().getTemplate(sql);
+			Template template = getFreemarkerSqlExecutors().getTemplate(sql);
 			if (template == null) {
 				throw new IllegalArgumentException("Failed to load SQL template: " + sql);
 			}

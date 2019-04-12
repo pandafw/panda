@@ -2,7 +2,7 @@ package panda.dao.sql.executor;
 
 import java.util.List;
 
-import panda.dao.sql.SqlManager;
+import panda.dao.sql.SqlExecutors;
 
 
 /**
@@ -77,7 +77,8 @@ import panda.dao.sql.SqlManager;
  * <b>EXAMPLE:</b>
  *   Class.forName("org.hsqldb.jdbcDriver" );
  *   Connection connection = DriverManager.getConnection("jdbc:hsqldb:mem:test", "sa", "");
- *   SqlExecutor executor = new SimpleSqlExecutor(connection);
+ *   SimpleSqlExecutors sses = new SimpleSqlExecutors();
+ *   SqlExecutor executor = sses.getSqlExecutor(connection);
  *   
  *   
  *   // queryForObject - Map
@@ -149,17 +150,17 @@ import panda.dao.sql.SqlManager;
 public class SimpleSqlExecutor extends JdbcSqlExecutor {
 	/**
 	 * Constructor
-	 * @param sqlManager sqlManager
+	 * @param sqlExecutor sqlExecutor
 	 */
-	protected SimpleSqlExecutor(SqlManager sqlManager) {
-		super(sqlManager);
+	protected SimpleSqlExecutor(SqlExecutors sqlExecutor) {
+		super(sqlExecutor);
 	}
 
 	/**
-	 * @return the sqlManager
+	 * @return the sqlExecutors
 	 */
-	public SimpleSqlManager getSimpleSqlManager() {
-		return (SimpleSqlManager)getSqlManager();
+	public SimpleSqlExecutors getSimpleSqlExecutors() {
+		return (SimpleSqlExecutors)getSqlExecutors();
 	}
 
 	/**
@@ -171,10 +172,10 @@ public class SimpleSqlExecutor extends JdbcSqlExecutor {
 	 */
 	@Override
 	protected String parseSqlStatement(String sql, Object parameter, List<JdbcSqlParameter> sqlParams) {
-		JdbcSqlParser parser = getSimpleSqlManager().getSqlParser(sql);
+		JdbcSqlParser parser = getSimpleSqlExecutors().getSqlParser(sql);
 		if (parser == null) {
 			parser = createSqlParser(sql);
-			getSimpleSqlManager().putSqlParser(sql, parser);
+			getSimpleSqlExecutors().putSqlParser(sql, parser);
 		}
 		return parser.parse(this, parameter, sqlParams);
 	}

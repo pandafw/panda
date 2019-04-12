@@ -23,7 +23,7 @@ public class FreemarkerSqlExecutorTest extends SqlExecutorTestCase {
 
 	@Override
 	protected SqlExecutor createExecutor(Connection c) throws Exception {
-		return new FreemarkerSqlManager().getExecutor(c);
+		return new FreemarkerSqlExecutors().getExecutor(c);
 	}
 
 	/**

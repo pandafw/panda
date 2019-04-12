@@ -29,7 +29,7 @@ public class SimpleSqlParserTest {
 	}
 
 	protected SqlExecutor createExecutor() {
-		return new SimpleSqlManager().getExecutor();
+		return new SimpleSqlExecutors().getExecutor();
 	}
 	
 	protected JdbcSqlParser createParser(String sql) {

@@ -15,7 +15,7 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlLogger;
-import panda.dao.sql.SqlManager;
+import panda.dao.sql.SqlExecutors;
 import panda.dao.sql.SqlResultSet;
 import panda.dao.sql.Sqls;
 import panda.dao.sql.adapter.TypeAdapters;
@@ -69,25 +69,25 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	protected int timeout;
 
 	/**
-	 * SQL Manager
+	 * SQL Executors
 	 */
-	protected final SqlManager sqlManager;
+	protected final SqlExecutors sqlExecutors;
 
 	/**
 	 * Constructor
-	 * @param sqlManager sqlManager
+	 * @param sqlExecutors sqlExecutors
 	 */
-	protected JdbcSqlExecutor(SqlManager sqlManager) {
-		this.sqlManager = sqlManager;
+	protected JdbcSqlExecutor(SqlExecutors sqlExecutors) {
+		this.sqlExecutors = sqlExecutors;
 		reset();
 	}
 
 	//------------------------------------------------------------------
 	/**
-	 * @return the sqlManager
+	 * @return the sqlExecutors
 	 */
-	public SqlManager getSqlManager() {
-		return sqlManager;
+	public SqlExecutors getSqlExecutors() {
+		return sqlExecutors;
 	}
 
 	/**
@@ -508,8 +508,8 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * reset
 	 */
 	public void reset() {
-		beans = sqlManager.getBeans();
-		typeAdapters = sqlManager.getTypeAdapters();
+		beans = sqlExecutors.getBeans();
+		typeAdapters = sqlExecutors.getTypeAdapters();
 		
 		connection = null;
 		resultSetType = ResultSet.TYPE_FORWARD_ONLY;

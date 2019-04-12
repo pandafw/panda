@@ -87,7 +87,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 
 	@Override
 	protected SqlExecutor createExecutor(Connection c) throws Exception {
-		return new SimpleSqlManager().getExecutor(c);
+		return new SimpleSqlExecutors().getExecutor(c);
 	}
 	
 	/**

@@ -21,7 +21,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 
 	@Override
 	protected SqlExecutor createExecutor(Connection c) throws Exception {
-		return new DynamicSqlManager().getExecutor(c);
+		return new DynamicSqlExecutors().getExecutor(c);
 	}
 
 	/**

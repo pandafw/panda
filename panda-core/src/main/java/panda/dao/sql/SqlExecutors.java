@@ -5,35 +5,11 @@ import java.sql.ResultSet;
 
 import panda.bean.Beans;
 import panda.dao.sql.adapter.TypeAdapters;
-import panda.dao.sql.executor.DynamicSqlManager;
 
 
 /**
  */
-public abstract class SqlManager {
-	private static SqlManager i = new DynamicSqlManager();
-
-	/**
-	 * @return the instance
-	 */
-	public static SqlManager i() {
-		return i;
-	}
-
-	/**
-	 * @return the instance
-	 */
-	public static SqlManager getInstance() {
-		return i;
-	}
-
-	/**
-	 * @param instance the instance to set
-	 */
-	public static void setInstance(SqlManager instance) {
-		SqlManager.i = instance;
-	}
-	
+public abstract class SqlExecutors {
 	/**
 	 * Beans
 	 */

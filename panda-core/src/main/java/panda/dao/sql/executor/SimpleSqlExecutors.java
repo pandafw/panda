@@ -7,12 +7,12 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.SqlManager;
+import panda.dao.sql.SqlExecutors;
 
 
 /**
  */
-public class SimpleSqlManager extends SqlManager {
+public class SimpleSqlExecutors extends SqlExecutors {
 	/**
 	 * lock for cache
 	 */
@@ -35,8 +35,7 @@ public class SimpleSqlManager extends SqlManager {
 	 *            ResultSet.HOLD_CURSORS_OVER_COMMIT or ResultSet.CLOSE_CURSORS_AT_COMMIT
 	 */
 	@Override
-	public SqlExecutor getExecutor(Connection connection, int resultSetType, int resultSetConcurrency,
-			int resultSetHoldability) {
+	public SqlExecutor getExecutor(Connection connection, int resultSetType, int resultSetConcurrency, int resultSetHoldability) {
 		SimpleSqlExecutor se = new SimpleSqlExecutor(this);
 		se.setConnection(connection);
 		se.setResultSetType(resultSetType);

@@ -15,7 +15,7 @@ import panda.dao.sql.SqlExecutor;
  */
 public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	protected SqlExecutor createExecutor() {
-		return new DynamicSqlManager().getExecutor();
+		return new DynamicSqlExecutors().getExecutor();
 	}
 	
 	protected JdbcSqlParser createParser(String sql) {

@@ -6,7 +6,7 @@ import panda.dao.sql.SqlExecutor;
 
 /**
  */
-public class DynamicSqlManager extends SimpleSqlManager {
+public class DynamicSqlExecutors extends SimpleSqlExecutors {
 	/**
 	 * Constructor
 	 * 
@@ -19,8 +19,7 @@ public class DynamicSqlManager extends SimpleSqlManager {
 	 *            ResultSet.HOLD_CURSORS_OVER_COMMIT or ResultSet.CLOSE_CURSORS_AT_COMMIT
 	 */
 	@Override
-	public SqlExecutor getExecutor(Connection connection, int resultSetType, int resultSetConcurrency,
-			int resultSetHoldability) {
+	public SqlExecutor getExecutor(Connection connection, int resultSetType, int resultSetConcurrency, int resultSetHoldability) {
 		DynamicSqlExecutor se = new DynamicSqlExecutor(this);
 		se.setConnection(connection);
 		se.setResultSetType(resultSetType);

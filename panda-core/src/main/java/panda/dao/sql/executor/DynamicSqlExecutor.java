@@ -43,10 +43,10 @@ package panda.dao.sql.executor;
 public class DynamicSqlExecutor extends SimpleSqlExecutor {
 	/**
 	 * Constructor
-	 * @param sqlManager sqlManager
+	 * @param sqlExecutors sqlExecutors
 	 */
-	protected DynamicSqlExecutor(DynamicSqlManager sqlManager) {
-		super(sqlManager);
+	protected DynamicSqlExecutor(DynamicSqlExecutors sqlExecutors) {
+		super(sqlExecutors);
 	}
 
 	/**

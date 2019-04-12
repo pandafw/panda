@@ -1,53 +1,82 @@
 package panda.dao.sql.executor;
 
-import java.net.URL;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.dao.sql.SqlExecutor;
-import panda.lang.ClassLoaders;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
-import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
+import panda.dao.sql.SqlExecutor;
+import panda.lang.Systems;
+import panda.tpl.ftl.ClassTemplateLoader;
 
 
 /**
  */
-public class FreemarkerSqlManager extends SimpleSqlManager {
+public class FreemarkerSqlExecutors extends SimpleSqlExecutors {
 	/**
 	 * configuration
 	 */
 	private Configuration configuration;
 
 	/**
-	 * ClassTemplateLoader
+	 * template file location
 	 */
-	public static class ClassTemplateLoader extends URLTemplateLoader {
-		protected URL getURL(String name) {
-			return ClassLoaders.getResourceAsURL(name, getClass().getClassLoader());
-		}
+	private File location;
+	
+	
+	public FreemarkerSqlExecutors() throws IOException {
+		setLocation(Systems.getUserDir());
+	}
+
+	/**
+	 * @param location template file location
+	 * @throws IOException if an error occurs
+	 */
+	public FreemarkerSqlExecutors(File location) throws IOException {
+		setLocation(location);
+	}
+
+	/**
+	 * @return the location
+	 */
+	public File getLocation() {
+		return location;
+	}
+
+
+	/**
+	 * @param location the location to set
+	 */
+	public void setLocation(File location) throws IOException {
+		this.location = location;
+		this.configuration = getConfiguration();
+	}
+
+	protected Template getTemplate(String name) throws IOException {
+		return configuration.getTemplate(name);
 	}
 	
 	/**
 	 * @return the configuration
-	 * @throws Exception if an error occurs
+	 * @throws IOException if an error occurs
 	 */
 	@SuppressWarnings("deprecation")
-	public Configuration getConfiguration() throws Exception {
-		if (configuration == null) {
-			configuration = new Configuration();
+	protected Configuration getConfiguration() throws IOException {
+		Configuration configuration = new Configuration();
 
-			List<TemplateLoader> tls = new ArrayList<TemplateLoader>();
-			tls.add(new ClassTemplateLoader());
-			tls.add(new FileTemplateLoader());
-			
-			MultiTemplateLoader mtl = new MultiTemplateLoader(tls.toArray(new TemplateLoader[tls.size()]));
-			
-			configuration.setTemplateLoader(mtl);
-		}
+		List<TemplateLoader> tls = new ArrayList<TemplateLoader>();
+		tls.add(new ClassTemplateLoader());
+		tls.add(new FileTemplateLoader(location));
+		
+		MultiTemplateLoader mtl = new MultiTemplateLoader(tls.toArray(new TemplateLoader[tls.size()]));
+		
+		configuration.setTemplateLoader(mtl);
 		return configuration;
 	}
 
