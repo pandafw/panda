@@ -8,7 +8,6 @@ import java.util.Map;
 
 import panda.args.Option;
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.SqlManager;
 import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Charsets;
@@ -176,7 +175,7 @@ public class ResourceImportor extends AbstractSqlTool {
 		println1("Importing resource file: " + f.getPath());
 		
 		FileInputStream fis = null;
-		SqlExecutor executor = SqlManager.i().getExecutor(connection); 
+		SqlExecutor executor = getSqlExecutor(); 
 		
 		try {
 			fis = new FileInputStream(f);

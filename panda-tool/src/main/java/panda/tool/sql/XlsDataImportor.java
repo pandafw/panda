@@ -13,7 +13,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.SqlManager;
 import panda.lang.Strings;
 
 /**
@@ -76,7 +75,7 @@ public class XlsDataImportor extends AbstractDataImportor {
 		int line = 2;
 		Map<String, Object> values = null;
 		try {
-			SqlExecutor executor = SqlManager.i().getExecutor(connection); 
+			SqlExecutor executor = getSqlExecutor(); 
 
 			int cnt = 0;
 			for (; ; line++) {

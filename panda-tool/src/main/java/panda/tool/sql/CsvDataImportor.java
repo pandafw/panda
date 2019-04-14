@@ -9,7 +9,6 @@ import java.util.Map;
 
 import panda.args.Option;
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.SqlManager;
 import panda.io.stream.CsvReader;
 import panda.lang.Strings;
 
@@ -95,7 +94,7 @@ public class CsvDataImportor extends AbstractDataImportor {
 
 		String insertSql = getInsertSql(tableName, columns, types);
 		try {
-			SqlExecutor executor = SqlManager.i().getExecutor(connection); 
+			SqlExecutor executor = getSqlExecutor(); 
 
 			int cnt = 0;
 			for (int i = 3; ; i++) {

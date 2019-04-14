@@ -16,7 +16,6 @@ import panda.args.Option;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.SqlManager;
 import panda.dao.sql.SqlResultSet;
 import panda.io.Streams;
 import panda.io.stream.CsvReader;
@@ -187,7 +186,7 @@ public class CsvDataExportor extends AbstractDataExportor {
 			Class<?> recClass = createDataClass();
 			BeanHandler beanh = Beans.i().getBeanHandler(recClass);
 
-			SqlExecutor executor = SqlManager.i().getExecutor(connection); 
+			SqlExecutor executor = getSqlExecutor(); 
 			SqlResultSet<?> srs = executor.selectResultSet(selectSql, recClass);
 			while (srs.next()) {
 				Object data = srs.getResult();

@@ -17,6 +17,7 @@ import panda.dao.sql.SqlIterator;
 import panda.dao.sql.Sqls;
 import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.dao.sql.executor.JdbcSqlExecutor;
+import panda.dao.sql.executor.JdbcSqlExecutors;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
@@ -99,9 +100,8 @@ public abstract class AppHelper {
 	
 	public static void execSql(DaoClient dc, String file) throws SQLException {
 		if (dc instanceof SqlDaoClient) {
-			JdbcSqlExecutor se = ((SqlDaoClient)dc).getJdbcSqlExecutor();
 			Connection connection = ((SqlDaoClient)dc).getDataSource().getConnection();
-			se.setConnection(connection);
+			JdbcSqlExecutor se = JdbcSqlExecutors.getJdbcExecutor(connection);
 			try {
 				connection.setAutoCommit(true);
 				InputStream is = ClassLoaders.getResourceAsStream(file);

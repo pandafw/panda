@@ -11,7 +11,6 @@ import java.util.Properties;
 
 import panda.args.Option;
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.SqlManager;
 import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Locales;
@@ -210,7 +209,7 @@ public class PropertyImportor extends AbstractSqlTool {
 			Streams.safeClose(fis);
 		}
 
-		SqlExecutor executor = SqlManager.i().getExecutor(connection); 
+		SqlExecutor executor = getSqlExecutor(); 
 		try {
 			if (Strings.isNotEmpty(deleteSql)) {
 				cntDel = executor.update(deleteSql, param);

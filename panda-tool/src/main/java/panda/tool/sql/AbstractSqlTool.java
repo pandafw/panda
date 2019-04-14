@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import panda.args.Option;
+import panda.dao.sql.SqlExecutors;
+import panda.dao.sql.SqlExecutor;
+import panda.dao.sql.executor.DynamicSqlExecutors;
 import panda.tool.AbstractCommandTool;
 import panda.tool.AbstractFileTool;
 
@@ -28,6 +31,7 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 	protected String jdbcPassword = "";
 	protected boolean autoCommit = false;
 	protected Connection connection;
+	protected SqlExecutors sqls = new DynamicSqlExecutors();
 
 	/**
 	 * @return the jdbcDriver
@@ -118,6 +122,10 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 		this.connection = connection;
 	}
 
+	public SqlExecutor getSqlExecutor() {
+		return sqls.getExecutor(connection);
+	}
+	
 	protected void connect() throws SQLException, ClassNotFoundException {
 		if (connection == null) {
 			Class.forName(jdbcDriver);
