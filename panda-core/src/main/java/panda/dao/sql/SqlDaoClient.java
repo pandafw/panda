@@ -9,8 +9,6 @@ import javax.sql.DataSource;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DatabaseMeta;
-import panda.dao.sql.executor.JdbcSqlExecutor;
-import panda.dao.sql.executor.JdbcSqlManager;
 import panda.dao.sql.expert.SqlExpert;
 import panda.dao.sql.expert.SqlExpertConfig;
 import panda.log.Log;
@@ -23,7 +21,6 @@ public class SqlDaoClient extends DaoClient {
 	
 	protected DataSource dataSource;
 	protected SqlExpert sqlExpert;
-	protected SqlManager sqlManager = new JdbcSqlManager();
 	
 	/**
 	 * Constructor
@@ -61,27 +58,6 @@ public class SqlDaoClient extends DaoClient {
 		this.sqlExpert = sqlExpert;
 	}
 
-	/**
-	 * @return the sqlManager
-	 */
-	public SqlManager getSqlManager() {
-		return sqlManager;
-	}
-
-	/**
-	 * @param sqlManager the sqlManager to set
-	 */
-	public void setSqlManager(SqlManager sqlManager) {
-		this.sqlManager = sqlManager;
-	}
-
-	/**
-	 * @return the jdbcSqlExecutor
-	 */
-	public JdbcSqlExecutor getJdbcSqlExecutor() {
-		return (JdbcSqlExecutor)sqlManager.getExecutor();
-	}
-	
 	/**
 	 * get SqlExpert by DataSource
 	 * 

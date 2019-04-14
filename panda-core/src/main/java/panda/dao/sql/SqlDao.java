@@ -16,6 +16,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.query.DataQuery;
 import panda.dao.query.Query;
 import panda.dao.sql.executor.JdbcSqlExecutor;
+import panda.dao.sql.executor.JdbcSqlExecutors;
 import panda.dao.sql.expert.SqlExpert;
 import panda.io.Streams;
 import panda.lang.Exceptions;
@@ -109,7 +110,7 @@ public class SqlDao extends AbstractDao {
 				}
 			}
 			if (executor == null) {
-				executor = getSqlDaoClient().getJdbcSqlExecutor();
+				executor = JdbcSqlExecutors.getJdbcExecutor();
 			}
 			else {
 				executor.reset();
