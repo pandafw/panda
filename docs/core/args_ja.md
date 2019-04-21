@@ -1,16 +1,14 @@
  Panda.Args
 ============================
 
- Panda.Args 是一个小巧的命令行参数解释器，使用它可以很方便的在CUI应用程序中解析命令行参数。
+ Panda.Args は小さいコマンドライン引数のパーサーです。それを利用して、コマンドの引数を簡単に解析できます。
+ 
+### 機能
+ - annotationsでパラメーターを定義する
+ - ヘルプの自動生成
+ - GNUスタイルのオプションを解析するように設計されています（例：　ls -lRにはlとRの2つのオプションがある）
 
-### 它有哪些功能？
- - 利用注释(annotations)来定义参数
- - 自动生成HELP
- - 可以解析GNU风格的选项（其中ls -lR被认为有两个选项l和R）。
-
-
-### 我该如何使用它？
- 看一下下面的Sample吧
+### 使い方
 
 ```Java
 import java.io.File;
@@ -83,14 +81,14 @@ public class HelloWorld {
 }
 ```
 
-### 编译程序
+### ソースをコンパイル
 
 > javac -classpath .;panda-core.jar HelloWorld.java
 
 
-### 运行程序
+### プログラムを実行
 
-#### 无参数
+#### 引数がない場合
 
 > java -classpath .;panda-core.jar HelloWorld
 
@@ -113,7 +111,7 @@ Output:
 	  -s, --ss=S    string option (required)
 
 
-#### 传递参数和选项
+#### 必須パラメーターとオプションを渡す
 
 > java -classpath .;panda-core.jar HelloWorld **-s hello baby**  
 > java -classpath .;panda-core.jar HelloWorld **-shello baby**  
@@ -123,7 +121,7 @@ Output:
 > HelloWorld [**arg0=baby**, arg1=null, args=null, num=0, file=null, **str=hello**, b1=false, b2=false, help=false]
 
 
-#### 传递long-form选项
+#### long-formのオプションを渡す
 
 > java -classpath .;panda-core.jar HelloWorld **--ss=hello** baby  
 
@@ -132,7 +130,7 @@ Output:
 > HelloWorld [arg0=baby, arg1=null, args=null, num=0, file=null, **str=hello**, b1=false, b2=false, help=false]
 
 
-#### 传递无参数选项
+#### パラメータなしのオプションを渡す
 
 > java -classpath .;panda-core.jar HelloWorld -s hello **-1** my baby  
 
@@ -141,7 +139,7 @@ Output:
 > HelloWorld [arg0=my, arg1=baby, args=null, num=0, file=null, str=hello, **b1=true**, b2=false, help=false]
 
 
-#### 传递多个无参数选项
+#### 複数のパラメータなしのオプションを渡す
 
 > java -classpath .;panda-core.jar HelloWorld -s hello **-12** my baby  
 
@@ -154,5 +152,5 @@ Output:
 
 ---
 
- - [下一篇： BEAN →](bean_zh.md)
- - [返回目录 ↑](index_zh.md)
+ - [次： BEAN →](bean_ja.md)
+ - [インデックス ↑](index_ja.md)

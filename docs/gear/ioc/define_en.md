@@ -68,7 +68,7 @@ Output:
 Where **com.my.PetFactory** is the full class name of the factory class, **create** is the factory method, and its parameter is "**Tom**".
 
 
-#### Syntax 2 (#ioc_object_name@method_name):
+#### Syntax 2 (#ioc_object_name.method_name):
 ```JavaScript
 {
 	type : "panda.demo.ioc.Pet",

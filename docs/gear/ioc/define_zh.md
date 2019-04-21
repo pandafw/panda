@@ -65,7 +65,7 @@ JSON 配置文件：
 其中**com.my.PetFactory**是工厂类的类全名, **create**是工厂方法, 其参数是"**Tom**"。
 
 
-#### 语法2 (#Ioc对象名@方法名):
+#### 语法2 (#Ioc对象名.方法名):
 ```JavaScript
 {
 	type : "panda.demo.ioc.Pet",

@@ -113,39 +113,39 @@ Output:
 
 #### pass required arguments and options
 
-> java -classpath .;panda-core.jar HelloWorld -s hello baby
-> java -classpath .;panda-core.jar HelloWorld -shello baby
+> java -classpath .;panda-core.jar HelloWorld **-s hello baby**  
+> java -classpath .;panda-core.jar HelloWorld **-shello baby**  
 
 Output:
 
-	HelloWorld [arg0=baby, arg1=null, args=null, num=0, file=null, str=hello, b1=false, b2=false, help=false]
+> HelloWorld [**arg0=baby**, arg1=null, args=null, num=0, file=null, **str=hello**, b1=false, b2=false, help=false]
 
 
 #### pass long-form options
 
-> java -classpath .;panda-core.jar HelloWorld --ss=hello baby
+> java -classpath .;panda-core.jar HelloWorld **--ss=hello** baby  
 
 Output:
 
-	HelloWorld [arg0=baby, arg1=null, args=null, num=0, file=null, str=hello, b1=false, b2=false, help=false]
+> HelloWorld [arg0=baby, arg1=null, args=null, num=0, file=null, **str=hello**, b1=false, b2=false, help=false]
 
 
 #### pass options without parameter
 
-> java -classpath .;panda-core.jar HelloWorld -s hello -1 my baby
+> java -classpath .;panda-core.jar HelloWorld -s hello **-1** my baby  
 
 Output:
 
-	HelloWorld [arg0=my, arg1=baby, args=null, num=0, file=null, str=hello, b1=true, b2=false, help=false]
+> HelloWorld [arg0=my, arg1=baby, args=null, num=0, file=null, str=hello, **b1=true**, b2=false, help=false]
 
 
 #### pass 2 options without parameter
 
-> java -classpath .;panda-core.jar HelloWorld -s hello -12 my baby
+> java -classpath .;panda-core.jar HelloWorld -s hello **-12** my baby  
 
 Output:
 
-	HelloWorld [arg0=my, arg1=baby, args=null, num=0, file=null, str=hello, b1=true, b2=true, help=false]
+> HelloWorld [arg0=my, arg1=baby, args=null, num=0, file=null, str=hello, **b1=true**, **b2=true**, help=false]
 
 
 
