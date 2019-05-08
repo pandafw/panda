@@ -14,6 +14,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.ValidateHandler;
 import panda.mvc.Validator;
 import panda.mvc.annotation.validate.ValidateBy;
+import panda.mvc.validator.VisitValidator;
 
 @IocBean(type=ValidateHandler.class)
 public class DefaultValidateHandler implements ValidateHandler {
@@ -22,14 +23,11 @@ public class DefaultValidateHandler implements ValidateHandler {
 
 	@Override
 	public boolean validate(ActionContext ac, String name, Object value) {
-		return validate(ac, null, name, value);
+		Validator fv = createValidator(ac, VisitValidator.class);
+		fv.setName(name);
+		return fv.validate(ac, value);
 	}
 
-	@Override
-	public boolean validate(ActionContext ac, Validator parent, String name, Object value) {
-		return validate(ac, parent, name, value, null);
-	}
-	
 	@Override
 	public boolean validate(ActionContext ac, Validator parent, String name, Object value, Annotation[] vas) {
 		boolean r = true;

@@ -19,16 +19,6 @@ public interface ValidateHandler {
 	 * @param parent parent validator
 	 * @param name field name
 	 * @param value field value
-	 * @return validate result
-	 */
-	boolean validate(ActionContext ac, Validator parent, String name, Object value);
-
-	/**
-	 * validate value
-	 * @param ac action context
-	 * @param parent parent validator
-	 * @param name field name
-	 * @param value field value
 	 * @param vas validate annotations
 	 * @return validate result
 	 */
