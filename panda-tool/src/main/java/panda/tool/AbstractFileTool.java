@@ -4,7 +4,6 @@ import java.io.File;
 
 import panda.args.Option;
 import panda.io.FileNames;
-import panda.lang.HandledException;
 import panda.lang.Strings;
 import panda.lang.Systems;
 

@@ -6,8 +6,8 @@ import java.net.URL;
 import panda.args.Argument;
 import panda.args.Option;
 import panda.io.Streams;
-import panda.lang.HandledException;
 import panda.tool.AbstractCommandTool;
+import panda.tool.HandledException;
 import panda.util.chardet.CharDetects;
 import panda.util.chardet.LangHint;
 
