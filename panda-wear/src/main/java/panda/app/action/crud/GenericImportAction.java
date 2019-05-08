@@ -530,6 +530,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @param data data object
 	 */
 	protected void trimData(T data) {
+		assist().setCreatedByFields(data);
 	}
 
 	/**
@@ -537,7 +538,6 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @param data the input data
 	 */
 	protected void insertData(T data) {
-		assist().setCreatedByFields(data);
 		getDao().insert(data);
 	}
 
