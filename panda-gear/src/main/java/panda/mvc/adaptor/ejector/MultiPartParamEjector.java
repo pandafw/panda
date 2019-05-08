@@ -24,6 +24,7 @@ import panda.mvc.adaptor.multipart.FileItemIterator;
 import panda.mvc.adaptor.multipart.FileItemStream;
 import panda.mvc.adaptor.multipart.FileUploader;
 import panda.net.URLHelper;
+import panda.servlet.FilteredHttpServletRequestWrapper;
 import panda.servlet.HttpServlets;
 import panda.vfs.FileItem;
 import panda.vfs.FileStore;
@@ -111,7 +112,7 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 			final FileItemStream item = iter.next();
 			if (item.isFormField()) {
 				String s = Streams.toString(item.openStream(), encoding);
-				addStringParam(item.getFieldName(), s);
+				addStringParam(req, item.getFieldName(), s);
 			}
 			else {
 				FileItem i = saveUploadFile(item);
@@ -132,9 +133,14 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 		return fi;
 	}
 
-	protected void addStringParam(String name, String value) {
+	protected void addStringParam(HttpServletRequest req, String name, String value) {
 		if (Strings.isNotEmpty(value)) {
 			addParam(name, value);
+
+			// add to FilteredHttpServletRequestWrapper
+			if (req instanceof FilteredHttpServletRequestWrapper) {
+				((FilteredHttpServletRequestWrapper)req).addParam(name, value);
+			}
 		}
 	}
 	

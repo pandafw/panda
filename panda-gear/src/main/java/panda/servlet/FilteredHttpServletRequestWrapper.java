@@ -41,6 +41,7 @@ public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper
 
 	public FilteredHttpServletRequestWrapper(HttpServletRequest req) {
 		super(req);
+		init();
 	}
 
 	
@@ -59,6 +60,27 @@ public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper
 	}
 
 	//--------------------------------------------------------------------
+	protected void init() {
+		HttpServletRequest req = (HttpServletRequest)getRequest();
+
+		params = new HashMap<String, String[]>();
+
+		String cs = Charsets.defaultEncoding(getCharacterEncoding(), defaultEncoding);
+		Map<String, Object> ps = URLHelper.parseQueryString(req.getQueryString(), cs, false);
+		addParams(ps);
+		
+		if (HttpServlets.isFormUrlEncoded(req)) {
+			try {
+				String qs = Streams.toString(getSource(), cs);
+				ps = URLHelper.parseQueryString(qs, cs, false);
+				addParams(ps);
+			}
+			catch (IOException e) {
+				log.warn("Failed to decode urlencoded form", e);
+			}
+		}
+	}
+
 	protected InputStream getSource() throws IOException {
 		if (source == null) {
 			HttpServletRequest req = (HttpServletRequest)getRequest();
@@ -82,42 +104,47 @@ public class FilteredHttpServletRequestWrapper extends HttpServletRequestWrapper
 	}
 
 	protected Map<String, String[]> getParams() {
-		if (params == null) {
-			HttpServletRequest req = (HttpServletRequest)getRequest();
-
-			params = new HashMap<String, String[]>();
-
-			String cs = Charsets.defaultEncoding(getCharacterEncoding(), defaultEncoding);
-			Map<String, Object> ps = URLHelper.parseQueryString(req.getQueryString(), cs, false);
-			addParams(ps);
-			
-			if (HttpServlets.isFormUrlEncoded(req)) {
-				try {
-					String qs = Streams.toString(getSource(), cs);
-					ps = URLHelper.parseQueryString(qs, cs, false);
-					addParams(ps);
-				}
-				catch (IOException e) {
-					log.warn("Failed to decode urlencoded form", e);
-				}
-			}
-		}
-		
 		return params;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void addParams(Map<String, Object> ps) {
+	public void addParams(Map<String, Object> ps) {
 		for (Entry<String, Object> en : ps.entrySet()) {
-			Object v = en.getValue();
-			if (v instanceof String) {
-				v = new String[] { (String)v };
-			}
-			else if (v instanceof List) {
-				v = ((List<String>)v).toArray(new String[((List)v).size()]);
-			}
-			params.put(en.getKey(), (String[])v);
+			addParam(en.getKey(), en.getValue());
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addParam(String name, Object value) {
+		String[] vs = params.get(name);
+		if (vs == null) {
+			if (value instanceof String) {
+				vs = new String[] { (String)value };
+			}
+			else if (value instanceof List) {
+				vs = ((List<String>)value).toArray(new String[((List)value).size()]);
+			}
+			else if (value instanceof String[]) {
+				vs = (String[])value;
+			}
+			else {
+				return;
+			}
+		}
+		else {
+			if (value instanceof String) {
+				vs = Arrays.add(vs, (String)value);
+			}
+			else if (value instanceof List) {
+				vs = Arrays.addAll(vs, ((List<String>)value).toArray(new String[((List)value).size()]));
+			}
+			else if (value instanceof String[]) {
+				vs = Arrays.addAll(vs, (String[])value);
+			}
+			else {
+				return;
+			}
+		}
+		params.put(name, vs);
 	}
 
 	//------------------------------------------------------
