@@ -1040,6 +1040,24 @@ public abstract class Collections {
 	}
 
 	/**
+	 * Return a new key/value swapped map.
+	 * Map<K, V> -> Map<V,K>
+	 * 
+	 * @param map the map
+	 */
+	public static <K, V> Map<V, K> swapMap(Map<K, V> map) {
+		if (map == null) {
+			return null;
+		}
+		
+		Map<V, K> nm = Classes.born(map.getClass());
+		for (Entry<K, V> en : map.entrySet()) {
+			nm.put(en.getValue(), en.getKey());
+		}
+		return nm;
+	}
+
+	/**
 	 * Replaces all of the elements of the specified list with the specified element.
 	 * <p>
 	 * This method runs in linear time.
