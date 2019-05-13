@@ -1228,19 +1228,27 @@ jQuery.jcookie = function(name, value, options) {
 })(jQuery);
 (function($) {
 	function clearMaskTimeout($el) {
-		//if this element has delayed mask scheduled then remove it and display the new one
+		//if this element has delayed mask scheduled then remove it
 		var t = $el.data("_mask_timeout");
 		if (t) {
 			clearTimeout(t);
 			$el.removeData("_mask_timeout");
 		}
+
+		//if this element has unmask timeout scheduled then remove it
+		t = $el.data("_unmask_timeout");
+		if (t) {
+			clearTimeout(t);
+			$el.removeData("_unmask_timeout");
+		}
 	}
 	
 	function maskElement($el, c) {
-		clearMaskTimeout($el);
-		
 		if ($el.isLoadMasked()) {
 			unmaskElement($el);
+		}
+		else {
+			clearMaskTimeout($el);
 		}
 		
 		if ($el.css("position") == "static") {
@@ -1282,6 +1290,12 @@ jQuery.jcookie = function(name, value, options) {
 			$mb.center();
 		}
 		$mb.show();
+		
+		if (c.timeout > 0) {
+			$el.data("_unmask_timeout", setTimeout(function() {
+				unmaskElement($el);
+			}, c.timeout));
+		}
 	}
 	
 	function unmaskElement($el) {
