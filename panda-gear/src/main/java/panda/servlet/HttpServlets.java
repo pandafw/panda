@@ -832,8 +832,7 @@ public class HttpServlets {
 		}
 		
 		if (ua.isSafari()) {
-			int v = ua.getMajorVersion(UserAgent.SAFARI);
-			if (v < 6) {
+			if (ua.getBrowser().getMajor() < 6) {
 				return quoteFileName(filename);
 			}
 			return rfc2231FileName(filename, charset);

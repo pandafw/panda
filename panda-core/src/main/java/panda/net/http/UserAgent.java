@@ -3,10 +3,6 @@ package panda.net.http;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 
 /**
  * HTTP user-agent
@@ -20,341 +16,493 @@ public class UserAgent {
 	public static final String UA_IPHONE_SAFARI = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1";
 	public static final String UA_IPAD_SAFARI = "Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1";
 
-	public static class Version {
-		public String version;
-		public int major;
-		public int minor;
-		public Version(String version, int major, int minor) {
-			this.version = version;
-			this.major = major;
-			this.minor = minor;
+	public static final int FLAG_IPHONE = 0x0001;
+	public static final int FLAG_IPAD = 0x0002;
+	public static final int FLAG_IPOD = 0x0004;
+	public static final int FLAG_IOS = FLAG_IPHONE | FLAG_IPAD | FLAG_IPOD;
+	public static final int FLAG_ANDROID = 0x0010;
+	public static final int FLAG_WINDOWS = 0x0020;
+	public static final int FLAG_LINUX = 0x0040;
+	public static final int FLAG_MACINTOSH = 0x0080;
+	public static final int FLAG_MOBILE = 0x0100;
+	public static final int FLAG_DESKTOP = 0x0200;
+	public static final int FLAG_TABLET = 0x0400;
+	public static final int FLAG_GAME = 0x0800;
+	public static final int FLAG_32BIT = 0x1000;
+	public static final int FLAG_64BIT = 0x2000;
+
+	private static class Detect {
+		private String name;
+		private String key;
+		private boolean nocase;
+		private String verp;
+		private int flags;
+		
+		public Detect(String name, String key) {
+			this.name = name;
+			this.key = key;
+		}
+		
+		public Detect(String name, int flags) {
+			this.name = name;
+			this.key = name;
+			this.flags = flags;
 		}
 
-		@Override
-		public String toString() {
-			return version;
+		public Detect(String name, String key, boolean nocase) {
+			this.name = name;
+			this.key = key;
+			this.nocase = nocase;
+		}
+
+		public Detect(String name, String key, int flags) {
+			this.name = name;
+			this.key = key;
+			this.flags = flags;
+		}
+
+		public Detect(String name, String key, String verp) {
+			this.name = name;
+			this.key = key;
+			this.verp = verp;
 		}
 	}
 	
-	private static final Version DUMMY = new Version("", 0, 0);
+	public static class Agent {
+		private String name;
+		private String arch;
+		private String version;
+		private int major;
+		private int minor;
+		private int flags;
 
-	private String userAgent;
-	private Map<String, Version> browsers;
+		public Agent(String name) {
+			this.name = name;
+		}
 
-	public static final String CHROME = "Chrome";
-	public static final String FIREFOX = "Firefox";
-	public static final String EDGE = "Edge";
-	public static final String MSIE = "MSIE";
-	public static final String MSIE11 = "Trident";
-	public static final String NETSCAPE = "Netscape";
-	public static final String OPERA = "Opera";
-	public static final String SAFARI = "Safari";
-	private static final String IPHONE = "iPhone";
-	private static final String IPAD = "iPad";
-	private static final String IPOD = "iPod";
-	private static final String IOS = "ios";
-	private static final String ANDROID = "Android";
-	private static final String WINDOWS = "Windows";
-	private static final String MACINTOSH = "Macintosh";
-	private static final String LINUX = "Linux";
-	private static final String UBUNTU = "Ubuntu";
-	private static final String MINT = "Mint";
-	private static final String FEDORA = "Fedora";
-	private static final String GENTOO = "Gentoo";
+		private void setVersion(String version) {
+			this.version = version;
+
+			if (Strings.isEmpty(version)) {
+				return;
+			}
+
+			int i = version.indexOf('.');
+			if (i > 0) {
+				major =  Numbers.toInt(version.substring(0, i), 0);
+				if (i < version.length() - 1) {
+					String v2 = version.substring(i + 1);
+					int j = v2.indexOf('.');
+					if (j > 0) {
+						minor = Numbers.toInt(v2.substring(0, j), 0);
+					}
+					else {
+						minor = Numbers.toInt(v2, 0);
+					}
+				}
+			}
+			else {
+				major = Numbers.toInt(version);
+			}
+		}
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @return the version
+		 */
+		public String getVersion() {
+			return version;
+		}
+
+		/**
+		 * @return the major number
+		 */
+		public int getMajor() {
+			return major;
+		}
+
+		/**
+		 * @return the minor number
+		 */
+		public int getMinor() {
+			return minor;
+		}
+
+		/**
+		 * @return the arch
+		 */
+		public String getArch() {
+			return arch;
+		}
+		
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append(name);
+			
+			if (Strings.isNotEmpty(version)) {
+				sb.append(' ').append(name).append(major);
+			}
+			if (Strings.isNotEmpty(arch)) {
+				sb.append(' ').append(arch);
+			}
+			return sb.toString();
+		}
+	}
 	
-	private static final String[] ROBOTS = { 
-		"robot", "Googlebot", "bingbot", "yahoo", "baidu", 
-		"msnbot", "ask.", "naver.", "DotBot", "Yandex", "goo.ne.jp"
+	private String value;
+	private Agent browser = UNKNOWN;
+	private Agent platform = UNKNOWN;
+	private Agent device = UNKNOWN;
+
+	private static final Object[] BROWSERS = {
+			"Firefox",
+			"Edge",
+			"MSIE",
+			new Detect("MSIE", "Trident", "rv:"),
+			"Netscape",
+			"Opera",
+			new Detect("Opera", "OPR/"),
+			"UCBrowser",
+			"PhantomJS",
+			"Otter",
+			"QQBrowser",
+			"Electron",
+			new Detect("Weibo", "__weibo__", true),
+			new Detect("Alipay", "AlipayClient", true),
+			new Detect("Fackbook", "FBAV"),
+			"Chrome",
+			"Safari"
 	};
 
-	private static final String MOBILE = "mobile";
-	private static final String ROBOT = "robot";
+	private static final Object[] DEVICES = {
+			new Detect("iPhone", FLAG_IPHONE | FLAG_MOBILE),
+			new Detect("iPad", FLAG_IPAD | FLAG_MOBILE | FLAG_TABLET),
+			new Detect("iPod", FLAG_IPOD | FLAG_MOBILE),
+			new Detect("Macintosh", FLAG_MACINTOSH | FLAG_DESKTOP),
+			new Detect("Windows CE", FLAG_WINDOWS | FLAG_MOBILE),
+			new Detect("Windows Phone", FLAG_WINDOWS | FLAG_MOBILE),
+			new Detect("Windows", FLAG_WINDOWS | FLAG_DESKTOP),
+			new Detect("Kindle Fire", FLAG_TABLET | FLAG_MOBILE),
+			new Detect("Kindle Fire", "KFTT", FLAG_TABLET | FLAG_MOBILE),
+			new Detect("Kindle", FLAG_TABLET | FLAG_MOBILE),
+			new Detect("Android", FLAG_ANDROID | FLAG_MOBILE),
+			new Detect("PLAYSTATION 3", FLAG_GAME),
+			new Detect("PLAYSTATION 4", FLAG_GAME),
+			new Detect("PSP", "PlayStation Portable", FLAG_MOBILE | FLAG_GAME),
+			new Detect("PSV", "PlayStation Vita", FLAG_MOBILE | FLAG_GAME),
+			new Detect("Nintendo WiiU", FLAG_GAME),
+			new Detect("Nintendo Wii", FLAG_GAME),
+			new Detect("Nintendo Switch", FLAG_MOBILE | FLAG_GAME),
+			new Detect("Nintendo 3DS", FLAG_MOBILE | FLAG_GAME),
+			new Detect("Xbox One", FLAG_GAME),
+			new Detect("Xbox", FLAG_GAME),
+			new Detect("BlackBerry", FLAG_MOBILE),
+			new Detect("BlackBerry", "BB10", FLAG_MOBILE)
+	};
+	
+	private static final Object[] PLATFORMS = {
+			new Detect("Linux", FLAG_LINUX | FLAG_DESKTOP),
+			new Detect("Chrome OS", "CrOS", FLAG_DESKTOP),
+			new Detect("FreeBSD", FLAG_DESKTOP),
+			new Detect("OpenBSD", FLAG_DESKTOP),
+			new Detect("NetBSD", FLAG_DESKTOP)
+	};
+	
+	private static final Object[][] ARCHS = {
+			{ "i386", FLAG_32BIT },
+			{ "i686", FLAG_32BIT },
+			{ "x86_64", FLAG_64BIT },
+			{ "x64", FLAG_64BIT },
+			{ "amd64", FLAG_64BIT },
+			{ "WOW64", FLAG_64BIT },
+			{ "Win64", FLAG_64BIT }
+	};
+
+	private static final Agent UNKNOWN = new Agent("UNKNOWN");
+	
+	/**
+	 * @param value user agent
+	 */
+	public UserAgent(String value) {
+		this.value = value;
+		init();
+	}
 
 	/**
-	 * @param userAgent user agent
+	 * @return the value
 	 */
-	public UserAgent(String userAgent) {
-		super();
-		this.userAgent = userAgent;
-		init();
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * @return the browser
+	 */
+	public Agent getBrowser() {
+		return browser;
+	}
+
+	/**
+	 * @return the platform
+	 */
+	public Agent getPlatform() {
+		return platform;
+	}
+
+	/**
+	 * @return the device
+	 */
+	public Agent getDevice() {
+		return device;
+	}
+
+	/**
+	 * @return the flags
+	 */
+	public int getFlags() {
+		return device.flags | device.flags | platform.flags;
 	}
 
 	/**
 	 * @return true if user agent is Chrome
 	 */
 	public boolean isChrome() {
-		return browsers.containsKey(CHROME);
+		return "Chrome".equals(browser.name);
 	}
 
 	/**
 	 * @return true if user agent is EDGE
 	 */
 	public boolean isEdge() {
-		return browsers.containsKey(EDGE);
+		return "Edge".equals(browser.name);
 	}
 
 	/**
 	 * @return true if user agent is MSIE
 	 */
 	public boolean isMsie() {
-		return browsers.containsKey(MSIE);
+		return "MSIE".equals(browser.name);
 	}
 
 	/**
 	 * @return true if user agent is Netscape
 	 */
 	public boolean isNetscape() {
-		return browsers.containsKey(NETSCAPE);
+		return "Netscape".equals(browser.name);
 	}
 
 	/**
 	 * @return true if user agent is Firefox
 	 */
 	public boolean isFirefox() {
-		return browsers.containsKey(FIREFOX);
+		return "Firefox".equals(browser.name);
 	}
 
 	/**
 	 * @return true if user agent is Safari
 	 */
 	public boolean isSafari() {
-		return browsers.containsKey(SAFARI);
+		return "Safari".equals(browser.name);
 	}
 
 	/**
 	 * @return true if user agent is Opera
 	 */
 	public boolean isOpera() {
-		return browsers.containsKey(OPERA);
+		return "Opera".equals(browser.name);
 	}
 
 	/**
 	 * @return true if user agent is Mobile
 	 */
 	public boolean isMobile() {
-		return browsers.containsKey(MOBILE);
+		return (getFlags() & FLAG_MOBILE) != 0;
 	}
 
 	/**
-	 * @return true if user agent is Robot
+	 * @return true if user agent is Tablet
 	 */
-	public boolean isRobot() {
-		return browsers.containsKey(ROBOT);
+	public boolean isTablet() {
+		return (getFlags() & FLAG_TABLET) != 0;
+	}
+
+	/**
+	 * @return true if user agent is Desktop
+	 */
+	public boolean isDesktop() {
+		return (getFlags() & FLAG_DESKTOP) != 0;
+	}
+
+	/**
+	 * @return true if user agent is Game
+	 */
+	public boolean isGame() {
+		return (getFlags() & FLAG_GAME) != 0;
 	}
 
 	/**
 	 * @return true if user agent is Android
 	 */
 	public boolean isAndroid() {
-		return browsers.containsKey(ANDROID);
+		return (getFlags() & FLAG_ANDROID) != 0;
 	}
 
 	/**
 	 * @return true if user agent is iPad
 	 */
 	public boolean isIpad() {
-		return browsers.containsKey(IPAD);
+		return (getFlags() & FLAG_IPAD) != 0;
 	}
 
 	/**
 	 * @return true if user agent is iPhone
 	 */
 	public boolean isIphone() {
-		return browsers.containsKey(IPHONE);
+		return (getFlags() & FLAG_IPHONE) != 0;
 	}
 
 	/**
 	 * @return true if user agent is iPod
 	 */
 	public boolean isIpod() {
-		return browsers.containsKey(IPOD);
+		return (getFlags() & FLAG_IPOD) != 0;
 	}
 
 	/**
 	 * @return true if user agent is ios
 	 */
 	public boolean isIos() {
-		return browsers.containsKey(IOS);
+		return (getFlags() & FLAG_IOS) != 0;
 	}
 
 	/**
 	 * @return true if user agent is windows
 	 */
 	public boolean isWindows() {
-		return browsers.containsKey(WINDOWS);
+		return (getFlags() & FLAG_WINDOWS) != 0;
 	}
 
 	/**
 	 * @return true if user agent is Macintosh
 	 */
 	public boolean isMacintosh() {
-		return browsers.containsKey(MACINTOSH);
+		return (getFlags() & FLAG_MACINTOSH) != 0;
 	}
 
 	/**
 	 * @return true if user agent is Linux
 	 */
 	public boolean isLinux() {
-		return browsers.containsKey(LINUX);
+		return (getFlags() & FLAG_LINUX) != 0;
 	}
 
-	/**
-	 * @return true if user agent is Ubuntu
-	 */
-	public boolean isUbuntu() {
-		return browsers.containsKey(UBUNTU);
-	}
-
-	/**
-	 * @return true if user agent is Fedora
-	 */
-	public boolean isFedora() {
-		return browsers.containsKey(FEDORA);
-	}
-
-	/**
-	 * @return true if user agent is Mint
-	 */
-	public boolean isMint() {
-		return browsers.containsKey(MINT);
-	}
-
-	/**
-	 * @return true if user agent is Gentoo
-	 */
-	public boolean isGentoo() {
-		return browsers.containsKey(GENTOO);
-	}
-	
 	private void init() {
-		browsers = new HashMap<String, Version>();
-		
-		if (Strings.isEmpty(userAgent)) {
+		if (Strings.isEmpty(value)) {
 			return;
 		}
-		
-		if (parse(EDGE) 
-				|| parse(CHROME)
-				|| parse(FIREFOX)
-				|| parse(MSIE)
-				|| parse(MSIE11, MSIE, 11)
-				|| parse(OPERA)
-				|| parse(SAFARI)
-				|| parse(NETSCAPE)) {
-		}
 
-		if (parse(IPHONE) || parse(IPAD) || parse(IPOD)
-				|| parse(ANDROID) || parse(WINDOWS) || parse(MACINTOSH)) {
-		}
-		else if (parse(LINUX)) {
-			if (parse(UBUNTU) || parse(MINT) || parse(FEDORA) || parse(GENTOO)) {}
-		}
-		
-		if (checkRobot()) {
-			browsers.put(ROBOT, DUMMY);
-		}
-		
-		if (isAndroid()) {
-			browsers.put(MOBILE, DUMMY);
-		}
-		if (isIphone() || isIpad() || isIpod()) {
-			browsers.put(MOBILE, DUMMY);
-			browsers.put(IOS, DUMMY);
-		}
-	}
+		browser = detect(BROWSERS);
 
-	private boolean parse(String client) {
-		return parse(client, client, 0);
-	}
-	
-	private boolean parse(String client, String alias, int major) {
-		int i = userAgent.indexOf(client);
-		if (i < 0) {
-			return false;
-		}
-
-		int len = userAgent.length();
-		for (i += client.length(); i < len; i++) {
-			char c = userAgent.charAt(i);
-			if (Character.isDigit(c)) {
-				break;
+		device = detect(DEVICES);
+		if ((device.flags & FLAG_ANDROID) != 0) {
+			platform = device;
+			if (!value.contains("Mobile")) {
+				device.flags |= FLAG_TABLET;
 			}
 		}
-		
-		int j = i;
-		for (; j < len; j++) {
-			char c = userAgent.charAt(j);
-			if (!Character.isDigit(c) && c != '.' && c != '_') {
-				break;
+		else if ((device.flags & (FLAG_IOS | FLAG_MACINTOSH | FLAG_WINDOWS)) != 0) {
+			platform = device;
+		}
+		else {
+			platform = detect(PLATFORMS);
+		}
+
+		if (platform != UNKNOWN) {
+			for (Object[] ss : ARCHS) {
+				if (value.contains((String)ss[0])) {
+					platform.arch = (String)ss[0];
+					platform.flags |= (int)ss[1];
+					break;
+				}
+			}
+		}
+	}
+
+	private Agent detect(Object[] agents) {
+		Agent a = null;
+		for (Object o : agents) {
+			if (o instanceof Detect) {
+				Detect d = (Detect)o;
+				a = parse(d.name, d.key, d.nocase, d.verp);
+				if (a != null) {
+					a.flags = d.flags;
+					break;
+				}
+			}
+			else {
+				a = parse((String)o);
+				if (a != null) {
+					break;
+				}
+			}
+		}
+		return a == null ? UNKNOWN : a;
+	}
+
+	private Agent parse(String key) {
+		return parse(key, key, false, null);
+	}
+	
+	private Agent parse(String name, String key, boolean nocase, String verp) {
+		int i = nocase ? Strings.indexOfIgnoreCase(value, key) : value.indexOf(key);
+		if (i < 0) {
+			return null;
+		}
+
+		int len = value.length();
+
+		i += key.length();
+		if (Strings.isNotEmpty(verp)) {
+			i = value.indexOf(verp, i);
+			if (i > 0) {
+				i += verp.length();
 			}
 		}
 		
 		String ver = "";
-		if (i < len) {
-			ver = userAgent.substring(i, j);
-		}
+		if (i > 0) {
+			// find version start
+			for (; i < len; i++) {
+				char c = value.charAt(i);
+				if (Character.isDigit(c)) {
+					break;
+				}
+			}
+			
+			// find version end
+			int j = i;
+			for (; j < len; j++) {
+				char c = value.charAt(j);
+				if (!Character.isDigit(c) && c != '.' && c != '_') {
+					break;
+				}
+			}
 
-		if (major == 0) {
-			major = parseMajorVersion(ver);
-		}
-		browsers.put(alias, new Version(ver, major, 0));
-		return true;
-	}
-	
-	private boolean checkRobot() {
-		for (String s : ROBOTS) {
-			if (userAgent.indexOf(s) >= 0) {
-				return true;
+			if (i < len) {
+				ver = value.substring(i, j).replace('_', '.');
 			}
 		}
-		return false;
-	}
-	
-	private int parseMajorVersion(String ver) {
-		if (ver != null) {
-			int i = Strings.indexOfAny(ver, '.', '_');
-			if (i > 0) {
-				return Numbers.toInt(ver.substring(0, i), 0);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * @param client client 
-	 * @return major version of the client
-	 */
-	public int getMajorVersion(String client) {
-		Version v = browsers.get(client);
-		return (v == null ? 0 : v.major);
-	}
-
-	/**
-	 * @return simple string with major version
-	 */
-	public String toMajorString() {
-		StringBuilder sb = new StringBuilder();
-		for (Entry<String, Version> en : browsers.entrySet()) {
-			String b = en.getKey().toLowerCase();
-			sb.append(b).append(' ');
-			Version v = en.getValue();
-			if (v.major > 0) {
-				sb.append(b).append(v.major).append(' ');
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * @return simple string
-	 */
-	public String toSimpleString() {
-		StringBuilder sb = new StringBuilder();
-		for (Entry<String, Version> en : browsers.entrySet()) {
-			String b = en.getKey().toLowerCase();
-			sb.append(b).append(' ');
-		}
-		return sb.toString();
+		
+		Agent a = new Agent(name);
+		a.setVersion(ver);
+		return a;
 	}
 	
 	/**
@@ -362,6 +510,22 @@ public class UserAgent {
 	 */
 	@Override
 	public String toString() {
-		return userAgent;
+		StringBuilder sb = new StringBuilder();
+		if (browser != UNKNOWN) {
+			sb.append(browser);
+		}
+		if (device != UNKNOWN) {
+			if (sb.length() > 0) {
+				sb.append(' ');
+			}
+			sb.append(device);
+		}
+		if (platform != UNKNOWN && platform != device) {
+			if (sb.length() > 0) {
+				sb.append(' ');
+			}
+			sb.append(platform);
+		}
+		return sb.toString();
 	}
 }

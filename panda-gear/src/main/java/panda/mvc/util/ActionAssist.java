@@ -179,7 +179,7 @@ public class ActionAssist extends ActionSupport {
 	 * @return browser string
 	 */
 	public String getBrowser() {
-		String b = getUserAgent().toSimpleString();
+		String b = getUserAgent().toString().toLowerCase();
 		String l = getLayout();
 		if (Strings.isNotEmpty(l)) {
 			b += " layout-" + l;

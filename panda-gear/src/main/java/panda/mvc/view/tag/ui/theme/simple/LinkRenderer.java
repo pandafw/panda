@@ -64,8 +64,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			if (v == 0) {
 				UserAgent ua = context.getUserAgent();
 				if (ua.isMsie()) {
-					int m = ua.getMajorVersion(UserAgent.MSIE);
-					v = m < 9 ? 1 : 2;
+					v = ua.getBrowser().getMajor() < 9 ? 1 : 2;
 				}
 				else {
 					v = 2;
@@ -149,7 +148,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private void writeRespondJs() throws IOException {
 		if (js && tag.isRespondjs()) {
 			UserAgent ua = context.getUserAgent();
-			if (ua.isMsie() && ua.getMajorVersion(UserAgent.MSIE) < 9) {
+			if (ua.isMsie() && ua.getBrowser().getMajor() < 9) {
 				if (tag.useCdn()) {
 					writeCdnJs("//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond");
 				}
