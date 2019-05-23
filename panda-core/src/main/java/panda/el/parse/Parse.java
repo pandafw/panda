@@ -1,6 +1,4 @@
-package panda.el;
-
-import panda.el.parse.CharQueue;
+package panda.el.parse;
 
 /**
  * 转换器接口.<br>

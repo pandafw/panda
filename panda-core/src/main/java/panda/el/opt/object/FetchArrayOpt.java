@@ -4,8 +4,8 @@ import java.util.Queue;
 
 import panda.el.ELContext;
 import panda.el.ELException;
-import panda.el.Operator;
 import panda.el.opt.AbstractOpt;
+import panda.el.opt.Operator;
 
 /**
  * ']',数组封装. 本身没做什么操作,只是对'[' ArrayOpt 做了一个封装而已

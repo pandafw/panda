@@ -1,13 +1,13 @@
 package panda.el.parse;
 
 import panda.el.ELException;
-import panda.el.Parse;
 
 /**
- * 数值转换器
+ * Number parse
  */
-public class ValParse implements Parse {
+public class NumberParse implements Parse {
 
+	@Override
 	public Object fetchItem(CharQueue exp) {
 		StringBuilder sb = new StringBuilder();
 		switch (exp.peek()) {

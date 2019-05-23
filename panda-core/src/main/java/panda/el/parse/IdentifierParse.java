@@ -1,6 +1,5 @@
 package panda.el.parse;
 
-import panda.el.Parse;
 import panda.el.obj.ELObj;
 
 /**

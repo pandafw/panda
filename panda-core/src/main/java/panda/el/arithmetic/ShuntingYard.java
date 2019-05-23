@@ -3,9 +3,9 @@ package panda.el.arithmetic;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import panda.el.Operator;
 import panda.el.opt.LArrayOpt;
 import panda.el.opt.LBracketOpt;
+import panda.el.opt.Operator;
 import panda.el.opt.RArrayOpt;
 import panda.el.opt.RBracketOpt;
 import panda.el.opt.logic.QuestionOpt;

@@ -53,7 +53,7 @@ The following java type variable are supported.
  | ==       |  2              | 7        | Equal      |
  | !=       |  2              | 6        | Not Equal    |
  | !        |  2              | 7        | Not        |
- | !!       |  1              | 0        | Ignore exception and return null |
+ | !!       |  1              | 7        | Ignore exception and return null |
  | >        |  2              | 6        | Greater   |
  | <        |  2              | 6        | Less      |
  | &&       |  2              | 11       | Logical And |
@@ -62,12 +62,12 @@ The following java type variable are supported.
  | ?:       |  2              | 13       | Ternary   |
  | &        |  2              | 8        | Bit AND  |
  | ~        |  2              | 2        | Bit NOT  |
- | \|        |  2              | 10       | Bit OR  |
+ | \|       |  2              | 10       | Bit OR  |
  | ^        |  2              | 9        | Bit XOR |
  | <<       |  2              | 5        | Bit Left Shift |
  | >>       |  2              | 5        | Bit Right Shift |
  | >>>      |  2              | 5        | Bit Right Shift (unsigned) |
-            
+
 
 ### Like Java
 

@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import panda.el.ELContext;
-import panda.el.Operator;
 import panda.el.obj.ELObj;
+import panda.el.opt.Operator;
 
 /**
  * 逆波兰表示法（Reverse Polish

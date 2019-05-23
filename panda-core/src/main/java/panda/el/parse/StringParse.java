@@ -1,12 +1,13 @@
 package panda.el.parse;
 
 import panda.el.ELException;
-import panda.el.Parse;
 
 /**
- * 字符串转换器
+ * String parse
  */
 public class StringParse implements Parse {
+
+	@Override
 	public Object fetchItem(CharQueue exp) {
 		switch (exp.peek()) {
 		case '\'':

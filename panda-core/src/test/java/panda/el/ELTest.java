@@ -665,7 +665,7 @@ public class ELTest {
 		
 		try {
 			EL.eval("(obj.pet.name) == null", ec);
-			Assert.fail("(obj.pet.name) == null");
+			Assert.fail("(obj.pet.name) == null should raise exception");
 		}
 		catch (Exception e) {
 		}
@@ -700,7 +700,6 @@ public class ELTest {
 		catch (RuntimeException e) {
 			assertEquals("Failed to eval('obj.raiseError()', null)", e.getMessage());
 		}
-		EL.eval("!!(obj.raiseError())");
 		EL.eval("!!(obj.raiseError())");
 		EL.eval("!!obj.raiseError()");
 	}

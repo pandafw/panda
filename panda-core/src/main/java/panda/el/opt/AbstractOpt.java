@@ -2,7 +2,6 @@ package panda.el.opt;
 
 import panda.el.ELContext;
 import panda.el.ELException;
-import panda.el.Operator;
 import panda.el.obj.ELObj;
 
 /**

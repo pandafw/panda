@@ -1,12 +1,10 @@
 package panda.el.parse;
 
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import panda.el.ELException;
-import panda.el.Parse;
 import panda.el.obj.ELObj;
 import panda.el.opt.LArrayOpt;
 import panda.el.opt.LBracketOpt;
@@ -22,7 +20,6 @@ import panda.el.opt.object.CommaOpt;
 import panda.el.opt.object.InvokeMethodOpt;
 import panda.el.opt.object.MakeArrayOpt;
 import panda.el.opt.object.MethodOpt;
-import panda.io.stream.CharSequenceReader;
 
 /**
  * 转换器,也就是用来将字符串转换成队列. 这个类的名字不知道取什么好...
@@ -32,37 +29,35 @@ public class Converter {
 
 	// 表达式字符队列
 	private CharQueue exp;
+
 	// 表达式项
 	private LinkedList<Object> itemCache;
+
 	// 方法栈
 	private LinkedList<MethodOpt> methods = new LinkedList<MethodOpt>();
 
 	// 上一个数据
 	private Object prev = null;
 
-	public Converter(CharQueue reader) {
-		this.exp = reader;
+	public Converter(CharQueue exp) {
+		this.exp = exp;
 		itemCache = new LinkedList<Object>();
 		skipSpace();
 		initParse();
 	}
 
-	public Converter(CharSequence val) {
-		this(new CharSequenceReader(val));
-	}
-
-	public Converter(Reader reader) {
-		this(new CharQueueDefault(reader));
+	public Converter(CharSequence exp) {
+		this(new CharQueue(exp));
 	}
 
 	/**
-	 * 初始化解析器
+	 * initialize
 	 */
 	private void initParse() {
 		parses.add(new OptParse());
 		parses.add(new StringParse());
 		parses.add(new IdentifierParse());
-		parses.add(new ValParse());
+		parses.add(new NumberParse());
 	}
 
 	/**

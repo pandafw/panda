@@ -1,7 +1,6 @@
 package panda.el.parse;
 
 import panda.el.ELException;
-import panda.el.Parse;
 import panda.el.opt.LArrayOpt;
 import panda.el.opt.LBracketOpt;
 import panda.el.opt.RArrayOpt;
@@ -38,7 +37,7 @@ import panda.el.opt.object.FetchArrayOpt;
 import panda.el.opt.object.StaticOpt;
 
 /**
- * 操作符转换器
+ * Operator parse
  */
 public class OptParse implements Parse {
 

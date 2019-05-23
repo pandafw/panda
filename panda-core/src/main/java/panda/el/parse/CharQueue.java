@@ -1,32 +1,49 @@
 package panda.el.parse;
 
 /**
- * 字符队列, 主要是为了解决reader 中使用的 cursor 临时变量的问题.
+ * a char queue for reader
  */
-public interface CharQueue {
-	/**
-	 * 不删除字符的情况下读取第一个字符
-	 * @return the peeked character
-	 */
-	char peek();
+public class CharQueue {
+	private CharSequence string;
+	private int cursor;
+
+	public CharQueue(CharSequence string) {
+		this.string = string;
+	}
 
 	/**
-	 * 不删除字符的情况下读取第ofset个字符,
+	 * read current (offset: 0) character but not move to next
+	 * @return the peeked character
+	 */
+	public char peek() {
+		return peek(0);
+	}
+
+	/**
+	 * read character at the specified offset but not move to next
 	 * 
-	 * @param ofset 偏移量
+	 * @param offset offset
 	 * @return the peeked character
 	 */
-	char peek(int ofset);
+	public char peek(int offset) {
+		int idx = cursor + offset;
+		return idx >= string.length() ? 0 : string.charAt(idx);
+	}
 
 	/**
-	 * 读取字符,并删除字符
+	 * read and move to next
 	 * @return the polled character
 	 */
-	char poll();
+	public char poll() {
+		char x = peek();
+		cursor++;
+		return x;
+	}
 
 	/**
-	 * 是否为空
 	 * @return true if the queue is empty
 	 */
-	boolean isEmpty();
+	public boolean isEmpty() {
+		return cursor >= string.length();
+	}
 }

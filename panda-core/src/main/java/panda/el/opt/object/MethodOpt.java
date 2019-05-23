@@ -6,10 +6,10 @@ import java.util.Queue;
 
 import panda.el.ELContext;
 import panda.el.ELException;
-import panda.el.Operator;
 import panda.el.obj.ELObj;
 import panda.el.opt.RunMethod;
 import panda.el.opt.AbstractTwoOpt;
+import panda.el.opt.Operator;
 
 /**
  * 方法体封装. 主要是把方法的左括号做为边界
