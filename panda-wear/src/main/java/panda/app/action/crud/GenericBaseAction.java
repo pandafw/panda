@@ -66,6 +66,16 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		displayFields = fields;
 	}
 
+	/**
+	 * @param fields the fields to add
+	 */
+	protected void setDisplayFields(String... fields) {
+		displayFields = Arrays.toSet(fields);
+	}
+
+	/**
+	 * @param fields the fields to add
+	 */
 	protected void addDisplayFields(String... fields) {
 		if (Arrays.isEmpty(fields)) {
 			return;
@@ -76,6 +86,9 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		displayFields.addAll(Arrays.asList(fields));
 	}
 
+	/**
+	 * @param fields the fields to remove
+	 */
 	protected void removeDisplayFields(String... fields) {
 		if (Arrays.isEmpty(fields)) {
 			return;
@@ -116,6 +129,24 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		mappingFields = fields;
 	}
 
+	/**
+	 * @param fields the fields to set
+	 */
+	protected void setMappingFields(String... fields) {
+		if (Arrays.isEmpty(fields)) {
+			mappingFields = null;
+			return;
+		}
+		if (fields.length % 2 != 0) {
+			throw new IllegalArgumentException("The mapping fields is incorrect: " + Strings.join(fields, ','));
+		}
+
+		mappingFields = Arrays.toMap(fields);
+	}
+
+	/**
+	 * @param fields the fields to add
+	 */
 	protected void addMappingFields(String... fields) {
 		if (Arrays.isEmpty(fields)) {
 			return;
@@ -132,6 +163,9 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		}
 	}
 
+	/**
+	 * @param fields the fields to remove
+	 */
 	protected void removeMappingFields(String... fields) {
 		if (Arrays.isEmpty(fields)) {
 			return;
