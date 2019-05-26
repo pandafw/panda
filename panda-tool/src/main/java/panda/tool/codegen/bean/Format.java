@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.lang.Objects;
+
 /**
  * <p>
  * Java class for Format complex type.
@@ -103,6 +105,28 @@ public class Format {
 	 */
 	public void setPattern(String pattern) {
 		this.pattern = pattern;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(paramList, pattern, type);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Format rhs = (Format)obj;
+		return Objects.equalsBuilder()
+				.append(paramList, rhs.paramList)
+				.append(pattern, rhs.pattern)
+				.append(type, rhs.type)
+				.isEquals();
 	}
 
 }

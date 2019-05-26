@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name=&quot;footer&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; maxOccurs=&quot;1&quot; minOccurs=&quot;0&quot;/&gt;
  *         &lt;element name=&quot;validator&quot; type=&quot;{panda.tool.codegen}Validator&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name=&quot;display&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;generate&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
@@ -58,7 +58,7 @@ public class InputField implements Comparable<InputField> {
 	private List<Validator> validatorList;
 
 	@XmlAttribute
-	private Boolean display;
+	private Boolean generate;
 	@XmlAttribute
 	private String tooltip;
 	@XmlAttribute
@@ -89,7 +89,7 @@ public class InputField implements Comparable<InputField> {
 		this.header = ifd.header;
 		this.footer = ifd.footer;
 		this.content = ifd.content;
-		this.display = ifd.display;
+		this.generate = ifd.generate;
 		this.tooltip = ifd.tooltip;
 		this.label = ifd.label;
 		this.required = ifd.required;
@@ -131,8 +131,8 @@ public class InputField implements Comparable<InputField> {
 		if (src.content != null) {
 			me.content = src.content;
 		}
-		if (src.display != null) {
-			me.display = src.display;
+		if (src.generate != null) {
+			me.generate = src.generate;
 		}
 		if (src.tooltip != null) {
 			me.tooltip = src.tooltip;
@@ -252,17 +252,17 @@ public class InputField implements Comparable<InputField> {
 	}
 
 	/**
-	 * @return the display
+	 * @return the generate
 	 */
-	public Boolean getDisplay() {
-		return display;
+	public Boolean getGenerate() {
+		return generate;
 	}
 
 	/**
-	 * @param display the display to set
+	 * @param generate the generate to set
 	 */
-	public void setDisplay(Boolean display) {
-		this.display = display;
+	public void setGenerate(Boolean generate) {
+		this.generate = generate;
 	}
 
 	/**
@@ -397,5 +397,123 @@ public class InputField implements Comparable<InputField> {
 		int i = this.order.compareTo(o.order);
 		return i == 0 ? compareByName(o) : i;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((generate == null) ? 0 : generate.hashCode());
+		result = prime * result + ((editTag == null) ? 0 : editTag.hashCode());
+		result = prime * result + ((footer == null) ? 0 : footer.hashCode());
+		result = prime * result + ((header == null) ? 0 : header.hashCode());
+		result = prime * result + ((label == null) ? 0 : label.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((order == null) ? 0 : order.hashCode());
+		result = prime * result + ((required == null) ? 0 : required.hashCode());
+		result = prime * result + ((requiredrefer == null) ? 0 : requiredrefer.hashCode());
+		result = prime * result + ((requiredvalidate == null) ? 0 : requiredvalidate.hashCode());
+		result = prime * result + ((tooltip == null) ? 0 : tooltip.hashCode());
+		result = prime * result + ((validatorList == null) ? 0 : validatorList.hashCode());
+		result = prime * result + ((viewTag == null) ? 0 : viewTag.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InputField other = (InputField)obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		}
+		else if (!content.equals(other.content))
+			return false;
+		if (generate == null) {
+			if (other.generate != null)
+				return false;
+		}
+		else if (!generate.equals(other.generate))
+			return false;
+		if (editTag == null) {
+			if (other.editTag != null)
+				return false;
+		}
+		else if (!editTag.equals(other.editTag))
+			return false;
+		if (footer == null) {
+			if (other.footer != null)
+				return false;
+		}
+		else if (!footer.equals(other.footer))
+			return false;
+		if (header == null) {
+			if (other.header != null)
+				return false;
+		}
+		else if (!header.equals(other.header))
+			return false;
+		if (label == null) {
+			if (other.label != null)
+				return false;
+		}
+		else if (!label.equals(other.label))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		}
+		else if (!name.equals(other.name))
+			return false;
+		if (order == null) {
+			if (other.order != null)
+				return false;
+		}
+		else if (!order.equals(other.order))
+			return false;
+		if (required == null) {
+			if (other.required != null)
+				return false;
+		}
+		else if (!required.equals(other.required))
+			return false;
+		if (requiredrefer == null) {
+			if (other.requiredrefer != null)
+				return false;
+		}
+		else if (!requiredrefer.equals(other.requiredrefer))
+			return false;
+		if (requiredvalidate == null) {
+			if (other.requiredvalidate != null)
+				return false;
+		}
+		else if (!requiredvalidate.equals(other.requiredvalidate))
+			return false;
+		if (tooltip == null) {
+			if (other.tooltip != null)
+				return false;
+		}
+		else if (!tooltip.equals(other.tooltip))
+			return false;
+		if (validatorList == null) {
+			if (other.validatorList != null)
+				return false;
+		}
+		else if (!validatorList.equals(other.validatorList))
+			return false;
+		if (viewTag == null) {
+			if (other.viewTag != null)
+				return false;
+		}
+		else if (!viewTag.equals(other.viewTag))
+			return false;
+		return true;
+	}
+
 
 }

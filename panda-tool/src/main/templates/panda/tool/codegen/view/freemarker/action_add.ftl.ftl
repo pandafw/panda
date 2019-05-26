@@ -10,7 +10,7 @@
 
 	${s}#include "/action-alert.ftl"/>
 
-	<#list ui.displayFieldList as f>
+	<#list ui.orderedFieldList as f>
 		<#if f.editTag?? && f.editTag.name?ends_with(".file")>
 			<#assign _formenctype = "multipart/form-data" />
 		</#if>

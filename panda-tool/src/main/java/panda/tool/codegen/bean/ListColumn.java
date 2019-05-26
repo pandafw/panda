@@ -1,5 +1,7 @@
 package panda.tool.codegen.bean;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -23,7 +25,7 @@ import panda.lang.Strings;
  *         &lt;element name=&quot;filter&quot; type=&quot;{panda.tool.codegen}Filter&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;cssClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;display&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;generate&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;link&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -52,7 +54,7 @@ public class ListColumn implements Comparable<ListColumn> {
 	@XmlAttribute
 	private String cssClass;
 	@XmlAttribute
-	private String display;
+	private Boolean generate;
 	@XmlAttribute
 	private String tooltip;
 	@XmlAttribute
@@ -86,7 +88,7 @@ public class ListColumn implements Comparable<ListColumn> {
 	 * @param lc source list column
 	 */
 	public ListColumn(ListColumn lc) {
-		this.display = lc.display;
+		this.generate = lc.generate;
 		this.tooltip = lc.tooltip;
 		this.link = lc.link;
 		this.cssClass = lc.cssClass;
@@ -118,8 +120,8 @@ public class ListColumn implements Comparable<ListColumn> {
 	public static ListColumn extend(ListColumn src, ListColumn parent) {
 		ListColumn me = new ListColumn(parent);
 
-		if (src.display != null) {
-			me.display = src.display;
+		if (src.generate != null) {
+			me.generate = src.generate;
 		}
 		if (src.tooltip != null) {
 			me.tooltip = src.tooltip;
@@ -195,20 +197,17 @@ public class ListColumn implements Comparable<ListColumn> {
 	}
 
 	/**
-	 * @return the display
+	 * @return the generate
 	 */
-	public String getDisplay() {
-		return display;
+	public Boolean getGenerate() {
+		return generate;
 	}
 
 	/**
-	 * @param display the display to set
+	 * @param generate the generate to set
 	 */
-	public void setDisplay(String display) {
-		if (Strings.isNotEmpty(display) && !"true".equals(display) && !"false".equals(display)) {
-			throw new IllegalArgumentException("Invalid display value: " + display);
-		}
-		this.display = display;
+	public void setGenerate(Boolean generate) {
+		this.generate = generate;
 	}
 
 	/**
@@ -407,4 +406,106 @@ public class ListColumn implements Comparable<ListColumn> {
 		return i == 0 ? compareByName(o) : i;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(cssClass, generate, filter, filterable, format, group, hidden, label, link, name, order, sortable, tooltip, value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ListColumn other = (ListColumn)obj;
+		if (cssClass == null) {
+			if (other.cssClass != null)
+				return false;
+		}
+		else if (!cssClass.equals(other.cssClass))
+			return false;
+		if (generate == null) {
+			if (other.generate != null)
+				return false;
+		}
+		else if (!generate.equals(other.generate))
+			return false;
+		if (filter == null) {
+			if (other.filter != null)
+				return false;
+		}
+		else if (!filter.equals(other.filter))
+			return false;
+		if (filterable == null) {
+			if (other.filterable != null)
+				return false;
+		}
+		else if (!filterable.equals(other.filterable))
+			return false;
+		if (format == null) {
+			if (other.format != null)
+				return false;
+		}
+		else if (!format.equals(other.format))
+			return false;
+		if (group == null) {
+			if (other.group != null)
+				return false;
+		}
+		else if (!group.equals(other.group))
+			return false;
+		if (hidden == null) {
+			if (other.hidden != null)
+				return false;
+		}
+		else if (!hidden.equals(other.hidden))
+			return false;
+		if (label == null) {
+			if (other.label != null)
+				return false;
+		}
+		else if (!label.equals(other.label))
+			return false;
+		if (link == null) {
+			if (other.link != null)
+				return false;
+		}
+		else if (!link.equals(other.link))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		}
+		else if (!name.equals(other.name))
+			return false;
+		if (order == null) {
+			if (other.order != null)
+				return false;
+		}
+		else if (!order.equals(other.order))
+			return false;
+		if (sortable == null) {
+			if (other.sortable != null)
+				return false;
+		}
+		else if (!sortable.equals(other.sortable))
+			return false;
+		if (tooltip == null) {
+			if (other.tooltip != null)
+				return false;
+		}
+		else if (!tooltip.equals(other.tooltip))
+			return false;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		}
+		else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+
+	
 }

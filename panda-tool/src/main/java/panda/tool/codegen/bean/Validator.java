@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import panda.lang.Collections;
+import panda.lang.Objects;
 
 /**
  * <p>
@@ -180,4 +181,58 @@ public class Validator {
 	public void setShortCircuit(String shortCircuit) {
 		this.shortCircuit = shortCircuit;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(message, msgId, paramList, refer, shortCircuit, type);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Validator other = (Validator)obj;
+		if (message == null) {
+			if (other.message != null)
+				return false;
+		}
+		else if (!message.equals(other.message))
+			return false;
+		if (msgId == null) {
+			if (other.msgId != null)
+				return false;
+		}
+		else if (!msgId.equals(other.msgId))
+			return false;
+		if (paramList == null) {
+			if (other.paramList != null)
+				return false;
+		}
+		else if (!paramList.equals(other.paramList))
+			return false;
+		if (refer == null) {
+			if (other.refer != null)
+				return false;
+		}
+		else if (!refer.equals(other.refer))
+			return false;
+		if (shortCircuit == null) {
+			if (other.shortCircuit != null)
+				return false;
+		}
+		else if (!shortCircuit.equals(other.shortCircuit))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		}
+		else if (!type.equals(other.type))
+			return false;
+		return true;
+	}
+
 }

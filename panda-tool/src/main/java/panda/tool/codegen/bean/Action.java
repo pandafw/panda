@@ -1,11 +1,9 @@
 package panda.tool.codegen.bean;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -363,15 +361,18 @@ public class Action {
 		return list;
 	}
 
-	public Set<ListColumn> getDisplayListUIColumns() {
-		Set<ListColumn> cs = new LinkedHashSet<ListColumn>();
+	public String getDisplayListColumns(Entity en) {
+		String dlcs = "";
 		for (ListUI lui : getSortedListUIList()) {
-			for (ListColumn lc : lui.getDisplayColumnList()) {
-				cs.add(lc);
+			String s = lui.getDisplayColumns(en);
+			if (dlcs.isEmpty()) {
+				dlcs = s;
 			}
-			break;
+			else if (!dlcs.equals(s)) {
+				return "";
+			}
 		}
-		return cs;
+		return dlcs;
 	}
 
 	/**
@@ -397,15 +398,19 @@ public class Action {
 		return list;
 	}
 
-	public Set<InputField> getDisplayInputUIFields() {
-		Set<InputField> cs = new LinkedHashSet<InputField>();
+	public String getDisplayInputFields(Entity en) {
+		String difs = "";
 		for (InputUI iui : getSortedInputUIList()) {
-			for (InputField inf : iui.getDisplayFieldList()) {
-				cs.add(inf);
+			String s = iui.getDisplayFields(en);
+			if (difs.isEmpty()) {
+				difs = s;
 			}
-			break;
+			else if (!difs.equals(s)) {
+				return "";
+			}
+			
 		}
-		return cs;
+		return difs;
 	}
 
 	public String getAutoJoin() {

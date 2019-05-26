@@ -1,4 +1,4 @@
-<#list ui.displayFieldList as f>
+<#list ui.orderedFieldList as f>
 	${s}#if a.displayField("${f.name}")>
 	<#if f.before?has_content>
 			${f.before}

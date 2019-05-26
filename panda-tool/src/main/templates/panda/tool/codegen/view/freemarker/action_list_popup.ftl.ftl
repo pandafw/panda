@@ -17,7 +17,7 @@
 			"name": "${c.name}",
 			"value": ${(c.value!true)?string},
 			"header": a.getFieldLabel("${c.name}"),
-			"display": <#if c.display?has_content>${c.display?string}<#else>a.displayField("${c.name}")</#if>,
+			"display": a.displayField("${c.name}"),
 			"filterable": <#if c.filterable?has_content>${c.filterable?string}<#else>a.filterField("${c.name}")</#if>,
 		<#if c.format??>
 			"format": {

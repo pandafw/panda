@@ -186,25 +186,7 @@ public class ListUI implements Comparable<ListUI> {
 	}
 
 	/**
-	 * @return the ordered column list which ListColumn.display is not false
-	 */
-	public Set<ListColumn> getDisplayColumnList() {
-		Set<ListColumn> set = new TreeSet<ListColumn>();
-		List<ListColumn> list = getColumnList();
-		for (int i = 0; i < list.size(); i++) {
-			ListColumn lc = list.get(i);
-			if (lc.getOrder() == null) {
-				lc.setOrder((i + 1) * 100);
-			}
-			if (Strings.isEmpty(lc.getDisplay()) || "true".equals(lc.getDisplay())) {
-				set.add(lc);
-			}
-		}
-		return set;
-	}
-
-	/**
-	 * @return the ordered column list 
+	 * @return the ordered column list which ListColumn.generate is not false
 	 */
 	public Set<ListColumn> getOrderedColumnList() {
 		Set<ListColumn> set = new TreeSet<ListColumn>();
@@ -214,9 +196,37 @@ public class ListUI implements Comparable<ListUI> {
 			if (lc.getOrder() == null) {
 				lc.setOrder((i + 1) * 100);
 			}
-			set.add(lc);
+
+			if (!Boolean.FALSE.equals(lc.getGenerate())) {
+				set.add(lc);
+			}
 		}
 		return set;
+	}
+
+	/**
+	 * <#list lcs as lc>
+	 *   <#if lc.virtualColumn>"${lc.name}"<#else>${entity.simpleName}.${lc.uname}</#if>
+	 *   <#if lc_has_next>, </#if>
+	 * </#list>
+	 * @param en Entity
+	 * @return columns string
+	 */
+	public String getDisplayColumns(Entity en) {
+		String s = "";
+		Set<ListColumn> lcs = getOrderedColumnList();
+		for (ListColumn lc : lcs) {
+			if (!s.isEmpty()) {
+				s += ", ";
+			}
+			if (lc.isVirtualColumn()) {
+				s += "\"" + lc.getName() + "\"";
+			}
+			else {
+				s += en.getSimpleName() + "." + lc.getUname();
+			}
+		}
+		return s;
 	}
 
 	/**

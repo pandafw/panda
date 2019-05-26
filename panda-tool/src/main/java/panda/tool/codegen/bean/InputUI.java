@@ -194,9 +194,9 @@ public class InputUI implements Comparable<InputUI> {
 	}
 
 	/**
-	 * @return the ordered field list which InputField.display is not false
+	 * @return the ordered field list which InputField.generate is not false
 	 */
-	public Set<InputField> getDisplayFieldList() {
+	public Set<InputField> getOrderedFieldList() {
 		Set<InputField> set = new TreeSet<InputField>();
 		List<InputField> list = getFieldList();
 		for (int i = 0; i < list.size(); i++) {
@@ -206,31 +206,33 @@ public class InputUI implements Comparable<InputUI> {
 				f.setOrder((i + 1) * 100);
 			}
 
-			if (!Boolean.FALSE.equals(f.getDisplay())) {
+			if (!Boolean.FALSE.equals(f.getGenerate())) {
 				set.add(f);
 			}
 		}
 		return set;
 	}
-//
-//	public Set<InputField> getOrderedFieldList() {
-//		Set<InputField> set = new TreeSet<InputField>();
-//		List<InputField> list = getFieldList();
-//		for (int i = 0; i < list.size(); i++) {
-//			InputField f = list.get(i);
-//
-//			if (f.getOrder() == null) {
-//				f.setOrder((i + 1) * 100);
-//			}
-//
-//			set.add(f);
-//		}
-//		return set;
-//	}
-
+	
+	/**
+	 * <#list ifs as f>${entity.simpleName}.${f.uname}<#if f_has_next>, </#if></#list>
+	 * @param en Entity
+	 * @return fields string
+	 */
+	public String getDisplayFields(Entity en) {
+		String s = "";
+		Set<InputField> ifs = getOrderedFieldList();
+		for (InputField f : ifs) {
+			if (!s.isEmpty()) {
+				s += ", ";
+			}
+			s += en.getSimpleName() + "." + f.getUname();
+		}
+		return s;
+	}
+	
 	public List<InputField> getRequiredValidateFieldList() {
 		List<InputField> set = new ArrayList<InputField>();
-		for (InputField f : getDisplayFieldList()) {
+		for (InputField f : getOrderedFieldList()) {
 			if (Boolean.TRUE.equals(f.getRequired()) && Boolean.TRUE.equals(f.getRequiredvalidate())) {
 				set.add(f);
 			}
@@ -482,5 +484,123 @@ public class InputUI implements Comparable<InputUI> {
 		int i = this.name.compareTo(o.name);
 		return i == 0 ? this.hashCode() - o.hashCode() : i;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((extend == null) ? 0 : extend.hashCode());
+		result = prime * result + ((fieldList == null) ? 0 : fieldList.hashCode());
+		result = prime * result + ((focusme == null) ? 0 : focusme.hashCode());
+		result = prime * result + ((footer == null) ? 0 : footer.hashCode());
+		result = prime * result + ((footinc == null) ? 0 : footinc.hashCode());
+		result = prime * result + ((formId == null) ? 0 : formId.hashCode());
+		result = prime * result + ((generate == null) ? 0 : generate.hashCode());
+		result = prime * result + ((header == null) ? 0 : header.hashCode());
+		result = prime * result + ((headinc == null) ? 0 : headinc.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((paramList == null) ? 0 : paramList.hashCode());
+		result = prime * result + ((params == null) ? 0 : params.hashCode());
+		result = prime * result + ((template == null) ? 0 : template.hashCode());
+		result = prime * result + ((theme == null) ? 0 : theme.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InputUI other = (InputUI)obj;
+		if (extend == null) {
+			if (other.extend != null)
+				return false;
+		}
+		else if (!extend.equals(other.extend))
+			return false;
+		if (fieldList == null) {
+			if (other.fieldList != null)
+				return false;
+		}
+		else if (!fieldList.equals(other.fieldList))
+			return false;
+		if (focusme == null) {
+			if (other.focusme != null)
+				return false;
+		}
+		else if (!focusme.equals(other.focusme))
+			return false;
+		if (footer == null) {
+			if (other.footer != null)
+				return false;
+		}
+		else if (!footer.equals(other.footer))
+			return false;
+		if (footinc == null) {
+			if (other.footinc != null)
+				return false;
+		}
+		else if (!footinc.equals(other.footinc))
+			return false;
+		if (formId == null) {
+			if (other.formId != null)
+				return false;
+		}
+		else if (!formId.equals(other.formId))
+			return false;
+		if (generate == null) {
+			if (other.generate != null)
+				return false;
+		}
+		else if (!generate.equals(other.generate))
+			return false;
+		if (header == null) {
+			if (other.header != null)
+				return false;
+		}
+		else if (!header.equals(other.header))
+			return false;
+		if (headinc == null) {
+			if (other.headinc != null)
+				return false;
+		}
+		else if (!headinc.equals(other.headinc))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		}
+		else if (!name.equals(other.name))
+			return false;
+		if (paramList == null) {
+			if (other.paramList != null)
+				return false;
+		}
+		else if (!paramList.equals(other.paramList))
+			return false;
+		if (params == null) {
+			if (other.params != null)
+				return false;
+		}
+		else if (!params.equals(other.params))
+			return false;
+		if (template == null) {
+			if (other.template != null)
+				return false;
+		}
+		else if (!template.equals(other.template))
+			return false;
+		if (theme == null) {
+			if (other.theme != null)
+				return false;
+		}
+		else if (!theme.equals(other.theme))
+			return false;
+		return true;
+	}
+
 
 }

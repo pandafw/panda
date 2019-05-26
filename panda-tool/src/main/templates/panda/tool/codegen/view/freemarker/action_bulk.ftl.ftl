@@ -30,7 +30,7 @@ ${s}#if result?has_content>
 			"value": ${c.value?string},
 		</#if>
 			"header": a.getFieldLabel("${c.name}"),
-			"display": <#if c.display?has_content>${c.display?string}<#else>a.displayField("${c.name}")</#if>,
+			"display": a.displayField("${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>

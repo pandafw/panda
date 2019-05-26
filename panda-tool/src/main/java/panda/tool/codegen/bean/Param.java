@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import panda.bind.json.Jsons;
 import panda.lang.Exceptions;
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
@@ -112,5 +113,28 @@ public class Param {
 	 */
 	public String getCname() {
 		return Strings.capitalize(name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+
+		if (obj == null)
+			return false;
+
+		if (getClass() != obj.getClass())
+			return false;
+
+		Param rhs = (Param)obj;
+		return Objects.equalsBuilder()
+				.append(name, rhs.name)
+				.append(value, rhs.value)
+				.isEquals();
 	}
 }

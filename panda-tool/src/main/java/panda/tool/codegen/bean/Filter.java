@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.lang.Objects;
+
 /**
  * <p>
  * Java class for Filter complex type.
@@ -196,6 +198,32 @@ public class Filter implements Comparable<Filter> {
 		}
 		int i = this.order.compareTo(o.order);
 		return i == 0 ? compareByName(o) : i;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(fixed, label, name, order, paramList, tooltip, type);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Filter rhs = (Filter)obj;
+		return Objects.equalsBuilder()
+				.append(fixed, rhs.fixed)
+				.append(label, rhs.label)
+				.append(name, rhs.name)
+				.append(order, rhs.order)
+				.append(paramList, rhs.paramList)
+				.append(tooltip, rhs.tooltip)
+				.append(type, rhs.type)
+				.isEquals();
 	}
 
 }

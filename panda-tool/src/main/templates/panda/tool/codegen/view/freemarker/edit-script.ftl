@@ -13,7 +13,7 @@
 	</#if>
 </#macro>
 		<script type="text/javascript"><!--
-		<#list ui.displayFieldList as f>
+		<#list ui.orderedFieldList as f>
 			<@initpc f=f/>
 			<#if _popup?has_content>
 			function ${action.name}_${f.name}_onPopupCallback(sd) {
@@ -51,7 +51,7 @@
 		</#list>
 		
 			function onPageLoad() {
-		<#list ui.displayFieldList as f>
+		<#list ui.orderedFieldList as f>
 			<@initpc f=f/>
 			<#if _popup?has_content>
 			<#assign pid = ""/>

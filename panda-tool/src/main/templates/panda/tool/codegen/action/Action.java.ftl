@@ -4,6 +4,16 @@ package ${actionPackage};
 <#list imports as i>
 import ${i};
 </#list>
+<#macro setListDisplayColumns ui><#assign alcs = action.getDisplayListColumns(entity)/><#assign lcs = ui.getDisplayColumns(entity)/>
+<#if !(alcs?has_content) && lcs?has_content>
+		setDisplayFields(${lcs});
+</#if>
+</#macro>
+<#macro setInputDisplayFields ui><#assign aifs = action.getDisplayInputFields(entity)/><#assign ifs = ui.getDisplayFields(entity)/>
+<#if !(aifs?has_content) && ifs?has_content>
+		setDisplayFields(${ifs});
+</#if>
+</#macro>
 <#macro validates ui><#if ui.requiredValidateFieldList?has_content>
 
 			@RequiredValidate(${ui.requiredValidateFields})
@@ -31,13 +41,13 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	public ${actionClass}() {
 		setType(${entityBeanClass}.class);
-<#assign lcs = action.displayListUIColumns/>
+<#assign lcs = action.getDisplayListColumns(entity)/>
 <#if lcs?has_content>
-		addDisplayFields(<#list lcs as lc><#if lc.virtualColumn>"${lc.name}"<#else>${entity.simpleName}.${lc.uname}</#if><#if lc_has_next>, </#if></#list>);
+		setDisplayFields(${lcs});
 </#if>
-<#assign ifs = action.displayInputUIFields/>
+<#assign ifs = action.getDisplayInputFields(entity)/>
 <#if ifs?has_content>
-		addDisplayFields(<#list ifs as f>${entity.simpleName}.${f.uname}<#if f_has_next>, </#if></#list>);
+		setDisplayFields(${ifs});
 </#if>
 	}
 
@@ -134,6 +144,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer qr) {
+		<@setListDisplayColumns ui=ui/>
 		return super.list(qr);
 	}
 	
@@ -146,6 +157,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer qr) {
+		<@setListDisplayColumns ui=ui/>
 		return super.list_popup(qr);
 	}
 	
@@ -158,6 +170,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer qr) {
+		<@setListDisplayColumns ui=ui/>
 		return super.list_print(qr);
 	}
 	
@@ -171,7 +184,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
-<#list ui.displayColumnList as c>
+<#list ui.orderedColumnList as c>
 		if (displayField("${c.name}")) {
 			ListColumn lc = new ListColumn();
 			lc.name = "${c.name}";
@@ -205,6 +218,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(Views.S${ui.template?keep_after('_')?upper_case})
 	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
+		<@setListDisplayColumns ui=ui/>
 		return super.${ui.template}(qr);
 	}
 	
@@ -217,6 +231,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
+		<@setListDisplayColumns ui=ui/>
 		return super.${ui.template}(qr);
 	}
 	
@@ -230,6 +245,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error=Views.SFTL)
 	@TokenProtect
 	public Object ${gen.trimMethodName(ui.name)}(@Param Arg arg) {
+		<@setListDisplayColumns ui=ui/>
 		return super.importx(arg);
 	}
 	
@@ -242,6 +258,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param Map<String, String[]> args) {
+		<@setListDisplayColumns ui=ui/>
 		return super.bdelete(args);
 	}
 
@@ -254,6 +271,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
+		<@setListDisplayColumns ui=ui/>
 		return super.bdelete_execute(args);
 	}
 	
@@ -266,6 +284,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param Map<String, String[]> args) {
+		<@setListDisplayColumns ui=ui/>
 		return super.bupdate(args);
 	}
 
@@ -278,6 +297,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
+		<@setListDisplayColumns ui=ui/>
 		return super.bupdate_execute(args);
 	}
 	
@@ -289,6 +309,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}() {
+		<@setListDisplayColumns ui=ui/>
 		return super.bedit();
 	}
 
@@ -299,6 +320,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${ui.name}_input() {
+		<@setListDisplayColumns ui=ui/>
 		return super.bedit_input();
 	}
 
@@ -310,6 +332,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error=Views.SFTL)
 	@TokenProtect
 	public Object ${ui.name}_confirm() {
+		<@setListDisplayColumns ui=ui/>
 		return super.bedit_confirm();
 	}
 
@@ -321,6 +344,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error=Views.SFTL)
 	@TokenProtect
 	public Object ${ui.name}_execute() {
+		<@setListDisplayColumns ui=ui/>
 		return super.bedit_execute();
 	}
 	
@@ -336,6 +360,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
 		return super.view(key);
 	}
 
@@ -347,6 +372,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.view_input(data);
 	}
 
@@ -359,6 +385,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
 		return super.print(key);
 	}
 
@@ -370,6 +397,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.print_input(data);
 	}
 
@@ -381,6 +409,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}() {
+		<@setInputDisplayFields ui=ui/>
 		return super.add();
 	}
 
@@ -392,6 +421,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.add_input(data);
 	}
 
@@ -404,6 +434,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.add_confirm(data);
 	}
 
@@ -416,6 +447,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.add_execute(data);
 	}
 
@@ -428,6 +460,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
 		return super.copy(key);
 	}
 
@@ -439,6 +472,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.copy_input(data);
 	}
 
@@ -451,6 +485,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.copy_confirm(data);
 	}
 
@@ -463,6 +498,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.copy_execute(data);
 	}
 
@@ -475,6 +511,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
 		return super.edit(key);
 	}
 
@@ -486,6 +523,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.edit_input(data);
 	}
 
@@ -498,6 +536,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.edit_confirm(data);
 	}
 
@@ -510,6 +549,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
 		return super.edit_execute(data);
 	}
 
@@ -522,6 +562,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
 		return super.delete(key);
 	}
 
@@ -534,6 +575,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@To(value=Views.SFTL, error="sftl:~${ui.name}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
 		return super.delete_execute(key);
 	}
 

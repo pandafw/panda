@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
@@ -129,6 +130,35 @@ public class Tag {
 	 */
 	public void setName(String value) {
 		this.name = value;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, paramList);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tag other = (Tag)obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		}
+		else if (!name.equals(other.name))
+			return false;
+		if (paramList == null) {
+			if (other.paramList != null)
+				return false;
+		}
+		else if (!paramList.equals(other.paramList))
+			return false;
+		return true;
 	}
 
 }
