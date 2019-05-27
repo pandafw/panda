@@ -62,24 +62,24 @@ public class PropertyListAction extends GenericListAction<Property> {
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object expo_csv(@Param @VisitValidate QueryerEx qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
-		if (displayField("id")) {
+		if (displayField(Property.ID)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "id";
-			lc.header = getFieldLabel("id");
+			lc.name = Property.ID;
+			lc.header = getFieldLabel(Property.ID);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("clazz")) {
+		if (displayField(Property.CLAZZ)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "clazz";
-			lc.header = getFieldLabel("clazz");
+			lc.name = Property.CLAZZ;
+			lc.header = getFieldLabel(Property.CLAZZ);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("locale")) {
+		if (displayField(Property.LOCALE)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "locale";
-			lc.header = getFieldLabel("locale");
+			lc.name = Property.LOCALE;
+			lc.header = getFieldLabel(Property.LOCALE);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
@@ -87,31 +87,31 @@ public class PropertyListAction extends GenericListAction<Property> {
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("name")) {
+		if (displayField(Property.NAME)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "name";
-			lc.header = getFieldLabel("name");
+			lc.name = Property.NAME;
+			lc.header = getFieldLabel(Property.NAME);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("value")) {
+		if (displayField(Property.VALUE)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "value";
-			lc.header = getFieldLabel("value");
+			lc.name = Property.VALUE;
+			lc.header = getFieldLabel(Property.VALUE);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("memo")) {
+		if (displayField(Property.MEMO)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "memo";
-			lc.header = getFieldLabel("memo");
+			lc.name = Property.MEMO;
+			lc.header = getFieldLabel(Property.MEMO);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("status")) {
+		if (displayField(Property.STATUS)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "status";
-			lc.header = getFieldLabel("status");
+			lc.name = Property.STATUS;
+			lc.header = getFieldLabel(Property.STATUS);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
@@ -119,20 +119,20 @@ public class PropertyListAction extends GenericListAction<Property> {
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("updatedAt")) {
+		if (displayField(Property.UPDATED_AT)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "updatedAt";
-			lc.header = getFieldLabel("updatedAt");
+			lc.name = Property.UPDATED_AT;
+			lc.header = getFieldLabel(Property.UPDATED_AT);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "datetime";
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("updatedBy")) {
+		if (displayField(Property.UPDATED_BY)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "updatedBy";
-			lc.header = getFieldLabel("updatedBy");
+			lc.name = Property.UPDATED_BY;
+			lc.header = getFieldLabel(Property.UPDATED_BY);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "expr";

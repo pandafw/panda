@@ -185,10 +185,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	public Object ${gen.trimMethodName(ui.name)}(@Param @VisitValidate Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
 <#list ui.orderedColumnList as c>
-		if (displayField("${c.name}")) {
+		if (displayField(<#if c.virtualColumn>"${c.name}"<#else>${entity.simpleName}.${c.uname}</#if>)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "${c.name}";
-			lc.header = getFieldLabel("${c.name}");
+			lc.name = <#if c.virtualColumn>"${c.name}"<#else>${entity.simpleName}.${c.uname}</#if>;
+			lc.header = getFieldLabel(<#if c.virtualColumn>"${c.name}"<#else>${entity.simpleName}.${c.uname}</#if>);
 			lc.hidden = ${(c.hidden!false)?string};
 	<#if c.format??>
 			ListColumn.Format lcf = new ListColumn.Format();

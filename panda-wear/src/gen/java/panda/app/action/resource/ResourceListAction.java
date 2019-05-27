@@ -62,24 +62,24 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object expo_csv(@Param @VisitValidate QueryerEx qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
-		if (displayField("id")) {
+		if (displayField(Resource.ID)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "id";
-			lc.header = getFieldLabel("id");
+			lc.name = Resource.ID;
+			lc.header = getFieldLabel(Resource.ID);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("clazz")) {
+		if (displayField(Resource.CLAZZ)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "clazz";
-			lc.header = getFieldLabel("clazz");
+			lc.name = Resource.CLAZZ;
+			lc.header = getFieldLabel(Resource.CLAZZ);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("locale")) {
+		if (displayField(Resource.LOCALE)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "locale";
-			lc.header = getFieldLabel("locale");
+			lc.name = Resource.LOCALE;
+			lc.header = getFieldLabel(Resource.LOCALE);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
@@ -87,17 +87,17 @@ public class ResourceListAction extends GenericListAction<Resource> {
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("source")) {
+		if (displayField(Resource.SOURCE)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "source";
-			lc.header = getFieldLabel("source");
+			lc.name = Resource.SOURCE;
+			lc.header = getFieldLabel(Resource.SOURCE);
 			lc.hidden = true;
 			columns.add(lc);
 		}
-		if (displayField("status")) {
+		if (displayField(Resource.STATUS)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "status";
-			lc.header = getFieldLabel("status");
+			lc.name = Resource.STATUS;
+			lc.header = getFieldLabel(Resource.STATUS);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
@@ -105,20 +105,20 @@ public class ResourceListAction extends GenericListAction<Resource> {
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("updatedAt")) {
+		if (displayField(Resource.UPDATED_AT)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "updatedAt";
-			lc.header = getFieldLabel("updatedAt");
+			lc.name = Resource.UPDATED_AT;
+			lc.header = getFieldLabel(Resource.UPDATED_AT);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "datetime";
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("updatedBy")) {
+		if (displayField(Resource.UPDATED_BY)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "updatedBy";
-			lc.header = getFieldLabel("updatedBy");
+			lc.name = Resource.UPDATED_BY;
+			lc.header = getFieldLabel(Resource.UPDATED_BY);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "expr";

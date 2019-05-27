@@ -62,24 +62,24 @@ public class TemplateListAction extends GenericListAction<Template> {
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public Object expo_csv(@Param @VisitValidate QueryerEx qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
-		if (displayField("id")) {
+		if (displayField(Template.ID)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "id";
-			lc.header = getFieldLabel("id");
+			lc.name = Template.ID;
+			lc.header = getFieldLabel(Template.ID);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("name")) {
+		if (displayField(Template.NAME)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "name";
-			lc.header = getFieldLabel("name");
+			lc.name = Template.NAME;
+			lc.header = getFieldLabel(Template.NAME);
 			lc.hidden = false;
 			columns.add(lc);
 		}
-		if (displayField("locale")) {
+		if (displayField(Template.LOCALE)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "locale";
-			lc.header = getFieldLabel("locale");
+			lc.name = Template.LOCALE;
+			lc.header = getFieldLabel(Template.LOCALE);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
@@ -87,10 +87,10 @@ public class TemplateListAction extends GenericListAction<Template> {
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("status")) {
+		if (displayField(Template.STATUS)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "status";
-			lc.header = getFieldLabel("status");
+			lc.name = Template.STATUS;
+			lc.header = getFieldLabel(Template.STATUS);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
@@ -98,20 +98,20 @@ public class TemplateListAction extends GenericListAction<Template> {
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("updatedAt")) {
+		if (displayField(Template.UPDATED_AT)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "updatedAt";
-			lc.header = getFieldLabel("updatedAt");
+			lc.name = Template.UPDATED_AT;
+			lc.header = getFieldLabel(Template.UPDATED_AT);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "datetime";
 			lc.format = lcf;
 			columns.add(lc);
 		}
-		if (displayField("updatedBy")) {
+		if (displayField(Template.UPDATED_BY)) {
 			ListColumn lc = new ListColumn();
-			lc.name = "updatedBy";
-			lc.header = getFieldLabel("updatedBy");
+			lc.name = Template.UPDATED_BY;
+			lc.header = getFieldLabel(Template.UPDATED_BY);
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "expr";
