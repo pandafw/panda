@@ -19,7 +19,7 @@ public class ResourceImportAction extends GenericImportAction<Resource> {
 	 */
 	public ResourceImportAction() {
 		setType(Resource.class);
-		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY);
+		setDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY);
 	}
 
 

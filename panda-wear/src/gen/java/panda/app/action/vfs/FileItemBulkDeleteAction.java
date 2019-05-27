@@ -17,7 +17,7 @@ public abstract class FileItemBulkDeleteAction extends GenericBulkAction<FileIte
 	 */
 	public FileItemBulkDeleteAction() {
 		setType(FileItem.class);
-		addDisplayFields(FileItem.NAME, FileItem.SIZE, FileItem.DATE);
+		setDisplayFields(FileItem.NAME, FileItem.SIZE, FileItem.DATE);
 	}
 
 

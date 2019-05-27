@@ -17,7 +17,7 @@ public abstract class ResourceBulkEnableAction extends GenericBulkAction<Resourc
 	 */
 	public ResourceBulkEnableAction() {
 		setType(Resource.class);
-		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY);
+		setDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LOCALE, Resource.SOURCE, Resource.STATUS, Resource.UPDATED_AT, Resource.UPDATED_BY);
 	}
 
 

@@ -17,7 +17,7 @@ public abstract class MediaBulkDeleteAction extends GenericBulkAction<Media> {
 	 */
 	public MediaBulkDeleteAction() {
 		setType(Media.class);
-		addDisplayFields(Media.ID, Media.SLUG, Media.TAG, Media.FILE, Media.NAME, Media.SIZE, Media.WIDTH, Media.HEIGHT, Media.CREATED_AT, Media.CREATED_BY, Media.UPDATED_AT, Media.UPDATED_BY);
+		setDisplayFields(Media.ID, Media.SLUG, Media.TAG, Media.FILE, Media.NAME, Media.SIZE, Media.WIDTH, Media.HEIGHT, Media.CREATED_AT, Media.CREATED_BY, Media.UPDATED_AT, Media.UPDATED_BY);
 	}
 
 

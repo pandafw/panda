@@ -24,7 +24,7 @@ public class TemplateListAction extends GenericListAction<Template> {
 	 */
 	public TemplateListAction() {
 		setType(Template.class);
-		addDisplayFields(Template.ID, Template.NAME, Template.LOCALE, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY);
+		setDisplayFields(Template.ID, Template.NAME, Template.LOCALE, Template.STATUS, Template.UPDATED_AT, Template.UPDATED_BY);
 	}
 
 

@@ -16,7 +16,7 @@ public abstract class FileItemListAction extends GenericListAction<FileItem> {
 	 */
 	public FileItemListAction() {
 		setType(FileItem.class);
-		addDisplayFields(FileItem.NAME, FileItem.SIZE, FileItem.DATE);
+		setDisplayFields(FileItem.NAME, FileItem.SIZE, FileItem.DATE);
 	}
 
 

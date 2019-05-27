@@ -24,7 +24,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 	 */
 	public PropertyListAction() {
 		setType(Property.class);
-		addDisplayFields(Property.ID, Property.CLAZZ, Property.LOCALE, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY);
+		setDisplayFields(Property.ID, Property.CLAZZ, Property.LOCALE, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UPDATED_AT, Property.UPDATED_BY);
 	}
 
 
