@@ -30,7 +30,6 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;link&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;group&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
- *       &lt;attribute name=&quot;filterable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;sortable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;hidden&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;value&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
@@ -66,8 +65,6 @@ public class ListColumn implements Comparable<ListColumn> {
 	@XmlAttribute
 	private Boolean sortable;
 	@XmlAttribute
-	private String filterable;
-	@XmlAttribute
 	private Boolean hidden;
 	@XmlAttribute
 	private Boolean value;
@@ -94,7 +91,6 @@ public class ListColumn implements Comparable<ListColumn> {
 		this.cssClass = lc.cssClass;
 		this.group = lc.group;
 		this.sortable = lc.sortable;
-		this.filterable = lc.filterable;
 		this.hidden = lc.hidden;
 		this.value = lc.value;
 		this.order = lc.order;
@@ -137,9 +133,6 @@ public class ListColumn implements Comparable<ListColumn> {
 		}
 		if (src.sortable != null) {
 			me.sortable = src.sortable;
-		}
-		if (src.filterable != null) {
-			me.filterable = src.filterable;
 		}
 		if (src.hidden != null) {
 			me.hidden = src.hidden;
@@ -295,23 +288,6 @@ public class ListColumn implements Comparable<ListColumn> {
 	}
 
 	/**
-	 * @return the filterable
-	 */
-	public String getFilterable() {
-		return filterable;
-	}
-
-	/**
-	 * @param filterable the filterable to set
-	 */
-	public void setFilterable(String filterable) {
-		if (Strings.isNotEmpty(filterable) && !"true".equals(filterable) && !"false".equals(filterable)) {
-			throw new IllegalArgumentException("Invalid filterable value: " + filterable);
-		}
-		this.filterable = filterable;
-	}
-
-	/**
 	 * @return the hidden
 	 */
 	public Boolean getHidden() {
@@ -408,7 +384,7 @@ public class ListColumn implements Comparable<ListColumn> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cssClass, generate, filter, filterable, format, group, hidden, label, link, name, order, sortable, tooltip, value);
+		return Objects.hash(cssClass, generate, filter, format, group, hidden, label, link, name, order, sortable, tooltip, value);
 	}
 
 	@Override
@@ -437,12 +413,6 @@ public class ListColumn implements Comparable<ListColumn> {
 				return false;
 		}
 		else if (!filter.equals(other.filter))
-			return false;
-		if (filterable == null) {
-			if (other.filterable != null)
-				return false;
-		}
-		else if (!filterable.equals(other.filterable))
 			return false;
 		if (format == null) {
 			if (other.format != null)
@@ -506,6 +476,4 @@ public class ListColumn implements Comparable<ListColumn> {
 			return false;
 		return true;
 	}
-
-	
 }

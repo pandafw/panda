@@ -198,7 +198,6 @@
 		<attribute name="label" type="string"></attribute>
 		<attribute name="link" type="string"></attribute>
 		<attribute name="group" type="string"></attribute>
-		<attribute name="filterable" type="string"></attribute>
 		<attribute name="sortable" type="string"></attribute>
 		<attribute name="hidden" type="string"></attribute>
 		<attribute name="value" type="string"></attribute>

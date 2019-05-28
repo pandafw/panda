@@ -98,12 +98,8 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
 		if (qfs != null) {
 			for (ListColumn c : columns) {
-				if (!c.filterable) {
-					continue;
-				}
-	
 				ListFilter cf = c.filter;
-				if (cf == null) {
+				if (cf == null || !cf.enable) {
 					continue;
 				}
 	

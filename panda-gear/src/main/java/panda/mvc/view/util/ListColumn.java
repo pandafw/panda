@@ -21,7 +21,6 @@ public class ListColumn {
 	public String cssClass;
 
 	public boolean display = true;
-	public boolean filterable = true;
 	public boolean sortable = false;
 
 	public boolean fixed;

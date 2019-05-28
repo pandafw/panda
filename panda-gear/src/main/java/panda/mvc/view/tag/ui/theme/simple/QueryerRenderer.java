@@ -105,12 +105,8 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 			
 			String _pf = prefix + "f.";
 			for (ListColumn c : columns) {
-				if (!c.filterable) {
-					continue;
-				}
-	
 				ListFilter cf = c.filter;
-				if (cf == null) {
+				if (cf == null || !cf.enable) {
 					continue;
 				}
 

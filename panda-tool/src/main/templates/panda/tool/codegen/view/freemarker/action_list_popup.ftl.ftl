@@ -18,7 +18,6 @@
 			"value": ${(c.value!true)?string},
 			"header": a.getFieldLabel("${c.name}"),
 			"display": a.displayField("${c.name}"),
-			"filterable": <#if c.filterable?has_content>${c.filterable?string}<#else>a.filterField("${c.name}")</#if>,
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -32,8 +31,9 @@
 			</#if>
 			},
 		</#if>
-		<#if c.filter??>
+		<#if c.filter?? && c.filter.type != "none" && c.filter.type != "">
 			"filter": {
+				"type": "${c.filter.type?replace('#', '\\x23')}",
 			<#if c.filter.label??>
 				"label": "${c.filter.label}",
 			</#if>
@@ -46,7 +46,7 @@
 			<#list c.filter.paramList as fp>
 				"${fp.name}": ${fp.value},
 			</#list>
-				"type": "${c.filter.type?replace('#', '\\x23')}"
+				"enable": a.filterField("${c.name}")
 			},
 		</#if>
 		<#if c.hidden??>
