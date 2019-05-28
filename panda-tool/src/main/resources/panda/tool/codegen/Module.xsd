@@ -193,6 +193,7 @@
 			</choice>
 		</sequence>
 		<attribute name="generate" type="string"></attribute>
+		<attribute name="display" type="string"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
 		<attribute name="cssClass" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
@@ -217,6 +218,7 @@
 			</choice>
 		</sequence>
 		<attribute name="generate" type="string"></attribute>
+		<attribute name="display" type="string"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
 		<attribute name="required" type="string"></attribute>

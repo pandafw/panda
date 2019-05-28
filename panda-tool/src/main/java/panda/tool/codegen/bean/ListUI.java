@@ -216,6 +216,10 @@ public class ListUI implements Comparable<ListUI> {
 		String s = "";
 		Set<ListColumn> lcs = getOrderedColumnList();
 		for (ListColumn lc : lcs) {
+			if (Boolean.FALSE.equals(lc.getDisplay())) {
+				continue;
+			}
+			
 			if (!s.isEmpty()) {
 				s += ", ";
 			}

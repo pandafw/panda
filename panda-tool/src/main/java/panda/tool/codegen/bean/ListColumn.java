@@ -26,6 +26,7 @@ import panda.lang.Strings;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;cssClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;generate&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;display&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;link&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -54,6 +55,8 @@ public class ListColumn implements Comparable<ListColumn> {
 	private String cssClass;
 	@XmlAttribute
 	private Boolean generate;
+	@XmlAttribute
+	private Boolean display;
 	@XmlAttribute
 	private String tooltip;
 	@XmlAttribute
@@ -86,6 +89,7 @@ public class ListColumn implements Comparable<ListColumn> {
 	 */
 	public ListColumn(ListColumn lc) {
 		this.generate = lc.generate;
+		this.display = lc.display;
 		this.tooltip = lc.tooltip;
 		this.link = lc.link;
 		this.cssClass = lc.cssClass;
@@ -118,6 +122,9 @@ public class ListColumn implements Comparable<ListColumn> {
 
 		if (src.generate != null) {
 			me.generate = src.generate;
+		}
+		if (src.display != null) {
+			me.display = src.display;
 		}
 		if (src.tooltip != null) {
 			me.tooltip = src.tooltip;
@@ -201,6 +208,20 @@ public class ListColumn implements Comparable<ListColumn> {
 	 */
 	public void setGenerate(Boolean generate) {
 		this.generate = generate;
+	}
+
+	/**
+	 * @return the display
+	 */
+	public Boolean getDisplay() {
+		return display;
+	}
+
+	/**
+	 * @param display the display to set
+	 */
+	public void setDisplay(Boolean display) {
+		this.display = display;
 	}
 
 	/**
@@ -384,7 +405,7 @@ public class ListColumn implements Comparable<ListColumn> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cssClass, generate, filter, format, group, hidden, label, link, name, order, sortable, tooltip, value);
+		return Objects.hash(cssClass, generate, display, filter, format, group, hidden, label, link, name, order, sortable, tooltip, value);
 	}
 
 	@Override
@@ -395,6 +416,7 @@ public class ListColumn implements Comparable<ListColumn> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+
 		ListColumn other = (ListColumn)obj;
 		if (cssClass == null) {
 			if (other.cssClass != null)
@@ -407,6 +429,12 @@ public class ListColumn implements Comparable<ListColumn> {
 				return false;
 		}
 		else if (!generate.equals(other.generate))
+			return false;
+		if (display == null) {
+			if (other.display != null)
+				return false;
+		}
+		else if (!display.equals(other.display))
 			return false;
 		if (filter == null) {
 			if (other.filter != null)

@@ -222,6 +222,9 @@ public class InputUI implements Comparable<InputUI> {
 		String s = "";
 		Set<InputField> ifs = getOrderedFieldList();
 		for (InputField f : ifs) {
+			if (Boolean.FALSE.equals(f.getDisplay())) {
+				continue;
+			}
 			if (!s.isEmpty()) {
 				s += ", ";
 			}

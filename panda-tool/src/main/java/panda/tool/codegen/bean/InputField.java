@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name=&quot;validator&quot; type=&quot;{panda.tool.codegen}Validator&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;generate&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;display&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
@@ -60,6 +61,8 @@ public class InputField implements Comparable<InputField> {
 	@XmlAttribute
 	private Boolean generate;
 	@XmlAttribute
+	private Boolean display;
+	@XmlAttribute
 	private String tooltip;
 	@XmlAttribute
 	private String label;
@@ -90,6 +93,7 @@ public class InputField implements Comparable<InputField> {
 		this.footer = ifd.footer;
 		this.content = ifd.content;
 		this.generate = ifd.generate;
+		this.display = ifd.display;
 		this.tooltip = ifd.tooltip;
 		this.label = ifd.label;
 		this.required = ifd.required;
@@ -133,6 +137,9 @@ public class InputField implements Comparable<InputField> {
 		}
 		if (src.generate != null) {
 			me.generate = src.generate;
+		}
+		if (src.display != null) {
+			me.display = src.display;
 		}
 		if (src.tooltip != null) {
 			me.tooltip = src.tooltip;
@@ -263,6 +270,20 @@ public class InputField implements Comparable<InputField> {
 	 */
 	public void setGenerate(Boolean generate) {
 		this.generate = generate;
+	}
+
+	/**
+	 * @return the display
+	 */
+	public Boolean getDisplay() {
+		return display;
+	}
+
+	/**
+	 * @param display the display to set
+	 */
+	public void setDisplay(Boolean display) {
+		this.display = display;
 	}
 
 	/**
@@ -404,6 +425,7 @@ public class InputField implements Comparable<InputField> {
 		int result = 1;
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((generate == null) ? 0 : generate.hashCode());
+		result = prime * result + ((display == null) ? 0 : display.hashCode());
 		result = prime * result + ((editTag == null) ? 0 : editTag.hashCode());
 		result = prime * result + ((footer == null) ? 0 : footer.hashCode());
 		result = prime * result + ((header == null) ? 0 : header.hashCode());
@@ -439,6 +461,12 @@ public class InputField implements Comparable<InputField> {
 				return false;
 		}
 		else if (!generate.equals(other.generate))
+			return false;
+		if (display == null) {
+			if (other.display != null)
+				return false;
+		}
+		else if (!display.equals(other.display))
 			return false;
 		if (editTag == null) {
 			if (other.editTag != null)
