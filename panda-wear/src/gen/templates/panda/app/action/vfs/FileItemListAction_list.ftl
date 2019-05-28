@@ -100,10 +100,10 @@
 			"value": true,
 			"header": a.getFieldLabel("name"),
 			"display": a.displayField("name"),
-			"filterable": a.filterField("name"),
 			"filter": {
+				"type": "string",
 				"fixed": true,
-				"type": "string"
+				"enable": a.filterField("name")
 			},
 			"link": true,
 			"sortable": true,
@@ -115,10 +115,10 @@
 			"format": {
 				"type": "size"
 			},
-			"filterable": a.filterField("size"),
 			"filter": {
+				"type": "number",
 				"fixed": true,
-				"type": "number"
+				"enable": a.filterField("size")
 			},
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("size")
@@ -129,10 +129,10 @@
 			"format": {
 				"type": "timestamp"
 			},
-			"filterable": a.filterField("date"),
 			"filter": {
+				"type": "datetime",
 				"fixed": true,
-				"type": "datetime"
+				"enable": a.filterField("date")
 			},
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("date")

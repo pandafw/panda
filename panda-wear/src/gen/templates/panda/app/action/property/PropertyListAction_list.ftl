@@ -100,9 +100,9 @@
 			"value": true,
 			"header": a.getFieldLabel("id"),
 			"display": a.displayField("id"),
-			"filterable": a.filterField("id"),
 			"filter": {
-				"type": "number"
+				"type": "number",
+				"enable": a.filterField("id")
 			},
 			"hidden": false,
 			"link": true,
@@ -112,10 +112,10 @@
 			"name" : "clazz",
 			"header": a.getFieldLabel("clazz"),
 			"display": a.displayField("clazz"),
-			"filterable": a.filterField("clazz"),
 			"filter": {
+				"type": "string",
 				"fixed": true,
-				"type": "string"
+				"enable": a.filterField("clazz")
 			},
 			"hidden": false,
 			"link": false,
@@ -129,11 +129,11 @@
 				"codemap": consts.appLocaleMap,
 				"type": "code"
 			},
-			"filterable": a.filterField("locale"),
 			"filter": {
+				"type": "select",
 				"fixed": true,
 				"list": consts.appLocaleMap,
-				"type": "select"
+				"enable": a.filterField("locale")
 			},
 			"hidden": false,
 			"link": false,
@@ -143,10 +143,10 @@
 			"name" : "name",
 			"header": a.getFieldLabel("name"),
 			"display": a.displayField("name"),
-			"filterable": a.filterField("name"),
 			"filter": {
+				"type": "string",
 				"fixed": true,
-				"type": "string"
+				"enable": a.filterField("name")
 			},
 			"hidden": false,
 			"link": false,
@@ -156,9 +156,9 @@
 			"name" : "value",
 			"header": a.getFieldLabel("value"),
 			"display": a.displayField("value"),
-			"filterable": a.filterField("value"),
 			"filter": {
-				"type": "string"
+				"type": "string",
+				"enable": a.filterField("value")
 			},
 			"hidden": false,
 			"link": false,
@@ -168,9 +168,9 @@
 			"name" : "memo",
 			"header": a.getFieldLabel("memo"),
 			"display": a.displayField("memo"),
-			"filterable": a.filterField("memo"),
 			"filter": {
-				"type": "string"
+				"type": "string",
+				"enable": a.filterField("memo")
 			},
 			"hidden": false,
 			"link": false,
@@ -184,10 +184,10 @@
 				"codemap": consts.dataStatusMap,
 				"type": "code"
 			},
-			"filterable": a.filterField("status"),
 			"filter": {
+				"type": "checklist",
 				"list": consts.dataStatusMap,
-				"type": "checklist"
+				"enable": a.filterField("status")
 			},
 			"hidden": false,
 			"link": false,
@@ -200,9 +200,9 @@
 			"format": {
 				"type": "datetime"
 			},
-			"filterable": a.filterField("updatedAt"),
 			"filter": {
-				"type": "datetime"
+				"type": "datetime",
+				"enable": a.filterField("updatedAt")
 			},
 			"hidden": false,
 			"link": false,
@@ -216,9 +216,9 @@
 				"expr": "top.updatedByUser",
 				"type": "expr"
 			},
-			"filterable": a.filterField("updatedBy"),
 			"filter": {
-				"type": "number"
+				"type": "number",
+				"enable": a.filterField("updatedBy")
 			},
 			"hidden": false,
 			"link": false,

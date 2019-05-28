@@ -100,9 +100,9 @@
 			"value": true,
 			"header": a.getFieldLabel("id"),
 			"display": a.displayField("id"),
-			"filterable": a.filterField("id"),
 			"filter": {
-				"type": "number"
+				"type": "number",
+				"enable": a.filterField("id")
 			},
 			"hidden": false,
 			"link": true,
@@ -112,9 +112,9 @@
 			"name" : "slug",
 			"header": a.getFieldLabel("slug"),
 			"display": a.displayField("slug"),
-			"filterable": a.filterField("slug"),
 			"filter": {
-				"type": "string"
+				"type": "string",
+				"enable": a.filterField("slug")
 			},
 			"hidden": false,
 			"link": true,
@@ -128,11 +128,11 @@
 				"codemap": consts.mediaTagMap,
 				"type": "code"
 			},
-			"filterable": a.filterField("tag"),
 			"filter": {
+				"type": "select",
 				"fixed": true,
 				"list": consts.mediaTagMap,
-				"type": "select"
+				"enable": a.filterField("tag")
 			},
 			"hidden": false,
 			"link": false,
@@ -155,10 +155,10 @@
 			"name" : "name",
 			"header": a.getFieldLabel("name"),
 			"display": a.displayField("name"),
-			"filterable": a.filterField("name"),
 			"filter": {
+				"type": "string",
 				"fixed": true,
-				"type": "string"
+				"enable": a.filterField("name")
 			},
 			"hidden": false,
 			"link": true,
@@ -171,10 +171,10 @@
 			"format": {
 				"type": "size"
 			},
-			"filterable": a.filterField("size"),
 			"filter": {
+				"type": "number",
 				"fixed": true,
-				"type": "number"
+				"enable": a.filterField("size")
 			},
 			"hidden": false,
 			"link": false,
@@ -184,9 +184,9 @@
 			"name" : "width",
 			"header": a.getFieldLabel("width"),
 			"display": a.displayField("width"),
-			"filterable": a.filterField("width"),
 			"filter": {
-				"type": "number"
+				"type": "number",
+				"enable": a.filterField("width")
 			},
 			"hidden": false,
 			"link": false,
@@ -196,9 +196,9 @@
 			"name" : "height",
 			"header": a.getFieldLabel("height"),
 			"display": a.displayField("height"),
-			"filterable": a.filterField("height"),
 			"filter": {
-				"type": "number"
+				"type": "number",
+				"enable": a.filterField("height")
 			},
 			"hidden": false,
 			"link": false,
@@ -211,9 +211,9 @@
 			"format": {
 				"type": "datetime"
 			},
-			"filterable": a.filterField("createdAt"),
 			"filter": {
-				"type": "datetime"
+				"type": "datetime",
+				"enable": a.filterField("createdAt")
 			},
 			"hidden": false,
 			"link": false,
@@ -227,9 +227,9 @@
 				"expr": "top.createdByUser",
 				"type": "expr"
 			},
-			"filterable": a.filterField("createdBy"),
 			"filter": {
-				"type": "number"
+				"type": "number",
+				"enable": a.filterField("createdBy")
 			},
 			"hidden": false,
 			"link": false,
@@ -242,9 +242,9 @@
 			"format": {
 				"type": "datetime"
 			},
-			"filterable": a.filterField("updatedAt"),
 			"filter": {
-				"type": "datetime"
+				"type": "datetime",
+				"enable": a.filterField("updatedAt")
 			},
 			"hidden": false,
 			"link": false,
@@ -258,9 +258,9 @@
 				"expr": "top.updatedByUser",
 				"type": "expr"
 			},
-			"filterable": a.filterField("updatedBy"),
 			"filter": {
-				"type": "number"
+				"type": "number",
+				"enable": a.filterField("updatedBy")
 			},
 			"hidden": false,
 			"link": false,
