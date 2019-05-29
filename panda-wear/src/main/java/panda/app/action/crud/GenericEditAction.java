@@ -197,6 +197,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
+	 * add_execute with apimode
+	 * @param data the input data
+	 * @param apimode the apimode
+	 * @return data object
+	 */
+	protected Object add_execute(T data, boolean apimode) {
+		setApimode(apimode);
+		return doInsertExecute(data);
+	}
+
+	/**
 	 * edit
 	 * @param key the input key
 	 * @return data object
@@ -224,11 +235,31 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
+	 * edit_check only, commonly used by apimode
+	 * @param data the input data
+	 * @return data object
+	 */
+	public Object edit_check(T data) {
+		return doUpdateCheck(data);
+	}
+
+	/**
 	 * edit_execute
 	 * @param data the input data
 	 * @return data object
 	 */
 	protected Object edit_execute(T data) {
+		return doUpdateExecute(data);
+	}
+
+	/**
+	 * edit_execute with apimode
+	 * @param data the input data
+	 * @param apimode the apimode
+	 * @return data object
+	 */
+	protected Object edit_execute(T data, boolean apimode) {
+		setApimode(apimode);
 		return doUpdateExecute(data);
 	}
 
@@ -247,6 +278,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return data object
 	 */
 	protected Object delete_execute(T key) {
+		return doDeleteExecute(key);
+	}
+
+	/**
+	 * delete_execute with apimode
+	 * @param key the input key
+	 * @param apimode the apimode
+	 * @return data object
+	 */
+	protected Object delete_execute(T key, boolean apimode) {
+		setApimode(apimode);
 		return doDeleteExecute(key);
 	}
 
@@ -399,6 +441,22 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	protected Object doUpdateSelect(T key) {
 		T pk = prepareKey(key);
 		return selectData(pk);
+	}
+
+	/**
+	 * doUpdateCheck (used for apimode)
+	 * @param data the input data
+	 * @return data object
+	 */
+	protected Object doUpdateCheck(T data) {
+		T pdat = prepareData(data);
+		T sdat = selectData(pdat);
+		if (sdat == null) {
+			return null;
+		}
+		
+		checkOnUpdate(pdat, sdat);
+		return pdat;
 	}
 
 	/**
