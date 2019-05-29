@@ -48,6 +48,28 @@ public abstract class MediaEditAction extends GenericEditAction<Media> {
 	}
 
 	/**
+	 * view_json
+	 * @param key the input key
+	 * @return result
+	 */
+	@At
+	@To(Views.SJSON)
+	public Object view_json(@Param Media key) {
+		return super.view(key);
+	}
+
+	/**
+	 * view_xml
+	 * @param key the input key
+	 * @return result
+	 */
+	@At
+	@To(Views.SXML)
+	public Object view_xml(@Param Media key) {
+		return super.view(key);
+	}
+
+	/**
 	 * print
 	 * @param key the input key
 	 * @return result or view

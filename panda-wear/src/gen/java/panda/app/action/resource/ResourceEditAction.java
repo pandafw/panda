@@ -52,6 +52,28 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	}
 
 	/**
+	 * view_json
+	 * @param key the input key
+	 * @return result
+	 */
+	@At
+	@To(Views.SJSON)
+	public Object view_json(@Param Resource key) {
+		return super.view(key);
+	}
+
+	/**
+	 * view_xml
+	 * @param key the input key
+	 * @return result
+	 */
+	@At
+	@To(Views.SXML)
+	public Object view_xml(@Param Resource key) {
+		return super.view(key);
+	}
+
+	/**
 	 * print
 	 * @param key the input key
 	 * @return result or view

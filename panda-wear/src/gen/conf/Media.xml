@@ -128,6 +128,8 @@
 			<param name="toolbar" value="${view.toolbar}"/>
 			<param name="actions" value="${view.actions}"/>
 		</input>
+		<input name="view.json" extend="basicInput" template="${template.view_json}" generate="true"/>
+		<input name="view.xml" extend="basicInput" template="${template.view_xml}" generate="true"/>
 		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
 		<input name="add" extend="basicAdd" template="${template.add}" generate="true"/>
 		<input name="copy" extend="basicAdd" template="${template.copy}" generate="true"/>
