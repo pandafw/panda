@@ -161,7 +161,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_popup(qr);
 	}
 	
-<#elseif ui.template == ("list_print")>
+<#elseif ui.template == "list_print">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
@@ -235,7 +235,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.${ui.template}(qr);
 	}
 	
-<#elseif ui.template == ("import")>
+<#elseif ui.template == "import">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param arg argument
@@ -249,7 +249,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.importx(arg);
 	}
 	
-<#elseif ui.template == ("bdelete")>
+<#elseif ui.template == "bdelete">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param args arguments
@@ -267,7 +267,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param args arguments
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
@@ -275,7 +275,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.bdelete_execute(args);
 	}
 	
-<#elseif ui.template == ("bupdate")>
+<#elseif ui.template == "bupdate">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param args arguments
@@ -293,7 +293,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param args arguments
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
@@ -301,7 +301,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.bupdate_execute(args);
 	}
 	
-<#elseif ui.template == ("bedit")>
+<#elseif ui.template == "bedit">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @return result or view
@@ -328,7 +328,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${gen.trimMethodName(ui.name)}_confirm
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	@TokenProtect
 	public Object ${ui.name}_confirm() {
@@ -340,7 +340,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error=Views.SFTL)
 	@TokenProtect
 	public Object ${ui.name}_execute() {
@@ -351,7 +351,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 </#if>
 </#if></#list></#if>
 <#if action.inputUIList?has_content><#list action.inputUIList as ui><#if ui.generate!false>
-<#if ui.template == ("view")>
+<#if ui.template == "view">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
@@ -374,6 +374,19 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
 		<@setInputDisplayFields ui=ui/>
 		return super.view_input(data);
+	}
+
+<#elseif [ "view_json", "view_xml" ]?seq_contains(ui.template)>
+	/**
+	 * ${gen.trimMethodName(ui.name)}
+	 * @param key the input key
+	 * @return result
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@To(Views.S${ui.template?keep_after('_')?upper_case})
+	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
+		return super.view(key);
 	}
 
 <#elseif ui.template == ("print")>
@@ -430,7 +443,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
@@ -443,7 +456,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
@@ -451,7 +464,20 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.add_execute(data);
 	}
 
-<#elseif ui.template == ("copy")>
+<#elseif [ "add_json", "add_xml" ]?seq_contains(ui.template)>
+	/**
+	 * ${gen.trimMethodName(ui.name)}
+	 * @param data the input data
+	 * @return result
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@To(Views.S${ui.template?keep_after('_')?upper_case})
+	public Object ${gen.trimMethodName(ui.name)}(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
+		return super.add_execute(data, true);
+	}
+
+<#elseif ui.template == "copy">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
@@ -481,7 +507,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
@@ -494,7 +520,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
@@ -502,7 +528,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.copy_execute(data);
 	}
 
-<#elseif ui.template == ("edit")>
+<#elseif ui.template == "edit">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
@@ -532,7 +558,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/>${entityBeanClass} data) {
@@ -545,12 +571,25 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param data the input data
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/>${entityBeanClass} data) {
 		<@setInputDisplayFields ui=ui/>
 		return super.edit_execute(data);
+	}
+
+<#elseif [ "edit_json", "edit_xml" ]?seq_contains(ui.template)>
+	/**
+	 * ${gen.trimMethodName(ui.name)}
+	 * @param data the input data
+	 * @return result
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@To(Views.S${ui.template?keep_after('_')?upper_case})
+	public Object ${gen.trimMethodName(ui.name)}(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
+		return super.edit_execute(data, true);
 	}
 
 <#elseif ui.template == ("delete")>
@@ -571,12 +610,25 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * @param key the input key
 	 * @return result or view
 	 */
-	@At${gen.postAtName()}
+	@At${gen.postAtName(ui.name)}
 	@To(value=Views.SFTL, error="sftl:~${ui.name}")
 	@TokenProtect
 	public Object ${ui.name}_execute(@Param ${entityBeanClass} key) {
 		<@setInputDisplayFields ui=ui/>
 		return super.delete_execute(key);
+	}
+
+<#elseif [ "delete_json", "delete_xml" ]?seq_contains(ui.template)>
+	/**
+	 * ${gen.trimMethodName(ui.name)}
+	 * @param key the input key
+	 * @return result
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@To(Views.S${ui.template?keep_after('_')?upper_case})
+	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
+		<@setInputDisplayFields ui=ui/>
+		return super.delete_execute(key, true);
 	}
 
 </#if>
