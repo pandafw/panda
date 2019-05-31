@@ -19,7 +19,7 @@ import panda.mvc.view.Views;
 public class StaticResourceAction extends ActionSupport {
 	private static final Log log = Logs.getLog(StaticResourceAction.class);
 
-	protected static final String BASE = "panda/html/";
+	protected static final String RESBASE = "/panda/html/";
 	protected static final String VERSION = Panda.VERSION + '/';
 	
 	protected String getStaticVersion() {
@@ -38,8 +38,8 @@ public class StaticResourceAction extends ActionSupport {
 
 	@At("(.*)$")
 	@To(Views.RES)
-	public Object execute(@PathArg String path) {
-		Object r = findResource(path);
+	public Object execute(@PathArg String name) {
+		Object r = findResource(context.getPath(), name);
 		if (r == null) {
 			return Views.scNotFound(context);
 		}
@@ -47,59 +47,53 @@ public class StaticResourceAction extends ActionSupport {
 	}
 	
 	protected File findFile(String path) {
+		if (log.isDebugEnabled()) {
+			log.debug("Find File: " + path);
+		}
+
 		String rpath = getServlet().getRealPath(path);
 		File file = new File(rpath);
 		return (file.exists() ? file : null);
 	}
-	
-	protected Object findResource(String name) {
-		String version = getStaticVersion();
 
-		String path = BASE + name;
-		
+	protected URL findClass(String path) {
 		if (log.isDebugEnabled()) {
-			log.debug("Find File: " + path);
+			log.debug("Find Resource: " + path);
 		}
+
+		return ClassLoaders.getResourceAsURL(path);
+	}
+
+	protected Object findResource(String path, String name) {
+		String version = getStaticVersion();
 
 		File file = findFile(path);
 		if (file != null) {
 			return file;
 		}
 		
-		String npath = null;
+		String sname = null;
 		if (Strings.isNotEmpty(version) && Strings.startsWith(name, version)) {
-			npath = BASE + Strings.substring(name, version.length());
+			sname = name.substring(version.length());
 		}
 
-		if (npath != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Find File: " + npath);
-			}
-
-			file = findFile(npath);
+		if (sname != null) {
+			path = path.substring(0, path.length() - name.length()) + sname;
+			file = findFile(path);
 			if (file != null) {
 				return file;
 			}
 		}
-		
-		if (log.isDebugEnabled()) {
-			log.debug("Find Resource: " + path);
-		}
 
-		URL url = ClassLoaders.getResourceAsURL(path);
+		path = RESBASE + name;
+		URL url = findClass(path);
 		if (url != null) {
 			return url;
 		}
 		
-		if (npath != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Find Resource: " + npath);
-			}
-			
-			url = ClassLoaders.getResourceAsURL(npath);
-			if (url != null) {
-				return url;
-			}
+		if (sname != null) {
+			path = RESBASE + sname;
+			return findClass(path);
 		}
 		
 		return null;
