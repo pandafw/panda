@@ -5,21 +5,28 @@
 Panda Framework is an elegant, extensible framework for creating enterprise-ready Java Web applications. 
 The framework is designed to streamline the full development cycle, from designing to building, to deploying, to maintaining applications over time. 
 Comparing to popular Java application frameworks such as Spring/Struts2/Hibernate, Panda Framework is small and complete, easy to use, and easy to develop.
+The learning cost, development efficiency and maintainability are similar to Ruby on rails or Django.
 
 
 ## Features
 1. Automatic generation of the source code  
-   The Panda Framework Code Generator can automatically generate the source of Action / Dao / Bean / View. The cost of development can be significantly reduced.
+   The Panda Framework Code Generator can automatically generate the source of Action / Dao / Bean / View.
+   The cost of development can be significantly reduced.
 
-2. Writing SQL is not needed  
-   Use the API provided by Panda Framework, a programmer does not need to write SQL statements, can easily execute query / insert/ update / delete function based on a database table. It is easy to extend the Panda Framework’s base class to achieve some special purpose. So, it can improve the quality of source code and reduce the bugs. 
+2. Fluent DAO API  
+   Use the Fluent DAO API provided by Panda Framework, you can easily execute query / insert/ update / delete function based on a database table. 
+   Writing SQL is not needed。
 
-3. HTML Page ⇒ PDF Convert Feature
-4. Business Logic Development is Easy  
+3. Business Logic Development is Easy  
    Using template class to develop Search/List/View/Add/Update/Delete function is very easy and fast. 
 
-5. Improve productivity and source quality  
+4. Improve productivity and source quality  
    Base on the generated source, the source quality and program productivity can be significantly improved. 
+
+5. Many extended modules  
+   * HTML Page ⇒ PDF Convert Feature
+   * Media (Image) module
+   * Post (Article) module
 
 6. Easy to use  
    We provide a rich set of documents and samples to reduce initial cost from introduction to development.
@@ -143,7 +150,7 @@ Having persisted in writing for several years, I finally completed a framework t
 It can implement some very common features of Spring/Struts2/Hibernate. 
 The source code generator can generate the source code (including HTML pages and server side logic) implements the CRUD features.
 
-I made a [DEMO website](http://pandafw.ga). Through this DEMO, you may understand the Panda Framework more intuitively.
+I made a [DEMO website](https://panda-demo.azurewebsites.net). Through this DEMO, you may understand the Panda Framework more intuitively.
 
 I would be very grateful for that if you think the Panda Framework is easy to use and can help your work well.
 Leave a suggestion or write a bug report, welcome to Folk.
