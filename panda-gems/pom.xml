@@ -9,11 +9,11 @@
 		<version>1.5.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>panda-wear</artifactId>
+	<artifactId>panda-gems</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Wear</name>
-	<description>Panda Wear is a module of the Panda Framework for quickly develop web application. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
+	<name>Panda Gems</name>
+	<description>Panda Gems is a module of the Panda Framework for quickly develop web application. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
 
 	<build>
 		<resources>

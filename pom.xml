@@ -24,12 +24,12 @@
 		<module>panda-core</module>
 		<module>panda-html</module>
 		<module>panda-gear</module>
+		<module>panda-gems</module>
 		<module>panda-glue</module>
 		<module>panda-nets</module>
 		<module>panda-tool</module>
 		<module>panda-tube</module>
 		<module>panda-roid</module>
-		<module>panda-wear</module>
 	</modules>
 
 	<properties>
