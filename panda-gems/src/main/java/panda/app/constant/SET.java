@@ -65,15 +65,6 @@ public interface SET extends SetConstants {
 	public static final String TMP_FILES_MAXAGE = "tmp.files.maxage";
 
 	//------------------------------------------------
-	// The media settings
-	//
-	public static final String MEDIA_LOCATION = "media.location";
-	public static final String MEDIA_ICON_SIZE = "media.icon.size";
-	public static final String MEDIA_THUMB_SIZE = "media.thumb.size";
-	public static final String MEDIA_INDEX_LIMIT = "media.index.limit";
-	public static final String MEDIA_CACHE_MAXAGE = "media.cache.maxage";
-
-	//------------------------------------------------
 	// html to pdf
 	//
 	/** The wkhtmltopdf exe path */

@@ -96,13 +96,6 @@ public interface MVC extends MvcConstants {
 	public static final String AUTH_TOKEN_LIFE = "panda.auth.token.life";
 
 	//------------------------------------------------
-	// The media settings
-	//
-	public static final String MEDIA_LOCATION = "panda.media.location";
-	public static final String MEDIA_GCS_BUCKET = "panda.media.gcs.bucket";
-	public static final String MEDIA_GCS_PREFIX = "panda.media.gcs.prefix";
-
-	//------------------------------------------------
 	// The lucene settings
 	//
 	public static final String LUCENE_LOCATION = "panda.lucene.location";
