@@ -246,7 +246,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 			return "assist().get" + Strings.capitalize(Strings.substringAfter(sv, "assist.")) + "()";
 		}
 		if (Strings.startsWith(sv, "consts.")) {
-			return "consts().get" + Strings.capitalize(Strings.substringAfter(sv, "consts.")) + "()";
+			return "consts().get(\"" + Strings.substringAfter(sv, "consts.") + "\")";
 		}
 		return "panda.mvc.Mvcs.findValue(\"" + sv + "\")";
 	}

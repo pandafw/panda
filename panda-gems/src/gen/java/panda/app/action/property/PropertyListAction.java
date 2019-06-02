@@ -83,7 +83,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
-			lcf.codemap = consts().getAppLocaleMap();
+			lcf.codemap = consts().get("appLocaleMap");
 			lc.format = lcf;
 			columns.add(lc);
 		}
@@ -115,7 +115,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
 			lcf.type = "code";
-			lcf.codemap = consts().getDataStatusMap();
+			lcf.codemap = consts().get("dataStatusMap");
 			lc.format = lcf;
 			columns.add(lc);
 		}

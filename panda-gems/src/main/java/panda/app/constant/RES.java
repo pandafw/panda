@@ -7,50 +7,6 @@ package panda.app.constant;
  */
 public interface RES {
 	//------------------------------------------------------------
-	// CONSTS
-	//------------------------------------------------------------
-	/**
-	 * DATA_STATUS_MAP = "data-statusMap"
-	 */
-	public final static String DATA_STATUS_MAP = "data-statusMap";
-
-	/**
-	 * APP_LOCALES = "app-locales";
-	 */
-	public final static String APP_LOCALES = "app-locales";
-
-	/**
-	 *  MEDIA_TAGS = "media-tags";
-	 */
-	public final static String MEDIA_TAGS = "media-tags";
-
-	/**
-	 * CALENDAR_WEEKDAYS = "calendar-weekdays";
-	 */
-	public final static String CALENDAR_WEEKDAYS = "calendar-weekdays";;
-
-	/**
-	 * CALENDAR_WEEKDAYS_ABBR = "calendar-weekdays-abbr";
-	 */
-	public final static String CALENDAR_WEEKDAYS_ABBR = "calendar-weekdays-abbr";
-
-	/**
-	 * CALENDAR_WEEKDAYS_MIN = "calendar-weekdays-min";
-	 */
-	public final static String CALENDAR_WEEKDAYS_MIN = "calendar-weekdays-min";;
-
-	/**
-	 * CALENDAR_MONTHS = "calendar-months";
-	 */
-	public final static String CALENDAR_MONTHS = "calendar-months";
-
-	/**
-	 * CALENDAR_MONTHS_ABBR = "calendar-months-abbr";
-	 */
-	public final static String CALENDAR_MONTHS_ABBR = "calendar-months-abbr";
-
-
-	//------------------------------------------------------------
 	// SETTINGS
 	//------------------------------------------------------------
 	/**
@@ -63,16 +19,6 @@ public interface RES {
 	 * REDIRECT_TIMEOUT = "redirect-timeout";
 	 */
 	public final static String REDIRECT_TIMEOUT = "redirect-timeout";
-
-	/**
-	 * AUTH_PERMISSIONS = "auth-permissions";
-	 */
-	public final static String AUTH_PERMISSIONS = "auth-permissions";
-
-	/**
-	 * AUTH_ROLES = "auth-roles";
-	 */
-	public final static String AUTH_ROLES = "auth-roles";
 
 	//------------------------------------------------------------
 	// UI SETTINGS

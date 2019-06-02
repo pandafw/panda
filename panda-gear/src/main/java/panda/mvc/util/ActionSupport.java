@@ -20,9 +20,6 @@ import panda.mvc.alert.ParamAlert;
  * ActionSupport
  */
 public class ActionSupport {
-	/*------------------------------------------------------------
-	 * bean
-	 *------------------------------------------------------------*/
 	@IocInject
 	protected ActionContext context;
 

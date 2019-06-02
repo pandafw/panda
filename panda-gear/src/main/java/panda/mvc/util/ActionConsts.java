@@ -1,18 +1,27 @@
 package panda.mvc.util;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.lang.Objects;
+import panda.lang.Strings;
+import panda.lang.Texts;
+import panda.mvc.ActionContext;
 
 @IocBean(scope=Scope.REQUEST)
-public class ActionConsts extends ActionSupport {
+public class ActionConsts implements Map<String, Object> {
+	@IocInject
+	protected ActionContext context;
+
 	protected Map<String, Object> cache = new HashMap<String, Object>();
-	
+
 	/**
 	 * getTextAsList
 	 * @param name name
@@ -38,7 +47,7 @@ public class ActionConsts extends ActionSupport {
 			return (List)v;
 		}
 
-		v = super.getTextAsList(key, def);
+		v = context.getText().getTextAsList(key, def);
 		if (v == null) {
 			v = Objects.NULL;
 		}
@@ -67,11 +76,85 @@ public class ActionConsts extends ActionSupport {
 			return (Map)v;
 		}
 
-		v = super.getTextAsMap(key, def);
+		v = context.getText().getTextAsMap(key, def);
 		if (v == null) {
 			v = Objects.NULL;
 		}
 		cache.put(key, v);
 		return v == Objects.NULL ? def : (Map)v;
+	}
+
+	@Override
+	public int size() {
+		return cache.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return cache.isEmpty();
+	}
+
+	@Override
+	public boolean containsKey(Object key) {
+		return cache.containsKey(key);
+	}
+
+	@Override
+	public boolean containsValue(Object value) {
+		return cache.containsValue(value);
+	}
+
+	@Override
+	public Object get(Object key) {
+		Object v = cache.get(key);
+		if (v == null && key instanceof String) {
+			String k = "const-" + Texts.uncamelWord((String)key, '-');
+			if (Strings.endsWith(k, "-map")) {
+				v = context.getText().getTextAsMap(k, Collections.EMPTY_MAP);
+			}
+			else if (Strings.endsWith(k, "-list")) {
+				v = context.getText().getTextAsList(k, Collections.EMPTY_LIST);
+			}
+			else {
+				v = context.getText().getText(k, k);
+			}
+			cache.put((String)key, v);
+		}
+		return v;
+	}
+
+	@Override
+	public Object put(String key, Object value) {
+		return cache.put(key, value);
+	}
+
+	@Override
+	public Object remove(Object key) {
+		return cache.remove(key);
+	}
+
+	@Override
+	public void putAll(Map<? extends String, ? extends Object> m) {
+		cache.putAll(m);
+	}
+
+	@Override
+	public void clear() {
+		cache.clear();
+	}
+
+	@Override
+	public Set<String> keySet() {
+		return cache.keySet();
+	}
+
+	@Override
+	public Collection<Object> values() {
+		return cache.values();
+	}
+
+	@Override
+	public Set<Entry<String, Object>> entrySet() {
+		return cache.entrySet();
 	}
 }

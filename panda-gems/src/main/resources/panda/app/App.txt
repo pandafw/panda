@@ -147,7 +147,7 @@ lbl-search-result=Search result of "${top.key}"
 #-----------------------------------------------------------------------------
 # d.statusMap
 #-----------------------------------------------------------------------------
-data-statusMap=\
+const-data-status-map=\
 	"A": "Enabled", \
 	"D": "Disabled"
 
@@ -155,7 +155,7 @@ data-statusMap=\
 #-----------------------------------------------------------------------------
 # app locales
 #-----------------------------------------------------------------------------
-app-locales=\
+const-app-locale-map=\
 	"*": "*", \
 	"en": "English", \
 	"ja": "Japanese", \
@@ -165,11 +165,11 @@ app-locales=\
 #-----------------------------------------------------------------------------
 # calendar
 #-----------------------------------------------------------------------------
-calendar-weekdays=[ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
-calendar-weekdays-abbr=[ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ]
-calendar-weekdays-min=[ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" ]
-calendar-months=[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
-calendar-months-abbr=[ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
+const-calendar-weekday-list=[ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
+const-calendar-weekday-abbr-list=[ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ]
+const-calendar-weekday-min-list=[ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" ]
+const-calendar-month-list=[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+const-calendar-month-abbr-list=[ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
 
 
 #-----------------------------------------------------------------------------
