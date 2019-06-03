@@ -1,4 +1,0 @@
-title=キャッシュ
-
-task-resource=リソース
-task-template=テンプレート

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pandafw.github.io/repos/schema/panda-codegen-module-1.5.2.xsd">
+	<include>codegen.xml</include>
+
+	<!-- entity -->
+	<entity name="${entity.package}.Resource" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001" generate="true">
+		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
+		<property name="clazz" type="String" size="100" notNull="true" uniqueKey="CLC" comment="class name">
+			<validator type="stringlength">
+				<param name="maxLength" value="100"/>
+			</validator>
+		</property>
+		<property name="locale" type="String" size="10" notNull="true" uniqueKey="NL" comment="locale">
+			<validator type="stringlength">
+				<param name="maxLength" value="10"/>
+			</validator>
+			<validator type="constant">
+				<param name="list" value="%{consts.appLocaleMap}"/>
+			</validator>
+		</property>
+		<property name="source" type="String" size="50000" jdbcType="CLOB" setterTrim="" comment="resource source">
+			<validator type="stringlength">
+				<param name="maxLength" value="50000"/>
+			</validator>
+		</property>
+	</entity>
+
+	<!-- action -->
+	<action name="action.Resource" entity="${entity.package}.Resource" extend="baseAction">
+		<list name="basicList" extend="suList">
+			<column name="id" hidden="false" sortable="true" link="true">
+				<filter type="number"/>
+			</column>
+			<column name="clazz" hidden="false" sortable="true" link="true">
+				<filter type="string" fixed="true"/>
+			</column>
+			<column name="locale" hidden="false" sortable="true" link="false">
+				<format type="code">
+					<param name="codemap" value="consts.appLocaleMap"/>
+				</format>
+				<filter type="select" fixed="true">
+					<param name="list" value="consts.appLocaleMap"/>
+				</filter>
+			</column>
+			<column name="source" hidden="true" sortable="true" link="false">
+				<filter type="string"/>
+			</column>
+			<param name="options" value="${slist.options}"/>
+		</list>
+		<list name="basicBulk" extend="basicList">
+			<param name="toolbar" value="${bulk.toolbar}"/>
+			<param name="buttons" value="${bulk.buttons}"/>
+		</list>
+		<input name="basicInput" extend="suInput">
+			<field name="id">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="clazz" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="100"/>
+				</editTag>
+			</field>
+			<field name="locale" required="true">
+				<editTag name="${tag.select}">
+					<param name="emptyOption" value="false"/>
+					<param name="list" value="%{consts.appLocaleMap}"/>
+				</editTag>
+			</field>
+			<field name="source">
+				<editTag name="${tag.textarea}">
+					<param name="maxlength" value="50000"/>
+					<param name="cols" value="${tag.textarea.cols}"/>
+					<param name="rows" value="20"/>
+					<param name="*cssClass" value="p-code"/>
+					<param name="_escape" value="phtml"/>
+				</editTag>
+			</field>
+		</input>
+	</action>
+	<action name="resource" auth="${super.auth}" path="${super.path}" extend="action.Resource" actionClass="${action.package}.ResourceListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="expo.csv" extend="basicList" template="${template.expo_csv}" generate="true"/>
+		<list name="expo.json" extend="basicList" template="${template.expo_json}" generate="true"/>
+		<list name="expo.xml" extend="basicList" template="${template.expo_xml}" generate="true"/>
+	</action>
+	<action name="resource" auth="${super.auth}" path="${super.path}" extend="action.Resource" actionClass="${action.package}.ResourceImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+		<list name="import" extend="basicList" template="${template.import}" generate="true"/>
+	</action>
+	<action name="resource" auth="${super.auth}" path="${super.path}" extend="action.Resource" actionClass="${action.package}.ResourceBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="resource" extend="action.Resource" actionClass="${action.package}.ResourceBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="resource" extend="action.Resource" actionClass="${action.package}.ResourceBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="resource" auth="${super.auth}" path="${super.path}" extend="action.Resource" actionClass="${action.package}.ResourceEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+		<input name="view" extend="basicInput" template="${template.view}" generate="true">
+			<param name="toolbar" value="${view.toolbar}"/>
+			<param name="actions" value="${view.actions}"/>
+		</input>
+		<input name="view.json" extend="basicInput" template="${template.view_json}" generate="true"/>
+		<input name="view.xml" extend="basicInput" template="${template.view_xml}" generate="true"/>
+		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+		<input name="add" extend="basicInput" template="${template.add}" generate="true"/>
+		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
+		<input name="edit" extend="basicInput" template="${template.edit}" generate="true"/>
+		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
+			<param name="toolbar" value="${delete.toolbar}"/>
+			<param name="actions" value="${delete.actions}"/>
+		</input>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="${entity.package}.Resource">
+			<property name="clazz" label="Class"/>
+			<property name="locale" label="Locale"/>
+			<property name="source" label="Source"/>
+		</entity>
+		<action name="resource" title="Resource">
+			<property name="icon" label="fa fa-file-text-o"/>
+		</action>
+	</resource>
+	<resource locale="ja">
+		<entity name="${entity.package}.Resource">
+			<property name="clazz" label="クラス名"/>
+			<property name="locale" label="言語・地域"/>
+			<property name="source" label="内容"/>
+		</entity>
+		<action name="resource" title="リソース"/>
+	</resource>
+	<resource locale="zh">
+		<entity name="${entity.package}.Resource">
+			<property name="clazz" label="类名"/>
+			<property name="locale" label="语言・地区"/>
+			<property name="source" label="内容"/>
+		</entity>
+		<action name="resource" title="资源"/>
+	</resource>
+</module>

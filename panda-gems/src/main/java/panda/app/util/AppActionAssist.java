@@ -48,9 +48,6 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	protected AppFreemarkerTemplateLoader ftlTemplateLoader;
 
 	@IocInject
-	protected AppResourceBundleLoader resBundleLoader;
-
-	@IocInject
 	protected AppAuthenticator authenticator;
 
 	//--------------------------------------------------------------------------	
@@ -81,13 +78,6 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 */
 	public String getAppVersion() {
 		return settings.getAppVersion();
-	}
-	
-	/**
-	 * @return true if database resource loader is activated
-	 */
-	public boolean isDatabaseResourceLoader() {
-		return resBundleLoader.getDatabaseResourceLoader() != null;
 	}
 	
 	/**

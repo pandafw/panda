@@ -1,13 +1,13 @@
-package panda.app.util;
+package panda.gems.bundle.resource;
 
 import java.util.List;
 
-import panda.app.constant.MVC;
 import panda.app.constant.VAL;
-import panda.app.entity.Property;
-import panda.app.entity.query.PropertyQuery;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.gems.bundle.resource.entity.Resource;
+import panda.gems.bundle.resource.entity.query.ResourceQuery;
+import panda.io.Settings;
 import panda.io.resource.BeanResourceMaker;
 import panda.io.resource.ResourceLoader;
 import panda.ioc.annotation.IocBean;
@@ -20,12 +20,14 @@ import panda.log.Logs;
  * A class for load database resource.
  */
 @IocBean(type=ResourceLoader.class, create="initialize")
-public class AppResourceBundleLoader extends ResourceLoader {
-	private static final Log log = Logs.getLog(AppResourceBundleLoader.class);
+public class ResourceBundleLoader extends ResourceLoader {
+	private static final Log log = Logs.getLog(ResourceBundleLoader.class);
 
-	@IocInject(value=MVC.DATABASE_PROPERTY, required=false)
-	private boolean property;
+	public static final String DATABASE_RESOURCE = "database-resource-load";
 
+	@IocInject
+	protected Settings settings;
+	
 	@IocInject
 	protected DaoClient daoClient;
 
@@ -43,14 +45,13 @@ public class AppResourceBundleLoader extends ResourceLoader {
 	 * @throws Exception if an error occurs
 	 */
 	public void initialize() throws Exception {
-		if (property) {
+		if (settings.getPropertyAsBoolean(DATABASE_RESOURCE)) {
 			BeanResourceMaker mrbm = new BeanResourceMaker();
 
-			mrbm.setClassColumn(Property.CLAZZ);
-			mrbm.setLocaleColumn(Property.LOCALE);
-			mrbm.setNameColumn(Property.NAME);
-			mrbm.setValueColumn(Property.VALUE);
-			mrbm.setTimestampColumn(Property.UPDATED_AT);
+			mrbm.setClassColumn(Resource.CLAZZ);
+			mrbm.setLocaleColumn(Resource.LOCALE);
+			mrbm.setSourceColumn(Resource.SOURCE);
+			mrbm.setTimestampColumn(Resource.UPDATED_AT);
 			mrbm.setPackageName(getClass().getPackage().getName());
 
 			databaseResourceLoader = mrbm;
@@ -69,16 +70,12 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			return false;
 		}
 		
-		if (property) {
-			log.info("Loading database properties ...");
+		log.info("Loading database resources ...");
 
-			Dao dao = daoClient.getDao();
-			PropertyQuery pq = new PropertyQuery();
-			pq.status().eq(VAL.STATUS_ACTIVE);
-			List<Property> list = dao.select(pq);
-			return databaseResourceLoader.loadResources(list);
-		}
-		
-		return false;
+		Dao dao = daoClient.getDao();
+		ResourceQuery rq = new ResourceQuery();
+		rq.status().eq(VAL.STATUS_ACTIVE);
+		List<Resource> list = dao.select(rq);
+		return databaseResourceLoader.loadResources(list);
 	}
 }

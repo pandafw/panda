@@ -1,6 +1,0 @@
-icon=fa fa-spinner
-
-title=Cache
-
-task-resource=Resource
-task-template=Template

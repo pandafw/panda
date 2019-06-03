@@ -20,7 +20,6 @@ import panda.app.util.AppDaoClient;
 import panda.app.util.AppDaoClientFactory;
 import panda.app.util.AppFreemarkerTemplateLoader;
 import panda.app.util.AppLocalFileStore;
-import panda.app.util.AppResourceBundleLoader;
 import panda.app.util.AppSettings;
 import panda.app.util.pdf.WkHtml2Pdf;
 import panda.lang.Collections;
@@ -51,7 +50,6 @@ public class AppIocLoader extends MvcComboIocLoader {
 				AppDaoClientFactory.class,
 				AppFreemarkerTemplateLoader.class,
 				AppLocalFileStore.class,
-				AppResourceBundleLoader.class,
 				AppSettings.class,
 				UserAuthenticateProcessor.class,
 				WkHtml2Pdf.class);

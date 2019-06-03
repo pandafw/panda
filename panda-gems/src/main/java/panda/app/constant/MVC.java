@@ -61,9 +61,6 @@ public interface MVC extends MvcConstants {
 	/** The task error limit */
 	public static final String TASK_ERROR_LIMIT = "panda.task.error.limit";
 
-	/** The load task keys */
-	public static final String TASK_LOAD_KEYS = "panda.task.load.keys";
-
 	//------------------------------------------------
 	// The authenticate
 	//
@@ -111,8 +108,6 @@ public interface MVC extends MvcConstants {
 	// The database settings
 	//
 	public static final String DATABASE_TEMPLATE = "panda.database.template";
-
-	public static final String DATABASE_RESOURCE = "panda.database.resource";
 
 	public static final String DATABASE_PROPERTY = "panda.database.property";
 }

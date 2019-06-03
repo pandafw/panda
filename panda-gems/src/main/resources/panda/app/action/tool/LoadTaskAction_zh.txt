@@ -1,4 +1,0 @@
-title=应用缓存
-
-task-resource=资源
-task-template=模板
