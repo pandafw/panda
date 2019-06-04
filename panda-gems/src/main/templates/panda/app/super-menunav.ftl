@@ -22,14 +22,10 @@
 		<@mitem ac="/super/datacpy"         ic="icon-super-datacpy"      tx="navi-super-datacpy"/>
 
 		<@mitem ac="/super/crons"           ic="icon-super-crons"        tx="navi-super-crons"/>
-		<@mitem ac="/super/loadtask"        ic="icon-super-loadtask"     tx="navi-super-loadtask"/>
 
 		<@mitem ac="/super/media/list"      ic="icon-super-media"        tx="navi-super-media"/>
-		<@mitem ac="/super/fileitem/list"  ic="icon-super-fileitem"    tx="navi-super-fileitem"/>
-	<#if assist.databaseResourceLoader>
+		<@mitem ac="/super/fileitem/list"   ic="icon-super-fileitem"     tx="navi-super-fileitem"/>
+		<@mitem ac="/super/property/list"   ic="icon-super-property"     tx="navi-super-property"/>
 		<@mitem ac="/super/resource/list"   ic="icon-super-resource"     tx="navi-super-resource"/>
-	</#if>
-	<#if assist.databaseTemplateLoader>
 		<@mitem ac="/super/template/list"   ic="icon-super-template"     tx="navi-super-template"/>
-	</#if>
 </#if>

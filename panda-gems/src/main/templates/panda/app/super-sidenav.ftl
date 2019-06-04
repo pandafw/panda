@@ -24,16 +24,12 @@
 			<@navis ap="/super/datacpy"   ac="/super/datacpy"       ic="icon-super-datacpy"    tx="navi-super-datacpy"/>
 
 			<@navis ap="/super/crons"     ac="/super/crons"         ic="icon-super-crons"      tx="navi-super-crons"/>
-			<@navis ap="/super/loadtask"  ac="/super/loadtask"      ic="icon-super-loadtask"   tx="navi-super-loadtask"/>
 
 			<@navis ap="/super/media/"    ac="/super/media/list"    ic="icon-super-media"      tx="navi-super-media"/>
 			<@navis ap="/super/fileitem/" ac="/super/fileitem/list" ic="icon-super-fileitem"   tx="navi-super-fileitem"/>
-		<#if assist.databaseResourceLoader>
+			<@navis ap="/super/property/" ac="/super/property/list" ic="icon-super-property"   tx="navi-super-property"/>
 			<@navis ap="/super/resource/" ac="/super/resource/list" ic="icon-super-resource"   tx="navi-super-resource"/>
-		</#if>
-		<#if assist.databaseTemplateLoader>
 			<@navis ap="/super/template/" ac="/super/template/list" ic="icon-super-template"   tx="navi-super-template"/>
-		</#if>
 		</ul>
 	</div>
 </div><!-- end of navi_super -->
