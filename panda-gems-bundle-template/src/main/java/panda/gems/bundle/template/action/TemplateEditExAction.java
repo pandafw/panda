@@ -1,12 +1,11 @@
-package panda.app.action.template;
+package panda.gems.bundle.template.action;
 
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
+import panda.gems.bundle.template.entity.Template;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 import panda.mvc.view.ftl.FreemarkerHelper;
-import panda.app.action.template.TemplateEditAction;
-import panda.app.entity.Template;
 
 @At("${!!super_path|||'/super'}/template")
 @Auth(AUTH.SUPER)

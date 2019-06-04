@@ -45,9 +45,6 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	protected FreemarkerHelper freemarker;
 	
 	@IocInject
-	protected AppFreemarkerTemplateLoader ftlTemplateLoader;
-
-	@IocInject
 	protected AppAuthenticator authenticator;
 
 	//--------------------------------------------------------------------------	
@@ -78,13 +75,6 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 */
 	public String getAppVersion() {
 		return settings.getAppVersion();
-	}
-	
-	/**
-	 * @return true if database template loader is activated
-	 */
-	public boolean isDatabaseTemplateLoader() {
-		return ftlTemplateLoader.getDatabaseTemplateLoader() != null;
 	}
 	
 	/**

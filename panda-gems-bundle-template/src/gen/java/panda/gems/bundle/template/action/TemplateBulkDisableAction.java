@@ -1,8 +1,8 @@
-package panda.app.action.template;
+package panda.gems.bundle.template.action;
 
 import java.util.Map;
 import panda.app.action.crud.GenericBulkAction;
-import panda.app.entity.Template;
+import panda.gems.bundle.template.entity.Template;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.TokenProtect;

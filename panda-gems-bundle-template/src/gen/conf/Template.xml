@@ -74,26 +74,26 @@
 			</field>
 		</input>
 	</action>
-	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.TemplateListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="expo.csv" extend="basicList" template="${template.expo_csv}" generate="true"/>
 		<list name="expo.json" extend="basicList" template="${template.expo_json}" generate="true"/>
 		<list name="expo.xml" extend="basicList" template="${template.expo_xml}" generate="true"/>
 	</action>
-	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.TemplateImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
 		<list name="import" extend="basicList" template="${template.import}" generate="true"/>
 	</action>
-	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.template.TemplateBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="template" auth="${super.auth}" path="${super.path}" extend="action.Template" actionClass="${action.package}.TemplateBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
-	<action name="template" extend="action.Template" actionClass="${action.package}.template.TemplateBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="template" extend="action.Template" actionClass="${action.package}.TemplateBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
-	<action name="template" extend="action.Template" actionClass="${action.package}.template.TemplateBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="template" extend="action.Template" actionClass="${action.package}.TemplateBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
-	<action name="template" extend="action.Template" actionClass="${action.package}.template.TemplateEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+	<action name="template" extend="action.Template" actionClass="${action.package}.TemplateEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="${view.toolbar}"/>
 			<param name="actions" value="${view.actions}"/>

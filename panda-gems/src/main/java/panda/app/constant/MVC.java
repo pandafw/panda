@@ -103,9 +103,4 @@ public interface MVC extends MvcConstants {
 	// The gae search settings
 	//
 	public static final String GAE_SEARCH_LOCALE = "panda.gae.search.locale";
-
-	//------------------------------------------------
-	// The database settings
-	//
-	public static final String DATABASE_TEMPLATE = "panda.database.template";
 }

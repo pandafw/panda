@@ -1,11 +1,11 @@
-package panda.app.entity.query;
+package panda.gems.bundle.template.entity.query;
 
-import panda.app.entity.Template;
 import panda.app.entity.query.SUQuery;
 import panda.dao.entity.Entities;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.DataQuery;
 import panda.dao.query.StringCondition;
+import panda.gems.bundle.template.entity.Template;
 
 public class TemplateQuery extends SUQuery<Template, TemplateQuery> {
 	/**

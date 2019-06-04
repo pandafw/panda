@@ -1,31 +1,29 @@
-package panda.app.util;
+package panda.gems.bundle.template;
 
 import java.util.List;
 
-import panda.app.constant.MVC;
+import freemarker.cache.TemplateLoader;
 import panda.app.constant.VAL;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.gems.bundle.template.entity.Template;
+import panda.gems.bundle.template.entity.query.TemplateQuery;
+import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.tpl.ftl.ExternalTemplateLoader;
-import panda.app.entity.Template;
-import panda.app.entity.query.TemplateQuery;
-
-import freemarker.cache.TemplateLoader;
 
 @IocBean(type=TemplateLoader.class, create="initialize")
-public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
-	private static final Log log = Logs.getLog(AppFreemarkerTemplateLoader.class);
+public class TemplateBundleLoader extends FreemarkerTemplateLoader {
+	private static final Log log = Logs.getLog(TemplateBundleLoader.class);
 
-	public AppFreemarkerTemplateLoader() {
-	}
+	public static final String DATABASE_TEMPLATE = "database-template-load";
 
-	@IocInject(value=MVC.DATABASE_TEMPLATE, required=false)
-	private boolean enable;
+	@IocInject
+	protected Settings settings;
 
 	@IocInject
 	private DaoClient daoClient;
@@ -40,7 +38,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 	}
 
 	public void initialize() {
-		if (enable) {
+		if (settings.getPropertyAsBoolean(DATABASE_TEMPLATE)) {
 			ExternalTemplateLoader etl = new ExternalTemplateLoader();
 			
 			etl.setNameColumn(Template.NAME);
