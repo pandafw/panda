@@ -1,12 +1,13 @@
-package panda.app.action.property;
+package panda.gems.bundle.property.action;
 
 import java.util.List;
 
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.VAL;
-import panda.app.entity.Property;
 import panda.dao.query.DataQuery;
+import panda.gems.bundle.property.action.PropertyBulkDisableAction;
+import panda.gems.bundle.property.entity.Property;
 import panda.mvc.annotation.At;
 
 @At("${!!super_path|||'/super'}/property")

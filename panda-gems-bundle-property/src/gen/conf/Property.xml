@@ -105,26 +105,26 @@
 			</field>
 		</input>
 	</action>
-	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.property.PropertyListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.PropertyListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="expo.csv" extend="basicList" template="${template.expo_csv}" generate="true"/>
 		<list name="expo.json" extend="basicList" template="${template.expo_json}" generate="true"/>
 		<list name="expo.xml" extend="basicList" template="${template.expo_xml}" generate="true"/>
 	</action>
-	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.property.PropertyImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.PropertyImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
 		<list name="import" extend="basicList" template="${template.import}" generate="true"/>
 	</action>
-	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.property.PropertyBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.PropertyBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
-	<action name="property" extend="action.Property" actionClass="${action.package}.property.PropertyBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="property" extend="action.Property" actionClass="${action.package}.PropertyBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
-	<action name="property" extend="action.Property" actionClass="${action.package}.property.PropertyBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="property" extend="action.Property" actionClass="${action.package}.PropertyBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
-	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.property.PropertyEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+	<action name="property" auth="${super.auth}" path="${super.path}" extend="action.Property" actionClass="${action.package}.PropertyEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="${view.toolbar}"/>
 			<param name="actions" value="${view.actions}"/>

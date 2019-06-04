@@ -1,11 +1,11 @@
-package panda.app.action.property;
+package panda.gems.bundle.property.action;
 
 import java.util.ArrayList;
 import java.util.List;
 import panda.app.action.crud.GenericListAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.app.entity.Property;
+import panda.gems.bundle.property.entity.Property;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;

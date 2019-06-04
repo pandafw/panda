@@ -1,13 +1,13 @@
-package panda.app.util;
+package panda.gems.bundle;
 
 import java.util.List;
 
-import panda.app.constant.MVC;
 import panda.app.constant.VAL;
-import panda.app.entity.Property;
-import panda.app.entity.query.PropertyQuery;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.gems.bundle.property.entity.Property;
+import panda.gems.bundle.property.entity.query.PropertyQuery;
+import panda.io.Settings;
 import panda.io.resource.BeanResourceMaker;
 import panda.io.resource.ResourceLoader;
 import panda.ioc.annotation.IocBean;
@@ -20,12 +20,14 @@ import panda.log.Logs;
  * A class for load database resource.
  */
 @IocBean(type=ResourceLoader.class, create="initialize")
-public class AppResourceBundleLoader extends ResourceLoader {
-	private static final Log log = Logs.getLog(AppResourceBundleLoader.class);
+public class PropertyBundleLoader extends ResourceLoader {
+	private static final Log log = Logs.getLog(PropertyBundleLoader.class);
 
-	@IocInject(value=MVC.DATABASE_PROPERTY, required=false)
-	private boolean property;
+	public static final String DATABASE_PROPERTY = "database-property-load";
 
+	@IocInject
+	protected Settings settings;
+	
 	@IocInject
 	protected DaoClient daoClient;
 
@@ -43,7 +45,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 	 * @throws Exception if an error occurs
 	 */
 	public void initialize() throws Exception {
-		if (property) {
+		if (settings.getPropertyAsBoolean(DATABASE_PROPERTY)) {
 			BeanResourceMaker mrbm = new BeanResourceMaker();
 
 			mrbm.setClassColumn(Property.CLAZZ);
@@ -69,16 +71,12 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			return false;
 		}
 		
-		if (property) {
-			log.info("Loading database properties ...");
+		log.info("Loading database properties ...");
 
-			Dao dao = daoClient.getDao();
-			PropertyQuery pq = new PropertyQuery();
-			pq.status().eq(VAL.STATUS_ACTIVE);
-			List<Property> list = dao.select(pq);
-			return databaseResourceLoader.loadResources(list);
-		}
-		
-		return false;
+		Dao dao = daoClient.getDao();
+		PropertyQuery pq = new PropertyQuery();
+		pq.status().eq(VAL.STATUS_ACTIVE);
+		List<Property> list = dao.select(pq);
+		return databaseResourceLoader.loadResources(list);
 	}
 }

@@ -1,9 +1,9 @@
-package panda.app.action.property;
+package panda.gems.bundle.property.action;
 
 import panda.app.action.crud.GenericEditAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.app.entity.Property;
+import panda.gems.bundle.property.entity.Property;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.TokenProtect;

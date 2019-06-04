@@ -108,6 +108,4 @@ public interface MVC extends MvcConstants {
 	// The database settings
 	//
 	public static final String DATABASE_TEMPLATE = "panda.database.template";
-
-	public static final String DATABASE_PROPERTY = "panda.database.property";
 }

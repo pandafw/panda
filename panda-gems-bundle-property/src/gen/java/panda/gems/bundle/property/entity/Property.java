@@ -1,4 +1,4 @@
-package panda.app.entity;
+package panda.gems.bundle.property.entity;
 
 import java.io.Serializable;
 import panda.app.entity.SUBean;
@@ -19,7 +19,7 @@ import panda.mvc.validator.Validators;
 })
 public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -858737188L;
+	private static final long serialVersionUID = 1812454986L;
 
 	/**
 	 * Constructor

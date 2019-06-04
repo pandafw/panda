@@ -25,6 +25,7 @@
 		<module>panda-html</module>
 		<module>panda-gear</module>
 		<module>panda-gems</module>
+		<module>panda-gems-bundle-property</module>
 		<module>panda-gems-bundle-resource</module>
 		<module>panda-gems-media</module>
 		<module>panda-glue</module>
