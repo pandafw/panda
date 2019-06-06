@@ -1,4 +1,4 @@
-package panda.ex.zendesk;
+package panda.tube.zendesk;
 
 public class Via {
 	/** This tells you how the ticket or event was created. Examples: "web", "mobile", "rule", "system" */

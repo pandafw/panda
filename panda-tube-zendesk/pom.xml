@@ -9,11 +9,11 @@
 		<version>1.5.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>panda-tube</artifactId>
+	<artifactId>panda-tube-zendesk</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Tube</name>
-	<description>Panda Tube is a Web Service API client for WordPress XML-RPC, Google Vision API, etc.</description>
+	<name>Panda Tube Zendesk</name>
+	<description>Panda Tube Zendesk is a Web Service API client for Zendesk.</description>
 
 	<build>
 		<plugins>

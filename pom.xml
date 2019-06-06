@@ -32,11 +32,11 @@
 		<module>panda-glue</module>
 		<module>panda-nets</module>
 		<module>panda-tool</module>
-		<module>panda-tube</module>
 		<module>panda-tube-freshdesk</module>
 		<module>panda-tube-gcloud</module>
 		<module>panda-tube-sendgrid</module>
 		<module>panda-tube-wordpress</module>
+		<module>panda-tube-zendesk</module>
 		<module>panda-roid</module>
 	</modules>
 

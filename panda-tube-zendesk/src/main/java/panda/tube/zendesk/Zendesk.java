@@ -1,4 +1,4 @@
-package panda.ex.zendesk;
+package panda.tube.zendesk;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

@@ -1,4 +1,4 @@
-package panda.ex.zendesk;
+package panda.tube.zendesk;
 
 import java.util.List;
 
