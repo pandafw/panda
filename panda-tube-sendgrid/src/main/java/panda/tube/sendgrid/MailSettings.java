@@ -1,4 +1,4 @@
-package panda.ex.sendgrid;
+package panda.tube.sendgrid;
 
 /**
  * An object representing a collection of different mail settings that you can use to specify how you would like this email to be handled.

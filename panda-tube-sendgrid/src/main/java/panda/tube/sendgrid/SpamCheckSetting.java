@@ -1,4 +1,4 @@
-package panda.ex.sendgrid;
+package panda.tube.sendgrid;
 
 /**
  * A setting object that allows you to test the content of your email for spam.

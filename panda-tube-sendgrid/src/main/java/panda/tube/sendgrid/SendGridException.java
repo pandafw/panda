@@ -1,4 +1,4 @@
-package panda.ex.sendgrid;
+package panda.tube.sendgrid;
 
 import panda.net.http.HttpException;
 

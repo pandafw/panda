@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+							 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.pandafw</groupId>
+		<artifactId>panda</artifactId>
+		<version>1.5.2-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>panda-tube-sendgrid</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Panda Tube SendGrid</name>
+	<description>Panda Tube SendGrid is a Web Service API client for SendGrid.</description>
+
+	<build>
+		<plugins>
+			<!-- git commit id -->
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Version>${project.version}</Version>
+							<Revision>${git.commit.id.abbrev}</Revision>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- gpg sign -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- Panda -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>panda-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

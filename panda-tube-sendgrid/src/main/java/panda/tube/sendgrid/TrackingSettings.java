@@ -1,4 +1,4 @@
-package panda.ex.sendgrid;
+package panda.tube.sendgrid;
 
 public class TrackingSettings {
 	public ClickTrackingSetting click_tracking;
