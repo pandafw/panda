@@ -34,6 +34,7 @@
 		<module>panda-tool</module>
 		<module>panda-tube</module>
 		<module>panda-tube-freshdesk</module>
+		<module>panda-tube-gcloud</module>
 		<module>panda-roid</module>
 	</modules>
 
