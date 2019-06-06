@@ -33,6 +33,7 @@
 		<module>panda-nets</module>
 		<module>panda-tool</module>
 		<module>panda-tube</module>
+		<module>panda-tube-freshdesk</module>
 		<module>panda-roid</module>
 	</modules>
 

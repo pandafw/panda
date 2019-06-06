@@ -1,4 +1,4 @@
-package panda.ex.freshdesk;
+package panda.tube.freshdesk;
 
 import panda.net.http.HttpException;
 

@@ -1,4 +1,4 @@
-package panda.ex.freshdesk;
+package panda.tube.freshdesk;
 
 public class FreshHeader {
 	/** FreshDesk api version */

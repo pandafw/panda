@@ -1,4 +1,4 @@
-package panda.ex.freshdesk;
+package panda.tube.freshdesk;
 
 public enum ErrorCode {
 	/**	A mandatory attribute is missing. For example, calling Create a Contact without the mandatory email field in the request will result in this error. */
