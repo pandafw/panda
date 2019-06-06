@@ -172,13 +172,13 @@ public class ActionConfig {
 
 	@Override
 	public String toString() {
-		return toString(false);
+		return toString(true);
 	}
 	
-	public String toString(boolean noPath) {
+	public String toString(boolean path) {
 		StringBuilder sb = new StringBuilder();
 
-		if (!noPath) {
+		if (path) {
 			sb.append(Strings.join(paths, ", "));
 			sb.append(" >> ");
 		}

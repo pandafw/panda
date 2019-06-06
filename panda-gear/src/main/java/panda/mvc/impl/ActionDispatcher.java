@@ -110,14 +110,14 @@ public class ActionDispatcher {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (defaultChain != null) {
-			sb.append(defaultChain.getConfig().toString(true));
+			sb.append(defaultChain.getConfig().toString(false));
 		}
 		if (Collections.isNotEmpty(chainMap)) {
 			for (Entry<String, ActionChain> en : chainMap.entrySet()) {
 				if (sb.length() > 0) {
 					sb.append(Streams.EOL).append("   - ");
 				}
-				sb.append(en.getKey()).append(": ").append(en.getValue().getConfig());
+				sb.append(en.getKey()).append(": ").append(en.getValue().getConfig().toString(false));
 			}
 		}
 		return sb.toString();

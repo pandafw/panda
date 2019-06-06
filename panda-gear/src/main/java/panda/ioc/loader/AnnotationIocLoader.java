@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import panda.io.Streams;
@@ -60,7 +62,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 			}
 
 			if (log.isInfoEnabled()) {
-				TreeSet<String> as = new TreeSet<String>();
+				Set<String> as = new LinkedHashSet<String>();
 				for (Object a : args) {
 					as.add(String.valueOf(a));
 				}

@@ -249,13 +249,13 @@ public class MvcLoader {
 		Modules ann = mainModule.getAnnotation(Modules.class);
 		if (ann == null) {
 			// no annotation, add the specified class
-			addAction(actions, mainModule, true);
+			addAction(actions, mainModule);
 			return actions;
 		}
 
 		// add classes
 		for (Class<?> action : ann.value()) {
-			addAction(actions, action, true);
+			addAction(actions, action);
 		}
 
 		Set<String> packages = new LinkedHashSet<String>();
@@ -282,7 +282,7 @@ public class MvcLoader {
 
 				List<Class<?>> clss = Classes.scan(pkg);
 				for (Class<?> cls : clss) {
-					addAction(actions, cls, true);
+					addAction(actions, cls);
 				}
 			}
 		}
@@ -290,15 +290,17 @@ public class MvcLoader {
 		return actions;
 	}
 
-	private void addAction(Set<Class<?>> actions, Class<?> action, boolean warn) {
+	private void addAction(Set<Class<?>> actions, Class<?> action) {
 		if (isActionClass(action)) {
 			if (log.isDebugEnabled()) {
 				log.debug(" > add " + action.getName());
 			}
 			actions.add(action);
 		}
-		else if (warn) {
-			log.warn(" > ignore " +  action.getName());
+		else {
+			if (log.isDebugEnabled()) {
+				log.debug(" > ignore " +  action.getName());
+			}
 		}
 	}
 	
