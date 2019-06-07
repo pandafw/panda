@@ -116,11 +116,14 @@ public class ActionConsts implements Map<String, Object> {
 				v = context.getText().getTextAsList(k, Collections.EMPTY_LIST);
 			}
 			else {
-				v = context.getText().getText(k, k);
+				v = context.getText().getText(k);
+			}
+			if (v == null) {
+				v = Objects.NULL;
 			}
 			cache.put((String)key, v);
 		}
-		return v;
+		return v == Objects.NULL ? null : v;
 	}
 
 	@Override
