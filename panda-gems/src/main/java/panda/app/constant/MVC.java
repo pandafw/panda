@@ -74,8 +74,6 @@ public interface MVC extends MvcConstants {
 	
 	public static final String AUTH_SECURE_USER_AGE = "panda.auth.secure.session.age";
 	
-	public static final String AUTH_USER_TYPE = "panda.auth.user.type";
-	
 	public static final String AUTH_TICKET_PARAM_NAME = "panda.auth.ticket.param.name";
 	
 	public static final String AUTH_TICKET_COOKIE_NAME = "panda.auth.ticket.cookie.name";

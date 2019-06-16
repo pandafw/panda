@@ -2,8 +2,8 @@ package panda.app;
 
 import java.util.Collection;
 
-import panda.app.auth.AppAuthenticator;
 import panda.app.auth.UserAuthenticateProcessor;
+import panda.app.auth.UserAuthenticator;
 import panda.app.index.gae.RevisionedGaeIndexes;
 import panda.app.index.lucene.RevisionedLuceneIndexes;
 import panda.app.task.ActionTaskSubmitter;
@@ -41,7 +41,6 @@ public class AppIocLoader extends MvcComboIocLoader {
 			Collections.addAll(ss, 
 				AppActionAssist.class,
 				AppActionConsts.class,
-				AppAuthenticator.class,
 				AppCache.class,
 				AppCacheFactory.class,
 				AppDao.class,
@@ -50,6 +49,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 				AppLocalFileStore.class,
 				AppSettings.class,
 				UserAuthenticateProcessor.class,
+				UserAuthenticator.class,
 				WkHtml2Pdf.class);
 			
 			if (Systems.IS_OS_APPENGINE) {

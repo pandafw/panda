@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import freemarker.template.TemplateException;
-import panda.app.auth.AppAuthenticator;
 import panda.app.auth.IUser;
+import panda.app.auth.UserAuthenticator;
 import panda.app.constant.RES;
 import panda.app.constant.VAL;
 import panda.app.entity.ICreatedBy;
@@ -45,7 +45,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	protected FreemarkerHelper freemarker;
 	
 	@IocInject
-	protected AppAuthenticator authenticator;
+	protected UserAuthenticator authenticator;
 
 	//--------------------------------------------------------------------------	
 	/**

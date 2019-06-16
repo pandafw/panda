@@ -10,12 +10,6 @@ public interface RES {
 	// SETTINGS
 	//------------------------------------------------------------
 	/**
-	 * MAIL_EXCEPTION = "mail-exception";
-	 */
-	public static final String MAIL_EXCEPTION = "mail-exception";
-	
-	//--------------------------------------------------------
-	/**
 	 * REDIRECT_TIMEOUT = "redirect-timeout";
 	 */
 	public final static String REDIRECT_TIMEOUT = "redirect-timeout";
