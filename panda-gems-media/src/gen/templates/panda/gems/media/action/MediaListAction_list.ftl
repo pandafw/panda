@@ -283,7 +283,7 @@
 	/>
 
 	<@p.listview id="media_list" action="./list"
-		list=result columns=_columns_
+		list=result.list columns=_columns_
 		cssTable="table-hover table-striped"
 		link={ "action": "./view", "params": { "id": "%{top.id}" } }
 		tools="%{vars.lvtools}"

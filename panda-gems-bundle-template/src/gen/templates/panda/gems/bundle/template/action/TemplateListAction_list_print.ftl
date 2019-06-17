@@ -90,7 +90,7 @@
 
 
 	<@p.listview id="template_list_print" action="./list.print" 
-		list=result columns=_columns_ cssColumn="status"
+		list=result.list columns=_columns_ cssColumn="status"
 		cssTable="table-striped"
 	/>
 </div>

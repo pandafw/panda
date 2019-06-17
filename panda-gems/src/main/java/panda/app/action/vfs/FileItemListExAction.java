@@ -32,9 +32,9 @@ public class FileItemListExAction extends FileItemListAction {
 	}
 
 	@Override
-	protected void queryList(Queryer qr, long defLimit, long maxLimit) {
+	protected void queryList(final Result<FileItem> r, final Queryer qr, long defLimit, long maxLimit) {
 		if (fileStore instanceof DaoFileStore) {
-			super.queryList(qr, defLimit, maxLimit);
+			super.queryList(r, qr, defLimit, maxLimit);
 			return;
 		}
 
@@ -63,16 +63,20 @@ public class FileItemListExAction extends FileItemListAction {
 			Collections.sort(ds, c);
 		}
 
+		r.setPage(qr.getPager());
+		
 		// start, limit
-		dataList = new ArrayList<FileItem>();
+		List<FileItem> list = new ArrayList<FileItem>();
 		int start = qr.getPager().getStart().intValue();
 		int limit = start + qr.getPager().getLimit().intValue();
 		if (limit > ds.size()) {
 			limit = ds.size();
 		}
 		for (int i = start; i < limit; i++) {
-			dataList.add(ds.get(i));
+			list.add(ds.get(i));
 		}
+		
+		r.setList(list);
 	}
 
 }

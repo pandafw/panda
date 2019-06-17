@@ -31,13 +31,17 @@ public class PagerAdapter extends IncludePropertyFilter<Pager> {
 			includes.add("s");
 			includes.add("l");
 			includes.add("p");
+			includes.add("ps");
 			includes.add("t");
+			includes.add("c");
 		}
 		else {
 			includes.add("start");
 			includes.add("limit");
 			includes.add("page");
+			includes.add("pages");
 			includes.add("total");
+			includes.add("count");
 		}
 	}
 }

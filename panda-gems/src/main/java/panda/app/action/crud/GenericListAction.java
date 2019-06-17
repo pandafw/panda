@@ -41,6 +41,35 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	public final static String STATE_LIST = "list";
 
+	public static class Result<T> {
+		private List<T> list;
+		private Pager page;
+		/**
+		 * @return the list
+		 */
+		public List<T> getList() {
+			return list;
+		}
+		/**
+		 * @param list the list to set
+		 */
+		public void setList(List<T> list) {
+			this.list = list;
+		}
+		/**
+		 * @return the page
+		 */
+		public Pager getPage() {
+			return page;
+		}
+		/**
+		 * @param page the page to set
+		 */
+		public void setPage(Pager page) {
+			this.page = page;
+		}
+	}
+	
 	//------------------------------------------------------------
 	// config properties
 	//------------------------------------------------------------
@@ -48,11 +77,6 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	private Boolean _save;
 	private Boolean listCountable;
 
-	//------------------------------------------------------------
-	// result properties
-	//------------------------------------------------------------
-	protected List<T> dataList;
-	
 	/**
 	 * Constructor 
 	 */
@@ -444,9 +468,11 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			saveListParameters(qr);
 		}
 
-		queryList(qr, defLimit, maxLimit);
+		Result<T> r = new Result<T>();
+
+		queryList(r, qr, defLimit, maxLimit);
 		
-		return dataList;
+		return r;
 	}
 
 	/**
@@ -474,13 +500,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 
-		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof Views) {
-			return rv;
+		Object r = doList(qr, defLimit, maxLimit);
+		if (r instanceof Views) {
+			return r;
 		}
 		
 		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
-		csv.setList((List)rv);
+		csv.setList(((Result)r).list);
 		csv.setColumns(columns);
 
 		getContext().setResult(csv);
@@ -501,13 +527,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 
-		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof Views) {
-			return rv;
+		Object r = doList(qr, defLimit, maxLimit);
+		if (r instanceof Views) {
+			return r;
 		}
 		
 		TsvExporter tsv = getContext().getIoc().get(TsvExporter.class);
-		tsv.setList((List)rv);
+		tsv.setList(((Result)r).list);
 		tsv.setColumns(columns);
 
 		getContext().setResult(tsv);
@@ -528,13 +554,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 
-		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof Views) {
-			return rv;
+		Object r = doList(qr, defLimit, maxLimit);
+		if (r instanceof Views) {
+			return r;
 		}
 		
 		XlsExporter xls = getContext().getIoc().get(XlsExporter.class);
-		xls.setList((List)rv);
+		xls.setList(((Result)r).list);
 		xls.setColumns(columns);
 
 		getContext().setResult(xls);
@@ -555,13 +581,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 
-		Object rv = doList(qr, defLimit, maxLimit);
-		if (rv instanceof Views) {
-			return rv;
+		Object r = doList(qr, defLimit, maxLimit);
+		if (r instanceof Views) {
+			return r;
 		}
 		
 		XlsxExporter xlsx = getContext().getIoc().get(XlsxExporter.class);
-		xlsx.setList((List)rv);
+		xlsx.setList(((Result)r).list);
 		xlsx.setColumns(columns);
 
 		getContext().setResult(xlsx);
@@ -575,7 +601,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * @param defLimit default limit
 	 * @param maxLimit default maximum limit
 	 */
-	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
+	protected void queryList(final Result<T> r, final Queryer qr, long defLimit, long maxLimit) {
 		final DataQuery<T> dq = getDataQuery();
 
 		addQueryColumns(dq);
@@ -588,10 +614,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			listCountable = getTextAsBoolean(RES.UI_LIST_COUNTABLE, true);
 		}
 
-		queryList(qr, dq);
+		queryList(r, qr, dq);
 	}
 	
-	protected void queryList(final Queryer qr, final DataQuery<T> dq) {
+	protected void queryList(final Result<T> r, final Queryer qr, final DataQuery<T> dq) {
+		r.page = qr.getPager();
+		
 		final Dao dao = getDao();
 		dao.exec(new Runnable() {
 			public void run() {
@@ -599,14 +627,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 					qr.getPager().setTotal(dao.count(dq));
 					qr.getPager().normalize();
 					if (qr.getPager().getTotal() < 1) {
-						dataList = new ArrayList<T>();
+						r.list = new ArrayList<T>();
 						return;
 					}
 				}
 				dq.setStart(qr.getPager().getStart());
 				dq.setLimit(qr.getPager().getLimit());
-				dataList = dao.select(dq);
-				dataList = trimDataList(dataList);
+				r.list = dao.select(dq);
+				r.list = trimDataList(r.list);
 			}
 		});
 	}

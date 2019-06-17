@@ -172,7 +172,7 @@
 	/>
 
 	${s}@p.listview id="${action.name}_${gen.trimUiName(ui.name)}" action="./${ui.name}"<#if ui.params.method?has_content> method="${ui.params.method}"</#if><#if ui.params.target?has_content> target="${ui.params.target}"</#if>
-		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
+		list=result.list columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		cssTable="table-hover table-striped"
 	<#if actionView?has_content>
 		link={ "action": "${actionView}", "params": { <#list entity.primaryKeyList as p>"${p.name}": "%{top.${p.name}}"<#if p_has_next>, </#if></#list> } }

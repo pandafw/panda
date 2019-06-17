@@ -54,7 +54,7 @@
 
 
 	<@p.listview id="fileitem_list_print" action="./list.print" 
-		list=result columns=_columns_
+		list=result.list columns=_columns_
 		cssTable="table-striped"
 	/>
 </div>

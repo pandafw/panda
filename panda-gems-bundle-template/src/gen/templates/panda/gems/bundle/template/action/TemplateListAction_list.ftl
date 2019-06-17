@@ -210,7 +210,7 @@
 	/>
 
 	<@p.listview id="template_list" action="./list"
-		list=result columns=_columns_ cssColumn="status"
+		list=result.list columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
 		link={ "action": "./view", "params": { "id": "%{top.id}" } }
 		tools="%{vars.lvtools}"
