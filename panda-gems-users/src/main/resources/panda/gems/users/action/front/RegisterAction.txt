@@ -1,0 +1,10 @@
+icon=fa fa-user-plus
+title=Register
+
+welcome=Please input the data below.
+
+btn-register=Register
+
+message-confirm=Are you sure to register?
+message-success=User register successfully.
+link-redirect=Continue...

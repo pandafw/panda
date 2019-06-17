@@ -1,0 +1,9 @@
+name=用户名
+
+email=电子邮件
+
+password=密码
+
+role=权限
+
+

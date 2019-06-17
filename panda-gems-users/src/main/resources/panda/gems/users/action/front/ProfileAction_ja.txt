@@ -1,0 +1,5 @@
+title=プロフィール編集
+
+message-confirm=下記の内容を変更して宜しいでしょうか？
+message-success=下記の内容を変更しました。
+

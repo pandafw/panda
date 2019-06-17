@@ -1,0 +1,6 @@
+icon=fa fa-id-card-o
+title=Profile Edit
+
+message-confirm=Are you sure to update the profile?
+message-success=The profile is successfully updated.
+

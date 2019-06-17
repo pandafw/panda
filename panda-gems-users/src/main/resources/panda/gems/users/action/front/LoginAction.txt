@@ -1,0 +1,24 @@
+title=Sign In
+
+text-input=Please input your email and password.
+
+text-registered=I have a account of <${a.getText("site-name")}>
+
+p.username=Email
+p.password=Password
+p.autosave=Keep me signed in
+
+
+
+text-password-forgot=Forgot your password？ 
+
+
+text-unregistered=New user for <${a.getText("site-name")}>
+link-register=Register
+
+message-login-success=Sign in successfully.
+message-logout-success=Sign out successfully.
+
+link-redirect=Move to the page before sign in
+
+error-login=Failed to sign in: Incorrect email or password.

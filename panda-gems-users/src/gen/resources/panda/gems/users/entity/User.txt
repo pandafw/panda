@@ -1,0 +1,9 @@
+name=User name
+
+email=Email
+
+password=Password
+
+role=Role
+
+

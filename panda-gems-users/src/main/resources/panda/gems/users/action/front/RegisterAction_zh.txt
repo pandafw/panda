@@ -1,0 +1,9 @@
+title=用户注册
+
+welcome=请输入用户名，邮件地址，密码。
+
+btn-register=用户注册
+
+message-confirm=是否登录以下信息？
+message-success=注册成功。
+link-redirect=返回登录前的页面

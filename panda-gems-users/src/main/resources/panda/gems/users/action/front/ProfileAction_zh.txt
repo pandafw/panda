@@ -1,0 +1,5 @@
+title=会员信息編集
+
+message-confirm=您确定更新以下信息吗？
+message-success=会员信息成功更新了。
+

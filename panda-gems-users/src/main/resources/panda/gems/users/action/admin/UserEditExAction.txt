@@ -1,0 +1,5 @@
+well-add=The item marked with <span class="p-required">*</span> is mandatory.<br>\
+If the password is not inputed, the initial password ${a.defaultPassword} will be set.
+
+well-edit=The item marked with <span class="p-required">*</span> is mandatory.<br>\
+If you do not want to change the password, please leave the password blank.

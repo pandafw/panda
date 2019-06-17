@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pandafw.github.io/repos/schema/panda-codegen-module-1.5.2.xsd">
+	<include>codegen.xml</include>
+
+	<!-- entity -->
+	<entity name="${entity.package}.User" extend="cuEntity" baseInterface="${entity.baseUserIF}" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
+		<property name="id" type="Long" notNull="true" primaryKey="true" comment="UID"/>
+		<property name="name" type="String" size="50" notNull="true" comment="Name">
+			<validator type="stringlength">
+				<param name="maxLength" value="50"/>
+			</validator>
+		</property>
+		<property name="email" type="String" size="100" notNull="true" uniqueKey="EMAIL" setterTrim="${trim.lowerNull}" comment="Email">
+			<validator type="stringlength">
+				<param name="maxLength" value="100"/>
+			</validator>
+			<validator type="email"/>
+		</property>
+		<property name="password" type="String" size="64" notNull="true" comment="Password">
+			<validator type="stringlength">
+				<param name="minLength" value="6"/>
+				<param name="maxLength" value="16"/>
+			</validator>
+			<validator type="regex" msgId="password">
+				<param name="regex" value="#(regex-password)"/>
+			</validator>
+		</property>
+		<property name="role" type="String" jdbcType="VARCHAR" size="5" comment="Role">
+			<validator type="constant">
+				<param name="list" value="%{consts.authRoleMap}"/>
+			</validator>
+		</property>
+	</entity>
+
+	<!-- action -->
+	<action name="action.User" entity="${entity.package}.User" extend="baseAction">
+		<list name="basicList" extend="scuList">
+			<column name="id" hidden="false" sortable="true" link="true">
+				<filter type="number"/>
+			</column>
+			<column name="name" hidden="false" sortable="true" link="true">
+				<filter type="string" fixed="true"/>
+			</column>
+			<column name="email" hidden="false" sortable="true" link="false">
+				<filter type="string" fixed="true"/>
+			</column>
+			<column name="role" hidden="false" sortable="true" link="false">
+				<format type="code">
+					<param name="codemap" value="consts.authRoleMap"/>
+				</format>
+				<filter type="string"/>
+			</column>
+			<param name="options" value="${slist.options}"/>
+		</list>
+		<list name="basicBulk" extend="basicList">
+			<param name="toolbar" value="${bulk.toolbar}"/>
+			<param name="buttons" value="${bulk.buttons}"/>
+		</list>
+		<input name="basicInput" extend="scuInput">
+			<field name="id">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="name" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="20"/>
+				</editTag>
+			</field>
+			<field name="email" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="100"/>
+				</editTag>
+			</field>
+			<field name="password" required="false">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="20"/>
+				</editTag>
+			</field>
+			<field name="role">
+				<editTag name="${tag.radio}">
+					<param name="list" value="%{consts.authRoleMap}"/>
+				</editTag>
+			</field>
+		</input>
+	</action>
+	<action name="user" auth="${super.auth}" path="${super.path}" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
+		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
+		<list name="expo.csv" extend="basicList" template="${template.expo_csv}" generate="true"/>
+		<list name="expo.xlsx" extend="basicList" template="${template.expo_xlsx}" generate="true"/>
+	</action>
+	<action name="user" extend="action.User" actionClass="${action.package}.UserImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+		<list name="import" extend="basicList" template="${template.import}" generate="true">
+			<column name="password"/>
+		</list>
+	</action>
+	<action name="user" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="user" extend="action.User" actionClass="${action.package}.UserBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="user" extend="action.User" actionClass="${action.package}.UserBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="user" auth="${super.auth}" path="${super.path}" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserViewAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+		<input name="view" extend="basicInput" template="${template.view}" generate="true">
+			<param name="toolbar" value="${view.toolbar}"/>
+			<param name="actions" value="${view.actions}"/>
+		</input>
+		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+	</action>
+	<action name="user" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
+		<input name="add" extend="basicInput" template="${template.add}" generate="true"/>
+		<input name="edit" extend="basicInput" template="${template.edit}" generate="true"/>
+		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
+			<param name="toolbar" value="${delete.toolbar}"/>
+			<param name="actions" value="${delete.actions}"/>
+		</input>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="${entity.package}.User">
+			<property name="name" label="User name"/>
+			<property name="email" label="Email"/>
+			<property name="password" label="Password"/>
+			<property name="role" label="Role"/>
+		</entity>
+		<action name="user" title="User">
+			<property name="icon" label="fa fa-user-circle"/>
+		</action>
+	</resource>
+	<resource locale="ja">
+		<entity name="${entity.package}.User">
+			<property name="name" label="ユーザー名"/>
+			<property name="email" label="メール"/>
+			<property name="password" label="パスワード"/>
+			<property name="role" label="権限"/>
+		</entity>
+		<action name="user" title="ユーザー"/>
+	</resource>
+	<resource locale="zh">
+		<entity name="${entity.package}.User">
+			<property name="name" label="用户名"/>
+			<property name="email" label="电子邮件"/>
+			<property name="password" label="密码"/>
+			<property name="role" label="权限"/>
+		</entity>
+		<action name="user" title="用户"/>
+	</resource>
+</module>

@@ -1,0 +1,5 @@
+well-add=<span class="p-required">*</span>が付いている項目は入力必須です。<br>\
+パスワードが入力しない場合、初期パスワード${a.defaultPassword}が設定されます。
+
+well-edit=<span class="p-required">*</span>が付いている項目は入力必須です。<br>\
+パスワードを変更しない場合は、パスワードが空白のままにしてください。

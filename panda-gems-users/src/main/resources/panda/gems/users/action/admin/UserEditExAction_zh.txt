@@ -1,0 +1,5 @@
+well-add=<span class="p-required">*</span>是必须输入的项目。<br>\
+如果没有输入密码，则会自动设置初始密码${a.defaultPassword}。
+
+well-edit=<span class="p-required">*</span>是必须输入的项目。<br>\
+如果没有输入密码，则密码不会被变更。
