@@ -164,6 +164,10 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		return authenticator.getLoginUserName(context);
 	}
 
+	public String getLoginUserPassword() {
+		return authenticator.getLoginUserPassword(context);
+	}
+
 	/**
 	 * getLoginUser
 	 * @return user

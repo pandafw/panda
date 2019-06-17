@@ -365,6 +365,15 @@ public class UserAuthenticator {
 	}
 
 	/**
+	 * @param ac action context
+	 * @return login user ID or SYSTEM_UID
+	 */
+	public String getLoginUserPassword(ActionContext ac) {
+		IUser user = getLoginUser(ac);
+		return user == null ? Strings.EMPTY : user.getPassword();
+	}
+
+	/**
 	 * get Login User From Request Attributes
 	 * @param ac action context
 	 * @return user object
