@@ -129,7 +129,7 @@
 				"type": "code"
 			},
 			"filter": {
-				"type": "select",
+				"type": "checklist",
 				"fixed": true,
 				"list": consts.mediaTagMap,
 				"enable": a.filterField("tag")

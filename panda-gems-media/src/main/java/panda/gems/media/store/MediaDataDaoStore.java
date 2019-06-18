@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.Dao;
-import panda.gems.media.Medias;
+import panda.gems.media.V;
 import panda.gems.media.entity.Media;
 import panda.gems.media.entity.MediaData;
 import panda.gems.media.entity.query.MediaDataQuery;
@@ -22,8 +22,8 @@ public class MediaDataDaoStore extends AbstractMediaDataStore {
 	@Override
 	public MediaData find(Dao dao, Media m, int sz) {
 		MediaData md = dao.fetch(MediaData.class, m.getId(), sz);
-		if (md == null && sz != Medias.ORIGINAL) {
-			MediaData mo = dao.fetch(MediaData.class, m.getId(), Medias.ORIGINAL);
+		if (md == null && sz != V.ORIGINAL) {
+			MediaData mo = dao.fetch(MediaData.class, m.getId(), V.ORIGINAL);
 			if (mo == null) {
 				return null;
 			}
@@ -54,7 +54,7 @@ public class MediaDataDaoStore extends AbstractMediaDataStore {
 		try {
 			MediaData md = new MediaData();
 			md.setMid(m.getId());
-			md.setMsz(Medias.ORIGINAL);
+			md.setMsz(V.ORIGINAL);
 			md.setSize(m.getFile().getSize());
 			md.setData(m.getFile().data());
 			dao.save(md);

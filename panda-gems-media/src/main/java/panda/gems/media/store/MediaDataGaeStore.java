@@ -18,7 +18,8 @@ import com.google.appengine.tools.cloudstorage.ListResult;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 
 import panda.dao.Dao;
-import panda.gems.media.Medias;
+import panda.gems.media.I;
+import panda.gems.media.V;
 import panda.gems.media.entity.Media;
 import panda.gems.media.entity.MediaData;
 import panda.image.ImageWrapper;
@@ -40,10 +41,10 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 	
 	protected GcsService gcsService;
 	
-	@IocInject(value=Medias.IOC_MEDIA_GCS_BUCKET, required=false)
+	@IocInject(value=I.MEDIA_GCS_BUCKET, required=false)
 	protected String bucket;
 
-	@IocInject(value=Medias.IOC_MEDIA_GCS_PREFIX, required=false)
+	@IocInject(value=I.MEDIA_GCS_PREFIX, required=false)
 	protected String prefix = "media/";
 
 	public MediaDataGaeStore() {
@@ -88,7 +89,7 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 		StringBuilder name = new StringBuilder();
 		
 		name.append(getFilePath(m));
-		if (sz == Medias.ORIGINAL) {
+		if (sz == V.ORIGINAL) {
 			name.append(m.getName());
 		}
 		else {
@@ -142,8 +143,8 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 				return null;
 			}
 		}
-		else if (sz != Medias.ORIGINAL) {
-			GcsFilename org = toGcsFilename(m, Medias.ORIGINAL);
+		else if (sz != V.ORIGINAL) {
+			GcsFilename org = toGcsFilename(m, V.ORIGINAL);
 			if (!exists(org)) {
 				return null;
 			}
@@ -185,7 +186,7 @@ public class MediaDataGaeStore extends AbstractMediaDataStore {
 	
 	@Override
 	public void save(Dao dao, Media m) {
-		GcsFilename gfn = toGcsFilename(m, Medias.ORIGINAL);
+		GcsFilename gfn = toGcsFilename(m, V.ORIGINAL);
 
 		try {
 			byte[] data = FileStores.toByteArray(m.getFile());

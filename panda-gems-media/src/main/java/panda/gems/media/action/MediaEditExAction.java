@@ -2,10 +2,10 @@ package panda.gems.media.action;
 
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.gems.media.Medias;
 import panda.gems.media.action.MediaEditAction;
 import panda.gems.media.entity.Media;
 import panda.gems.media.store.MediaDataStore;
+import panda.gems.media.util.Medias;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Randoms;
 import panda.mvc.annotation.At;

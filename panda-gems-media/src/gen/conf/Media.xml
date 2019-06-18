@@ -39,7 +39,7 @@
 				<format type="code">
 					<param name="codemap" value="consts.mediaTagMap"/>
 				</format>
-				<filter type="select" fixed="true">
+				<filter type="checklist" fixed="true">
 					<param name="list" value="consts.mediaTagMap"/>
 				</filter>
 			</column>
@@ -75,7 +75,7 @@
 				<editTag name="${tag.viewfield}"/>
 			</field>
 			<field name="tag">
-				<editTag name="${tag.select}">
+				<editTag name="${tag.radio}">
 					<param name="emptyOption" value="false"/>
 					<param name="list" value="%{consts.mediaTagMap}"/>
 				</editTag>
@@ -105,7 +105,7 @@
 					<param name="dnloadAction" value="%{b.files_path + '/download'}"/>
 					<param name="dnloadName" value="file"/>
 					<param name="defaultAction" value="media"/>
-					<param name="defaultParams" value="!{'id': '%{r.id}'}"/>
+					<param name="defaultParams" value="!{'slug': '%{r.slug}'}"/>
 					<param name="defaultEnable" value="%{r.id != null &amp;&amp; r.size > 0}"/>
 				</editTag>
 			</field>

@@ -5,7 +5,9 @@ import java.io.IOException;
 
 import panda.app.util.AppSettings;
 import panda.dao.Dao;
-import panda.gems.media.Medias;
+import panda.gems.media.I;
+import panda.gems.media.S;
+import panda.gems.media.V;
 import panda.gems.media.entity.Media;
 import panda.gems.media.entity.MediaData;
 import panda.image.ImageWrapper;
@@ -31,11 +33,11 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 	@IocInject
 	protected AppSettings settings;
 	
-	@IocInject(value=Medias.IOC_MEDIA_LOCATION, required=false)
+	@IocInject(value=I.MEDIA_LOCATION, required=false)
 	protected String location;
 
 	protected String getLocation() {
-		String loc = settings.getProperty(Medias.SET_MEDIA_LOCATION);
+		String loc = settings.getProperty(S.MEDIA_LOCATION);
 		if (Strings.isEmpty(loc)) {
 			if (Strings.isEmpty(location)) {
 				location = Texts.translate(DEFAULT_LOCATION, settings);
@@ -74,8 +76,8 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 				return null;
 			}
 		}
-		else if (sz != Medias.ORIGINAL) {
-			File org = new File(dir, getName(m, Medias.ORIGINAL));
+		else if (sz != V.ORIGINAL) {
+			File org = new File(dir, getName(m, V.ORIGINAL));
 			if (!org.exists()) {
 				return null;
 			}
@@ -113,7 +115,7 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 			File dir = getDir(m.getId(), m.getSlug());
 			Files.makeDirs(dir);
 			
-			File file = new File(dir, getName(m, Medias.ORIGINAL));
+			File file = new File(dir, getName(m, V.ORIGINAL));
 
 			FileStores.copy(m.getFile(), file);
 		}

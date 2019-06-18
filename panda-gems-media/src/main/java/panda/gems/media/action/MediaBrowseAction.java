@@ -11,11 +11,13 @@ import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.dao.Dao;
-import panda.gems.media.Medias;
+import panda.gems.media.S;
+import panda.gems.media.V;
 import panda.gems.media.entity.Media;
 import panda.gems.media.entity.MediaData;
 import panda.gems.media.entity.query.MediaQuery;
 import panda.gems.media.store.MediaDataStore;
+import panda.gems.media.util.Medias;
 import panda.io.FileNames;
 import panda.io.MimeTypes;
 import panda.ioc.annotation.IocInject;
@@ -46,9 +48,24 @@ public class MediaBrowseAction extends AbstractAction {
 	private MediaDataStore mds;
 
 	public static class Arg {
+		/**
+		 * date start
+		 */
 		public Date ds;
+		
+		/**
+		 * date end
+		 */
 		public Date de;
+		
+		/**
+		 * query string
+		 */
 		public String qs;
+		
+		/**
+		 * start media ID
+		 */
 		public Long si;
 	}
 
@@ -74,12 +91,12 @@ public class MediaBrowseAction extends AbstractAction {
 
 	@At
 	public void thumb(@Param("slug") String slug) throws Exception {
-		find(slug, Medias.SET_MEDIA_THUMB_SIZE, Medias.DEFAULT_THUMB_SIZE);
+		find(slug, S.MEDIA_THUMB_SIZE, V.DEFAULT_THUMB_SIZE);
 	}
 
 	@At
 	public void icon(@Param("slug") String slug) throws Exception {
-		find(slug, Medias.SET_MEDIA_ICON_SIZE, Medias.DEFAULT_ICON_SIZE);
+		find(slug, S.MEDIA_ICON_SIZE, V.DEFAULT_ICON_SIZE);
 	}
 
 	@At("")
@@ -128,12 +145,15 @@ public class MediaBrowseAction extends AbstractAction {
 		return dao.select(mq);
 	}
 
-	// add filters for sub class
+	/**
+	 * add filters for sub class override
+	 * @param mq media query
+	 */
 	protected void addFilters(MediaQuery mq) {
 	}
 
 	public int getMediaIndexLimit() {
-		return getSettings().getPropertyAsInt(Medias.SET_MEDIA_INDEX_LIMIT, Medias.DEFAULT_INDEX_LIMIT);
+		return getSettings().getPropertyAsInt(S.MEDIA_INDEX_LIMIT, V.DEFAULT_INDEX_LIMIT);
 	}
 	
 	@At
@@ -227,7 +247,7 @@ public class MediaBrowseAction extends AbstractAction {
 			
 			Media m = dao.fetch(mq);
 			if (m != null) {
-				int maxage = getSettings().getPropertyAsInt(Medias.SET_MEDIA_CACHE_MAXAGE, Medias.DEFAULT_CACHE_MAXAGE);
+				int maxage = getSettings().getPropertyAsInt(S.MEDIA_CACHE_MAXAGE, V.DEFAULT_CACHE_MAXAGE);
 
 				if (HttpServlets.checkAndSetNotModified(getRequest(), getResponse(), m.getUpdatedAt(), maxage)) {
 					return;
@@ -256,7 +276,7 @@ public class MediaBrowseAction extends AbstractAction {
 		if (Strings.isEmpty(filename)) { 
 			filename = "media-" + m.getId() + ".jpg";
 		}
-		if (md.getMsz() != Medias.ORIGINAL) {
+		if (md.getMsz() != V.ORIGINAL) {
 			filename = FileNames.addSuffix(filename, "-" + md.getMsz());
 		}
 

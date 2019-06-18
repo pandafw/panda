@@ -78,7 +78,7 @@
 				dnloadAction="%{b.files_path + '/download'}"
 				dnloadName="file"
 				defaultAction="media"
-				defaultParams="!{'id': '%{r.id}'}"
+				defaultParams="!{'slug': '%{r.slug}'}"
 				defaultEnable="%{r.id != null && r.size > 0}"
 			/>
 	</#if>
