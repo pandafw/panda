@@ -1,4 +1,4 @@
-package panda.app.util;
+package panda.app.bean;
 
 import panda.lang.Objects;
 import panda.mvc.bean.Pager;
