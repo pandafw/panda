@@ -1,8 +1,6 @@
 package panda.mvc;
 
-import panda.ioc.IocConstants;
-
-public interface MvcConstants extends IocConstants {
+public interface MvcConstants {
 
 	/** The static resource path */
 	public static final String STATIC_PATH = "static_path";

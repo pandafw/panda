@@ -1,8 +1,6 @@
 package panda.app.constant;
 
-import panda.mvc.MvcConstants;
-
-public interface MVC extends MvcConstants {
+public interface MVC {
 	//------------------------------------------------
 	// runtime settings
 	//
