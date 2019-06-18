@@ -10,8 +10,8 @@ import panda.gems.media.store.MediaDataStore;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 
-@At("${!!super_path|||'/super'}/media")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/media")
+@Auth(AUTH.ADMIN)
 public class MediaBulkDeleteExAction extends MediaBulkDeleteAction {
 
 	@IocInject

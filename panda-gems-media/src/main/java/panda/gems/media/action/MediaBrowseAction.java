@@ -39,8 +39,8 @@ import panda.servlet.HttpServlets;
 import panda.vfs.FileItem;
 import panda.vfs.FileStores;
 
-@At("${!!super_path|||'/super'}/media")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/media")
+@Auth(AUTH.ADMIN)
 public class MediaBrowseAction extends AbstractAction {
 	private static final Log log = Logs.getLog(MediaBrowseAction.class);
 	

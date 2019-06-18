@@ -6,8 +6,8 @@ import panda.gems.media.action.MediaListAction;
 import panda.gems.media.entity.Media;
 import panda.mvc.annotation.At;
 
-@At("${!!super_path|||'/super'}/media")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/media")
+@Auth(AUTH.ADMIN)
 public class MediaListExAction extends MediaListAction {
 	public String getMediaLink(Media m) {
 		if (m == null || m.getSize() <= 0) {

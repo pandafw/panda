@@ -11,8 +11,8 @@ import panda.lang.Randoms;
 import panda.mvc.annotation.At;
 import panda.vfs.FileStores;
 
-@At("${!!super_path|||'/super'}/media")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/media")
+@Auth(AUTH.ADMIN)
 public class MediaEditExAction extends MediaEditAction {
 
 	@IocInject
