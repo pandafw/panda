@@ -36,10 +36,11 @@ navi-user-usagelog=使用记录
 
 navi-admin=管理中心
 navi-admin-account=账户管理
-navi-admin-user=用户管理
-navi-admin-group=用户组管理
 navi-admin-company=公司管理
-
+navi-admin-group=用户组管理
+navi-admin-users=用户管理
+navi-admin-media=媒体
+navi-admin-pages=网页
 navi-admin-site=网站管理
 navi-admin-service=服务管理
 navi-admin-category=类别管理
@@ -47,12 +48,9 @@ navi-admin-index=索引管理
 navi-admin-tag=标签管理
 
 navi-super=系统管理
-
-navi-super-media=媒体
 navi-super-property=配置
 navi-super-resource=资源
 navi-super-template=模板
-
 navi-super-cmdexec=CMD工具
 navi-super-crons=Cron任务
 navi-super-datacpy=数据转移

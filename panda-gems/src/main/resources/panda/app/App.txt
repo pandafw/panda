@@ -26,6 +26,7 @@ navi-home=Home
 
 navi-language=Languages
 navi-media=Media
+navi-pages=Pages
 navi-search=Search
 navi-tag=Tag
 navi-theme=Theme
@@ -67,36 +68,36 @@ icon-user-usagelog=fa fa-history
 
 navi-admin=Administration
 navi-admin-account=Account Management
-navi-admin-user=User Management
-navi-admin-group=Group Management
 navi-admin-company=Company Management
-
-icon-admin-account=fa fa-user-circle-o
-icon-admin-user=fa fa-user-circle
-icon-admin-group=fa fa-group
-icon-admin-company=fa fa-bank
-
-
+navi-admin-group=Group Management
+navi-admin-users=Users Management
+navi-admin-media=Media Management
+navi-admin-pages=Pages Management
 navi-admin-site=Site Management
 navi-admin-service=Service Management
 navi-admin-category=Category Management
 navi-admin-index=Index Management
 navi-admin-tag=Tag Management
 
+
+icon-admin-account=fa fa-user-circle-o
+icon-admin-company=fa fa-bank
+icon-admin-group=fa fa-group
+icon-admin-users=fa fa-user-circle
+icon-admin-media=fa fa-picture-o
+icon-admin-pages=fa fa-file-text-o
 icon-admin-site=fa fa-gears
 icon-admin-service=fa fa-gears
 icon-admin-category=fa fa-bookmark
 icon-admin-index=fa fa-search
 icon-admin-tag=fa fa-bookmark
 
-navi-super=System
 
-navi-super-media=Media
+navi-super=System
 navi-super-fileitem=File Store
 navi-super-property=Property
 navi-super-resource=Resource
 navi-super-template=Template
-
 navi-super-cmdexec=CMD Tool
 navi-super-crons=Crons
 navi-super-datacpy=Data Transfer
@@ -113,13 +114,10 @@ navi-super-sysdump=System Dump
 
 
 icon-super=fa fa-wrench
-
-icon-super-media=fa fa-picture-o
 icon-super-fileitem=fa fa-file-o
 icon-super-property=fa fa-file-text-o
 icon-super-resource=fa fa-file-text-o
 icon-super-template=fa fa-file-code-o
-
 icon-super-cmdexec=fa fa-terminal
 icon-super-crons=fa fa-clock-o
 icon-super-datacpy=fa fa-random
