@@ -76,6 +76,35 @@ public class URLHelper {
 	}
 	
 	/**
+	 * get filename from url
+	 * <pre>
+	 *   "http://www.test.com/readme.txt?;#" -> "readme.txt"
+	 * </pre>
+	 * @param url url string
+	 * @return file name
+	 */
+	public static String getURLFileName(String url) {
+		String fn = Strings.stripEnd(url, "/");
+		int i = fn.lastIndexOf('/');
+		if (i >= 0) {
+			fn = fn.substring(i + 1);
+		}
+		i = fn.indexOf('?');
+		if (i >= 0) {
+			fn = fn.substring(0, i);
+		}
+		i = fn.indexOf(';');
+		if (i >= 0) {
+			fn = fn.substring(0, i);
+		}
+		i = fn.indexOf('#');
+		if (i >= 0) {
+			fn = fn.substring(0, i);
+		}
+		return fn;
+	}
+
+	/**
 	 * get root length from url
 	 * <pre>
 	 *   http://www.test.com     = [http://www.test.com]
