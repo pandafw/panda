@@ -34,23 +34,6 @@ public class Html2PdfAction extends AbstractAction {
 	@IocInject
 	private Html2Pdf html2pdf;
 
-	private String getFileNameFromUrl(String url) {
-		String fn = Strings.stripEnd(url, "/");
-		int i = fn.lastIndexOf('/');
-		if (i >= 0) {
-			fn = fn.substring(i + 1);
-		}
-		i = fn.lastIndexOf('?');
-		if (i >= 0) {
-			fn = fn.substring(0, i);
-		}
-		i = fn.lastIndexOf(';');
-		if (i >= 0) {
-			fn = fn.substring(0, i);
-		}
-		return fn;
-	}
-
 	public static class Arg {
 		private String url;
 		private String charset;
@@ -128,7 +111,7 @@ public class Html2PdfAction extends AbstractAction {
 			HttpServletResponser hsr = new HttpServletResponser(request, response);
 			hsr.setContentLength(Integer.valueOf(pdf.length));
 			hsr.setContentType(MimeTypes.APP_PDF);
-			hsr.setFileName(getFileNameFromUrl(arg.url) + '.' + FileTypes.PDF);
+			hsr.setFileName(URLHelper.getURLFileName(arg.url) + '.' + FileTypes.PDF);
 			hsr.setMaxAge(0);
 			hsr.setBody(pdf);
 
