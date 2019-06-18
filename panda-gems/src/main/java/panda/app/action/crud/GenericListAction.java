@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import panda.app.bean.ListResult;
 import panda.app.constant.RES;
 import panda.app.constant.VAL;
 import panda.dao.Dao;
@@ -41,35 +42,6 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	public final static String STATE_LIST = "list";
 
-	public static class Result<T> {
-		private List<T> list;
-		private Pager page;
-		/**
-		 * @return the list
-		 */
-		public List<T> getList() {
-			return list;
-		}
-		/**
-		 * @param list the list to set
-		 */
-		public void setList(List<T> list) {
-			this.list = list;
-		}
-		/**
-		 * @return the page
-		 */
-		public Pager getPage() {
-			return page;
-		}
-		/**
-		 * @param page the page to set
-		 */
-		public void setPage(Pager page) {
-			this.page = page;
-		}
-	}
-	
 	//------------------------------------------------------------
 	// config properties
 	//------------------------------------------------------------
@@ -468,7 +440,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			saveListParameters(qr);
 		}
 
-		Result<T> r = new Result<T>();
+		ListResult<T> r = new ListResult<T>();
 
 		queryList(r, qr, defLimit, maxLimit);
 		
@@ -506,7 +478,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		}
 		
 		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
-		csv.setList(((Result)r).list);
+		csv.setList(((ListResult)r).getList());
 		csv.setColumns(columns);
 
 		getContext().setResult(csv);
@@ -533,7 +505,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		}
 		
 		TsvExporter tsv = getContext().getIoc().get(TsvExporter.class);
-		tsv.setList(((Result)r).list);
+		tsv.setList(((ListResult)r).getList());
 		tsv.setColumns(columns);
 
 		getContext().setResult(tsv);
@@ -560,7 +532,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		}
 		
 		XlsExporter xls = getContext().getIoc().get(XlsExporter.class);
-		xls.setList(((Result)r).list);
+		xls.setList(((ListResult)r).getList());
 		xls.setColumns(columns);
 
 		getContext().setResult(xls);
@@ -587,7 +559,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		}
 		
 		XlsxExporter xlsx = getContext().getIoc().get(XlsxExporter.class);
-		xlsx.setList(((Result)r).list);
+		xlsx.setList(((ListResult)r).getList());
 		xlsx.setColumns(columns);
 
 		getContext().setResult(xlsx);
@@ -597,11 +569,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * queryList
+	 * @param r list result
 	 * @param qr queryer
 	 * @param defLimit default limit
 	 * @param maxLimit default maximum limit
 	 */
-	protected void queryList(final Result<T> r, final Queryer qr, long defLimit, long maxLimit) {
+	protected void queryList(final ListResult<T> r, final Queryer qr, long defLimit, long maxLimit) {
 		final DataQuery<T> dq = getDataQuery();
 
 		addQueryColumns(dq);
@@ -617,8 +590,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		queryList(r, qr, dq);
 	}
 	
-	protected void queryList(final Result<T> r, final Queryer qr, final DataQuery<T> dq) {
-		r.page = qr.getPager();
+	protected void queryList(final ListResult<T> r, final Queryer qr, final DataQuery<T> dq) {
+		r.setPage(qr.getPager());
 		
 		final Dao dao = getDao();
 		dao.exec(new Runnable() {
@@ -627,14 +600,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 					qr.getPager().setTotal(dao.count(dq));
 					qr.getPager().normalize();
 					if (qr.getPager().getTotal() < 1) {
-						r.list = new ArrayList<T>();
+						r.setList(new ArrayList<T>());
 						return;
 					}
 				}
 				dq.setStart(qr.getPager().getStart());
 				dq.setLimit(qr.getPager().getLimit());
-				r.list = dao.select(dq);
-				r.list = trimDataList(r.list);
+				r.setList(dao.select(dq));
+				r.setList(trimDataList(r.getList()));
 			}
 		});
 	}

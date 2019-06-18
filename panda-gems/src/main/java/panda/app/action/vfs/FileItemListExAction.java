@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import panda.app.auth.Auth;
+import panda.app.bean.ListResult;
 import panda.app.constant.AUTH;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -32,7 +33,7 @@ public class FileItemListExAction extends FileItemListAction {
 	}
 
 	@Override
-	protected void queryList(final Result<FileItem> r, final Queryer qr, long defLimit, long maxLimit) {
+	protected void queryList(final ListResult<FileItem> r, final Queryer qr, long defLimit, long maxLimit) {
 		if (fileStore instanceof DaoFileStore) {
 			super.queryList(r, qr, defLimit, maxLimit);
 			return;
