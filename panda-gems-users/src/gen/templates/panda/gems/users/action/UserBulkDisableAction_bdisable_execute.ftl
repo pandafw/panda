@@ -119,7 +119,7 @@
 		}] />
 
 
-	<@p.listview id="user_bdisable"
+	<@p.listview id="users_bdisable"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
 	/>

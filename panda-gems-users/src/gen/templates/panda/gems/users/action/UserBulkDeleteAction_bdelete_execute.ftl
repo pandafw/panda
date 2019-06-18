@@ -119,7 +119,7 @@
 		}] />
 
 
-	<@p.listview id="user_bdelete"
+	<@p.listview id="users_bdelete"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
 	/>

@@ -11,8 +11,8 @@ import panda.gems.users.entity.User;
 import panda.gems.users.entity.query.UserQuery;
 import panda.mvc.annotation.At;
 
-@At("${!!super_path|||'/super'}/user")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/users")
+@Auth(AUTH.ADMIN)
 public class UserBulkEnableExAction extends UserBulkEnableAction {
 	public UserBulkEnableExAction() {
 		super();

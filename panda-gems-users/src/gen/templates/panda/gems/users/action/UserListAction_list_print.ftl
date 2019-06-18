@@ -120,7 +120,7 @@
 		}] />
 
 
-	<@p.listview id="user_list_print" action="./list.print" 
+	<@p.listview id="users_list_print" action="./list.print" 
 		list=result.list columns=_columns_ cssColumn="status"
 		cssTable="table-striped"
 	/>

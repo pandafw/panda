@@ -11,8 +11,8 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
-@At("${!!super_path|||'/super'}/user")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/users")
+@Auth(AUTH.ADMIN)
 public class UserViewAction extends GenericEditAction<User> {
 
 	/**

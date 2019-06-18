@@ -82,7 +82,7 @@
 			</field>
 		</input>
 	</action>
-	<action name="user" auth="${super.auth}" path="${super.path}" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+	<action name="users" auth="${admin.auth}" path="${admin.path}" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
@@ -90,28 +90,28 @@
 		<list name="expo.csv" extend="basicList" template="${template.expo_csv}" generate="true"/>
 		<list name="expo.xlsx" extend="basicList" template="${template.expo_xlsx}" generate="true"/>
 	</action>
-	<action name="user" extend="action.User" actionClass="${action.package}.UserImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+	<action name="users" extend="action.User" actionClass="${action.package}.UserImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
 		<list name="import" extend="basicList" template="${template.import}" generate="true">
 			<column name="password"/>
 		</list>
 	</action>
-	<action name="user" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="users" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
-	<action name="user" extend="action.User" actionClass="${action.package}.UserBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="users" extend="action.User" actionClass="${action.package}.UserBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
-	<action name="user" extend="action.User" actionClass="${action.package}.UserBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="users" extend="action.User" actionClass="${action.package}.UserBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
-	<action name="user" auth="${super.auth}" path="${super.path}" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserViewAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+	<action name="users" auth="${admin.auth}" path="${admin.path}" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserViewAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="${view.toolbar}"/>
 			<param name="actions" value="${view.actions}"/>
 		</input>
 		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
 	</action>
-	<action name="user" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+	<action name="users" extend="action.User" autoJoin="left:all" actionClass="${action.package}.UserEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
 		<input name="add" extend="basicInput" template="${template.add}" generate="true"/>
 		<input name="edit" extend="basicInput" template="${template.edit}" generate="true"/>
@@ -129,7 +129,7 @@
 			<property name="password" label="Password"/>
 			<property name="role" label="Role"/>
 		</entity>
-		<action name="user" title="User">
+		<action name="users" title="User Management">
 			<property name="icon" label="fa fa-user-circle"/>
 		</action>
 	</resource>
@@ -140,7 +140,7 @@
 			<property name="password" label="パスワード"/>
 			<property name="role" label="権限"/>
 		</entity>
-		<action name="user" title="ユーザー"/>
+		<action name="users" title="ユーザー管理"/>
 	</resource>
 	<resource locale="zh">
 		<entity name="${entity.package}.User">
@@ -149,6 +149,6 @@
 			<property name="password" label="密码"/>
 			<property name="role" label="权限"/>
 		</entity>
-		<action name="user" title="用户"/>
+		<action name="users" title="用户管理"/>
 	</resource>
 </module>

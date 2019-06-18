@@ -1,4 +1,4 @@
-title=User
+title=User Management
 
 icon=fa fa-user-circle
 

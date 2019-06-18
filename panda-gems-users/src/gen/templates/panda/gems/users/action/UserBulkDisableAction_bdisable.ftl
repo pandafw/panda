@@ -125,7 +125,7 @@
 		}] />
 
 
-	<@p.listview id="user_bdisable"
+	<@p.listview id="users_bdisable"
 		action="./bdisable.execute" method="post"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
@@ -133,17 +133,17 @@
 	
 	<br/>
 	<div class="p-tcenter" focusme="true">
-		<@p.submit onclick="return user_bdisable_submit();" icon="icon-bdisable-execute" label="#(btn-bdisable-execute)"/>
+		<@p.submit onclick="return users_bdisable_submit();" icon="icon-bdisable-execute" label="#(btn-bdisable-execute)"/>
 
 		<@p.a href="javascript:window.history.back()" btn="default" icon="icon-back" label="#(btn-back)"/>
 
 		<script type="text/javascript"><!--
-			function user_bdisable_submit() {
-				return plv_submitCheckedKeys('user_bdisable');
+			function users_bdisable_submit() {
+				return plv_submitCheckedKeys('users_bdisable');
 			}
 			
 			function onPageLoad() {
-				plv_checkAll('user_bdisable');
+				plv_checkAll('users_bdisable');
 			}
 		--></script>
 	</div>

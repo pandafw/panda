@@ -125,7 +125,7 @@
 		}] />
 
 
-	<@p.listview id="user_benable"
+	<@p.listview id="users_benable"
 		action="./benable.execute" method="post"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
@@ -133,17 +133,17 @@
 	
 	<br/>
 	<div class="p-tcenter" focusme="true">
-		<@p.submit onclick="return user_benable_submit();" icon="icon-benable-execute" label="#(btn-benable-execute)"/>
+		<@p.submit onclick="return users_benable_submit();" icon="icon-benable-execute" label="#(btn-benable-execute)"/>
 
 		<@p.a href="javascript:window.history.back()" btn="default" icon="icon-back" label="#(btn-back)"/>
 
 		<script type="text/javascript"><!--
-			function user_benable_submit() {
-				return plv_submitCheckedKeys('user_benable');
+			function users_benable_submit() {
+				return plv_submitCheckedKeys('users_benable');
 			}
 			
 			function onPageLoad() {
-				plv_checkAll('user_benable');
+				plv_checkAll('users_benable');
 			}
 		--></script>
 	</div>

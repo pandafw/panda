@@ -237,21 +237,21 @@
 	</#if>
 	<@p.set var="lvtools">
 		<#if a.canAccess("./bdelete")>
-			<@p.b onclick="return user_list_bdelete();" icon="icon-bdelete" label="#(btn-bdelete)"/>
+			<@p.b onclick="return users_list_bdelete();" icon="icon-bdelete" label="#(btn-bdelete)"/>
 		</#if>
 		<#if a.canAccess("./benable")>
-			<@p.b onclick="return user_list_benable();" icon="icon-benable" label="#(btn-benable)"/>
+			<@p.b onclick="return users_list_benable();" icon="icon-benable" label="#(btn-benable)"/>
 		</#if>
 		<#if a.canAccess("./bdisable")>
-			<@p.b onclick="return user_list_bdisable();" icon="icon-bdisable" label="#(btn-bdisable)"/>
+			<@p.b onclick="return users_list_bdisable();" icon="icon-bdisable" label="#(btn-bdisable)"/>
 		</#if>
 	</@p.set>
 
-	<@p.queryer id="user_list_qr" action="./list"
+	<@p.queryer id="users_list_qr" action="./list"
 		columns=_columns_
 	/>
 
-	<@p.listview id="user_list" action="./list"
+	<@p.listview id="users_list" action="./list"
 		list=result.list columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
 		link={ "action": "./view", "params": { "id": "%{top.id}" } }
@@ -259,14 +259,14 @@
 	/>
 
 	<script type="text/javascript"><!--
-		function user_list_bdelete() {
-			return plv_submitCheckedKeys('user_list', '<@p.url action="./bdelete"/>', null, "");
+		function users_list_bdelete() {
+			return plv_submitCheckedKeys('users_list', '<@p.url action="./bdelete"/>', null, "");
 		}
-		function user_list_benable() {
-			return plv_submitCheckedKeys('user_list', '<@p.url action="./benable"/>', null, "");
+		function users_list_benable() {
+			return plv_submitCheckedKeys('users_list', '<@p.url action="./benable"/>', null, "");
 		}
-		function user_list_bdisable() {
-			return plv_submitCheckedKeys('user_list', '<@p.url action="./bdisable"/>', null, "");
+		function users_list_bdisable() {
+			return plv_submitCheckedKeys('users_list', '<@p.url action="./bdisable"/>', null, "");
 		}
 	--></script>
 </div>

@@ -14,8 +14,8 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
 
-@At("${!!super_path|||'/super'}/user")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/users")
+@Auth(AUTH.ADMIN)
 public class UserEditExAction extends UserEditAction {
 
 	@IocInject

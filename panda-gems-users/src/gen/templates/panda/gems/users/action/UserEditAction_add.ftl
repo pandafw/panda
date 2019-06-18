@@ -23,7 +23,7 @@
 
 	<#include "/action-alert.ftl"/>
 
-	<@p.form cssClass="p-eform" id="user" method="post">
+	<@p.form cssClass="p-eform" id="users" method="post">
 	<#if a.displayField("id")>
 			<@p.viewfield
 				key="id"

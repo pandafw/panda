@@ -17,8 +17,8 @@ import panda.mvc.bean.QueryerEx;
 import panda.mvc.view.Views;
 import panda.mvc.view.util.ListColumn;
 
-@At("${!!super_path|||'/super'}/user")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/users")
+@Auth(AUTH.ADMIN)
 public class UserListAction extends GenericListAction<User> {
 
 	/**

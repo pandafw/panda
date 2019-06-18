@@ -125,7 +125,7 @@
 		}] />
 
 
-	<@p.listview id="user_bdelete"
+	<@p.listview id="users_bdelete"
 		action="./bdelete.execute" method="post"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
@@ -133,17 +133,17 @@
 	
 	<br/>
 	<div class="p-tcenter" focusme="true">
-		<@p.submit onclick="return user_bdelete_submit();" icon="icon-bdelete-execute" label="#(btn-bdelete-execute)"/>
+		<@p.submit onclick="return users_bdelete_submit();" icon="icon-bdelete-execute" label="#(btn-bdelete-execute)"/>
 
 		<@p.a href="javascript:window.history.back()" btn="default" icon="icon-back" label="#(btn-back)"/>
 
 		<script type="text/javascript"><!--
-			function user_bdelete_submit() {
-				return plv_submitCheckedKeys('user_bdelete');
+			function users_bdelete_submit() {
+				return plv_submitCheckedKeys('users_bdelete');
 			}
 			
 			function onPageLoad() {
-				plv_checkAll('user_bdelete');
+				plv_checkAll('users_bdelete');
 			}
 		--></script>
 	</div>
