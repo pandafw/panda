@@ -1,4 +1,3 @@
-<#if assist.superUser>
 <#macro mitem ac ic tx>
 	<#if a.canAccess(ac)>
 		<@p.a cssClass="p-menu-item" action=ac>
@@ -26,4 +25,3 @@
 		<@mitem ac="/super/property/list"   ic="icon-super-property"     tx="navi-super-property"/>
 		<@mitem ac="/super/resource/list"   ic="icon-super-resource"     tx="navi-super-resource"/>
 		<@mitem ac="/super/template/list"   ic="icon-super-template"     tx="navi-super-template"/>
-</#if>

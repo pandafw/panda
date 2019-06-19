@@ -312,11 +312,21 @@ public class UserAuthenticator {
 		if (u == null) {
 			return false;
 		}
+
 		if (u instanceof IPermission) {
-			return Collections.contains(((IPermission)u).getPermissions(), p);
+			List<String> ps = ((IPermission)u).getPermissions();
+			if (Collections.contains(ps, p)) {
+				return true;
+			}
+			if (!AUTH.SUPER.equals(p) && Collections.contains(ps, AUTH.SUPER)) {
+				return true;
+			}
+			return false;
 		}
+		
 		if (u instanceof IRole) {
-			return Strings.equals(((IRole)u).getRole(), p);
+			String r = ((IRole)u).getRole();
+			return Strings.equals(r, p) || AUTH.SUPER.equals(r);
 		}
 		
 		return false;
@@ -326,7 +336,7 @@ public class UserAuthenticator {
 	 * @param u user
 	 * @return true - if the user is admin
 	 */
-	public boolean isAdminUser(IUser u) {
+	public boolean hasAdminRole(IUser u) {
 		return hasPermission(u, AUTH.ADMIN);
 	}
 
@@ -334,16 +344,8 @@ public class UserAuthenticator {
 	 * @param u user
 	 * @return true - if the user is super
 	 */
-	public boolean isSuperUser(IUser u) {
+	public boolean hasSuperRole(IUser u) {
 		return hasPermission(u, AUTH.SUPER);
-	}
-
-	/**
-	 * @param u user
-	 * @return true - if the user is a super or admin
-	 */
-	public boolean isAdministrators(IUser u) {
-		return isSuperUser(u) || isAdminUser(u);
 	}
 
 	/**

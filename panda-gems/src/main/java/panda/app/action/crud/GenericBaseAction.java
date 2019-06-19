@@ -374,7 +374,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 */
 	protected void addSystemError(String prefix, Throwable e) {
 		addActionError(getScenarioMessage(prefix, 
-			assist().isSuperUser() ? Systems.LINE_SEPARATOR + e.getMessage() : Strings.EMPTY));
+			assist().hasSuperRole() ? Systems.LINE_SEPARATOR + e.getMessage() : Strings.EMPTY));
 	}
 	
 	/**
