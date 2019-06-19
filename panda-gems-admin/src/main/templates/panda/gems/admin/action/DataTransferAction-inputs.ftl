@@ -1,2 +1,2 @@
-		<@p.textfield key="source" required="false"/>
-		<@p.textfield key="target" required="true"/>
+		<@p.select key="source" list=a.dataSources emptyOption="true" required="false"/>
+		<@p.select key="target" list=a.dataSources emptyOption="true" required="true"/>

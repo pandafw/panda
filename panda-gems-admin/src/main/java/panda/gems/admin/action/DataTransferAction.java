@@ -2,7 +2,9 @@ package panda.gems.admin.action;
 
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import panda.app.action.work.GenericSyncWorkAction;
 import panda.app.auth.Auth;
@@ -39,6 +41,7 @@ public class DataTransferAction extends GenericSyncWorkAction {
 	protected Arg arg;
 
 	protected Map<String, String> dataSettings;
+	protected Set<String> dataSources;
 	
 	private Arg getArguments() {
 		Arg arg = new Arg();
@@ -63,6 +66,25 @@ public class DataTransferAction extends GenericSyncWorkAction {
 		}
 		
 		return dataSettings;
+	}
+
+	public Set<String> getDataSources() {
+		if (dataSources == null) {
+			String prefix = SET.DATA + '.';
+
+			Set<String> ds = new HashSet<String>();
+			for (String k : settings.keySet()) {
+				if (Strings.startsWith(k, prefix)) {
+					int i = k.indexOf('.', prefix.length());
+					if (i > 0) {
+						ds.add(k.substring(prefix.length(), i));
+					}
+				}
+			}
+			dataSources = ds;
+		}
+		
+		return dataSources;
 	}
 	
 	@At("")
