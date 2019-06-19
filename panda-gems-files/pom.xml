@@ -9,11 +9,11 @@
 		<version>1.5.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>panda-gems</artifactId>
+	<artifactId>panda-gems-files</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Gems</name>
-	<description>Panda Gems is a module of the Panda Framework for quickly develop web application. Contains basic template classes that implement CRUD, user authentication, and some other useful classes.</description>
+	<name>Panda Gems Files</name>
+	<description>Files extension module for the Panda Framework web application.</description>
 
 	<build>
 		<resources>
@@ -23,9 +23,68 @@
 			<resource>
 				<directory>${project.basedir}/src/main/templates</directory>
 			</resource>
+			<resource>
+				<directory>${project.basedir}/src/gen/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/gen/templates</directory>
+			</resource>
 		</resources>
 
 		<plugins>
+			<!-- add source folder (src/gen) -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.basedir}/src/gen/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- ant build -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>codegen</id>
+						<configuration>
+							<target>
+								<ant antfile="../panda-gems/build.xml">
+									<target name="gen-all" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>build</id>
+						<configuration>
+							<target>
+								<ant antfile="../panda-gems/build.xml">
+									<target name="${ant.target}" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- git commit id -->
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
@@ -87,6 +146,11 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>panda-gems</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-tool</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -125,32 +189,6 @@
 			<version>3.13</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- LUCENE -->
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-			<version>5.5.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-queries</artifactId>
-			<version>5.5.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-queryparser</artifactId>
-			<version>5.5.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-analyzers-common</artifactId>
-			<version>5.5.5</version>
-			<scope>provided</scope>
-		</dependency>
 		
 		<!-- GAE -->
 		<dependency>
@@ -169,14 +207,6 @@
 			<groupId>com.google.appengine.tools</groupId>
 			<artifactId>appengine-gcs-client</artifactId>
 			<version>0.8</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- EZCache -->
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-			<version>2.6.9</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

@@ -15,7 +15,7 @@ import panda.vfs.FileItem;
 import panda.vfs.FileStore;
 
 /**
- * download/upload Action
+ * file download/upload Action
  */
 public abstract class BaseTempFileAction extends AbstractAction {
 	@IocInject

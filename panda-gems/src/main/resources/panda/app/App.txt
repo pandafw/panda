@@ -67,34 +67,35 @@ icon-user-usagelog=fa fa-history
 
 
 navi-admin=Administration
+navi-admin-site=Site Management
+navi-admin-service=Service Management
+navi-admin-category=Category Management
+navi-admin-index=Index Management
+navi-admin-tag=Tag Management
 navi-admin-account=Account Management
 navi-admin-company=Company Management
 navi-admin-group=Group Management
 navi-admin-users=Users Management
 navi-admin-media=Media Management
 navi-admin-pages=Pages Management
-navi-admin-site=Site Management
-navi-admin-service=Service Management
-navi-admin-category=Category Management
-navi-admin-index=Index Management
-navi-admin-tag=Tag Management
+navi-admin-files=Files Management
 
 
+icon-admin-site=fa fa-gears
+icon-admin-service=fa fa-gears
+icon-admin-category=fa fa-bookmark
+icon-admin-index=fa fa-search
+icon-admin-tag=fa fa-bookmark
 icon-admin-account=fa fa-user-circle-o
 icon-admin-company=fa fa-bank
 icon-admin-group=fa fa-group
 icon-admin-users=fa fa-user-circle
 icon-admin-media=fa fa-picture-o
 icon-admin-pages=fa fa-file-text-o
-icon-admin-site=fa fa-gears
-icon-admin-service=fa fa-gears
-icon-admin-category=fa fa-bookmark
-icon-admin-index=fa fa-search
-icon-admin-tag=fa fa-bookmark
+icon-admin-files=fa fa-file-o
 
 
 navi-super=System
-navi-super-fileitem=File Store
 navi-super-property=Property
 navi-super-resource=Resource
 navi-super-template=Template
@@ -114,7 +115,6 @@ navi-super-sysdump=System Dump
 
 
 icon-super=fa fa-wrench
-icon-super-fileitem=fa fa-file-o
 icon-super-property=fa fa-file-text-o
 icon-super-resource=fa fa-file-text-o
 icon-super-template=fa fa-file-code-o

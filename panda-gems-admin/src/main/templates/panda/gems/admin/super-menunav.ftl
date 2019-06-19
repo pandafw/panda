@@ -23,7 +23,6 @@
 
 		<@mitem ac="/super/crons"           ic="icon-super-crons"        tx="navi-super-crons"/>
 
-		<@mitem ac="/super/fileitem/list"   ic="icon-super-fileitem"     tx="navi-super-fileitem"/>
 		<@mitem ac="/super/property/list"   ic="icon-super-property"     tx="navi-super-property"/>
 		<@mitem ac="/super/resource/list"   ic="icon-super-resource"     tx="navi-super-resource"/>
 		<@mitem ac="/super/template/list"   ic="icon-super-template"     tx="navi-super-template"/>

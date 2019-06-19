@@ -36,21 +36,21 @@ navi-user-usagelog=利用履歴
 
 
 navi-admin=管理センター
+navi-admin-site=サイト管理
+navi-admin-service=サービス管理
+navi-admin-category=カテゴリ管理
+navi-admin-index=インデックス管理
+navi-admin-tag=タグ管理
 navi-admin-account=アカウント管理
 navi-admin-company=会社管理
 navi-admin-group=グループ管理
 navi-admin-users=ユーザー管理
 navi-admin-media=メディア管理
 navi-admin-pages=ページ管理
-navi-admin-site=サイト管理
-navi-admin-service=サービス管理
-navi-admin-category=カテゴリ管理
-navi-admin-index=インデックス管理
-navi-admin-tag=タグ管理
+navi-admin-files=ファイル管理
 
 
 navi-super=システム管理
-navi-super-fileitem=ファイルストア
 navi-super-property=プロパティ
 navi-super-resource=リソース
 navi-super-template=テンプレート
