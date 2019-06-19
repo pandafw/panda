@@ -1,6 +1,6 @@
 package panda.gems.files.action;
 
-import panda.app.action.base.BaseTempFileAction;
+import panda.app.action.base.BaseFileAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.mvc.annotation.At;
@@ -11,7 +11,7 @@ import panda.vfs.FileItem;
 
 @At("${!!admin_path|||'/admin'}/files")
 @Auth(AUTH.ADMIN)
-public class FileItemViewAction extends BaseTempFileAction {
+public class FileItemViewAction extends BaseFileAction {
 	/**
 	 * Constructor
 	 */

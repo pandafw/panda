@@ -17,7 +17,7 @@ import panda.vfs.FileStore;
 /**
  * file download/upload Action
  */
-public abstract class BaseTempFileAction extends AbstractAction {
+public abstract class BaseFileAction extends AbstractAction {
 	@IocInject
 	protected FileStore fileStore;
 	
