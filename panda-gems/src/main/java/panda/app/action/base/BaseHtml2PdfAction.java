@@ -1,4 +1,4 @@
-package panda.app.action.tool;
+package panda.app.action.base;
 
 import java.util.Map;
 
@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.app.action.AbstractAction;
-import panda.app.auth.Auth;
-import panda.app.constant.AUTH;
 import panda.app.util.pdf.Html2Pdf;
 import panda.io.FileTypes;
 import panda.io.MimeTypes;
@@ -26,10 +24,8 @@ import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletResponser;
 import panda.servlet.ServletRequestHeaderMap;
 
-@At("${!!super_path|||'/super'}/html2pdf")
-@Auth(AUTH.SUPER)
-public class Html2PdfAction extends AbstractAction {
-	private static final Log log = Logs.getLog(Html2PdfAction.class);
+public abstract class BaseHtml2PdfAction extends AbstractAction {
+	private static final Log log = Logs.getLog(BaseHtml2PdfAction.class);
 	
 	@IocInject
 	private Html2Pdf html2pdf;

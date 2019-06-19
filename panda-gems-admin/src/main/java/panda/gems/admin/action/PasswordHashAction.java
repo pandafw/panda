@@ -1,4 +1,4 @@
-package panda.app.action.tool;
+package panda.gems.admin.action;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package panda.app.action.tool;
+package panda.gems.admin.action;
 
 import panda.mvc.annotation.At;
 import panda.app.action.base.BaseTempFileAction;

@@ -1,4 +1,4 @@
-package panda.app.action.tool;
+package panda.gems.admin.action;
 
 import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;

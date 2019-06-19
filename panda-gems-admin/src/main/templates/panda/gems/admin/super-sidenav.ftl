@@ -25,7 +25,6 @@
 
 			<@navis ap="/super/crons"     ac="/super/crons"         ic="icon-super-crons"      tx="navi-super-crons"/>
 
-			<@navis ap="/super/media/"    ac="/super/media/list"    ic="icon-super-media"      tx="navi-super-media"/>
 			<@navis ap="/super/fileitem/" ac="/super/fileitem/list" ic="icon-super-fileitem"   tx="navi-super-fileitem"/>
 			<@navis ap="/super/property/" ac="/super/property/list" ic="icon-super-property"   tx="navi-super-property"/>
 			<@navis ap="/super/resource/" ac="/super/resource/list" ic="icon-super-resource"   tx="navi-super-resource"/>

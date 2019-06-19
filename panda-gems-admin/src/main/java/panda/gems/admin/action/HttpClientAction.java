@@ -1,4 +1,4 @@
-package panda.app.action.tool;
+package panda.gems.admin.action;
 
 import java.io.IOException;
 import java.io.InputStream;
