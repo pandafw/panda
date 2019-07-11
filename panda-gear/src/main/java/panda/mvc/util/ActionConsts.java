@@ -22,6 +22,15 @@ public class ActionConsts implements Map<String, Object> {
 
 	protected Map<String, Object> cache = new HashMap<String, Object>();
 
+
+	public List getList(String key) {
+		return (List)get(key);
+	}
+
+	public Map getMap(String key) {
+		return (Map)get(key);
+	}
+	
 	/**
 	 * getTextAsList
 	 * @param name name
@@ -83,7 +92,7 @@ public class ActionConsts implements Map<String, Object> {
 		cache.put(key, v);
 		return v == Objects.NULL ? def : (Map)v;
 	}
-
+	
 	@Override
 	public int size() {
 		return cache.size();
