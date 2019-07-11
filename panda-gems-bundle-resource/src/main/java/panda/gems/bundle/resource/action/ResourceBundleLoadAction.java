@@ -1,6 +1,6 @@
 package panda.gems.bundle.resource.action;
 
-import panda.app.action.base.BaseLoadAction;
+import panda.app.action.work.SyncLoadAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.gems.bundle.resource.ResourceBundleLoader;
@@ -10,7 +10,7 @@ import panda.mvc.util.ActionTextProvider;
 
 @At("${!!task_path|||'/task'}/resource/load")
 @Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
-public class ResourceBundleLoadAction extends BaseLoadAction {
+public class ResourceBundleLoadAction extends SyncLoadAction {
 	@IocInject
 	protected ResourceBundleLoader resourceLoader;
 

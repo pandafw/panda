@@ -1,4 +1,4 @@
-package panda.app.action.base;
+package panda.app.action.work;
 
 import panda.app.constant.RES;
 import panda.lang.Strings;
@@ -6,19 +6,19 @@ import panda.lang.time.DateTimes;
 
 /**
  */
-public abstract class BaseLoadAction extends BaseTaskAction {
+public abstract class SyncLoadAction extends SyncWorkAction {
 	private String appKey;
 	private String msgKey;
 	
-	public BaseLoadAction() {
+	public SyncLoadAction() {
 		this(null);
 	}
 
-	public BaseLoadAction(String appKey) {
+	public SyncLoadAction(String appKey) {
 		this(appKey, RES.MESSAGE_PROCESSED);
 	}
 
-	public BaseLoadAction(String appKey, String msgKey) {
+	public SyncLoadAction(String appKey, String msgKey) {
 		super();
 		this.appKey = appKey;
 		this.msgKey = msgKey;

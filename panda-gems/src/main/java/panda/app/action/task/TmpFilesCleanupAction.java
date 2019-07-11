@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import panda.app.action.work.GenericSyncWorkAction;
+import panda.app.action.work.SyncWorkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.SET;
@@ -26,7 +26,7 @@ import panda.mvc.annotation.At;
  */
 @At("${!!task_path|||'/task'}/tmpfilescleanup")
 @Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
-public class TmpFilesCleanupAction extends GenericSyncWorkAction {
+public class TmpFilesCleanupAction extends SyncWorkAction {
 	@IocInject
 	private Settings settings;
 	

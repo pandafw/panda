@@ -10,7 +10,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 
 
-public abstract class GenericSyncWorkAction extends GenericWorkAction {
+public abstract class SyncWorkAction extends BaseWorkAction {
 	protected static final Object lock = new Object();
 	
 	public static class SyncStatus extends Status {
@@ -49,9 +49,9 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	 * get singleton instance
 	 * @return instance
 	 */
-	protected GenericSyncWorkAction getSelf() {
+	protected SyncWorkAction getSelf() {
 		synchronized (lock) {
-			return (GenericSyncWorkAction)getApp().get(getActionKey());
+			return (SyncWorkAction)getApp().get(getActionKey());
 		}
 	}
 
@@ -59,7 +59,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	 * set singleton instance
 	 * @param instance instance
 	 */
-	protected void setSelf(GenericSyncWorkAction instance) {
+	protected void setSelf(SyncWorkAction instance) {
 		synchronized (lock) {
 			if (instance == null) {
 				getApp().remove(getActionKey());
@@ -79,7 +79,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	@To(Views.SJSON)
 	@Override
 	public Object stop() {
-		GenericSyncWorkAction aswa = getSelf();
+		SyncWorkAction aswa = getSelf();
 		if (aswa != null) {
 			referStatus(aswa);
 			aswa.doStop();
@@ -102,7 +102,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	@To(Views.SJSON)
 	@Override
 	public Object status() {
-		GenericSyncWorkAction aswa = getSelf();
+		SyncWorkAction aswa = getSelf();
 		if (aswa != null) {
 			referStatus(aswa);
 		}
@@ -114,7 +114,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	public Object start(@Param("e.*") Events es) {
 		init(es);
 
-		GenericSyncWorkAction aswa = getSelf();
+		SyncWorkAction aswa = getSelf();
 		if (aswa == null) {
 			setSelf(this);
 			StopWatch sw = new StopWatch();

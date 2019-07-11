@@ -17,7 +17,7 @@ import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletResponser;
 
 
-public abstract class GenericWorkAction extends AbstractAction {
+public abstract class BaseWorkAction extends AbstractAction {
 	protected static final char PREFIX = '%';
 	protected static final char L_DEBUG = 'd';
 	protected static final char L_INFO = 'i';
@@ -84,7 +84,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 	/**
 	 * 
 	 */
-	public GenericWorkAction() {
+	public BaseWorkAction() {
 		events = new Events();
 		status = newStatus();
 	}
@@ -137,7 +137,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 		status.status = msg;
 	}
 	
-	protected void referStatus(GenericWorkAction awa) {
+	protected void referStatus(BaseWorkAction awa) {
 		if (awa == this || awa == null) {
 			return;
 		}

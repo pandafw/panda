@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import panda.app.action.work.GenericSyncWorkAction;
+import panda.app.action.work.SyncWorkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.SET;
@@ -26,7 +26,7 @@ import panda.mvc.view.Views;
 
 @At("${!!super_path|||'/super'}/datacpy")
 @Auth(AUTH.SUPER)
-public class DataTransferAction extends GenericSyncWorkAction {
+public class DataTransferAction extends SyncWorkAction {
 	public static class Arg {
 		public String source;
 		public String target;
@@ -34,6 +34,9 @@ public class DataTransferAction extends GenericSyncWorkAction {
 
 	@IocInject
 	protected AppDaoClientFactory dcfactory;
+
+	@IocInject
+	protected DaoClient daoClient;
 
 	@IocInject
 	protected Settings settings;
@@ -49,6 +52,10 @@ public class DataTransferAction extends GenericSyncWorkAction {
 		return arg;
 	}
 
+	protected DaoClient getDaoClient() {
+		return daoClient;
+	}
+	
 	protected Collection<Class<?>> getEntities() {
 		return getDaoClient().getEntities().keySet();
 	}

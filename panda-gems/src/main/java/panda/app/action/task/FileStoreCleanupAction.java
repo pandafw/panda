@@ -3,7 +3,7 @@ package panda.app.action.task;
 import java.util.Date;
 import java.util.List;
 
-import panda.app.action.work.GenericSyncWorkAction;
+import panda.app.action.work.SyncWorkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.ioc.annotation.IocInject;
@@ -22,7 +22,7 @@ import panda.vfs.FileStore;
  */
 @At("${!!task_path|||'/task'}/filestorecleanup")
 @Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
-public class FileStoreCleanupAction extends GenericSyncWorkAction {
+public class FileStoreCleanupAction extends SyncWorkAction {
 	/**
 	 * the temporary directory of upload file.
 	 */

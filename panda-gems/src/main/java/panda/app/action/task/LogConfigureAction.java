@@ -2,7 +2,7 @@ package panda.app.action.task;
 
 import java.io.File;
 
-import panda.app.action.work.GenericSyncWorkAction;
+import panda.app.action.work.SyncWorkAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.io.Settings;
@@ -17,7 +17,7 @@ import panda.mvc.annotation.At;
  */
 @At("${!!task_path|||'/task'}/logconfigure")
 @Auth({ AUTH.LOCAL, AUTH.TOKEN, AUTH.SUPER })
-public class LogConfigureAction extends GenericSyncWorkAction {
+public class LogConfigureAction extends SyncWorkAction {
 	private static final Log log = Logs.getLog(LogConfigureAction.class);
 	
 	@Override
