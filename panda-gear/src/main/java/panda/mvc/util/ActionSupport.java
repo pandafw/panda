@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import panda.dao.DaoClient;
 import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.ioc.annotation.IocInject;
@@ -37,6 +38,13 @@ public class ActionSupport {
 		return context.getIoc();
 	}
 	
+	/**
+	 * @return the daoClient
+	 */
+	protected DaoClient getDaoClient() {
+		return context.getDaoClient();
+	}
+
 	/**
 	 * @return the settings
 	 */

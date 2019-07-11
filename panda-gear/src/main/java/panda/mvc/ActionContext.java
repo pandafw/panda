@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import panda.bean.Beans;
+import panda.dao.DaoClient;
 import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.ioc.bean.IocProxy;
@@ -48,6 +49,8 @@ public class ActionContext {
 	
 	private Settings settings;
 
+	private DaoClient daoClient;
+	
 	private FileStore fileStore;
 
 	private TextProvider text;
@@ -392,6 +395,7 @@ public class ActionContext {
 	//----------------------------------------------------
 	// ioc object
 	//
+	
 	/**
 	 * @return the settings
 	 */
@@ -400,6 +404,16 @@ public class ActionContext {
 			settings = ioc.get(Settings.class);
 		}
 		return settings;
+	}
+
+	/**
+	 * @return the daoClient
+	 */
+	public DaoClient getDaoClient() {
+		if (daoClient == null) {
+			daoClient = ioc.get(DaoClient.class);
+		}
+		return daoClient;
 	}
 
 	/**

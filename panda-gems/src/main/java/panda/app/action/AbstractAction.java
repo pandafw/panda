@@ -2,25 +2,10 @@ package panda.app.action;
 
 import panda.app.util.AppActionAssist;
 import panda.app.util.AppActionConsts;
-import panda.dao.DaoClient;
-import panda.ioc.annotation.IocInject;
 import panda.mvc.util.AccessHandler;
 import panda.mvc.util.ActionSupport;
 
 public abstract class AbstractAction extends ActionSupport implements AccessHandler {
-	/*------------------------------------------------------------
-	 * bean
-	 *------------------------------------------------------------*/
-	@IocInject
-	protected DaoClient daoClient;
-
-	/**
-	 * @return the daoClient
-	 */
-	public DaoClient getDaoClient() {
-		return daoClient;
-	}
-
 	/**
 	 * @return the assist
 	 */
