@@ -11,6 +11,7 @@ import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
 import panda.lang.collection.CaseInsensitiveMap;
 import panda.mvc.ActionMapping;
+import panda.net.URLHelper;
 
 /**
  * Regular expression action mapping
@@ -59,8 +60,10 @@ public class RegexActionMapping extends AbstractActionMapping {
 				if (args != null) {
 					m.reset();
 					while (m.find()) {
-						for (int a = 1; a <= m.groupCount(); a++) {
-							args.add(m.group(a));
+						for (int j = 1; j <= m.groupCount(); j++) {
+							String a = m.group(j);
+							a = URLHelper.decodeURL(a);
+							args.add(a);
 						}
 					}
 				}
