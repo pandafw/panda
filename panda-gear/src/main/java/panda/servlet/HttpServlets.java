@@ -34,7 +34,6 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.net.Mimes;
 import panda.net.URLBuilder;
-import panda.net.URLHelper;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
@@ -185,7 +184,6 @@ public class HttpServlets {
 			query = request.getQueryString();
 		}
 		else {
-			uri = URLHelper.decodeURL(uri);
 			query = (String)request.getAttribute(SERVLET_FORWARD_QUERY_STRING);
 		}
 
@@ -218,7 +216,6 @@ public class HttpServlets {
 		if (Strings.isEmpty(uri)) {
 			uri = request.getRequestURI();
 		}
-		uri = URLHelper.decodeURL(uri);
 		return uri;
 	}
 	
@@ -230,13 +227,9 @@ public class HttpServlets {
 		if (request == null) {
 			return null;
 		}
-		String uri = (String)request.getAttribute(SERVLET_INCLUDE_REQUEST_URI);
-		if (Strings.isEmpty(uri)) {
-			uri = request.getRequestURI();
-		}
+		String uri = getRequestURI(request);
 		uri = uri.substring(request.getContextPath().length());
 		uri = Strings.substringBefore(uri, ";jsessionid=");
-		uri = URLHelper.decodeURL(uri);
 		return uri;
 	}
 
