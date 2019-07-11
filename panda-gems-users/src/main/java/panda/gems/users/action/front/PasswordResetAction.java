@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.constant.RES;
 import panda.bind.json.Jsons;
 import panda.dao.Dao;
@@ -31,7 +31,7 @@ import panda.net.mail.EmailException;
 
 @At("/user/password/reset")
 @To(Views.SFTL)
-public class PasswordResetAction extends AbstractAction {
+public class PasswordResetAction extends BaseAction {
 	private static final long DURATION = DateTimes.MS_HOUR * 2;
 	
 	@IocInject

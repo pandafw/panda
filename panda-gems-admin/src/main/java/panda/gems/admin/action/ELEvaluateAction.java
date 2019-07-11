@@ -1,6 +1,6 @@
 package panda.gems.admin.action;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.el.EL;
@@ -13,7 +13,7 @@ import panda.mvc.view.Views;
 
 @At("${!!super_path|||'/super'}/el")
 @Auth(AUTH.SUPER)
-public class ELEvaluateAction extends AbstractAction {
+public class ELEvaluateAction extends BaseAction {
 
 	@At("")
 	@To(Views.SFTL)

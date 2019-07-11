@@ -1,6 +1,6 @@
 package panda.app.action.base;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.ioc.annotation.IocInject;
@@ -17,7 +17,7 @@ import panda.vfs.FileStore;
 /**
  * file download/upload Action
  */
-public abstract class BaseFileAction extends AbstractAction {
+public abstract class BaseFileAction extends BaseAction {
 	@IocInject
 	protected FileStore fileStore;
 	

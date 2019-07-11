@@ -2,7 +2,7 @@ package panda.gems.admin.action;
 
 import java.io.InputStream;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.io.Streams;
@@ -20,7 +20,7 @@ import panda.mvc.view.Views;
 @Auth(AUTH.SUPER)
 @At("${!!super_path|||'/super'}/cmd")
 @To(Views.SFTL)
-public class CommandAction extends AbstractAction {
+public class CommandAction extends BaseAction {
 	public static class Result {
 		private String command;
 		private int code = -1;

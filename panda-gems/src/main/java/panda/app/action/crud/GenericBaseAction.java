@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
@@ -23,7 +23,7 @@ import panda.mvc.view.Views;
 /**
  * @param <T> data type
  */
-public abstract class GenericBaseAction<T> extends AbstractAction {
+public abstract class GenericBaseAction<T> extends BaseAction {
 	//------------------------------------------------------------
 	// scenario & apimode
 	//------------------------------------------------------------

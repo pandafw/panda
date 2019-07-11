@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.log.Log;
@@ -18,7 +18,7 @@ import panda.log.Logs;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpResponse;
 
-public class HttpClientAction extends AbstractAction {
+public class HttpClientAction extends BaseAction {
 	
 	private static final Log log = Logs.getLog(HttpClientAction.class);
 	

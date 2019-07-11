@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.dao.DaoClient;
@@ -30,7 +30,7 @@ import panda.mvc.view.Views;
 @At("${!!super_path|||'/super'}/sql")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
-public class SqlExecuteAction extends AbstractAction {
+public class SqlExecuteAction extends BaseAction {
 	public static class Option {
 		protected boolean autoCommit = true;
 		protected boolean ignoreError = false;

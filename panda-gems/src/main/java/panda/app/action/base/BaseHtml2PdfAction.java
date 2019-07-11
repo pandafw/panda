@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.util.pdf.Html2Pdf;
 import panda.io.FileTypes;
 import panda.io.MimeTypes;
@@ -24,7 +24,7 @@ import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletResponser;
 import panda.servlet.ServletRequestHeaderMap;
 
-public abstract class BaseHtml2PdfAction extends AbstractAction {
+public abstract class BaseHtml2PdfAction extends BaseAction {
 	private static final Log log = Logs.getLog(BaseHtml2PdfAction.class);
 	
 	@IocInject

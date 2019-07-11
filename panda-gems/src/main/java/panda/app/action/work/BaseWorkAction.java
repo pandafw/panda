@@ -3,7 +3,7 @@ package panda.app.action.work;
 import java.io.PrintWriter;
 import java.util.Date;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.el.ELTemplate;
 import panda.io.MimeTypes;
 import panda.io.Streams;
@@ -17,7 +17,7 @@ import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletResponser;
 
 
-public abstract class BaseWorkAction extends AbstractAction {
+public abstract class BaseWorkAction extends BaseAction {
 	protected static final char PREFIX = '%';
 	protected static final char L_DEBUG = 'd';
 	protected static final char L_INFO = 'i';

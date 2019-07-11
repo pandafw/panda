@@ -1,6 +1,6 @@
 package panda.app.action.tool;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.io.FileNames;
 import panda.lang.Numbers;
 import panda.mvc.annotation.At;
@@ -10,7 +10,7 @@ import panda.mvc.view.Views;
 import panda.servlet.HttpServlets;
 
 @At("/servlet-error")
-public class ServletErrorAction extends AbstractAction {
+public class ServletErrorAction extends BaseAction {
 
 	private static final String TPL = ServletErrorView.TPL_SERVLET_ERROR;
 	

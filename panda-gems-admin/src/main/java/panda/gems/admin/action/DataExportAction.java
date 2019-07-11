@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.bind.json.Jsons;
@@ -41,7 +41,7 @@ import panda.servlet.HttpServletResponser;
 @At("${!!super_path|||'/super'}/dataexp")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
-public class DataExportAction extends AbstractAction {
+public class DataExportAction extends BaseAction {
 	protected static class DataType {
 		String type;
 		String format;

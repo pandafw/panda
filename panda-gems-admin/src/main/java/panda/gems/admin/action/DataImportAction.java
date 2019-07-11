@@ -18,7 +18,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.bean.BeanHandler;
@@ -55,7 +55,7 @@ import panda.vfs.FileStores;
 @At("${!!super_path|||'/super'}/dataimp")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
-public class DataImportAction extends AbstractAction {
+public class DataImportAction extends BaseAction {
 	public static class Arg {
 		public boolean deleteAll = false;
 		public String target;

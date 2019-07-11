@@ -1,12 +1,12 @@
 package panda.app.action.base;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.PathArg;
 import panda.mvc.view.Views;
 
-public abstract class BaseHtmlAction extends AbstractAction {
+public abstract class BaseHtmlAction extends BaseAction {
 	@At("(.*)\\.htm$")
 	@To(Views.RES)
 	public Object htm(@PathArg String path) throws Exception {

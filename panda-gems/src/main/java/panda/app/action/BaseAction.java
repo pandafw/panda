@@ -5,7 +5,7 @@ import panda.app.util.AppActionConsts;
 import panda.mvc.util.AccessHandler;
 import panda.mvc.util.ActionSupport;
 
-public abstract class AbstractAction extends ActionSupport implements AccessHandler {
+public abstract class BaseAction extends ActionSupport implements AccessHandler {
 	/**
 	 * @return the assist
 	 */

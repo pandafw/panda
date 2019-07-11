@@ -2,7 +2,7 @@ package panda.gems.users.action.front;
 
 import java.util.List;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.constant.RES;
 import panda.dao.entity.EntityDao;
 import panda.gems.users.ROLE;
@@ -30,7 +30,7 @@ import panda.servlet.HttpServlets;
  */
 @At("/user/register")
 @To(value=Views.SFTL, error=Views.SFTL_INPUT)
-public class RegisterAction extends AbstractAction {
+public class RegisterAction extends BaseAction {
 	@IocInject
 	private PasswordHelper pwHelper;
 

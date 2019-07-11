@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.dao.Dao;
@@ -41,7 +41,7 @@ import panda.vfs.FileStores;
 
 @At("${!!admin_path|||'/admin'}/media")
 @Auth(AUTH.ADMIN)
-public class MediaBrowseAction extends AbstractAction {
+public class MediaBrowseAction extends BaseAction {
 	private static final Log log = Logs.getLog(MediaBrowseAction.class);
 	
 	@IocInject

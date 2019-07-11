@@ -3,7 +3,7 @@ package panda.gems.admin.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.lang.Strings;
@@ -17,7 +17,7 @@ import panda.util.crypto.Digests;
 @At("${!!super_path|||'/super'}/pwdhash")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
-public class PasswordHashAction extends AbstractAction {
+public class PasswordHashAction extends BaseAction {
 
 	@At("")
 	public Object exec(@Param("txt") String txt) {

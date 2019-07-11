@@ -1,6 +1,6 @@
 package panda.gems.admin.action;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.lang.Arrays;
@@ -31,7 +31,7 @@ import panda.vfs.FileItem;
 @At("${!!super_path|||'/super'}/sendmail")
 @Auth(AUTH.SUPER)
 @To(value=Views.SFTL, error=Views.SFTL)
-public class SendMailAction extends AbstractAction {
+public class SendMailAction extends BaseAction {
 	private static final Log log = Logs.getLog(SendMailAction.class);
 	
 	public static class Arg {

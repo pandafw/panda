@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.codec.binary.Hex;
@@ -22,7 +22,7 @@ import panda.vfs.FileItem;
 @At("${!!super_path|||'/super'}/hash")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
-public class HashAction extends AbstractAction {
+public class HashAction extends BaseAction {
 	/**
 	 * execute
 	 * @param s the string to hash

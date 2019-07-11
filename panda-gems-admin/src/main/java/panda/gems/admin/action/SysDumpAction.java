@@ -2,7 +2,7 @@ package panda.gems.admin.action;
 
 import java.util.Map;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.mvc.annotation.At;
@@ -12,7 +12,7 @@ import panda.mvc.view.Views;
 
 @At("${!!super_path|||'/super'}/sysdump")
 @Auth(AUTH.SUPER)
-public class SysDumpAction extends AbstractAction {
+public class SysDumpAction extends BaseAction {
 	@At("")
 	@To(value=Views.SFTL, error=Views.SFTL)
 	public void ftl(@Param Map m) {

@@ -1,6 +1,6 @@
 package panda.gems.users.action.front;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.RES;
@@ -29,7 +29,7 @@ import panda.mvc.view.Views;
 @At("/user/password/change")
 @Auth(AUTH.SIGNIN)
 @To(Views.SFTL)
-public class PasswordChangeAction extends AbstractAction {
+public class PasswordChangeAction extends BaseAction {
 	@IocInject
 	private PasswordHelper pwHelper;
 

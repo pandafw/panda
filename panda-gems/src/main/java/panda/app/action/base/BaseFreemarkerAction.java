@@ -1,12 +1,12 @@
 package panda.app.action.base;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.PathArg;
 import panda.mvc.view.Views;
 
-public abstract class BaseFreemarkerAction extends AbstractAction {
+public abstract class BaseFreemarkerAction extends BaseAction {
 	@At("(.*)\\.ftl$")
 	@To("ftl:${result}")
 	public Object ftl(@PathArg String path) {

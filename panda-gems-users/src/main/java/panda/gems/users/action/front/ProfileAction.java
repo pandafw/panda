@@ -2,7 +2,7 @@ package panda.gems.users.action.front;
 
 import java.util.List;
 
-import panda.app.action.AbstractAction;
+import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.RES;
@@ -24,7 +24,7 @@ import panda.net.mail.EmailException;
 @At("/user/profile")
 @Auth(AUTH.SIGNIN)
 @To(value=Views.SFTL, error=Views.SFTL_INPUT)
-public class ProfileAction extends AbstractAction {
+public class ProfileAction extends BaseAction {
 
 	@IocInject
 	private UserMailer mailer;
