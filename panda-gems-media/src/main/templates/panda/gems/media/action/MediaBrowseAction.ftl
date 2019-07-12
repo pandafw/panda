@@ -117,7 +117,7 @@
 	var media_limit = ${a.mediaIndexLimit};
 	var media_items = <#if result?has_content>${assist.toJson(result)}<#else>[]</#if>;
 
-	function onPageLoadMediaBrowser() {
+	function onPageLoadMediaBrowse() {
 		$.jcss('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>css?v=${assist.appVersion}');
 		$.jscript('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>js?v=${assist.appVersion}');
 
@@ -148,7 +148,7 @@
 		});
 		$('#media_form').submit(media_on_change);
 		$('#media_form div.p-datepicker').on('changeDate', media_on_change);
-		$('#meida_form_ds, #media_form_de, #media_form_qs').change(media_on_change);
+		$('#media_form_ds, #media_form_de, #media_form_qs').change(media_on_change);
 
 		$(window).scroll(media_on_scroll);
 	}
@@ -216,13 +216,6 @@
 		return false;
 	}
 	
-	function media_title(m) {
-		return m.name 
-			+ '\r\n' + m.width + ' x ' + m.height
-			+ ' (' + String.formatSize(m.size) + ')'
-			+ '\r\n' + media_date_format.format(new Date(m.createdAt));
-	}
-
 	function media_append(m) {
 		media_create(m).insertBefore('#media_end');
 	}
@@ -243,6 +236,13 @@
 			.click(media_on_click);
 	}
 	
+	function media_title(m) {
+		return m.name 
+			+ '\r\n' + m.width + ' x ' + m.height
+			+ ' (' + String.formatSize(m.size) + ')'
+			+ '\r\n' + media_date_format.format(new Date(m.updatedAt));
+	}
+
 	function media_on_uploaded(d) {
 		var r = d.result;
 		if ($.isArray(r)) {
