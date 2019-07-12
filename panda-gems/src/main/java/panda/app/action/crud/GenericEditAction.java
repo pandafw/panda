@@ -618,6 +618,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	protected T prepareData(T data) {
 		if (data == null) {
 			data = Classes.born(getType());
+			assist().setCreatedByFields(data);
 		}
 		return data;
 	}
@@ -1200,8 +1201,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				EntityHelper.clearIdentityValue(getEntity(), data);
 			}
 
-			assist().clearCreateByFields(data);
-			assist().clearUpdateByFields(data);
+			assist().setCreatedByFields(data);
 		}
 	}
 }
