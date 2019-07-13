@@ -1,0 +1,7 @@
+title=Pages
+
+icon=fa fa-file-text-o
+
+form-focusme=true
+
+

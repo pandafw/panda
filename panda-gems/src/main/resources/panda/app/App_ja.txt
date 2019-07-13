@@ -5,6 +5,7 @@ navi-home=ホーム
 
 navi-language=言語
 navi-media=メディア
+navi-pages=ページ
 navi-search=検索
 navi-tag=タグ
 navi-theme=テーマ

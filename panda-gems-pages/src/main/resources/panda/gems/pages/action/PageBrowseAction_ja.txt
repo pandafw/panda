@@ -1,0 +1,4 @@
+title=ページ
+
+lbl-date=日付
+

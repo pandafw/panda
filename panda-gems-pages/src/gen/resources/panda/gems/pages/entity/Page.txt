@@ -1,0 +1,13 @@
+slug=Slug
+
+title=Title
+
+tag=Tag
+
+publishDate=Publish Date
+
+thumbnail=Thumbnail
+
+content=Content
+
+

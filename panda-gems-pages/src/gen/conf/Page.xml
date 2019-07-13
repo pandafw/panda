@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pandafw.github.io/repos/schema/panda-codegen-module-1.5.0.xsd">
+	<include>codegen.xml</include>
+
+	<!-- entity -->
+	<entity name="${entity.package}.Page" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1" generate="true">
+		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
+		<property name="slug" type="String" size="100" notNull="true" uniqueKey="S"/>
+		<property name="title" type="String" size="100" notNull="true" uniqueKey="TL" comment="title">
+			<validator type="stringlength">
+				<param name="maxLength" value="100"/>
+			</validator>
+		</property>
+		<property name="tag" type="String" size="255" comment="thumbnail">
+			<validator type="stringlength">
+				<param name="maxLength" value="255"/>
+			</validator>
+		</property>
+		<property name="publishDate" type="Date"/>
+		<property name="thumbnail" type="String" size="32" comment="thumbnail">
+			<validator type="stringlength">
+				<param name="maxLength" value="32"/>
+			</validator>
+		</property>
+		<property name="content" type="String" size="100000" jdbcType="CLOB" setterTrim="" comment="page content">
+			<validator type="stringlength">
+				<param name="maxLength" value="100000"/>
+			</validator>
+		</property>
+	</entity>
+
+	<!-- action -->
+	<action name="action.Page" entity="${entity.package}.Page" extend="baseAction">
+		<list name="basicList" extend="scuList">
+			<column name="id" hidden="false" sortable="true" link="true">
+				<filter type="number"/>
+			</column>
+			<column name="thumbnail">
+				<format type="tran">
+					<param name="expr" value="&quot;&lt;img class='p-mwh32px' src='%{!!(b.media_path)|||'/media'}/icon/%{top.thumbnail}'&gt;&quot;"/>
+					<param name="escape" value="&quot;none&quot;"/>
+				</format>
+			</column>
+			<column name="slug" sortable="true" link="true">
+				<filter type="string"/>
+			</column>
+			<column name="title" sortable="true" link="true">
+				<filter type="string" fixed="true"/>
+			</column>
+			<column name="tag" sortable="true">
+				<filter type="string"/>
+			</column>
+			<column name="publishDate" sortable="true">
+				<format type="datetime" />
+				<filter type="date"/>
+			</column>
+			<param name="options" value="${slist.options}"/>
+		</list>
+		<list name="basicExpo" extend="basicList">
+			<column name="thumbnail">
+				<format type="string"/>
+			</column>
+		</list>
+		<list name="basicBulk" extend="basicList">
+			<param name="toolbar" value="${bulk.toolbar}"/>
+			<param name="buttons" value="${bulk.buttons}"/>
+		</list>
+		<input name="basicInput" extend="scuInput" footinc="PageEditAction-footer.ftl">
+			<field name="id">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="slug">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="100"/>
+					<param name="size" value="${tag.textfield.size}"/>
+				</editTag>
+			</field>
+			<field name="title" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="100"/>
+					<param name="size" value="${tag.textfield.size}"/>
+				</editTag>
+			</field>
+			<field name="tag">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="255"/>
+					<param name="size" value="${tag.textfield.size}"/>
+				</editTag>
+			</field>
+			<field name="publishDate">
+				<editTag name="${tag.datetimepicker}">
+					<param name="maxlength" value="${tag.datetimepicker.maxlength}"/>
+					<param name="size" value="${tag.datetimepicker.size}"/>
+				</editTag>
+			</field>
+			<field name="thumbnail">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="32"/>
+					<param name="size" value="${tag.textfield.size}"/>
+				</editTag>
+			</field>
+			<field name="content">
+				<editTag name="${tag.htmleditor}">
+					<param name="maxlength" value="100000"/>
+					<param name="cols" value="${tag.textarea.cols}"/>
+					<param name="mediaAction" value="%{(!!(b.media_path)|||'/media') + '/browse.popup'}"/>
+					<param name="height" value="400"/>
+				</editTag>
+			</field>
+		</input>
+	</action>
+	<action name="pages" auth="${admin.auth}" path="${admin.path}" extend="action.Page" actionClass="${action.package}.PageListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="expo.csv" extend="basicExpo" template="${template.expo_csv}" generate="true"/>
+		<list name="expo.json" extend="basicExpo" template="${template.expo_json}" generate="true"/>
+		<list name="expo.xml" extend="basicExpo" template="${template.expo_xml}" generate="true"/>
+	</action>
+	<action name="pages" auth="${admin.auth}" path="${admin.path}" extend="action.Page" actionClass="${action.package}.PageImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+		<list name="import" extend="basicList" template="${template.import}" generate="true"/>
+	</action>
+	<action name="pages" auth="${admin.auth}" path="${admin.path}" extend="action.Page" actionClass="${action.package}.PageBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="pages" extend="action.Page" actionClass="${action.package}.PageBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="bdisable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="pages" extend="action.Page" actionClass="${action.package}.PageBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
+	</action>
+	<action name="pages" auth="${admin.auth}" path="${admin.path}" extend="action.Page" actionClass="${action.package}.PageEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+		<input name="view" extend="basicInput" template="${template.view}" generate="true">
+			<param name="toolbar" value="${view.toolbar}"/>
+			<param name="actions" value="${view.actions}"/>
+		</input>
+		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+		<input name="add" extend="basicInput" template="${template.add}" generate="true"/>
+		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
+		<input name="edit" extend="basicInput" template="${template.edit}" generate="true"/>
+		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
+			<param name="toolbar" value="${delete.toolbar}"/>
+			<param name="actions" value="${delete.actions}"/>
+		</input>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="${entity.package}.Page">
+			<property name="slug" label="Slug"/>
+			<property name="title" label="Title"/>
+			<property name="tag" label="Tag"/>
+			<property name="publishDate" label="Publish Date"/>
+			<property name="thumbnail" label="Thumbnail"/>
+			<property name="content" label="Content"/>
+		</entity>
+		<action name="pages" title="Pages">
+			<property name="icon" label="fa fa-file-text-o"/>
+		</action>
+	</resource>
+	<resource locale="ja">
+		<entity name="${entity.package}.Page">
+			<property name="slug" label="スラッグ"/>
+			<property name="title" label="タイトル"/>
+			<property name="tag" label="タグ"/>
+			<property name="publishDate" label="公開日時"/>
+			<property name="thumbnail" label="アイキャッチ"/>
+			<property name="content" label="内容"/>
+		</entity>
+		<action name="pages" title="ページ"/>
+	</resource>
+	<resource locale="zh">
+		<entity name="${entity.package}.Page">
+			<property name="slug" label="URL"/>
+			<property name="title" label="标题"/>
+			<property name="tag" label="标签"/>
+			<property name="publishDate" label="公开时间"/>
+			<property name="thumbnail" label="缩略图"/>
+			<property name="content" label="内容"/>
+		</entity>
+		<action name="pages" title="网页"/>
+	</resource>
+</module>

@@ -1,0 +1,13 @@
+slug=スラッグ
+
+title=タイトル
+
+tag=タグ
+
+publishDate=公開日時
+
+thumbnail=アイキャッチ
+
+content=内容
+
+

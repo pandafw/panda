@@ -1,0 +1,13 @@
+slug=URL
+
+title=标题
+
+tag=标签
+
+publishDate=公开时间
+
+thumbnail=缩略图
+
+content=内容
+
+

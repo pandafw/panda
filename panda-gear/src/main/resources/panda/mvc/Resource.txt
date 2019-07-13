@@ -441,6 +441,7 @@ icon-media-browser=fa fa-list-alt
 icon-new=fa fa-plus-circle
 icon-next=fa fa-arrow-circle-o-right
 icon-ok=fa fa-check
+icon-pages=fa fa-file-text-o
 icon-pdf=fa fa-file-pdf-o
 icon-play=fa fa-play-circle
 icon-print=fa fa-print
