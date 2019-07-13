@@ -30,7 +30,7 @@ public class CookieStateProvider implements StateProvider {
 
 	@IocInject
 	protected Cryptor cryptor;
-	
+
 	private String domain;
 	private String path;
 	private Integer maxAge;
@@ -148,15 +148,15 @@ public class CookieStateProvider implements StateProvider {
 
 		Cookie c = new Cookie(name, val);
 
-		if (domain != null) {
+		if (Strings.isNotEmpty(domain)) {
 			c.setDomain(domain);
 		}
 		
-		if (path == null) {
+		if (Strings.isEmpty(path)) {
 			path = context.getRequest().getRequestURI();
 		}
-		if (Strings.startsWithChar(path, '~')){
-			path = context.getBase() + path.substring(1);
+		else {
+			path = MvcURLBuilder.buildPath(context, path);
 		}
 		c.setPath(path);
 
