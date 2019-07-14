@@ -30,16 +30,16 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 		if (value == null) {
 			return null;
 		}
-		else if (Strings.isEmpty(value)) {
+		
+		if (Strings.isEmpty(value)) {
 			return Types.born(type);
 		}
-		else {
-			try {
-				return Jsons.fromJson(value, type);
-			}
-			catch (Exception e) {
-				throw new SQLException(e);
-			}
+		
+		try {
+			return Jsons.fromJson(value, type);
+		}
+		catch (Exception e) {
+			throw new SQLException("Failed to deserialize json string", e);
 		}
 	}
 
