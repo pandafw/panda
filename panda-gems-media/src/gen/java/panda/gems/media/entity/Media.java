@@ -19,11 +19,11 @@ import panda.vfs.FileItem;
 	@Index(name="CA", fields={ "createdAt" }),
 	@Index(name="NAME", fields={ "name" }),
 	@Index(name="TAG", fields={ "tag" }),
-	@Index(name="S", fields={ "slug" }, unique=true)
+	@Index(name="SLUG", fields={ "slug" }, unique=true)
 })
 public class Media extends CUBean implements Serializable {
 
-	private static final long serialVersionUID = 1942454175L;
+	private static final long serialVersionUID = 825525087L;
 
 	/**
 	 * Constructor

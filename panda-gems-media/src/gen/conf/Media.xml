@@ -5,7 +5,7 @@
 	<!-- entity -->
 	<entity name="${entity.package}.Media" baseBeanClass="${entity.cuBeanClass}" baseQueryClass="${entity.cuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id">
 		<property name="id" type="Long" notNull="true" primaryKey="true"/>
-		<property name="slug" type="String" size="32" notNull="true" uniqueKey="S"/>
+		<property name="slug" type="String" size="32" notNull="true" uniqueKey="SLUG"/>
 		<property name="tag" type="String" size="10" indexKey="TAG">
 			<validator type="constant">
 				<param name="list" value="%{consts.mediaTagMap}"/>

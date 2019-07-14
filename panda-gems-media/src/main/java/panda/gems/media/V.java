@@ -16,5 +16,5 @@ public class V {
 
 	public static final int DEFAULT_INDEX_LIMIT = 50;
 
-	public static final int DEFAULT_CACHE_MAXAGE = 30 * DateTimes.SEC_DAY;
+	public static final int DEFAULT_CACHE_MAXAGE = DateTimes.SEC_MONTH;
 }
