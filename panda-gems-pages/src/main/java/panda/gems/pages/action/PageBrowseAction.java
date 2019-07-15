@@ -7,8 +7,11 @@ import panda.app.auth.Auth;
 import panda.app.bean.IndexArg;
 import panda.app.constant.AUTH;
 import panda.dao.Dao;
+import panda.gems.pages.V;
 import panda.gems.pages.entity.Page;
 import panda.gems.pages.entity.query.PageQuery;
+import panda.gems.tager.entity.Tag;
+import panda.gems.tager.entity.query.TagQuery;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Systems;
@@ -45,6 +48,26 @@ public class PageBrowseAction extends BaseAction {
 		return index(arg);
 	}
 
+	@At
+	@To(Views.REDIRECT)
+	public String tag(@Param("tag") String tag) throws Exception {
+		String url = Strings.removeEnd(getContext().getPath(), "tag") + "t/";
+		if (Strings.isNotEmpty(tag)) {
+			url += URLHelper.encodeURL(tag);
+		}
+		return url;
+	}
+
+	@At("t/(.*)$")
+	@To(Views.SFTL)
+	public Object tags(@PathArg String tag, @Param IndexArg arg) {
+		if (Strings.isNotEmpty(tag)) {
+			arg.setTag(tag);
+		}
+
+		return index(arg);
+	}
+
 	@At("p(\\d*)$")
 	@To(Views.SFTL)
 	public Object pager(@PathArg String sno, @Param IndexArg arg) {
@@ -63,15 +86,13 @@ public class PageBrowseAction extends BaseAction {
 		assist().loadLimitParams(arg.getPager());
 
 		PageQuery pq = new PageQuery();
-		pq.publishDate().le(DateTimes.getDate());
-		pq.publishDate().desc().id().desc();
-
-		addFilters(pq);
+		addFilters(pq, arg);
 
 		List<Page> pages = null;
 		Dao dao = getDaoClient().getDao();
 		if (Systems.IS_OS_APPENGINE) {
 			arg.getPager().normalize();
+			addSorters(pq);
 			pages = dao.select(pq);
 			arg.getPager().setCount(pages.size());
 		}
@@ -79,6 +100,7 @@ public class PageBrowseAction extends BaseAction {
 			arg.getPager().setTotal(dao.count(pq));
 			arg.getPager().normalize();
 			if (arg.getPager().getTotal() > 0) {
+				addSorters(pq);
 				pages = dao.select(pq);
 			}
 		}
@@ -87,8 +109,22 @@ public class PageBrowseAction extends BaseAction {
 		return pages;
 	}
 
-	// add filters for sub class
-	protected void addFilters(PageQuery pq) {
+	protected void addFilters(PageQuery pq, IndexArg arg) {
+		pq.publishDate().le(DateTimes.getDate());
+		
+		if (Strings.isNotEmpty(arg.getKey())) {
+			pq.title().contains(arg.getKey());
+		}
+		if (Strings.isNotEmpty(arg.getTag())) {
+			TagQuery tq = new TagQuery();
+			tq.kind().eq(V.PAGE_TAG_KIND);
+			tq.name().eq(arg.getTag());
+			pq.innerJoin(tq, "tg", Page.ID + '=' + Tag.CODE);
+		}
+	}
+
+	protected void addSorters(PageQuery pq) {
+		pq.publishDate().desc().id().desc();
 	}
 }
 

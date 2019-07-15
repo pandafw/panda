@@ -116,10 +116,10 @@
 		<list name="expo.json" extend="basicExpo" template="${template.expo_json}" generate="true"/>
 		<list name="expo.xml" extend="basicExpo" template="${template.expo_xml}" generate="true"/>
 	</action>
-	<action name="pages" auth="${admin.auth}" path="${admin.path}" extend="action.Page" actionClass="${action.package}.PageImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
+	<action name="pages" extend="action.Page" actionClass="${action.package}.PageImportAction" actionBaseClass="${action.baseImportActionClass}" generate="true">
 		<list name="import" extend="basicList" template="${template.import}" generate="true"/>
 	</action>
-	<action name="pages" auth="${admin.auth}" path="${admin.path}" extend="action.Page" actionClass="${action.package}.PageBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="pages" extend="action.Page" actionClass="${action.package}.PageBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="pages" extend="action.Page" actionClass="${action.package}.PageBulkDisableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
@@ -128,7 +128,7 @@
 	<action name="pages" extend="action.Page" actionClass="${action.package}.PageBulkEnableAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="benable" extend="basicBulk" template="${template.bupdate}" generate="true"/>
 	</action>
-	<action name="pages" auth="${admin.auth}" path="${admin.path}" extend="action.Page" actionClass="${action.package}.PageEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+	<action name="pages" extend="action.Page" actionClass="${action.package}.PageEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="${view.toolbar}"/>
 			<param name="actions" value="${view.actions}"/>

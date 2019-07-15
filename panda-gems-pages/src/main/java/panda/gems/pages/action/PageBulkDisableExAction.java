@@ -9,8 +9,8 @@ import panda.dao.query.DataQuery;
 import panda.gems.pages.entity.Page;
 import panda.mvc.annotation.At;
 
-@At("${!!super_path|||'/super'}/pages")
-@Auth(AUTH.SUPER)
+@At("${!!admin_path|||'/admin'}/pages")
+@Auth(AUTH.ADMIN)
 public class PageBulkDisableExAction extends PageBulkDisableAction {
 
 	public PageBulkDisableExAction() {

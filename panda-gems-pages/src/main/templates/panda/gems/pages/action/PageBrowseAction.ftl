@@ -39,7 +39,7 @@
 
 
 <#if result?has_content>
-	<#if methodName == "searchs">
+	<#if methodName == "searchs" || methodName == "tager">
 		<#include "/panda/app/view/index-link.ftl"/>
 	<#else>
 		<#assign _index_pager_link_ = "p!{page}"/>
@@ -49,11 +49,12 @@
 	<#include "/panda/app/view/index-topbar.ftl"/>
 </#if>
 
+	<@p.url var="pp" action="%{!!(b.pages_path)|||'/pages'}"/>
 	<@p.url var="mp" action="%{!!(b.media_path)|||'/media'}"/>
 
 	<div class="pages-list">
 	<#list result as t>
-		<a class="page-block" href="v/<#if t.slug?has_content>${t.slug}<#else>${t.id}</#if>">
+		<a class="page-block" href="${base}${vars.pp}/v/<#if t.slug?has_content>${t.slug}<#else>${t.id}</#if>">
 			<img class="img-thumbnail" src="${v.mp}/thumb/${t.thumbnail!}">
 			<div class="page-title">${t.title?html}</div>
 		</a>

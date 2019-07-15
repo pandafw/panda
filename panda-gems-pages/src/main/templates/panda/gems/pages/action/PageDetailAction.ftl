@@ -27,7 +27,18 @@
 </#if>
 
 	<h1 class="page-title">${r.title?html}</h1>
-	<div class="page-meta"><@p.property value=r.publishDate format="date"/></div>
+	<div class="page-meta">
+		<span class="page-date"><@p.property value=r.publishDate format="date"/></span>
+	<#assign ts = (a.getTags(r))![] />
+	<#if ts?has_content>
+		<@p.url var="pp" action="%{!!(b.pages_path)|||'/pages'}"/>
+		<span class="page-tags">
+		<#list ts as t>
+			<@p.a cssClass="btn btn-xs btn-info" action="${vars.pp}/tag"><@p.param name="tag" value=t/>#${t?html}</@p.a>
+		</#list>
+		<span>
+	</#if>
+	</div>
 	<div class="page-content">${r.content}</div>
 </div>
 

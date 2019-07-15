@@ -63,5 +63,8 @@ public class PageDetailAction extends BaseAction {
 		return p;
 	}
 
+	public String[] getTags(Page p) {
+		return Strings.split(p.getTag());
+	}
 }
 

@@ -2,8 +2,6 @@ package panda.gems.pages.action;
 
 import java.util.Map;
 import panda.app.action.crud.GenericBulkAction;
-import panda.app.auth.Auth;
-import panda.app.constant.AUTH;
 import panda.gems.pages.entity.Page;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
@@ -12,9 +10,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 
-@At("${!!admin_path|||'/admin'}/pages")
-@Auth(AUTH.ADMIN)
-public class PageBulkDeleteAction extends GenericBulkAction<Page> {
+public abstract class PageBulkDeleteAction extends GenericBulkAction<Page> {
 
 	/**
 	 * Constructor

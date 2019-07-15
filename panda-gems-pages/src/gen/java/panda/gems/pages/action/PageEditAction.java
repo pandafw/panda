@@ -1,8 +1,6 @@
 package panda.gems.pages.action;
 
 import panda.app.action.crud.GenericEditAction;
-import panda.app.auth.Auth;
-import panda.app.constant.AUTH;
 import panda.gems.pages.entity.Page;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
@@ -13,9 +11,7 @@ import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 
-@At("${!!admin_path|||'/admin'}/pages")
-@Auth(AUTH.ADMIN)
-public class PageEditAction extends GenericEditAction<Page> {
+public abstract class PageEditAction extends GenericEditAction<Page> {
 
 	/**
 	 * Constructor
