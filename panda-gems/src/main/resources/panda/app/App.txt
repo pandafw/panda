@@ -28,7 +28,7 @@ navi-language=Languages
 navi-media=Media
 navi-pages=Pages
 navi-search=Search
-navi-tag=Tag
+navi-tags=Tags
 navi-theme=Theme
 
 navi-help=Help
@@ -71,7 +71,6 @@ navi-admin-site=Site Management
 navi-admin-service=Service Management
 navi-admin-category=Category Management
 navi-admin-index=Index Management
-navi-admin-tag=Tag Management
 navi-admin-account=Account Management
 navi-admin-company=Company Management
 navi-admin-group=Group Management
@@ -79,6 +78,7 @@ navi-admin-users=Users Management
 navi-admin-media=Media Management
 navi-admin-pages=Pages Management
 navi-admin-files=Files Management
+navi-admin-tags=Tags
 
 
 icon-admin-site=fa fa-gears
@@ -93,6 +93,7 @@ icon-admin-users=fa fa-user-circle
 icon-admin-media=fa fa-picture-o
 icon-admin-pages=fa fa-file-text-o
 icon-admin-files=fa fa-file-o
+icon-admin-tags=fa fa-bookmark
 
 
 navi-super=System

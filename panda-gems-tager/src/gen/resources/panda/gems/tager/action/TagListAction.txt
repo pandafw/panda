@@ -1,0 +1,5 @@
+title=Tags
+
+icon=fa fa-bookmark
+
+

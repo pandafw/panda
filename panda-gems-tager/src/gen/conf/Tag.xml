@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pandafw.github.io/repos/schema/panda-codegen-module-1.5.0.xsd">
+	<include>codegen.xml</include>
+
+	<!-- entity -->
+	<entity name="${entity.package}.Tag" baseBeanClass="${entity.baseBeanClass}" baseQueryClass="${entity.baseQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1" generate="true">
+		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
+		<property name="name" type="String" size="100" notNull="true" uniqueKey="NKC"/>
+		<property name="kind" type="String" size="10" uniqueKey="NKC">
+			<validator type="constant">
+				<param name="list" value="%{consts.tagKindMap}"/>
+			</validator>
+		</property>
+		<property name="code" type="String" size="255" notNull="true" uniqueKey="NKC">
+			<validator type="stringlength">
+				<param name="maxLength" value="255"/>
+			</validator>
+		</property>
+	</entity>
+
+	<!-- action -->
+	<action name="action.Tag" entity="${entity.package}.Tag" extend="baseAction">
+		<list name="basicList" extend="baseList">
+			<column name="id" hidden="false" sortable="true">
+				<filter type="number"/>
+			</column>
+			<column name="name" sortable="true">
+				<filter type="string" fixed="true"/>
+			</column>
+			<column name="kind" sortable="true">
+				<format type="code">
+					<param name="codemap" value="consts.tagKindMap"/>
+				</format>
+				<filter type="checklist">
+					<param name="list" value="consts.tagKindMap"/>
+				</filter>
+			</column>
+			<column name="code" sortable="true">
+				<filter type="string"/>
+			</column>
+		</list>
+		<list name="basicExpo" extend="basicList">
+			<column name="kind">
+				<format type="string"/>
+			</column>
+		</list>
+	</action>
+	<action name="tags" auth="${admin.auth}" path="${admin.path}" extend="action.Tag" actionClass="${action.package}.TagListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="expo.csv" extend="basicExpo" template="${template.expo_csv}" generate="true"/>
+		<list name="expo.json" extend="basicExpo" template="${template.expo_json}" generate="true"/>
+		<list name="expo.xml" extend="basicExpo" template="${template.expo_xml}" generate="true"/>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="${entity.package}.Tag">
+			<property name="name" label="Name"/>
+			<property name="kind" label="Kind"/>
+			<property name="code" label="Code"/>
+		</entity>
+		<action name="tags" title="Tags">
+			<property name="icon" label="fa fa-bookmark"/>
+		</action>
+	</resource>
+	<resource locale="ja">
+		<entity name="${entity.package}.Tag">
+			<property name="name" label="タグ"/>
+			<property name="kind" label="種別"/>
+			<property name="code" label="コード"/>
+		</entity>
+		<action name="tags" title="タグ"/>
+	</resource>
+	<resource locale="zh">
+		<entity name="${entity.package}.Tag">
+			<property name="name" label="标签"/>
+			<property name="kind" label="分类"/>
+			<property name="code" label="代码"/>
+		</entity>
+		<action name="tags" title="标签"/>
+	</resource>
+</module>

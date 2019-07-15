@@ -465,6 +465,7 @@ icon-sql=fa fa-strikethrough
 icon-stop=fa fa-stop
 icon-submit=fa fa-upload
 icon-suspend=fa fa-stop
+icon-tags=fa fa-bookmark
 icon-test=fa fa-bug
 icon-trash=fa fa-trash-o
 icon-undo=fa fa-undo

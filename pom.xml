@@ -32,6 +32,7 @@
 		<module>panda-gems-files</module>
 		<module>panda-gems-media</module>
 		<module>panda-gems-pages</module>
+		<module>panda-gems-tager</module>
 		<module>panda-gems-users</module>
 		<module>panda-glue</module>
 		<module>panda-nets</module>
