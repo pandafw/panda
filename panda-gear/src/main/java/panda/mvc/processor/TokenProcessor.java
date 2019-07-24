@@ -125,16 +125,15 @@ public class TokenProcessor extends AbstractProcessor {
 		doErrorView(ac);
 	}
 
-	public static final Set<String> UNPROTECT_METHODS = Arrays.toSet(
-		HttpMethod.GET, HttpMethod.HEAD, HttpMethod.OPTIONS, HttpMethod.TRACE);
+	public static final Set<String> PROTECT_METHODS = Arrays.toSet(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT);
 	
-	public static boolean isUnProtectMethod(String method) {
+	public static boolean isProtectMethod(String method) {
 		method = Strings.upperCase(method);
-		return UNPROTECT_METHODS.contains(method);
+		return PROTECT_METHODS.contains(method);
 	}
 	
 	protected boolean validate(ActionContext ac, Token token) {
-		if (isUnProtectMethod(ac.getRequest().getMethod())) {
+		if (!isProtectMethod(ac.getRequest().getMethod())) {
 			return true;
 		}
 		

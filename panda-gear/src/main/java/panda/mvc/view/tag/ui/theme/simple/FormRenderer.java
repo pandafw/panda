@@ -2,7 +2,7 @@ package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
 
-import panda.lang.Strings;
+import panda.mvc.processor.TokenProcessor;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Token;
 import panda.mvc.view.tag.ui.theme.AbstractTagRenderer;
@@ -41,7 +41,7 @@ public class FormRenderer extends AbstractTagRenderer<Form> {
 
 		Boolean token = tag.getToken();
 		if (token == null) {
-			token = Strings.equalsIgnoreCase("post", method);
+			token = TokenProcessor.isProtectMethod(method);
 		}
 		if (token) {
 			Token t = newTag(Token.class);
