@@ -20,7 +20,7 @@ import panda.mvc.validator.Validators;
 })
 public class Page extends SCUBean implements Serializable {
 
-	private static final long serialVersionUID = -1670608657L;
+	private static final long serialVersionUID = 45910314L;
 
 	/**
 	 * Constructor
@@ -59,7 +59,7 @@ public class Page extends SCUBean implements Serializable {
 	@Comment("id")
 	protected Long id;
 
-	@Column(size=100, notNull=true)
+	@Column(size=100)
 	protected String slug;
 
 	@Column(size=100, notNull=true)

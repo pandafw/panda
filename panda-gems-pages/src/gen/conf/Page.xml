@@ -5,7 +5,7 @@
 	<!-- entity -->
 	<entity name="${entity.package}.Page" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1" generate="true">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
-		<property name="slug" type="String" size="100" notNull="true" uniqueKey="S"/>
+		<property name="slug" type="String" size="100" uniqueKey="S"/>
 		<property name="title" type="String" size="100" notNull="true" uniqueKey="TL" comment="title">
 			<validator type="stringlength">
 				<param name="maxLength" value="100"/>
