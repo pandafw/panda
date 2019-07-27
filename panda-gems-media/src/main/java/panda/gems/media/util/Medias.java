@@ -21,7 +21,7 @@ public class Medias {
 		
 		m.setSize(m.getFile().getSize());
 		if (Strings.isEmpty(m.getName())) {
-			m.setName(Strings.right(FileNames.getName(m.getFile().getName()), V.MAX_FILENAME_LENGTH));
+			m.setName(Strings.right(FileNames.getName(m.getFile().getName()), V.FILENAME_MAX_LENGTH));
 		}
 
 		try {

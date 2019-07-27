@@ -8,13 +8,15 @@ import panda.lang.time.DateTimes;
 public class V {
 	public static final int ORIGINAL = 0;
 
-	public static final int MAX_FILENAME_LENGTH = 200;
+	public static final int FILENAME_MAX_LENGTH = 200;
 
-	public static final int DEFAULT_ICON_SIZE = 32;
+	public static final int THUMB_SIZE_MINIMUM = 32;
 
-	public static final int DEFAULT_THUMB_SIZE = 128;
+	public static final int THUMB_SIZE_DEFAULT = 128;
 
-	public static final int DEFAULT_INDEX_LIMIT = 50;
+	public static final int THUMB_SIZE_MAXIMUM = 384;
 
-	public static final int DEFAULT_CACHE_MAXAGE = DateTimes.SEC_MONTH;
+	public static final int INDEX_LIMIT_DEFAULT = 50;
+
+	public static final int CACHE_MAXAGE_DEFAULT = DateTimes.SEC_MONTH;
 }

@@ -18,7 +18,7 @@ public class MediaBulkDeleteExAction extends MediaBulkDeleteAction {
 	private MediaDataStore mds;
 	
 	public String getMediaLink(Media m) {
-		return "<img class=\"p-mwh32px\" src=\"icon/" + m.getSlug() + "\">";
+		return MediaListExAction.getMediaImage(m);
 	}
 
 	@Override

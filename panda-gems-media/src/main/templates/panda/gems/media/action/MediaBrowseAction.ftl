@@ -19,7 +19,15 @@
 }
 .media-thumb {
 	display: inline-block;
+	vertical-align: top;
+	border: 1px solid #ddd;
 	margin: 3px;
+	padding: 4px;
+	width: 138px;
+}
+.media-thumb>img {
+	width: 100%;
+	height: auto;
 }
 .media-select {
 	background-color: #6495ED;
@@ -225,8 +233,8 @@
 	}
 
 	function media_create(m) {
-		return $('<a class="media-thumb img-thumbnail" href="#">')
-			.append($('<img src="' + media_base + 'thumb/' + m.slug + '"/>').attr('alt', m.name))
+		return $('<a class="media-thumb" href="#">')
+			.append($('<img src="' + media_base + 'thumb/128/' + m.slug + '"/>').attr('alt', m.name))
 			.attr({
 				'href': media_base + 'media/' + m.slug,
 				'title': media_title(m)

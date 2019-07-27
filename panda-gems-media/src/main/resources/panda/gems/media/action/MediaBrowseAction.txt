@@ -7,3 +7,5 @@ lbl-date=Date
 btn-slides=Slideshow
 
 media-save-failed=Failed to save media file ${top}.
+
+thumb-sizes=[ 32, 64, 96, 128, 192, 256, 384 ]

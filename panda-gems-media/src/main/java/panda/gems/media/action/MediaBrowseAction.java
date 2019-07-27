@@ -11,6 +11,7 @@ import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.dao.Dao;
+import panda.gems.media.R;
 import panda.gems.media.S;
 import panda.gems.media.V;
 import panda.gems.media.entity.Media;
@@ -74,14 +75,9 @@ public class MediaBrowseAction extends BaseAction {
 		media(slug);
 	}
 
-	@At("thumb/(.*)$")
-	public void thumb2(@PathArg String slug) throws Exception {
-		thumb(slug);
-	}
-
-	@At("icon/(.*)$")
-	public void icon2(@PathArg String slug) throws Exception {
-		icon(slug);
+	@At("thumb/(\\d+)/(.*)$")
+	public void thumb2(@PathArg Integer size, @PathArg String slug) throws Exception {
+		thumb(slug, size);
 	}
 
 	@At
@@ -89,14 +85,47 @@ public class MediaBrowseAction extends BaseAction {
 		find(slug, null, 0);
 	}
 
-	@At
-	public void thumb(@Param("slug") String slug) throws Exception {
-		find(slug, S.MEDIA_THUMB_SIZE, V.DEFAULT_THUMB_SIZE);
+	protected int normalizeSize(Integer size) {
+		if (size == null) {
+			return getTextAsInt(R.THUMB_SIZE_DEFAULT, V.THUMB_SIZE_DEFAULT);
+		}
+		
+		int minSize = getTextAsInt(R.THUMB_SIZE_MINIMUM, V.THUMB_SIZE_MINIMUM);
+		if (size < minSize) {
+			return minSize;
+		}
+
+		int maxSize = getTextAsInt(R.THUMB_SIZE_MAXIMUM, V.THUMB_SIZE_MAXIMUM);
+		if (size > maxSize) {
+			return maxSize;
+		}
+		
+		List sizes = getTextAsList(R.THUMB_SIZES);
+		if (Collections.isEmpty(sizes)) {
+			return size;
+		}
+
+		// check available sizes
+		int ldiff = Integer.MAX_VALUE;
+		int lsize = size;
+		for (Object o : sizes) {
+			Integer n = (Integer)o;
+			int d = Math.abs(size - n);
+			if (d == 0) {
+				return size;
+			}
+			if (d < ldiff) {
+				ldiff = d;
+				lsize = n;
+			}
+		}
+		return lsize;
 	}
 
 	@At
-	public void icon(@Param("slug") String slug) throws Exception {
-		find(slug, S.MEDIA_ICON_SIZE, V.DEFAULT_ICON_SIZE);
+	public void thumb(@Param("slug") String slug, @Param("size") Integer size) throws Exception {
+		size = normalizeSize(size);
+		find(slug, S.MEDIA_THUMB_SIZE, size);
 	}
 
 	@At("")
@@ -153,7 +182,7 @@ public class MediaBrowseAction extends BaseAction {
 	}
 
 	public int getMediaIndexLimit() {
-		return getSettings().getPropertyAsInt(S.MEDIA_INDEX_LIMIT, V.DEFAULT_INDEX_LIMIT);
+		return getSettings().getPropertyAsInt(S.MEDIA_INDEX_LIMIT, V.INDEX_LIMIT_DEFAULT);
 	}
 	
 	@At
@@ -247,7 +276,7 @@ public class MediaBrowseAction extends BaseAction {
 			
 			Media m = dao.fetch(mq);
 			if (m != null) {
-				int maxage = getSettings().getPropertyAsInt(S.MEDIA_CACHE_MAXAGE, V.DEFAULT_CACHE_MAXAGE);
+				int maxage = getSettings().getPropertyAsInt(S.MEDIA_CACHE_MAXAGE, V.CACHE_MAXAGE_DEFAULT);
 
 				if (HttpServlets.checkAndSetNotModified(getRequest(), getResponse(), m.getUpdatedAt(), maxage)) {
 					return;
