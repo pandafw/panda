@@ -37,7 +37,7 @@
 			</column>
 			<column name="thumbnail">
 				<format type="tran">
-					<param name="expr" value="&quot;&lt;img class='p-mwh32px' src='%{!!(b.media_path)|||'/media'}/icon/%{top.thumbnail}'&gt;&quot;"/>
+					<param name="expr" value="&quot;&lt;img class='p-mwh32px' src='%{!!(b.media_path)|||'/media'}/thumb/32/%{top.thumbnail}'&gt;&quot;"/>
 					<param name="escape" value="&quot;none&quot;"/>
 				</format>
 			</column>

@@ -12,11 +12,17 @@
 .page-block {
 	display: inline-block;
 	margin: 3px;
-	min-width: 200px;
+	width: 256px;
 	text-align: center;
+	vertical-align: top;
 }
 .page-title {
 	padding: 5px;
+}
+img.page-thumb {
+	width: 100%;
+	height: auto;
+	max-height: 192px;
 }
 </style>
 
@@ -55,7 +61,7 @@
 	<div class="pages-list">
 	<#list result as t>
 		<a class="page-block" href="${base}${vars.pp}/v/<#if t.slug?has_content>${t.slug}<#else>${t.id}</#if>">
-			<img class="img-thumbnail" src="${v.mp}/thumb/${t.thumbnail!}">
+			<img class="page-thumb" src="${v.mp}/thumb/256/${t.thumbnail!}">
 			<div class="page-title">${t.title?html}</div>
 		</a>
 	</#list>

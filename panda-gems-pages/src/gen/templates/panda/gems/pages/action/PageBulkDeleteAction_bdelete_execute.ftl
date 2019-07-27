@@ -43,7 +43,7 @@
 			"header": a.getFieldLabel("thumbnail"),
 			"display": a.displayField("thumbnail"),
 			"format": {
-				"expr": "<img class='p-mwh32px' src='%{!!(b.media_path)|||'/media'}/icon/%{top.thumbnail}'>",
+				"expr": "<img class='p-mwh32px' src='%{!!(b.media_path)|||'/media'}/thumb/32/%{top.thumbnail}'>",
 				"escape": "none",
 				"type": "tran"
 			},

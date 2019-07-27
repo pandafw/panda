@@ -6,7 +6,7 @@
 		
 		var fu = function() {
 			$d.attr({
-				'src': mp + '/thumb/' + $t.val(),
+				'src': mp + '/thumb/256/' + $t.val(),
 				'title': $t.val()
 			});
 		};
