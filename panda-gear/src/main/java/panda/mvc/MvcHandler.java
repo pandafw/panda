@@ -31,10 +31,23 @@ public class MvcHandler {
 		this.loading = loading;
 	}
 
+	/**
+	 * handle request
+	 * @param req servlet request
+	 * @param res servlet response
+	 * @return true if request has been handled
+	 */
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
 		return handle(req, res, null);
 	}
 	
+	/**
+	 * handle request
+	 * @param req servlet request
+	 * @param res servlet response
+	 * @param next next filter
+	 * @return true if request has been handled
+	 */
 	public boolean handle(HttpServletRequest req, HttpServletResponse res, ServletFilter next) {
 		req.setAttribute(Mvcs.REQUEST_TIME, System.currentTimeMillis());
 

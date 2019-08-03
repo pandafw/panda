@@ -149,6 +149,8 @@ public class DispatchFilter implements ServletFilter {
 			if (log.isDebugEnabled()) {
 				log.debug("IGNORE: " + path);
 			}
+			
+			// return false and stop filter chain
 			return false;
 		}
 
@@ -205,6 +207,7 @@ public class DispatchFilter implements ServletFilter {
 					log.debug("Dispatch: " + path);
 				}
 				if (dispatcher.dispatch(ac)) {
+					// return true and stop filter chain
 					return true;
 				}
 			}
