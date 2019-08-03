@@ -24,6 +24,11 @@ public interface SetConstants {
 	public static final String MVC_ACCESS_LOG_FORMAT = "mvc.access.log.format";
 
 	/**
+	 * mvc https redirect
+	 */
+	public static final String MVC_HTTPS_REDIRECT = "mvc.https.redirect";
+
+	/**
 	 * mvc http dump path
 	 */
 	public static final String MVC_HTTP_DUMP_PATH = "mvc.http.dump.path";
