@@ -13,6 +13,7 @@ public class ActionTask {
 	private Map<String, String> headers;
 	private Map<String, String> params;
 	private boolean token;
+	private boolean autoRedirect = true;
 
 	private String description;
 	private Integer errorLimit;
@@ -93,6 +94,20 @@ public class ActionTask {
 	}
 
 	/**
+	 * @return the autoRedirect
+	 */
+	public boolean isAutoRedirect() {
+		return autoRedirect;
+	}
+
+	/**
+	 * @param autoRedirect the autoRedirect to set
+	 */
+	public void setAutoRedirect(boolean autoRedirect) {
+		this.autoRedirect = autoRedirect;
+	}
+
+	/**
 	 * @return the description
 	 */
 	public String getDescription() {
@@ -128,6 +143,7 @@ public class ActionTask {
 				.append("headers", headers)
 				.append("params", params)
 				.append("token", token)
+				.append("autoRedirect", autoRedirect)
 				.append("description", description)
 				.append("errorLimit", errorLimit)
 				.toString();

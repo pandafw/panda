@@ -70,7 +70,7 @@ public class ActionTaskSubmitter implements Runnable {
 		try {
 			HttpClient hc = new HttpClient();
 			
-			hc.setAutoRedirect(false);
+			hc.setAutoRedirect(task.isAutoRedirect());
 			HttpRequest hreq = HttpRequest.create(url, task.getMethod());
 			if (task.getParams() != null) {
 				hreq.getParams().putAll(task.getParams());
