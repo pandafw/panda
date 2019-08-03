@@ -13,7 +13,6 @@ import panda.mvc.MvcConstants;
 import panda.mvc.ServletChain;
 import panda.mvc.ServletFilter;
 import panda.mvc.filter.DecodingFilter;
-import panda.mvc.filter.HttpDumpFilter;
 import panda.mvc.filter.DispatchFilter;
 import panda.mvc.filter.LoggingFilter;
 
@@ -37,7 +36,6 @@ public class DefaultServletChain implements ServletChain {
 
 	public void initialize() {
 		if (filters.isEmpty()) {
-			filters.add(ioc.get(HttpDumpFilter.class));
 			filters.add(ioc.get(DecodingFilter.class));
 			filters.add(ioc.get(LoggingFilter.class));
 			filters.add(ioc.get(DispatchFilter.class));
