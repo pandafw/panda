@@ -243,7 +243,7 @@ public class URLBuilder {
 			appendQueryParameters(url, qs);
 		}
 		
-		if (params != null) {
+		if (Objects.isNotEmpty(params)) {
 			appendQuerySeparator(url);
 			appendQueryParameters(url, params);
 		}
