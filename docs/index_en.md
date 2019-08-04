@@ -48,11 +48,11 @@ Panda Framework consists of the following modules.
  |--------------------------------|---------------------------------------------------------------------------|
  | [panda-core](core/index_en.md) | This is the most basic part of the Panda framework and it contains many useful classes similar to apache-commons.  |
  | [panda-gear](gear/index_en.md) | [IOC](gear/ioc/ioc_en.md)/[MVC](gear/mvc/mvc_en.md) module. Similar to Spring-MVC, Struts2, contains some commonly used taglib. |
+ | [panda-gems](gems/index_en.md) | Extension module for Web-APP. Contains basic template classes that implement CRUD, user authentication, and some other useful classes. |
  | [panda-glue](glue/index_en.md) | [ASM](glue/asm_en.md)/[AOP](glue/aop_en.md) module.                  |
  | [panda-html](html/index_en.md) | Contains jQuery, Bootstrap, and the css/javascript required by panda-gear's taglib. |
  | [panda-tool](tool/index_en.md) | Source code generator. Can generate Entity/Query/Dao/Action class, Freemarker (HTML) template file. |
  | [panda-tube](tube/index_en.md) | Web Service API client (WordPress XMP-RPC, Google Vision API).                     |
- | [panda-wear](wear/index_en.md) | Extension module for Web-APP. Contains basic template classes that implement CRUD, user authentication, and some other useful classes. |
 
 
 ## Code Generator
