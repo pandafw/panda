@@ -33,6 +33,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.Mimes;
+import panda.net.Scheme;
 import panda.net.URLBuilder;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
@@ -133,7 +134,18 @@ public class HttpServlets {
 	public static int getServerPort(HttpServletRequest request) {
 		int port = Numbers.toInt(request.getHeader(HttpHeader.X_FORWARDED_PORT), 0);
 		if (port <= 0) {
-			port = request.getServerPort();
+			// some web server does not set X-FORWARDED-PORT (Azure IIS),
+			// so we need to check X-FORWARDED-PROTO
+			String proto = request.getHeader(HttpHeader.X_FORWARDED_PROTO);
+			if (Scheme.HTTP.equals(proto)) {
+				port = 80;
+			}
+			else if (Scheme.HTTPS.equals(proto)) {
+				port = 443;
+			}
+			else {
+				port = request.getServerPort();
+			}
 		}
 		return port;
 	}
