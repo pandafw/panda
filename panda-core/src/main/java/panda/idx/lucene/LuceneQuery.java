@@ -1,7 +1,7 @@
 package panda.idx.lucene;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -17,11 +17,21 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import panda.idx.IQuery;
 import panda.idx.IndexException;
 import panda.lang.Collections;
+import panda.lang.Strings;
 
 public class LuceneQuery extends IQuery {
 	protected Analyzer analyzer;
 	protected QueryParser parser;
 	protected List<SortField> sorts;
+
+	/**
+	 * https://lucene.apache.org/core/7_7_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package.description
+	 */
+	private static final String SPECIAL_CHARS = "+-&|!(){}[]^\"~*?:\\/";
+	
+	public static String escapeText(String str) {
+		return Strings.escapeChars(str, SPECIAL_CHARS);
+	}
 
 	public LuceneQuery(Analyzer analyzer) {
 		this.analyzer = analyzer;
@@ -38,10 +48,17 @@ public class LuceneQuery extends IQuery {
 	@Override
 	public IQuery value(String value) {
 		addSpace();
-		query.append('"').append(Lucenes.escapeText(value)).append('"');
+		query.append('"').append(escapeText(value)).append('"');
 		return this;
 	}
 	
+	@Override
+	public IQuery value(Date date) {
+		addSpace();
+		query.append(date.getTime());
+		return this;
+	}
+
 	@Override
 	public IQuery sort(String field, SortType type, boolean desc) {
 		if (sorts == null) {
@@ -95,9 +112,9 @@ public class LuceneQuery extends IQuery {
 		else {
 			Sort sort = new Sort(sorts.toArray(new SortField[0]));
 			try {
-				collector = TopFieldCollector.create(sort, (int)(getStart() + getLimit()), true, false, false);
+				collector = TopFieldCollector.create(sort, (int)(getStart() + getLimit()), true, false, false, false);
 			}
-			catch (IOException e) {
+			catch (Exception e) {
 				throw new IndexException("Failed to create TopFieldCollector: " + sorts);
 			}
 		}

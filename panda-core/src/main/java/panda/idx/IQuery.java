@@ -156,31 +156,31 @@ public abstract class IQuery {
 		return this;
 	}
 	
-	public IQuery equal() {
+	public IQuery eq() {
 		addSpace();
 		query.append(':');
 		return this;
 	}
 	
-	public IQuery lessThan() {
+	public IQuery lt() {
 		addSpace();
 		query.append('<');
 		return this;
 	}
 	
-	public IQuery lessEqual() {
+	public IQuery le() {
 		addSpace();
 		query.append("<=");
 		return this;
 	}
 	
-	public IQuery greatThan() {
+	public IQuery gt() {
 		addSpace();
 		query.append('>');
 		return this;
 	}
 	
-	public IQuery greatEqual() {
+	public IQuery ge() {
 		addSpace();
 		query.append(">=");
 		return this;

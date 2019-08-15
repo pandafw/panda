@@ -7,19 +7,22 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.DoubleField;
+import org.apache.lucene.document.DoubleDocValuesField;
+import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.FloatField;
-import org.apache.lucene.document.IntField;
-import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.FloatDocValuesField;
+import org.apache.lucene.document.FloatPoint;
+import org.apache.lucene.document.IntPoint;
+import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.document.NumericDocValuesField;
+import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 
 import panda.idx.IDocument;
-import panda.idx.IndexException;
 
 public class LuceneDocument implements IDocument {
 	protected static final String ID = "_id_";
@@ -144,21 +147,26 @@ public class LuceneDocument implements IDocument {
 		if (num == null) {
 			return;
 		}
-		
+
 		if (num instanceof Float) {
-			doc.add(new FloatField(name, num.floatValue(), Lucenes.FLOAT_FIELD_TYPE_STORED));
+			doc.add(new FloatDocValuesField(name, num.floatValue()));
+			doc.add(new StoredField(name, num.floatValue()));
+			doc.add(new FloatPoint(name, num.floatValue()));
 		}
 		else if (num instanceof Double || num instanceof BigDecimal) {
-			doc.add(new DoubleField(name, num.floatValue(), Lucenes.DOUBLE_FIELD_TYPE_STORED));
-		}
-		else if (num instanceof Byte || num instanceof Short || num instanceof Integer) {
-			doc.add(new IntField(name, num.intValue(), Lucenes.INT_FIELD_TYPE_STORED));
+			doc.add(new DoubleDocValuesField(name, num.doubleValue()));
+			doc.add(new StoredField(name, num.doubleValue()));
+			doc.add(new DoublePoint(name, num.doubleValue()));
 		}
 		else if (num instanceof Long || num instanceof BigInteger) {
-			doc.add(new LongField(name, num.longValue(), Lucenes.LONG_FIELD_TYPE_STORED));
+			doc.add(new NumericDocValuesField(name, num.longValue()));
+			doc.add(new StoredField(name, num.longValue()));
+			doc.add(new LongPoint(name, num.longValue()));
 		}
 		else {
-			throw new IndexException("Invalid number: " + num.getClass());
+			doc.add(new NumericDocValuesField(name, num.intValue()));
+			doc.add(new StoredField(name, num.intValue()));
+			doc.add(new IntPoint(name, num.intValue()));
 		}
 	}
 
