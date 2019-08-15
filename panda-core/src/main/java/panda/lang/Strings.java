@@ -5318,7 +5318,7 @@ public class Strings {
 	 * @return modified String, {@code null} if null string input
 	 */
 	public static String escapeChars(final String str, final String searchChars) {
-		return escapeChars(str, searchChars, '\'');
+		return escapeChars(str, searchChars, '\\');
 	}
 	
 	/**
