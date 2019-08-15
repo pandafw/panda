@@ -85,6 +85,9 @@ public abstract class Locales {
 		if (str == null) {
 			return null;
 		}
+		if (str.isEmpty()) { // LANG-941 - JDK 8 introduced an empty locale where all fields are blank
+			return new Locale("", "");
+		}
 		if (str.contains("#")) { // LANG-879 - Cannot handle Java 7 script & extensions
 			throw new IllegalArgumentException("Invalid locale format: " + str);
 		}
@@ -109,31 +112,57 @@ public abstract class Locales {
 			return new Locale("", Strings.upperCase(str.substring(1, 3)), str.substring(4));
 		}
 
-		if (len == 2) {
-			return new Locale(Strings.lowerCase(str));
-		}
-		if (len < 5) {
-			throw new IllegalArgumentException("Invalid locale format: " + str);
-		}
-		if (str.charAt(2) != '_') {
-			throw new IllegalArgumentException("Invalid locale format: " + str);
+		if (isISO639LanguageCode(str)) {
+			return new Locale(str);
 		}
 
-		if (str.charAt(3) == '_') {
-			return new Locale(Strings.lowerCase(str.substring(0, 2)), "", str.substring(4));
+		final String[] segments = Strings.splitPreserveAllTokens(str, '_');
+		final String language = segments[0];
+		if (segments.length == 2) {
+			final String country = segments[1];
+			if (isISO639LanguageCode(language) && isISO3166CountryCode(country) || isNumericAreaCode(country)) {
+				return new Locale(Strings.lowerCase(language), Strings.upperCase(country));
+			}
 		}
+		else if (segments.length == 3) {
+			final String country = segments[1];
+			final String variant = segments[2];
+			if (isISO639LanguageCode(language) && (country.isEmpty() || isISO3166CountryCode(country) || isNumericAreaCode(country)) && !variant.isEmpty()) {
+				return new Locale(Strings.lowerCase(language), Strings.upperCase(country), variant);
+			}
+		}
+		throw new IllegalArgumentException("Invalid locale format: " + str);
+	}
 
-		if (len == 5) {
-			return new Locale(Strings.lowerCase(str.substring(0, 2)), Strings.upperCase(str.substring(3, 5)));
-		}
 
-		if (len < 7) {
-			throw new IllegalArgumentException("Invalid locale format: " + str);
-		}
-		if (str.charAt(5) != '_') {
-			throw new IllegalArgumentException("Invalid locale format: " + str);
-		}
-		return new Locale(Strings.lowerCase(str.substring(0, 2)), Strings.upperCase(str.substring(3, 5)), str.substring(6));
+	/**
+	 * Checks whether the given String is a ISO 639 compliant language code.
+	 *
+	 * @param str the String to check.
+	 * @return true, if the given String is a ISO 639 compliant language code.
+	 */
+	private static boolean isISO639LanguageCode(final String str) {
+		return Strings.isAlpha(str) && (str.length() == 2 || str.length() == 3);
+	}
+
+	/**
+	 * Checks whether the given String is a ISO 3166 alpha-2 country code.
+	 *
+	 * @param str the String to check
+	 * @return true, is the given String is a ISO 3166 compliant country code.
+	 */
+	private static boolean isISO3166CountryCode(final String str) {
+		return Strings.isAlpha(str) && str.length() == 2;
+	}
+
+	/**
+	 * Checks whether the given String is a UN M.49 numeric area code.
+	 *
+	 * @param str the String to check
+	 * @return true, is the given String is a UN M.49 numeric area code.
+	 */
+	private static boolean isNumericAreaCode(final String str) {
+		return Strings.isNumeric(str) && str.length() == 3;
 	}
 
 	// -----------------------------------------------------------------------
@@ -183,7 +212,7 @@ public abstract class Locales {
 			if (locale.getCountry().length() > 0) {
 				list.add(new Locale(locale.getLanguage(), ""));
 			}
-			if (list.contains(defaultLocale) == false) {
+			if (!list.contains(defaultLocale)) {
 				list.add(defaultLocale);
 			}
 		}
@@ -256,8 +285,7 @@ public abstract class Locales {
 		if (langs == null) {
 			langs = new ArrayList<Locale>();
 			final List<Locale> locales = availableLocaleList();
-			for (int i = 0; i < locales.size(); i++) {
-				final Locale locale = locales.get(i);
+			for (final Locale locale : locales) {
 				if (countryCode.equals(locale.getCountry()) && locale.getVariant().isEmpty()) {
 					langs.add(locale);
 				}
@@ -290,8 +318,7 @@ public abstract class Locales {
 		if (countries == null) {
 			countries = new ArrayList<Locale>();
 			final List<Locale> locales = availableLocaleList();
-			for (int i = 0; i < locales.size(); i++) {
-				final Locale locale = locales.get(i);
+			for (final Locale locale : locales) {
 				if (languageCode.equals(locale.getLanguage()) && locale.getCountry().length() != 0
 						&& locale.getVariant().isEmpty()) {
 					countries.add(locale);

@@ -97,6 +97,9 @@ public class LocalesTest extends TestCase {
 		// Valid format but lang doesnt exist, should make instance anyway
 		assertValidParseLocale("qq");
 
+		// LANG-941: JDK 8 introduced the empty locale as one of the default locales
+		assertValidParseLocale("");
+
 		try {
 			Locales.parseLocale("u");
 			fail("Must be 2 chars if less than 5");
@@ -105,8 +108,8 @@ public class LocalesTest extends TestCase {
 		}
 
 		try {
-			Locales.parseLocale("uuu");
-			fail("Must be 2 chars if less than 5");
+			Locales.parseLocale("uuuu");
+			fail("Must be 2 or 3 chars if less than 5");
 		}
 		catch (final IllegalArgumentException iae) {
 		}
@@ -259,6 +262,21 @@ public class LocalesTest extends TestCase {
 		assertEquals(set.contains(LOCALE_QQ_ZZ), Locales.isAvailableLocale(LOCALE_QQ_ZZ));
 	}
 
+	/**
+	 * Test for 3-chars locale, further details at LANG-915
+	 *
+	 */
+	@Test
+	public void testThreeCharsLocale() {
+		for (final String str : Arrays.asList("udm", "tet")) {
+			final Locale locale = Locales.toLocale(str);
+			assertNotNull(locale);
+			assertEquals(str, locale.getLanguage());
+			assertTrue(Strings.isBlank(locale.getCountry()));
+			assertEquals(new Locale(str), locale);
+		}
+	}
+
 	// -----------------------------------------------------------------------
 	/**
 	 * Make sure the language by country is correct. It checks that the
@@ -374,6 +392,17 @@ public class LocalesTest extends TestCase {
 		assertValidParseLocale("fr__POSIX", "fr", "", "POSIX");
 	}
 
+	@Test
+	public void testLanguageAndUNM49Numeric3AreaCodeLang1312() {
+		assertValidParseLocale("en_001", "en", "001");
+		assertValidParseLocale("en_150", "en", "150");
+		assertValidParseLocale("ar_001", "ar", "001");
+
+		// LANG-1312
+		assertValidParseLocale("en_001_GB", "en", "001", "GB");
+		assertValidParseLocale("en_150_US", "en", "150", "US");
+	}
+
 	/**
 	 * Tests #LANG-865, strings starting with an underscore.
 	 */
@@ -418,7 +447,7 @@ public class LocalesTest extends TestCase {
 				}
 				if (suff >= 0) { // we have a suffix
 					try {
-						Locales.parseLocale(str); // shouuld cause IAE
+						Locales.parseLocale(str); // should cause IAE
 						System.out.println("Should not have parsed: " + str);
 						failures++;
 						continue; // try next Locale
@@ -428,8 +457,14 @@ public class LocalesTest extends TestCase {
 						str = str.substring(0, suff);
 					}
 				}
-				Locale loc = Locales.parseLocale(str);
-				if (!l.equals(loc)) {
+				try {
+					Locale loc = Locales.parseLocale(str);
+					if (!l.equals(loc)) {
+						System.out.println("Failed to parse: " + str);
+						failures++;
+					}
+				}
+				catch (Exception e) {
 					System.out.println("Failed to parse: " + str);
 					failures++;
 				}
