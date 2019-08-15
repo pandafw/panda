@@ -36,12 +36,12 @@ public class ObjectsTest {
 
 	@Test
 	public void testFirstNonNull() {
-		assertEquals(null, Objects.firstNonNull(null, null));
+		assertNull(Objects.firstNonNull(null, null));
 		assertEquals("", Objects.firstNonNull(null, ""));
 		final String firstNonNullGenerics = Objects.firstNonNull(null, null, "123", "456");
 		assertEquals("123", firstNonNullGenerics);
 		assertEquals("123", Objects.firstNonNull("123", null, "456", null));
-		assertEquals(null, Objects.firstNonNull());
+		assertNull(Objects.firstNonNull());
 		assertSame(Boolean.TRUE, Objects.firstNonNull(Boolean.TRUE));
 		assertNull(Objects.firstNonNull());
 		assertNull(Objects.firstNonNull(null, null));
