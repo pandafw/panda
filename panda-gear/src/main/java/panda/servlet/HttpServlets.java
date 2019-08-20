@@ -151,21 +151,29 @@ public class HttpServlets {
 	}
 
 	/**
-	 * get remote ip from X_REAL_IP, X_FORWARD_FOR (last), request.getRemoteAddr
+	 * get remote ip from X_FORWARD_FOR (last), request.getRemoteAddr
 	 * @param request request
 	 * @return remote ip
 	 */
 	public static String getRemoteAddr(HttpServletRequest request) {
-		String ip = request.getHeader(HttpHeader.X_REAL_IP);
-		if (Strings.isEmpty(ip)) {
-			ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
-			int i = Strings.lastIndexOf(ip, ',');
+		String ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
+		if (ip != null && ip.length() > 0) {
+			int i = ip.lastIndexOf(',');
 			if (i >= 0) {
 				ip = ip.substring(i + 1);
 			}
-			ip = Strings.strip(ip);
-			if (Strings.isEmpty(ip)) {
-				ip = request.getRemoteAddr();
+		}
+
+		ip = Strings.strip(ip);
+		if (Strings.isEmpty(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		else {
+			// fix ipv4:port for IIS httpPlatformHandler
+			int i = ip.lastIndexOf(':');
+			if (i > 0 && ip.indexOf('.') > 0) {
+				// ipv4
+				ip = ip.substring(0, i);
 			}
 		}
 		return ip;
@@ -383,10 +391,7 @@ public class HttpServlets {
 	public static void dumpRequestPath(HttpServletRequest request, Appendable writer) {
 		try {
 			writer.append(request.getRemoteAddr());
-			String ip = request.getHeader(HttpHeader.X_REAL_IP);
-			if (Strings.isEmpty(ip)) {
-				ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
-			}
+			String ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
 			if (Strings.isNotEmpty(ip)) {
 				writer.append('(').append(ip).append(')');
 			}
