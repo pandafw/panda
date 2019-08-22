@@ -13,13 +13,13 @@ import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
 
 import panda.app.constant.MVC;
-import panda.app.index.RevisionedIndexes;
+import panda.app.index.RevisionedIndexerManager;
 import panda.app.util.AppSettings;
 import panda.idx.IndexException;
 import panda.idx.Indexer;
-import panda.idx.Indexes;
+import panda.idx.IndexerManager;
 import panda.idx.gae.GaeIndexer;
-import panda.idx.gae.GaeIndexes;
+import panda.idx.gae.GaeIndexerManager;
 import panda.io.FileNames;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -28,9 +28,9 @@ import panda.log.Log;
 import panda.log.Logs;
 
 
-@IocBean(type=Indexes.class, create="initialize", depose="close")
-public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexes {
-	private static final Log log = Logs.getLog(RevisionedGaeIndexes.class);
+@IocBean(type=IndexerManager.class, create="initialize", depose="close")
+public class RevisionedGaeIndexerManager extends GaeIndexerManager implements RevisionedIndexerManager {
+	private static final Log log = Logs.getLog(RevisionedGaeIndexerManager.class);
 	
 	@IocInject
 	protected AppSettings settings;

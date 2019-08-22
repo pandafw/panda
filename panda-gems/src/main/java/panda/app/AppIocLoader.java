@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import panda.app.auth.UserAuthenticateProcessor;
 import panda.app.auth.UserAuthenticator;
-import panda.app.index.gae.RevisionedGaeIndexes;
-import panda.app.index.lucene.RevisionedLuceneIndexes;
+import panda.app.index.gae.RevisionedGaeIndexerManager;
+import panda.app.index.lucene.RevisionedLuceneIndexerManager;
 import panda.app.task.ActionTaskSubmitter;
 import panda.app.task.gae.GaeTaskExecutor;
 import panda.app.task.gae.GaeTaskScheduler;
@@ -55,13 +55,13 @@ public class AppIocLoader extends MvcComboIocLoader {
 			if (Systems.IS_OS_APPENGINE) {
 				ss.add(GaeTaskExecutor.class);
 				ss.add(GaeTaskScheduler.class);
-				ss.add(RevisionedGaeIndexes.class);
+				ss.add(RevisionedGaeIndexerManager.class);
 			}
 			else {
 				ss.add(ActionTaskSubmitter.class);
 				ss.add(JavaTaskExecutor.class);
 				ss.add(JavaTaskScheduler.class);
-				ss.add(RevisionedLuceneIndexes.class);
+				ss.add(RevisionedLuceneIndexerManager.class);
 			}
 		}
 	}

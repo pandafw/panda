@@ -1,6 +1,6 @@
 package panda.idx;
 
-public interface Indexes {
+public interface IndexerManager {
 	Indexer getIndexer();
 
 	Indexer getIndexer(String name);

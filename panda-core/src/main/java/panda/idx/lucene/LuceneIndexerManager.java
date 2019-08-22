@@ -12,15 +12,15 @@ import org.apache.lucene.store.FSDirectory;
 
 import panda.idx.IndexException;
 import panda.idx.Indexer;
-import panda.idx.Indexes;
+import panda.idx.IndexerManager;
 
 
-public class LuceneIndexes implements Indexes {
+public class LuceneIndexerManager implements IndexerManager {
 	public static final String DEFAULT = "default";
 	
 	protected Map<String, LuceneIndexer> indexes;
 
-	public LuceneIndexes() {
+	public LuceneIndexerManager() {
 		indexes = new HashMap<String, LuceneIndexer>();
 	}
 

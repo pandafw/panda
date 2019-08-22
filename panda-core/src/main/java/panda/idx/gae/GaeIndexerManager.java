@@ -9,16 +9,16 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchServiceFactory;
 
 import panda.idx.Indexer;
-import panda.idx.Indexes;
+import panda.idx.IndexerManager;
 
 
-public class GaeIndexes implements Indexes {
+public class GaeIndexerManager implements IndexerManager {
 	public static final String DEFAULT = "default";
 	
 	protected Map<String, GaeIndexer> indexes;
 	protected Locale locale;
 
-	public GaeIndexes() {
+	public GaeIndexerManager() {
 		indexes = new HashMap<String, GaeIndexer>();
 	}
 

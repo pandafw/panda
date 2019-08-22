@@ -13,13 +13,13 @@ import org.apache.lucene.store.FSDirectory;
 
 import panda.app.constant.MVC;
 import panda.app.constant.SET;
-import panda.app.index.RevisionedIndexes;
+import panda.app.index.RevisionedIndexerManager;
 import panda.app.util.AppSettings;
 import panda.idx.IndexException;
 import panda.idx.Indexer;
-import panda.idx.Indexes;
+import panda.idx.IndexerManager;
 import panda.idx.lucene.LuceneIndexer;
-import panda.idx.lucene.LuceneIndexes;
+import panda.idx.lucene.LuceneIndexerManager;
 import panda.io.FileNames;
 import panda.io.Files;
 import panda.ioc.annotation.IocBean;
@@ -32,9 +32,9 @@ import panda.log.Log;
 import panda.log.Logs;
 
 
-@IocBean(type=Indexes.class, create="initialize", depose="close")
-public class RevisionedLuceneIndexes extends LuceneIndexes implements RevisionedIndexes {
-	private static final Log log = Logs.getLog(RevisionedLuceneIndexes.class);
+@IocBean(type=IndexerManager.class, create="initialize", depose="close")
+public class RevisionedLuceneIndexerManager extends LuceneIndexerManager implements RevisionedIndexerManager {
+	private static final Log log = Logs.getLog(RevisionedLuceneIndexerManager.class);
 	
 	@IocInject
 	protected AppSettings settings;
