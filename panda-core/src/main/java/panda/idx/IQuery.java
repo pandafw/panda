@@ -2,10 +2,7 @@ package panda.idx;
 
 import java.util.Date;
 
-import panda.lang.Asserts;
-import panda.lang.time.DateTimes;
-
-public abstract class IQuery {
+public interface IQuery {
 	/**
 	 * Specifies the type of the terms to be sorted, or special types such as CUSTOM
 	 */
@@ -58,192 +55,65 @@ public abstract class IQuery {
 		DOUBLE
 	}
 
-	protected StringBuilder query;
-	protected long start;
-	protected long limit;
-
-	public IQuery() {
-		this.query = new StringBuilder();
-	}
-
 	/**
 	 * clear
 	 * @return this
 	 */
-	public IQuery clear() {
-		query.setLength(0);
-		start = 0L;
-		limit = 0L;
-		
-		return this;
-	}
+	IQuery clear();
 	
 	//---------------------------------------------------------------
 	// query
 	//
-	/**
-	 * @return the query
-	 */
-	public String getQuery() {
-		return query.toString();
-	}
+	public IQuery and();
 
-	/**
-	 * @param query the query to set
-	 */
-	public void setQuery(String query) {
-		this.query.setLength(0);
-		this.query.append(query);
-	}
+	public IQuery or();
 
-	protected void addSpace() {
-		if (query.length() > 0) {
-			query.append(' ');
-		}
-	}
+	public IQuery field(String field);
 
-	public IQuery and() {
-		addSpace();
-		query.append("AND");
-		return this;
-	}
-
-	public IQuery or() {
-		addSpace();
-		query.append("OR");
-		return this;
-	}
+	public IQuery match(String text);
 	
-	public IQuery not() {
-		addSpace();
-		query.append("NOT");
-		return this;
-	}
+	public IQuery eq(String... values);
 	
-	public IQuery begin() {
-		addSpace();
-		query.append("(");
-		return this;
-	}
+	public IQuery eq(Number... values);
 	
-	public IQuery end() {
-		addSpace();
-		query.append(")");
-		return this;
-	}
+	public IQuery eq(Date... values);
 	
-	public IQuery field(String field) {
-		addSpace();
-		query.append(field);
-		return this;
-	}
+	public IQuery ne(String... values);
 	
-	public IQuery value(String value) {
-		addSpace();
-		query.append(value);
-		return this;
-	}
+	public IQuery ne(Number... values);
 	
-	public IQuery value(Number value) {
-		addSpace();
-		query.append(value);
-		return this;
-	}
-
-	public IQuery value(Date value) {
-		addSpace();
-		query.append(DateTimes.isoDatetimeNohFormat().format(value));
-		return this;
-	}
+	public IQuery ne(Date... values);
 	
-	public IQuery eq() {
-		addSpace();
-		query.append(':');
-		return this;
-	}
+	public IQuery lt(Number value);
 	
-	public IQuery lt() {
-		addSpace();
-		query.append('<');
-		return this;
-	}
+	public IQuery lt(Date value);
 	
-	public IQuery le() {
-		addSpace();
-		query.append("<=");
-		return this;
-	}
+	public IQuery le(Number value);
 	
-	public IQuery gt() {
-		addSpace();
-		query.append('>');
-		return this;
-	}
+	public IQuery le(Date value);
 	
-	public IQuery ge() {
-		addSpace();
-		query.append(">=");
-		return this;
-	}
+	public IQuery gt(Number value);
+	
+	public IQuery gt(Date value);
+	
+	public IQuery ge(Number value);
+	
+	public IQuery ge(Date value);
 	
 	//---------------------------------------------------------------
 	// start & limit
 	//
 	/**
-	 * @return the start
-	 */
-	public long getStart() {
-		return start;
-	}
-
-	/**
-	 * @param start the start to set
-	 */
-	public void setStart(long start) {
-		Asserts.isTrue(start >= 0, "The start must >= 0");
-		this.start = start;
-	}
-
-	/**
-	 * @return the limit
-	 */
-	public long getLimit() {
-		return limit;
-	}
-
-	/**
-	 * @param limit the limit to set
-	 */
-	public void setLimit(long limit) {
-		Asserts.isTrue(limit >= 0, "The limit must >= 0");
-		this.limit = limit;
-	}
-
-	/**
 	 * @param start the start to set
 	 * @return this
 	 */
-	public IQuery start(long start) {
-		setStart(start);
-		return this;
-	}
+	public IQuery start(long start);
 
 	/**
 	 * @param limit the limit to set
 	 * @return this
 	 */
-	public IQuery limit(long limit) {
-		setLimit(limit);
-		return this;
-	}
-
-	/**
-	 * is this query needs paginate
-	 * @return true if start or limit > 0
-	 */
-	public boolean needsPaginate() {
-		return start > 0 || limit > 0;
-	}
+	public IQuery limit(long limit);
 
 	//---------------------------------------------------------------
 	// sort
@@ -255,10 +125,5 @@ public abstract class IQuery {
 	 * @param desc descend
 	 * @return this
 	 */
-	public abstract IQuery sort(String field, SortType type, boolean desc);
-
-	@Override
-	public String toString() {
-		return "IQuery [query=" + query + ", start=" + start + ", limit=" + limit + "]";
-	}
+	public IQuery sort(SortType type, boolean desc);
 }
