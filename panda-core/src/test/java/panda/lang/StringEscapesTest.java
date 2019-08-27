@@ -1,6 +1,7 @@
 package panda.lang;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -587,6 +588,34 @@ public class StringEscapesTest {
 		String input = "\"foo\" isn't \"bar\". specials: \b\r\n\f\t\\/";
 
 		assertEquals(expected, StringEscapes.escapeJson(input));
+	}
+
+	@Test
+	public void testEscapeChars_StringStringChar() {
+		char z = (char)0;
+		assertEquals(null, StringEscapes.escapeChars(null, null, z));
+		assertEquals(null, StringEscapes.escapeChars(null, "", z));
+		assertEquals(null, StringEscapes.escapeChars(null, "a", z));
+		assertEquals(null, StringEscapes.escapeChars(null, null, 'x'));
+
+		assertEquals("", StringEscapes.escapeChars("", null, z));
+		assertEquals("", StringEscapes.escapeChars("", "", z));
+		assertEquals("", StringEscapes.escapeChars("", "a", z));
+		assertEquals("", StringEscapes.escapeChars("", null, 'x'));
+
+		assertEquals("abc", StringEscapes.escapeChars("abc", null, z));
+		assertEquals("abc", StringEscapes.escapeChars("abc", null, 'x'));
+
+		assertEquals("abc", StringEscapes.escapeChars("abc", "", z));
+		assertEquals("abc", StringEscapes.escapeChars("abc", "", 'x'));
+
+		assertEquals("abc", StringEscapes.escapeChars("abc", "b", z));
+		assertEquals("axbc", StringEscapes.escapeChars("abc", "b", 'x'));
+
+		assertEquals("aybycyba", StringEscapes.escapeChars("abcba", "bc", 'y'));
+
+		assertEquals("abcba", StringEscapes.escapeChars("abcba", "z", 'w'));
+		assertSame("abcba", StringEscapes.escapeChars("abcba", "z", 'w'));
 	}
 
 }

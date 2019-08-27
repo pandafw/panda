@@ -831,4 +831,78 @@ public abstract class StringEscapes {
 	public static void escapePhtml(CharSequence str, final int start, final int end, Appendable writer) throws IOException {
 		ESCAPE_PHTML.translate(str, start, end, writer);
 	}
+
+	/**
+	 * <p>
+	 * Escapes all occurrences of a character in a String with another.
+	 * </p>
+	 * <p>
+	 * A {@code null} string input returns {@code null}. An empty ("") string input returns an empty
+	 * string.
+	 * </p>
+	 * 
+	 * <pre>
+	 * escapeChars(null, *)           = null
+	 * escapeChars("", *)             = ""
+	 * escapeChars("abcba", 'b')      = "a\\bc\\ba"
+	 * escapeChars("abcba", 'z')      = "abcba"
+	 * </pre>
+	 * 
+	 * @param str String to replace characters in, may be null
+	 * @param searchChars the character to search for, may be null
+	 * @return modified String, {@code null} if null string input
+	 */
+	public static String escapeChars(final CharSequence str, final CharSequence searchChars) {
+		return escapeChars(str, searchChars, '\\');
+	}
+	
+	/**
+	 * <p>
+	 * Escapes all occurrences of a character in a String with another.
+	 * </p>
+	 * <p>
+	 * A {@code null} string input returns {@code null}. An empty ("") string input returns an empty
+	 * string.
+	 * </p>
+	 * 
+	 * <pre>
+	 * escapeChars(null, *, *)        = null
+	 * escapeChars("", *, *)          = ""
+	 * escapeChars("abcba", 'b', '\\')= "a\\bc\\ba"
+	 * escapeChars("abcba", 'z', '\\')= "abcba"
+	 * </pre>
+	 * 
+	 * @param str String to replace characters in, may be null
+	 * @param searchChars the character to search for, may be null
+	 * @param escapeChar a character for escape, may be zero
+	 * @return modified String, {@code null} if null string input
+	 */
+	public static String escapeChars(final CharSequence str, final CharSequence searchChars, final char escapeChar) {
+		if (str == null) {
+			return null;
+		}
+		if (Strings.isEmpty(str) || Strings.isEmpty(searchChars)) {
+			return str.toString();
+		}
+
+		boolean modified = false;
+		final int strLength = str.length();
+		final StringBuilder buf = new StringBuilder(strLength);
+		for (int i = 0; i < strLength; i++) {
+			final char ch = str.charAt(i);
+			final int index = CharSequences.indexOf(searchChars, ch, 0);
+			if (index >= 0) {
+				modified = true;
+				if (escapeChar > 0) {
+					buf.append(escapeChar);
+				}
+			}
+			buf.append(ch);
+		}
+		if (modified) {
+			return buf.toString();
+		}
+		return str.toString();
+	}
+
 }
