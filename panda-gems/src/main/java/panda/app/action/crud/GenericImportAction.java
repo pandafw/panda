@@ -84,33 +84,37 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
-	public static class Ret {
+	public static class Ret<T> {
 		private Object headers;
 		private List<List<?>> warning = new ArrayList<List<?>>();
 		private List<List<?>> success = new ArrayList<List<?>>();
+		private List<T> updates = new ArrayList<T>();
+		private List<T> inserts = new ArrayList<T>();
+
+		public Object getHeaders() {
+			return headers;
+		}
 
 		public List<List<?>> getWarning() {
 			return warning;
-		}
-
-		public void setWarning(List<List<?>> warning) {
-			this.warning = warning;
 		}
 
 		public List<List<?>> getSuccess() {
 			return success;
 		}
 
-		public void setSuccess(List<List<?>> success) {
-			this.success = success;
+		/**
+		 * @return the updates
+		 */
+		public List<T> getUpdates() {
+			return updates;
 		}
 
-		public Object getHeaders() {
-			return headers;
-		}
-
-		public void setHeaders(Object headers) {
-			this.headers = headers;
+		/**
+		 * @return the inserts
+		 */
+		public List<T> getInserts() {
+			return inserts;
 		}
 	}
 
@@ -323,7 +327,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 
-		final Ret ret = new Ret();
+		final Ret<T> ret = new Ret<T>();
 		ret.headers = headers;
 
 		if (arg.loose) {
@@ -358,7 +362,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @param columns columns
 	 * @throws IOException if an IO error occurred
 	 */
-	protected void impDatas(Ret ret, ListReader lst, String[] columns) throws IOException {
+	protected void impDatas(Ret<T> ret, ListReader lst, String[] columns) throws IOException {
 		for (int i = 1; ; i++) {
 			List row = lst.readList();
 			if (row == null) {
@@ -379,7 +383,12 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			try {
 				T data = castData(values);
 
-				impData(data);
+				if (impData(data)) {
+					ret.updates.add(data);
+				}
+				else {
+					ret.inserts.add(data);
+				}
 				
 				ret.success.add(row);
 			}
@@ -398,8 +407,9 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	/**
 	 * import data
 	 * @param data the the input data
+	 * @return true if data is updated
 	 */
-	protected void impData(T data) {
+	protected boolean impData(T data) {
 		trimData(data);
 
 		checkNotNulls(data);
@@ -410,13 +420,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			if (sdat != null) {
 				checkUniqueIndexesOnUpdate(data, sdat);
 				updateData(data, sdat);
-				return;
+				return true;
 			}
 		}
 		
 		checkPrimaryKeysOnInsert(data);
 		checkUniqueIndexesOnInsert(data);
 		insertData(data);
+		return false;
 	}
 
 	/**
