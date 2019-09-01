@@ -13,6 +13,7 @@ import java.util.TreeMap;
 
 import javax.sql.DataSource;
 
+import panda.cast.Castors;
 import panda.dao.sql.dbcp.AbstractDataSource;
 import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.dao.sql.dbcp.ThreadLocalDataSource;
@@ -124,7 +125,7 @@ public class TestHelper {
 				else {
 					ads = new SimpleDataSource();
 				}
-				ads.initialize(dps);
+				Castors.scastTo(dps, ads);
 
 				log.debug("Connect " + ads.getJdbc().getUrl() + " - " + ads.getJdbc().getUsername());
 				ads.getConnection().close();

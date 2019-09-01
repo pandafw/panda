@@ -5,15 +5,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import panda.cast.Castors;
-import panda.lang.Asserts;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -30,6 +26,7 @@ import panda.log.Logs;
  * <li>jdbc.username</li>
  * <li>jdbc.password</li>
  * <li>jdbc.autoCommit - default: false</li>
+ * <li>jdbc.readOnly - default: false</li>
  * </ul>
  * <p/>
  * 
@@ -38,7 +35,6 @@ public abstract class AbstractDataSource implements DataSource {
 	private static Log log = Logs.getLog(AbstractDataSource.class);
 
 	protected JdbcConfig jdbc = new JdbcConfig();
-	protected Properties prop = new Properties();
 
 	/**
 	 * Constructor
@@ -47,51 +43,9 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Constructor to allow passing in a map of properties for configuration
-	 * 
-	 * @param props - the configuration parameters
-	 */
-	public void initialize(Properties props) {
-		initialize((Map<?, ?>)props);
-	}
-
-	/**
-	 * Constructor to allow passing in a map of properties for configuration
-	 * 
-	 * @param props - the configuration parameters
-	 */
-	public void initialize(Map<?, ?> props) {
-		if (props == null) {
-			throw new NullPointerException("The properties passed to the initializer was null.");
-		}
-
-		Castors.scastTo(props, this);
-		
-		initialize();
-	}
-	
-	public void initialize() {
-		Asserts.notEmpty(jdbc.driver, "The jdbc.driver property is empty.");
-		Asserts.notEmpty(jdbc.url, "The jdbc.url property is empty.");
-
-		try {
-			Class.forName(jdbc.driver);
-		}
-		catch (ClassNotFoundException e) {
-			throw new RuntimeException("Failed to initialize jdbc driver: " + jdbc.driver, e);
-		}
-
-		if (jdbc.username != null) {
-			prop.put("user", jdbc.username);
-		}
-		if (jdbc.password != null) {
-			prop.put("password", jdbc.password);
-		}
-	}
-
-	/**
 	 * @see javax.sql.DataSource#getConnection()
 	 */
+	@Override
 	public Connection getConnection() throws SQLException {
 		return popConnection();
 	}
@@ -99,8 +53,9 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * @see javax.sql.DataSource#getConnection(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Connection getConnection(String username, String password) throws SQLException {
-		if (Strings.equals(jdbc.username, username) && Strings.equals(jdbc.password, password)) {
+		if (Strings.equals(jdbc.getUsername(), username) && Strings.equals(jdbc.getPassword(), password)) {
 			return popConnection();
 		}
 
@@ -113,6 +68,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * @see javax.sql.DataSource#setLoginTimeout(int)
 	 */
+	@Override
 	public void setLoginTimeout(int loginTimeout) throws SQLException {
 		DriverManager.setLoginTimeout(loginTimeout);
 	}
@@ -120,6 +76,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * @see javax.sql.DataSource#getLoginTimeout()
 	 */
+	@Override
 	public int getLoginTimeout() throws SQLException {
 		return DriverManager.getLoginTimeout();
 	}
@@ -127,6 +84,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * @see javax.sql.DataSource#setLogWriter(java.io.PrintWriter)
 	 */
+	@Override
 	public void setLogWriter(PrintWriter logWriter) throws SQLException {
 		DriverManager.setLogWriter(logWriter);
 	}
@@ -134,6 +92,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * @see javax.sql.DataSource#getLogWriter()
 	 */
+	@Override
 	public PrintWriter getLogWriter() throws SQLException {
 		return DriverManager.getLogWriter();
 	}
@@ -153,20 +112,6 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * @return the properties
-	 */
-	public Properties getProp() {
-		return prop;
-	}
-
-	/**
-	 * @param prop the properties to set
-	 */
-	public void setProp(Properties prop) {
-		this.prop = prop;
-	}
-
-	/**
 	 * Returns the status of the connection pool
 	 * 
 	 * @return The status
@@ -175,15 +120,14 @@ public abstract class AbstractDataSource implements DataSource {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n===============================================================");
-		sb.append("\n jdbc.driver                     ").append(jdbc.getDriver());
-		sb.append("\n jdbc.url                        ").append(jdbc.getUrl());
-		sb.append("\n jdbc.username                   ").append(jdbc.getUsername());
-		sb.append("\n jdbc.password                   ").append(jdbc.getPassword());
-		sb.append("\n jdbc.autoCommit                 ").append(jdbc.isAutoCommit());
+		sb.append("\n jdbc.driver                     ").append(jdbc.driver);
+		sb.append("\n jdbc.url                        ").append(jdbc.url);
+		sb.append("\n jdbc.autoCommit                 ").append(jdbc.autoCommit);
+		sb.append("\n jdbc.readOnly                   ").append(jdbc.readOnly);
 		sb.append("\n===============================================================");
-		for (Entry en : prop.entrySet()) {
+		for (Entry en : jdbc.prop.entrySet()) {
 			String k = (String)en.getKey();
-			sb.append("\n prop.").append(Strings.rightPad(k, 27)).append(en.getValue());
+			sb.append("\n jdbc.prop.").append(Strings.rightPad(k, 22)).append(en.getValue());
 		}
 		sb.append("\n===============================================================");
 
@@ -195,6 +139,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
 	 */
+	@Override
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {
 		return false;
 	}
@@ -202,6 +147,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * @see java.sql.Wrapper#unwrap(java.lang.Class)
 	 */
+	@Override
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		return null;
 	}
@@ -209,6 +155,7 @@ public abstract class AbstractDataSource implements DataSource {
 	//--------------------------------------------------------------------
 	// JDK 1.7 Methods below
 	//--------------------------------------------------------------------
+	@Override
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		return null;
 	}

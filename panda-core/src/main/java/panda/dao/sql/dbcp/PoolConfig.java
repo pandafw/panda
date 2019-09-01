@@ -4,14 +4,16 @@ import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 
 public class PoolConfig {
-	protected int maxActive = 10;
-	protected int maxIdle = 5;
-	protected long maxCheckoutTime = DateTimes.MS_WEEK;
+	protected int maxActive = 100;
+	protected int maxIdle = 20;
+	protected int maxWait = 1000;
+	protected long maxWaitMillis = 20000;
+	protected long maxCheckoutMillis = DateTimes.MS_WEEK;
+
 	protected String pingQuery = "";
 	protected int pingTimeout = 1;
 	protected long pingOlderThan;
 	protected long pingNotUsedFor = 600000;
-	protected long timeToWait = 20000;
 
 	public int getMaxActive() {
 		return maxActive;
@@ -25,11 +27,23 @@ public class PoolConfig {
 	public void setMaxIdle(int maxIdle) {
 		this.maxIdle = maxIdle;
 	}
-	public long getMaxCheckoutTime() {
-		return maxCheckoutTime;
+	public int getMaxWait() {
+		return maxWait;
 	}
-	public void setMaxCheckoutTime(long maxCheckoutTime) {
-		this.maxCheckoutTime = maxCheckoutTime;
+	public void setMaxWait(int maxWait) {
+		this.maxWait = maxWait;
+	}
+	public long getMaxWaitMillis() {
+		return maxWaitMillis;
+	}
+	public void setMaxWaitMillis(long maxWaitMillis) {
+		this.maxWaitMillis = maxWaitMillis;
+	}
+	public long getMaxCheckoutMillis() {
+		return maxCheckoutMillis;
+	}
+	public void setMaxCheckoutMillis(long maxCheckoutMillis) {
+		this.maxCheckoutMillis = maxCheckoutMillis;
 	}
 	public String getPingQuery() {
 		return pingQuery;
@@ -37,14 +51,11 @@ public class PoolConfig {
 	public void setPingQuery(String pingQuery) {
 		this.pingQuery = Strings.stripToEmpty(pingQuery);
 	}
-	public long getPingTimeout() {
-		return pingTimeout * 1000L;
+	public int getPingTimeout() {
+		return pingTimeout;
 	}
-	public void setPingTimeout(long pingTimeout) {
-		this.pingTimeout = (int)(pingTimeout / 1000);
-		if (this.pingTimeout < 1) {
-			this.pingTimeout = 1;
-		}
+	public void setPingTimeout(int pingTimeout) {
+		this.pingTimeout = pingTimeout;
 	}
 	public long getPingOlderThan() {
 		return pingOlderThan;
@@ -57,11 +68,5 @@ public class PoolConfig {
 	}
 	public void setPingNotUsedFor(long pingNotUsedFor) {
 		this.pingNotUsedFor = pingNotUsedFor;
-	}
-	public long getTimeToWait() {
-		return timeToWait;
-	}
-	public void setTimeToWait(long timeToWait) {
-		this.timeToWait = timeToWait;
 	}
 }

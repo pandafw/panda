@@ -1,5 +1,6 @@
 package panda.dao.sql.dbcp;
 
+import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -26,28 +27,30 @@ import panda.log.Logs;
  * <li>jdbc.username</li>
  * <li>jdbc.password</li>
  * <li>jdbc.autoCommit - default: false</li>
+ * <li>jdbc.readOnly - default: false</li>
  * </ul>
  * <p/>
  * 
  * ---- POOLING PROPERTIES ----
  * <ul>
- * <li>pool.maxActive - default: 10</li>
- * <li>pool.maxIdle - default: 5</li>
- * <li>pool.maxCheckoutTime - default: 1 week (milliseconds)</li>
+ * <li>pool.maxActive - default: 100</li>
+ * <li>pool.maxIdle - default: 20</li>
+ * <li>pool.maxWait - default: 1000</li>
+ * <li>pool.maxWaitMillis - default: 20000 (milliseconds)</li>
+ * <li>pool.maxCheckoutMillis - default: 1 week (milliseconds)</li>
  * <li>pool.pingQuery</li>
- * <li>pool.pingTimeout - default: 1 second (milliseconds)</li>
+ * <li>pool.pingTimeout - default: 1 (seconds)</li>
  * <li>pool.pingOlderThan - default: 0 (milliseconds)</li>
  * <li>pool.pingNotUsedFor - default: 600000 (milliseconds)</li>
- * <li>pool.timeToWait - default: 20000 (milliseconds)</li>
  * </ul>
  * <p/>
  * 
  */
-public class SimpleDataSource extends AbstractDataSource {
+public class SimpleDataSource extends AbstractDataSource implements Closeable {
 	private static Log log = Logs.getLog(SimpleDataSource.class);
 
 	//--------------------------------------------------------------------------------------
-	// PROPERTY FIELDS FOR CONFIGURATION
+	// PROPERTY FIELDS FOR POOL CONFIGURATION
 	//--------------------------------------------------------------------------------------
 	private PoolConfig pool = new PoolConfig();
 
@@ -72,6 +75,8 @@ public class SimpleDataSource extends AbstractDataSource {
 
 	private long accumulatedWaitTime;
 
+	private long waiting;
+	
 	private long hadToWaitCount;
 
 	private long badConnectionCount;
@@ -189,12 +194,13 @@ public class SimpleDataSource extends AbstractDataSource {
 		sb.append(super.getStatus());
 		sb.append("\n pool.maxActive                  ").append(pool.getMaxActive());
 		sb.append("\n pool.maxIdle                    ").append(pool.getMaxIdle());
-		sb.append("\n pool.maxCheckoutTime            ").append(pool.getMaxCheckoutTime());
+		sb.append("\n pool.maxWait                    ").append(pool.getMaxWait());
+		sb.append("\n pool.maxWaitMillis              ").append(pool.getMaxWaitMillis());
+		sb.append("\n pool.maxCheckoutMillis          ").append(pool.getMaxCheckoutMillis());
 		sb.append("\n pool.pingQuery                  ").append(pool.getPingQuery());
 		sb.append("\n pool.pingTimeout                ").append(pool.getPingTimeout());
 		sb.append("\n pool.pingOlderThan              ").append(pool.getPingOlderThan());
 		sb.append("\n pool.pingNotUsedFor             ").append(pool.getPingNotUsedFor());
-		sb.append("\n pool.timeToWait                 ").append(pool.getTimeToWait());
 		sb.append("\n --------------------------------------------------------------");
 		sb.append("\n activeConnections               ").append(actives.size());
 		sb.append("\n idleConnections                 ").append(idles.size());
@@ -213,17 +219,17 @@ public class SimpleDataSource extends AbstractDataSource {
 
 	/**
 	 * close connection and remove from pool
-	 * @param conns connection list
+	 * @param pcons connection list
 	 */
-	private void close(List<SimplePooledConnection> conns) {
-		for (int i = conns.size(); i > 0; i--) {
+	private void close(List<SimplePooledConnection> pcons) {
+		for (int i = pcons.size() - 1; i >= 0; i--) {
 			try {
-				SimplePooledConnection conn = conns.remove(i - 1);
-				conn.invalidate();
+				SimplePooledConnection pcon = pcons.remove(i);
+				pcon.invalidate();
 
-				Connection rcon = conn.getRealConnection();
+				Connection rcon = pcon.getRealConnection();
 				try {
-					if (!rcon.getAutoCommit()) {
+					if (!rcon.getAutoCommit() && !rcon.isReadOnly()) {
 						rcon.rollback();
 					}
 				}
@@ -243,64 +249,71 @@ public class SimpleDataSource extends AbstractDataSource {
 	/**
 	 * Closes all of the connections in the pool
 	 */
+	@Override
 	public void close() {
 		synchronized (POOL_LOCK) {
-			close(actives);
-			close(idles);
-		}
+			if (actives.size() > 0 || idles.size() > 0) {
+				close(actives);
+				close(idles);
 
-		if (log.isDebugEnabled()) {
-			log.debug("SimpleDataSource forcefully closed/removed all connections.");
+				if (log.isDebugEnabled()) {
+					log.debug("SimpleDataSource forcefully closed/removed all connections.");
+				}
+			}
 		}
 	}
 
-	protected void pushConnection(SimplePooledConnection conn) throws SQLException {
+	protected void pushConnection(SimplePooledConnection pcon) throws SQLException {
+		if (log.isDebugEnabled()) {
+			log.debug("Return connection (" + pcon.getRealHashCode() + ") to the pool.");
+		}
+
 		synchronized (POOL_LOCK) {
-			actives.remove(conn);
-			if (!conn.isValid()) {
+			actives.remove(pcon);
+			if (!pcon.isValid()) {
 				if (log.isDebugEnabled()) {
-					log.debug("A bad connection (" + conn.getRealHashCode()
+					log.debug("A bad connection (" + pcon.getRealHashCode()
 							+ ") attempted to return to the pool, discarding connection.");
 				}
 				badConnectionCount++;
 				return;
 			}
 			
-			accumulatedCheckoutTime += conn.getCheckoutTime();
+			accumulatedCheckoutTime += pcon.getCheckoutTime();
 
 			boolean valid = true;
-			Connection rcon = conn.getRealConnection();
+			Connection rcon = pcon.getRealConnection();
 			try {
-				if (!rcon.getAutoCommit()) {
+				if (!rcon.getAutoCommit() && !rcon.isReadOnly()) {
 					rcon.rollback();
 				}
 			}
 			catch (SQLException e) {
 				if (log.isDebugEnabled()) {
-					log.debug("Failed to rollback returned connection " + conn.getRealHashCode() + ": " + e.getMessage());
+					log.debug("Failed to rollback returned connection " + pcon.getRealHashCode() + ": " + e.getMessage());
 				}
 				valid = false;
 			}
 			
-			if (valid && idles.size() < pool.maxIdle) {
-				SimplePooledConnection newConn = new SimplePooledConnection(rcon, this);
-				newConn.setCreatedTimestamp(conn.getCreatedTimestamp());
-				newConn.setLastUsedTimestamp(conn.getLastUsedTimestamp());
-				idles.add(newConn);
+			if (valid && (waiting > 0 || idles.size() < pool.maxIdle)) {
+				SimplePooledConnection ncon = new SimplePooledConnection(rcon, this);
+				ncon.setCreatedTimestamp(pcon.getCreatedTimestamp());
+				ncon.setLastUsedTimestamp(pcon.getLastUsedTimestamp());
+				idles.add(ncon);
 
-				conn.invalidate();
+				pcon.invalidate();
 				if (log.isDebugEnabled()) {
-					log.debug("Returned connection " + newConn.getRealHashCode() + " to pool.");
+					log.debug("Returned connection " + ncon.getRealHashCode() + " to pool.");
 				}
 				POOL_LOCK.notifyAll();
 			}
 			else {
 				Sqls.safeClose(rcon);
 
-				conn.invalidate();
+				pcon.invalidate();
 
 				if (log.isDebugEnabled()) {
-					log.debug("Closed connection " + conn.getRealHashCode() + ".");
+					log.debug("Closed connection " + pcon.getRealHashCode() + ".");
 				}
 			}
 		}
@@ -309,76 +322,36 @@ public class SimpleDataSource extends AbstractDataSource {
 	@Override
 	protected Connection popConnection() throws SQLException {
 		long start = System.currentTimeMillis();
-		int bad = 0, wait = 0;
-
+		long waitMillis = pool.maxWaitMillis;
+		
 		synchronized (POOL_LOCK) {
+			if (waiting >= pool.maxWait) {
+				throw new SQLException("Failed to get a connection due to too many wait (" + waiting + ").");
+			}
 			while (true) {
-				if (idles.size() > 0) {
-					// Pool has available connection
-					SimplePooledConnection conn = idles.remove(0);
-					if (log.isDebugEnabled()) {
-						log.debug("Checked out connection " + conn.getRealHashCode() + " from pool.");
-					}
-					if (conn.testValid()) {
-						checkoutConnection(conn, start);
-						return conn;
-					}
-
-					bad++;
-					badConnectionCount++;
-					if (log.isDebugEnabled()) {
-						log.debug("A bad connection (" + conn.getRealHashCode()
-								+ ") was returned from the pool, getting another connection " + bad);
-					}
-					continue;
+				// get a idle connection
+				SimplePooledConnection pcon = getIdleConnection();
+				if (pcon != null) {
+					checkoutConnection(pcon, start);
+					return pcon;
 				}
 
-				// Pool does not have available connection
+				// get a overdue connection
+				pcon = getOverdueConnection();
+				if (pcon != null) {
+					checkoutConnection(pcon, start);
+					return pcon;
+				}
+
 				if (actives.size() < pool.maxActive) {
-					// create new connection
-					SimplePooledConnection conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, prop), this);
-					Connection rcon = conn.getRealConnection();
-					if (rcon.getAutoCommit() != jdbc.autoCommit) {
-						rcon.setAutoCommit(jdbc.autoCommit);
-					}
-					if (log.isDebugEnabled()) {
-						log.debug("Created connection " + conn.getRealHashCode() + ".");
-					}
-					checkoutConnection(conn, start);
-					return conn;
-				}
-
-				// Cannot create new connection
-				SimplePooledConnection oldest = (SimplePooledConnection)actives.get(0);
-				long longestCheckoutTime = oldest.getCheckoutTime();
-				if (longestCheckoutTime > pool.maxCheckoutTime) {
-					// Can claim overdue connection
-					claimedOverdueConnectionCount++;
-					accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
-					accumulatedCheckoutTime += longestCheckoutTime;
-					actives.remove(oldest);
-					
-					SimplePooledConnection conn = new SimplePooledConnection(oldest.getRealConnection(), this);
-					oldest.invalidate();
-					if (log.isDebugEnabled()) {
-						log.debug("Claimed overdue connection " + conn.getRealHashCode() + ".");
-					}
-					if (conn.testValid()) {
-						checkoutConnection(conn, start);
-						return conn;
-					}
-
-					bad++;
-					badConnectionCount++;
-					if (log.isDebugEnabled()) {
-						log.debug("A bad connection (" + conn.getRealHashCode()
-								+ ") was returned from the pool, getting another connection " + bad);
-					}
-					continue;
+					// create a new connection
+					pcon = createConnection();
+					checkoutConnection(pcon, start);
+					return pcon;
 				}
 
 				// waited and timeout??
-				if (wait > 1 && start + pool.timeToWait < System.currentTimeMillis()) {
+				if (waitMillis <= 0) {
 					if (log.isDebugEnabled()) {
 						log.debug("SimpleDataSource: Failed to get a connection due to wait timeout.");
 					}
@@ -387,22 +360,99 @@ public class SimpleDataSource extends AbstractDataSource {
 
 				// Must wait
 				if (log.isDebugEnabled()) {
-					log.debug("Waiting as long as " + pool.timeToWait + " milliseconds for connection.");
+					log.debug("Waiting as long as " + waitMillis + " milliseconds for connection.");
 				}
 
-				wait++;
+				
 				hadToWaitCount++;
-				long wt = System.currentTimeMillis();
-				Threads.safeWait(POOL_LOCK, pool.timeToWait);
-				accumulatedWaitTime += System.currentTimeMillis() - wt;
+
+				waiting++;
+				long waitStart = System.currentTimeMillis();
+				Threads.safeWait(POOL_LOCK, waitMillis);
+				long elapsed = System.currentTimeMillis() - waitStart;
+				waiting--;
+
+				accumulatedWaitTime += elapsed;
+				waitMillis -= elapsed;
 			}
 		}
 	}
 
-	private void checkoutConnection(SimplePooledConnection conn, long start) {
-		conn.setCheckoutTimestamp(System.currentTimeMillis());
-		conn.setLastUsedTimestamp(System.currentTimeMillis());
-		actives.add(conn);
+	private SimplePooledConnection createConnection() throws SQLException {
+		SimplePooledConnection pcon = new SimplePooledConnection(DriverManager.getConnection(jdbc.url, jdbc.prop), this);
+		if (log.isDebugEnabled()) {
+			log.debug("Created connection " + pcon.getRealHashCode() + ".");
+		}
+		return pcon;
+	}
+
+	private SimplePooledConnection getIdleConnection() {
+		int bad = 0;
+		while (idles.size() > 0) {
+			// Pool has available connection
+			SimplePooledConnection pcon = idles.remove(0);
+			if (log.isDebugEnabled()) {
+				log.debug("Checked out connection " + pcon.getRealHashCode() + " from pool.");
+			}
+			if (pcon.testValid()) {
+				return pcon;
+			}
+
+			bad++;
+			badConnectionCount++;
+			if (log.isDebugEnabled()) {
+				log.debug("A bad idle connection (" + pcon.getRealHashCode()
+						+ ") was returned from the pool, getting another connection " + bad);
+			}
+			continue;
+		}
+		return null;
+	}
+
+	private SimplePooledConnection getOverdueConnection() {
+		int bad = 0;
+		while (actives.size() > 0) {
+			SimplePooledConnection oldest = (SimplePooledConnection)actives.get(0);
+			long longestCheckoutTime = oldest.getCheckoutTime();
+			if (longestCheckoutTime > pool.maxCheckoutMillis) {
+				// Can claim overdue connection
+				claimedOverdueConnectionCount++;
+				accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
+				accumulatedCheckoutTime += longestCheckoutTime;
+				actives.remove(oldest);
+				
+				SimplePooledConnection pcon = new SimplePooledConnection(oldest.getRealConnection(), this);
+				oldest.invalidate();
+				if (log.isDebugEnabled()) {
+					log.debug("Claimed overdue connection " + pcon.getRealHashCode() + ".");
+				}
+				if (pcon.testValid()) {
+					return pcon;
+				}
+	
+				bad++;
+				badConnectionCount++;
+				if (log.isDebugEnabled()) {
+					log.debug("A bad overdue connection (" + pcon.getRealHashCode()
+							+ ") was returned from the pool, getting another connection " + bad);
+				}
+				continue;
+			}
+			break;
+		}
+		return null;
+	}
+
+	private void checkoutConnection(SimplePooledConnection pcon, long start) throws SQLException {
+		if (pcon.isReadOnly() != jdbc.readOnly) {
+			pcon.setReadOnly(jdbc.readOnly);
+		}
+		if (pcon.getAutoCommit() != jdbc.autoCommit) {
+			pcon.setAutoCommit(jdbc.autoCommit);
+		}
+		pcon.setCheckoutTimestamp(System.currentTimeMillis());
+		pcon.setLastUsedTimestamp(System.currentTimeMillis());
+		actives.add(pcon);
 		requestCount++;
 		accumulatedRequestTime += System.currentTimeMillis() - start;
 	}
@@ -410,11 +460,11 @@ public class SimpleDataSource extends AbstractDataSource {
 	/**
 	 * Method to check to see if a connection is still usable
 	 * 
-	 * @param conn - the connection to check
+	 * @param pcon - the connection to check
 	 * @return True if the connection is still usable
 	 */
-	protected boolean pingConnection(SimplePooledConnection conn) {
-		Connection rcon = conn.getRealConnection();
+	protected boolean pingConnection(SimplePooledConnection pcon) {
+		Connection rcon = pcon.getRealConnection();
 		try {
 			if (rcon.isClosed()) {
 				return false;
@@ -422,19 +472,19 @@ public class SimpleDataSource extends AbstractDataSource {
 		}
 		catch (Exception e) {
 			if (log.isDebugEnabled()) {
-				log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
+				log.debug("Connection " + pcon.getRealHashCode() + " is BAD: " + e.getMessage());
 			}
 			return false;
 		}
 
 		if (Strings.isEmpty(pool.pingQuery)
-				|| ((pool.pingOlderThan <= 0 || conn.getAge() <= pool.pingOlderThan)
-					&& (pool.pingNotUsedFor <= 0 || conn.getTimeElapsedSinceLastUse() <= pool.pingNotUsedFor))) {
+				|| ((pool.pingOlderThan <= 0 || pcon.getAge() <= pool.pingOlderThan)
+					&& (pool.pingNotUsedFor <= 0 || pcon.getTimeElapsedSinceLastUse() <= pool.pingNotUsedFor))) {
 			return true;
 		}
 
 		if (log.isDebugEnabled()) {
-			log.debug("Testing connection " + conn.getRealHashCode() + " ...");
+			log.debug("Testing connection " + pcon.getRealHashCode() + " ...");
 		}
 
 		try {
@@ -445,7 +495,7 @@ public class SimpleDataSource extends AbstractDataSource {
 			statement.close();
 
 			if (log.isDebugEnabled()) {
-				log.debug("Connection " + conn.getRealHashCode() + " is GOOD!");
+				log.debug("Connection " + pcon.getRealHashCode() + " is GOOD!");
 			}
 			return true;
 		}
@@ -457,28 +507,14 @@ public class SimpleDataSource extends AbstractDataSource {
 			Sqls.safeClose(rcon);
 
 			if (log.isDebugEnabled()) {
-				log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
+				log.debug("Connection " + pcon.getRealHashCode() + " is BAD: " + e.getMessage());
 			}
 			
 			return false;
 		}
 	}
 
-	/**
-	 * Unwraps a pooled connection to get to the 'real' connection
-	 * 
-	 * @param conn - the pooled connection to unwrap
-	 * @return The 'real' connection
-	 */
-	public static Connection unwrapConnection(Connection conn) {
-		if (conn instanceof SimplePooledConnection) {
-			return ((SimplePooledConnection) conn).getRealConnection();
-		}
-		else {
-			return conn;
-		}
-	}
-
+	@Override
 	protected void finalize() throws Throwable {
 		close();
 	}

@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+import panda.cast.Castors;
 import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.dao.sql.dbcp.SimplePooledConnection;
 import panda.log.Log;
@@ -18,12 +19,14 @@ public class SimpleDataSourceTest extends TestCase {
 	
 	private static SimpleDataSource simpleDataSource;
 
+	private Throwable lastError;
+	
 	static {
 		try {
 			Properties p = new Properties();
 			p.load(SimpleDataSourceTest.class.getResourceAsStream("SimpleDataSourceTest.properties"));
 			simpleDataSource = new SimpleDataSource();
-			simpleDataSource.initialize(p);
+			Castors.scastTo(p, simpleDataSource);
 		}
 		catch (Exception e) {
 			log.error("exception", e);
@@ -55,7 +58,7 @@ public class SimpleDataSourceTest extends TestCase {
 			}
 			catch (Exception e) {
 				log.error("exception", e);
-				fail(e.getMessage());
+				lastError = e;
 			}
 		}
 	}
@@ -79,13 +82,17 @@ public class SimpleDataSourceTest extends TestCase {
 		log.debug("+++++++++++++test01+++++++++++++++");
 		try {
 			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaxCheckoutTime() - 500)).start();
+				(new TestThread(simpleDataSource.getPool().getMaxCheckoutMillis() - 1000)).start();
 			}
 			printStatus();
 		}
 		catch (Exception e) {
 			log.error("exception", e);
 			fail(e.getMessage());
+		}
+		
+		if (lastError != null) {
+			fail(lastError.getMessage());
 		}
 	}
 
@@ -96,13 +103,17 @@ public class SimpleDataSourceTest extends TestCase {
 		log.debug("+++++++++++++test02+++++++++++++++");
 		try {
 			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaxCheckoutTime() + 500)).start();
+				(new TestThread(simpleDataSource.getPool().getMaxCheckoutMillis() + 1000)).start();
 			}
 			printStatus();
 		}
 		catch (Exception e) {
 			log.error("exception", e);
 			fail(e.getMessage());
+		}
+		
+		if (lastError != null) {
+			fail(lastError.getMessage());
 		}
 	}
 }
