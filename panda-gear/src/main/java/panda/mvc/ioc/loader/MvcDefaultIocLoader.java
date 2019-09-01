@@ -31,7 +31,7 @@ import panda.mvc.processor.FatalProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
-import panda.mvc.processor.PrepareProcessor;
+import panda.mvc.processor.PreProcessor;
 import panda.mvc.processor.RedirectProcessor;
 import panda.mvc.processor.TokenProcessor;
 import panda.mvc.processor.ValidateProcessor;
@@ -221,7 +221,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			InvokeProcessor.class,
 			LayoutProcessor.class,
 			LocaleProcessor.class,
-			PrepareProcessor.class,
+			PreProcessor.class,
 			RedirectProcessor.class,
 			TokenProcessor.class,
 			ValidateProcessor.class,

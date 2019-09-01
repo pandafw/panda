@@ -1,17 +1,19 @@
 package panda.mvc.processor;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.Prepareable;
 import panda.mvc.ActionContext;
+import panda.mvc.util.ActionPreprocessor;
 
 @IocBean
-public class PrepareProcessor extends AbstractProcessor {
+public class PreProcessor extends AbstractProcessor {
 	@Override
 	public void process(ActionContext ac) {
 		Object action = ac.getAction();
 		
-		if (action instanceof Prepareable) {
-			((Prepareable)action).prepare();
+		if (action instanceof ActionPreprocessor) {
+			if (!((ActionPreprocessor)action).preprocess()) {
+				return;
+			}
 		}
 		doNext(ac);
 	}
