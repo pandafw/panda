@@ -1,6 +1,8 @@
 package panda.gems.users.action.front;
 
 import panda.app.action.BaseAction;
+import panda.app.util.AppSettings;
+import panda.gems.users.S;
 import panda.gems.users.auth.AppAuthenticator;
 import panda.gems.users.entity.User;
 import panda.ioc.annotation.IocInject;
@@ -21,6 +23,9 @@ import panda.mvc.view.Views;
 @At("/login")
 @To(Views.SFTL)
 public class LoginAction extends BaseAction {
+	@IocInject
+	private AppSettings settings;
+
 	@IocInject
 	private AppAuthenticator auth;
 
@@ -89,6 +94,10 @@ public class LoginAction extends BaseAction {
 		}
 	}
 
+	public boolean isRegisterEnabled() {
+		return settings.getPropertyAsBoolean(S.REGISTER_ENABLE);
+	}
+	
 	/**
 	 * input
 	 * @param arg the input argument

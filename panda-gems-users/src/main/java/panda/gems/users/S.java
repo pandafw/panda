@@ -4,6 +4,8 @@ package panda.gems.users;
  * Settings constants
  */
 public interface S {
+	public static final String REGISTER_ENABLE = "users.register.enable";
+
 	public static final String SUPER_EMAIL = "users.super.email";
 	public static final String SUPER_USERNAME = "users.super.username";
 	public static final String SUPER_PASSWORD = "users.super.password";
