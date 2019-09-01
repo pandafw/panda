@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
+import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
@@ -122,7 +123,8 @@ public abstract class AppHelper {
 
 	public static SqlDaoClient createSqlDaoClient(Map<String, String> props) throws SQLException {
 		SimpleDataSource sds = new SimpleDataSource();
-		sds.initialize(props);
+		Castors.scastTo(props, sds);
+
 		SqlDaoClient sdc = new SqlDaoClient();
 		sdc.setDataSource(sds);
 		
