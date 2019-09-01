@@ -10,26 +10,25 @@
 		<h3><i class="fa fa-sign-in"></i> <@p.text name="title"/></h3>
 	</div>
 
-	<div style="text-align: center">
-	<div style="display: inline-block">
-	<div style="text-align: left">
-		<h4 class="caption"><@p.text name="text-unregistered"/></h4>
+	<div style="text-align: center"><div style="display: inline-block"><div style="text-align: left">
+	<#if a.registerEnabled>
+		<h4><@p.text name="text-unregistered"/></h4>
 		<br/>
-		<div class="indent2">
+		<div>
 			<@p.url var='_ri' action='/user/register/input'>
 				<@p.param name='redirect' value='redirect'/>
 			</@p.url>
-			<@p.a icon="pencil-square-o" href="${v._ri}" label="#(link-register)"/>
+			<@p.a btn="default" icon="pencil-square-o" href="${v._ri}" label="#(link-register)"/>
 		</div>
-		
-		<br/><br/>
-		<div class="hr"></div>
-	
-		<h4 class="caption"><@p.text name="text-registered"/></h4>
 		<br/>
-	
-		<div class="indent2">
-			<h4><@p.text name="text-input"/></h4>
+		<hr/>
+		<br/>
+		<h4><@p.text name="text-registered"/></h4>
+		<br/>
+	</#if>
+
+		<div>
+			<div class="p-well"><@p.text name="text-input"/></div>
 	
 			<#include "/action-alert.ftl"/>
 			<br/>
@@ -49,12 +48,7 @@
 			<br/>
 			<@p.a icon="next" action="/user/password/reset/" label="#(text-password-forgot)"/>
 		</div>
-		<br/>
-	</div>
-	</div>
-	</div>
-
-	<br/>
+	</div></div></div>
 </div>
 
 <script type="text/javascript">

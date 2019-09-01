@@ -4,8 +4,10 @@ import java.util.List;
 
 import panda.app.action.BaseAction;
 import panda.app.constant.RES;
+import panda.app.util.AppSettings;
 import panda.dao.entity.EntityDao;
 import panda.gems.users.ROLE;
+import panda.gems.users.S;
 import panda.gems.users.T;
 import panda.gems.users.auth.AppAuthenticator;
 import panda.gems.users.entity.User;
@@ -20,6 +22,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.validate.RequiredValidate;
 import panda.mvc.annotation.validate.VisitValidate;
+import panda.mvc.util.ActionPreprocessor;
 import panda.mvc.view.Views;
 import panda.net.mail.EmailException;
 import panda.servlet.HttpServlets;
@@ -30,7 +33,7 @@ import panda.servlet.HttpServlets;
  */
 @At("/user/register")
 @To(value=Views.SFTL, error=Views.SFTL_INPUT)
-public class RegisterAction extends BaseAction {
+public class RegisterAction extends BaseAction implements ActionPreprocessor {
 	@IocInject
 	private PasswordHelper pwHelper;
 
@@ -39,6 +42,9 @@ public class RegisterAction extends BaseAction {
 
 	@IocInject
 	private UserMailer mailer;
+	
+	@IocInject
+	private AppSettings settings;
 
 	public static class Arg extends User {
 		private static final long serialVersionUID = 1L;
@@ -73,6 +79,16 @@ public class RegisterAction extends BaseAction {
 		public void setAutoLogin(Boolean autoLogin) {
 			this.autoLogin = autoLogin;
 		}
+	}
+
+	@Override
+	public boolean preprocess() {
+		if (settings.getPropertyAsBoolean(S.REGISTER_ENABLE)) {
+			return true;
+		}
+		
+		Views.seNotFound(context).render(context);
+		return false;
 	}
 
 	/**
