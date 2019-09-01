@@ -9,6 +9,8 @@ import javax.sql.DataSource;
 
 import panda.app.constant.MVC;
 import panda.app.constant.SET;
+import panda.cast.CastContext;
+import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
@@ -16,25 +18,31 @@ import panda.dao.gae.GaeDaoClient;
 import panda.dao.mongo.MongoDaoClient;
 import panda.dao.sql.SqlDaoClient;
 import panda.dao.sql.Sqls;
-import panda.dao.sql.dbcp.AbstractDataSource;
 import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.dao.sql.dbcp.ThreadLocalDataSource;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.reflect.Methods;
 import panda.log.Log;
 import panda.log.Logs;
 
-@IocBean(create="initialize")
+@IocBean(create="initialize", depose="destroy")
 public class AppDaoClientFactory {
 	private static final Log log = Logs.getLog(AppDaoClientFactory.class);
 
 	private static final String GAE = "gae";
 	private static final String MONGO = "mongo";
 	private static final String JNDI = "jndi";
+	private static final String LOCAL = "local";
+	private static final String DBCP = "dbcp";
+	private static final String DBCP2 = "dbcp2";
+	private static final String DBCP_CLASS = "org.apache.commons.dbcp.BasicDataSource";
+	private static final String DBCP2_CLASS = "org.apache.commons.dbcp2.BasicDataSource";
 	
 	@IocInject(required=false)
 	protected ServletContext servlet;
@@ -65,6 +73,19 @@ public class AppDaoClientFactory {
 		
 		timeout = settings.getPropertyAsInt(SET.DATA_QUERY_TIMEOUT, timeout);
 		daoClient.setTimeout(timeout);
+	}
+	
+	public void destroy() {
+		if (daoClient instanceof SqlDaoClient) {
+			DataSource ds = ((SqlDaoClient)daoClient).getDataSource();
+			if (ds instanceof SimpleDataSource) {
+				((SimpleDataSource)ds).close();
+			}
+			else if (DBCP_CLASS.equals(ds.getClass().getName()) || 
+					DBCP2_CLASS.equals(ds.getClass().getName())) {
+				Methods.safeCall(ds, "close");
+			}
+		}
 	}
 	
 	protected DaoClient buildDaoClient() {
@@ -109,9 +130,19 @@ public class AppDaoClientFactory {
 					}
 					return sqlDaoClient;
 				}
+
+				String clazz = SimpleDataSource.class.getName();
+				if (DBCP.equalsIgnoreCase(factory)) {
+					clazz = DBCP_CLASS;
+				}
+				else if (DBCP2.equalsIgnoreCase(factory)) {
+					clazz = DBCP2_CLASS;
+				}
+				else if (LOCAL.equalsIgnoreCase(factory)) {
+					clazz = ThreadLocalDataSource.class.getName();
+				}
 				
-				// default JDBC
-				DataSource jds = createSimpleDataSource(SET.DATA + '.' + ds + '.');
+				DataSource jds = createSqlDataSource(clazz, SET.DATA + '.' + ds + '.');
 				SqlDaoClient sqlDaoClient = new SqlDaoClient();
 				sqlDaoClient.setDataSource(jds);
 				return sqlDaoClient;
@@ -129,8 +160,8 @@ public class AppDaoClientFactory {
 		throw new DaoException("Failed to build DaoClient for [" + Strings.join(dss, ", ") + "]");
 	}
 	
-	private DataSource createSimpleDataSource(String prefix) {
-		log.info("Create Simple JDBC DataSource: " + prefix);
+	private DataSource createSqlDataSource(String clazz, String prefix) {
+		log.info("Create SQL JDBC DataSource: " + clazz + " - " + prefix);
 
 		Map<String, String> dps = new TreeMap<String, String>(Collections.subMap(settings, prefix));
 		String web = servlet != null ? servlet.getRealPath("/") : "web";
@@ -148,15 +179,20 @@ public class AppDaoClientFactory {
 			log.info("  " + en.getKey() + ": " + en.getValue());
 		}
 
-		AbstractDataSource ds = null;
-		String driver = dps.get("jdbc.driver");
-		if ("org.sqlite.JDBC".equals(driver)) {
-			ds = new ThreadLocalDataSource();
+		DataSource ds = (DataSource)Classes.born(clazz);
+
+		Castors cs = Castors.i();
+		CastContext cc = cs.newCastContext(true);
+		cs.castTo(dps, ds, cc);
+		if (cc.hasError()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Failed to set properties to " + clazz);
+			for (Entry<String, Object> en : cc.getErrorValues().entrySet()) {
+				sb.append("\n  ").append(prefix).append(en.getKey()).append('=').append(en.getValue());
+			}
+			throw new IllegalArgumentException(sb.toString());
 		}
-		else {
-			ds = new SimpleDataSource();
-		}
-		ds.initialize(dps);
+
 		return ds;
 	}
 }
