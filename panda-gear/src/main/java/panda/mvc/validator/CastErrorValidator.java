@@ -26,8 +26,8 @@ public class CastErrorValidator extends AbstractValidator {
 	protected boolean validateValue(ActionContext ac, Object value) {
 		String fullFieldName = getFullFieldName(getName());
 
-		if (ac.getCastErrors().containsKey(fullFieldName)) {
-			setValue(ac.getCastErrors().get(fullFieldName));
+		if (ac.getCastErrorParams().containsKey(fullFieldName)) {
+			setValue(ac.getCastErrorParams().get(fullFieldName));
 			
 			if (clearErrors) {
 				ac.getParamAlert().getErrors().remove(fullFieldName);

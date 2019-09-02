@@ -284,8 +284,11 @@ public abstract class Mvcs {
 		cc.setLocale(ac.getLocale());
 		
 		T o = cs.cast(value, type, cc);
-		if (Collections.isNotEmpty(cc.getErrors())) {
-			ac.addCastErrors(cc.getErrors());
+		if (Collections.isNotEmpty(cc.getErrorValues())) {
+			ac.addCastErrorParams(cc.getErrorValues());
+		}
+		if (Collections.isNotEmpty(cc.getErrorCauses())) {
+			ac.addCastErrorCauses(cc.getErrorCauses());
 		}
 		return o;
 	}
