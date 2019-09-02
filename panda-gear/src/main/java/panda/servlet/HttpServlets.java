@@ -56,25 +56,11 @@ public class HttpServlets {
 	public static final String SERVLET_TEMP_DIR_CONTEXT = "javax.servlet.context.tempdir";
 
 	/**
-	 * Standard Servlet 2.3+ spec request attributes for include URI and paths.
-	 * <p>If included via a RequestDispatcher, the current resource will see the
-	 * originating request. Its own URI and paths are exposed as request attributes.
-	 */
-	public static final String SERVLET_INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
-	public static final String SERVLET_INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
-	public static final String SERVLET_INCLUDE_SERVLET_PATH = "javax.servlet.include.servlet_path";
-	public static final String SERVLET_INCLUDE_PATH_INFO = "javax.servlet.include.path_info";
-	public static final String SERVLET_INCLUDE_QUERY_STRING = "javax.servlet.include.query_string";
-
-	/**
 	 * Standard Servlet 2.4+ spec request attributes for forward URI and paths.
 	 * <p>If forwarded to via a RequestDispatcher, the current resource will see its
 	 * own URI and paths. The originating URI and paths are exposed as request attributes.
 	 */
 	public static final String SERVLET_FORWARD_REQUEST_URI = "javax.servlet.forward.request_uri";
-	public static final String SERVLET_FORWARD_CONTEXT_PATH = "javax.servlet.forward.context_path";
-	public static final String SERVLET_FORWARD_SERVLET_PATH = "javax.servlet.forward.servlet_path";
-	public static final String SERVLET_FORWARD_PATH_INFO = "javax.servlet.forward.path_info";
 	public static final String SERVLET_FORWARD_QUERY_STRING = "javax.servlet.forward.query_string";
 
 	/**
@@ -84,12 +70,9 @@ public class HttpServlets {
 	 * resolution mechanism.
 	 */
 	public static final String SERVLET_ERROR_STATUS_CODE = "javax.servlet.error.status_code";
-	public static final String SERVLET_ERROR_EXCEPTION_TYPE = "javax.servlet.error.exception_type";
 	public static final String SERVLET_ERROR_MESSAGE = "javax.servlet.error.message";
 	public static final String SERVLET_ERROR_EXCEPTION = "javax.servlet.error.exception";
 	public static final String SERVLET_ERROR_JSP_EXCEPTION = "javax.servlet.error.JspException";
-	public static final String SERVLET_ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
-	public static final String SERVLET_ERROR_SERVLET_NAME = "javax.servlet.error.servlet_name";
 
 	public static final String CONTENT_TYPE_BOUNDARY = "boundary";
 	
@@ -178,6 +161,21 @@ public class HttpServlets {
 		}
 		return ip;
 	}
+	
+	/**
+	 * @param request request
+	 * @return relative URI
+	 */
+	public static String getServletPath(HttpServletRequest request) {
+		if (request == null) {
+			return null;
+		}
+		
+		String uri = request.getRequestURI();
+		uri = uri.substring(request.getContextPath().length());
+		uri = Strings.substringBefore(uri, ";jsessionid=");
+		return uri;
+	}
 
 	/**
 	 * @param request servlet request
@@ -236,20 +234,6 @@ public class HttpServlets {
 		if (Strings.isEmpty(uri)) {
 			uri = request.getRequestURI();
 		}
-		return uri;
-	}
-	
-	/**
-	 * @param request request
-	 * @return relative URI
-	 */
-	public static String getServletPath(HttpServletRequest request) {
-		if (request == null) {
-			return null;
-		}
-		String uri = getRequestURI(request);
-		uri = uri.substring(request.getContextPath().length());
-		uri = Strings.substringBefore(uri, ";jsessionid=");
 		return uri;
 	}
 
