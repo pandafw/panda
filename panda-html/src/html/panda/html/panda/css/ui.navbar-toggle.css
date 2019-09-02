@@ -1,0 +1,28 @@
+/** navbar toogle */
+.navbar-default .navbar-toggle, .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+	background: transparent;
+}
+.navbar-default .navbar-toggle:hover .icon-bar, 
+.navbar-default .navbar-toggle:focus .icon-bar,
+.navbar-default .navbar-toggle.active .icon-bar {
+	background-color: #333;
+}
+.navbar-toggle {
+	border: none;
+	border-radius: 0;
+}
+.navbar-toggle, .navbar-toggle .icon-bar {
+	transition: all .4s;
+}
+.navbar-toggle .icon-bar + .icon-bar {
+	margin-top: 6px;
+}
+.navbar-toggle.active .icon-bar:nth-of-type(1) {
+	transform: translateY(8px) rotate(-45deg);
+}
+.navbar-toggle.active .icon-bar:nth-of-type(2) {
+	opacity: 0;
+}
+.navbar-toggle.active .icon-bar:nth-of-type(3) {
+	transform: translateY(-8px) rotate(45deg);
+}
