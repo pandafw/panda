@@ -310,7 +310,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected boolean isNeedLoadListParameters(Queryer qr) {
 		if (_load == null) {
-			return Strings.isEmpty(HttpServlets.getRequestQuery(getRequest()));
+			return Strings.isEmpty(HttpServlets.getRequestQueryString(getRequest()));
 		}
 		return _load;
 	}
