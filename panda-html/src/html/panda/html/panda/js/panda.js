@@ -2929,6 +2929,13 @@ panda.meta_props = function() {
 };
 
 (function($) {
+	$(window).on('load', function () {
+		$('.navbar-toggle').click(function() {
+			$(this).toggleClass('active');
+		});
+	});
+})(jQuery);
+(function($) {
 	$(window).on('load', function() {
 		// invoke onPageLoad function
 		for (var i in window) {
