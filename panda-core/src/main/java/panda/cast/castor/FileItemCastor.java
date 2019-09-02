@@ -24,11 +24,10 @@ public class FileItemCastor extends AnySingleCastor<FileItem> {
 		else if (value instanceof CharSequence) {
 			id = value.toString();
 		}
-		
-		if (id == null) {
+		else {
 			return castError(value, context);
 		}
-
+		
 		if (Strings.isEmpty(id)) {
 			return defaultValue();
 		}
