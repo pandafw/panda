@@ -113,7 +113,7 @@ public abstract class InputUIBean extends UIBean {
 
 		value = context.getParameter(name);
 		if (value == null) {
-			value = context.getCastErrors().get(name);
+			value = context.getCastErrorParams().get(name);
 		}
 	}
 

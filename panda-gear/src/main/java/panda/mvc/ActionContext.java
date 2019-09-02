@@ -85,7 +85,8 @@ public class ActionContext {
 	private List<Object> tops;
 	private Map<String, Object> vars;
 
-	private Map<String, Object> castErrors;
+	private Map<String, Object> castErrorParams;
+	private Map<String, Object> castErrorCauses;
 	
 	//--------------------------
 	// statics path
@@ -603,23 +604,41 @@ public class ActionContext {
 	 * clear cast errors
 	 */
 	public void clearCastErrors() {
-		if (castErrors != null) {
-			castErrors.clear();
+		if (castErrorParams != null) {
+			castErrorParams.clear();
+		}
+		if (castErrorCauses != null) {
+			castErrorCauses.clear();
 		}
 	}
 
 	/**
-	 * @return the castErrors
+	 * @return the castErrorParams
 	 */
-	public Map<String, Object> getCastErrors() {
-		if (castErrors == null) {
-			castErrors = new HashMap<String, Object>();
+	public Map<String, Object> getCastErrorParams() {
+		if (castErrorParams == null) {
+			castErrorParams = new HashMap<String, Object>();
 		}
-		return castErrors;
+		return castErrorParams;
 	}
 	
-	public void addCastErrors(Map<String, Object> errors) {
-		getCastErrors().putAll(errors);
+	public void addCastErrorParams(Map<String, Object> errors) {
+		getCastErrorParams().putAll(errors);
+	}
+	
+
+	/**
+	 * @return the castErrorCauses
+	 */
+	public Map<String, Object> getCastErrorCauses() {
+		if (castErrorCauses == null) {
+			castErrorCauses = new HashMap<String, Object>();
+		}
+		return castErrorCauses;
+	}
+
+	public void addCastErrorCauses(Map<String, Object> errors) {
+		getCastErrorCauses().putAll(errors);
 	}
 
 	//----------------------------------------------------
