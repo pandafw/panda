@@ -176,18 +176,19 @@ public abstract class AbstractCastor<S, T> implements Castor<S, T> {
 	
 	protected T castError(Object value, CastContext context, Throwable e) {
 		if (context.isSkipCastError()) {
-			context.addError(context.toName(), value);
+			context.addError(context.toName(), value, e);
 			return defaultValue();
 		}
 		throw new CastException(castErrorMsg(value, context), e);
 	}
 	
 	protected T castError(Object value, CastContext context) {
+		String err = castErrorMsg(value, context);
 		if (context.isSkipCastError()) {
-			context.addError(context.toName(), value);
+			context.addError(context.toName(), value, err);
 			return defaultValue();
 		}
-		throw new CastException(castErrorMsg(value, context));
+		throw new CastException(err);
 	}
 	
 	protected <TS, TT> Castor<TS, TT> getCastor(CastContext context, Type fromType, Type toType) {

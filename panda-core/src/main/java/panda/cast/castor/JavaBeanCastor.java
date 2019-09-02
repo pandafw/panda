@@ -54,7 +54,7 @@ public class JavaBeanCastor<T> extends AnyJsonCastor<T> {
 
 			if (!tbh.canWriteBean(pn)) {
 				// add readonly bean error
-				context.addError(context.toName(), pv);
+				context.addError(context.toName(), pv, "Cannot write readonly property [" + pn + "]");
 				continue;
 			}
 
@@ -75,7 +75,7 @@ public class JavaBeanCastor<T> extends AnyJsonCastor<T> {
 				Type pt = tbh.getBeanType(bean, pn);
 				Object bv = context.getCastors().cast(pv, pt, context);
 				if (!tbh.setBeanValue(bean, pn, bv)) {
-					context.addError(context.toName(), pv);
+					context.addError(context.toName(), pv, "Failed to set bean value of [" + pn + "]");
 				}
 			}
 			catch (Throwable e) {

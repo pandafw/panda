@@ -21,7 +21,8 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 
 	private Castors castors;
 	private Map<String, Object> context;
-	private Map<String, Object> errors;
+	private Map<String, Object> errorValues;
+	private Map<String, Object> errorCauses;
 	
 	/**
 	 * Constructor
@@ -135,39 +136,48 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	}
 
 	/**
-	 * @return the errors
+	 * @return the error values
 	 */
-	public Map<String, Object> getErrors() {
-		return errors;
+	public Map<String, Object> getErrorValues() {
+		return errorValues;
 	}
 
 	/**
-	 * @param errors the errors to set
+	 * @return the errorCauses
 	 */
-	public void setErrors(Map<String, Object> errors) {
-		this.errors = errors;
+	public Map<String, Object> getErrorCauses() {
+		return errorCauses;
 	}
-	
+
 	/**
 	 * add error value
 	 * 
 	 * @param name error name
 	 * @param value error value
+	 * @param cause error cause
 	 */
-	public void addError(String name, Object value) {
-		if (errors == null) {
-			errors = new HashMap<String, Object>();
+	public void addError(String name, Object value, Object cause) {
+		if (errorValues == null) {
+			errorValues = new HashMap<String, Object>();
 		}
 		
 		String key = Strings.isEmpty(prefix) ? name : prefix + name;
-		errors.put(key, value);
+		errorValues.put(key, value);
+
+		if (cause != null) {
+			if (errorCauses == null) {
+				errorCauses = new HashMap<String, Object>();
+			}
+			errorCauses.put(key, cause);
+		}
+		
 	}
 
 	/**
 	 * @return has error
 	 */
 	public boolean hasError() {
-		return Collections.isNotEmpty(errors);
+		return Collections.isNotEmpty(errorValues);
 	}
 	
 	//----------------------------------------------------
