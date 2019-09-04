@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.pandafw</groupId>
 		<artifactId>panda</artifactId>
-		<version>1.5.2</version>
+		<version>1.5.3</version>
 	</parent>
 
 	<artifactId>panda-gems-media</artifactId>
