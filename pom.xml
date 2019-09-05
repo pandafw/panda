@@ -49,6 +49,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<lucene.version>7.7.2</lucene.version>
+		<gaeapi.version>1.9.76</gaeapi.version>
+		<gaegcs.version>0.8</gaegcs.version>
+		<poi.version>4.1.0</poi.version>
 		<gpg.skip>true</gpg.skip>
 	</properties>
 
