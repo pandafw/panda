@@ -133,7 +133,6 @@ public class GaeIndexer implements Indexer {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void drop() {
 		try {
 			index.deleteSchema();
