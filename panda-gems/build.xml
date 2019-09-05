@@ -5,7 +5,7 @@
 	<path id="codegen.cp">
 		<pathelement path="${maven.dependency.com.github.pandafw.panda-core.jar.path}"/>
 		<pathelement path="${maven.dependency.com.github.pandafw.panda-gear.jar.path}"/>
-		<pathelement path="${maven.dependency.com.github.pandafw.panda-tool.jar.path}"/>
+		<pathelement path="${maven.dependency.com.github.pandafw.panda-cgen.jar.path}"/>
 		<pathelement path="${maven.dependency.org.freemarker.freemarker.jar.path}"/>
 	</path>
 
@@ -40,10 +40,10 @@ gen-res          --> Generate resource bundle source files
 			<fileset dir="src/gen/java" includes="**/*.java"/>
 		</delete>
 
-		<taskdef name="genent" classname="panda.tool.codegen.EntityGenerator" classpathref="codegen.cp"/>
+		<taskdef name="genent" classname="panda.cgen.mvc.EntityGenerator" classpathref="codegen.cp"/>
 		<genent dir="src/gen/conf" includes="*.xml" out="src/gen/java" verbose="${gen.verbose}"/>
 
-		<taskdef name="genact" classname="panda.tool.codegen.ActionGenerator" classpathref="codegen.cp"/>
+		<taskdef name="genact" classname="panda.cgen.mvc.ActionGenerator" classpathref="codegen.cp"/>
 		<genact dir="src/gen/conf" includes="*.xml" out="src/gen/java" verbose="${gen.verbose}"/>
 	</target>
 
@@ -52,7 +52,7 @@ gen-res          --> Generate resource bundle source files
 			<fileset dir="src/gen/templates" includes="**/*"/>
 		</delete>
 
-		<taskdef name="genftl" classname="panda.tool.codegen.FreemarkerGenerator" classpathref="codegen.cp"/>
+		<taskdef name="genftl" classname="panda.cgen.mvc.FreemarkerGenerator" classpathref="codegen.cp"/>
 		<genftl dir="src/gen/conf" includes="*.xml" out="src/gen/templates" verbose="${gen.verbose}"/>
 	</target>
 
@@ -61,7 +61,7 @@ gen-res          --> Generate resource bundle source files
 			<fileset dir="src/gen/resources" includes="**/*.properties"/>
 		</delete>
 
-		<taskdef name="gentxt" classname="panda.tool.codegen.TextGenerator" classpathref="codegen.cp"/>
+		<taskdef name="gentxt" classname="panda.cgen.mvc.TextGenerator" classpathref="codegen.cp"/>
 		<gentxt dir="src/gen/conf" includes="*.xml" out="src/gen/resources" verbose="${gen.verbose}"/>
 	</target>
 
