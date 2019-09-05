@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -130,36 +131,32 @@ public class XlsReader implements ListReader<Object>, Closeable {
 		return all;
 	}
 
-	protected Object readCell(Cell c, int type) {
-		Object v = Strings.EMPTY;
-		switch (type) {
-		case Cell.CELL_TYPE_BLANK:
-			break;
-		case Cell.CELL_TYPE_BOOLEAN:
-			v = c.getBooleanCellValue();
-			break;
-		case Cell.CELL_TYPE_NUMERIC:
-			if (DateUtil.isCellDateFormatted(c)) {
-				v = c.getDateCellValue();
-			}
-			else {
-				if (numAsText) {
-					v = NumberToTextConverter.toText(c.getNumericCellValue());
-				}
-				else {
-					v = c.getNumericCellValue();
-				}
-			}
-			break;
-		case Cell.CELL_TYPE_FORMULA:
-			v = readCell(c, c.getCachedFormulaResultType());
-			break;
-		default: 
-			v = c.getStringCellValue();
-			break;
+	protected Object readCell(Cell c, CellType type) {
+		if (CellType.BLANK.equals(type)) {
+			return Strings.EMPTY;
 		}
 
-		return v;
+		if (CellType.BOOLEAN.equals(type)) {
+			return c.getBooleanCellValue();
+		}
+		
+		if (CellType.NUMERIC.equals(type)) {
+			if (DateUtil.isCellDateFormatted(c)) {
+				return c.getDateCellValue();
+			}
+
+			if (numAsText) {
+				return NumberToTextConverter.toText(c.getNumericCellValue());
+			}
+
+			return c.getNumericCellValue();
+		}
+		
+		if (CellType.FORMULA.equals(type)) {
+			return readCell(c, c.getCachedFormulaResultType());
+		}
+
+		return c.getStringCellValue();
 	}
 
 	/**

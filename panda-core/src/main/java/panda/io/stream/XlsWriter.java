@@ -171,7 +171,6 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 			}
 
 			if (allString) {
-				cell.setCellType(Cell.CELL_TYPE_STRING);
 				cell.setCellValue(o.toString());
 			}
 			else {
