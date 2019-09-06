@@ -29,6 +29,14 @@ public class TestSupport extends TestHelper {
 	 * @param connection connection
 	 * @throws Exception if an error occurs
 	 */
+	public static void initMaraidbTestData(Connection connection) throws Exception {
+		execSQL(TestSupport.class, connection, "mariadb.sql", "\\;");
+	}
+
+	/**
+	 * @param connection connection
+	 * @throws Exception if an error occurs
+	 */
 	public static void initMysqlTestData(Connection connection) throws Exception {
 		execSQL(TestSupport.class, connection, "mysql.sql", "\\;");
 	}
@@ -138,15 +146,22 @@ public class TestSupport extends TestHelper {
 	}
 
 	/**
+	 * @return mariadb connection 
+	 * @throws Exception if an error occurs
+	 */
+	public static Connection getMaraidbConnection() throws Exception {
+		Connection connection = getConnection("maraidb");
+		initMaraidbTestData(connection);
+		return connection;
+	}
+
+	/**
 	 * @return mysql connection 
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getMysqlConnection() throws Exception {
 		Connection connection = getConnection("mysql");
 		initMysqlTestData(connection);
-
-//		connection.close();
-//		connection = getConnection("mysql");
 		return connection;
 	}
 

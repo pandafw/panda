@@ -114,11 +114,18 @@ public class TestHelper {
 		if (ds == null) {
 			DriverManager.setLoginTimeout(10);
 
+			Map<String, String> dps = new TreeMap<String, String>(Collections.subMap(settings, name + '.'));
+			String driver = dps.get("jdbc.driver");
+			
+			try {
+				Class.forName(driver);
+			}
+			catch (Exception e) {
+				throw Exceptions.wrapThrow(e);
+			}
+
 			AbstractDataSource ads = null;
 			try {
-				Map<String, String> dps = new TreeMap<String, String>(Collections.subMap(settings, name + '.'));
-
-				String driver = dps.get("jdbc.driver");
 				if ("org.sqlite.JDBC".equals(driver)) {
 					ads = new ThreadLocalDataSource();
 				}
