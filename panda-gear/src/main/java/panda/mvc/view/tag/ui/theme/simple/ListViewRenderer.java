@@ -137,9 +137,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		if (tag.isUntoggleSelect()) {
 			attr.data("untoggleSelect", "true");
 		}
-		if (tag.isAutosize()) {
-			attr.data("autosize", "true");
-		}
 		stag("div", attr);
 		
 		writeListViewForm();
@@ -437,11 +434,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 
 		write(tag.getHiddens());
 		
-		write("<div class=\"p-lv-table-wrap");
-		if (tag.isAutosize()) {
-			write(" table-responsive");
-		}
-		write("\">");
+		write("<div class=\"p-lv-table-wrap table-responsive\">");
 		write("<table id=\"" + id + "_table\" class=\"p-lv-table table");
 		if (Strings.isNotEmpty(tag.getCssTable())) {
 			write(' ');

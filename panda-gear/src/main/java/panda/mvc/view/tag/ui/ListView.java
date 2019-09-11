@@ -46,9 +46,6 @@ public class ListView extends UIBean {
 	protected String onsubmit;
 	protected String onreset;
 
-	// auto size table
-	protected boolean autosize = true;
-
 	//--------------------------------------------
 	// style option
 	// p : pager
@@ -201,13 +198,6 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @return the autosize
-	 */
-	public boolean isAutosize() {
-		return autosize;
-	}
-
-	/**
 	 * @return the tools
 	 */
 	public String getTools() {
@@ -296,13 +286,6 @@ public class ListView extends UIBean {
 	 */
 	public void setSortable(Boolean sortable) {
 		this.sortable = sortable;
-	}
-
-	/**
-	 * @param autosize the autosize to set
-	 */
-	public void setAutosize(boolean autosize) {
-		this.autosize = autosize;
 	}
 
 	/**

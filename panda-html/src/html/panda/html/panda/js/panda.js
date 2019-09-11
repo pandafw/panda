@@ -2666,43 +2666,6 @@ function plv_checkRow(id, row, check) {
 
 
 function _plv_init_table($lv) {
-	if ($lv.data("autosize") == 'true') {
-		$lv.addClass("p-lv-autosize");
-		var $lvb = $lv.children(".p-lv-body").autosize();
-
-//		var $sth = $lv.find(".p-lv-thead");
-//		var $cth = $sth.clone();
-//		
-//		$cth.find('tr').append('<th><div class="p-lv-cell-last"></div></th>');
-//		
-//		var $bht = $('<table class="p-table"></table>').css('visibility', 'hidden').append($cth);
-//		
-//		$sth.removeClass('p-lv-thead').addClass('p-lv-thead-shadow');
-//		$sth.parent().css('margin-top', -1 - $sth.outerHeight() + "px");
-//		
-//		$('<div class="p-lv-body-head p-table-wrapper"></div>')
-//			.append($bht)
-//			.insertBefore($lvb).autosize({ 
-//				overflow: 'hidden',
-//				callback: function() {
-//					var $cths = $cth.find('.p-lv-cell');
-//					var $sths = $sth.find('.p-lv-cell');
-//					$cths.each(function(i) {
-//						var $sc = $sths.eq(i);
-//						if (!$sc.parent().is(':hidden')) {
-//							var cw = $sc.width();
-//							var hw = $sc.parent().width();
-//							$(this).width(cw >= hw ? cw : hw + 1);
-//						}
-//					});
-//					$bht.css('visibility', 'visible');
-//				}
-//			});
-//		$lvb.scroll(function() {
-//			$bht.css('margin-left', -1 - $lvb.scrollLeft() + "px");
-//		});
-	}
-
 	$lv.find(".p-lv-thead > tr > th").each(function() {
 		var $th = $(this);
 		if ($th.hasClass("p-lv-sortable")) {
@@ -2846,10 +2809,10 @@ function _plv_setCheckAll($lv, check, crows) {
 	$lv.find(".p-lv-cab").each(function() {
 		var $b = $(this);
 		$b.prop('checked', check)
-		  .find("i")
-		  	.removeClass($b.data(check ? "iconSelectAll" : "iconSelectNone"))
-		  	.addClass($b.data(check ? "iconSelectNone" : "iconSelectAll"))
-		  	.get(0).nextSibling.data = ' ' + $b.data(check ? 'textSelectNone' : 'textSelectAll');
+			.find("i")
+				.removeClass($b.data(check ? "iconSelectAll" : "iconSelectNone"))
+				.addClass($b.data(check ? "iconSelectNone" : "iconSelectAll"))
+				.get(0).nextSibling.data = ' ' + $b.data(check ? 'textSelectNone' : 'textSelectAll');
 	});
 	if (crows) {
 		$lv.find(".p-lv-tbody > tr").each(function() {
