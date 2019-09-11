@@ -34,9 +34,9 @@
 		<module>panda-gems-pages</module>
 		<module>panda-gems-tager</module>
 		<module>panda-gems-users</module>
+		<module>panda-cgen</module>
 		<module>panda-glue</module>
 		<module>panda-nets</module>
-		<module>panda-tool</module>
 		<module>panda-tube-freshdesk</module>
 		<module>panda-tube-gcloud</module>
 		<module>panda-tube-sendgrid</module>
@@ -48,6 +48,17 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.7</jdk.version>
+		<lucene.version>5.5.5</lucene.version>
+		<gaeapi.version>1.9.42</gaeapi.version>
+		<gaegcs.version>0.8</gaegcs.version>
+		<poi.version>3.13</poi.version>
+		<derby.version>10.10.1.1</derby.version>
+		<h2db.version>1.3.173</h2db.version>
+		<hsqldb.version>2.3.5</hsqldb.version>
+		<mariadb.version>1.6.4</mariadb.version>
+		<mysql.version>5.1.39</mysql.version>
+		<postgresql.version>9.4.1209.jre6</postgresql.version>
+		<sqlite.version>3.25.2</sqlite.version>
 		<gpg.skip>true</gpg.skip>
 	</properties>
 
