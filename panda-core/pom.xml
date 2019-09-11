@@ -208,7 +208,7 @@
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
-			<version>3.4.2</version>
+			<version>${mongodb.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

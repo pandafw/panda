@@ -4,7 +4,7 @@ jdk:
   - openjdk7
 
 git:
-  depth: 3
+  depth: 1
 
 branches:
   only:
@@ -18,20 +18,24 @@ services:
   - docker
   - mysql
   - postgresql
+  - mongodb
 
 addons:
   hosts:
     - mysql
     - pgsql
+    - mongo
 
 install: true
 
 before_script:
+  - sleep 15
   - mysql -uroot -e "create database ptest;"
   - mysql -uroot -e "CREATE USER 'panda'@'127.0.0.1' IDENTIFIED BY 'panda';"
   - mysql -uroot -e "GRANT ALL PRIVILEGES ON ptest.* TO 'panda'@'127.0.0.1';"
   - psql -U postgres -c "CREATE USER panda PASSWORD 'panda';"
   - psql -U postgres -c "CREATE DATABASE ptest WITH OWNER = panda ENCODING = 'UTF-8';"
   - psql -U postgres -c "GRANT ALL ON DATABASE ptest TO panda;"
+  - mongo ptest --eval 'db.createUser({user:"panda",pwd:"panda",roles:["readWrite"]});'
 
 script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -B clean source:jar javadoc:jar deploy"
