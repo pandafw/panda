@@ -13,7 +13,9 @@ import org.junit.Test;
 import panda.Panda;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
+import panda.lang.Arrays;
 import panda.lang.Randoms;
+import panda.lang.Strings;
 import panda.net.ssl.SSLProtocols;
 
 public class HttpClientTest {
@@ -85,22 +87,25 @@ public class HttpClientTest {
 	@Test
 	public void testEncode() throws Exception {
 		// detect charset
-		HttpResponse response = HttpClient.get("www.baidu.com");
+		HttpResponse response = HttpClient.get("http://panda-demo.azurewebsites.net/?__locale=ja");
 		assertEquals("utf-8", response.getContentCharset().toLowerCase());
-		assertTrue(response.getContentText().indexOf("百度") > 0);
+		assertTrue(response.getContentText().indexOf("ペットショップ") > 0);
 
 		// supply the charset
-		response = HttpClient.get("www.exam8.com/SiteMap/Article1.htm");
-		assertTrue(response.getContentText("GBK").indexOf("考试吧") > 0);
+		String c = "GBK";
+		String t = "你吃过饭了么";
+		Map<String, String> ps = Arrays.toMap("c", c, "t", t);
+		response = HttpClient.post("http://panda-demo.azurewebsites.net/test/echo", ps);
+		assertEquals(t, response.getContentText(c));
 	}
 
 	@Test(expected = IOException.class)
 	public void testTimeout() throws Exception {
-		HttpResponse response = HttpClient.get("www.baidu.com", 10 * 1000);
+		HttpResponse response = HttpClient.get("https://github.com", 10 * 1000);
 		assertTrue(response.getStatusCode() == 200);
 
 		// timeout exception
-		HttpClient.get("www.baidu.com", 1);
+		HttpClient.get("https://github.com", 1);
 	}
 
 	@Test
@@ -118,9 +123,8 @@ public class HttpClientTest {
 		HttpClient hc = new HttpClient();
 		hc.setSslProtocols(SSLProtocols.TLSv1_2);
 		hc.setSslHostnameCheck(false);
-		hc.getRequest().setUrl("https://xxx.orange1.net");
+		hc.getRequest().setUrl("https://kagoya.aska-soft.com");
 		HttpResponse response = hc.doGet();
-
-		assertTrue(response.getStatusCode() == 200);
+		assertTrue(Strings.isNotEmpty(response.getContentText()));
 	}
 }
