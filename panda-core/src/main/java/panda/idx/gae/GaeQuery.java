@@ -106,12 +106,13 @@ public class GaeQuery implements IQuery {
 		}
 	}
 
-	private IQuery _eq(Object[] values) {
+	@Override
+	public IQuery eq(String... values) {
 		_andor();
 		_name();
 		_add("=(");
 		boolean first = true;
-		for (Object v : values) {
+		for (String v : values) {
 			if (!first) {
 				_add(' ');
 				first = true;
@@ -121,23 +122,35 @@ public class GaeQuery implements IQuery {
 		query.append(')');
 		return this;
 	}
+
+	private IQuery _in(Object[] values) {
+		_andor();
+		_name();
+		_add("=(");
+		boolean first = true;
+		for (Object v : values) {
+			if (!first) {
+				_add(" OR ");
+				first = true;
+			}
+			_val(v);
+		}
+		query.append(')');
+		return this;
+	}
 	
 	@Override
-	public IQuery eq(String... values) {
-		return _eq(values);
+	public IQuery in(Number... values) {
+		return _in(values);
 	}
 
 	@Override
-	public IQuery eq(Number... values) {
-		return _eq(values);
+	public IQuery in(Date... values) {
+		return _in(values);
 	}
 
 	@Override
-	public IQuery eq(Date... values) {
-		return _eq(values);
-	}
-
-	private IQuery _ne(Object[] values) {
+	public IQuery ne(String... values) {
 		_andor();
 		_not();
 		_name();
@@ -153,20 +166,32 @@ public class GaeQuery implements IQuery {
 		_add(')');
 		return this;
 	}
+
+	private IQuery _nin(Object[] values) {
+		_andor();
+		_not();
+		_name();
+		_add("=(");
+		boolean first = true;
+		for (Object v : values) {
+			if (!first) {
+				_add(" AND ");
+				first = true;
+			}
+			_val(v);
+		}
+		_add(')');
+		return this;
+	}
 	
 	@Override
-	public IQuery ne(String... values) {
-		return _ne(values);
+	public IQuery nin(Number... values) {
+		return _nin(values);
 	}
 
 	@Override
-	public IQuery ne(Number... values) {
-		return _ne(values);
-	}
-
-	@Override
-	public IQuery ne(Date... values) {
-		return _ne(values);
+	public IQuery nin(Date... values) {
+		return _nin(values);
 	}
 
 	private IQuery _lt(Object value) {

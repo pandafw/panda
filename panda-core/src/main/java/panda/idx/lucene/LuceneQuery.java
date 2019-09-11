@@ -150,7 +150,7 @@ public class LuceneQuery implements IQuery {
 	}
 
 	@Override
-	public IQuery eq(Number... values) {
+	public IQuery in(Number... values) {
 		Query q;
 		if (values.length == 1) {
 			q = numEqQuery(field, values[0]);
@@ -175,7 +175,7 @@ public class LuceneQuery implements IQuery {
 	}
 
 	@Override
-	public IQuery eq(Date... values) {
+	public IQuery in(Date... values) {
 		Query q;
 		if (values.length == 1) {
 			q = numEqQuery(field, values[0].getTime());
@@ -202,7 +202,7 @@ public class LuceneQuery implements IQuery {
 	}
 
 	@Override
-	public IQuery ne(Number... values) {
+	public IQuery nin(Number... values) {
 		Query q;
 		Number num = values[0];
 		if (num instanceof Float) {
@@ -225,7 +225,7 @@ public class LuceneQuery implements IQuery {
 	}
 
 	@Override
-	public IQuery ne(Date... values) {
+	public IQuery nin(Date... values) {
 		List<Long> nums = new ArrayList<Long>();
 		for (Date d : values) {
 			nums.add(d.getTime());

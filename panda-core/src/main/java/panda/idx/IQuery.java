@@ -74,15 +74,15 @@ public interface IQuery {
 	
 	public IQuery eq(String... values);
 	
-	public IQuery eq(Number... values);
+	public IQuery in(Number... values);
 	
-	public IQuery eq(Date... values);
+	public IQuery in(Date... values);
 	
 	public IQuery ne(String... values);
 	
-	public IQuery ne(Number... values);
+	public IQuery nin(Number... values);
 	
-	public IQuery ne(Date... values);
+	public IQuery nin(Date... values);
 	
 	public IQuery lt(Number value);
 	
