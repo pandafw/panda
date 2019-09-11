@@ -2,7 +2,6 @@ package panda.dao.query;
 
 import java.util.Collection;
 
-
 /**
  * @param <E> query target type
  * @param <T> the compare value type
@@ -18,6 +17,7 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field = value" expression
 	 * @param value value
 	 * @return parent
 	 */
@@ -27,15 +27,17 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field = otherField" expression
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E eq2(String otherField) {
-		parent.getQuery().eq2(field, otherField);
+	public E eqf(String otherField) {
+		parent.getQuery().eqf(field, otherField);
 		return parent;
 	}
 
 	/**
+	 * add "field &lt;&gt; value" expression
 	 * @param value value
 	 * @return parent
 	 */
@@ -45,15 +47,17 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field &lt;&gt; otherField" expression
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E ne2(String otherField) {
-		parent.getQuery().ne2(field, otherField);
+	public E nef(String otherField) {
+		parent.getQuery().nef(field, otherField);
 		return parent;
 	}
 
 	/**
+	 * add "field &gt; value" expression
 	 * @param value value
 	 * @return parent
 	 */
@@ -63,15 +67,17 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field &gt; otherField" expression
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E gt2(String otherField) {
-		parent.getQuery().gt2(field, otherField);
+	public E gtf(String otherField) {
+		parent.getQuery().gtf(field, otherField);
 		return parent;
 	}
 
 	/**
+	 * add "field %gt;= value" expression
 	 * @param value value
 	 * @return parent
 	 */
@@ -81,15 +87,17 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field %gt;= otherField" expression
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E ge2(String otherField) {
-		parent.getQuery().ge2(field, otherField);
+	public E gef(String otherField) {
+		parent.getQuery().gef(field, otherField);
 		return parent;
 	}
 
 	/**
+	 * add "field &lt; value" expression
 	 * @param value value
 	 * @return parent
 	 */
@@ -99,15 +107,17 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field &lt; otherField" expression
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E lt2(String otherField) {
-		parent.getQuery().lt2(field, otherField);
+	public E ltf(String otherField) {
+		parent.getQuery().ltf(field, otherField);
 		return parent;
 	}
 
 	/**
+	 * add "field &lt;= value" expression
 	 * @param value value
 	 * @return parent
 	 */
@@ -117,15 +127,17 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field &lt;= otherField" expression
 	 * @param otherField the field to compare
 	 * @return parent
 	 */
-	public E le2(String otherField) {
-		parent.getQuery().le2(field, otherField);
+	public E lef(String otherField) {
+		parent.getQuery().lef(field, otherField);
 		return parent;
 	}
 
 	/**
+	 * add "field IN (value1, value2 ...)" expression
 	 * @param values value array
 	 * @return parent
 	 */
@@ -135,6 +147,7 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field IN (value1, value2 ...)" expression
 	 * @param values value list
 	 * @return parent
 	 */
@@ -144,6 +157,7 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field NOT IN (value1, value2 ...)" expression
 	 * @param values value list
 	 * @return parent
 	 */
@@ -153,6 +167,7 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field NOT IN (value1, value2 ...)" expression
 	 * @param values value list
 	 * @return parent
 	 */
@@ -162,6 +177,7 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field BETWEEN (value1, value2)" expression
 	 * @param minValue minValue
 	 * @param maxValue maxValue
 	 * @return parent
@@ -172,6 +188,7 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	}
 
 	/**
+	 * add "field NOT BETWEEN (value1, value2)" expression
 	 * @param minValue minValue
 	 * @param maxValue maxValue
 	 * @return parent

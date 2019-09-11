@@ -1237,7 +1237,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> eq2(String field, String compareField) {
+	public DataQuery<T> eqf(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.EQUAL, compareField);
 	}
 
@@ -1247,7 +1247,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> ne2(String field, String compareField) {
+	public DataQuery<T> nef(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.NOT_EQUAL, compareField);
 	}
 
@@ -1257,7 +1257,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> gt2(String field, String compareField) {
+	public DataQuery<T> gtf(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_THAN, compareField);
 	}
 
@@ -1267,7 +1267,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> ge2(String field, String compareField) {
+	public DataQuery<T> gef(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_EQUAL, compareField);
 	}
 
@@ -1277,7 +1277,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> lt2(String field, String compareField) {
+	public DataQuery<T> ltf(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_THAN, compareField);
 	}
 
@@ -1287,7 +1287,7 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public DataQuery<T> le2(String field, String compareField) {
+	public DataQuery<T> lef(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_EQUAL, compareField);
 	}
 
