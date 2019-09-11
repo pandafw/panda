@@ -106,17 +106,23 @@ public class LuceneIndexer implements Indexer {
 	 * @throws IOException if an IO error occurred
 	 */
 	protected void close() throws IOException {
-		if (indexReader != null) {
-			Streams.safeClose(indexReader);
-			indexReader = null;
-		}
+		closeReader();
+		
 		if (indexWriter != null) {
 			Streams.safeClose(indexWriter);
 			indexWriter = null;
 		}
+		
 		if (directory != null) {
 			directory.close();
 			directory = null;
+		}
+	}
+
+	protected void closeReader() {
+		if (indexReader != null) {
+			Streams.safeClose(indexReader);
+			indexReader = null;
 		}
 	}
 
@@ -140,10 +146,6 @@ public class LuceneIndexer implements Indexer {
 		}
 	}
 
-	protected IndexSearcher getIndexSearcher() {
-		return new IndexSearcher(getIndexReader());
-	}
-	
 	/**
 	 * @return the lucene IndexReader
 	 */
@@ -207,6 +209,7 @@ public class LuceneIndexer implements Indexer {
 			LuceneDocument ld = (LuceneDocument)doc;
 			iw.addDocument(ld.getDocument());
 			iw.commit();
+			closeReader();
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to insert document - " + doc, e);
@@ -222,6 +225,7 @@ public class LuceneIndexer implements Indexer {
 				iw.addDocument(ld.getDocument());
 			}
 			iw.commit();
+			closeReader();
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to inserts documents - " + docs, e);
@@ -235,6 +239,7 @@ public class LuceneIndexer implements Indexer {
 			LuceneDocument ld = (LuceneDocument)doc;
 			iw.updateDocument(ld.getIdTerm(), ld.getDocument());
 			iw.commit();
+			closeReader();
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to update document - " + doc, e);
@@ -250,6 +255,7 @@ public class LuceneIndexer implements Indexer {
 				iw.updateDocument(ld.getIdTerm(), ld.getDocument());
 			}
 			iw.commit();
+			closeReader();
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to update documents - " + docs, e);
@@ -263,6 +269,7 @@ public class LuceneIndexer implements Indexer {
 			Term term = LuceneDocument.getIdTerm(id);
 			iw.deleteDocuments(term);
 			iw.commit();
+			closeReader();
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to remove document - " + id, e);
@@ -272,15 +279,29 @@ public class LuceneIndexer implements Indexer {
 	@Override
 	public void removes(Collection<String> ids) {
 		try {
+			List<Term> terms = new ArrayList<Term>();
 			IndexWriter iw = getIndexWriter();
 			for (String id : ids) {
-				Term term = LuceneDocument.getIdTerm(id);
-				iw.deleteDocuments(term);
+				terms.add(LuceneDocument.getIdTerm(id));
 			}
+			iw.deleteDocuments(terms.toArray(new Term[terms.size()]));
 			iw.commit();
+			closeReader();
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to remove documents - " + ids, e);
+		}
+	}
+
+	public void removeAll() {
+		try {
+			IndexWriter iw = getIndexWriter();
+			iw.deleteAll();
+			iw.commit();
+			closeReader();
+		}
+		catch (IOException e) {
+			throw new IndexException("Failed to remove all documents", e);
 		}
 	}
 
@@ -291,17 +312,22 @@ public class LuceneIndexer implements Indexer {
 
 	@Override
 	public IResult search(IQuery query) {
+		IndexReader idxReader = getIndexReader();
+		idxReader.incRef();
+		
 		try {
-			Query q = ((LuceneQuery)query).buildQuery();
+			LuceneQuery lq = (LuceneQuery)query;
+			Query q = lq.buildQuery();
+
 			TopDocsCollector c = ((LuceneQuery)query).buildCollector();
 			
-			IndexSearcher searcher = getIndexSearcher(); 
+			IndexSearcher searcher = new IndexSearcher(idxReader); 
 			searcher.search(q, c);
 	
 			IResult r = new IResult();
 			r.setTotalHits(c.getTotalHits());
 			if (r.getTotalHits() > 0) {
-				TopDocs hits = c.topDocs((int)query.getStart(), (int)query.getLimit());
+				TopDocs hits = c.topDocs((int)lq.start(), (int)lq.limit());
 				List<IDocument> docs = new ArrayList<IDocument>(hits.scoreDocs.length);
 				for (int i = 0; i < hits.scoreDocs.length; i++) {
 					Document doc = searcher.doc(hits.scoreDocs[i].doc);
@@ -313,6 +339,9 @@ public class LuceneIndexer implements Indexer {
 		}
 		catch (IOException e) {
 			throw new IndexException("Failed to search " + query);
+		}
+		finally {
+			Streams.safeClose(indexReader);
 		}
 	}
 
