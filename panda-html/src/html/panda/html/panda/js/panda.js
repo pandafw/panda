@@ -2230,16 +2230,17 @@ if (typeof String.formatSize != "function") {
 			}
 			var js = $dps.data('datetimepickerJs');
 			if (js) {
-				$.jscript(js);
+				$.jscript(js, function() {
+					$dps.each(function() {
+						var i = $(this).data('language');
+						var v = $(this).data('datetimepickerLangJs');
+						if (i && v && !langs[i]) {
+							$.jscript(v);
+							langs[i] = v;
+						}
+					});
+				});
 			}
-			$dps.each(function() {
-				var i = $(this).data('language');
-				var v = $(this).data('datetimepickerLangJs');
-				if (i && v && !langs[i]) {
-					$.jscript(v);
-					langs[i] = v;
-				}
-			});
 			initDateTimePicker();
 		}
 	});
@@ -2485,16 +2486,17 @@ if (typeof(panda) == "undefined") { panda = {}; }
 			}
 			var js = $sns.data('summernoteJs');
 			if (js) {
-				$.jscript(js);
+				$.jscript(js, function() {
+					$sns.each(function() {
+						var i = $(this).data('summernoteLang');
+						var v = $(this).data('summernoteLangJs');
+						if (i && v && !langs[i]) {
+							$.jscript(v);
+							langs[i] = v;
+						}
+					});
+				});
 			}
-			$sns.each(function() {
-				var i = $(this).data('summernoteLang');
-				var v = $(this).data('summernoteLangJs');
-				if (i && v && !langs[i]) {
-					$.jscript(v);
-					langs[i] = v;
-				}
-			});
 			initSummerNote();
 		}
 

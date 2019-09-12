@@ -142,16 +142,17 @@
 			}
 			var js = $sns.data('summernoteJs');
 			if (js) {
-				$.jscript(js);
+				$.jscript(js, function() {
+					$sns.each(function() {
+						var i = $(this).data('summernoteLang');
+						var v = $(this).data('summernoteLangJs');
+						if (i && v && !langs[i]) {
+							$.jscript(v);
+							langs[i] = v;
+						}
+					});
+				});
 			}
-			$sns.each(function() {
-				var i = $(this).data('summernoteLang');
-				var v = $(this).data('summernoteLangJs');
-				if (i && v && !langs[i]) {
-					$.jscript(v);
-					langs[i] = v;
-				}
-			});
 			initSummerNote();
 		}
 
