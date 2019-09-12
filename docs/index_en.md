@@ -51,7 +51,7 @@ Panda Framework consists of the following modules.
  | [panda-gems](gems/index_en.md) | Extension module for Web-APP. Contains basic template classes that implement CRUD, user authentication, and some other useful classes. |
  | [panda-glue](glue/index_en.md) | [ASM](glue/asm_en.md)/[AOP](glue/aop_en.md) module.                  |
  | [panda-html](html/index_en.md) | Contains jQuery, Bootstrap, and the css/javascript required by panda-gear's taglib. |
- | [panda-tool](tool/index_en.md) | Source code generator. Can generate Entity/Query/Dao/Action class, Freemarker (HTML) template file. |
+ | [panda-cgen](cgen/index_en.md) | CRUD source code generator for Panda MVC Framework. Can generate Entity/Query/Dao/Action class, Freemarker (HTML) template file. |
  | [panda-tube](tube/index_en.md) | Web Service API client (WordPress XMP-RPC, Google Vision API).                     |
 
 

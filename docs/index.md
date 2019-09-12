@@ -1,6 +1,12 @@
  Panda Framework
 =====================================================================
 
+![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-32.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-48.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-64.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-96.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-128.png)
+
+[![Build Status](https://travis-ci.org/pandafw/panda.svg?branch=master)](https://travis-ci.org/pandafw/panda) [![codecov](https://codecov.io/gh/pandafw/panda/branch/master/graph/badge.svg)](https://codecov.io/gh/pandafw/panda) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pandafw/panda-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.pandafw/panda-core) [![Apache 2](https://img.shields.io/badge/license-Apache%202-green)](https://www.apache.org/licenses/LICENSE-2.0.html)
+
+
+
 Panda is a Java development framework, it can help you quickly create a WEB application.
 
  - [Project Site](https://pandafw.github.io/panda)
@@ -35,20 +41,15 @@ Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应�
 
 
 
-## Requirements
- - Java 7 ~
-
-
 ## Versions
- - 1.6.0  
+ - 1.6.0 (2019-09-25)  
    Java 8 ~
-   In Development.
 
- - 1.5.2  (2019-08-05)  
-
- - 1.5.1  (2019-05-01)  
+ - 1.5.5 (2019-09-25)  
+   Java 7 ~
 
  - 1.3.0  (2019-01-30)  
+   Java 7 ~
 
  - 1.2.0  (2018-06-05)  
    Java 7 ~
