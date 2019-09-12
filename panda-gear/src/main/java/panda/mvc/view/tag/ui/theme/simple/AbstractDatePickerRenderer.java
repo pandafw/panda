@@ -8,6 +8,7 @@ import java.util.Set;
 import panda.Panda;
 import panda.lang.Arrays;
 import panda.lang.Strings;
+import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.DatePicker;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
@@ -16,6 +17,7 @@ public abstract class AbstractDatePickerRenderer<T extends DatePicker> extends A
 	private static final String DTP_CSS_KEY = AbstractDatePickerRenderer.class.getName() + ".css";
 	private static final String DTP_ROOT = "/datetimepicker/";
 	private static final String DTP_PATH = DTP_ROOT + "bootstrap-datetimepicker";
+	private static final String DTP_CDN = Mvcs.PANDA_CDN + '/' + Panda.VERSION + DTP_PATH;
 	private static final String DTP_VERSION = Panda.VERSION;
 	
 	private static final Set<String> LANGS =
@@ -73,10 +75,16 @@ public abstract class AbstractDatePickerRenderer<T extends DatePicker> extends A
 	}
 
 	private String datetimepickerCss() {
+		if (tag.useCdn()) {
+			return DTP_CDN + ".css";
+		}
 		return suri(DTP_PATH + ".css?v=" + DTP_VERSION);
 	}
 	
 	private String datetimepickerJs() {
+		if (tag.useCdn()) {
+			return DTP_CDN + debug() + ".js";
+		}
 		return suri(DTP_PATH + debug() + ".js?v=" + DTP_VERSION);
 	}
 

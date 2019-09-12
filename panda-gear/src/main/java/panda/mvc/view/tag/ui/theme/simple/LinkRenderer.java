@@ -2,8 +2,10 @@ package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
 
+import panda.Panda;
 import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
@@ -14,7 +16,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String JQUERY1_VERSION = "1.12.4";
 	private static final String JQUERY2_VERSION = "2.2.4";
 	private static final String JQUERY3_VERSION = "3.3.1";
-	private static final String JQUERY_CDN_BASE = "//code.jquery.com/jquery-";
+	private static final String JQUERY_CDN_BASE = "https://code.jquery.com/jquery-";
 	private static final String JQUERY_BIND_BASE = "/jquery/js/jquery-";
 	private static final String JQUERY1_CDN_PATH = JQUERY_CDN_BASE + JQUERY1_VERSION;
 	private static final String JQUERY2_CDN_PATH = JQUERY_CDN_BASE + JQUERY2_VERSION;
@@ -102,46 +104,72 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 	private void writeJqueryPlugins() throws IOException {
 		if (tag.isJqplugins()) {
-			writeStaticCss("/jquery/css/jquery-plugins");
-			writeStaticJs("/jquery/js/jquery-plugins");
+			if (css) {
+				if (tag.useCdn()) {
+					writeCdnCss(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/jquery/css/jquery-plugins");
+				}
+				else {
+					writeStaticCss("/jquery/css/jquery-plugins");
+				}
+			}
+			if (js) {
+				if (tag.useCdn()) {
+					writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/jquery/js/jquery-plugins");
+				}
+				else {
+					writeStaticJs("/jquery/js/jquery-plugins");
+				}
+			}
 		}
 	}
 
 	private void writeBootstrap() throws IOException {
-		boolean bs = tag.isBootstrap();
-		if (css && bs) {
-			if (tag.useCdn()) {
-				writeCdnCss("//netdna.bootstrapcdn.com/bootstrap/" 
-						+ BOOTSTRAP3_VERSION 
-						+ "/css/bootstrap");
-				writeCdnCss("//netdna.bootstrapcdn.com/font-awesome/" 
-						+ FONTAWESOME4_VERSION 
-						+ "/css/font-awesome");
+		if (tag.isBootstrap()) {
+			if (css) {
+				if (tag.useCdn()) {
+					writeCdnCss("https://netdna.bootstrapcdn.com/bootstrap/" 
+							+ BOOTSTRAP3_VERSION 
+							+ "/css/bootstrap");
+					writeCdnCss("https://netdna.bootstrapcdn.com/font-awesome/" 
+							+ FONTAWESOME4_VERSION 
+							+ "/css/font-awesome");
+				}
+				else {
+					writeStaticCss("/bootstrap3/css/bootstrap");
+					writeStaticCss("/font-awesome/css/font-awesome");
+				}
 			}
-			else {
-				writeStaticCss("/bootstrap3/css/bootstrap");
-				writeStaticCss("/font-awesome/css/font-awesome");
-			}
-		}
-		if (js && bs) {
-			if (tag.useCdn()) {
-				writeCdnJs("//netdna.bootstrapcdn.com/bootstrap/" 
-						+ BOOTSTRAP3_VERSION 
-						+ "/js/bootstrap");
-			}
-			else {
-				writeStaticJs("/bootstrap3/js/bootstrap");
+			if (js) {
+				if (tag.useCdn()) {
+					writeCdnJs("https://netdna.bootstrapcdn.com/bootstrap/" 
+							+ BOOTSTRAP3_VERSION 
+							+ "/js/bootstrap");
+				}
+				else {
+					writeStaticJs("/bootstrap3/js/bootstrap");
+				}
 			}
 		}
 	}
 
 	private void writePanda() throws IOException {
-		boolean panda = tag.isPanda();
-		if (css && panda) {
-			writeStaticCss("/panda/css/panda");
-		}
-		if (js && panda) {
-			writeStaticJs("/panda/js/panda");
+		if (tag.isPanda()) {
+			if (css) {
+				if (tag.useCdn()) {
+					writeCdnCss(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/panda/css/panda");
+				}
+				else {
+					writeStaticCss("/panda/css/panda");
+				}
+			}
+			if (js) {
+				if (tag.useCdn()) {
+					writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/panda/js/panda");
+				}
+				else {
+					writeStaticJs("/panda/js/panda");
+				}
+			}
 		}
 	}
 	
@@ -150,7 +178,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			UserAgent ua = context.getUserAgent();
 			if (ua.isMsie() && ua.getBrowser().getMajor() < 9) {
 				if (tag.useCdn()) {
-					writeCdnJs("//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond");
+					writeCdnJs("https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond");
 				}
 				else {
 					writeStaticJs("/respondjs/respond");
