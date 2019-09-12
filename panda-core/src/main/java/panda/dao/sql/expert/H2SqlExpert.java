@@ -25,6 +25,11 @@ public class H2SqlExpert extends SqlExpert {
 	}
 
 	@Override
+	public String escape(String s) {
+		return '"' + Strings.upperCase(s) + '"'; 
+	}
+
+	@Override
 	public String dropTable(String tableName) {
 		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
 	}
