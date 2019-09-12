@@ -202,9 +202,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 
 	protected String suri(String uri) {
-		StringBuilder s = new StringBuilder();
-		s.append(context.getStatics()).append(uri);
-		return s.toString();
+		return context.getStatics() + uri;
 	}
 
 	protected void writeJsc(String jsc) throws IOException {

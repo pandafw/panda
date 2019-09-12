@@ -35,7 +35,7 @@ public abstract class Mvcs {
 
 	public static final String STATIC_PATH = "/static";
 	
-	public static final String PANDA_CDN = "//pandafw.github.io/repos/static";
+	public static final String PANDA_CDN = "https://pandafw.github.io/repos/static";
 
 	private static Beans beans = Beans.i();
 	private static Castors castors = Castors.i();
@@ -162,15 +162,7 @@ public abstract class Mvcs {
 	 * @return the static base path
 	 */
 	public static String getStaticPath(ActionContext ac) {
-		String sp = null;
-
-		if (isUseCdn(ac)) {
-			sp = PANDA_CDN;
-		}
-
-		if (Strings.isEmpty(sp)) {
-			sp = ac.getIoc().getIfExists(String.class, MvcConstants.STATIC_PATH);
-		}
+		String sp = ac.getIoc().getIfExists(String.class, MvcConstants.STATIC_PATH);
 		
 		if (Strings.isEmpty(sp)) {
 			sp = ac.getServlet().getContextPath() + STATIC_PATH;

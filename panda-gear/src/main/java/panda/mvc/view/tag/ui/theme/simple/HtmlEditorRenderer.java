@@ -14,7 +14,7 @@ import panda.mvc.view.tag.ui.theme.RenderingContext;
 public class HtmlEditorRenderer extends AbstractEndRenderer<HtmlEditor> {
 	private static final String SUMMERNOTE_KEY = HtmlEditorRenderer.class.getName() + ".summernote";
 	private static final String SUMMERNOTE_VERSION = "0.8.11";
-	private static final String SUMMERNOTE_CDN = "http://cdnjs.cloudflare.com/ajax/libs/summernote/" + SUMMERNOTE_VERSION + "/summernote";
+	private static final String SUMMERNOTE_CDN = "https://cdnjs.cloudflare.com/ajax/libs/summernote/" + SUMMERNOTE_VERSION + "/summernote";
 	private static final String SUMMERNOTE_ROOT = "/summernote/";
 	private static final String SUMMERNOTE_PATH = SUMMERNOTE_ROOT + "summernote";
 
