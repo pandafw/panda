@@ -133,10 +133,10 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.0.1</version>
+					<version>3.1.1</version>
 					<configuration>
 						<quiet>true</quiet>
-						<additionalparam>-Xdoclint:none</additionalparam>
+						<doclint>none</doclint>
 						<sourcepath>${project.basedir}/src/main/java;${project.basedir}/src/gen/java</sourcepath>
 					</configuration>
 					<executions>
@@ -195,6 +195,20 @@
 					</configuration>
 				</plugin>
 
+				<!-- coverage report -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>cobertura-maven-plugin</artifactId>
+					<version>2.7</version>
+					<configuration>
+						<formats>
+							<format>html</format>
+							<format>xml</format>
+						</formats>
+						<check/>
+					</configuration>
+				</plugin>
+
 				<!-- sonatype release -->
 				<plugin>
 					<groupId>org.sonatype.plugins</groupId>
@@ -241,15 +255,23 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<version>2.7</version>
+				<configuration>
+					<formats>
+						<format>html</format>
+						<format>xml</format>
+					</formats>
+					<check/>
+				</configuration>
 			</plugin>
 
 			<!-- javadoc report -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.1</version>
 				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
+					<quiet>true</quiet>
+					<doclint>none</doclint>
 					<sourcepath>${project.basedir}/src/main/java;${project.basedir}/src/gen/java</sourcepath>
 				</configuration>
 				<reportSets>

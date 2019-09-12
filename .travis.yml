@@ -38,4 +38,7 @@ before_script:
   - psql -U postgres -c "GRANT ALL ON DATABASE ptest TO panda;"
   - mongo ptest --eval 'db.createUser({user:"panda",pwd:"panda",roles:["readWrite"]});'
 
-script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -B clean source:jar javadoc:jar deploy"
+script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -B clean source:jar javadoc:jar cobertura:cobertura deploy"
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
