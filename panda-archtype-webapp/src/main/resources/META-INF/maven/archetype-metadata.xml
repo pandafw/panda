@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+	name="webapp" partial="false">
+
+	<fileSets>
+		<fileSet filtered="false" packaged="false">
+			<directory></directory>
+			<includes>
+				<include>.gitignore</include>
+				<include>build.xml</include>
+				<include>deploy.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="false" packaged="false">
+			<directory>env</directory>
+		</fileSet>
+		<fileSet filtered="true" packaged="true">
+			<directory>src/main/java</directory>
+		</fileSet>
+		<fileSet filtered="false" packaged="true">
+			<directory>src/main/resources</directory>
+			<excludes>
+				<exclude>*.json</exclude>
+				<exclude>*.properties</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet filtered="true" packaged="false">
+			<directory>src/main/resources</directory>
+			<includes>
+				<include>*.json</include>
+				<include>app.properties</include>
+				<include>java-logging.properties</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="false" packaged="true">
+			<directory>src/main/templates</directory>
+			<includes>
+				<include>action/**/*</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="false" packaged="false">
+			<directory>src/main/templates</directory>
+			<excludes>
+				<exclude>action/**/*</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet filtered="true" packaged="false">
+			<directory>src/gen/conf</directory>
+			<includes>
+				<include>*.properties</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="false" packaged="false">
+			<directory>src/gen/conf</directory>
+			<includes>
+				<include>*.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" packaged="true">
+			<directory>src/gen/java</directory>
+		</fileSet>
+		<fileSet filtered="false" packaged="true">
+			<directory>src/gen/resources</directory>
+		</fileSet>
+		<fileSet filtered="false" packaged="true">
+			<directory>src/gen/templates</directory>
+		</fileSet>
+		<fileSet filtered="true" packaged="true">
+			<directory>src/test/java</directory>
+		</fileSet>
+		<fileSet filtered="false" packaged="false">
+			<directory>src/test/resources</directory>
+		</fileSet>
+		<fileSet filtered="false" packaged="false">
+			<directory>web</directory>
+			<excludes>
+				<exclude>WEB-INF/web.xml</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet filtered="true" packaged="false">
+			<directory>web</directory>
+			<includes>
+				<include>WEB-INF/web.xml</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</archetype-descriptor>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="${artifactId}" version="2.5" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd">
+
+	<display-name>Archetype Created Web Application</display-name>
+	<distributable />
+	
+	<!-- session listener 
+	<listener>
+		<listener-class>panda.mvc.ioc.IocSessionListener</listener-class>
+	</listener>
+	-->
+
+	<!-- filter -->
+	<filter>
+		<filter-name>panda-mvc-filter</filter-name>
+		<filter-class>panda.mvc.MvcFilter</filter-class>
+		<init-param>
+			<param-name>modules</param-name>
+			<param-value>${package}.WebSetup</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>panda-mvc-filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- servlet -->
+	<servlet>
+		<servlet-name>panda-mvc-servlet</servlet-name>
+		<servlet-class>panda.mvc.MvcServlet</servlet-class>
+		<init-param>
+			<param-name>modules</param-name>
+			<param-value>${package}.WebSetup</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>panda-mvc-servlet</servlet-name>
+		<url-pattern>/servlet-error/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- error-page -->
+	<error-page>
+		<error-code>403</error-code>
+		<location>/servlet-error/403.sftl</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/servlet-error/404.sftl</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/servlet-error/500.sftl</location>
+	</error-page>
+	<error-page>
+		<error-code>503</error-code>
+		<location>/servlet-error/503.sftl</location>
+	</error-page>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+	</welcome-file-list>
+
+	<resource-ref>
+		<description>jdbc connection</description>
+		<res-ref-name>jdbc/${artifactId}</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+</web-app>

@@ -43,6 +43,7 @@
 		<module>panda-tube-wordpress</module>
 		<module>panda-tube-zendesk</module>
 		<module>panda-roid</module>
+		<module>panda-archtype-webapp</module>
 	</modules>
 
 	<properties>

@@ -1,0 +1,19 @@
+name=Name
+
+gender=Gender
+
+birthday=Brithday
+
+amount=Amount
+
+price=Price
+
+shopName=Shop name
+
+shopTelephone=Shop TEL
+
+shopLink=Shop URL
+
+description=Description
+
+
