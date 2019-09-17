@@ -31,6 +31,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpUpgradeHandler;
 import javax.servlet.http.Part;
 
 import panda.io.MimeTypes;
@@ -935,6 +936,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	@Override
 	public Collection<Part> getParts() throws IOException, ServletException {
+		return null;
+	}
+
+	@Override
+	public <T extends HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
 		return null;
 	}
 
