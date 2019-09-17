@@ -79,7 +79,6 @@ public class RevisionedGaeIndexerManager extends GaeIndexerManager implements Re
 		return latest;
 	}
 
-	@SuppressWarnings("deprecation")
 	private void deleteIndex(Index index) {
 		try {
 			log.info("Delete gae index " + index.getName());
