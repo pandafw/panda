@@ -28,6 +28,10 @@
 		<mysql.version>5.1.39</mysql.version>
 		<postgresql.version>9.4.1209.jre6</postgresql.version>
 		<sqlite.version>3.25.2</sqlite.version>
+		<tomcat.version>8.5.45.0</tomcat.version>
+		<servlet.api.version>3.1.0</servlet.api.version>
+		<servlet.jsp.version>2.3.3</servlet.jsp.version>
+		<websocket.version>1.1</websocket.version>
 		<log.hostname>localhost</log.hostname>
 		<log.slack.channel>${env.LOG_SLACK_CHANNEL}</log.slack.channel>
 		<log.slack.webhook>${env.LOG_SLACK_WEBHOOK}</log.slack.webhook>
@@ -197,7 +201,7 @@
 								<artifactItem>
 									<groupId>com.github.jsimone</groupId>
 									<artifactId>webapp-runner</artifactId>
-									<version>7.0.88.0</version>
+									<version>${tomcat.version}</version>
 									<destFileName>webapp-runner.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
@@ -328,19 +332,19 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<version>${servlet.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>javax.servlet.jsp-api</artifactId>
-			<version>2.3.1</version>
+			<version>${servlet.jsp.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.websocket</groupId>
 			<artifactId>javax.websocket-api</artifactId>
-			<version>1.1</version>
+			<version>${websocket.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -348,7 +352,7 @@
 		<dependency>
 			<groupId>com.github.jsimone</groupId>
 			<artifactId>webapp-runner</artifactId>
-			<version>7.0.88.0</version>
+			<version>${tomcat.version}</version>
 			<scope>provided</scope>
 		</dependency>
 

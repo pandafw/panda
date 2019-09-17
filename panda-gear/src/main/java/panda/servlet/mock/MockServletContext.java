@@ -458,4 +458,29 @@ public class MockServletContext implements ServletContext {
 		return null;
 	}
 
+	public Dynamic addJspFile(String servletName, String jspFile) {
+		return null;
+	}
+
+	public int getSessionTimeout() {
+		return 0;
+	}
+
+	public void setSessionTimeout(int sessionTimeout) {
+	}
+
+	public String getRequestCharacterEncoding() {
+		return null;
+	}
+
+	public void setRequestCharacterEncoding(String encoding) {
+	}
+
+	public String getResponseCharacterEncoding() {
+		return null;
+	}
+
+	public void setResponseCharacterEncoding(String encoding) {
+	}
+
 }

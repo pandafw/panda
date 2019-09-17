@@ -11,6 +11,8 @@ public class AppMain {
 			System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow", "|{}&");
 			Main.main(new String[] { 
 					"--port", "8080",
+					"-ArelaxedPathChars=[]|{}&",
+					"-ArelaxedQueryChars=[]|{}&",
 					"--temp-directory", "out/tomcat",
 					"--uri-encoding", "UTF-8",
 					"--use-body-encoding-for-uri",

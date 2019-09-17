@@ -3,6 +3,7 @@ package panda.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 
 import panda.lang.Asserts;
@@ -51,5 +52,8 @@ public class DelegateServletInputStream extends ServletInputStream {
 
 	public boolean isReady() {
 		return true;
+	}
+
+	public void setReadListener(ReadListener readListener) {
 	}
 }
