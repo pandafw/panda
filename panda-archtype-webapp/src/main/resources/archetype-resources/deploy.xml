@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${maven.project.artifactId}" default="deploy" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
+	<property environment="env"/>
+	<property name="APPNAME" value="${maven.project.artifactId}"/>
+
+	<property name="app.dir" value="/app/${APPNAME}"/>
+	<property name="web.dir" value="${app.dir}/web"/>
+	<property name="log.dir" value="${app.dir}/log"/>
+	<property name="hsqldb.dir" value="${app.dir}/hsqldb"/>
+	<property name="sqlite.dir" value="${app.dir}/sqlite"/>
+	<property name="lucene.dir" value="${app.dir}/lucene"/>
+	<property name="cls.dir" value="${web.dir}/WEB-INF/classes"/>
+
+	<!-- deploy -->
+	<target name="deploy">
+		<mkdir dir="${web.dir}"/>
+		<mkdir dir="${log.dir}"/>
+		<mkdir dir="${hsqldb.dir}"/>
+		<mkdir dir="${sqlite.dir}"/>
+		<mkdir dir="${lucene.dir}"/>
+
+		<delete includeemptydirs="true">
+			<fileset dir="${web.dir}"/>
+		</delete>
+
+		<!-- extract war -->
+		<unzip src="${project.build.directory}/${project.artifactId}-${project.version}.war" dest="${web.dir}"/>
+
+		<!-- extract static -->
+		<loadresource property="panda.static.version">
+			<propertyresource name="panda.version"/>
+			<filterchain>
+				<tokenfilter>
+					<filetokenizer/>
+					<replacestring from="-SNAPSHOT" to=""/>
+				</tokenfilter>
+			</filterchain>
+		</loadresource>
+		<unzip src="${maven.dependency.com.github.pandafw.panda-html.jar.path}" dest="${web.dir}/static"/>
+		<move file="${web.dir}/static/panda/html" tofile="${web.dir}/static/${panda.static.version}" verbose="true"/>
+		<delete dir="${web.dir}/static/panda"/>
+
+		<!-- copy properties -->
+		<copy todir="${cls.dir}">
+			<fileset dir="${project.build.outputDirectory}">
+				<include name="*.properties"/>
+			</fileset>
+		</copy>
+
+		<!-- freemarker.properties -->
+		<replaceregexp file="${cls.dir}/freemarker.properties"
+			match="template_update_delay=.*"
+			replace="template_update_delay=60000"
+			byline="true"
+			encoding="ISO-8859-1"
+			if:set="RELEASE"/>
+
+		<!-- app.properties -->
+		<replaceregexp file="${cls.dir}/app.properties"
+			match="jdbc:hsqldb:file:.*"
+			replace="jdbc:hsqldb:file:${hsqldb.dir}/${APPNAME}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${cls.dir}/app.properties"
+			match="jdbc:sqlite:.*"
+			replace="jdbc:sqlite:${sqlite.dir}/${APPNAME}.db3"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${cls.dir}/app.properties" 
+			match=".*lucene.location=.*"
+			replace="lucene.location=${lucene.dir}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${cls.dir}/app.properties" 
+			match=".*task.action.scheme=.*"
+			replace="task.action.scheme=http://${APPNAME}:8080"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${cls.dir}/app.properties"
+			match="mvc.link.usecdn=.*"
+			replace="mvc.link.usecdn=true"
+			byline="true"
+			encoding="ISO-8859-1"
+			if:set="RELEASE"/>
+		<replaceregexp file="${cls.dir}/app.properties"
+			match="app.debug=.*"
+			replace="app.debug=false"
+			byline="true"
+			encoding="ISO-8859-1"
+			if:set="RELEASE"/>
+
+		<!-- logging -->
+		<replaceregexp file="${cls.dir}/log.properties"
+			match="(debug)|(trace)"
+			replace="info"
+			byline="true"
+			encoding="ISO-8859-1"
+			if:set="RELEASE"/>
+		<replaceregexp file="${cls.dir}/log.properties"
+			match="level\.\*=.*"
+			replace="level.*=info, file, slack"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${cls.dir}/log.properties" 
+			match="logger.file.File=.*.log"
+			replace="logger.file.File=${log.dir}/${APPNAME}.log"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${cls.dir}/log.properties" 
+			match="logger.access.File=.*.log"
+			replace="logger.access.File=${log.dir}/${APPNAME}-access.log"
+			byline="true"
+			encoding="ISO-8859-1"/>
+	</target>
+</project>

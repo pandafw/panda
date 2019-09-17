@@ -1,0 +1,129 @@
+{
+	// context path
+	"admin_path": "/admin",
+	"super_path": "/super",
+	"static_path": "/static",
+	"task_path": "/task",
+
+	"files_path": "/files",
+	"media_path": "/media",
+	"pages_path": "/pages",
+	
+	// default resources
+	"panda.mvc.resources": [ 
+		"panda.mvc.Resource",
+		"panda.app.App",
+		"${package}.Application"
+	],
+
+	// runtime settings (reloadable)
+	//"panda.settings.runtime.files": [ "runtime.properties" ],
+
+	// runtime settings reload check delay (ms) */
+	//"panda.settings.runtime.delay": 60000,
+
+	// acceptable locale array (first element is the default)
+	//"panda.locale.accepts": [ "en", "ja", "zh" ],
+
+	// mvc url action mapping ignore case (default: false)
+	//"panda.mvc.mapping.case.ignore": true,
+
+	// media location
+	//"panda.media.location": "${web.dir}/WEB-INF/_media",
+	
+	// lucene location
+	//"panda.lucene.location": "${web.dir}/WEB-INF/_lucene",
+	
+	// lucene analyzer
+	//"panda.lucene.analyzer": "org.apache.lucene.analysis.cjk.CJKAnalyzer",
+
+	// local filestore storage local path
+	//"panda.filestore.location": "${web.dir}/WEB-INF/_files",
+
+	// multipart max upload body size (default: 2MB)
+	"panda.multipart.body.maxsize": 10485760, // 10MB
+
+	// multipart max upload file size (default: 2MB)
+	"panda.multipart.file.maxsize": 10485760, // 10MB
+
+	// upload file maxage (second, default: 1 day)
+	//"panda.multipart.upload.maxage": 86400,
+
+	// auth
+	"panda.auth.view.unlogin": "redirect:/login/?redirect=${top}",
+	//"panda.auth.view.unsecure": "redirect:/login/?redirect=${top}",
+
+	// crypto secret key string
+	//"panda.crypto.key.secret": "== Panda Java ==",
+
+	// crypt algorithm
+	//"panda.crypto.algorithm": "AES",
+
+	// secure user age (s)
+	"panda.auth.secure.session.age": 1800,
+	
+	// auth ticket parameter name
+	//"panda.auth.ticket.param.name": "_ticket_",
+
+	// auth ticket cookie name
+	//"panda.auth.ticket.cookie.name": "WW_TICKET",
+
+	// auth ticket cookie age (60 * 60 * 24 * 7day)
+	//"panda.auth.ticket.cookie.age": 604800,
+
+	// executor settings
+	"panda.executor.enable": true,
+	//"panda.executor.name": "executor",
+	//"panda.executor.pool.size.core": 1,
+	//"panda.executor.pool.size.max": 1,
+
+	// scheduler settings
+	"panda.scheduler.enable": true,
+	//"panda.scheduler.name": "scheduler",
+	//"panda.scheduler.pool.size": 1,
+
+	// cron
+	"panda.scheduler.crons": [{
+		"action": "/task/filestorecleanup/start",
+		"description": "Execute every 4 hours to remove the upload temporary files",
+		"token": true,
+		"initialDelay": 3600000,
+		"fixedDelay": 14400000
+	}],
+
+	// sitemesh
+	"panda.sitemesh": {
+		"excludes": [],
+
+		"decorators": [{
+				"head": "x_sitemesh=false"
+			}, {
+				"para": "__mesh=false"
+			}, {
+				"para": "__inner=true",
+				"page": "/sitemesh/inner.ftl"
+			}, {
+				"para": "__pdf=true",
+				"page": "/sitemesh/pdf.ftl"
+			}, {
+				"para": "__print=true",
+				"page": "/sitemesh/print.ftl"
+			}, {
+				"para": "__popup=true",
+				"page": "/sitemesh/popup.ftl"
+			}, {
+				"path": "/.*[/_\\.]pdf",
+				"page": "/sitemesh/pdf.ftl"
+			}, {
+				"path": "/.*[/_\\.]print",
+				"page": "/sitemesh/print.ftl"
+			}, {
+				"path": "/.*[/_\\.]popup",
+				"page": "/sitemesh/popup.ftl"
+			}, {
+				"path": "/.*",
+				"page": "/sitemesh/main.ftl"
+			}
+		]
+	}
+}

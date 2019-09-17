@@ -1,0 +1,16 @@
+._*
+.#*
+/.classpath
+/.factorypath
+/.project
+/.settings
+/.vscode
+/*.properties
+/lib
+/log
+/out
+/azure/src
+/azure/web
+/heroku
+/web/WEB-INF/_*
+/web/WEB-INF/fonts
