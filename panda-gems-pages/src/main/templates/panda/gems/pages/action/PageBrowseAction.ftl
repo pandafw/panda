@@ -31,7 +31,8 @@ img.page-thumb {
 		<h3><@p.i icon="icon"/> <@p.text name="title"/></h3>
 	</div>
 
-	<form id="pages_form" action="search" method="GET" loadmask="false" role="search">
+	<@p.url var="pp" action="%{!!(b.pages_path)|||'/pages'}"/>
+	<form id="pages_form" action="${vars.pp}/search" method="GET" loadmask="false" role="search">
 		<div class="input-group">
 			<@p.textfield cssClass="form-control" name="key" maxlength="80" placeholder="#(placeholder-search)"/>
 			<span class="input-group-btn">
@@ -55,7 +56,6 @@ img.page-thumb {
 	<#include "/panda/app/view/index-topbar.ftl"/>
 </#if>
 
-	<@p.url var="pp" action="%{!!(b.pages_path)|||'/pages'}"/>
 	<@p.url var="mp" action="%{!!(b.media_path)|||'/media'}"/>
 
 	<div class="pages-list">
