@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import panda.app.action.BaseAction;
-import panda.app.auth.Auth;
-import panda.app.constant.AUTH;
 import panda.dao.Dao;
 import panda.gems.media.R;
 import panda.gems.media.S;
@@ -25,6 +23,7 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.lang.Randoms;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
@@ -40,9 +39,7 @@ import panda.servlet.HttpServlets;
 import panda.vfs.FileItem;
 import panda.vfs.FileStores;
 
-@At("${!!admin_path|||'/admin'}/media")
-@Auth(AUTH.ADMIN)
-public class MediaBrowseAction extends BaseAction {
+public abstract class MediaBrowseAction extends BaseAction {
 	private static final Log log = Logs.getLog(MediaBrowseAction.class);
 	
 	@IocInject
@@ -153,6 +150,29 @@ public class MediaBrowseAction extends BaseAction {
 		Dao dao = getDaoClient().getDao();
 
 		MediaQuery mq = new MediaQuery();
+
+		addFilters(mq, arg);
+
+		mq.id().desc();
+		mq.limit(getMediaIndexLimit());
+
+		return dao.select(mq);
+	}
+
+	/**
+	 * add filters for sub class override
+	 * @param mq media query
+	 */
+	protected void addFilters(MediaQuery mq, Arg arg) {
+		if (arg.si != null) {
+			mq.id().lt(arg.si);
+		}
+	
+		if (Systems.IS_OS_APPENGINE) {
+			// GAE data store does not support complex query
+			return;
+		}
+
 		if (arg.ds != null) {
 			mq.createdAt().ge(arg.ds);
 		}
@@ -163,22 +183,6 @@ public class MediaBrowseAction extends BaseAction {
 		if (Strings.isNotEmpty(arg.qs)) {
 			mq.name().contains(arg.qs);
 		}
-		if (arg.si != null) {
-			mq.id().lt(arg.si);
-		}
-		mq.id().desc();
-		mq.limit(getMediaIndexLimit());
-		
-		addFilters(mq);
-
-		return dao.select(mq);
-	}
-
-	/**
-	 * add filters for sub class override
-	 * @param mq media query
-	 */
-	protected void addFilters(MediaQuery mq) {
 	}
 
 	public int getMediaIndexLimit() {

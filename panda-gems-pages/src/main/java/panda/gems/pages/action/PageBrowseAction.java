@@ -3,9 +3,7 @@ package panda.gems.pages.action;
 import java.util.List;
 
 import panda.app.action.BaseAction;
-import panda.app.auth.Auth;
 import panda.app.bean.IndexArg;
-import panda.app.constant.AUTH;
 import panda.dao.Dao;
 import panda.gems.pages.V;
 import panda.gems.pages.entity.Page;
@@ -24,10 +22,7 @@ import panda.mvc.annotation.param.PathArg;
 import panda.mvc.view.Views;
 import panda.net.URLHelper;
 
-@At("${!!admin_path|||'/admin'}/pages")
-@Auth(AUTH.ADMIN)
-public class PageBrowseAction extends BaseAction {
-
+public abstract class PageBrowseAction extends BaseAction {
 	@At
 	@To(Views.REDIRECT)
 	public String search(@Param("key") String key) throws Exception {
@@ -111,9 +106,12 @@ public class PageBrowseAction extends BaseAction {
 
 	protected void addFilters(PageQuery pq, IndexArg arg) {
 		pq.publishDate().le(DateTimes.getDate());
-		
-		if (Strings.isNotEmpty(arg.getKey())) {
-			pq.title().contains(arg.getKey());
+
+		if (!Systems.IS_OS_APPENGINE) {
+			// GQL does not support like
+			if (Strings.isNotEmpty(arg.getKey())) {
+				pq.title().contains(arg.getKey());
+			}
 		}
 		if (Strings.isNotEmpty(arg.getTag())) {
 			TagQuery tq = new TagQuery();
