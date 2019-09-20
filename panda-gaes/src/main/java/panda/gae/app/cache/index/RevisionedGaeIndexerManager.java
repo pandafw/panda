@@ -1,4 +1,4 @@
-package panda.app.index.gae;
+package panda.gae.app.cache.index;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,11 +15,11 @@ import com.google.appengine.api.search.SearchServiceFactory;
 import panda.app.constant.MVC;
 import panda.app.index.RevisionedIndexerManager;
 import panda.app.util.AppSettings;
+import panda.gae.idx.GaeIndexer;
+import panda.gae.idx.GaeIndexerManager;
 import panda.idx.IndexException;
 import panda.idx.Indexer;
 import panda.idx.IndexerManager;
-import panda.idx.gae.GaeIndexer;
-import panda.idx.gae.GaeIndexerManager;
 import panda.io.FileNames;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;

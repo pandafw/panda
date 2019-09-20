@@ -120,25 +120,5 @@
 			<version>${poi.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<!-- GAE -->
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>${gaeapi.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-labs</artifactId>
-			<version>${gaeapi.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine.tools</groupId>
-			<artifactId>appengine-gcs-client</artifactId>
-			<version>${gaegcs.version}</version>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 </project>

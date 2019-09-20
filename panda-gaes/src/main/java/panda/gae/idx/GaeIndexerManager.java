@@ -1,4 +1,4 @@
-package panda.idx.gae;
+package panda.gae.idx;
 
 import java.util.HashMap;
 import java.util.Locale;

@@ -9,82 +9,14 @@
 		<version>1.5.5</version>
 	</parent>
 
-	<artifactId>panda-gems-users</artifactId>
+	<artifactId>panda-gaes</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Gems Users</name>
-	<description>Users login/logout extension module for the Panda Framework web application.</description>
+	<name>Panda Gaes</name>
+	<description>Panda Gaes is a module of the Panda Framework for quickly develop web application on Google App Engine.</description>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>${project.basedir}/src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>${project.basedir}/src/main/templates</directory>
-			</resource>
-			<resource>
-				<directory>${project.basedir}/src/gen/resources</directory>
-			</resource>
-			<resource>
-				<directory>${project.basedir}/src/gen/templates</directory>
-			</resource>
-		</resources>
-
 		<plugins>
-			<!-- add source folder (src/gen) -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.basedir}/src/gen/java</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- ant build -->
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>codegen</id>
-						<configuration>
-							<target>
-								<ant antfile="../panda-gems/build.xml">
-									<target name="gen-all" />
-								</ant>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>build</id>
-						<configuration>
-							<target>
-								<ant antfile="../panda-gems/build.xml">
-									<target name="${ant.target}" />
-								</ant>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- git commit id -->
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
@@ -143,15 +75,11 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-gear</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>panda-gems</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>panda-cgen</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -175,5 +103,26 @@
 			<version>${websocket.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- GAE -->
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>${gaeapi.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-labs</artifactId>
+			<version>${gaeapi.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine.tools</groupId>
+			<artifactId>appengine-gcs-client</artifactId>
+			<version>${gaegcs.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 </project>

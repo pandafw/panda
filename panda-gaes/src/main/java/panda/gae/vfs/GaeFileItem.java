@@ -1,4 +1,4 @@
-package panda.vfs.gae;
+package panda.gae.vfs;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package panda.dao.gae;
+package panda.gae.dao;
 
 public interface GaeConverter {
 	Object convert(Object obj);

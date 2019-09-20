@@ -1,9 +1,11 @@
-package panda.image;
+package panda.gae.image;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import panda.image.ImageWrapper;
+import panda.image.Images;
 import panda.io.Streams;
 import panda.io.stream.ByteArrayOutputStream;
 

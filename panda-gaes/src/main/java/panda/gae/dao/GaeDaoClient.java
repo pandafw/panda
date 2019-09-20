@@ -1,4 +1,4 @@
-package panda.dao.gae;
+package panda.gae.dao;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

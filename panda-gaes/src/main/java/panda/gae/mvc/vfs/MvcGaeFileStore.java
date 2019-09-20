@@ -1,10 +1,10 @@
-package panda.mvc.vfs;
+package panda.gae.mvc.vfs;
 
+import panda.gae.vfs.GaeFileStore;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.MvcConstants;
 import panda.vfs.FileStore;
-import panda.vfs.gae.GaeFileStore;
 
 @IocBean(type=FileStore.class)
 public class MvcGaeFileStore extends GaeFileStore {

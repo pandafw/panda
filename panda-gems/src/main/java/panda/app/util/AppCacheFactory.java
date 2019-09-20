@@ -9,9 +9,11 @@ import panda.io.Settings;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Systems;
 import panda.lang.collection.ExpireMap;
+import panda.lang.reflect.Methods;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -68,7 +70,8 @@ public class AppCacheFactory {
 	protected Map buildCache() throws Exception {
 		if (Systems.IS_OS_APPENGINE) {
 			log.info("Build Gae Cache");
-			return GaeHelper.buildCache(maxAge);
+			Class cls = Classes.getClass("panda.gae.app.cache.GaeCaches");
+			return (Map)Methods.invokeStaticMethod(cls, "buildCache", maxAge);
 		}
 
 		if (EHCACHE.equalsIgnoreCase(provider)) {

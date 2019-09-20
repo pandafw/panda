@@ -1,4 +1,4 @@
-package panda.app.util;
+package panda.gae.app.cache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 
 import panda.lang.collection.SafeMap;
 
-public class GaeHelper {
+public class GaeCaches {
 
 	@SuppressWarnings("unchecked")
 	public static Map buildCache(int maxAge) throws Exception {

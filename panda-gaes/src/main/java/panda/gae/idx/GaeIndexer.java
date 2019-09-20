@@ -1,4 +1,4 @@
-package panda.idx.gae;
+package panda.gae.idx;
 
 import java.util.ArrayList;
 import java.util.Collection;

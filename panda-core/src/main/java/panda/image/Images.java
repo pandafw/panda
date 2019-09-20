@@ -16,16 +16,15 @@ public abstract class Images {
 	private static Images i = initInstance();
 	
 	private static Images initInstance() {
-		String prefix = Images.class.getPackage().getName() + ".";
 		if (Systems.IS_OS_ANDROID) {
-			return (Images)Classes.born(prefix + "AndroidImages");
+			return (Images)Classes.born("panda.roid.image.AndroidImages");
 		}
-		else if (Systems.IS_OS_APPENGINE) {
-			return (Images)Classes.born(prefix + "GaeImages");
+		
+		if (Systems.IS_OS_APPENGINE) {
+			return (Images)Classes.born("panda.gae.image.GaeImages");
 		}
-		else {
-			return (Images)Classes.born(prefix + "JavaImages");
-		}
+
+		return new JavaImages();
 	}
 	
 	/**

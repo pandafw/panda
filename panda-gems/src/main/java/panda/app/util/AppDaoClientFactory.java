@@ -14,7 +14,6 @@ import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
-import panda.dao.gae.GaeDaoClient;
 import panda.dao.mongo.MongoDaoClient;
 import panda.dao.sql.SqlDaoClient;
 import panda.dao.sql.Sqls;
@@ -103,7 +102,8 @@ public class AppDaoClientFactory {
 			try {
 				String factory = settings.getProperty(SET.DATA + '.' + ds, ds);
 				if (GAE.equalsIgnoreCase(factory)) {
-					GaeDaoClient gdc = GaeDaoClient.i();
+					Class cls = Classes.getClass("panda.gae.dao.GaeDaoClient");
+					DaoClient gdc = (DaoClient)Methods.invokeStaticMethod(cls, "i");
 					return gdc;
 				}
 				
