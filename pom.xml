@@ -34,6 +34,7 @@
 		<module>panda-gems-pages</module>
 		<module>panda-gems-tager</module>
 		<module>panda-gems-users</module>
+		<module>panda-gaes</module>
 		<module>panda-cgen</module>
 		<module>panda-glue</module>
 		<module>panda-nets</module>

@@ -1,4 +1,4 @@
-package panda.dao.gae;
+package panda.gae.dao;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;

@@ -94,6 +94,14 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- javax.mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- FreeMarker -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -139,26 +147,6 @@
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-common</artifactId>
 			<version>${lucene.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- GAE -->
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>${gaeapi.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-labs</artifactId>
-			<version>${gaeapi.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine.tools</groupId>
-			<artifactId>appengine-gcs-client</artifactId>
-			<version>${gaegcs.version}</version>
 			<scope>provided</scope>
 		</dependency>
 

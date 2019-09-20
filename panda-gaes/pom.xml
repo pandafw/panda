@@ -9,22 +9,13 @@
 		<version>1.6.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>panda-gems-admin</artifactId>
+	<artifactId>panda-gaes</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Panda Gems Admin</name>
-	<description>Super admin tools extension module for the Panda Framework web application.</description>
+	<name>Panda Gaes</name>
+	<description>Panda Gaes is a module of the Panda Framework for quickly develop web application on Google App Engine.</description>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>${project.basedir}/src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>${project.basedir}/src/main/templates</directory>
-			</resource>
-		</resources>
-
 		<plugins>
 			<!-- git commit id -->
 			<plugin>
@@ -77,12 +68,18 @@
 		<!-- Panda -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>panda-gems</artifactId>
+			<artifactId>panda-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>panda-cgen</artifactId>
+			<artifactId>panda-gear</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>panda-gems</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -107,18 +104,25 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- POI -->
+		<!-- GAE -->
 		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>${poi.version}</version>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>${gaeapi.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml-schemas</artifactId>
-			<version>${poi.version}</version>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-labs</artifactId>
+			<version>${gaeapi.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.appengine.tools</groupId>
+			<artifactId>appengine-gcs-client</artifactId>
+			<version>${gaegcs.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 </project>

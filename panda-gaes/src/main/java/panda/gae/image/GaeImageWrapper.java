@@ -1,8 +1,10 @@
-package panda.image;
+package panda.gae.image;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
+import panda.image.AbstractImageWrapper;
+import panda.image.ImageWrapper;
 import panda.io.Streams;
 
 import com.google.appengine.api.images.Image;
