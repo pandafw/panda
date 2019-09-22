@@ -20,6 +20,9 @@ public class HttpsRedirectFilter implements ServletFilter {
 	@IocInject(value=MvcConstants.MVC_HTTPS_REDIRECT, required=false)
 	private boolean redirect = true;
 
+	@IocInject(value=MvcConstants.MVC_HTTPS_PORT, required=false)
+	private int httpsport = 443;
+
 	@IocInject
 	private MvcSettings settings;
 	
@@ -29,12 +32,17 @@ public class HttpsRedirectFilter implements ServletFilter {
 		if (enabled) {
 			String schema = HttpServlets.getScheme(req);
 			if (Scheme.HTTP.equals(schema)) {
+				int port = settings.getPropertyAsInt(SetConstants.MVC_HTTPS_PORT, httpsport);
+
 				ServletURLBuilder sub = new ServletURLBuilder();
 				sub.setRequest(req);
 				sub.setScheme(Scheme.HTTPS);
 				sub.setHost(req.getServerName());
+				sub.setPort(port);
 				sub.setParams(req.getParameterMap());
+	
 				String url = sub.build();
+	
 				HttpServlets.sendRedirect(res, url);
 
 				// stop filter chain
