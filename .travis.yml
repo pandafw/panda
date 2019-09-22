@@ -28,6 +28,10 @@ addons:
 
 install: true
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_85e093d3bccc_key -iv $encrypted_85e093d3bccc_iv -in secret-keys.gpg.enc -out secret-keys.gpg -d
+  - gpg --import secret-keys.gpg
+
 before_script:
   - sleep 15
   - mysql -uroot -e "create database ptest;"
@@ -38,7 +42,9 @@ before_script:
   - psql -U postgres -c "GRANT ALL ON DATABASE ptest TO panda;"
   - mongo ptest --eval 'db.createUser({user:"panda",pwd:"panda",roles:["readWrite"]});'
 
-script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn -B clean source:jar javadoc:jar cobertura:cobertura deploy"
+script: 
+  - mvn -B -s .travis.settings.xml -Dgpg.skip=false clean source:jar javadoc:jar gpg:sign cobertura:cobertura deploy
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
