@@ -54,7 +54,7 @@ Panda Frameworkは下記のモジュールで構成されている。
  | [panda-gems](gems/index_ja.md) | CRUD機能/ユーザー認証機能などを実装した拡張Web-APPモジュール。 |
  | [panda-glue](glue/index_ja.md) | [ASM](glue/asm_ja.md)/[AOP](glue/aop_ja.md)モジュール。                  |
  | [panda-html](html/index_ja.md) | jQuery、Bootstrapなどを含むCSS/JavaScriptモジュール。 |
- | [panda-tool](tool/index_ja.md) | コードジェネレータ。 |
+ | [panda-cgen](cgen/index_ja.md) | Panda MVC CRUDソースコードジェネレータ。 |
  | [panda-tube](tube/index_ja.md) | Web Service APIのクライアント（WordPress XMP-RPC, Google Vision APIなど）。    |
 
 

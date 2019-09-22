@@ -43,8 +43,7 @@ before_script:
   - mongo ptest --eval 'db.createUser({user:"panda",pwd:"panda",roles:["readWrite"]});'
 
 script: 
-  - mvn -s .travis.settings.xml -Dgpg.skip=false -DskipTests clean source:jar javadoc:jar gpg:sign deploy
-  - mvn -B -s .travis.settings.xml cobertura:cobertura
+  - mvn -B -s .travis.settings.xml -Dgpg.skip=false clean source:jar javadoc:jar gpg:sign cobertura:cobertura deploy
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
