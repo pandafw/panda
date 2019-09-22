@@ -26,9 +26,11 @@ public class AppSettings extends MvcSettings {
 	private static final String SYS = "$SYS";
 	private static final String APP_PROPERTIES = "app.properties";
 	private static final String ENV_PROPERTIES = "env.properties";
+	private static final String TEST_PROPERTIES = "test.properties";
 
 	@IocInject(value=MVC.SETTINGS, required=false)
-	protected List<String> settings = Arrays.asList(ENV, SYS, APP_PROPERTIES, ENV_PROPERTIES);
+	protected List<String> settings = Arrays.asList(
+		ENV, SYS, APP_PROPERTIES, ENV_PROPERTIES);
 
 	@IocInject(value=MVC.SETTINGS_RUNTIME_FILES, required=false)
 	protected String[] runtimes;
@@ -78,6 +80,13 @@ public class AppSettings extends MvcSettings {
 			}
 		}
 		
+		try {
+			load(TEST_PROPERTIES);
+			log.warn(TEST_PROPERTIES + " is loadded.");
+		}
+		catch (FileNotFoundException e) {
+		}
+
 		if (Arrays.isNotEmpty(runtimes)) {
 			loadRuntimes(runtimes);
 		}
