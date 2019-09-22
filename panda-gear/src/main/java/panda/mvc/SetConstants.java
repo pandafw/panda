@@ -29,6 +29,11 @@ public interface SetConstants {
 	public static final String MVC_HTTPS_REDIRECT = "mvc.https.redirect";
 
 	/**
+	 * mvc https port
+	 */
+	public static final String MVC_HTTPS_PORT = "mvc.https.port";
+
+	/**
 	 * mvc http dump path
 	 */
 	public static final String MVC_HTTP_DUMP_PATH = "mvc.http.dump.path";

@@ -26,6 +26,9 @@ public interface MvcConstants {
 	/** mvc https redirect */
 	public static final String MVC_HTTPS_REDIRECT = "panda.mvc.https.redirect";
 
+	/** mvc https port */
+	public static final String MVC_HTTPS_PORT = "panda.mvc.https.port";
+
 	/* Crypto */
 	public static final String CRYPTO_ALGORITHM = "panda.crypto.algorithm";
 
