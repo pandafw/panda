@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.pandafw</groupId>
 		<artifactId>panda</artifactId>
-		<version>1.5.5</version>
+		<version>1.5.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>panda-cgen</artifactId>
@@ -30,45 +30,6 @@
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>get-the-git-infos</id>
-						<goals>
-							<goal>revision</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<failOnNoGitDirectory>false</failOnNoGitDirectory>
-				</configuration>
-			</plugin>
-
-			<!-- jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifestEntries>
-							<Version>${project.version}</Version>
-							<Revision>${git.commit.id.abbrev}</Revision>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-
-			<!-- gpg sign -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
