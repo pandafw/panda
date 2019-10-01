@@ -6,7 +6,7 @@
 	<groupId>com.github.pandafw</groupId>
 	<artifactId>panda</artifactId>
 	<packaging>pom</packaging>
-	<version>1.6.0</version>
+	<version>1.6.1-SNAPSHOT</version>
 
 	<name>Panda Framework</name>
 	<description>Panda Framework is a Java development framework, it can help you quickly create a WEB application.</description>
@@ -119,6 +119,13 @@
 					<version>3.7.1</version>
 				</plugin>
 
+				<!-- resources -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+
 				<!-- source:jar -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -168,6 +175,18 @@
 					<groupId>pl.project13.maven</groupId>
 					<artifactId>git-commit-id-plugin</artifactId>
 					<version>2.2.4</version>
+					<executions>
+						<execution>
+							<id>get-the-git-infos</id>
+							<goals>
+								<goal>revision</goal>
+							</goals>
+							<phase>initialize</phase>
+						</execution>
+					</executions>
+					<configuration>
+						<failOnNoGitDirectory>true</failOnNoGitDirectory>
+					</configuration>
 				</plugin>
 
 				<!-- jar -->
@@ -175,6 +194,14 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
 					<version>3.1.0</version>
+					<configuration>
+						<archive>
+							<manifestEntries>
+								<Version>${project.version}</Version>
+								<Revision>${git.commit.id.abbrev}</Revision>
+							</manifestEntries>
+						</archive>
+					</configuration>
 				</plugin>
 
 				<!-- war -->
