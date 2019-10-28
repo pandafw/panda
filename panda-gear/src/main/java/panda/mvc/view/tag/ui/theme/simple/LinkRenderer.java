@@ -44,6 +44,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeJquery();
 			writeJqueryPlugins();
 			writeBootstrap();
+			writeFontawesome();
 			writePanda();
 			writeStyleSheets();
 		}
@@ -130,13 +131,9 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 					writeCdnCss("https://netdna.bootstrapcdn.com/bootstrap/" 
 							+ BOOTSTRAP3_VERSION 
 							+ "/css/bootstrap");
-					writeCdnCss("https://netdna.bootstrapcdn.com/font-awesome/" 
-							+ FONTAWESOME4_VERSION 
-							+ "/css/font-awesome");
 				}
 				else {
 					writeStaticCss("/bootstrap3/css/bootstrap");
-					writeStaticCss("/font-awesome/css/font-awesome");
 				}
 			}
 			if (js) {
@@ -147,6 +144,21 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				}
 				else {
 					writeStaticJs("/bootstrap3/js/bootstrap");
+				}
+			}
+		}
+	}
+
+	private void writeFontawesome() throws IOException {
+		if (tag.isFontawesome()) {
+			if (css) {
+				if (tag.useCdn()) {
+					writeCdnCss("https://netdna.bootstrapcdn.com/font-awesome/" 
+							+ FONTAWESOME4_VERSION 
+							+ "/css/font-awesome");
+				}
+				else {
+					writeStaticCss("/font-awesome/css/font-awesome");
 				}
 			}
 		}

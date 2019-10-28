@@ -54,9 +54,10 @@ public class Link extends UIBean {
 	protected Boolean cdn;
 	protected Boolean debug;
 
+	protected Locale locale;
+
 	protected boolean js;
 	protected boolean css;
-	protected Locale locale;
 	protected boolean jquery;
 	protected boolean jquery1;
 	protected boolean jquery2;
@@ -65,6 +66,7 @@ public class Link extends UIBean {
 	protected boolean bootstrap;
 	protected boolean bootstrap3;
 	protected boolean bootstrap4;
+	protected boolean fontawesome;
 	protected boolean panda;
 	protected boolean respondjs;
 	protected List<String> stylesheets;
@@ -96,6 +98,7 @@ public class Link extends UIBean {
 			jquery = true;
 			jqplugins = true;
 			bootstrap = true;
+			fontawesome = true;
 		}
 		
 		if (cdn == null) {
@@ -314,6 +317,20 @@ public class Link extends UIBean {
 	 */
 	public void setBootstrap4(boolean bootstrap4) {
 		this.bootstrap4 = bootstrap4;
+	}
+
+	/**
+	 * @return the fontawesome
+	 */
+	public boolean isFontawesome() {
+		return fontawesome;
+	}
+
+	/**
+	 * @param fontawesome the fontawesome to set
+	 */
+	public void setFontawesome(boolean fontawesome) {
+		this.fontawesome = fontawesome;
 	}
 
 	/**
