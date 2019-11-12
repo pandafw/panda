@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.io.FileNames;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -16,16 +15,12 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 
 /**
- * 内部重定向视图
+ * Servlet forward view
  * <p/>
- * 根据传入的视图名，决定视图的路径：
+ * Example:
  * <ul>
- * <li>如果视图名以 '/' 开头， 则被认为是一个 全路径
- * <li>否则，将视图名中的 '.' 转换成 '/'，并加入前缀 "/WEB-INF/"
- * </ul>
- * 通过注解映射的例子：
- * <ul>
- * <li>'@Ok("forward:abc.cbc")' => /WEB-INF/abc/cbc
+ * <li>'@Ok("forward")' => path: abc.cbc => /WEB-INF/abc.cbc
+ * <li>'@Ok("forward:abc/cbc")' => /WEB-INF/abc/cbc
  * <li>'@Ok("forward:/abc/cbc")' => /abc/cbc
  * <li>'@Ok("forward:/abc/cbc.jsp")' => /abc/cbc.jsp
  * </ul>
@@ -41,6 +36,24 @@ public class ForwardView extends AbstractView {
 		setArgument(location);
 	}
 	
+	/**
+	 * override this method to customize
+	 * 
+	 * @return extension
+	 */
+	protected String getExtension() {
+		return "";
+	}
+	
+	/**
+	 * override this method to customize
+	 * 
+	 * @return root path
+	 */
+	protected String getRootPath() {
+		return "/WEB-INF";
+	}
+
 	public void render(ActionContext ac) {
 		String path = argument;
 		String args = "";
@@ -56,20 +69,14 @@ public class ForwardView extends AbstractView {
 		String ext = getExtension();
 		
 		if (Strings.isEmpty(path)) {
-			path = ac.getPath();
-			path = "/WEB-INF" + (Strings.startsWithChar(path, '/') ? "" : "/") + FileNames.removeExtension(path) +  ext;
+			path = getRootPath() + ac.getPath();
 		}
-		else if (path.charAt(0) == '/') {
-			// absolute path
-			if (!Strings.endsWithIgnoreCase(path, ext)) {
-				path += ext;
-			}
+		else if (path.charAt(0) != '/') {
+			path = getRootPath() + '/' + path;
 		}
-		else {
-			if (!Strings.endsWithIgnoreCase(path, ext)) {
-				path += ext;
-			}
-			path = "/WEB-INF/" + path;
+
+		if (!Strings.endsWithIgnoreCase(path, ext)) {
+			path += ext;
 		}
 
 		// do forward
@@ -98,15 +105,6 @@ public class ForwardView extends AbstractView {
 		}
 		
 		rd.forward(req, res);
-	}
-	
-	/**
-	 * override this method to customize
-	 * 
-	 * @return extension
-	 */
-	protected String getExtension() {
-		return "";
 	}
 
 }

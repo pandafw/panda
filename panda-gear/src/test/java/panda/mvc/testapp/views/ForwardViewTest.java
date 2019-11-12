@@ -11,17 +11,31 @@ import panda.mvc.testapp.BaseWebappTest;
 public class ForwardViewTest extends BaseWebappTest {
 
 	@Test
-	public void test_simple() throws IOException {
-		get("/views/for?to=base");
+	public void test_for1() throws IOException {
+		get("/views/for1?to=base");
 		assertEquals(200, resp.getStatusCode());
 		assertEquals(getContextPath(), resp.getContentText());
+	}
 
+	@Test
+	public void test_for2() throws IOException {
 		get("/views/for2?to=base");
 		assertEquals(200, resp.getStatusCode());
 		assertEquals(getContextPath(), resp.getContentText());
+	}
 
+	@Test
+	public void test_for3() throws IOException {
 		get("/views/for3?to=base");
 		assertEquals(200, resp.getStatusCode());
 		assertEquals(getContextPath(), resp.getContentText());
+	}
+
+	@Test
+	public void test_for4() throws IOException {
+		String exp = "/views/for.4";
+		get(exp + "?to=base");
+		assertEquals(200, resp.getStatusCode());
+		assertEquals(exp, resp.getContentText());
 	}
 }

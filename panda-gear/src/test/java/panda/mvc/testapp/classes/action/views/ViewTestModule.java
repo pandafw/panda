@@ -62,9 +62,9 @@ public class ViewTestModule {
 	}
 
 	// -------------ForwardView
-	@At("for")
+	@At("for1")
 	@To("->:/${reqParams.to}.jsp")
-	public void forwardView() {
+	public void forwardView1() {
 	}
 
 	@At("for2")
@@ -75,6 +75,11 @@ public class ViewTestModule {
 	@At("for3")
 	@To("forward:/${reqParams.to == null ? 'base' : 'base'}.jsp")
 	public void forwardView3() {
+	}
+
+	@At("for.4")
+	@To("forward")
+	public void forwardView4() {
 	}
 
 	// --------------Raw view
