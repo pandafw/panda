@@ -32,7 +32,7 @@ public class JspViewTest {
 		ac.setPath("/abc/bcd.do");
 		JspView fv = new JspView("");
 		fv.render(ac);
-		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
+		assertEquals("/WEB-INF/abc/bcd.do.jsp", ac.getMockResponse().getForwardedUrl());
 	}
 
 	@Test

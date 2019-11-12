@@ -50,6 +50,9 @@ public abstract class BaseWebappTest {
 					String path = url.toExternalForm();
 					String war = path.substring(0, path.length() - xml.length());
 					war = Strings.removeStart(war, "file:");
+					System.out.println("-------------------------------------");
+					System.out.println(" WAR: " + war);
+					System.out.println("-------------------------------------");
 					try {
 						System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow", "|{}&");
 						webapp.runner.launch.Main.main(new String[] { 
