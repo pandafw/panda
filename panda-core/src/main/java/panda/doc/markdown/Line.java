@@ -1,8 +1,8 @@
 package panda.doc.markdown;
 
-import panda.doc.html.HTML;
-
 import java.util.LinkedList;
+
+import panda.lang.html.HTML;
 
 /**
  * This class represents a text line.

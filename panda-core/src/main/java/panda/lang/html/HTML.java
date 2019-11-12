@@ -1,4 +1,4 @@
-package panda.doc.html;
+package panda.lang.html;
 
 import java.util.HashSet;
 import java.util.Set;

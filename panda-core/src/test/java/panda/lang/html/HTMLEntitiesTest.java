@@ -1,4 +1,4 @@
-package panda.doc.html;
+package panda.lang.html;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import panda.lang.escape.EntityArrays;
+import panda.lang.html.HTMLEntities;
 
 /**
  * Unit tests for {@link HTMLEntities}.

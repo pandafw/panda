@@ -1,4 +1,4 @@
-package panda.doc.html;
+package panda.lang.html;
 
 import java.util.HashMap;
 import java.util.Map;
