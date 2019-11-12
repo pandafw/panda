@@ -1,6 +1,6 @@
 package panda.doc.markdown;
 
-import panda.doc.html.HTML;
+import panda.lang.html.HTML;
 
 /**
  * Utilities.

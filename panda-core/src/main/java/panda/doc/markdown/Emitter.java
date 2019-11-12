@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import panda.doc.html.HTML;
 import panda.lang.Strings;
+import panda.lang.html.HTML;
 
 /**
  * Emitter class responsible for generating HTML output.

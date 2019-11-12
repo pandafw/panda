@@ -1,4 +1,4 @@
-package panda.doc.html;
+package panda.lang.html;
 
 /**
  * Enum of HTML tags.

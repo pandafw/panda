@@ -1,6 +1,5 @@
 package panda.lang;
 
-import panda.doc.html.HTMLEntities;
 import panda.lang.escape.AggregateTranslator;
 import panda.lang.escape.CharSequenceTranslator;
 import panda.lang.escape.CsvEscaper;
@@ -11,6 +10,7 @@ import panda.lang.escape.LookupTranslator;
 import panda.lang.escape.NumericEntityUnescaper;
 import panda.lang.escape.OctalUnescaper;
 import panda.lang.escape.UnicodeUnescaper;
+import panda.lang.html.HTMLEntities;
 
 import java.io.IOException;
 

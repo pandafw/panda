@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import panda.bind.json.JsonObject;
-import panda.doc.html.HTMLEntities;
 import panda.io.FileNames;
 import panda.lang.Collections;
 import panda.lang.Numbers;
 import panda.lang.Strings;
+import panda.lang.html.HTMLEntities;
 import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.theme.AbstractTagRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
