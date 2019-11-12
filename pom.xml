@@ -22,6 +22,7 @@
 
 	<modules>
 		<module>panda-core</module>
+		<module>panda-docs</module>
 		<module>panda-html</module>
 		<module>panda-gear</module>
 		<module>panda-gems</module>
