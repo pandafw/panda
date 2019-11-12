@@ -1,4 +1,4 @@
-Panda Tube
+Panda Nets
 ===============
 
-Web Service API Java Wrapper for WordPress(XML-RPC)
+Panda Nets is a client side library of many basic Internet protocols.
