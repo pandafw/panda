@@ -25,8 +25,14 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String JQUERY2_BIND_PATH = JQUERY_BIND_BASE + JQUERY2_VERSION;
 	private static final String JQUERY3_BIND_PATH = JQUERY_BIND_BASE + JQUERY3_VERSION;
 
+	private static final String BOOTSTRAP_CDN_BASE = "https://netdna.bootstrapcdn.com/bootstrap/";
 	private static final String BOOTSTRAP3_VERSION = "3.4.0";
+	
+	private static final String FONTAWESOME_CDN_BASE = "https://netdna.bootstrapcdn.com/font-awesome/";
 	private static final String FONTAWESOME4_VERSION = "4.7.0";
+
+	private static final String FLAGICONCSS_CDN_BASE = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/";
+	private static final String FLAGICONCSS_VERSION = "3.4.3";
 	
 	private boolean js;
 	private boolean css;
@@ -45,6 +51,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeJqueryPlugins();
 			writeBootstrap();
 			writeFontawesome();
+			writeFlagIconCss();
 			writePanda();
 			writeStyleSheets();
 		}
@@ -128,9 +135,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (tag.isBootstrap()) {
 			if (css) {
 				if (tag.useCdn()) {
-					writeCdnCss("https://netdna.bootstrapcdn.com/bootstrap/" 
-							+ BOOTSTRAP3_VERSION 
-							+ "/css/bootstrap");
+					writeCdnCss(BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/css/bootstrap");
 				}
 				else {
 					writeStaticCss("/bootstrap3/css/bootstrap");
@@ -138,9 +143,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			}
 			if (js) {
 				if (tag.useCdn()) {
-					writeCdnJs("https://netdna.bootstrapcdn.com/bootstrap/" 
-							+ BOOTSTRAP3_VERSION 
-							+ "/js/bootstrap");
+					writeCdnJs(BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/js/bootstrap");
 				}
 				else {
 					writeStaticJs("/bootstrap3/js/bootstrap");
@@ -153,12 +156,23 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (tag.isFontawesome()) {
 			if (css) {
 				if (tag.useCdn()) {
-					writeCdnCss("https://netdna.bootstrapcdn.com/font-awesome/" 
-							+ FONTAWESOME4_VERSION 
-							+ "/css/font-awesome");
+					writeCdnCss(FONTAWESOME_CDN_BASE + FONTAWESOME4_VERSION + "/css/font-awesome");
 				}
 				else {
 					writeStaticCss("/font-awesome/css/font-awesome");
+				}
+			}
+		}
+	}
+
+	private void writeFlagIconCss() throws IOException {
+		if (tag.isFlagiconcss()) {
+			if (css) {
+				if (tag.useCdn()) {
+					writeCdnCss(FLAGICONCSS_CDN_BASE + FLAGICONCSS_VERSION + "/css/flag-icon");
+				}
+				else {
+					writeStaticCss("/flag-icon-css/css/flag-icon");
 				}
 			}
 		}
