@@ -16,20 +16,23 @@ import panda.mvc.Mvcs;
  *
  * Configurable attributes are :-
  * <ul>
+ *    <li>js</li>
+ *    <li>css</li>
  *    <li>cdn</li>
  *    <li>debug</li>
  *    <li>version</li>
  *    <li>jquery</li>
+ *    <li>jquery1</li>
+ *    <li>jquery2</li>
+ *    <li>jquery3</li>
  *    <li>jqplugins</li>
  *    <li>jqextras</li>
  *    <li>bootstrap</li>
- *    <li>bsplugins</li>
+ *    <li>bootstrap3</li>
+ *    <li>bootstrap4</li>
+ *    <li>fontawesome</li>
+ *    <li>flagiconcss</li>
  *    <li>panda</li>
- *    <li>hammer</li>
- *    <li>lightbox</li>
- *    <li>meiomask</li>
- *    <li>mousewheel</li>
- *    <li>tablesorter</li>
  *    <li>respondjs</li>
  *    <li>stylesheets</li>
  *    <li>jscripts</li>
@@ -67,6 +70,7 @@ public class Link extends UIBean {
 	protected boolean bootstrap3;
 	protected boolean bootstrap4;
 	protected boolean fontawesome;
+	protected boolean flagiconcss;
 	protected boolean panda;
 	protected boolean respondjs;
 	protected List<String> stylesheets;
@@ -331,6 +335,20 @@ public class Link extends UIBean {
 	 */
 	public void setFontawesome(boolean fontawesome) {
 		this.fontawesome = fontawesome;
+	}
+
+	/**
+	 * @return the flagiconcss
+	 */
+	public boolean isFlagiconcss() {
+		return flagiconcss;
+	}
+
+	/**
+	 * @param flagiconcss the flagiconcss to set
+	 */
+	public void setFlagiconcss(boolean flagiconcss) {
+		this.flagiconcss = flagiconcss;
 	}
 
 	/**
