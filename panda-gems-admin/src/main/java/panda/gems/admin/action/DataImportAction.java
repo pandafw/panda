@@ -45,6 +45,7 @@ import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.TokenProtect;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.validator.Validators;
@@ -102,6 +103,7 @@ public class DataImportAction extends BaseAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
+	@TokenProtect
 	public Object execute(@Param @VisitValidate Arg arg) throws Exception {
 		this.arg = arg;
 		if (arg.file == null) {
