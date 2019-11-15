@@ -122,12 +122,20 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	}
 
 	protected FileItem saveUploadFile(FileItemStream item) throws IOException {
-		FileStore fs = getActionContext().getFileStore();
+		String pref = tmpdir + '/' + Randoms.randUUID32() + '/';
 
 		String name = FileNames.getName(item.getName());
-		String pref = tmpdir + '/' + Randoms.randUUID32() + '/';
-		String path = pref + FileNames.trimFileName(name, FileNames.MAX_FILENAME_LENGTH - pref.length());
+		name = FileNames.trimFileName(name, FileNames.MAX_FILENAME_LENGTH - pref.length());
+		
+		if (Strings.isEmpty(name)) {
+			// ignore empty file name
+			Streams.drain(item.openStream());
+			return null;
+		}
 
+		String path = pref + name;
+
+		FileStore fs = getActionContext().getFileStore();
 		FileItem fi = fs.getFile(path);
 		fi.save(item.openStream());
 		return fi;
