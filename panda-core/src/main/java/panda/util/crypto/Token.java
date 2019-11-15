@@ -46,18 +46,25 @@ public class Token {
 		return t;
 	}
 
+	private Token(String token) {
+		this.token = token;
+	}
+	
 	public Token() {
-		initialize();
+		this((Token)null, System.currentTimeMillis());
 	}
 
 	public Token(Token token) {
-		initialize(token == null ? null : token.secret);
-	}
-
-	private Token(String token) {
-		this.token= token;
+		this(token, System.currentTimeMillis());
 	}
 	
+	public Token(Token token, long timestamp) {
+		this.secret = token == null ? newSecret() : token.secret;
+		this.salt = newSalt();
+		this.timestamp = timestamp;
+		this.token = salt + saltSecret() + saltTimestamp();
+	}
+
 	/**
 	 * @return the token
 	 */
@@ -84,23 +91,6 @@ public class Token {
 	 */
 	public long getTimestamp() {
 		return timestamp;
-	}
-
-	/**
-	 * initialize the token
-	 */
-	public void initialize() {
-		initialize(null);
-	}
-	
-	/**
-	 * initialize the token
-	 */
-	public void initialize(String secret) {
-		this.secret = Strings.isEmpty(secret) ? newSecret() : secret;
-		salt = newSalt();
-		timestamp = System.currentTimeMillis();
-		token = salt + saltSecret() + saltTimestamp();
 	}
 
 	/**

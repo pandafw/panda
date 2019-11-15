@@ -20,6 +20,7 @@ import panda.mvc.annotation.TokenProtect;
 import panda.mvc.view.Views;
 import panda.net.http.HttpMethod;
 import panda.servlet.HttpServlets;
+import panda.util.crypto.Cryptor;
 import panda.util.crypto.Token;
 
 @IocBean
@@ -51,6 +52,11 @@ public class TokenProcessor extends AbstractProcessor {
 	 */
 	public static final int DEFAULT_COOKIE_MAXAGE = DateTimes.SEC_MONTH; //1M
 
+	/**
+	 * Token Protect Methods
+	 */
+	public static final Set<String> PROTECT_METHODS = Arrays.toSet(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT);
+	
 	@IocInject(value=MvcConstants.TOKEN_HEADER_NAME, required=false)
 	protected String headerName = DEFAULT_HEADER;
 
@@ -81,6 +87,9 @@ public class TokenProcessor extends AbstractProcessor {
 	@IocInject(value=MvcConstants.TOKEN_SAVE_TO_COOKIE, required=false)
 	protected boolean saveToCookie = true;
 
+	@IocInject
+	protected Cryptor cryptor;
+	
 	/**
 	 * Constructor
 	 */
@@ -103,40 +112,25 @@ public class TokenProcessor extends AbstractProcessor {
 
 	@Override
 	public void process(ActionContext ac) {
-		Token token = null;
-
-		HttpSession session = ac.getRequest().getSession(false);
-		if (session != null) {
-			token = (Token)session.getAttribute(sessionName);
+		if (isProtectMethod(ac.getRequest().getMethod())) {
+			Token token = getSourceToken(ac);
+			if (!validate(ac, token)) {
+				ac.getActionAlert().addError(ac.getText().getText("servlet-error-message-400", "Invalid Request Token."));
+				doErrorView(ac);
+				return;
+			}
 		}
 
-		if (token == null && Strings.isNotEmpty(cookieName)) {
-			token = getTokenFromCookie(ac);
-		}
-
-		if (validate(ac, token)) {
-			saveToken(ac, token);
-			doNext(ac);
-			return;
-		}
-
-		ac.getActionAlert().addError(ac.getText().getText("servlet-error-message-400", "Invalid Request Token."));
-		saveToken(ac, token);
-		doErrorView(ac);
+		doNext(ac);
+		return;
 	}
 
-	public static final Set<String> PROTECT_METHODS = Arrays.toSet(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT);
-	
 	public static boolean isProtectMethod(String method) {
 		method = Strings.upperCase(method);
 		return PROTECT_METHODS.contains(method);
 	}
 	
-	protected boolean validate(ActionContext ac, Token token) {
-		if (!isProtectMethod(ac.getRequest().getMethod())) {
-			return true;
-		}
-		
+	protected boolean validate(ActionContext ac, Token stoken) {
 		Method method = ac.getMethod();
 
 		TokenProtect tp = method.getAnnotation(TokenProtect.class);
@@ -144,29 +138,32 @@ public class TokenProcessor extends AbstractProcessor {
 			tp = ac.getAction().getClass().getAnnotation(TokenProtect.class);
 		}
 		
-		if (tp != null) {
-			if (tp.value()) {
-				if (token == null) {
-					log.warn("Missing cookie or session token!");
+		if (tp != null && tp.value()) {
+			if (stoken == null) {
+				log.warn("Missing cookie or session token: " + ac.getPath());
+				return false;
+			}
+
+			Token rtoken = getRequestToken(ac);
+			if (rtoken == null) {
+				return false;
+			}
+			
+			if (rtoken.getTimestamp() <= 0) {
+				log.warn("Request token (" + rtoken + ") has invalid timestamp: " + ac.getPath());
+				return false;
+			}
+			
+			if (!Token.isSameSecret(stoken, rtoken)) {
+				log.warn("Request token (" + rtoken + ") is not same as (" + stoken + "): " + ac.getPath());
+				return false;
+			}
+			
+			if (tp.expire() > 0) {
+				long now = System.currentTimeMillis();
+				if (rtoken.getTimestamp() + tp.expire() < now) {
+					log.warn("Request token (" + rtoken + ") expired " + tp.expire() + " ms: " + ac.getPath());
 					return false;
-				}
-				
-				Token rtoken = getRequestToken(ac);
-				if (rtoken == null) {
-					log.warn("Missing request token!");
-					return false;
-				}
-				
-				if (!Token.isSameSecret(token, rtoken)) {
-					log.warn("Request token (" + rtoken + ") is not same as (" + token + ")!");
-					return false;
-				}
-				
-				if (tp.expire() > 0) {
-					if (token.getTimestamp() + tp.expire() < rtoken.getTimestamp()) {
-						log.warn("Request token (" + rtoken + ") expired " + tp.expire() + " ms than (" + token + ")!"); 
-						return false;
-					}
 				}
 			}
 		}
@@ -182,8 +179,62 @@ public class TokenProcessor extends AbstractProcessor {
 		view.render(ac);
 	}
 
+	protected String encrypt(String s) {
+		return cryptor.encrypt(s);
+	}
+	
+	protected String decrypt(String s) {
+		return cryptor.decrypt(s);
+	}
+
+	protected Token parseToken(String s) {
+		try {
+			if (Strings.isEmpty(s)) {
+				return null;
+			}
+			
+			String token = decrypt(s);
+			return Token.parse(token);
+		}
+		catch (Throwable e) {
+			return null;
+		}
+	}
+
+	protected Token getSourceToken(ActionContext ac) {
+		Token token = (Token)ac.getReq().get(requestName);
+		if (token == null) {
+			token = getTokenFromSession(ac);
+			if (token == null) {
+				token = getTokenFromCookie(ac);
+			}
+			if (token != null) {
+				ac.getReq().put(requestName, token);
+			}
+		}
+		
+		return token;
+	}
+	
+	protected Token getTokenFromSession(ActionContext ac) {
+		HttpSession session = ac.getRequest().getSession(false);
+		if (session != null && Strings.isNotEmpty(sessionName)) {
+			Token token = (Token)session.getAttribute(sessionName);
+			if (token != null && log.isDebugEnabled()) {
+				log.debug("Get Session Token " + sessionName + ": " + token);
+			}
+			return token;
+		}
+		
+		return null;
+	}
+
 	protected Token getTokenFromCookie(ActionContext ac) {
-		return Token.parse(HttpServlets.getCookieValue(ac.getRequest(), cookieName));
+		Token token = parseToken(HttpServlets.getCookieValue(ac.getRequest(), cookieName));
+		if (token != null && log.isDebugEnabled()) {
+			log.debug("Get Cookie Token " + cookieName + ": " + token);
+		}
+		return token;
 	}
 
 	protected Token getRequestToken(ActionContext ac) {
@@ -195,21 +246,29 @@ public class TokenProcessor extends AbstractProcessor {
 	}
 	
 	protected Token getTokenFromParameter(ActionContext ac) {
-		return Token.parse(ac.getRequest().getParameter(parameterName));
+		Token token = parseToken(ac.getRequest().getParameter(parameterName));
+		if (token != null && log.isDebugEnabled()) {
+			log.debug("Get Parameter Token " + parameterName + ": " + token);
+		}
+		return token;
 	}
 
 	protected Token getTokenFromHeader(ActionContext ac) {
-		return Token.parse(ac.getRequest().getHeader(headerName));
+		Token token = parseToken(ac.getRequest().getHeader(headerName));
+		if (token != null && log.isDebugEnabled()) {
+			log.debug("Get Header Token " + headerName + ": " + token);
+		}
+		return token;
 	}
 
 	protected void saveToken(ActionContext ac, Token token) {
-		// refresh salt and timestamp of token
-		token = new Token(token);
-
 		ac.getReq().put(requestName, token);
 		
 		if (saveToSession) {
 			ac.getSes().put(sessionName, token);
+			if (log.isDebugEnabled()) {
+				log.debug("Save Session Token " + sessionName + ": " + token);
+			}
 		}
 		if (saveToCookie && Strings.isNotEmpty(cookieName)) {
 			saveTokenToCookie(ac, token);
@@ -217,7 +276,12 @@ public class TokenProcessor extends AbstractProcessor {
 	}
 
 	protected void saveTokenToCookie(ActionContext ac, Token token) {
-		Cookie c = new Cookie(cookieName, token.getToken());
+		// refresh salt and clear timestamp
+		token = new Token(token, 0);
+
+		String et = encrypt(token.getToken());
+		
+		Cookie c = new Cookie(cookieName, et);
 		if (Strings.isNotEmpty(cookieDomain)) {
 			c.setDomain(cookieDomain);
 		}
@@ -235,13 +299,22 @@ public class TokenProcessor extends AbstractProcessor {
 		c.setMaxAge(cookieMaxAge);
 		
 		ac.getResponse().addCookie(c);
+
+		if (log.isDebugEnabled()) {
+			log.debug("Save Cookie Token " + cookieName + ": " + token);
+		}
 	}
 	
 	public String getTokenString(ActionContext ac) {
-		Token token = (Token)ac.getReq().get(requestName);
+		Token token = getSourceToken(ac);
 		if (token == null) {
 			token = new Token();
+			saveToken(ac, token);
 		}
-		return token.getToken();
+		else {
+			// refresh salt and timestamp
+			token = new Token(token);
+		}
+		return encrypt(token.getToken());
 	}
 }
