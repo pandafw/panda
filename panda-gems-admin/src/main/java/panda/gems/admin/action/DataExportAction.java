@@ -35,6 +35,7 @@ import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
+import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.servlet.HttpServletResponser;
 
@@ -97,7 +98,7 @@ public class DataExportAction extends BaseAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
-	public Object execute(Arg arg) throws Exception {
+	public Object execute(@Param Arg arg) throws Exception {
 		this.arg = arg;
 
 		if (Strings.isEmpty(arg.target)) {
