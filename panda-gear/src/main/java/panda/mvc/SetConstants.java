@@ -24,14 +24,20 @@ public interface SetConstants {
 	public static final String MVC_ACCESS_LOG_FORMAT = "mvc.access.log.format";
 
 	/**
+	 * mvc https port
+	 */
+	public static final String MVC_HTTPS_PORT = "mvc.https.port";
+
+	/**
 	 * mvc https redirect
 	 */
 	public static final String MVC_HTTPS_REDIRECT = "mvc.https.redirect";
 
-	/**
-	 * mvc https port
-	 */
-	public static final String MVC_HTTPS_PORT = "mvc.https.port";
+	/** mvc https redirect includes */
+	public static final String MVC_HTTPS_REDIRECT_INCLUDES = "mvc.https.redirect.includes";
+
+	/** mvc https redirect excludes */
+	public static final String MVC_HTTPS_REDIRECT_EXCLUDES = "mvc.https.redirect.excludes";
 
 	/**
 	 * mvc http dump path
