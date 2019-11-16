@@ -8,14 +8,11 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.Systems;
 import panda.mvc.ActionContext;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.net.mail.Email;
 import panda.net.mail.EmailException;
-import panda.net.mail.JavaMailClient;
 import panda.net.mail.MailClient;
-import panda.net.mail.SmtpMailClient;
 
 @IocBean(scope=Scope.REQUEST)
 public class AppMailer {
@@ -138,15 +135,7 @@ public class AppMailer {
 	
 	protected MailClient getMailClient() {
 		String c = getMailSetting(SET.MAIL_CLIENT, null);
-		if (Strings.equalsIgnoreCase("java", c)) {
-			return new JavaMailClient();
-		}
-		
-		if (Strings.equalsIgnoreCase("smtp", c)) {
-			return new SmtpMailClient();
-		}
-
-		return Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
+		return MailClient.create(c);
 	}
 	
 	protected String getMailSetting(String key, String def) {
