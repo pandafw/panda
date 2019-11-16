@@ -1,10 +1,10 @@
 package panda.mvc.view.sitemesh;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import panda.lang.Collections;
+import panda.lang.Regexs;
 import panda.lang.Strings;
 
 public class SitemeshConfig {
@@ -42,13 +42,7 @@ public class SitemeshConfig {
 	public List<SitemeshDecorator> decorators;
 	
 	public void setExcludes(List<String> excludes) {
-		this.excludes = new ArrayList<Pattern>();
-		if (Collections.isNotEmpty(excludes)) {
-			this.excludes = new ArrayList<Pattern>();
-			for (String s : excludes) {
-				this.excludes.add(Pattern.compile(s));
-			}
-		}
+		this.excludes = Regexs.compiles(excludes);
 	}
 
 	public void initIgnoreCase() {
