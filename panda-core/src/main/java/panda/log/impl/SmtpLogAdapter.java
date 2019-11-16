@@ -6,8 +6,6 @@ import java.util.Map;
 import panda.lang.Booleans;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
-import panda.lang.Strings;
-import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.LogEvent;
 import panda.log.LogFormat;
@@ -18,9 +16,7 @@ import panda.log.Logs;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
 import panda.net.mail.EmailException;
-import panda.net.mail.JavaMailClient;
 import panda.net.mail.MailClient;
-import panda.net.mail.SmtpMailClient;
 
 
 public class SmtpLogAdapter extends AbstractLogAdapter {
@@ -133,18 +129,8 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	 * @return mail client, may not be null.
 	 */
 	private MailClient getMailClient() {
-		MailClient mc = null;
-		
-		if (Strings.equalsIgnoreCase("java", smtpClient)) {
-			mc = new JavaMailClient();
-		}
-		else if (Strings.equalsIgnoreCase("smtp", smtpClient)) {
-			mc = new SmtpMailClient();
-		}
-		else {
-			mc = Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
-		}
-		
+		MailClient mc = MailClient.create(smtpClient);
+
 		mc.setHost(smtpHost);
 		if (smtpPort > 0) {
 			mc.setPort(smtpPort);

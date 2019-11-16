@@ -6,7 +6,6 @@ import panda.app.constant.AUTH;
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.annotation.At;
@@ -22,9 +21,7 @@ import panda.mvc.view.Views;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
 import panda.net.mail.EmailAttachment;
-import panda.net.mail.JavaMailClient;
 import panda.net.mail.MailClient;
-import panda.net.mail.SmtpMailClient;
 import panda.vfs.FileItem;
 
 
@@ -305,14 +302,6 @@ public class SendMailAction extends BaseAction {
 	}
 
 	protected MailClient createMailClient(Arg arg) {
-		if (Strings.equalsIgnoreCase("java", arg.client)) {
-			return new JavaMailClient();
-		}
-		
-		if (Strings.equalsIgnoreCase("smtp", arg.client)) {
-			return new SmtpMailClient();
-		}
-
-		return Systems.IS_OS_APPENGINE ? new JavaMailClient() : new SmtpMailClient();
+		return MailClient.create(arg.client);
 	}
 }

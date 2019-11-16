@@ -1,5 +1,8 @@
 package panda.net.mail;
 
+import panda.lang.Classes;
+import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -8,6 +11,39 @@ import panda.log.Logs;
  */
 public abstract class MailClient {
 	private static Log LOG;
+
+	public static MailClient create(String type) {
+		if (Strings.isEmpty(type)) {
+			if (Systems.IS_OS_APPENGINE) {
+				return new JavaMailClient();
+			}
+			
+			String cls = Strings.replace(JavaMailClient.class.getName(), "Java", "Smtp");
+			try {
+				return (MailClient)Classes.born(cls);
+			}
+			catch (Throwable e) {
+				try {
+					return new JavaMailClient();
+				}
+				catch (Throwable e2) {
+					throw new RuntimeException("Failed to initialize "
+						+ cls + " or " + JavaMailClient.class.getName() 
+						+ " - please add panda-nets or javax.mail dependent jar.");
+				}
+			}
+		}
+
+		if (Strings.equalsIgnoreCase("java", type)) {
+			return new JavaMailClient();
+		}
+		
+		if (Strings.equalsIgnoreCase("smtp", type)) {
+			return (MailClient)Classes.born(Strings.replace(JavaMailClient.class.getName(), "Java", "Smtp"));
+		}
+		
+		return (MailClient)Classes.born(type);
+	}
 	
 	protected Log log;
 
