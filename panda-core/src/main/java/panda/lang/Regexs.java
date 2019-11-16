@@ -1,6 +1,8 @@
 package panda.lang;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Regexs {
@@ -35,4 +37,34 @@ public class Regexs {
 		return PATTERN_FILENAME.matcher(value).matches();
 	}
 
+	public static List<Pattern> compiles(List<String> strings) {
+		return compiles(strings, 0);
+	}
+	
+	public static List<Pattern> compiles(List<String> strings, int flags) {
+		if (strings == null) {
+			return null;
+		}
+
+		List<Pattern> ps = new ArrayList<Pattern>();
+		if (Collections.isNotEmpty(strings)) {
+			for (String s : strings) {
+				if (Strings.isNotEmpty(s)) {
+					ps.add(Pattern.compile(s, flags));
+				}
+			}
+		}
+		return ps;
+	}
+	
+	public static boolean matches(List<Pattern> ps, String str) {
+		if (Collections.isNotEmpty(ps)) {
+			for (Pattern p : ps) {
+				if (p.matcher(str).matches()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

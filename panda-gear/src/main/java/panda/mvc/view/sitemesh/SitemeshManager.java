@@ -1,13 +1,12 @@
 package panda.mvc.view.sitemesh;
 
-import java.util.regex.Pattern;
-
 import javax.servlet.ServletContext;
 
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
+import panda.lang.Regexs;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -56,12 +55,8 @@ public class SitemeshManager {
 			return null;
 		}
 		
-		if (Collections.isNotEmpty(smcfg.excludes)) {
-			for (Pattern p : smcfg.excludes) {
-				if (p.matcher(ac.getPath()).matches()) {
-					return null;
-				}
-			}
+		if (Regexs.matches(smcfg.excludes, ac.getPath())) {
+			return null;
 		}
 		
 		for (SitemeshDecorator sd : smcfg.decorators) {
