@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 import panda.lang.Charsets;
 import panda.net.SocketClient;
@@ -112,7 +113,7 @@ public class FingerClient extends SocketClient {
 	 * @exception IOException If an I/O error during the operation.
 	 ***/
 	public InputStream getInputStream(boolean longOutput, String username) throws IOException {
-		return getInputStream(longOutput, username, null);
+		return getInputStream(longOutput, username, Charsets.UTF_8);
 	}
 
 	/***
@@ -137,14 +138,8 @@ public class FingerClient extends SocketClient {
 		buffer.append(username);
 		buffer.append(SocketClient.NETASCII_EOL);
 
-		// Note: Charsets.toCharset() returns the platform default for null input
-		byte[] encodedQuery = buffer.toString().getBytes(Charsets.toCharset(encoding).name()); // Java
-																								// 1.6
-																								// can
-																								// use
-																								// charset
-																								// directly
-
+		Charset charset = Charsets.toCharset(encoding, Charsets.CS_UTF_8);
+		byte[] encodedQuery = buffer.toString().getBytes(charset);
 		output = new DataOutputStream(new BufferedOutputStream(_output_, 1024));
 		output.write(encodedQuery, 0, encodedQuery.length);
 		output.flush();
