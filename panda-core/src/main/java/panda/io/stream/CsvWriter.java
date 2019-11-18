@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import panda.lang.Arrays;
 import panda.lang.Chars;
 import panda.lang.Collections;
 import panda.lang.Strings;
@@ -15,7 +14,7 @@ import panda.lang.Strings;
 /**
  * CSV writer
  */
-public class CsvWriter implements ListWriter, Closeable, Flushable {
+public class CsvWriter extends ListWriter implements Closeable, Flushable {
 
 	private Appendable writer;
 
@@ -183,12 +182,14 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	/**
 	 * Writes the list to the file.
 	 *
-	 * @param list a collection with each comma-separated element as a separate entry.
+	 * @param it a iterator with each comma-separated element as a separate entry.
+	 * @throws IOException if an IO error occurred
 	 */
 	@Override
-	public void writeList(Collection<?> list) throws IOException {
+	public void writeIterator(Iterator it) throws IOException {
 		int i = 0;
-		for (Iterator<?> it = list.iterator(); it.hasNext();) {
+
+		while (it.hasNext()) {
 			if (i != 0) {
 				writer.append(separator);
 			}
@@ -201,17 +202,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 
 		writer.append(lineEnd);
 	}
-
-	/**
-	 * Writes the next line to the file.
-	 *
-	 * @param array a string array with each comma-separated element as a separate entry.
-	 * @throws IOException if an IO error occurred
-	 */
-	public void writeArray(Object[] array) throws IOException {
-		writeList(Arrays.asList(array));
-	}
-
+	
 	/**
 	 * Flush underlying stream to writer.
 	 *
