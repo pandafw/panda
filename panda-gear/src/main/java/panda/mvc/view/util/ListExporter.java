@@ -2,6 +2,7 @@ package panda.mvc.view.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,17 +13,22 @@ import panda.io.stream.ListWriter;
 import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.view.Component;
 import panda.mvc.view.tag.Property;
 
 public class ListExporter extends Component {
+
+	private static final Log log = Logs.getLog(ListExporter.class);
 	
 	private Map<String, Map> codemaps = new HashMap<String, Map>();
 	private Property property;
-	
+
 	protected Iterable list;
 	protected List<ListColumn> columns;
+	protected boolean noHeader;
 
 	/**
 	 * @return the list
@@ -50,6 +56,20 @@ public class ListExporter extends Component {
 	 */
 	public void setColumns(List<ListColumn> columns) {
 		this.columns = columns;
+	}
+
+	/**
+	 * @return the noHeader
+	 */
+	public boolean isNoHeader() {
+		return noHeader;
+	}
+
+	/**
+	 * @param noHeader the noHeader to set
+	 */
+	public void setNoHeader(boolean noHeader) {
+		this.noHeader = noHeader;
 	}
 
 	private Object getBeanProperty(Object bean, String name) {
@@ -82,29 +102,67 @@ public class ListExporter extends Component {
 		return Strings.EMPTY;
 	}
 
-	
 	public void export(ListWriter cw) throws IOException {
-		if (Collections.isEmpty(columns)) {
-			throw new IllegalArgumentException("columns is not defined");
-		}
-		
-		ArrayList<Object> line = new ArrayList<Object>();
-		for (ListColumn c : columns) {
-			if (c.hidden) {
-				continue;
-			}
-
-			line.add(c.header == null ? c.name : c.header);
-			if (c.format != null && Strings.isEmpty(c.format.escape)) {
-				c.format.escape = Escapes.ESCAPE_NONE;
-			}
-		}
-		cw.writeList(line);
-
 		if (list == null) {
+			log.warn(getClass().getName() + " null list property!");
+			return;
+		}
+
+		if (!list.iterator().hasNext()) {
 			return;
 		}
 		
+		if (!noHeader && Collections.isNotEmpty(columns)) {
+			List<Object> line = new ArrayList<Object>();
+			for (ListColumn c : columns) {
+				if (c.hidden) {
+					continue;
+				}
+	
+				line.add(c.header == null ? c.name : c.header);
+				if (c.format != null && Strings.isEmpty(c.format.escape)) {
+					c.format.escape = Escapes.ESCAPE_NONE;
+				}
+			}
+			cw.writeList(line);
+		}
+		
+		if (list == null) {
+			return;
+		}
+
+		if (Collections.isEmpty(columns)) {
+			writeArrayList(cw);
+		}
+		else {
+			writeObjectList(cw);
+		}
+	}
+
+	protected void writeArrayList(ListWriter cw) throws IOException {
+		for (Object d : list) {
+			if (d == null) {
+				continue;
+			}
+			
+			if (d instanceof Collection) {
+				cw.writeList((Collection)d);
+			}
+			else if (d instanceof Object[]) {
+				cw.writeArray((Object[])d);
+			}
+			else if (d.getClass().isArray()) {
+				cw.writeArray(d);
+			}
+			else {
+				throw new IllegalArgumentException("columns is not defined for non array/list object: " + d.getClass());
+			}
+		}
+	}
+	
+	protected void writeObjectList(ListWriter cw) throws IOException {
+		List<Object> line = new ArrayList<Object>();
+
 		for (Object d : list) {
 			line.clear();
 			for (ListColumn c : columns) {

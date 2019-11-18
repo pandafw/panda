@@ -1,7 +1,10 @@
 package panda.mvc.view.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import panda.lang.Arrays;
+import panda.lang.Collections;
 import panda.mvc.view.tag.ui.ListView.ItemLink;
 
 
@@ -34,4 +37,24 @@ public class ListColumn {
 	
 	public Object link;
 	public List<ItemLink> actions;
+
+	public ListColumn() {
+	}
+
+	public ListColumn(String name) {
+		this.name = name;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<ListColumn> toColumns(String...names) {
+		if (Arrays.isEmpty(names)) {
+			return Collections.EMPTY_LIST;
+		}
+		
+		List<ListColumn> cs = new ArrayList<ListColumn>();
+		for (String s : names) {
+			cs.add(new ListColumn(s));
+		}
+		return cs;
+	}
 }
