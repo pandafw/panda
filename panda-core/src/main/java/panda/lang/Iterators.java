@@ -161,6 +161,10 @@ public abstract class Iterators {
 			return (Iterator)value;
 		}
 
+		if (value instanceof Object[]) {
+			return Arrays.asList((Object[])value).iterator();
+		}
+
 		if (value instanceof Iterable) {
 			return ((Iterable)value).iterator();
 		}
@@ -188,6 +192,10 @@ public abstract class Iterators {
 
 		if (value instanceof Iterator) {
 			return new IteratorIterable((Iterator)value);
+		}
+
+		if (value instanceof Object[]) {
+			return Arrays.asList((Object[])value);
 		}
 
 		if (value.getClass().isArray()) {

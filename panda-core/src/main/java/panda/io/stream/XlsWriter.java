@@ -18,7 +18,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
@@ -26,7 +25,7 @@ import panda.lang.time.DateTimes;
 /**
  * XLS writer
  */
-public class XlsWriter implements ListWriter, Closeable, Flushable {
+public class XlsWriter extends ListWriter implements Closeable, Flushable {
 	private OutputStream writer;
 	private Workbook workbook;
 	private Sheet sheet;
@@ -155,14 +154,15 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	/**
 	 * Writes the list to the file.
 	 *
-	 * @param list a collection with each comma-separated element as a separate entry.
+	 * @param it a iterator with each comma-separated element as a separate entry.
+	 * @throws IOException if an IO error occurred
 	 */
 	@Override
-	public void writeList(Collection<?> list) throws IOException {
+	public void writeIterator(Iterator it) throws IOException {
 		Row row = sheet.createRow(rowidx++);
 		
 		int i = 0;
-		for (Iterator<?> it = list.iterator(); it.hasNext();) {
+		while (it.hasNext()) {
 			Cell cell = row.createCell(i++);
 
 			Object o = it.next();
@@ -193,16 +193,6 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Writes the next line to the file.
-	 *
-	 * @param array a string array with each comma-separated element as a separate entry.
-	 * @throws IOException if an IO error occurred
-	 */
-	public void writeArray(Object[] array) throws IOException {
-		writeList(Arrays.asList(array));
 	}
 
 	/**
