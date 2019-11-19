@@ -67,6 +67,7 @@ public class AppCacheFactory {
 		cache = buildCache();
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected Map buildCache() throws Exception {
 		if (Systems.IS_OS_APPENGINE) {
 			log.info("Build Gae Cache");
@@ -86,11 +87,10 @@ public class AppCacheFactory {
 
 		log.info("Build Internal Java Cache");
 		if (maxAge > 0) {
-			return Collections.synchronizedMap(new ExpireMap<String, String>(
-					new WeakHashMap<String, String>(), maxAge * 1000L));
+			return Collections.synchronizedMap(new ExpireMap(new WeakHashMap(), maxAge * 1000L));
 		}
 
-		return Collections.synchronizedMap(new WeakHashMap<String, String>());
+		return Collections.synchronizedMap(new WeakHashMap());
 	}
 
 	public void depose() {
