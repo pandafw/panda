@@ -17,7 +17,7 @@
 	],
 
 	// runtime settings (reloadable)
-	//"panda.settings.runtime.files": [ "runtime.properties" ],
+	"panda.settings.runtime.files": [ "/app/${artifactId}/etc/runtime.properties" ],
 
 	// runtime settings reload check delay (ms) */
 	//"panda.settings.runtime.delay": 60000,
@@ -28,17 +28,17 @@
 	// mvc url action mapping ignore case (default: false)
 	//"panda.mvc.mapping.case.ignore": true,
 
-	// media location
-	//"panda.media.location": "${web.dir}/WEB-INF/_media",
+	// media location (default: ${web.dir}/WEB-INF/_media)
+	//"panda.media.location": "/app/${artifactId}/media",
 	
-	// lucene location
-	//"panda.lucene.location": "${web.dir}/WEB-INF/_lucene",
+	// lucene location (default: ${web.dir}/WEB-INF/_lucene)
+	//"panda.lucene.location": "/app/${artifactId}/lucene",
 	
 	// lucene analyzer
 	//"panda.lucene.analyzer": "org.apache.lucene.analysis.cjk.CJKAnalyzer",
 
-	// local filestore storage local path
-	//"panda.filestore.location": "${web.dir}/WEB-INF/_files",
+	// local filestore storage local path (default: ${web.dir}/WEB-INF/_files)
+	//"panda.filestore.location": "/app/${artifactId}/files",
 
 	// multipart max upload body size (default: 2MB)
 	"panda.multipart.body.maxsize": 10485760, // 10MB
@@ -54,7 +54,7 @@
 	//"panda.auth.view.unsecure": "redirect:/login/?redirect=${top}",
 
 	// crypto secret key string
-	//"panda.crypto.key.secret": "== Panda Java ==",
+	"panda.crypto.key.secret": "== Panda Java ==",
 
 	// crypt algorithm
 	//"panda.crypto.algorithm": "AES",
