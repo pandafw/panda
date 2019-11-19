@@ -1,4 +1,4 @@
-package panda.gae.app.cache.task;
+package panda.gae.app.task;
 
 import java.util.Date;
 import java.util.List;
