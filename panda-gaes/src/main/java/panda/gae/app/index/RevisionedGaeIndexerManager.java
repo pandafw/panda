@@ -1,4 +1,4 @@
-package panda.gae.app.cache.index;
+package panda.gae.app.index;
 
 import java.io.IOException;
 import java.util.HashMap;
