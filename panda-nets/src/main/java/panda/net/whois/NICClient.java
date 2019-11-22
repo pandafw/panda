@@ -81,7 +81,38 @@ public class NICClient {
 		"pe", PE_HOST
 	);
 
-	private Pattern whoisPattern = Pattern.compile("Whois Server: (.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern whoisPattern = Pattern.compile("Whois Server: (.*)", Pattern.CASE_INSENSITIVE);
+
+	private int defaultTimeout = 5000;
+	private int connectTimeout = 5000;
+	
+	/**
+	 * @return the defaultTimeout
+	 */
+	public int getDefaultTimeout() {
+		return defaultTimeout;
+	}
+
+	/**
+	 * @param defaultTimeout the defaultTimeout to set
+	 */
+	public void setDefaultTimeout(int defaultTimeout) {
+		this.defaultTimeout = defaultTimeout;
+	}
+
+	/**
+	 * @return the connectTimeout
+	 */
+	public int getConnectTimeout() {
+		return connectTimeout;
+	}
+
+	/**
+	 * @param connectTimeout the connectTimeout to set
+	 */
+	public void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
+	}
 
 	private String findWhoisServer(String result, String server, String query) {
 		// Search the initial TLD lookup results for the regional-specifc
@@ -180,7 +211,8 @@ public class NICClient {
 		WhoisClient whois = new WhoisClient();
 
 		// We want to timeout if a response takes longer than 10 seconds
-		whois.setDefaultTimeout(10000);
+		whois.setDefaultTimeout(defaultTimeout);
+		whois.setConnectTimeout(connectTimeout);
 		try {
 			whois.connect(server);
 			response = whois.query(query);
