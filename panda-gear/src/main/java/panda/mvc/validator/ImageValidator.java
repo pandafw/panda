@@ -8,6 +8,7 @@ import java.net.URL;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.image.JavaImageWrapper;
+import panda.io.Files;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
@@ -156,7 +157,7 @@ public class ImageValidator extends AbstractValidator {
 			else if (value instanceof File) {
 				File f = (File)value;
 				if (f.exists() && f.isFile()) {
-					byte[] data = Streams.toByteArray(f);
+					byte[] data = Files.readToBytes(f);
 					img = Images.i().read(data);
 				}
 			}

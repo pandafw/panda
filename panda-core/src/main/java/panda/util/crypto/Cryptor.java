@@ -18,7 +18,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import panda.codec.binary.Base64;
-import panda.io.Streams;
+import panda.io.Files;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 
@@ -108,7 +108,7 @@ public class Cryptor {
 	 * @throws IOException 
 	 */
 	public void setSecretKey(File secretKey) throws IOException {
-		byte[] data = Streams.toByteArray(secretKey);
+		byte[] data = Files.readToBytes(secretKey);
 		setSecretKey(data);
 	}
 

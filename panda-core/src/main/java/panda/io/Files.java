@@ -1459,6 +1459,76 @@ public class Files {
 
 	// -----------------------------------------------------------------------
 	/**
+	 * Reads the contents of a file into a String. The file is always closed.
+	 * 
+	 * @param file the file to read, must not be {@code null}
+	 * @param encoding the encoding to use, {@code null} means platform default
+	 * @return the file contents, never {@code null}
+	 * @throws IOException in case of an I/O error
+	 */
+	public static String readToString(final File file, final Charset encoding) throws IOException {
+		InputStream in = null;
+		try {
+			in = Streams.openInputStream(file);
+			return Streams.toString(in, encoding);
+		}
+		finally {
+			Streams.safeClose(in);
+		}
+	}
+
+	/**
+	 * Reads the contents of a file into a String. The file is always closed.
+	 * 
+	 * @param file the file to read, must not be {@code null}
+	 * @param encoding the encoding to use, {@code null} means platform default
+	 * @return the file contents, never {@code null}
+	 * @throws IOException in case of an I/O error
+	 * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} 
+	 */
+	public static String readToString(final File file, final String encoding) throws IOException {
+		return readToString(file, Charsets.toCharset(encoding));
+	}
+
+	/**
+	 * Reads the contents of a file into a String using the default encoding for the VM. The file is
+	 * always closed.
+	 * 
+	 * @param file the file to read, must not be {@code null}
+	 * @return the file contents, never {@code null}
+	 * @throws IOException in case of an I/O error
+	 */
+	public static String readToString(File file) throws IOException {
+		BOMInputStream in = null;
+		try {
+			in = new BOMInputStream(Streams.openInputStream(file));
+			Charset cs = in.hasBOM() ? in.getBOMCharset() : Charset.defaultCharset();
+			return Streams.toString(in, cs);
+		}
+		finally {
+			Streams.safeClose(in);
+		}
+	}
+
+	/**
+	 * Reads the contents of a file into a byte array. The file is always closed.
+	 * 
+	 * @param file the file to read, must not be {@code null}
+	 * @return the file contents, never {@code null}
+	 * @throws IOException in case of an I/O error
+	 */
+	public static byte[] readToBytes(final File file) throws IOException {
+		InputStream in = null;
+		try {
+			in = Streams.openInputStream(file);
+			return Streams.toByteArray(in, file.length());
+		}
+		finally {
+			Streams.safeClose(in);
+		}
+	}
+
+	/**
 	 * Reads the contents of a file line by line to a List of Strings. The file is always closed.
 	 * 
 	 * @param file the file to read, must not be {@code null}
@@ -1490,6 +1560,7 @@ public class Files {
 		return readLines(file, Charsets.toCharset(encoding));
 	}
 
+	
 	/**
 	 * Reads the contents of a file line by line to a List of Strings using the default encoding for
 	 * the VM. The file is always closed.

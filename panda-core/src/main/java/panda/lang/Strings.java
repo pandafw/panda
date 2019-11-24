@@ -9707,6 +9707,22 @@ public class Strings {
 	}
 
 	/**
+	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the system
+	 * charset.
+	 * 
+	 * @param bytes The bytes to be decoded into characters
+	 * @return A new <code>String</code> decoded from the specified array of bytes using the given
+	 *         charset.
+	 */
+	public static String newString(byte[] bytes) {
+		if (bytes == null) {
+			return null;
+		}
+
+		return new String(bytes);
+	}
+
+	/**
 	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the given
 	 * charset.
 	 * <p>

@@ -14,7 +14,6 @@ import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.io.FileNames;
 import panda.io.Files;
-import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
@@ -69,7 +68,7 @@ public class MediaDataFileStore extends AbstractMediaDataStore {
 		
 		if (file.exists()) {
 			try {
-				data = Streams.toByteArray(file);
+				data = Files.readToBytes(file);
 			}
 			catch (IOException e) {
 				log.error("Failed to read data of media [" + m.getId() + "] (" + sz + ")", e);
