@@ -16,7 +16,7 @@ import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import panda.codec.binary.Base64;
-import panda.io.Streams;
+import panda.io.Files;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 
@@ -138,7 +138,7 @@ public class Keys {
 	 * @throws IOException
 	 */
 	public static Key parseKey(File file, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-		byte[] data = Streams.toByteArray(file);
+		byte[] data = Files.readToBytes(file);
 		String text = Strings.newStringUtf8(data);
 		return parseKey(text, algorithm);
 	}

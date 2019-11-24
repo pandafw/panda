@@ -1137,13 +1137,12 @@ public class StreamsTest extends FileBasedTestCase {
 		assertEqualContent(str.getBytes("UTF-8"), bytes);
 	}
 
-	// testing deprecated method
 	public void testToString_ByteArray() throws Exception {
 		final FileInputStream fin = new FileInputStream(m_testFile);
 		try {
 			final byte[] in = Streams.toByteArray(fin);
 			// Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
-			final String str = Streams.toString(in);
+			final String str = Strings.newString(in);
 			assertEqualContent(in, str.getBytes());
 		}
 		finally {

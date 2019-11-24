@@ -102,25 +102,6 @@ public class Streams {
 	private static char[] SKIP_CHAR_BUFFER;
 	private static byte[] SKIP_BYTE_BUFFER;
 
-	/**
-	 * Write the contents of the given byte array to the given output File.
-	 * 
-	 * @param in the byte array to copy from
-	 * @param out the file to copy to
-	 * @throws IOException in case of I/O errors
-	 */
-	public static void write(byte[] in, File out) throws IOException {
-		OutputStream os = null;
-
-		try {
-			os = new FileOutputStream(out);
-			write(in, os);
-		}
-		finally {
-			safeClose(os);
-		}
-	}
-
 	// -----------------------------------------------------------------------
 	/**
 	 * Closes a URLConnection.
@@ -414,25 +395,6 @@ public class Streams {
 
 	// read toByteArray
 	// -----------------------------------------------------------------------
-	/**
-	 * read file content to byte array
-	 * 
-	 * @param file file
-	 * @return byte array
-	 * @throws FileNotFoundException if file not found
-	 * @throws IOException in case of I/O errors
-	 */
-	public static byte[] toByteArray(File file) throws FileNotFoundException, IOException {
-		FileInputStream fis = openInputStream(file);
-		try {
-			byte[] b = toByteArray(fis);
-			return b;
-		}
-		finally {
-			safeClose(fis);
-		}
-	}
-
 	/**
 	 * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
 	 * <p>
@@ -904,87 +866,6 @@ public class Streams {
 	 */
 	public static String toString(final URL url, final String encoding) throws IOException {
 		return toString(url, Charsets.toCharset(encoding));
-	}
-
-	/**
-	 * Reads the contents of a file into a String using the default encoding for the VM. The file is
-	 * always closed.
-	 * 
-	 * @param file the file to read, must not be {@code null}
-	 * @return the file contents, never {@code null}
-	 * @throws IOException in case of an I/O error
-	 */
-	public static String toString(File file) throws IOException {
-		BOMInputStream in = null;
-		try {
-			in = new BOMInputStream(openInputStream(file));
-			Charset cs = in.hasBOM() ? in.getBOMCharset() : Charset.defaultCharset();
-			return toString(in, cs);
-		}
-		finally {
-			Streams.safeClose(in);
-		}
-	}
-
-	/**
-	 * Gets the contents at the given file.
-	 * 
-	 * @param file The source file.
-	 * @param encoding The encoding name for the file contents.
-	 * @return The contents of the file as a String.
-	 * @throws IOException if an I/O exception occurs.
-	 */
-	public static String toString(final File file, final String encoding) throws IOException {
-		return toString(file, Charsets.toCharset(encoding));
-	}
-
-	/**
-	 * Gets the contents at the given file.
-	 * 
-	 * @param file The source file.
-	 * @param encoding The encoding name for the file contents.
-	 * @return The contents of the file as a String.
-	 * @throws IOException if an I/O exception occurs.
-	 */
-	public static String toString(final File file, final Charset encoding) throws IOException {
-		final InputStream in = openInputStream(file);
-		try {
-			return toString(in, encoding);
-		}
-		finally {
-			in.close();
-		}
-	}
-
-	/**
-	 * Gets the contents of a <code>byte[]</code> as a String using the default character encoding
-	 * of the platform.
-	 * 
-	 * @param input the byte array to read from
-	 * @return the requested String
-	 * @throws NullPointerException if the input is null
-	 * @throws IOException if an I/O error occurs (never occurs)
-	 */
-	public static String toString(final byte[] input) throws IOException {
-		// make explicit the use of the default charset
-		return new String(input);
-	}
-
-	/**
-	 * Gets the contents of a <code>byte[]</code> as a String using the specified character
-	 * encoding.
-	 * <p>
-	 * Character encoding names can be found at <a
-	 * href="http://www.iana.org/assignments/character-sets">IANA</a>.
-	 * 
-	 * @param input the byte array to read from
-	 * @param encoding the encoding to use, null means platform default
-	 * @return the requested String
-	 * @throws NullPointerException if the input is null
-	 * @throws IOException if an I/O error occurs (never occurs)
-	 */
-	public static String toString(final byte[] input, final String encoding) throws IOException {
-		return new String(input, Charsets.toCharset(encoding));
 	}
 
 	// readLines

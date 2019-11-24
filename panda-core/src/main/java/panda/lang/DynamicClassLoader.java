@@ -29,7 +29,6 @@ import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 
 import panda.io.Files;
-import panda.io.Streams;
 import panda.io.stream.CharSequenceReader;
 import panda.log.Log;
 import panda.log.Logs;
@@ -89,7 +88,7 @@ public class DynamicClassLoader extends ClassLoader {
 		}
 
 		public byte[] getBinary() throws IOException {
-			return Streams.toByteArray(new File(toUri().getPath()));
+			return Files.readToBytes(new File(toUri().getPath()));
 		}
 	}
 

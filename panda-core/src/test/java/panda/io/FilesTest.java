@@ -1,5 +1,6 @@
 package panda.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
+
+import org.junit.Assert;
 
 import panda.io.filter.NameFileFilter;
 import panda.io.filter.WildcardFileFilter;
@@ -898,6 +901,15 @@ public class FilesTest extends FileBasedTestCase {
 		 * destination.lastModified());
 		 */
 	}
+
+	public void testCopyFileToBytes() throws Exception {
+		final ByteArrayOutputStream destination = new ByteArrayOutputStream();
+		Files.copyFile(testFile1, destination);
+		assertEquals("Check Full copy size", testFile1Size, destination.size());
+		final byte[] expected = Files.readToBytes(testFile1);
+		Assert.assertArrayEquals("Check Full copy", expected, destination.toByteArray());
+	}
+
 	public void IGNOREtestCopyFileLarge() throws Exception {
 
 		final File largeFile = new File(getTestDirectory(), "large.txt");
@@ -1309,12 +1321,12 @@ public class FilesTest extends FileBasedTestCase {
 		assertTrue(file2.exists());
 		assertTrue(file2.length() > 0);
 
-		final String file2contents = Streams.toString(file2, "UTF-8");
+		final String file2contents = Files.readToString(file2, "UTF-8");
 		assertTrue("Second file's contents correct", filename.equals(file2contents));
 
 		assertTrue(file2.delete());
 
-		final String contents = Streams.toString(new File(filename), "UTF-8");
+		final String contents = Files.readToString(new File(filename), "UTF-8");
 		assertEquals("Files.fileRead()", "This is a test", contents);
 
 	}
@@ -1476,6 +1488,43 @@ public class FilesTest extends FileBasedTestCase {
 		assertEquals(filesCount, filesAndDirs.size());
 	}
 
+	public void testReadFileToStringWithDefaultEncoding() throws Exception {
+		final File file = new File(getTestDirectory(), "read.obj");
+		final FileOutputStream out = new FileOutputStream(file);
+		final byte[] text = "Hello /u1234".getBytes();
+		out.write(text);
+		out.close();
+
+		final String data = Files.readToString(file);
+		assertEquals("Hello /u1234", data);
+	}
+
+	public void testReadFileToStringWithEncoding() throws Exception {
+		final File file = new File(getTestDirectory(), "read.obj");
+		final FileOutputStream out = new FileOutputStream(file);
+		final byte[] text = "Hello /u1234".getBytes("UTF8");
+		out.write(text);
+		out.close();
+
+		final String data = Files.readToString(file, "UTF8");
+		assertEquals("Hello /u1234", data);
+	}
+
+	public void testReadFileToByteArray() throws Exception {
+		final File file = new File(getTestDirectory(), "read.txt");
+		final FileOutputStream out = new FileOutputStream(file);
+		out.write(11);
+		out.write(21);
+		out.write(31);
+		out.close();
+
+		final byte[] data = Files.readToBytes(file);
+		assertEquals(3, data.length);
+		assertEquals(11, data[0]);
+		assertEquals(21, data[1]);
+		assertEquals(31, data[2]);
+	}
+
 	public void testReadLines() throws Exception {
 		final File file = newFile("lines.txt");
 		try {
@@ -1549,7 +1598,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.writeLines(file, "US-ASCII", list, "*");
 
 		final String expected = "hello*world**this is**some text*";
-		final String actual = Streams.toString(file, "US-ASCII");
+		final String actual = Files.readToString(file, "US-ASCII");
 		assertEquals(expected, actual);
 	}
 
@@ -1570,7 +1619,7 @@ public class FilesTest extends FileBasedTestCase {
 		final String expected = "hello" + Streams.EOL + "world" + Streams.EOL
 				+ Streams.EOL + "this is" + Streams.EOL + Streams.EOL + "some text"
 				+ Streams.EOL;
-		final String actual = Streams.toString(file, "US-ASCII");
+		final String actual = Files.readToString(file, "US-ASCII");
 		assertEquals(expected, actual);
 	}
 
@@ -1584,7 +1633,7 @@ public class FilesTest extends FileBasedTestCase {
 		final String expected = "hello" + Streams.EOL + "world" + Streams.EOL
 				+ Streams.EOL + "this is" + Streams.EOL + Streams.EOL + "some text"
 				+ Streams.EOL;
-		final String actual = Streams.toString(file, "US-ASCII");
+		final String actual = Files.readToString(file, "US-ASCII");
 		assertEquals(expected, actual);
 	}
 
@@ -1597,7 +1646,7 @@ public class FilesTest extends FileBasedTestCase {
 
 		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
 				+ "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1609,7 +1658,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.writeLines(file, null, linesToAppend, null, false);
 
 		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1622,7 +1671,7 @@ public class FilesTest extends FileBasedTestCase {
 
 		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
 				+ "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1634,7 +1683,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.writeLines(file, linesToAppend, null, false);
 
 		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1647,7 +1696,7 @@ public class FilesTest extends FileBasedTestCase {
 
 		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
 				+ "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1659,7 +1708,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.writeLines(file, null, linesToAppend, false);
 
 		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1672,7 +1721,7 @@ public class FilesTest extends FileBasedTestCase {
 
 		final String expected = "This line was there before you..." + "my first line" + Streams.EOL
 				+ "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1684,7 +1733,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.writeLines(file, linesToAppend, false);
 
 		final String expected = "my first line" + Streams.EOL + "The second Line" + Streams.EOL;
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1696,7 +1745,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", (String)null, true);
 
 		final String expected = "This line was there before you..." + "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1708,7 +1757,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", (String)null, false);
 
 		final String expected = "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1719,7 +1768,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", true);
 
 		final String expected = "This line was there before you..." + "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1730,7 +1779,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", false);
 
 		final String expected = "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1741,7 +1790,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", (String)null, true);
 
 		final String expected = "This line was there before you..." + "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1752,7 +1801,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", (String)null, false);
 
 		final String expected = "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1763,7 +1812,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", true);
 
 		final String expected = "This line was there before you..." + "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1774,7 +1823,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data", false);
 
 		final String expected = "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1785,7 +1834,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data".getBytes(), true);
 
 		final String expected = "This line was there before you..." + "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1796,7 +1845,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, "this is brand new data".getBytes(), false);
 
 		final String expected = "this is brand new data";
-		final String actual = Streams.toString(file);
+		final String actual = Files.readToString(file);
 		assertEquals(expected, actual);
 	}
 
@@ -1809,7 +1858,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, data, 10, 22, true);
 
 		final String expected = "This line was there before you..." + "this is brand new data";
-		final String actual = Streams.toString(file, Charsets.UTF_8);
+		final String actual = Files.readToString(file, Charsets.UTF_8);
 		assertEquals(expected, actual);
 	}
 
@@ -1822,7 +1871,7 @@ public class FilesTest extends FileBasedTestCase {
 		Files.write(file, data, 10, 22, false);
 
 		final String expected = "this is brand new data";
-		final String actual = Streams.toString(file, Charsets.UTF_8);
+		final String actual = Files.readToString(file, Charsets.UTF_8);
 		assertEquals(expected, actual);
 	}
 

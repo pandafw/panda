@@ -10,7 +10,6 @@ import java.util.Date;
 import panda.io.FileNames;
 import panda.io.Files;
 import panda.io.MimeTypes;
-import panda.io.Streams;
 import panda.lang.Strings;
 import panda.vfs.FileItem;
 
@@ -88,7 +87,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public byte[] data() throws IOException {
-		return Streams.toByteArray(file);
+		return Files.readToBytes(file);
 	}
 
 	/**
