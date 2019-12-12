@@ -33,6 +33,7 @@ import panda.mvc.Mvcs;
  *    <li>fontawesome</li>
  *    <li>flagiconcss</li>
  *    <li>panda</li>
+ *    <li>notifyjs</li>
  *    <li>respondjs</li>
  *    <li>stylesheets</li>
  *    <li>jscripts</li>
@@ -72,6 +73,7 @@ public class Link extends UIBean {
 	protected boolean fontawesome;
 	protected boolean flagiconcss;
 	protected boolean panda;
+	protected boolean notifyjs;
 	protected boolean respondjs;
 	protected List<String> stylesheets;
 	protected List<String> jscripts;
@@ -91,7 +93,7 @@ public class Link extends UIBean {
 			bootstrap = true;
 		}
 		
-		if (jquery1 || jquery2 || jquery3) {
+		if (jquery1 || jquery2 || jquery3 || notifyjs) {
 			jquery = true;
 		}
 		
@@ -363,6 +365,20 @@ public class Link extends UIBean {
 	 */
 	public void setPanda(boolean panda) {
 		this.panda = panda;
+	}
+
+	/**
+	 * @return the notifyjs
+	 */
+	public boolean isNotifyjs() {
+		return notifyjs;
+	}
+
+	/**
+	 * @param notifyjs the notifyjs to set
+	 */
+	public void setNotifyjs(boolean notifyjs) {
+		this.notifyjs = notifyjs;
 	}
 
 	/**

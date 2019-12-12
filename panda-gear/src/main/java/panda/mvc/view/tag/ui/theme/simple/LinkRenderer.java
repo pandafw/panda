@@ -63,6 +63,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeJqueryPlugins();
 			writeBootstrap();
 			writeRespondJs();
+			writeNotifyJs();
 			writePanda();
 			writeJscripts();
 		}
@@ -195,6 +196,17 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				else {
 					writeStaticJs("/panda/js/panda");
 				}
+			}
+		}
+	}
+	
+	private void writeNotifyJs() throws IOException {
+		if (js && tag.isNotifyjs()) {
+			if (tag.useCdn()) {
+				writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/notifyjs/jquery.ui.notify");
+			}
+			else {
+				writeStaticJs("/notifyjs/jquery.ui.notify");
 			}
 		}
 	}
