@@ -74,6 +74,9 @@ build-js          --> Merge & minify javascript files
 			<param name="src" value="${dir.s}/mousewheel/jquery.ui.mousewheel" />
 		</antcall>
 		<antcall target="minjs">
+			<param name="src" value="${dir.s}/notifyjs/jquery.ui.notify" />
+		</antcall>
+		<antcall target="minjs">
 			<param name="src" value="${dir.s}/tablesorter/jquery.ui.tablesorter" />
 		</antcall>
 
