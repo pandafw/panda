@@ -28,19 +28,20 @@ if (typeof Array.prototype.each != 'function') {
 
 if (typeof Array.prototype.empty != 'function') {
 	Array.prototype.empty = function() {
-		for (var i = 0; i <= this.length; i++) {
-			this.shift();
-		}
+		return this.splice(0, this.length);
 	}
 }
 
 if (typeof Array.prototype.remove != 'function') {
 	Array.prototype.remove = function(o) {
+		var c = 0;
 		for (var i = this.length - 1; i >= 0; i--) {
 			if (this[i] === o) {
 				this.splice(i, 1);
+				c++;
 			}
 		}
+		return c;
 	}
 }
 
