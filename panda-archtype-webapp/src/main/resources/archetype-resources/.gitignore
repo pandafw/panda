@@ -5,6 +5,8 @@
 /.project
 /.settings
 /.vscode
+/.idea
+/*.iml
 /*.properties
 /lib
 /log
