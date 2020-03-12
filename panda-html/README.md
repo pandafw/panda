@@ -23,14 +23,14 @@ Features
    | jquery.cookie.js             | cookie plugin                       |
    | jquery.disable.js            | $.disable function                  |
    | jquery.jscript.js            | dynamic load javascript             |
-   | jquery.ui.autosize.js        | auto expand size for textarea tag   |
+   | jquery.ui.center.js          | Move the selected element(s) to the center position of parent element (default: body)               |
    | jquery.ui.editable-select.js | a simple plugin that converts a select into an text field with suggestions |
    | jquery.ui.fieldset.js        | collapseable fieldset               |
    | jquery.ui.loadmask.js        | loader mask                         |
-   | jquery.ui.notify.js          | notification plugin                 |
    | jquery.ui.popup.js           | a popup pulldown                    |
    | jquery.ui.scrollIntoView.js  | $.scrollIntoView function           |
    | jquery.ui.selecttext.js      | $.selectText function               |
+   | jquery.ui.textarea.js        | textarea auto expand and fire event on Ctrl+Enter   |
 
  - jQuery Extra
 
@@ -40,6 +40,7 @@ Features
    | jquery.ui.lightbox.js    | LightBox Plugin                          |
    | jquery.ui.meio.mask.js   | A jquery plugin for masking text inputs  |
    | jquery.ui.mousewheel.js  | A jquery plugin for mouse wheel support  |
+   | jquery.ui.notify.js      | notification plugin                      |
    | jquery.ui.tablesorter.js | A jquery plugin for html table sort      |
 
  - Panda
