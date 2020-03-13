@@ -2,5 +2,6 @@
 /.project
 /.settings
 /out
+/panda-demo*
 /panda-repo
 *.iml
