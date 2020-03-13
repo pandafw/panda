@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="${maven.project.artifactId}" default="deploy" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
+<project name="${project.artifactId}" default="deploy" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<property environment="env"/>
-	<property name="APPNAME" value="${maven.project.artifactId}"/>
+	<property name="APPNAME" value="${project.artifactId}"/>
 
 	<property name="app.dir" value="/app/${APPNAME}"/>
 	<property name="web.dir" value="${app.dir}/web"/>

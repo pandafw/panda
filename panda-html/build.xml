@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="${maven.project.artifactId}" default="build" basedir=".">
+<project name="${project.artifactId}" default="build" basedir=".">
 	<target name="usage">
 		<echo><![CDATA[
-${maven.project.artifactId} build file
+${project.artifactId} build file
 -----------------------------------
 
 Available targets are:

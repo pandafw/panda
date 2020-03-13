@@ -13,12 +13,12 @@
 
  deploy (release)
 -------------------
-> mvn antrun:run@deploy -DAPPNAME=${artifactId} -DRELEASE=true
+> mvn antrun:run@deploy -DRELEASE=true -DAPPNAME=${artifactId}
 
 
  deploy (release & use cdn)
 ----------------------------
-> mvn antrun:run@deploy -DAPPNAME=${artifactId} -DRELEASE=true -DUSECDN=true
+> mvn antrun:run@deploy -DRELEASE=true -DUSECDN=true -DAPPNAME=${artifactId}
 
 
 
