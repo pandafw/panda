@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="${maven.project.artifactId}" default="gen-all" basedir=".">
+<project name="${project.artifactId}" default="gen-all" basedir=".">
 	<property name="gen.verbose" value="5"/>
 
 	<path id="codegen.cp">
