@@ -551,6 +551,11 @@ jQuery.jcookie = function(name, value, options) {
 })(jQuery);
 
 
+(function ($) {
+	$.fn.replaceClass = function(s, t) {
+		return this.removeClass(s).addClass(t);
+	};
+})(jQuery);
 (function($) {
 	/**
 	 * Move the selected element(s) to the center position of parent element (default: body)
