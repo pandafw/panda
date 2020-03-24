@@ -325,13 +325,13 @@
 			return;
 		}
 
-		var $t = $('<textarea>').css({ 'width' : '0px', 'height': '0px' }).html(s.escapeHtml());
-		var l = $t.val().length;
-		var t = $t.get(0);
+		var $t = $('<textarea>').css({ 'width' : '0px', 'height': '0px' }).text(s);
+		$('body').append($t);
 		
-		t.setSelectionRange(0, l);
+		$t.get(0).select();
 		document.execCommand('copy');
-		t.blur();
+
+		$('body').remove($t);
 	}
 })(jQuery);
 
