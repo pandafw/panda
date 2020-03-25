@@ -17,16 +17,25 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String JQUERY2_VERSION = "2.2.4";
 	private static final String JQUERY3_VERSION = "3.4.1";
 	private static final String JQUERY_CDN_BASE = "https://code.jquery.com/jquery-";
-	private static final String JQUERY_BIND_BASE = "/jquery/js/jquery-";
 	private static final String JQUERY1_CDN_PATH = JQUERY_CDN_BASE + JQUERY1_VERSION;
 	private static final String JQUERY2_CDN_PATH = JQUERY_CDN_BASE + JQUERY2_VERSION;
 	private static final String JQUERY3_CDN_PATH = JQUERY_CDN_BASE + JQUERY3_VERSION;
+	private static final String JQUERY_BIND_BASE = "/jquery/js/jquery-";
 	private static final String JQUERY1_BIND_PATH = JQUERY_BIND_BASE + JQUERY1_VERSION;
 	private static final String JQUERY2_BIND_PATH = JQUERY_BIND_BASE + JQUERY2_VERSION;
 	private static final String JQUERY3_BIND_PATH = JQUERY_BIND_BASE + JQUERY3_VERSION;
 
-	private static final String BOOTSTRAP_CDN_BASE = "https://netdna.bootstrapcdn.com/bootstrap/";
 	private static final String BOOTSTRAP3_VERSION = "3.4.1";
+	private static final String BOOTSTRAP4_VERSION = "4.4.1";
+	private static final String BOOTSTRAP_CDN_BASE = "https://netdna.bootstrapcdn.com/bootstrap/";
+	private static final String BOOTSTRAP3_CDN_CSS_PATH = BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/css/bootstrap";
+	private static final String BOOTSTRAP3_CDN_JS_PATH = BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/js/bootstrap";
+	private static final String BOOTSTRAP4_CDN_CSS_PATH = BOOTSTRAP_CDN_BASE + BOOTSTRAP4_VERSION + "/css/bootstrap";
+	private static final String BOOTSTRAP4_CDN_JS_PATH = BOOTSTRAP_CDN_BASE + BOOTSTRAP4_VERSION + "/js/bootstrap.bundle";
+	private static final String BOOTSTRAP3_BIND_CSS_PATH = "/bootstrap3/css/bootstrap";
+	private static final String BOOTSTRAP3_BIND_JS_PATH = "/bootstrap3/js/bootstrap";
+	private static final String BOOTSTRAP4_BIND_CSS_PATH = "/bootstrap4/css/bootstrap";
+	private static final String BOOTSTRAP4_BIND_JS_PATH = "/bootstrap4/js/bootstrap.bundle";
 	
 	private static final String FONTAWESOME_CDN_BASE = "https://netdna.bootstrapcdn.com/font-awesome/";
 	private static final String FONTAWESOME4_VERSION = "4.7.0";
@@ -134,20 +143,58 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 	private void writeBootstrap() throws IOException {
 		if (tag.isBootstrap()) {
+			int v = tag.isBootstrap4() ? 4 : 3;
+
+			// TODO: default use bs4
+//			int v = tag.isBootstrap4() ? 4 : (tag.isBootstrap3() ? 3 : 0);
+//			if (v == 0) {
+//				UserAgent ua = context.getUserAgent();
+//				if (ua.isMsie()) {
+//					v = ua.getBrowser().getMajor() < 10 ? 3 : 4;
+//				}
+//				else {
+//					v = 4;
+//				}
+//			}
+
 			if (css) {
-				if (tag.useCdn()) {
-					writeCdnCss(BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/css/bootstrap");
-				}
-				else {
-					writeStaticCss("/bootstrap3/css/bootstrap");
+				switch (v) {
+				case 4:
+					if (tag.getCdn()) {
+						writeCdnCss(BOOTSTRAP4_CDN_CSS_PATH);
+					}
+					else {
+						writeStaticCss(BOOTSTRAP4_BIND_CSS_PATH);
+					}
+					break;
+				case 3:
+					if (tag.getCdn()) {
+						writeCdnCss(BOOTSTRAP3_CDN_CSS_PATH);
+					}
+					else {
+						writeStaticCss(BOOTSTRAP3_BIND_CSS_PATH);
+					}
+					break;
 				}
 			}
 			if (js) {
-				if (tag.useCdn()) {
-					writeCdnJs(BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/js/bootstrap");
-				}
-				else {
-					writeStaticJs("/bootstrap3/js/bootstrap");
+				switch (v) {
+				case 4:
+					if (tag.getCdn()) {
+						writeCdnJs(BOOTSTRAP4_CDN_JS_PATH);
+					}
+					else {
+						writeStaticJs(BOOTSTRAP4_BIND_JS_PATH);
+					}
+					break;
+				case 3:
+					if (tag.getCdn()) {
+						writeCdnJs(BOOTSTRAP3_CDN_JS_PATH);
+					}
+					else {
+						writeStaticJs(BOOTSTRAP3_BIND_JS_PATH);
+					}
+					break;
 				}
 			}
 		}
