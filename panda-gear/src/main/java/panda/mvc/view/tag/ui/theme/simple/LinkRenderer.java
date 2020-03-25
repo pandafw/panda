@@ -15,7 +15,7 @@ import panda.net.http.UserAgent;
 public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String JQUERY1_VERSION = "1.12.4";
 	private static final String JQUERY2_VERSION = "2.2.4";
-	private static final String JQUERY3_VERSION = "3.3.1";
+	private static final String JQUERY3_VERSION = "3.4.1";
 	private static final String JQUERY_CDN_BASE = "https://code.jquery.com/jquery-";
 	private static final String JQUERY_BIND_BASE = "/jquery/js/jquery-";
 	private static final String JQUERY1_CDN_PATH = JQUERY_CDN_BASE + JQUERY1_VERSION;
