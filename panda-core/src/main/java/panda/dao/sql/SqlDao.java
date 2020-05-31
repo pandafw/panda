@@ -99,9 +99,13 @@ public class SqlDao extends AbstractDao {
 			if (connection == null) {
 				try {
 					connection = getSqlDaoClient().getDataSource().getConnection();
-					connection.setAutoCommit(false);
+					if (connection.getAutoCommit()) {
+						connection.setAutoCommit(false);
+					}
 					if (transactionLevel != Connection.TRANSACTION_NONE) {
-						connection.setTransactionIsolation(transactionLevel);
+						if (connection.getTransactionIsolation() != transactionLevel) {
+							connection.setTransactionIsolation(transactionLevel);
+						}
 					}
 				}
 				catch (SQLException e) {

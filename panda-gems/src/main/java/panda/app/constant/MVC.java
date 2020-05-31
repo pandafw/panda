@@ -14,9 +14,10 @@ public interface MVC {
 	public static final String SETTINGS_RUNTIME_DELAY = "panda.settings.runtime.delay";
 
 	//------------------------------------------------
-	// data
+	// dao
 	//
-	public static final String DATA_QUERY_TIMEOUT = "panda.data.query.timeout";
+	public static final String DAO_QUERY_TIMEOUT = "panda.dao.query.timeout";
+	public static final String DAO_TRANSACTION_LEVEL = "panda.dao.transaction.level";
 	
 	//------------------------------------------------
 	// cache
