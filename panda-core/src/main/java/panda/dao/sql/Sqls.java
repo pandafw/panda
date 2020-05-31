@@ -368,4 +368,37 @@ public abstract class Sqls {
 				|| type == Types.FLOAT
 				|| type == Types.DOUBLE);
 	}
+
+	public static String printTransactionLevel(int transactionLevel) {
+		switch (transactionLevel) {
+		case Connection.TRANSACTION_NONE:
+			return "NONE";
+		case Connection.TRANSACTION_READ_UNCOMMITTED:
+			return "READ_UNCOMMITTED";
+		case Connection.TRANSACTION_READ_COMMITTED:
+			return "READ_COMMITTED";
+		case Connection.TRANSACTION_REPEATABLE_READ:
+			return "REPEATABLE_READ";
+		case Connection.TRANSACTION_SERIALIZABLE:
+			return "SERIALIZABLE";
+		default:
+			return "UNKNOWN";
+		}
+	}
+	
+	public static int parseTransactionLevel(String transactionLevel) {
+		if ("READ_UNCOMMITTED".equalsIgnoreCase(transactionLevel)) {
+			return Connection.TRANSACTION_READ_UNCOMMITTED;
+		}
+		if ("READ_COMMITTED".equalsIgnoreCase(transactionLevel)) {
+			return Connection.TRANSACTION_READ_COMMITTED;
+		}
+		if ("REPEATABLE_READ".equalsIgnoreCase(transactionLevel)) {
+			return Connection.TRANSACTION_REPEATABLE_READ;
+		}
+		if ("SERIALIZABLE".equalsIgnoreCase(transactionLevel)) {
+			return Connection.TRANSACTION_SERIALIZABLE;
+		}
+		return Connection.TRANSACTION_NONE;
+	}
 }

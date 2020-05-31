@@ -20,7 +20,7 @@ import panda.log.Logs;
  * This is a simple, synchronous, thread-safe database connection pool.
  * <p/>
  * 
- * ---- REQUIRED PROPERTIES ----
+ * ---- JDBC PROPERTIES ----
  * <ul>
  * <li>jdbc.driver</li>
  * <li>jdbc.url</li>
@@ -28,6 +28,7 @@ import panda.log.Logs;
  * <li>jdbc.password</li>
  * <li>jdbc.autoCommit - default: false</li>
  * <li>jdbc.readOnly - default: false</li>
+ * <li>jdbc.transactionLevel - default: none</li>
  * </ul>
  * <p/>
  * 
@@ -444,12 +445,7 @@ public class SimpleDataSource extends AbstractDataSource implements Closeable {
 	}
 
 	private void checkoutConnection(SimplePooledConnection pcon, long start) throws SQLException {
-		if (pcon.isReadOnly() != jdbc.readOnly) {
-			pcon.setReadOnly(jdbc.readOnly);
-		}
-		if (pcon.getAutoCommit() != jdbc.autoCommit) {
-			pcon.setAutoCommit(jdbc.autoCommit);
-		}
+		checkoutConnection(pcon.getRealConnection());
 		pcon.setCheckoutTimestamp(System.currentTimeMillis());
 		pcon.setLastUsedTimestamp(System.currentTimeMillis());
 		actives.add(pcon);

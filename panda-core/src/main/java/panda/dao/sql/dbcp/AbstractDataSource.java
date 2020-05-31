@@ -19,7 +19,7 @@ import panda.log.Logs;
  * This is a simple, synchronous, thread-safe database connection pool.
  * <p/>
  * 
- * ---- REQUIRED PROPERTIES ----
+ * ---- JDBC PROPERTIES ----
  * <ul>
  * <li>jdbc.driver</li>
  * <li>jdbc.url</li>
@@ -27,6 +27,7 @@ import panda.log.Logs;
  * <li>jdbc.password</li>
  * <li>jdbc.autoCommit - default: false</li>
  * <li>jdbc.readOnly - default: false</li>
+ * <li>jdbc.transactionLevel - default: none</li>
  * </ul>
  * <p/>
  * 
@@ -111,6 +112,18 @@ public abstract class AbstractDataSource implements DataSource {
 		this.jdbc = jdbc;
 	}
 
+	protected void checkoutConnection(Connection con) throws SQLException {
+		if (con.isReadOnly() != jdbc.readOnly) {
+			con.setReadOnly(jdbc.readOnly);
+		}
+		if (con.getAutoCommit() != jdbc.autoCommit) {
+			con.setAutoCommit(jdbc.autoCommit);
+		}
+		if (con.getTransactionIsolation() != jdbc.transactionIsolation) {
+			con.setTransactionIsolation(jdbc.transactionIsolation);
+		}
+	}
+	
 	/**
 	 * Returns the status of the connection pool
 	 * 

@@ -32,9 +32,9 @@ import panda.log.Logs;
  */
 public class SqlDao extends AbstractDao {
 	private static final Log log = Logs.getLog(SqlDao.class);
-	
+
 	private int transactionLevel = Connection.TRANSACTION_NONE;
-	
+
 	/**
 	 * auto start count
 	 */
@@ -396,12 +396,10 @@ public class SqlDao extends AbstractDao {
 		
 		autoStart();
 		try {
-			try {
-				return executor.fetch(sql.getSql(), sql.getParams(), query.getType());
-			}
-			catch (SQLException e) {
-				throw new DaoException("Failed to fetch query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
-			}
+			return executor.fetch(sql.getSql(), sql.getParams(), query.getType());
+		}
+		catch (SQLException e) {
+			throw new DaoException("Failed to fetch query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
 		}
 		finally {
 			autoClose();
@@ -421,8 +419,7 @@ public class SqlDao extends AbstractDao {
 		
 		autoStart();
 		try {
-			int i = executor.fetch(sql.getSql(), sql.getParams(), int.class);
-			return i;
+			return executor.fetch(sql.getSql(), sql.getParams(), int.class);
 		}
 		catch (SQLException e) {
 			throw new DaoException("Failed to count query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
