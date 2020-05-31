@@ -3,9 +3,6 @@ package panda.lang;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.lang.CharSequences;
-import panda.lang.Strings;
-
 /**
  * Tests CharSequences
  *

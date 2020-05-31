@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
-import panda.codec.binary.Base64;
-
 /**
  * This random data was encoded by OpenSSL. Java had nothing to do with it. This data helps us test interop between
  * Commons-Codec and OpenSSL. Notice that OpenSSL creates 64 character lines instead of the 76 of Commons-Codec.

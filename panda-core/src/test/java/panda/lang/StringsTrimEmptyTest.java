@@ -8,8 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import panda.lang.Strings;
-
 /**
  * Unit tests {@link Strings} - Trim/Empty methods
  *

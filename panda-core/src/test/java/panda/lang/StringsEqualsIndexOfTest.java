@@ -10,8 +10,6 @@ import java.util.Locale;
 import org.hamcrest.core.IsNot;
 import org.junit.Test;
 
-import panda.lang.Strings;
-
 /**
  * Unit tests {@link Strings} - Substring methods
  *

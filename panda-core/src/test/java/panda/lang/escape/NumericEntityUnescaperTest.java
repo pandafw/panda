@@ -5,8 +5,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import panda.lang.escape.NumericEntityUnescaper;
-
 /**
  * Unit tests for {@link NumericEntityUnescaper}.
  */

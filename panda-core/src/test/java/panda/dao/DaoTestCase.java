@@ -8,8 +8,6 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
-import panda.dao.Dao;
-import panda.dao.DaoClient;
 import panda.dao.entity.Klass;
 import panda.dao.entity.Score;
 import panda.dao.entity.Student;

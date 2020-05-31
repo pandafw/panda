@@ -1,13 +1,13 @@
 package panda.lang.time;
 
-import org.junit.Test;
-import org.junit.Before;
-
-import panda.lang.time.DateTimes;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class DateTimesFragmentTest {
 

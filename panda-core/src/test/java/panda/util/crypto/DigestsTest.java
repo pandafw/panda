@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import panda.codec.binary.Hex;
 import panda.lang.Strings;
-import panda.util.crypto.Digests;
 
 /**
  * test class for Digests

@@ -1,14 +1,16 @@
 package panda.lang.time;
 
-import org.junit.Test;
-
-import panda.lang.time.DurationFormats;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import org.junit.Test;
 
 /**
  * TestCase for DurationFormats.

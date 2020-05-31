@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import panda.codec.DecoderException;
-
 /**
  * Tests {@link DecoderException}.
  */

@@ -19,7 +19,6 @@ import panda.lang.Arrays;
 import panda.lang.Numbers;
 import panda.lang.mutable.Mutable;
 import panda.lang.mutable.MutableObject;
-import panda.lang.reflect.Methods;
 
 /**
  * Unit tests Methods
