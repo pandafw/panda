@@ -27,13 +27,7 @@ public class ThreadLocalDataSource extends AbstractDataSource {
 
 	protected ThreadLocalConnection newConnection() throws SQLException {
 		ThreadLocalConnection c = new ThreadLocalConnection(DriverManager.getConnection(jdbc.url, jdbc.prop));
-		Connection r = c.getRealConnection();
-		if (r.isReadOnly() != jdbc.readOnly) {
-			r.setReadOnly(jdbc.readOnly);
-		}
-		if (r.getAutoCommit() != jdbc.autoCommit) {
-			r.setAutoCommit(jdbc.autoCommit);
-		}
+		checkoutConnection(c.getRealConnection());
 		return c;
 	}
 }

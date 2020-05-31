@@ -16,18 +16,34 @@ import panda.log.Logs;
 
 public class SqlDaoClient extends DaoClient {
 	private static Log log = Logs.getLog(SqlDaoClient.class);
-	
+
 	private static SqlExpertConfig sqlExpertConfig = new SqlExpertConfig();
-	
-	protected DataSource dataSource;
-	protected SqlExpert sqlExpert;
-	
+
+	private int transactionLevel = Connection.TRANSACTION_NONE;
+
+	private DataSource dataSource;
+	private SqlExpert sqlExpert;
+
 	/**
 	 * Constructor
 	 */
 	public SqlDaoClient() {
 	}
 	
+	/**
+	 * @return the transactionLevel
+	 */
+	public int getTransactionLevel() {
+		return transactionLevel;
+	}
+
+	/**
+	 * @param transactionLevel the transactionLevel to set
+	 */
+	public void setTransactionLevel(int transactionLevel) {
+		this.transactionLevel = transactionLevel;
+	}
+
 	/**
 	 * @return the dataSource
 	 */
@@ -118,6 +134,7 @@ public class SqlDaoClient extends DaoClient {
 	public Dao getDao() {
 		SqlDao dao = new SqlDao(this);
 		dao.setTimeout(getTimeout());
+		dao.setTransactionLevel(getTransactionLevel());
 		return dao;
 	}
 }
