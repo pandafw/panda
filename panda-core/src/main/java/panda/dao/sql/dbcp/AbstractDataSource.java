@@ -119,8 +119,10 @@ public abstract class AbstractDataSource implements DataSource {
 		if (con.getAutoCommit() != jdbc.autoCommit) {
 			con.setAutoCommit(jdbc.autoCommit);
 		}
-		if (con.getTransactionIsolation() != jdbc.transactionIsolation) {
-			con.setTransactionIsolation(jdbc.transactionIsolation);
+		if (jdbc.transactionIsolation != Connection.TRANSACTION_NONE) {
+			if (con.getTransactionIsolation() != jdbc.transactionIsolation) {
+				con.setTransactionIsolation(jdbc.transactionIsolation);
+			}
 		}
 	}
 	
@@ -137,6 +139,7 @@ public abstract class AbstractDataSource implements DataSource {
 		sb.append("\n jdbc.url                        ").append(jdbc.url);
 		sb.append("\n jdbc.autoCommit                 ").append(jdbc.autoCommit);
 		sb.append("\n jdbc.readOnly                   ").append(jdbc.readOnly);
+		sb.append("\n jdbc.transactionLevel           ").append(jdbc.getTransactionLevel());
 		sb.append("\n===============================================================");
 		for (Entry en : jdbc.prop.entrySet()) {
 			String k = (String)en.getKey();

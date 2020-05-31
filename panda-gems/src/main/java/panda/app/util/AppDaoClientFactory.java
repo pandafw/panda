@@ -1,5 +1,6 @@
 package panda.app.util;
 
+import java.sql.Connection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -49,11 +50,17 @@ public class AppDaoClientFactory {
 	@IocInject
 	protected Settings settings;
 
-	@IocInject(value=MVC.DATA_QUERY_TIMEOUT, required=false)
+	@IocInject(value=MVC.DAO_QUERY_TIMEOUT, required=false)
 	protected int timeout = Dao.DEFAULT_TIMEOUT;
 	
-	protected DaoClient daoClient;
+	protected int transcationLevel = Connection.TRANSACTION_READ_COMMITTED;
 	
+	protected DaoClient daoClient;
+
+	@IocInject(value=MVC.DAO_QUERY_TIMEOUT, required=false)
+	public void setTranscationLevel(String transcationLevel) {
+		this.transcationLevel = Sqls.parseTransactionLevel(transcationLevel);
+	}
 
 	/**
 	 * @return the daoClient
