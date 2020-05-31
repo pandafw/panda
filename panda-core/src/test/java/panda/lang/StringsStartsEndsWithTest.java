@@ -1,9 +1,9 @@
 package panda.lang;
 
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import panda.lang.Strings;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Unit tests {@link Strings} - StartsWith/EndsWith methods

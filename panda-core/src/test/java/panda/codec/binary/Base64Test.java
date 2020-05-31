@@ -15,9 +15,6 @@ import org.junit.Test;
 
 import panda.codec.DecoderException;
 import panda.codec.EncoderException;
-import panda.codec.binary.Base64;
-import panda.codec.binary.BaseNCodec;
-import panda.codec.binary.Hex;
 import panda.lang.Charsets;
 import panda.lang.Strings;
 

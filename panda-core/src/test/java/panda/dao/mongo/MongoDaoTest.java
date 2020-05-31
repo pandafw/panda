@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import panda.dao.DaoClient;
 import panda.dao.DaoTestCase;
-import panda.dao.mongo.MongoDaoClient;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;

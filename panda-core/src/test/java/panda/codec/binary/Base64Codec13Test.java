@@ -12,7 +12,6 @@ import panda.codec.Decoder;
 import panda.codec.DecoderException;
 import panda.codec.Encoder;
 import panda.codec.EncoderException;
-import panda.codec.binary.Base64;
 import panda.lang.Charsets;
 import panda.lang.Strings;
 

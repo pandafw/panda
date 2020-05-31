@@ -3,12 +3,11 @@ package panda.dao.sql.dbcp;
 import java.sql.Statement;
 import java.util.Properties;
 
-import junit.framework.TestCase;
 import panda.cast.Castors;
-import panda.dao.sql.dbcp.SimpleDataSource;
-import panda.dao.sql.dbcp.SimplePooledConnection;
 import panda.log.Log;
 import panda.log.Logs;
+
+import junit.framework.TestCase;
 
 
 /**

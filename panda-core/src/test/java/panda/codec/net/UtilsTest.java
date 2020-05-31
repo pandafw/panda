@@ -2,8 +2,6 @@ package panda.codec.net;
 
 import org.junit.Test;
 
-import panda.codec.net.Utils;
-
 /**
  * Tests Utils.
  * <p>

@@ -12,8 +12,6 @@ import java.util.Locale;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.lang.Systems;
-
 /**
  * Unit tests {@link Systems}.
  * 

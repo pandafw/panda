@@ -2,9 +2,6 @@ package panda.codec;
 
 import org.junit.Test;
 
-import panda.codec.BinaryEncoder;
-import panda.codec.EncoderException;
-
 /**
  */
 public abstract class BinaryEncoderTestCase {

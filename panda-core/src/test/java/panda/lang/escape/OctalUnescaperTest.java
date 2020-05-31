@@ -1,9 +1,8 @@
 package panda.lang.escape;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import panda.lang.escape.OctalUnescaper;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Unit tests for {@link OctalUnescaper}.

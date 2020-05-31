@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import panda.lang.escape.NumericEntityEscaper;
-
 /**
  * Unit tests for {@link NumericEntityEscaper}.
  */

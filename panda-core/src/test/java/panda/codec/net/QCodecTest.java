@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import panda.codec.DecoderException;
 import panda.codec.EncoderException;
-import panda.codec.net.QCodec;
 import panda.lang.Charsets;
 
 /**

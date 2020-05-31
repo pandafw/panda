@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import panda.codec.DecoderException;
-import panda.codec.net.RFC1522Codec;
 import panda.lang.Charsets;
 
 /**

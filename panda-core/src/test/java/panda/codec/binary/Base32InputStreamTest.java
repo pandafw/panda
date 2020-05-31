@@ -14,10 +14,6 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import panda.codec.binary.Base32;
-import panda.codec.binary.Base32InputStream;
-import panda.codec.binary.Base32OutputStream;
-import panda.codec.binary.BaseNCodec;
 import panda.lang.Strings;
 
 public class Base32InputStreamTest {

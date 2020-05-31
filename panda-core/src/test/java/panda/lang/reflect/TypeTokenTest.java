@@ -5,9 +5,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 
-import panda.lang.reflect.TypeToken;
-import panda.lang.reflect.Types;
-
 import junit.framework.TestCase;
 
 /**

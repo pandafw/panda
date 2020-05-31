@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import panda.net.http.ParameterParser;
-
 /**
  * Unit tests for {@link ParameterParser}.
  */

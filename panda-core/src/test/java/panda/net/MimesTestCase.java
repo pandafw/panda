@@ -6,8 +6,6 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import panda.net.Mimes;
-
 /**
  * Use the online <a href="http://dogmamix.com/MimeHeadersDecoder/">MimeHeadersDecoder</a> to
  * validate expected values.

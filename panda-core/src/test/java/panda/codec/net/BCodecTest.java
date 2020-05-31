@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import panda.codec.DecoderException;
 import panda.codec.EncoderException;
-import panda.codec.net.BCodec;
 import panda.lang.Charsets;
 
 /**

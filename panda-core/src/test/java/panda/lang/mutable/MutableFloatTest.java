@@ -1,9 +1,10 @@
 package panda.lang.mutable;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import panda.lang.mutable.MutableFloat;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * JUnit tests.

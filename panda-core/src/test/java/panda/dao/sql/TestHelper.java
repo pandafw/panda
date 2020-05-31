@@ -75,6 +75,7 @@ public class TestHelper {
 					sqls.append(" ").append(line);
 				}
 			}
+			br.close();
 		}
 		finally {
 			Streams.safeClose(is);

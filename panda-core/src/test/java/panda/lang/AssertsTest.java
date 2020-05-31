@@ -13,9 +13,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import panda.lang.Arrays;
-import panda.lang.Asserts;
-
 /**
  * Unit tests {@link Asserts}.
  *

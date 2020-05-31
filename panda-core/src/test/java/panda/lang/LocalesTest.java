@@ -8,13 +8,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import panda.lang.Arrays;
-import panda.lang.Locales;
+import junit.framework.TestCase;
 
 /**
  * test class for Locales

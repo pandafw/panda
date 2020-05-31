@@ -7,8 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import panda.lang.Chars;
-
 /**
  * Unit tests {@link panda.lang.Chars}.
  */

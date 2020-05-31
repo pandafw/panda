@@ -6,8 +6,6 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import panda.lang.Strings;
-
 /**
  * Unit tests {@link Strings} - Substring methods
  *

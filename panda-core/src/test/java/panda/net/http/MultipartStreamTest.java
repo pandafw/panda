@@ -7,8 +7,6 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-import panda.net.http.MultipartStream;
-
 /**
  * Unit tests {@link panda.net.http.MultipartStream}.
  */

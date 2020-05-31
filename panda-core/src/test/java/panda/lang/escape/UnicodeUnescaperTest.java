@@ -5,9 +5,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import panda.lang.escape.UnicodeEscaper;
-import panda.lang.escape.UnicodeUnescaper;
-
 /**
  * Unit tests for {@link UnicodeEscaper}.
  */

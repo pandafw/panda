@@ -10,8 +10,6 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import panda.codec.binary.Base64OutputStream;
-import panda.codec.binary.BaseNCodec;
 import panda.lang.Strings;
 
 /**

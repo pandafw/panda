@@ -9,8 +9,6 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import panda.net.Mimes;
-
 public final class QuotedPrintableDecoderTestCase {
 
 	private static final String US_ASCII_CHARSET = "US-ASCII";

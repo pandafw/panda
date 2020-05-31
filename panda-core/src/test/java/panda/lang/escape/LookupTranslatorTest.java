@@ -7,8 +7,6 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
-import panda.lang.escape.LookupTranslator;
-
 /**
  * Unit tests for {@link LookupTranslator}.
  */

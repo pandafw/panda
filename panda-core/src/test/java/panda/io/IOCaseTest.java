@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import panda.io.IOCase;
-
 /**
  * This is used to test IOCase for correctness.
  */
