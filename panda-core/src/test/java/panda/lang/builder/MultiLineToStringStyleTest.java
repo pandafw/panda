@@ -10,8 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import panda.lang.Systems;
-import panda.lang.builder.ToStringBuilder;
-import panda.lang.builder.ToStringStyle;
 import panda.lang.builder.ToStringStyleTest.Person;
 
 /**

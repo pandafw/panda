@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import panda.lang.Arrays;
-import panda.lang.builder.EqualsBuilder;
 
 /**
  * Unit tests {@link EqualsBuilder}.
