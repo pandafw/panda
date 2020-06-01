@@ -597,7 +597,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(List<String> sqls) throws SQLException {
-		return executeBatch(sqls, NO_MAXIMUM_SIZE);
+		return executeBatch(sqls, 0);
 	}
 
 	/**
@@ -606,7 +606,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * such as an SQL DDL statement. 
 	 *
 	 * @param sqls The SQL statements to execute.
-	 * @param batchSize the batch size to execute at a time
+	 * @param batchSize the batch size to execute at a time (&lt; 0: execute all sqls at one time)
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(List<String> sqls, int batchSize) throws SQLException {
@@ -671,7 +671,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(String sql, List<Object> parameters) throws SQLException {
-		return executeBatch(sql, parameters, NO_MAXIMUM_SIZE);
+		return executeBatch(sql, parameters, 0);
 	}
 
 	/**
@@ -681,7 +681,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 *
 	 * @param sql The SQL statement to execute.
 	 * @param parameters The parameter object list (e.g. JavaBean, Map, XML etc.).
-	 * @param batchSize the batch size to execute at a time
+	 * @param batchSize the batch size to execute at a time (&lt; 0: execute all sqls at one time)
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(String sql, List<Object> parameters, int batchSize) throws SQLException {
@@ -770,8 +770,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 *         or null if no result was found
 	 * @throws java.sql.SQLException If more than one result was found, or if any other error occurs.
 	 */
-	public <T> T fetch(String sql, Object parameter, Class<T> resultClass)
-			throws SQLException {
+	public <T> T fetch(String sql, Object parameter, Class<T> resultClass) throws SQLException {
 		return fetch(sql, parameter, resultClass, null);
 	}
 
@@ -999,9 +998,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 *         table or other source.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
-	protected <T> T insert(String sql, Object parameter, Class<T> resultClass, T resultObject, String keyProp)
-			throws SQLException {
-
+	protected <T> T insert(String sql, Object parameter, Class<T> resultClass, T resultObject, String keyProp) throws SQLException {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 		Asserts.notNull(resultClass, "resultClass is null");
 		
@@ -1056,10 +1053,8 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @return A List of result objects.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
-	public <T> List<T> selectList(String sql, Object parameter, Class<T> resultClass)
-			throws SQLException {
-		return selectList(sql, parameter, resultClass, NO_SKIPPED_RESULTS,
-			NO_MAXIMUM_RESULTS);
+	public <T> List<T> selectList(String sql, Object parameter, Class<T> resultClass) throws SQLException {
+		return selectList(sql, parameter, resultClass, 0, 0);
 	}
 
 	/**
@@ -1075,7 +1070,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public <T> List<T> selectList(String sql, Class<T> resultClass) throws SQLException {
-		return selectList(sql, null, resultClass, NO_SKIPPED_RESULTS, NO_MAXIMUM_RESULTS);
+		return selectList(sql, null, resultClass, 0, 0);
 	}
 
 	/**
@@ -1092,27 +1087,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @return A List of result objects.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
-	public <T> List<T> selectList(String sql, Class<T> resultClass, int skip, int max)
-			throws SQLException {
-		return selectList(sql, null, resultClass, skip, max);
-	}
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects within a certain range.
-	 * <p/>
-	 * This overload assumes no parameter is needed.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param resultClass The class of result object 
-	 * @param skip            The number of results to ignore.
-	 * @param max             The maximum number of results to return.
-	 * @return A List of result objects.
-	 * @throws java.sql.SQLException If an error occurs.
-	 */
-	public <T> List<T> selectList(String sql, Class<T> resultClass, long skip, long max)
-			throws SQLException {
+	public <T> List<T> selectList(String sql, Class<T> resultClass, int skip, int max) throws SQLException {
 		return selectList(sql, null, resultClass, skip, max);
 	}
 
@@ -1134,34 +1109,13 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 */
 	@Override
 	public <T> List<T> selectList(String sql, Object parameter, Class<T> resultClass, int skip, int max) throws SQLException {
-		return selectList(sql, parameter, resultClass, (long)skip, (long)max);
-	}
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects within a certain range.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param resultClass The class of result object 
-	 * @param skip            The number of results to ignore.
-	 * @param max             The maximum number of results to return.
-	 * @return A List of result objects.
-	 * @throws java.sql.SQLException If an error occurs.
-	 */
-	@Override
-	public <T> List<T> selectList(String sql, Object parameter, Class<T> resultClass, long skip, long max) throws SQLException {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
 		if (log.isDebugEnabled()) {
 			log.debug("selectList: " + sql);
 		}
 
-		List<JdbcSqlParameter> sqlParams = new ArrayList<JdbcSqlParameter>();
+		List<JdbcSqlParameter> sqlParams = new ArrayList<JdbcSqlParameter>(max >= 0 ? max : 0);
 		PreparedStatement ps = prepareStatement(sql, parameter, sqlParams);
 		
 		ResultSet rs = null;
@@ -1253,28 +1207,6 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 *
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
-	 * @param resultClass The class of result object 
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param skip The number of results to ignore.
-	 * @param max  The maximum number of results to return.
-	 * @return A Map keyed by keyProp with values being the result object instance.
-	 * @throws java.sql.SQLException If an SQL error occurs.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> Map<Object, T> selectMap(String sql, Class<T> resultClass, String keyProp, long skip, long max)
-			throws SQLException {
-		return (Map<Object, T>) selectMap(sql, null, resultClass, keyProp, null, skip, max);
-	}
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects that will be keyed into a Map.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param keyProp         The property to be used as the key in the Map.
 	 * @param resultClass The class of result object 
@@ -1305,27 +1237,6 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	@SuppressWarnings("unchecked")
 	public <T> Map<Object, T> selectMap(String sql, Object parameter, Class<T> resultClass,
 			String keyProp, int skip, int max) throws SQLException {
-		return (Map<Object, T>) selectMap(sql, parameter, resultClass, keyProp, null, skip, max);
-	}
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects that will be keyed into a Map.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param keyProp         The property to be used as the key in the Map.
-	 * @param resultClass The class of result object 
-	 * @return A Map keyed by keyProp with values being the result object instance.
-	 * @throws java.sql.SQLException If an error occurs.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> Map<Object, T> selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyProp, long skip, long max) throws SQLException {
 		return (Map<Object, T>) selectMap(sql, parameter, resultClass, keyProp, null, skip, max);
 	}
 
@@ -1382,30 +1293,6 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 *
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
-	 * @param resultClass The class of result object 
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param skip The number of results to ignore.
-	 * @param max  The maximum number of results to return.
-	 * @return A Map keyed by keyProp with values of valueProp.
-	 * @throws java.sql.SQLException If an SQL error occurs.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> Map<?, ?> selectMap(String sql, Class<T> resultClass, String keyProp,
-			String valProp, long skip, long max) throws SQLException {
-		return (Map<Object, T>) selectMap(sql, null, resultClass, keyProp,
-			valProp, skip, max);
-	}
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects from which one property will be keyed into a Map.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param resultClass The class of result object 
 	 * @param keyProp The property to be used as the key in the Map.
@@ -1415,8 +1302,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 */
 	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass,
 			String keyProp, String valProp) throws SQLException {
-		return selectMap(sql, parameter, resultClass, keyProp, valProp, NO_SKIPPED_RESULTS,
-			NO_MAXIMUM_RESULTS);
+		return selectMap(sql, parameter, resultClass, keyProp, valProp, 0, 0);
 	}
 
 	/**
@@ -1438,29 +1324,6 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	@Override
 	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass, String keyProp,
 			String valProp, int skip, int max) throws SQLException {
-		return selectMap(sql, parameter, resultClass, keyProp,
-			valProp, (long)skip, (long)max);
-	}
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects from which one property will be keyed into a Map.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param resultClass The class of result object 
-	 * @return A Map keyed by keyProp with values of valueProp.
-	 * @throws java.sql.SQLException If an error occurs.
-	 */
-	@Override
-	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass, String keyProp,
-			String valProp, long skip, long max) throws SQLException {
 
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 

@@ -10,21 +10,6 @@ import java.util.Map;
  */
 public interface SqlExecutor {
 	/**
-	 * Constant to let us know not to skip anything
-	 */
-	public static final int NO_SKIPPED_RESULTS = 0;
-
-	/**
-	 * Constant to let us know to include all records
-	 */
-	public static final int NO_MAXIMUM_RESULTS = 0;
-
-	/**
-	 * Constant to let us know to batch execute all sqls at one time
-	 */
-	public static final int NO_MAXIMUM_SIZE = 0;
-
-	/**
 	 * reset
 	 */
 	//public void reset();
@@ -46,7 +31,7 @@ public interface SqlExecutor {
 	 * such as an SQL DDL statement. 
 	 *
 	 * @param sqls The SQL statements to execute.
-	 * @param batchSize the batch size to execute at a time
+	 * @param batchSize the batch size to execute at a time (&lt; 0: execute all sqls at one time)
 	 * @return the effected row count array
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
@@ -71,7 +56,7 @@ public interface SqlExecutor {
 	 *
 	 * @param sql The SQL statement to execute.
 	 * @param parameters The parameter object list (e.g. JavaBean, Map, XML etc.).
-	 * @param batchSize the batch size to execute at a time
+	 * @param batchSize the batch size to execute at a time (&lt; 0: execute all sqls at one time)
 	 * @return the effected row count array
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
@@ -317,23 +302,6 @@ public interface SqlExecutor {
 	 * Executes a mapped SQL SELECT statement that returns data to populate
 	 * a number of result objects within a certain range.
 	 * <p/>
-	 * This overload assumes no parameter is needed.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param resultClass The class of result object 
-	 * @param skip            The number of results to ignore.
-	 * @param max             The maximum number of results to return.
-	 * @return A List of result objects.
-	 * @throws java.sql.SQLException If an error occurs.
-	 */
-	public <T> List<T> selectList(String sql, Class<T> resultClass, long skip, long max)
-			throws SQLException;
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects within a certain range.
-	 * <p/>
 	 * The parameter object is generally used to supply the input
 	 * data for the WHERE clause parameter(s) of the SELECT statement.
 	 *
@@ -348,25 +316,6 @@ public interface SqlExecutor {
 	 */
 	public <T> List<T> selectList(String sql, Object parameter, Class<T> resultClass, int skip,
 			int max) throws SQLException;
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects within a certain range.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param resultClass The class of result object 
-	 * @param skip The number of results to ignore.
-	 * @param max  The maximum number of results to return.
-	 * @return A List of result objects.
-	 * @throws java.sql.SQLException If an error occurs.
-	 */
-	public <T> List<T> selectList(String sql, Object parameter, Class<T> resultClass, long skip,
-			long max) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -441,26 +390,6 @@ public interface SqlExecutor {
 	 */
 	public <T> Map<Object, T> selectMap(String sql, Object parameter, Class<T> resultClass,
 			String keyProp, int skip, int max) throws SQLException;
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects that will be keyed into a Map.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param keyProp         The property to be used as the key in the Map.
-	 * @param resultClass The class of result object 
-	 * @param skip The number of results to ignore.
-	 * @param max  The maximum number of results to return.
-	 * @return A Map keyed by keyProp with values being the result object instance.
-	 * @throws java.sql.SQLException If an error occurs.
-	 */
-	public <T> Map<Object, T> selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyProp, long skip, long max) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -539,27 +468,6 @@ public interface SqlExecutor {
 	 */
 	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass,
 			String keyProp, String valProp, int skip, int max) throws SQLException;
-
-	/**
-	 * Executes a mapped SQL SELECT statement that returns data to populate
-	 * a number of result objects from which one property will be keyed into a Map.
-	 * <p/>
-	 * The parameter object is generally used to supply the input
-	 * data for the WHERE clause parameter(s) of the SELECT statement.
-	 *
-	 * @param <T> The type of result object 
-	 * @param sql The SQL statement to execute.
-	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param resultClass The class of result object 
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param skip the record count to skip
-	 * @param max the max record count to fetch
-	 * @return A Map keyed by keyProp with values of valueProp.
-	 * @throws java.sql.SQLException If an SQL error occurs.
-	 */
-	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyProp, String valProp, long skip, long max) throws SQLException;
 
 	/**
 	 * Executes the given SQL statement, which returns a single <code>ResultSetEx</code> object.

@@ -451,13 +451,13 @@ public class SqlDao extends AbstractDao {
 				if (getSqlExpert().isSupportScroll()) {
 					executor.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
 				}
-				List<T> list = executor.selectList(sql.getSql(), sql.getParams(), query.getType(), query.getStart(), query.getLimit());
+				List<T> list = executor.selectList(sql.getSql(), sql.getParams(), query.getType(), (int)query.getStart(), (int)query.getLimit());
 				if (getSqlExpert().isSupportScroll()) {
 					executor.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
 				}
 				return list;
 			}
-			return executor.selectList(sql.getSql(), sql.getParams(), query.getType());
+			return executor.selectList(sql.getSql(), sql.getParams(), query.getType(), 0, (int)query.getLimit());
 		}
 		catch (SQLException e) {
 			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
