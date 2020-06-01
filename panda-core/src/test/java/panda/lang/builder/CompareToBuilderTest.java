@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import panda.lang.builder.CompareToBuilder;
-
 /**
  * Unit tests {@link CompareToBuilder}.
  *

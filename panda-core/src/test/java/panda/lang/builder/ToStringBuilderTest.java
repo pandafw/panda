@@ -11,9 +11,6 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Test;
 
-import panda.lang.builder.ToStringBuilder;
-import panda.lang.builder.ToStringStyle;
-
 /**
  * Unit tests for {@ToStringBuilder}.
  *

@@ -131,6 +131,7 @@ public class NullInputStreamTest extends TestCase {
 	 * Test <code>mark()</code> and <code>reset()</code> methods.
 	 * @throws Exception if an error occurs
 	 */
+	@SuppressWarnings("resource")
 	public void testMarkAndReset() throws Exception {
 		int position = 0;
 		final int readlimit = 10;

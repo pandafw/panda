@@ -13,9 +13,6 @@ import java.util.concurrent.Future;
 
 import org.junit.Test;
 
-import panda.lang.builder.ToStringBuilder;
-import panda.lang.builder.ToStringStyle;
-
 /**
  * Tests concurrent access for the default {@link ToStringStyle}.
  * <p>

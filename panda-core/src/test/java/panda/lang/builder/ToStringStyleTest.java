@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import panda.lang.builder.ToStringStyle;
-
 /**
  * Test case for ToStringStyle.
  * 

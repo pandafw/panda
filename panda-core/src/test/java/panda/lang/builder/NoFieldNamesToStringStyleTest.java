@@ -9,8 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import panda.lang.builder.ToStringBuilder;
-import panda.lang.builder.ToStringStyle;
 import panda.lang.builder.ToStringStyleTest.Person;
 
 /**
