@@ -3,8 +3,8 @@ package panda.ioc.wea;
 import java.lang.reflect.Method;
 
 import panda.ioc.Ioc;
-import panda.lang.Creator;
 import panda.lang.Exceptions;
+import panda.lang.reflect.Creator;
 
 public class BeanMethodCreator<T> implements Creator<T> {
 	private Ioc ioc;

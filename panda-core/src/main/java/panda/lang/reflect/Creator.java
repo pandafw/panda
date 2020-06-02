@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.reflect;
 
 public interface Creator<T> {
 

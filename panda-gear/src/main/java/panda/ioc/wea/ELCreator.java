@@ -3,7 +3,7 @@ package panda.ioc.wea;
 import panda.el.EL;
 import panda.ioc.Ioc;
 import panda.ioc.bean.IocProxy;
-import panda.lang.Creator;
+import panda.lang.reflect.Creator;
 
 public class ELCreator<T> implements Creator<T> {
 	private Ioc ioc;

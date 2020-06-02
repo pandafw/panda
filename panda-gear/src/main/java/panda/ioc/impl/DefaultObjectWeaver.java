@@ -8,7 +8,7 @@ import panda.ioc.IocMaking;
 import panda.ioc.ObjectWeaver;
 import panda.ioc.ValueProxy;
 import panda.lang.Arrays;
-import panda.lang.Creator;
+import panda.lang.reflect.Creator;
 import panda.lang.reflect.Types;
 
 /**

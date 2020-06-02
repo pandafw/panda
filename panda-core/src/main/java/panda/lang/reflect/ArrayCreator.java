@@ -2,7 +2,6 @@ package panda.lang.reflect;
 
 import java.lang.reflect.Array;
 
-import panda.lang.Creator;
 import panda.lang.Exceptions;
 
 public class ArrayCreator<T> implements Creator<T> {

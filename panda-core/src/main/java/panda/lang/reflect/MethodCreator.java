@@ -2,7 +2,6 @@ package panda.lang.reflect;
 
 import java.lang.reflect.Method;
 
-import panda.lang.Creator;
 import panda.lang.Exceptions;
 
 public class MethodCreator<T> implements Creator<T> {
