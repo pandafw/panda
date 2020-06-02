@@ -1,12 +1,9 @@
 package panda.ioc.meta;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import panda.lang.Asserts;
-import panda.lang.Collections;
 import panda.lang.Objects;
 
 /**
@@ -35,12 +32,12 @@ public class IocObject implements Cloneable {
 	/**
 	 * 对象构造函数的参数列表
 	 */
-	private List<IocValue> args;
+	private IocValue[] args;
 
 	/**
 	 * 对象的字段
 	 */
-	private Map<String, IocValue> fields;
+	private Map<String, IocParam> fields;
 
 	/**
 	 * 对象基本，容器根据这个字段，来决定将这个对象保存在哪一个上下文范围中<br>
@@ -88,44 +85,23 @@ public class IocObject implements Cloneable {
 		this.events = events;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<IocValue> getArgs() {
-		return args == null ? Collections.EMPTY_LIST : args;
+	public IocValue[] getArgs() {
+		return args;
 	}
 
-	public boolean hasArgs() {
-		return Collections.isNotEmpty(args);
+	public void setArgs(IocValue[] args) {
+		this.args = args;
 	}
 
-	public void addArg(IocValue arg) {
-		if (this.args == null) {
-			this.args = new ArrayList<IocValue>();
-		}
-		this.args.add(arg);
+	public Map<String, IocParam> getFields() {
+		return fields;
 	}
 
-	public void copyArgs(List<IocValue> args) {
-		if (Collections.isEmpty(args)) {
-			return;
-		}
-		
-		if (this.args == null) {
-			this.args = new ArrayList<IocValue>();
-		}
-		this.args.clear();
-		this.args.addAll(args);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Map<String, IocValue> getFields() {
-		return fields == null ? Collections.EMPTY_MAP : fields;
-	}
-
-	public void addField(String name, IocValue value) {
+	public void addField(String name, IocParam param) {
 		if (fields == null) {
-			fields = new LinkedHashMap<String, IocValue>();
+			fields = new LinkedHashMap<String, IocParam>();
 		}
-		fields.put(name, value);
+		fields.put(name, param);
 	}
 
 	public boolean hasField(String name) {

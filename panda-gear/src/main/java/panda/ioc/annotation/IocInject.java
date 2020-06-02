@@ -22,7 +22,7 @@ public @interface IocInject {
 	 * </pre>
 	 * @return Bean Name
 	 */
-	String value() default "";
+	String[] value() default {};
 	
 	/**
 	 * Bean type
@@ -30,7 +30,7 @@ public @interface IocInject {
 	 * 
 	 * @return Bean type
 	 */
-	Class<?> type() default Object.class;
+	Class<?>[] type() default {};
 
 	/**
 	 * @return required or not

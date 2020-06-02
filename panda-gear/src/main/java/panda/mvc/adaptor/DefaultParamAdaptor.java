@@ -209,11 +209,16 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			throw new RuntimeException("You need define @IocBy in main module!!!");
 		}
 
-		if (ioci.type() != Object.class) {
-			cls = ioci.type();
+		String name = null;
+		if (Arrays.isNotEmpty(ioci.value())) {
+			name = ioci.value()[0];
 		}
-		
-		return ioci.required() ? ioc.get(cls, ioci.value()) : ioc.getIfExists(cls, ioci.value());
+
+		if (Arrays.isNotEmpty(ioci.type())) {
+			cls = ioci.type()[0];
+		}
+
+		return ioci.required() ? ioc.get(cls, name) : ioc.getIfExists(cls, name);
 	}
 
 	protected Object adaptByReqHeader(ActionContext ac, Type type, String name) {

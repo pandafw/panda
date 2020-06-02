@@ -54,7 +54,7 @@ public class DefaultActionChain implements ActionChain {
 		protected Processor initProcessor(String name, ActionContext ac) {
 			try {
 				Processor p;
-				if (Strings.startsWithChar(name, IocValue.TYPE_REF)) {
+				if (Strings.startsWithChar(name, IocValue.KIND_REF)) {
 					p = ac.getIoc().get(Processor.class, name.substring(1));
 				}
 				else {

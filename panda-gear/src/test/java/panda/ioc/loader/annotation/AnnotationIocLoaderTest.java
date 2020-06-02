@@ -33,7 +33,7 @@ public class AnnotationIocLoaderTest {
 		Assert.assertNotNull(iocObject);
 		Assert.assertNotNull(iocObject.getFields());
 		Assert.assertEquals(6, iocObject.getFields().size());
-		Assert.assertEquals(IocValue.TYPE_REF, iocObject.getFields().values().iterator().next().getType());
+		Assert.assertEquals(IocValue.KIND_REF, iocObject.getFields().values().iterator().next().getValues()[0].getKind());
 	}
 
 	@Test

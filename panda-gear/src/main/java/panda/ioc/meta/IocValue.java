@@ -1,41 +1,60 @@
 package panda.ioc.meta;
 
-import panda.lang.Injector;
+import java.lang.reflect.Type;
+
 import panda.lang.Objects;
 
 public class IocValue {
 
-	public static final char TYPE_NULL = '-';
-	public static final char TYPE_RAW = '*';
-	public static final char TYPE_INNER = 'i';
+	public static final char KIND_NULL = '-';
+	public static final char KIND_RAW = '*';
+	public static final char KIND_INNER = 'i';
 
-	public static final char TYPE_REF = '#';
-	public static final char TYPE_EL = '$';
-	public static final char TYPE_JSON = '!';
+	public static final char KIND_REF = '#';
+	public static final char KIND_EL = '$';
+	public static final char KIND_JSON = '!';
 
-	private char type;
+	private char kind;
+	private Type type;
 	private Object value;
-	private Injector injector;
 	private boolean required = true;
 
-	public IocValue(char type) {
-		this.type = type;
+	public IocValue(char kind) {
+		this.kind = kind;
 	}
 
-	/**
-	 * @param type the IocValue type
-	 * @param value the value
-	 */
-	public IocValue(char type, Object value) {
+	public IocValue(char kind, Type type, Object value) {
+		this.kind = kind;
 		this.type = type;
 		this.value = value;
 	}
 
-	public char getType() {
+	public IocValue(char kind, Type type, Object value, boolean required) {
+		this.kind = kind;
+		this.type = type;
+		this.value = value;
+		this.required = required;
+	}
+
+	public char getKind() {
+		return kind;
+	}
+
+	public void setKind(char kind) {
+		this.kind = kind;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(char type) {
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(Type type) {
 		this.type = type;
 	}
 
@@ -45,20 +64,6 @@ public class IocValue {
 
 	public void setValue(Object value) {
 		this.value = value;
-	}
-
-	/**
-	 * @return the injector
-	 */
-	public Injector getInjector() {
-		return injector;
-	}
-
-	/**
-	 * @param injector the injector to set
-	 */
-	public void setInjector(Injector injector) {
-		this.injector = injector;
 	}
 
 	/**
@@ -78,10 +83,10 @@ public class IocValue {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
+				.append("kind", kind)
 				.append("type", type)
 				.append("value", value)
 				.append("required", required)
-				.append("injector", injector)
 				.toString();
 	}
 

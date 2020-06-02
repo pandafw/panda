@@ -10,12 +10,13 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
-import panda.ioc.IocLoader;
 import panda.ioc.IocLoadException;
+import panda.ioc.IocLoader;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.XmlIocLoader;
 import panda.ioc.loader.xml.meta.Bee;
 import panda.ioc.meta.IocObject;
+import panda.ioc.meta.IocParam;
 import panda.ioc.meta.IocValue;
 
 public class XmlIocLoaderTest {
@@ -35,31 +36,37 @@ public class XmlIocLoaderTest {
 			assertNotNull(name);
 			assertNotNull(iocLoader.load(name));
 			IocObject iocObject = iocLoader.load(name);
-			if (iocObject.hasArgs()) {
+			if (iocObject.getArgs() != null) {
 				for (IocValue iocValue : iocObject.getArgs()) {
-					iocValue.getType();
+					iocValue.getKind();
 					iocValue.getValue();
 					checkValue(iocValue);
 				}
 			}
 			if (iocObject.getFields() != null) {
-				for (Entry<String, IocValue> en : iocObject.getFields().entrySet()) {
+				for (Entry<String, IocParam> en : iocObject.getFields().entrySet()) {
 					assertNotNull(en.getKey());
 					if (en.getValue() != null) {
-						IocValue iocValue = en.getValue();
-						checkValue(iocValue);
+						IocValue[] ivs = en.getValue().getValues();
+						assertNotNull(ivs);
+						assertTrue(ivs.length > 0);
+						for (IocValue iv : ivs) {
+							checkValue(iv);
+						}
 					}
 				}
 			}
 		}
 		
-		for (IocValue iv : iocLoader.load("obj").getFields().values()) {
-			iv.getValue();
+		for (IocParam ip : iocLoader.load("obj").getFields().values()) {
+			for (IocValue iv : ip.getValues()) {
+				iv.getValue();
+			}
 		}
 	}
 
 	private void checkValue(IocValue iocValue) {
-		iocValue.getType();
+		iocValue.getKind();
 		if (iocValue.getValue() != null && iocValue.getValue() instanceof Collection<?>) {
 			Collection<?> collection = (Collection<?>)iocValue.getValue();
 			for (Object object : collection) {

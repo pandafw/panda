@@ -18,44 +18,51 @@ import panda.ioc.val.CollectionValue;
 import panda.ioc.val.ELValue;
 import panda.ioc.val.InnerValue;
 import panda.ioc.val.MapValue;
+import panda.ioc.val.ParamsValue;
 import panda.ioc.val.ReferValue;
 import panda.ioc.val.StaticValue;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
 
 public class DefaultValueProxyMaker implements ValueProxyMaker {
-
+	public ValueProxy make(IocMaking im, IocValue[] ivs) {
+		if (ivs.length == 1) {
+			return make(im, ivs[0]);
+		}
+		return new ParamsValue(im, ivs);
+	}
+	
 	@SuppressWarnings("unchecked")
-	public ValueProxy make(IocMaking ing, IocValue iv) {
-		char type = iv.getType();
+	public ValueProxy make(IocMaking im, IocValue iv) {
+		char type = iv.getKind();
 		Object value = iv.getValue();
 
 		// Null
-		if (IocValue.TYPE_NULL == type || null == value) {
+		if (IocValue.KIND_NULL == type || null == value) {
 			return StaticValue.NULL;
 		}
 		
 		// String, Number, .....
-		if (IocValue.TYPE_RAW == type) {
+		if (IocValue.KIND_RAW == type) {
 			// Array
 			if (value.getClass().isArray()) {
 				Object[] vs = (Object[])value;
-				IocValue[] tmp = new IocValue[vs.length];
-				for (int i = 0; i < tmp.length; i++) {
-					tmp[i] = (IocValue)vs[i];
+				IocValue[] ivs = new IocValue[vs.length];
+				for (int i = 0; i < ivs.length; i++) {
+					ivs[i] = (IocValue)vs[i];
 				}
-				return new ArrayValue(ing, tmp);
+				return new ArrayValue(im, ivs);
 			}
 		
 			// Map
 			if (value instanceof Map<?, ?>) {
-				return new MapValue(ing, (Map<String, IocValue>)value,
+				return new MapValue(im, (Map<String, IocValue>)value,
 					(Class<? extends Map<String, Object>>)value.getClass());
 			}
 			
 			// Collection
 			if (value instanceof Collection<?>) {
-				return new CollectionValue(ing, (Collection<IocValue>)value,
+				return new CollectionValue(im, (Collection<IocValue>)value,
 					(Class<? extends Collection<Object>>)value.getClass());
 			}
 			
@@ -63,7 +70,7 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 		}
 		
 		// Refer
-		if (IocValue.TYPE_REF == type) {
+		if (IocValue.KIND_REF == type) {
 			if (value instanceof Class) {
 				if (Ioc.class.equals(value)) {
 					return ReferValue.IOC_SELF;
@@ -95,25 +102,25 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 			}
 			
 			Class t = null;
-			if (iv.getInjector() != null) {
-				t = Types.getRawType(Types.getDefaultImplType(iv.getInjector().type(null)));
+			if (iv.getType() != null) {
+				t = Types.getRawType(Types.getDefaultImplType(iv.getType()));
 			}
 			return new ReferValue(s, t, iv.isRequired());
 		}
 
 		// EL
-		if (IocValue.TYPE_EL == type) {
+		if (IocValue.KIND_EL == type) {
 			return new ELValue(value.toString());
 		}
 		
 		// JSON
-		if (IocValue.TYPE_JSON == type) {
+		if (IocValue.KIND_JSON == type) {
 			Object jv = Jsons.fromJson(value.toString());
 			return new StaticValue(jv);
 		}
 		
 		// INNER
-		if (IocValue.TYPE_INNER == type) {
+		if (IocValue.KIND_INNER == type) {
 			return new InnerValue((IocObject)value);
 		}
 

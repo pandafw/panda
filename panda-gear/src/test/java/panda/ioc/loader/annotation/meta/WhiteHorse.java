@@ -4,9 +4,9 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 
 @IocBean
-public class BlackHorse extends Horse {
+public class WhiteHorse extends Horse {
 
-	@IocInject("'black horse")
+	@IocInject("'white horse")
 	public void setName(String name) {
 		super.setName(name);
 	}
