@@ -55,15 +55,24 @@ public class IocMaking {
 		return new IocMaking(objectName, ioc, mirrors, maker, vpm, weavers);
 	}
 
+	public ValueProxy makeValueProxy(IocValue[] ivs) {
+		ValueProxy vp = vpm.make(this, ivs);
+		if (vp == null) {
+			throw new IocException(String.format(
+				"Failed to create IocValue[] ValueProxy for object '%s'", name));
+		}
+		return vp;
+	}
+
 	public ValueProxy makeValueProxy(IocValue iv) {
 		ValueProxy vp = vpm.make(this, iv);
-		if (vp != null) {
-			return vp;
+		if (vp == null) {
+			throw new IocException(String.format(
+				"Failed to create {'%s':%s} ValueProxy for object [%s]", 
+				iv.getKind(), Jsons.toJson(iv.getValue()), name));
 		}
 		
-		throw new RuntimeException(String.format(
-			"Unknown value {'%s':%s} for object [%s]", 
-			iv.getType(), Jsons.toJson(iv.getValue()), name));
+		return vp;
 	}
 
 }

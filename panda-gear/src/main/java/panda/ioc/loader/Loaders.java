@@ -1,9 +1,11 @@
 package panda.ioc.loader;
 
+import java.lang.reflect.Type;
 import java.util.Map.Entry;
 
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
+import panda.ioc.meta.IocParam;
 import panda.ioc.meta.IocValue;
 import panda.lang.Chars;
 import panda.lang.Strings;
@@ -22,40 +24,40 @@ public abstract class Loaders {
 	 * </pre>
 	 * 
 	 * @param value inject object description
-	 * @param defType default ioc type
+	 * @param kind default ioc type
 	 * @return the IocValue
 	 */
-	public static IocValue convert(String value, char defType) {
+	public static IocValue convert(char kind, Type type, String value) {
 		if (value == null) {
-			return new IocValue(IocValue.TYPE_NULL);
+			return new IocValue(IocValue.KIND_NULL, type, value);
 		}
 		if (value.isEmpty()) {
-			return new IocValue(IocValue.TYPE_RAW, value);
+			return new IocValue(IocValue.KIND_RAW, type, value);
 		}
 
 		int c0 = value.charAt(0);
 		if (c0 == Chars.SINGLE_QUOTE) {
-			return new IocValue(IocValue.TYPE_RAW, value.substring(1));
+			return new IocValue(IocValue.KIND_RAW, type, value.substring(1));
 		}
 		if (c0 == Chars.SHARP && value.length() > 1) {
-			return new IocValue(IocValue.TYPE_REF, value.substring(1));
+			return new IocValue(IocValue.KIND_REF, type, value.substring(1));
 		}
 		if (value.length() > 3) {
 			int c1 = value.charAt(1);
 			int cx = value.charAt(value.length() - 1);
 			
 			if ((c0 == Chars.DOLLAR || c0 == Chars.PERCENT) && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
-				return new IocValue(IocValue.TYPE_EL, value.substring(2, value.length() - 1));
+				return new IocValue(IocValue.KIND_EL, type, value.substring(2, value.length() - 1));
 			}
 			if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
-				return new IocValue(IocValue.TYPE_JSON, value.substring(1));
+				return new IocValue(IocValue.KIND_JSON, type, value.substring(1));
 			}
 			if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACKETS_LEFT && cx == Chars.BRACKETS_RIGHT) {
-				return new IocValue(IocValue.TYPE_JSON, value.substring(1));
+				return new IocValue(IocValue.KIND_JSON, type, value.substring(1));
 			}
 		}
 
-		return new IocValue(defType, value);
+		return new IocValue(kind, type, value);
 	}
 
 	/**
@@ -99,14 +101,16 @@ public abstract class Loaders {
 		}
 
 		// merge arguments
-		if (!me.hasArgs()) {
-			me.copyArgs(it.getArgs());
+		if (me.getArgs() == null) {
+			me.setArgs(it.getArgs());
 		}
 		
 		// merge fields
-		for (Entry<String, IocValue> en : it.getFields().entrySet()) {
-			if (!me.hasField(en.getKey())) {
-				me.addField(en.getKey(), en.getValue());
+		if (it.getFields() != null) {
+			for (Entry<String, IocParam> en : it.getFields().entrySet()) {
+				if (!me.hasField(en.getKey())) {
+					me.addField(en.getKey(), en.getValue());
+				}
 			}
 		}
 

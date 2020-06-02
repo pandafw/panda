@@ -12,13 +12,12 @@ import panda.ioc.ObjectProxy;
 import panda.ioc.ObjectWeaver;
 import panda.ioc.ValueProxy;
 import panda.ioc.meta.IocObject;
-import panda.ioc.meta.IocValue;
+import panda.ioc.meta.IocParam;
 import panda.ioc.wea.BeanMethodCreator;
 import panda.ioc.wea.ELCreator;
 import panda.lang.Arrays;
 import panda.lang.Chars;
 import panda.lang.Classes;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.ArrayCreator;
 import panda.lang.reflect.ConstructorCreator;
@@ -152,19 +151,22 @@ public class DefaultObjectMaker implements ObjectMaker {
 			dw.setOnCreate(createTrigger(cls, iobj.getEvents().getCreate()));
 		}
 
-		// 构造函数参数
-		ValueProxy[] vps = new ValueProxy[iobj.getArgs().size()];
-		for (int i = 0; i < vps.length; i++) {
-			vps[i] = ing.makeValueProxy(iobj.getArgs().get(i));
+		Object[] args = Arrays.EMPTY_OBJECT_ARRAY;
+		if (iobj.getArgs() != null) {
+			// 构造函数参数
+			ValueProxy[] vps = new ValueProxy[iobj.getArgs().length];
+			for (int i = 0; i < vps.length; i++) {
+				vps[i] = ing.makeValueProxy(iobj.getArgs()[i]);
+			}
+			dw.setArgs(vps);
+	
+			// 先获取一遍，根据这个数组来获得构造函数
+			args = new Object[vps.length];
+			for (int i = 0; i < args.length; i++) {
+				args[i] = vps[i].get(ing);
+			}
 		}
-		dw.setArgs(vps);
-
-		// 先获取一遍，根据这个数组来获得构造函数
-		Object[] args = new Object[vps.length];
-		for (int i = 0; i < args.length; i++) {
-			args[i] = vps[i].get(ing);
-		}
-
+		
 		// factory
 		if (Strings.isNotEmpty(iobj.getFactory())) {
 			String fa = iobj.getFactory();
@@ -216,7 +218,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 		else {
 			if (cls.isArray()) {
-				dw.setCreator(new ArrayCreator(cls, iobj.getFields().size()));
+				dw.setCreator(new ArrayCreator(cls, iobj.getFields() == null ? 0 : iobj.getFields().size()));
 			}
 			else {
 				Constructor<?> c = Constructors.getConstructor(cls, args);
@@ -234,16 +236,20 @@ public class DefaultObjectMaker implements ObjectMaker {
 	}
 
 	private void setWeaverFields(DefaultObjectWeaver weaver, Class<?> mirror, IocMaking ing, IocObject iobj) {
+		if (iobj.getFields() == null) {
+			return;
+		}
+		
 		// 获得每个字段的注入方式
 		IocFieldInjector[] fields = new IocFieldInjector[iobj.getFields().size()];
 		int i = 0;
-		for (Entry<String, IocValue> en : iobj.getFields().entrySet()) {
+		for (Entry<String, IocParam> en : iobj.getFields().entrySet()) {
 			try {
-				ValueProxy vp = ing.makeValueProxy(en.getValue());
+				ValueProxy vp = ing.makeValueProxy(en.getValue().getValues());
 				fields[i++] = IocFieldInjector.create(mirror, en.getKey(), en.getValue(), vp);
 			}
 			catch (Exception e) {
-				throw Exceptions.wrapThrow(e, "Failed to eval Injector for field: '%s'", en.getKey());
+				throw new IocException("Failed to eval Injector for field '" + en.getKey() + "' of " + mirror, e);
 			}
 		}
 		weaver.setFields(fields);
@@ -255,15 +261,15 @@ public class DefaultObjectMaker implements ObjectMaker {
 			return null;
 		}
 		
-		if (str.contains(".")) {
-			return (IocEventTrigger<Object>)Classes.born(str);
-		}
-		
 		try {
+			if (str.contains(".")) {
+				return (IocEventTrigger<Object>)Classes.born(str);
+			}
+			
 			return new MethodEventTrigger(mirror.getMethod(str));
 		}
-		catch (NoSuchMethodException e) {
-			throw Exceptions.wrapThrow(e);
+		catch (Exception e) {
+			throw new IocException("Failed to eval EventTrigger for '" + str + "' of " + mirror, e);
 		}
 	}
 

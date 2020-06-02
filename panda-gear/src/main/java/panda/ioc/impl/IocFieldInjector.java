@@ -2,6 +2,7 @@ package panda.ioc.impl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.Collection;
 
 import panda.bean.BeanHandler;
@@ -10,18 +11,19 @@ import panda.bean.PropertyInjector;
 import panda.cast.Castors;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
-import panda.ioc.meta.IocValue;
-import panda.lang.Injector;
+import panda.ioc.meta.IocParam;
+import panda.ioc.val.ParamsValue;
 import panda.lang.Objects;
 import panda.lang.reflect.FieldInjector;
 import panda.lang.reflect.Fields;
+import panda.lang.reflect.Injector;
 
 public class IocFieldInjector {
 
-	public static IocFieldInjector create(Class<?> mirror, String fieldName, IocValue iv, ValueProxy vp) {
+	public static IocFieldInjector create(Class<?> mirror, String fieldName, IocParam ip, ValueProxy vp) {
 		IocFieldInjector fi = new IocFieldInjector();
 		fi.proxy = vp;
-		fi.injector = iv.getInjector();
+		fi.injector = ip.getInjector();
 
 		if (fi.injector == null) {
 			BeanHandler bh = Beans.i().getBeanHandler(mirror);
@@ -57,9 +59,22 @@ public class IocFieldInjector {
 		if (ov == ValueProxy.UNDEFINED) {
 			return;
 		}
-		
-		Object cv = Castors.i().cast(ov, injector.type(obj));
-		injector.inject(obj, cv);
+
+		Castors cs = Castors.i();
+		if (proxy instanceof ParamsValue) {
+			Type[] types = injector.types(obj);
+			
+			Object[] ovs = (Object[])ov;
+			Object[] cvs = new Object[ovs.length];
+			for (int i = 0; i < ovs.length; i++) {
+				cvs[i] = cs.cast(ovs[i], types[i]);
+			}
+			injector.injects(obj, cvs);
+		}
+		else {
+			Object cv = cs.cast(ov, injector.type(obj));
+			injector.inject(obj, cv);
+		}
 	}
 
 	@Override

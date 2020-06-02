@@ -1,8 +1,8 @@
 package panda.ioc.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.Beans;
 import panda.ioc.Ioc;
@@ -110,7 +110,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 		this.loader = (loader instanceof CachedIocLoader ? loader : CachedIocLoaderImpl.create(loader));
 		
 		setValueProxyMaker(new DefaultValueProxyMaker());
-		weavers = new HashMap<String, ObjectWeaver>();
+		weavers = new ConcurrentHashMap<String, ObjectWeaver>();
 
 		// Class Factory for AOP
 		this.mirrors = (mirrors == null ? new MirrorFactory() : mirrors);
@@ -266,6 +266,10 @@ public class DefaultIoc implements Ioc, Cloneable {
 
 	public Set<String> getNames() {
 		return loader.getNames();
+	}
+
+	public ValueProxyMaker getValueProxyMaker() {
+		return vpMaker;
 	}
 
 	public void setValueProxyMaker(ValueProxyMaker vpm) {

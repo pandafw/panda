@@ -37,17 +37,17 @@ public class DefaultActionChainCreator implements ActionChainCreator {
 
 	protected ArrayList<String> defaultChain() {
 		return Arrays.toList(
-			IocValue.TYPE_REF + FatalProcessor.class.getName(),
-			IocValue.TYPE_REF + RedirectProcessor.class.getName(),
-			IocValue.TYPE_REF + LocaleProcessor.class.getName(),
-			IocValue.TYPE_REF + LayoutProcessor.class.getName(),
-			IocValue.TYPE_REF + AuthenticateProcessor.class.getName(),
-			IocValue.TYPE_REF + AdaptProcessor.class.getName(),
-			IocValue.TYPE_REF + PreProcessor.class.getName(),
-			IocValue.TYPE_REF + TokenProcessor.class.getName(),
-			IocValue.TYPE_REF + ValidateProcessor.class.getName(),
-			IocValue.TYPE_REF + InvokeProcessor.class.getName(),
-			IocValue.TYPE_REF + ViewProcessor.class.getName()
+			IocValue.KIND_REF + FatalProcessor.class.getName(),
+			IocValue.KIND_REF + RedirectProcessor.class.getName(),
+			IocValue.KIND_REF + LocaleProcessor.class.getName(),
+			IocValue.KIND_REF + LayoutProcessor.class.getName(),
+			IocValue.KIND_REF + AuthenticateProcessor.class.getName(),
+			IocValue.KIND_REF + AdaptProcessor.class.getName(),
+			IocValue.KIND_REF + PreProcessor.class.getName(),
+			IocValue.KIND_REF + TokenProcessor.class.getName(),
+			IocValue.KIND_REF + ValidateProcessor.class.getName(),
+			IocValue.KIND_REF + InvokeProcessor.class.getName(),
+			IocValue.KIND_REF + ViewProcessor.class.getName()
 		);
 	}
 	

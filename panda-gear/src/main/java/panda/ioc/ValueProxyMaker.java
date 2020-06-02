@@ -10,11 +10,16 @@ import panda.ioc.meta.IocValue;
  */
 public interface ValueProxyMaker {
 	/**
-	 * 如果返回的是 null，则表示当前的实现不能解释这个 IocValue，容器会调用下一个 ValueProxyMaker 来做解析
-	 * 
-	 * @param iv 字段装配信息
 	 * @param ing 对象装配时
+	 * @param iv 字段装配信息
 	 * @return 值代理对象
 	 */
 	ValueProxy make(IocMaking ing, IocValue iv);
+
+	/**
+	 * @param ing 对象装配时
+	 * @param ivs 字段装配信息
+	 * @return 值代理对象
+	 */
+	ValueProxy make(IocMaking ing, IocValue[] ivs);
 }

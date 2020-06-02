@@ -101,7 +101,7 @@ public class DefaultViewCreator implements ViewCreator {
 
 	private void addView(String alias, Class<? extends View> type) {
 		if (!aliass.containsKey(alias)) {
-			aliass.put(alias, IocValue.TYPE_REF + type.getName());
+			aliass.put(alias, IocValue.KIND_REF + type.getName());
 		}
 	}
 	
@@ -181,7 +181,7 @@ public class DefaultViewCreator implements ViewCreator {
 
 		try {
 			View v;
-			if (Strings.startsWithChar(name, IocValue.TYPE_REF)) {
+			if (Strings.startsWithChar(name, IocValue.KIND_REF)) {
 				v = ioc.get(View.class, name.substring(1));
 			}
 			else {

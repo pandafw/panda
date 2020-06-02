@@ -62,15 +62,15 @@ public class DefaultObjectWeaver implements ObjectWeaver {
 	}
 
 	public <T> T fill(IocMaking ing, T obj) {
-		// 设置字段的值
-		for (IocFieldInjector fi : fields) {
-			fi.inject(ing, obj);
+		if (fields != null) {
+			for (IocFieldInjector fi : fields) {
+				fi.inject(ing, obj);
+			}
 		}
 		return obj;
 	}
 
 	public Object born(IocMaking ing) {
-		// 准备构造函数参数
 		Object[] args = Arrays.EMPTY_OBJECT_ARRAY;
 		if (Arrays.isNotEmpty(this.args)) {
 			args = new Object[this.args.length];
@@ -83,7 +83,6 @@ public class DefaultObjectWeaver implements ObjectWeaver {
 			}
 		}
 		
-		// 创建实例
 		return creator.create(args);
 	}
 

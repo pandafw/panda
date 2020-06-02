@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,6 +14,7 @@ import panda.cast.CastException;
 import panda.cast.Castors;
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
+import panda.ioc.meta.IocParam;
 import panda.ioc.meta.IocValue;
 import panda.lang.Arrays;
 import panda.lang.Classes;
@@ -166,7 +168,9 @@ public class MapIocLoader extends AbstractIocLoader {
 				v = map.get("events");
 				if (v != null) {
 					IocEventSet ies = Castors.i().cast(v, IocEventSet.class);
-					iobj.setEvents(ies);
+					if (ies != null && ies.isNotEmpty()) {
+						iobj.setEvents(ies);
+					}
 				}
 			}
 			catch (Exception e) {
@@ -177,9 +181,11 @@ public class MapIocLoader extends AbstractIocLoader {
 			try {
 				v = map.get("args");
 				if (v != null) {
+					List<IocValue> ivs = new ArrayList<IocValue>();
 					for (Object o : Iterators.asIterable(v)) {
-						iobj.addArg(object2value(o));
+						ivs.add(object2value(o));
 					}
+					iobj.setArgs(ivs.toArray(new IocValue[ivs.size()]));
 				}
 			}
 			catch (Exception e) {
@@ -192,7 +198,7 @@ public class MapIocLoader extends AbstractIocLoader {
 				if (v != null) {
 					Map<String, Object> fields = (Map<String, Object>)v;
 					for (Entry<String, Object> en : fields.entrySet()) {
-						iobj.addField(en.getKey(), object2value(en.getValue()));
+						iobj.addField(en.getKey(), object2param(en.getValue()));
 					}
 				}
 			}
@@ -208,7 +214,7 @@ public class MapIocLoader extends AbstractIocLoader {
 		}
 		else {
 			for (Entry<String, Object> en : map.entrySet()) {
-				iobj.addField(en.getKey(), object2value(en.getValue()));
+				iobj.addField(en.getKey(), object2param(en.getValue()));
 			}
 		}
 		return iobj;
@@ -217,7 +223,7 @@ public class MapIocLoader extends AbstractIocLoader {
 	private IocObject array2iobj(Object[] array) {
 		final IocObject iobj = new IocObject();
 		for (int i = 0; i < array.length; i++) {
-			iobj.addField(String.valueOf(i), object2value(array[i]));
+			iobj.addField(String.valueOf(i), object2param(array[i]));
 		}
 		return iobj;
 	}
@@ -227,17 +233,21 @@ public class MapIocLoader extends AbstractIocLoader {
 		int i = 0;
 		Iterator it = list.iterator();
 		while (it.hasNext()) {
-			iobj.addField(String.valueOf(i), object2value(it.next()));
+			iobj.addField(String.valueOf(i), object2param(it.next()));
 			i++;
 		}
 		return iobj;
 	}
-
+	
+	private IocParam object2param(Object obj) {
+		return new IocParam(object2value(obj));
+	}
+	
 	@SuppressWarnings("unchecked")
 	private IocValue object2value(Object obj) {
 		// Null
 		if (obj == null) {
-			return new IocValue(IocValue.TYPE_NULL);
+			return new IocValue(IocValue.KIND_NULL);
 		}
 		
 		// IocValue
@@ -251,12 +261,12 @@ public class MapIocLoader extends AbstractIocLoader {
 
 		// Map
 		if (obj instanceof Map<?, ?>) {
-			IocValue iv = new IocValue(IocValue.TYPE_RAW);
+			IocValue iv = new IocValue(IocValue.KIND_RAW);
 			Map<String, Object> map = (Map<String, Object>)obj;
 
 			// Inner
 			if (map.size() > 0 && isIocObject(map)) {
-				iv.setType(IocValue.TYPE_INNER);
+				iv.setKind(IocValue.KIND_INNER);
 				iv.setValue(map2iobj(map));
 				return iv;
 			}
@@ -273,7 +283,7 @@ public class MapIocLoader extends AbstractIocLoader {
 		
 		// Array
 		if (obj.getClass().isArray()) {
-			IocValue iv = new IocValue(IocValue.TYPE_RAW);
+			IocValue iv = new IocValue(IocValue.KIND_RAW);
 			Object[] array = (Object[])obj;
 			IocValue[] ivs = new IocValue[array.length];
 			for (int i = 0; i < ivs.length; i++) {
@@ -285,7 +295,7 @@ public class MapIocLoader extends AbstractIocLoader {
 		
 		// Collection
 		if (obj instanceof Collection<?>) {
-			IocValue iv = new IocValue(IocValue.TYPE_RAW);
+			IocValue iv = new IocValue(IocValue.KIND_RAW);
 			Collection<IocValue> values = new ArrayList<IocValue>(((Collection)obj).size());
 			Iterator<?> it = ((Collection<?>)obj).iterator();
 			while (it.hasNext()) {
@@ -298,10 +308,10 @@ public class MapIocLoader extends AbstractIocLoader {
 		}
 		
 		// Normal
-		return new IocValue(IocValue.TYPE_RAW, obj);
+		return new IocValue(IocValue.KIND_RAW, null, obj);
 	}
 
 	protected IocValue convert(String value) {
-		return Loaders.convert(value, IocValue.TYPE_RAW);
+		return Loaders.convert(IocValue.KIND_RAW, null, value);
 	}
 }

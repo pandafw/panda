@@ -1,7 +1,5 @@
 package panda.mvc;
 
-import panda.mvc.ActionContext;
-
 /**
  * View
  */

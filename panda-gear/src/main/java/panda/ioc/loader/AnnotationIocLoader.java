@@ -3,7 +3,7 @@ package panda.ioc.loader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -15,7 +15,9 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
+import panda.ioc.meta.IocParam;
 import panda.ioc.meta.IocValue;
+import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Strings;
@@ -167,25 +169,23 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 	}
 
 	protected void setIocArgs(IocObject iocObject, String[] args) {
-		if (null != args && args.length > 0) {
-			for (String value : args) {
-				iocObject.addArg(convert(value));
+		if (Arrays.isNotEmpty(args)) {
+			IocValue[] ivs = new IocValue[args.length];
+			for (int i = 0; i < ivs.length; i++) {
+				ivs[i] = convert(null, args[i]);
 			}
+			iocObject.setArgs(ivs);
 		}
 	}
 	
 	protected void setIocEvents(IocObject iocObject, IocBean iocBean) {
 		// Events
-		IocEventSet eventSet = new IocEventSet();
-		iocObject.setEvents(eventSet);
-		if (Strings.isNotBlank(iocBean.create())) {
-			eventSet.setCreate(iocBean.create().trim().intern());
-		}
-		if (Strings.isNotBlank(iocBean.depose())) {
-			eventSet.setDepose(iocBean.depose().trim().intern());
-		}
-		if (Strings.isNotBlank(iocBean.fetch())) {
-			eventSet.setFetch(iocBean.fetch().trim().intern());
+		IocEventSet ies = new IocEventSet();
+		ies.setCreate(iocBean.create());
+		ies.setDepose(iocBean.depose());
+		ies.setFetch(iocBean.fetch());
+		if (ies.isNotEmpty()) {
+			iocObject.setEvents(ies);
 		}
 	}
 
@@ -229,18 +229,32 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		for (Field field : fields) {
 			IocInject inject = field.getAnnotation(IocInject.class);
 
-			IocValue iocValue;
-			if (Strings.isEmpty(inject.value())) {
-				iocValue = new IocValue(IocValue.TYPE_REF);
-				iocValue.setValue(Object.class.equals(inject.type()) ? field.getType() : inject.type());
+			IocValue iv;
+			if (Arrays.isEmpty(inject.value())) {
+				iv = new IocValue(IocValue.KIND_REF);
+				if (Arrays.isEmpty(inject.type())) {
+					iv.setValue(field.getType());
+				}
+				else {
+					if (inject.type().length != 1) {
+						throw new IocException("Multiple types defined at @IocInject field '" + field.getName() + "' of " + clazz);
+					}
+					iv.setValue(inject.type()[0]);
+				}
 			}
 			else {
-				iocValue = convert(inject.value());
+				if (inject.value().length != 1) {
+					throw new IocException("Multiple values defined at @IocInject field '" + field.getName() + "' of " + clazz);
+				}
+				iv = convert(field.getType(), inject.value()[0]);
 			}
-			iocValue.setRequired(inject.required());
-			iocValue.setInjector(new FieldInjector(field));
+			iv.setType(field.getType());
+			iv.setRequired(inject.required());
 			
-			iocObject.addField(field.getName(), iocValue);
+			IocParam ip = new IocParam(iv);
+			ip.setInjector(new FieldInjector(field));
+
+			iocObject.addField(field.getName(), ip);
 		}
 
 		Collection<Method> methods = Methods.getAnnotationMethods(clazz, IocInject.class);
@@ -248,52 +262,94 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 			IocInject inject = method.getAnnotation(IocInject.class);
 			
 			int m = method.getModifiers();
-			if (Modifier.isAbstract(m) || Modifier.isStatic(m)) {
-				continue;
+			if (Modifier.isAbstract(m)) {
+				throw new IocException("Illegal @IocInject on abstract method '" + method.getName() + "' defined in " + clazz);
+			}
+			if (Modifier.isStatic(m)) {
+				throw new IocException("Illegal @IocInject on static method '" + method.getName() + "' defined in " + clazz);
 			}
 			
-			String methodName = method.getName();
-			if (methodName.startsWith("set") && methodName.length() > 3 && method.getParameterTypes().length == 1) {
-				String name = Strings.uncapitalize(methodName.substring(3));
-				if (iocObject.hasField(name)) {
-					throw duplicateField(clazz, name);
-				}
-				
-				IocValue iocValue;
-				if (Strings.isEmpty(inject.value())) {
-					iocValue = new IocValue(IocValue.TYPE_REF);
-					iocValue.setValue(Strings.uncapitalize(methodName.substring(3)));
-					iocValue.setValue(Object.class.equals(inject.type()) ? method.getParameterTypes()[0] : inject.type());
-				}
-				else {
-					iocValue = convert(inject.value());
-				}
-				iocValue.setRequired(inject.required());
-				iocValue.setInjector(new MethodInjector(method));
-
-				iocObject.addField(name, iocValue);
+			if (method.getParameterTypes().length < 1) {
+				throw new IocException("Illegal @IocInject on non parameters method '" + method.getName() + "' defined in " + clazz);
 			}
+
+			String name = method.getName();
+			if (name.startsWith("set") && name.length() > 3 && method.getParameterTypes().length == 1) {
+				name = Strings.uncapitalize(name.substring(3));
+			}
+			
+			if (iocObject.hasField(name)) {
+				throw new IocException("Duplicate @IocInject method '" + method.getName() + "' defined in " + clazz);
+			}
+
+			IocParam ip = new IocParam();
+			Class<?>[] pts = method.getParameterTypes();
+			Class<?>[] its = pts;
+			if (Arrays.isNotEmpty(inject.type())) {
+				if (inject.type().length != pts.length) {
+					throw new IocException("Incorrect @IocInject method '" + method.getName() + "' defined in " + clazz + ", paramater count does not equals @IocInject.type");
+				}
+				its = inject.type();
+			}
+
+			if (Arrays.isNotEmpty(inject.value())) {
+				if (inject.value().length != pts.length) {
+					throw new IocException("Incorrect @IocInject method '" + method.getName() + "' defined in " + clazz + ", paramater count does not equals @IocInject.type");
+				}
+
+				IocValue[] ivs = new IocValue[pts.length];
+				for (int i = 0; i < ivs.length; i++) {
+					ivs[i] = convert(pts[i], inject.value()[i]);
+					ivs[i].setRequired(inject.required());
+				}
+				ip.setValues(ivs);
+			}
+			else {
+				IocValue[] ivs = new IocValue[its.length];
+				for (int i = 0; i < its.length; i++) {
+					ivs[i] = new IocValue(IocValue.KIND_REF, pts[i], its[i], inject.required());
+				}
+				ip.setValues(ivs);
+			}
+			ip.setInjector(new MethodInjector(method));
+
+			iocObject.addField(name, ip);
 		}
 	}
 	
 	protected void setIocFields(IocObject iocObject, Class<?> clazz, String[] fields) {
 		if (fields != null && fields.length > 0) {
 			for (String field : fields) {
-				if (iocObject.hasField(field)) {
-					throw duplicateField(clazz, field);
-				}
+				String desp = null;
 
+				// name:description
 				int c = field.indexOf(':');
 				if (c > 0) {
-					// name:description
-					iocObject.addField(field.substring(0, c), convert(field.substring(c + 1)));
+					field = field.substring(0, c);
+					desp = field.substring(c + 1);
 				}
-				else {
-					// name only (use field type)
+				
+				if (iocObject.hasField(field)) {
+					throw new IocException("Duplicate @IocInject field '" + field + "' defined in " + clazz);
+				}
+
+				try {
 					Field f = Fields.getField(clazz, field, true);
-					IocValue iocValue = new IocValue(IocValue.TYPE_REF);
-					iocValue.setValue(f.getType());
-					iocObject.addField(field, iocValue);
+
+					IocValue iv;
+					if (Strings.isEmpty(desp)) {
+						iv = new IocValue(IocValue.KIND_REF, f.getType(), f.getType());
+					}
+					else {
+						iv = convert(f.getType(), desp);
+					}
+
+					IocParam ip = new IocParam(iv);
+					ip.setInjector(new FieldInjector(f));
+					iocObject.addField(field, ip);
+				}
+				catch (Exception e) {
+					throw new IocException("Illegal @IocInject field '" + field + "' defined in " + clazz, e);
 				}
 			}
 		}
@@ -330,12 +386,8 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		return bn;
 	}
 	
-	private static final IocException duplicateField(Class<?> clazz, String name) {
-		return new IocException("Duplicate field '" + name + "' defined in " + clazz);
-	}
-
-	protected IocValue convert(String value) {
-		return Loaders.convert(value, IocValue.TYPE_REF);
+	protected IocValue convert(Type type, String s) {
+		return Loaders.convert(IocValue.KIND_REF, type, s);
 	}
 
 }

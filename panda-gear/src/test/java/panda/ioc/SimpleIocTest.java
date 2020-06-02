@@ -8,11 +8,12 @@ import org.junit.Test;
 
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.AnnotationIocLoader;
-import panda.ioc.loader.annotation.meta.BlackHorse;
 import panda.ioc.loader.annotation.meta.Cat;
 import panda.ioc.loader.annotation.meta.DogMaster;
 import panda.ioc.loader.annotation.meta.Horse;
+import panda.ioc.loader.annotation.meta.HorseMP;
 import panda.ioc.loader.annotation.meta.SingletonService;
+import panda.ioc.loader.annotation.meta.WhiteHorse;
 
 public class SimpleIocTest {
 
@@ -47,9 +48,18 @@ public class SimpleIocTest {
 		Horse h = ioc.get(Horse.class);
 		Assert.assertEquals("horse", h.getName());
 		
-		BlackHorse bh = ioc.get(BlackHorse.class);
-		Assert.assertEquals("black horse", bh.getName());
+		WhiteHorse bh = ioc.get(WhiteHorse.class);
+		Assert.assertEquals("white horse", bh.getName());
 		Assert.assertEquals("alias", bh.getAlias());
+	}
+
+	@Test
+	public void test_multi_params_inject() {
+		Ioc ioc = new DefaultIoc(new AnnotationIocLoader(HorseMP.class.getPackage().getName()));
+
+		HorseMP h = ioc.get(HorseMP.class);
+		Assert.assertEquals("horse", h.getName());
+		Assert.assertEquals("alias", h.getAlias());
 	}
 
 	@Test

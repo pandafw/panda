@@ -1,5 +1,7 @@
 package panda.ioc.meta;
 
+import panda.lang.Strings;
+
 /**
  * Ioc Event 
  * <p>
@@ -30,7 +32,7 @@ public class IocEventSet {
 	}
 
 	public void setCreate(String create) {
-		this.create = create;
+		this.create = Strings.stripToNull(create);
 	}
 
 	public String getFetch() {
@@ -38,7 +40,7 @@ public class IocEventSet {
 	}
 
 	public void setFetch(String fetch) {
-		this.fetch = fetch;
+		this.fetch = Strings.stripToNull(fetch);
 	}
 
 	public String getDepose() {
@@ -46,7 +48,14 @@ public class IocEventSet {
 	}
 
 	public void setDepose(String depose) {
-		this.depose = depose;
+		this.depose = Strings.stripToNull(depose);
 	}
 
+	public boolean isNotEmpty() {
+		return create != null || fetch != null || depose != null;
+	}
+
+	public boolean isEmpty() {
+		return create == null && fetch == null && depose == null;
+	}
 }
