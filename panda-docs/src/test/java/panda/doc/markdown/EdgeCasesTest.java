@@ -41,8 +41,6 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import panda.doc.markdown.Processor;
-
 public class EdgeCasesTest {
 	@Test
 	public void testEmptyString() {

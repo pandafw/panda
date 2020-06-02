@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
-import panda.net.ftp.parser.MacOsPeterFTPEntryParser;
 
 public class MacOsPeterFTPEntryParserTest extends FTPParseTestFramework {
 

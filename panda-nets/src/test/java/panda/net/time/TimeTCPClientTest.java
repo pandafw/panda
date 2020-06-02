@@ -1,11 +1,9 @@
 package panda.net.time;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Calendar;
-import java.io.IOException;
 import java.util.TimeZone;
-
-import panda.net.time.TimeTCPClient;
 
 import junit.framework.TestCase;
 

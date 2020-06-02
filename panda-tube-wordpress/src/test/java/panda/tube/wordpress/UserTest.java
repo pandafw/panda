@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import panda.lang.Arrays;
 import panda.lang.Randoms;
-import panda.tube.wordpress.Blog;
-import panda.tube.wordpress.User;
 
 public class UserTest extends AbstractWordpressTest {
 

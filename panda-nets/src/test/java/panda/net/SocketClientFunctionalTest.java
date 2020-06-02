@@ -3,7 +3,6 @@ package panda.net;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-import panda.net.SocketClient;
 import panda.net.ftp.FTPClient;
 
 /**

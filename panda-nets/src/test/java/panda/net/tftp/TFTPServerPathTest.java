@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import panda.net.tftp.TFTP;
-import panda.net.tftp.TFTPClient;
 import panda.net.tftp.TFTPServer.ServerMode;
 
 import junit.framework.TestCase;

@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import panda.lang.Arrays;
 import panda.lang.Collections;
-import panda.tube.wordpress.Post;
-import panda.tube.wordpress.PostType;
-import panda.tube.wordpress.Taxonomy;
 
 public class PostTest extends AbstractWordpressTest {
 

@@ -10,8 +10,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import panda.net.ftp.FTPClientConfig;
-import panda.net.ftp.parser.FTPTimestampParser;
-import panda.net.ftp.parser.FTPTimestampParserImpl;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;

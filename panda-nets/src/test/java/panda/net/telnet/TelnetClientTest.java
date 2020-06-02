@@ -1,21 +1,12 @@
 package panda.net.telnet;
 
-import junit.framework.TestCase;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import panda.net.telnet.EchoOptionHandler;
-import panda.net.telnet.SimpleOptionHandler;
-import panda.net.telnet.SuppressGAOptionHandler;
-import panda.net.telnet.TelnetClient;
-import panda.net.telnet.TelnetCommand;
-import panda.net.telnet.TelnetNotificationHandler;
-import panda.net.telnet.TelnetOption;
-import panda.net.telnet.TerminalTypeOptionHandler;
+import junit.framework.TestCase;
 
 /**
  * JUnit test class for TelnetClient.s Implements protocol compliance tests

@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import panda.lang.Arrays;
 import panda.lang.Collections;
-import panda.tube.wordpress.Tag;
 
 public class TagTest extends AbstractWordpressTest {
 

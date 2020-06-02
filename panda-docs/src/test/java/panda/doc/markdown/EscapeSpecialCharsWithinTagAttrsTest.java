@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import panda.doc.markdown.Processor;
-
 public class EscapeSpecialCharsWithinTagAttrsTest {
 	@Test
 	public void testImages() {

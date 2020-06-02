@@ -4,11 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import panda.net.ftp.FTPClient;
-import panda.net.ftp.FTPClientConfig;
-import panda.net.ftp.FTPFile;
-import panda.net.ftp.FTPFileEntryParser;
-import panda.net.ftp.FTPListParseEngine;
 import panda.net.ftp.parser.UnixFTPEntryParser;
 
 import junit.framework.TestCase;

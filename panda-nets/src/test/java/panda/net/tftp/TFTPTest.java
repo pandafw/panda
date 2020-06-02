@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import panda.net.tftp.TFTP;
-import panda.net.tftp.TFTPClient;
 import panda.net.tftp.TFTPServer.ServerMode;
 
 import junit.framework.TestCase;

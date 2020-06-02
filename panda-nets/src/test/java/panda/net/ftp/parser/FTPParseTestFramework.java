@@ -1,13 +1,13 @@
 package panda.net.ftp.parser;
 
-import junit.framework.TestCase;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
+
+import junit.framework.TestCase;
 
 /**
  * @version $Id: FTPParseTestFramework.java 1697293 2015-08-24 01:01:00Z sebb $

@@ -3,11 +3,10 @@ package panda.net.ftp.parser;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import junit.framework.TestCase;
-
 import panda.net.ftp.FTPClientConfig;
 import panda.net.ftp.FTPFile;
-import panda.net.ftp.parser.UnixFTPEntryParser;
+
+import junit.framework.TestCase;
 
 /**
  * This is a simple TestCase that tests entry parsing using the new FTPClientConfig mechanism. The

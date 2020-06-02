@@ -1,8 +1,5 @@
 package panda.net.telnet;
 
-import panda.net.telnet.SimpleOptionHandler;
-import panda.net.telnet.TelnetCommand;
-
 /***
  * JUnit test class for SimpleOptionHandler
  ***/

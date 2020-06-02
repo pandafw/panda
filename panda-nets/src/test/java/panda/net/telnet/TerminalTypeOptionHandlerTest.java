@@ -1,8 +1,5 @@
 package panda.net.telnet;
 
-import panda.net.telnet.TelnetOption;
-import panda.net.telnet.TerminalTypeOptionHandler;
-
 public class TerminalTypeOptionHandlerTest extends TelnetOptionHandlerTestAbstract {
 	@Override
 	protected void setUp() {

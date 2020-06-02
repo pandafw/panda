@@ -4,10 +4,6 @@ import org.junit.Assume;
 import org.junit.Test;
 
 import panda.lang.Strings;
-import panda.tube.sendgrid.Content;
-import panda.tube.sendgrid.Email;
-import panda.tube.sendgrid.Mail;
-import panda.tube.sendgrid.SendGrid;
 
 public class MailSendTest {
 

@@ -1,17 +1,12 @@
 package panda.net.ntp;
 
-import org.junit.Test;
-import org.junit.Assert;
-
-import panda.net.ntp.NtpV3Impl;
-import panda.net.ntp.NtpV3Packet;
-import panda.net.ntp.TimeInfo;
-import panda.net.ntp.TimeStamp;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 public class TestTimeInfo {
 

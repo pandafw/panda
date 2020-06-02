@@ -2,8 +2,6 @@ package panda.net.ftp.parser;
 
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
-import panda.net.ftp.parser.ConfigurableFTPFileEntryParserImpl;
-import panda.net.ftp.parser.OS2FTPEntryParser;
 
 public class OS2FTPEntryParserTest extends FTPParseTestFramework {
 

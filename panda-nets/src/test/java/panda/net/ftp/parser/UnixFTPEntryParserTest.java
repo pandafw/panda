@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
-import panda.net.ftp.parser.UnixFTPEntryParser;
 
 /**
  * @version $Id: UnixFTPEntryParserTest.java 1697433 2015-08-24 15:11:40Z sebb $

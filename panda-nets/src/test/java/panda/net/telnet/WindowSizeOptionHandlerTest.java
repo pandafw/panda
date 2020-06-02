@@ -1,8 +1,5 @@
 package panda.net.telnet;
 
-import panda.net.telnet.TelnetOption;
-import panda.net.telnet.WindowSizeOptionHandler;
-
 /***
  * JUnit test class for TerminalTypeOptionHandler
  ***/

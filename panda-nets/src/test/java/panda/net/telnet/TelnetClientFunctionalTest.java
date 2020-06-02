@@ -1,12 +1,11 @@
 package panda.net.telnet;
 
-import junit.framework.TestCase;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import panda.io.Streams;
-import panda.net.telnet.TelnetClient;
+
+import junit.framework.TestCase;
 
 /***
  * JUnit functional test for TelnetClient. Connects to the weather forecast service

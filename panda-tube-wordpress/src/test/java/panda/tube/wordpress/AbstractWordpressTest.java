@@ -6,7 +6,6 @@ import org.junit.Before;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.Logs;
-import panda.tube.wordpress.WordPress;
 
 public class AbstractWordpressTest {
 	public static WordPress WP;

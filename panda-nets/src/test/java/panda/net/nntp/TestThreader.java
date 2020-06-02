@@ -6,9 +6,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.net.nntp.Threadable;
-import panda.net.nntp.Threader;
-
 /**
  * Test the Threader
  */

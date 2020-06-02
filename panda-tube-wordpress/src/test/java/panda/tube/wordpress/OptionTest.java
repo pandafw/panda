@@ -5,8 +5,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.tube.wordpress.Option;
-
 public class OptionTest extends AbstractWordpressTest {
 
 	@Test
