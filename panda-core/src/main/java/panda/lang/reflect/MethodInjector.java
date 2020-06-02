@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 import panda.lang.Exceptions;
-import panda.lang.Objects;
 
 public class MethodInjector implements Injector {
 	private Method method;
@@ -52,8 +51,6 @@ public class MethodInjector implements Injector {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder()
-				.append("method", method)
-				.toString();
+		return getClass().getSimpleName() + ": " + method;
 	}
 }

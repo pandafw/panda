@@ -34,4 +34,9 @@ public class MethodCreator<T> implements Creator<T> {
 			throw Exceptions.wrapThrow(e);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ": " + method;
+	}
 }
