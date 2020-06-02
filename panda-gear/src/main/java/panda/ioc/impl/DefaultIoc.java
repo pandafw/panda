@@ -8,7 +8,6 @@ import panda.bean.Beans;
 import panda.ioc.Ioc;
 import panda.ioc.IocContext;
 import panda.ioc.IocException;
-import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.IocMaking;
 import panda.ioc.ObjectMaker;
@@ -177,7 +176,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 										iocBeanName));
 								}
 							}
-							throw new IocLoadException("Undefined object '" + name + "'");
+							throw new IocException("Undefined object '" + name + "'");
 						}
 						
 						// 检查对象级别

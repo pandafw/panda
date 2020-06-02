@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.meta.IocObject;
 import panda.lang.Classes;
@@ -170,6 +169,7 @@ public class ComboIocLoader implements IocLoader {
 		return cls;
 	}
 
+	@Override
 	public Set<String> getNames() {
 		Set<String> ns = new HashSet<String>();
 		for (IocLoader iocLoader : iocLoaders) {
@@ -178,6 +178,7 @@ public class ComboIocLoader implements IocLoader {
 		return ns;
 	}
 
+	@Override
 	public boolean has(String name) {
 		for (IocLoader iocLoader : iocLoaders) {
 			if (iocLoader.has(name)) {
@@ -187,7 +188,8 @@ public class ComboIocLoader implements IocLoader {
 		return false;
 	}
 
-	public IocObject load(String name) throws IocLoadException {
+	@Override
+	public IocObject load(String name) {
 		for (IocLoader iocLoader : iocLoaders) {
 			if (iocLoader.has(name)) {
 				IocObject iocObject = iocLoader.load(name);
@@ -201,6 +203,7 @@ public class ComboIocLoader implements IocLoader {
 		return null;
 	}
 
+	@Override
 	public String toString() {
 		return iocLoaders.toString();
 	}

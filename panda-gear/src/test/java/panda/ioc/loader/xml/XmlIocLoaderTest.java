@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
-import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.XmlIocLoader;
@@ -27,7 +26,7 @@ public class XmlIocLoaderTest {
 	}
 
 	@Test
-	public void testXmlIocLoader() throws IocLoadException {
+	public void testXmlIocLoader() {
 		IocLoader iocLoader = getNew("conf/offered.xml");
 		assertTrue(iocLoader.getNames() != null);
 		assertTrue(iocLoader.getNames().size() > 0);
