@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 import panda.lang.Exceptions;
-import panda.lang.Injector;
 import panda.lang.Objects;
 
 public class FieldInjector implements Injector {
@@ -25,6 +24,11 @@ public class FieldInjector implements Injector {
 	public Type type(Object obj) {
 		return Fields.getFieldType(field);
 	}
+
+	@Override
+	public Type[] types(Object obj) {
+		return new Type[] { Fields.getFieldType(field) };
+	}
 	
 	@Override
 	public void inject(Object obj, Object value) {
@@ -34,6 +38,14 @@ public class FieldInjector implements Injector {
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
 		}
+	}
+	
+	/**
+	 * @param obj object
+	 * @param value value
+	 */
+	public void injects(Object obj, Object[] values) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

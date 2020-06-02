@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 import panda.lang.Exceptions;
-import panda.lang.Injector;
 import panda.lang.Objects;
 
 public class MethodInjector implements Injector {
@@ -27,7 +26,22 @@ public class MethodInjector implements Injector {
 	}
 	
 	@Override
+	public Type[] types(Object obj) {
+		return method.getParameterTypes();
+	}
+	
+	@Override
 	public void inject(Object obj, Object value) {
+		try {
+			method.invoke(obj, value);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	@Override
+	public void injects(Object obj, Object[] value) {
 		try {
 			method.invoke(obj, value);
 		}
