@@ -5469,7 +5469,7 @@ public class Strings {
 
 		if (str.length() == 1) {
 			final char ch = str.charAt(0);
-			if (ch == Chars.CR || ch == Chars.LF) {
+			if (ch == '\r' || ch == '\n') {
 				return EMPTY;
 			}
 			return str;
@@ -5478,12 +5478,12 @@ public class Strings {
 		int lastIdx = str.length() - 1;
 		final char last = str.charAt(lastIdx);
 
-		if (last == Chars.LF) {
-			if (str.charAt(lastIdx - 1) == Chars.CR) {
+		if (last == '\n') {
+			if (str.charAt(lastIdx - 1) == '\r') {
 				lastIdx--;
 			}
 		}
-		else if (last != Chars.CR) {
+		else if (last != '\r') {
 			lastIdx++;
 		}
 		return str.substring(0, lastIdx);
@@ -5527,7 +5527,7 @@ public class Strings {
 		final int lastIdx = strLen - 1;
 		final String ret = str.substring(0, lastIdx);
 		final char last = str.charAt(lastIdx);
-		if (last == Chars.LF && ret.charAt(lastIdx - 1) == Chars.CR) {
+		if (last == '\n' && ret.charAt(lastIdx - 1) == '\r') {
 			return ret.substring(0, lastIdx - 1);
 		}
 		return ret;

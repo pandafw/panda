@@ -7,8 +7,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.lang.Chars;
-
 /**
  * CSV reader.
  */
@@ -25,7 +23,7 @@ public class CsvReader implements ListReader<String>, Closeable {
 	 * @param reader the reader to an underlying CSV source.
 	 */
 	public CsvReader(Reader reader) {
-		this(reader, Chars.COMMA);
+		this(reader, ',');
 	}
 
 	/**
@@ -35,7 +33,7 @@ public class CsvReader implements ListReader<String>, Closeable {
 	 * @param separator the delimiter to use for separating entries.
 	 */
 	public CsvReader(Reader reader, char separator) {
-		this(reader, separator, Chars.DOUBLE_QUOTE);
+		this(reader, separator, '"');
 	}
 	
 	

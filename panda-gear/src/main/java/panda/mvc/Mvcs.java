@@ -17,7 +17,6 @@ import panda.cast.castor.FileItemCastor;
 import panda.el.EL;
 import panda.el.ELTemplate;
 import panda.ioc.Ioc;
-import panda.lang.Chars;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
@@ -386,16 +385,16 @@ public abstract class Mvcs {
 			char c0 = expr.charAt(0);
 			char c1 = expr.charAt(1);
 			char cx = expr.charAt(expr.length() - 1);
-			if ((c0 == Chars.DOLLAR || c0 == Chars.PERCENT) && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
+			if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
 				val = findValue(ac, expr.substring(2, expr.length() - 1), arg);
 			}
-			else if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
+			else if (c0 == '!' && c1 == '{' && cx == '}') {
 				val = JsonObject.fromJson(expr.substring(1));
 			}
-			else if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACKETS_LEFT && cx == Chars.BRACKETS_RIGHT) {
+			else if (c0 == '!' && c1 == '[' && cx == ']') {
 				val = JsonArray.fromJson(expr.substring(1));
 			}
-			else if (c0 == Chars.SHARP && c1 == Chars.PARENTHESES_LEFT && cx == Chars.PARENTHESES_RIGHT) {
+			else if (c0 == '#' && c1 == '(' && cx == ')') {
 				String k = expr.substring(2, expr.length() - 1);
 				val = ac.getText().getText(k, "", arg);
 			}

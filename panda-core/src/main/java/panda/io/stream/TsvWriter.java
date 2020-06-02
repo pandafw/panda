@@ -1,6 +1,5 @@
 package panda.io.stream;
 
-import panda.lang.Chars;
 import panda.lang.Strings;
 
 /**
@@ -14,7 +13,7 @@ public class TsvWriter extends CsvWriter {
 	 * @param writer the writer to an underlying CSV source.
 	 */
 	public TsvWriter(Appendable writer) {
-		this(writer, Chars.TAB);
+		this(writer, '\t');
 	}
 
 	/**
@@ -24,7 +23,7 @@ public class TsvWriter extends CsvWriter {
 	 * @param separator the delimiter to use for separating entries.
 	 */
 	public TsvWriter(Appendable writer, char separator) {
-		this(writer, separator, Chars.DOUBLE_QUOTE);
+		this(writer, separator, '"');
 	}
 
 	/**

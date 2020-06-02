@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import panda.lang.Chars;
 import panda.lang.Collections;
 import panda.lang.Strings;
 
@@ -34,7 +33,7 @@ public class CsvWriter extends ListWriter implements Closeable, Flushable {
 	 * @param writer the writer to an underlying CSV source.
 	 */
 	public CsvWriter(Appendable writer) {
-		this(writer, Chars.COMMA);
+		this(writer, ',');
 	}
 
 	/**
@@ -44,7 +43,7 @@ public class CsvWriter extends ListWriter implements Closeable, Flushable {
 	 * @param separator the delimiter to use for separating entries.
 	 */
 	public CsvWriter(Appendable writer, char separator) {
-		this(writer, separator, Chars.DOUBLE_QUOTE);
+		this(writer, separator, '"');
 	}
 
 	/**
@@ -156,7 +155,7 @@ public class CsvWriter extends ListWriter implements Closeable, Flushable {
 					}
 					writer.append(escapechar).append(c);
 				}
-				else if (c == Chars.CR || c == Chars.LF || c == separator) {
+				else if (c == '\r' || c == '\n' || c == separator) {
 					if (!quoted) {
 						quoted = true;
 						writer.append(quotechar);

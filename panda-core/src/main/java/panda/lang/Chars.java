@@ -15,81 +15,9 @@ package panda.lang;
  */
 public abstract class Chars {
 	/**
-	 * zero (\u0000)
-	 */
-	public static final char ZERO = '\u0000';
-
-	/**
 	 * BOM character
 	 */
 	public static final char BOM = '\uFEFF';
-
-	/**
-	 * TAB (\u0009)
-	 */
-	public static final char TAB = '\t';
-
-	/**
-	 * line-feed LF ('\n') {@code '\u000a'}.
-	 * 
-	 * @see <a href="http://java.sun.com/docs/books/jls/third_edition/html/lexical.html#101089">JLF:
-	 *      Escape Sequences for Character and String Literals</a>
-	 */
-	public static final char LF = '\n';
-
-	/**
-	 * {@code '\u000d'} carriage return CR ('\r').
-	 * 
-	 * @see <a href="http://java.sun.com/docs/books/jls/third_edition/html/lexical.html#101089">JLF:
-	 *      Escape Sequences for Character and String Literals</a>
-	 */
-	public static final char CR = '\r';
-
-	/**
-	 * SPACE (\u0020)
-	 */
-	public static final char SPACE = ' ';
-
-	/** comma */
-	public static final char COMMA = ',';
-
-	/**
-	 * double quote
-	 */
-	public static final char DOUBLE_QUOTE = '"';
-	
-	/** ' */
-	public static final char SINGLE_QUOTE = '\'';
-	
-	/** # */
-	public static final char SHARP = '#';
-	
-	/** $ */
-	public static final char DOLLAR = '$';
-	
-	/** % */
-	public static final char PERCENT = '%';
-
-	/** { */
-	public static final char BRACES_LEFT = '{';
-	
-	/** } */
-	public static final char BRACES_RIGHT = '}';
-	
-	/** ( */
-	public static final char PARENTHESES_LEFT = '(';
-	
-	/** } */
-	public static final char PARENTHESES_RIGHT = ')';
-	
-	/** [ */
-	public static final char BRACKETS_LEFT = '[';
-	
-	/** ] */
-	public static final char BRACKETS_RIGHT = ']';
-	
-	/** ! */
-	public static final char EXCLAMATION = '!';
 
 	private static final String[] CHAR_STRING_ARRAY = new String[128];
 	static {

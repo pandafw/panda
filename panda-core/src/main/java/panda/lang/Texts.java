@@ -571,7 +571,7 @@ public abstract class Texts {
 	 * @return translated string
 	 */
 	public static String elTranslate(String expression, Object wrapper) {
-		return elTranslate(expression, wrapper, Chars.DOLLAR);
+		return elTranslate(expression, wrapper, '$');
 	}
 	
 	/**
@@ -588,7 +588,7 @@ public abstract class Texts {
 		}
 		
 		Evaluator eva = new ELEvaluator(wrapper);
-		return translate(expression, eva, prefix, Chars.BRACES_LEFT, Chars.BRACES_RIGHT);
+		return translate(expression, eva, prefix, '{', '}');
 	}
 
 	/**
@@ -758,7 +758,7 @@ public abstract class Texts {
 	 * @return string list
 	 */
 	public static List<String> parseCsv(String str) {
-		return parseCsv(str, Chars.COMMA);
+		return parseCsv(str, ',');
 	}
 
 	/**
@@ -769,7 +769,7 @@ public abstract class Texts {
 	 * @return string list
 	 */
 	public static List<String> parseCsv(String str, char separator) {
-		return parseCsv(str, Chars.COMMA, Chars.DOUBLE_QUOTE);
+		return parseCsv(str, separator, '"');
 	}
 
 	/**

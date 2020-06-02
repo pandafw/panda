@@ -2,8 +2,6 @@ package panda.io.stream;
 
 import java.io.Reader;
 
-import panda.lang.Chars;
-
 /**
  * TSV reader.
  */
@@ -14,7 +12,7 @@ public class TsvReader extends CsvReader {
 	 * @param reader the reader to an underlying CSV source.
 	 */
 	public TsvReader(Reader reader) {
-		this(reader, Chars.TAB);
+		this(reader, '\t');
 	}
 
 	/**
