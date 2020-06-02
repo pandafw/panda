@@ -5,7 +5,6 @@ import java.util.List;
 
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
-import panda.net.ftp.parser.MVSFTPEntryParser;
 
 /**
  * Test suite addapted to new MVSFTPEntryParser.java.

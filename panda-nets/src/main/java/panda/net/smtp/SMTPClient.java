@@ -297,6 +297,7 @@ public class SMTPClient extends SMTP {
 		return sendMessageData(null);
 	}
 
+	@SuppressWarnings("resource")
 	public Writer sendMessageData(Writer dbg) throws IOException {
 		if (!SMTPReply.isPositiveIntermediate(data())) {
 			return null;

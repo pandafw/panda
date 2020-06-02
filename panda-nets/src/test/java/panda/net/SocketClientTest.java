@@ -1,12 +1,11 @@
 package panda.net;
 
-import junit.framework.TestCase;
-
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-import panda.net.SocketClient;
 import panda.net.ftp.FTPClient;
+
+import junit.framework.TestCase;
 
 /**
  * A simple test class for SocketClient settings.

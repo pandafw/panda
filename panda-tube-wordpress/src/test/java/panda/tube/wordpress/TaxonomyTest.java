@@ -9,8 +9,6 @@ import org.junit.Test;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Numbers;
-import panda.tube.wordpress.Taxonomy;
-import panda.tube.wordpress.Term;
 
 public class TaxonomyTest extends AbstractWordpressTest {
 

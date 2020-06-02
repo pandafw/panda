@@ -6,8 +6,6 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-import panda.net.ftp.FTPClient;
-
 import junit.framework.TestCase;
 
 /**

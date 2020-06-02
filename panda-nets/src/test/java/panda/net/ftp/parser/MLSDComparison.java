@@ -17,8 +17,6 @@ import panda.net.ftp.FTPClientConfig;
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileFilters;
 import panda.net.ftp.FTPListParseEngine;
-import panda.net.ftp.parser.MLSxEntryParser;
-import panda.net.ftp.parser.UnixFTPEntryParser;
 
 /**
  * Attempt comparison of LIST and MLSD listings TODO - needs some work.

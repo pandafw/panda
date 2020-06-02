@@ -1,10 +1,10 @@
 package panda.net.telnet;
 
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /***
  * Simple TCP server. Waits for connections on a TCP port in a separate thread.

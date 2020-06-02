@@ -3,8 +3,6 @@ package panda.net.io;
 import java.io.IOException;
 import java.io.StringReader;
 
-import panda.net.io.DotTerminatedMessageReader;
-
 import junit.framework.TestCase;
 
 public class DotTerminatedMessageReaderTest extends TestCase {

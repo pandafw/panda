@@ -1,19 +1,14 @@
 package panda.net.ntp;
 
+import java.io.IOException;
+import java.net.InetAddress;
+
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import panda.net.examples.ntp.SimpleNTPServer;
-import panda.net.ntp.NTPUDPClient;
-import panda.net.ntp.NtpUtils;
-import panda.net.ntp.NtpV3Packet;
-import panda.net.ntp.TimeInfo;
-import panda.net.ntp.TimeStamp;
-
-import java.io.IOException;
-import java.net.InetAddress;
 
 /**
  * JUnit test class for NtpClient using SimpleNTPServer

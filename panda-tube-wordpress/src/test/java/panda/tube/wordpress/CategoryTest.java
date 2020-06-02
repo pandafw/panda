@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import panda.lang.Arrays;
 import panda.lang.Collections;
-import panda.tube.wordpress.Category;
 
 public class CategoryTest extends AbstractWordpressTest {
 

@@ -9,7 +9,6 @@ import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
 import panda.dao.entity.annotation.ForeignKeys;
 import panda.dao.entity.annotation.PK;
-import panda.gems.media.entity.Media;
 import panda.lang.Objects;
 import panda.mvc.annotation.validate.CastErrorValidate;
 import panda.mvc.validator.Validators;

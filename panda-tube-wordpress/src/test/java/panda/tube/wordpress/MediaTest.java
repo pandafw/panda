@@ -12,9 +12,6 @@ import panda.io.Streams;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpResponse;
 import panda.net.http.HttpStatus;
-import panda.tube.wordpress.MediaFile;
-import panda.tube.wordpress.MediaItem;
-import panda.tube.wordpress.MediaObject;
 
 public class MediaTest extends AbstractWordpressTest {
 

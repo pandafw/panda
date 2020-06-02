@@ -16,14 +16,6 @@ import java.util.Iterator;
 
 import panda.net.io.FromNetASCIIOutputStream;
 import panda.net.io.ToNetASCIIInputStream;
-import panda.net.tftp.TFTP;
-import panda.net.tftp.TFTPAckPacket;
-import panda.net.tftp.TFTPDataPacket;
-import panda.net.tftp.TFTPErrorPacket;
-import panda.net.tftp.TFTPPacket;
-import panda.net.tftp.TFTPPacketException;
-import panda.net.tftp.TFTPReadRequestPacket;
-import panda.net.tftp.TFTPWriteRequestPacket;
 
 /**
  * A fully multi-threaded tftp server. Can handle multiple clients at the same time. Implements RFC

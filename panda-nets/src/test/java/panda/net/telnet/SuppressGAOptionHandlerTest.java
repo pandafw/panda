@@ -1,9 +1,5 @@
 package panda.net.telnet;
 
-import panda.net.telnet.SuppressGAOptionHandler;
-import panda.net.telnet.TelnetCommand;
-import panda.net.telnet.TelnetOption;
-
 /***
  * JUnit test class for SuppressGAOptionHandler
  ***/

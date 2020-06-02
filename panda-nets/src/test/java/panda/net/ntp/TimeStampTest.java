@@ -1,9 +1,7 @@
 package panda.net.ntp;
 
-import java.util.Date;
 import java.util.Calendar;
-
-import panda.net.ntp.TimeStamp;
+import java.util.Date;
 
 import junit.framework.TestCase;
 

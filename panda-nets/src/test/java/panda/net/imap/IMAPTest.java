@@ -3,8 +3,6 @@ package panda.net.imap;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.net.imap.IMAP;
-
 public class IMAPTest {
 
 	@Test

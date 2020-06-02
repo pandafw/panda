@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import panda.net.ftp.FTPClientConfig;
-
 import junit.framework.TestCase;
 
 public class FTPClientConfigTest extends TestCase {

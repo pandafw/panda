@@ -1,7 +1,5 @@
 package panda.net.telnet;
 
-import panda.net.telnet.TelnetOptionHandler;
-
 import junit.framework.TestCase;
 
 /***

@@ -6,9 +6,6 @@ import java.io.IOException;
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
 import panda.net.ftp.FTPListParseEngine;
-import panda.net.ftp.parser.ConfigurableFTPFileEntryParserImpl;
-import panda.net.ftp.parser.VMSFTPEntryParser;
-import panda.net.ftp.parser.VMSVersioningFTPEntryParser;
 
 /**
  * @version $Id: VMSFTPEntryParserTest.java 1697433 2015-08-24 15:11:40Z sebb $

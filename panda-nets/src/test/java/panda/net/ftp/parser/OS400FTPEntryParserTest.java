@@ -1,13 +1,10 @@
 package panda.net.ftp.parser;
 
+import java.util.Calendar;
+
 import panda.net.ftp.FTPClientConfig;
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
-import panda.net.ftp.parser.CompositeFileEntryParser;
-import panda.net.ftp.parser.OS400FTPEntryParser;
-import panda.net.ftp.parser.UnixFTPEntryParser;
-
-import java.util.Calendar;
 
 /**
  * @version $Id: OS400FTPEntryParserTest.java 1697289 2015-08-24 00:32:19Z sebb $

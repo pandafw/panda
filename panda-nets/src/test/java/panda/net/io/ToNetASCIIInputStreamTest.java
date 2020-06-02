@@ -8,8 +8,6 @@ import java.io.InputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.net.io.ToNetASCIIInputStream;
-
 public class ToNetASCIIInputStreamTest {
 
 	private static final String ASCII = /* Charset.forName */("ASCII");

@@ -2,7 +2,6 @@ package panda.net.ftp.parser;
 
 import panda.net.ftp.FTPFile;
 import panda.net.ftp.FTPFileEntryParser;
-import panda.net.ftp.parser.MLSxEntryParser;
 
 /**
  * @version $Id: UnixFTPEntryParserTest.java 1643407 2014-12-05 19:32:00Z sebb $
