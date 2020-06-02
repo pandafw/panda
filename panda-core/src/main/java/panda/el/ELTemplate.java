@@ -8,14 +8,13 @@ import java.util.WeakHashMap;
 
 import panda.lang.Arrays;
 import panda.lang.Asserts;
-import panda.lang.Chars;
 import panda.tpl.AbstractTemplate;
 import panda.tpl.TemplateException;
 
 public class ELTemplate extends AbstractTemplate {
 	private static Map<String, ELTemplate> cache = new WeakHashMap<String, ELTemplate>();
 	
-	public static final char[] PREFIXS = { Chars.DOLLAR, Chars.PERCENT };
+	public static final char[] PREFIXS = { '$', '%' };
 	
 	private List<Object> segments;
 
@@ -24,11 +23,11 @@ public class ELTemplate extends AbstractTemplate {
 	}
 
 	public ELTemplate(String expr, char prefix) throws TemplateException {
-		this(expr, prefix, Chars.BRACES_LEFT, Chars.BRACES_RIGHT);
+		this(expr, prefix, '{', '}');
 	}
 
 	public ELTemplate(String expr, char[] prefixs) throws TemplateException {
-		this(expr, prefixs, Chars.BRACES_LEFT, Chars.BRACES_RIGHT);
+		this(expr, prefixs, '{', '}');
 	}
 
 	public ELTemplate(String expr, char prefix, char open, char close) throws TemplateException {

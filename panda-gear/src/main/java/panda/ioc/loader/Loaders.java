@@ -7,7 +7,6 @@ import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocParam;
 import panda.ioc.meta.IocValue;
-import panda.lang.Chars;
 import panda.lang.Strings;
 
 public abstract class Loaders {
@@ -36,23 +35,23 @@ public abstract class Loaders {
 		}
 
 		int c0 = value.charAt(0);
-		if (c0 == Chars.SINGLE_QUOTE) {
+		if (c0 == '\'') {
 			return new IocValue(IocValue.KIND_RAW, type, value.substring(1));
 		}
-		if (c0 == Chars.SHARP && value.length() > 1) {
+		if (c0 == '#' && value.length() > 1) {
 			return new IocValue(IocValue.KIND_REF, type, value.substring(1));
 		}
 		if (value.length() > 3) {
 			int c1 = value.charAt(1);
 			int cx = value.charAt(value.length() - 1);
 			
-			if ((c0 == Chars.DOLLAR || c0 == Chars.PERCENT) && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
+			if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
 				return new IocValue(IocValue.KIND_EL, type, value.substring(2, value.length() - 1));
 			}
-			if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
+			if (c0 == '!' && c1 == '{' && cx == '}') {
 				return new IocValue(IocValue.KIND_JSON, type, value.substring(1));
 			}
-			if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACKETS_LEFT && cx == Chars.BRACKETS_RIGHT) {
+			if (c0 == '!' && c1 == '[' && cx == ']') {
 				return new IocValue(IocValue.KIND_JSON, type, value.substring(1));
 			}
 		}

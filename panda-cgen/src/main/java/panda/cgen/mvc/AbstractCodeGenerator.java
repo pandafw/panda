@@ -31,9 +31,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
 import panda.args.Option;
 import panda.cgen.AbstractCommandTool;
 import panda.cgen.HandledException;
@@ -44,7 +41,6 @@ import panda.io.FileNames;
 import panda.io.Settings;
 import panda.io.Streams;
 import panda.lang.Arrays;
-import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.StringEscapes;
@@ -71,6 +67,10 @@ import panda.mvc.annotation.validate.RequiredValidate;
 import panda.mvc.annotation.validate.StringValidate;
 import panda.mvc.annotation.validate.URLValidate;
 import panda.mvc.annotation.validate.VisitValidate;
+
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
 
 /**
  * Base class for code generator.
@@ -533,7 +533,7 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 
 			StringWriter sw = new StringWriter();
 			tpl.process(context, sw);
-			int svuid = Strings.remove(sw.toString(), Chars.CR).hashCode();
+			int svuid = Strings.remove(sw.toString(), '\r').hashCode();
 			
 			context.put("svuid", svuid);
 		}

@@ -16,7 +16,6 @@ import panda.ioc.meta.IocParam;
 import panda.ioc.wea.BeanMethodCreator;
 import panda.ioc.wea.ELCreator;
 import panda.lang.Arrays;
-import panda.lang.Chars;
 import panda.lang.Classes;
 import panda.lang.Strings;
 import panda.lang.reflect.ArrayCreator;
@@ -172,13 +171,13 @@ public class DefaultObjectMaker implements ObjectMaker {
 			String fa = iobj.getFactory();
 			int c0 = fa.charAt(0);
 
-			if (fa.length() > 3 && (c0 == Chars.DOLLAR || c0 == Chars.PERCENT) 
-					&& fa.charAt(1) == Chars.BRACES_LEFT 
-					&& fa.charAt(fa.length() - 1) == Chars.BRACES_RIGHT) {
+			if (fa.length() > 3 && (c0 == '$' || c0 == '%') 
+					&& fa.charAt(1) == '{'
+					&& fa.charAt(fa.length() - 1) == '}') {
 				// EL
 				dw.setCreator(new ELCreator(ing.getIoc(), fa.substring(2, fa.length() - 1)));
 			}
-			else if (c0 == Chars.SHARP) {
+			else if (c0 == '#') {
 				// iocbean.method
 				int d = fa.lastIndexOf('.');
 				if (d < 1) {

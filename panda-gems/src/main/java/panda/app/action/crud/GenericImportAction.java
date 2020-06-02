@@ -31,7 +31,6 @@ import panda.io.stream.ListReader;
 import panda.io.stream.XlsReader;
 import panda.io.stream.XlsxReader;
 import panda.lang.Arrays;
-import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -225,10 +224,10 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				reader = getXlsReader(input, true);
 			}
 			else if (FileTypes.CSV.equalsIgnoreCase(fext)) {
-				reader = getCsvReader(input, Chars.COMMA);
+				reader = getCsvReader(input, ',');
 			}
 			else if (FileTypes.TSV.equalsIgnoreCase(fext) || FileTypes.TXT.equalsIgnoreCase(fext)) {
-				reader = getCsvReader(input, Chars.TAB);
+				reader = getCsvReader(input, '\t');
 			}
 			else {
 				addFieldError("file", getText("error-file"));
@@ -593,7 +592,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		for (Entry<String, List<String>> en : getParamAware().getErrors().entrySet()) {
 			String label = getFieldLabel(en.getKey()) + ": ";
 			for (String s : en.getValue()) {
-				sb.append(Chars.LF).append(label).append(s);
+				sb.append('\n').append(label).append(s);
 			}
 		}
 		getParamAware().clearErrors();

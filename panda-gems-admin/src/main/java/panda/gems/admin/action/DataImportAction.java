@@ -35,7 +35,6 @@ import panda.io.stream.CsvReader;
 import panda.io.stream.ListReader;
 import panda.io.stream.XlsReader;
 import panda.io.stream.XlsxReader;
-import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
@@ -131,7 +130,7 @@ public class DataImportAction extends BaseAction {
 				else {
 					byte[] data = arg.file.data();
 					if (data != null) {
-						impCsv(data, Chars.COMMA);
+						impCsv(data, ',');
 					}
 				}
 			}
@@ -143,7 +142,7 @@ public class DataImportAction extends BaseAction {
 				else {
 					byte[] data = arg.file.data();
 					if (data != null) {
-						impCsv(data, Chars.TAB);
+						impCsv(data, '\t');
 					}
 				}
 			}

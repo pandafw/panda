@@ -18,7 +18,6 @@ import panda.bind.adapter.CalendarAdapter;
 import panda.bind.adapter.DateAdapter;
 import panda.codec.binary.Base64;
 import panda.lang.Arrays;
-import panda.lang.Chars;
 import panda.lang.Collections;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
@@ -37,7 +36,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	protected int cycleDetectStrategy = CycleDetectStrategy.CYCLE_DETECT_NOPROP;
 
 	/** indent character */
-	protected char indentChar = Chars.TAB;
+	protected char indentChar = '\t';
 
 	/** The number of spaces to add to each level of indentation. */
 	protected int indentFactor = 0;
@@ -357,7 +356,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 
 	protected void writeIndent(int indent) throws IOException {
 		if (indentFactor > 0) {
-			writer.append(Chars.LF);
+			writer.append('\n');
 			for (int i = 0; i < indent; i++) {
 				writer.append(indentChar);
 			}

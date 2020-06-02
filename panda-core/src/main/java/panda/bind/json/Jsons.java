@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 
 import panda.io.Streams;
-import panda.lang.Chars;
 import panda.lang.Charsets;
 
 public abstract class Jsons {
@@ -74,7 +73,7 @@ public abstract class Jsons {
 
 	public static String toJson(Object value, int indent) {
 		JsonSerializer js = newJsonSerializer();
-		js.setIndentChar(Chars.SPACE);
+		js.setIndentChar(' ');
 		js.setIndentFactor(indent);
 		return js.serialize(value);
 	}
@@ -92,7 +91,7 @@ public abstract class Jsons {
 
 	public static void toJson(Object value, Appendable writer, int indent) {
 		JsonSerializer js = newJsonSerializer();
-		js.setIndentChar(Chars.SPACE);
+		js.setIndentChar(' ');
 		js.setIndentFactor(indent);
 		js.serialize(value, writer);
 	}
