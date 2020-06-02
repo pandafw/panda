@@ -18,11 +18,11 @@ import panda.cast.Castors;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Collections;
-import panda.lang.Injector;
 import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
 import panda.lang.reflect.FieldInjector;
 import panda.lang.reflect.Fields;
+import panda.lang.reflect.Injector;
 import panda.lang.reflect.MethodInjector;
 import panda.lang.reflect.Methods;
 
