@@ -23,4 +23,9 @@ public class ConstructorCreator<T> implements Creator<T> {
 			throw Exceptions.wrapThrow(e);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ": " + constructor;
+	}
 }
