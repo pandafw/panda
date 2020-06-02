@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import panda.bind.json.Jsons;
-import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.meta.IocObject;
 
@@ -21,15 +20,18 @@ public abstract class AbstractIocLoader implements IocLoader {
 		this.beans = beans;
 	}
 
+	@Override
 	public Set<String> getNames() {
 		return beans.keySet();
 	}
 
+	@Override
 	public boolean has(String name) {
 		return beans.containsKey(name);
 	}
 
-	public IocObject load(String name) throws IocLoadException {
+	@Override
+	public IocObject load(String name) {
 		return beans.get(name);
 	}
 

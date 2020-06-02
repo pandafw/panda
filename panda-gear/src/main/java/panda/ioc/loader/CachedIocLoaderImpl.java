@@ -1,6 +1,5 @@
 package panda.ioc.loader;
 
-import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.meta.IocObject;
 
@@ -33,7 +32,8 @@ public class CachedIocLoaderImpl extends AbstractIocLoader implements CachedIocL
 		beans.clear();
 	}
 
-	public IocObject load(String name) throws IocLoadException {
+	@Override
+	public IocObject load(String name) {
 		IocObject io = beans.get(name);
 		if (io == NULL) {
 			io = loader.load(name);

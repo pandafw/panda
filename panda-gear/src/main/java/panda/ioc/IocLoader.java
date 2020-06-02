@@ -16,9 +16,9 @@ public interface IocLoader {
 	 * 
 	 * @param name the bean name
 	 * @return IocObject
-	 * @throws IocLoadException if an error occurs
+	 * @throws IocException if an error occurs
 	 */
-	IocObject load(String name) throws IocLoadException;
+	IocObject load(String name);
 
 	/**
 	 * @param name the bean name
