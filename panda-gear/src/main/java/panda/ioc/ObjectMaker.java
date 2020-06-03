@@ -10,12 +10,20 @@ import panda.ioc.meta.IocObject;
 public interface ObjectMaker {
 
 	/**
-	 * 根据 IocObject 制作一个对象代理，如果对象是 singleton，则保存在上下文环境中
+	 * create a singleton ObjectProxy and save to scope IocContext
 	 * 
-	 * @param ing the IocMaking
+	 * @param im the IocMaking
 	 * @param iobj the IocObject
 	 * @return the ObjectProxy
 	 */
-	ObjectProxy make(IocMaking ing, IocObject iobj);
+	ObjectProxy makeSingleton(IocMaking im, IocObject iobj);
 
+	/**
+	 * create a dynamic ObjectProxy and save to thread local IocContext
+	 * 
+	 * @param im the IocMaking
+	 * @param iobj the IocObject
+	 * @return the ObjectProxy
+	 */
+	ObjectProxy makeDynamic(IocMaking im, IocObject iobj);
 }

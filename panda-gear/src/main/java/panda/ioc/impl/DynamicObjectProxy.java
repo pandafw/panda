@@ -29,8 +29,8 @@ public class DynamicObjectProxy implements ObjectProxy {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T get(Class<T> type, IocMaking ing) {
-		Object r = weaver.onCreate(weaver.fill(ing, weaver.born(ing)));
+	public <T> T get(Class<T> type, IocMaking im) {
+		Object r = weaver.onCreate(weaver.fill(im, weaver.born(im)));
 		
 		if (fetch != null) {
 			fetch.trigger(r);

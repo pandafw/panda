@@ -2,7 +2,6 @@ package panda.ioc.impl;
 
 import java.lang.reflect.Type;
 
-import panda.cast.Castors;
 import panda.ioc.IocEventTrigger;
 import panda.ioc.IocMaking;
 import panda.ioc.ObjectWeaver;
@@ -61,23 +60,23 @@ public class DefaultObjectWeaver implements ObjectWeaver {
 		this.fields = fields;
 	}
 
-	public <T> T fill(IocMaking ing, T obj) {
+	public <T> T fill(IocMaking im, T obj) {
 		if (fields != null) {
 			for (IocFieldInjector fi : fields) {
-				fi.inject(ing, obj);
+				fi.inject(im, obj);
 			}
 		}
 		return obj;
 	}
 
-	public Object born(IocMaking ing) {
+	public Object born(IocMaking im) {
 		Object[] args = Arrays.EMPTY_OBJECT_ARRAY;
 		if (Arrays.isNotEmpty(this.args)) {
 			args = new Object[this.args.length];
 			for (int i = 0; i < args.length; i++) {
-				Object o = this.args[i].get(ing);
+				Object o = this.args[i].get(im);
 				if (o != null && !Types.isAssignable(o.getClass(), argTypes[i], false)) {
-					o = Castors.i().cast(o, argTypes[i]);
+					o = im.getCastors().cast(o, argTypes[i]);
 				}
 				args[i] = o;
 			}

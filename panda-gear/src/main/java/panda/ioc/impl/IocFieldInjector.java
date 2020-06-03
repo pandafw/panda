@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 import panda.bean.BeanHandler;
-import panda.bean.Beans;
 import panda.bean.PropertyInjector;
 import panda.cast.Castors;
 import panda.ioc.IocMaking;
@@ -20,13 +19,13 @@ import panda.lang.reflect.Injector;
 
 public class IocFieldInjector {
 
-	public static IocFieldInjector create(Class<?> mirror, String fieldName, IocParam ip, ValueProxy vp) {
+	public static IocFieldInjector create(IocMaking im, Class<?> mirror, String fieldName, IocParam ip) {
 		IocFieldInjector fi = new IocFieldInjector();
-		fi.proxy = vp;
+		fi.proxy = im.makeValueProxy(ip.getValues());
 		fi.injector = ip.getInjector();
 
 		if (fi.injector == null) {
-			BeanHandler bh = Beans.i().getBeanHandler(mirror);
+			BeanHandler bh = im.getBeans().getBeanHandler(mirror);
 			if (mirror.isArray() || Collection.class.isAssignableFrom(mirror) || bh.canWriteProperty(fieldName)) {
 				fi.injector = new PropertyInjector(fieldName, bh);
 			}
@@ -54,13 +53,13 @@ public class IocFieldInjector {
 	private IocFieldInjector() {
 	}
 
-	public void inject(IocMaking ing, Object obj) {
-		Object ov = proxy.get(ing);
+	public void inject(IocMaking im, Object obj) {
+		Object ov = proxy.get(im);
 		if (ov == ValueProxy.UNDEFINED) {
 			return;
 		}
 
-		Castors cs = Castors.i();
+		Castors cs = im.getCastors();
 		if (proxy instanceof ParamsValue) {
 			Type[] types = injector.types(obj);
 			

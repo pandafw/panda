@@ -8,7 +8,7 @@ import panda.aop.DefaultClassDefiner;
 import panda.aop.MethodInterceptor;
 import panda.aop.asm.AsmClassAgent;
 import panda.ioc.Ioc;
-import panda.ioc.aop.MirrorFactory;
+import panda.ioc.aop.Mirrors;
 import panda.ioc.aop.config.AopConfigration;
 import panda.ioc.aop.config.InterceptorPair;
 import panda.ioc.aop.config.impl.AnnotationAopConfigration;
@@ -18,9 +18,9 @@ import panda.log.Logs;
 /**
  * 通过AopConfigration来识别需要拦截的方法,并根据需要生成新的类
  */
-public class DefaultMirrorFactory extends MirrorFactory {
+public class DefaultMirrors extends Mirrors {
 
-	private static final Log log = Logs.getLog(DefaultMirrorFactory.class);
+	private static final Log log = Logs.getLog(DefaultMirrors.class);
 
 	private ClassDefiner cd;
 

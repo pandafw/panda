@@ -53,9 +53,9 @@ public class SingletonObjectProxy implements ObjectProxy {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T get(Class<T> type, IocMaking imak) {
+	public <T> T get(Class<T> type, IocMaking im) {
 		if (object == null) {
-			throw new RuntimeException("Null '" + imak.getName() + "' Object for SingletonObjectProxy");
+			throw new RuntimeException("Null '" + im.getName() + "' Object for SingletonObjectProxy");
 		}
 
 		if (fetch != null) {

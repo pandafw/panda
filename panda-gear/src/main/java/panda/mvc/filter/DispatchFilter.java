@@ -159,7 +159,7 @@ public class DispatchFilter implements ServletFilter {
 
 		if (ioc instanceof DefaultIoc) {
 			// create a combo ioc context for request/session scope
-			DefaultIoc di = ((DefaultIoc)ioc).clone();
+			DefaultIoc di = new DefaultIoc((DefaultIoc)ioc);
 
 			ComboIocContext ctx = new ComboIocContext();
 			ric = new RequestIocContext();

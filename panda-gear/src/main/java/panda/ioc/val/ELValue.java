@@ -58,12 +58,12 @@ public class ELValue implements ValueProxy {
 	}
 
 	@Override
-	public Object get(IocMaking ing) {
-		return el.eval(new IocProxy(ing.getIoc()));
+	public Object get(IocMaking im) {
+		return el.eval(new IocProxy(im.getIoc()));
 	}
 
 	@Override
 	public String toString() {
-		return String.valueOf(el);
+		return getClass().getSimpleName() + ": " + el;
 	}
 }

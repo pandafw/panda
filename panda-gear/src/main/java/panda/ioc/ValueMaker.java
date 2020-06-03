@@ -8,18 +8,18 @@ import panda.ioc.meta.IocValue;
  * 你可以通过 Ioc 接口，增加你自定义的 ValueProxyMaker，你自定义的 ValueProxyMaker 会 比容器内内置的 ValueProxyMaker 更优先。即，后加入优先
  * 
  */
-public interface ValueProxyMaker {
+public interface ValueMaker {
 	/**
-	 * @param ing 对象装配时
+	 * @param im 对象装配时
 	 * @param iv 字段装配信息
 	 * @return 值代理对象
 	 */
-	ValueProxy make(IocMaking ing, IocValue iv);
+	ValueProxy make(IocMaking im, IocValue iv);
 
 	/**
-	 * @param ing 对象装配时
+	 * @param im 对象装配时
 	 * @param ivs 字段装配信息
 	 * @return 值代理对象
 	 */
-	ValueProxy make(IocMaking ing, IocValue[] ivs);
+	ValueProxy make(IocMaking im, IocValue[] ivs);
 }

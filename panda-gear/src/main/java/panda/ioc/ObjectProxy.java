@@ -9,7 +9,7 @@ package panda.ioc;
  * 在出现异常的时候，一定要将该对象从上下文中移除掉。
  */
 public interface ObjectProxy {
-	<T> T get(Class<T> type, IocMaking imak);
+	<T> T get(Class<T> type, IocMaking im);
 
 	void depose();
 }
