@@ -1,7 +1,7 @@
 package panda.mvc.ioc.provider;
 
 import panda.ioc.IocLoader;
-import panda.ioc.aop.MirrorFactory;
+import panda.ioc.aop.Mirrors;
 import panda.ioc.impl.DefaultIoc;
 import panda.lang.Classes;
 import panda.mvc.IocProvider;
@@ -14,8 +14,8 @@ public abstract class AbstractIocProvider implements IocProvider {
 
 		IocBy ib = mcfg.getMainModule().getAnnotation(IocBy.class);
 		if (ib != null) {
-			MirrorFactory mf = Classes.born(ib.mirror());
-			ioc.setMirrorFactory(mf);
+			Mirrors ms = Classes.born(ib.mirror());
+			ioc.setMirrors(ms);
 		}
 
 		return ioc;

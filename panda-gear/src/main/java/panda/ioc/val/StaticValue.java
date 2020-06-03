@@ -2,7 +2,6 @@ package panda.ioc.val;
 
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
-import panda.lang.Objects;
 
 public class StaticValue implements ValueProxy {
 
@@ -14,14 +13,12 @@ public class StaticValue implements ValueProxy {
 		this.obj = obj;
 	}
 
-	public Object get(IocMaking ing) {
+	public Object get(IocMaking im) {
 		return obj;
 	}
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder()
-				.append("obj", obj)
-				.toString();
+		return getClass().getSimpleName() + ": " + obj;
 	}
 }

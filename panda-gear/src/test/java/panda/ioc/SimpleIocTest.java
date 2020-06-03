@@ -6,6 +6,9 @@ import static org.junit.Assert.fail;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.ioc.a.A;
+import panda.ioc.a.B;
+import panda.ioc.a.C;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.AnnotationIocLoader;
 import panda.ioc.loader.annotation.meta.Cat;
@@ -54,6 +57,21 @@ public class SimpleIocTest {
 	}
 
 	@Test
+	public void test_override_inject_abc() {
+		Ioc ioc = new DefaultIoc(new AnnotationIocLoader(C.class.getPackage().getName()));
+		
+		A a = ioc.get(A.class);
+		B b = ioc.get(B.class);
+		C c = ioc.get(C.class);
+		
+		Assert.assertEquals(a, b);
+		Assert.assertEquals(c.a, a);
+		Assert.assertEquals(c.b, b);
+		Assert.assertEquals("{\"a\":0,\"b\":1}", b.jo.toString());
+		Assert.assertEquals("[0,1]", b.ja.toString());
+	}
+
+	@Test
 	public void test_multi_params_inject() {
 		Ioc ioc = new DefaultIoc(new AnnotationIocLoader(HorseMP.class.getPackage().getName()));
 
@@ -74,6 +92,5 @@ public class SimpleIocTest {
 		System.gc();
 		assertEquals(100, SingletonService.CreateCount);
 		assertEquals(0, SingletonService.DeposeCount);
-
 	}
 }

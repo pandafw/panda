@@ -2,7 +2,7 @@ package panda.ioc.aop;
 
 import panda.ioc.Ioc;
 
-public class MirrorFactory {
+public class Mirrors {
 
 	/**
 	 * Get a mirror class for AOP

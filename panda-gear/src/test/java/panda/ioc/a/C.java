@@ -6,12 +6,12 @@ import panda.ioc.annotation.IocInject;
 @IocBean
 public class C {
 	@IocInject
-	public void setB(B b) {
-		System.out.println(b.getClass());
-	}
-	
+	public A a;
+
+	public B b;
+
 	@IocInject
-	public void setA(A a) {
-		System.out.println(a.getClass());
+	public void setB(B b) {
+		this.b = b;
 	}
 }

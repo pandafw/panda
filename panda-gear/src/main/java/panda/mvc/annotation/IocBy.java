@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.ioc.aop.MirrorFactory;
+import panda.ioc.aop.Mirrors;
 import panda.mvc.IocProvider;
 
 /**
@@ -30,7 +30,7 @@ public @interface IocBy {
 	String[] args();
 	
 	/**
-	 * The MirrorFactory class for AOP
+	 * The Mirrors class for AOP
 	 */
-	Class<? extends MirrorFactory> mirror() default MirrorFactory.class;
+	Class<? extends Mirrors> mirror() default Mirrors.class;
 }

@@ -5,14 +5,13 @@ import panda.ioc.IocConstants;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.lang.Classes;
-import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
 
 public class ReferValue implements ValueProxy {
 	public static ValueProxy IOC_SELF = new ValueProxy() {
-		public Object get(IocMaking ing) {
-			return ing.getIoc();
+		public Object get(IocMaking im) {
+			return im.getIoc();
 		}
 
 		@Override
@@ -22,8 +21,8 @@ public class ReferValue implements ValueProxy {
 	};
 
 	public static ValueProxy IOC_BEAN_NAME = new ValueProxy() {
-		public Object get(IocMaking ing) {
-			return ing.getName();
+		public Object get(IocMaking im) {
+			return im.getName();
 		}
 
 		@Override
@@ -33,8 +32,8 @@ public class ReferValue implements ValueProxy {
 	};
 
 	public static ValueProxy IOC_CONTEXT = new ValueProxy() {
-		public Object get(IocMaking ing) {
-			return ing.getIoc().getContext();
+		public Object get(IocMaking im) {
+			return im.getIoc().getContext();
 		}
 
 		@Override
@@ -82,8 +81,8 @@ public class ReferValue implements ValueProxy {
 	}
 
 	@Override
-	public Object get(IocMaking ing) {
-		Ioc ioc = ing.getIoc();
+	public Object get(IocMaking im) {
+		Ioc ioc = im.getIoc();
 		if (required) {
 			return ioc.get(type, name);
 		}
@@ -97,10 +96,6 @@ public class ReferValue implements ValueProxy {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder()
-				.append("name", name)
-				.append("type", type)
-				.append("required", required)
-				.toString();
+		return getClass().getSimpleName() + ": #" + name + " (" + type + ")" + (required ? " <*>" : "");
 	}
 }

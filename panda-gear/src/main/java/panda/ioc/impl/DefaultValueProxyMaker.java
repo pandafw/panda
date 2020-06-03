@@ -10,7 +10,7 @@ import panda.ioc.IocContext;
 import panda.ioc.IocException;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
-import panda.ioc.ValueProxyMaker;
+import panda.ioc.ValueMaker;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.ioc.val.ArrayValue;
@@ -24,7 +24,7 @@ import panda.ioc.val.StaticValue;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
 
-public class DefaultValueProxyMaker implements ValueProxyMaker {
+public class DefaultValueProxyMaker implements ValueMaker {
 	public ValueProxy make(IocMaking im, IocValue[] ivs) {
 		if (ivs.length == 1) {
 			return make(im, ivs[0]);

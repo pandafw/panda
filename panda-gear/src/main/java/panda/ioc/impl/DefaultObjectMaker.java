@@ -26,6 +26,8 @@ import panda.lang.reflect.Methods;
 import panda.log.Log;
 import panda.log.Logs;
 
+import reactor.core.Exceptions;
+
 /**
  * 在这里，需要考虑 AOP
  * 
@@ -34,95 +36,107 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 	private static final Log log = Logs.getLog(DefaultObjectMaker.class);
 
-	public ObjectProxy make(IocMaking imak, IocObject iobj) {
+	public ObjectProxy makeSingleton(IocMaking im, IocObject iobj) {
 		// 获取 Mirror， AOP 将在这个方法中进行
-		Class<?> mirror = imak.getMirrors().getMirror(imak.getIoc(), iobj.getType(), imak.getName());
+		Class<?> mirror = im.getMirrors().getMirror(im.getIoc(), iobj.getType(), im.getName());
 
 		try {
-			if (iobj.isSingleton()) {
-				SingletonObjectProxy sop = new SingletonObjectProxy();
-				
-				// 建立对象代理，并保存在上下文环境中 只有对象为 singleton
-				// 并且有一个非 null 的名称的时候才会保存
-				// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
-				if (imak.getName() != null) {
-					if (!imak.getIoc().getContext().save(iobj.getScope(), imak.getName(), sop)) {
-						throw new IocException("Failed to save '" + imak.getName() + "' to " + iobj.getScope() + " IocContext");
-					}
+			SingletonObjectProxy sop = new SingletonObjectProxy();
+			
+			// 建立对象代理，并保存在上下文环境中 只有对象为 singleton
+			// 并且有一个非 null 的名称的时候才会保存
+			// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
+			if (im.getName() != null) {
+				if (!im.getIoc().getContext().save(iobj.getScope(), im.getName(), sop)) {
+					throw new IocException("Failed to save '" + im.getName() + "' to " + iobj.getScope() + " IocContext");
 				}
-	
-				// 为对象代理设置触发事件
-				if (iobj.getEvents() != null) {
-					sop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
-					sop.setDepose(createTrigger(mirror, iobj.getEvents().getDepose()));
-				}
-	
-				if (iobj.getValue() != null) {
-					sop.setObject(iobj.getValue());
-					return sop;
-				}
+			}
 
-				ObjectWeaver ow = makeWeaver(mirror, imak, iobj);
+			// 为对象代理设置触发事件
+			if (iobj.getEvents() != null) {
+				sop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
+				sop.setDepose(createTrigger(mirror, iobj.getEvents().getDepose()));
+			}
 
-				// create singleton object
-				Object obj = ow.born(imak);
-
-				// set obj to proxy
-				// 这一步非常重要，它解除了字段互相引用的问题
-				sop.setObject(obj);
-
-				// inject
-				ow.fill(imak, obj);
-				
-				// 对象创建完毕，如果有 create 事件，调用它
-				ow.onCreate(obj);
-				
+			if (iobj.getValue() != null) {
+				sop.setObject(iobj.getValue());
 				return sop;
 			}
-			else {
-				ObjectWeaver ow = makeWeaver(mirror, imak, iobj);
 
-				DynamicObjectProxy dop = new DynamicObjectProxy(ow);
-				
-				// 为对象代理设置触发事件
-				if (iobj.getEvents() != null) {
-					dop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
-				}
-	
-				return dop;
-			}
+			ObjectWeaver ow = makeWeaver(mirror, im, iobj);
+
+			// create singleton object
+			Object obj = ow.born(im);
+
+			// set obj to proxy
+			// 这一步非常重要，它解除了字段互相引用的问题
+			sop.setObject(obj);
+
+			// inject
+			ow.fill(im, obj);
+			
+			// 对象创建完毕，如果有 create 事件，调用它
+			ow.onCreate(obj);
+
+			return sop;
 		}
 		catch (Throwable e) {
 			if (log.isWarnEnabled()) {
-				log.warn("Error occurred for IocObject: " + iobj);
+				log.warn("Failed to make singleton IocObject: " + iobj);
 			}
 			
-			//remove ObjectProxy from context
-			if (iobj.isSingleton() && imak.getName() != null) {
-				imak.getIoc().getContext().remove(iobj.getScope(), imak.getName());
+			// remove ObjectProxy from context
+			im.getIoc().getContext().remove(iobj.getScope(), im.getName());
+			
+			if (e instanceof IocException) {
+				throw (IocException)e;
+			}
+			throw new IocException("Failed to create singleton ioc bean: " + im.getName(), Exceptions.unwrap(e));
+		}
+	}
+
+	public ObjectProxy makeDynamic(IocMaking im, IocObject iobj) {
+		// 获取 Mirror， AOP 将在这个方法中进行
+		Class<?> mirror = im.getMirrors().getMirror(im.getIoc(), iobj.getType(), im.getName());
+
+		try {
+			ObjectWeaver ow = makeWeaver(mirror, im, iobj);
+
+			DynamicObjectProxy dop = new DynamicObjectProxy(ow);
+			
+			// 为对象代理设置触发事件
+			if (iobj.getEvents() != null) {
+				dop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
+			}
+
+			return dop;
+		}
+		catch (Throwable e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Failed to make dynamic IocObject: " + iobj);
 			}
 			
 			if (e instanceof IocException) {
 				throw (IocException)e;
 			}
-			throw new IocException("Failed to create ioc bean: " + imak.getName(), e);
+			throw new IocException("Failed to create dynamic ioc bean: " + im.getName(), Exceptions.unwrap(e));
 		}
 	}
-	
-	public ObjectWeaver makeWeaver(Class<?> mirror, IocMaking imak, IocObject iobj) {
+
+	public ObjectWeaver makeWeaver(Class<?> mirror, IocMaking im, IocObject iobj) {
 		ObjectWeaver ow;
 
-		if (imak.getName() == null) {
-			ow = createWeaver(mirror, imak, iobj);
+		if (im.getName() == null) {
+			ow = createWeaver(mirror, im, iobj);
 		}
 		else {
-			ow = imak.getWeavers().get(imak.getName());
+			ow = im.getWeavers().get(im.getName());
 			if (ow == null) {
-				synchronized (imak.getWeavers()) {
-					ow = imak.getWeavers().get(imak.getName());
+				synchronized (im.getWeavers()) {
+					ow = im.getWeavers().get(im.getName());
 					if (ow == null) {
-						ow = createWeaver(mirror, imak, iobj);
-						imak.getWeavers().put(imak.getName(), ow);
+						ow = createWeaver(mirror, im, iobj);
+						im.getWeavers().put(im.getName(), ow);
 					}
 				}
 			}
@@ -130,21 +144,21 @@ public class DefaultObjectMaker implements ObjectMaker {
 		return ow;
 	}
 
-	private ObjectWeaver createWeaver(Class<?> mirror, IocMaking imak, IocObject iobj) {
+	private ObjectWeaver createWeaver(Class<?> mirror, IocMaking im, IocObject iobj) {
 		// 准备对象的编织方式
 		DefaultObjectWeaver dw = new DefaultObjectWeaver();
 
 		// 构造函数参数
-		setWeaverCreator(dw, mirror, imak, iobj);
+		setWeaverCreator(dw, mirror, im, iobj);
 
 		// 获得每个字段的注入方式
-		setWeaverFields(dw, mirror, imak, iobj);
+		setWeaverFields(dw, mirror, im, iobj);
 		
 		return dw;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void setWeaverCreator(DefaultObjectWeaver dw, Class<?> cls, IocMaking ing, IocObject iobj) {
+	private void setWeaverCreator(DefaultObjectWeaver dw, Class<?> cls, IocMaking im, IocObject iobj) {
 		// 为编织器设置事件触发器：创建时
 		if (iobj.getEvents() != null) {
 			dw.setOnCreate(createTrigger(cls, iobj.getEvents().getCreate()));
@@ -155,14 +169,14 @@ public class DefaultObjectMaker implements ObjectMaker {
 			// 构造函数参数
 			ValueProxy[] vps = new ValueProxy[iobj.getArgs().length];
 			for (int i = 0; i < vps.length; i++) {
-				vps[i] = ing.makeValueProxy(iobj.getArgs()[i]);
+				vps[i] = im.makeValueProxy(iobj.getArgs()[i]);
 			}
 			dw.setArgs(vps);
 	
 			// 先获取一遍，根据这个数组来获得构造函数
 			args = new Object[vps.length];
 			for (int i = 0; i < args.length; i++) {
-				args[i] = vps[i].get(ing);
+				args[i] = vps[i].get(im);
 			}
 		}
 		
@@ -175,40 +189,40 @@ public class DefaultObjectMaker implements ObjectMaker {
 					&& fa.charAt(1) == '{'
 					&& fa.charAt(fa.length() - 1) == '}') {
 				// EL
-				dw.setCreator(new ELCreator(ing.getIoc(), fa.substring(2, fa.length() - 1)));
+				dw.setCreator(new ELCreator(im.getIoc(), fa.substring(2, fa.length() - 1)));
 			}
 			else if (c0 == '#') {
 				// iocbean.method
 				int d = fa.lastIndexOf('.');
 				if (d < 1) {
-					throw new IocException("Invalid factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+					throw new IocException("Invalid factory method of '" + im.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
 				}
 				String name = fa.substring(1, d);
 				String method = fa.substring(d + 1);
-				Object obj = ing.getIoc().get(null, name);
+				Object obj = im.getIoc().get(null, name);
 
 				Method m = Methods.getMatchingAccessibleMethod(obj.getClass(), method, args);
 				if (m == null) {
 					m = Methods.getMatchingAccessibleMethod(obj.getClass(), method, args.length);
 					if (m == null) {
-						throw new IocException("Failed to find factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+						throw new IocException("Failed to find factory method of '" + im.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
 					}
 				}
 				dw.setArgTypes(m.getGenericParameterTypes());
-				dw.setCreator(new BeanMethodCreator<Object>(ing.getIoc(), name, m));
+				dw.setCreator(new BeanMethodCreator<Object>(im.getIoc(), name, m));
 			}
 			else {
 				// static class@method
 				String[] ss = fa.split("@", 2);
 				if (ss.length != 2) {
-					throw new IocException("Invalid factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+					throw new IocException("Invalid factory method of '" + im.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
 				}
 
 				Method m = Methods.getMatchingAccessibleMethod(cls, ss[0], args);
 				if (m == null) {
 					m = Methods.getMatchingAccessibleMethod(cls, ss[0], args.length);
 					if (m == null) {
-						throw new IocException("Failed to find factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+						throw new IocException("Failed to find factory method of '" + im.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
 					}
 				}
 				dw.setArgTypes(m.getGenericParameterTypes());
@@ -225,7 +239,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 					c = Constructors.getConstructor(cls, args.length);
 					if (c == null) {
 						throw new IocException("Failed to find constructor of '" 
-								+ ing.getName() + "' " + cls + ": " + Arrays.toString(args));
+								+ im.getName() + "' " + cls + ": " + Arrays.toString(args));
 					}
 				}
 				dw.setArgTypes(c.getGenericParameterTypes());
@@ -234,7 +248,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 	}
 
-	private void setWeaverFields(DefaultObjectWeaver weaver, Class<?> mirror, IocMaking ing, IocObject iobj) {
+	private void setWeaverFields(DefaultObjectWeaver weaver, Class<?> mirror, IocMaking im, IocObject iobj) {
 		if (iobj.getFields() == null) {
 			return;
 		}
@@ -244,8 +258,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		int i = 0;
 		for (Entry<String, IocParam> en : iobj.getFields().entrySet()) {
 			try {
-				ValueProxy vp = ing.makeValueProxy(en.getValue().getValues());
-				fields[i++] = IocFieldInjector.create(mirror, en.getKey(), en.getValue(), vp);
+				fields[i++] = IocFieldInjector.create(im, mirror, en.getKey(), en.getValue());
 			}
 			catch (Exception e) {
 				throw new IocException("Failed to eval Injector for field '" + en.getKey() + "' of " + mirror, e);

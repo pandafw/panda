@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
-import panda.ioc.aop.impl.DefaultMirrorFactory;
+import panda.ioc.aop.impl.DefaultMirrors;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.JsonIocLoader;
 
@@ -15,14 +15,14 @@ public class JsonAopConfigrationTest {
 	@Test
 	public void test_jsonAop() {
 		DefaultIoc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop.js"));
-		ioc.setMirrorFactory(new DefaultMirrorFactory());
+		ioc.setMirrors(new DefaultMirrors());
 		test(ioc);
 	}
 
 	@Test
 	public void test_jsonAop2() {
 		DefaultIoc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop2.js"));
-		ioc.setMirrorFactory(new DefaultMirrorFactory());
+		ioc.setMirrors(new DefaultMirrors());
 		test(ioc);
 	}
 

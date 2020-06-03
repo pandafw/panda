@@ -4,8 +4,8 @@ import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 
-@IocBean(type=A.class)
-public class B extends A {
+@IocBean(singleton=false, create="onCreate", fetch="onFetch", depose="onDespose")
+public class D {
 	@IocInject("$ioc")
 	public Ioc ioc;
 
