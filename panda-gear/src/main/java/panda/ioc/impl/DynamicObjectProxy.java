@@ -10,7 +10,7 @@ import panda.ioc.ObjectWeaver;
  */
 public class DynamicObjectProxy implements ObjectProxy {
 	private ThreadLocal<Object> local = new ThreadLocal<Object>();
-	
+
 	/**
 	 * object weaver
 	 */
@@ -44,16 +44,16 @@ public class DynamicObjectProxy implements ObjectProxy {
 				weaver.fill(im, o);
 				
 				weaver.onCreate(o);
+
+				if (fetch != null) {
+					fetch.trigger(o);
+				}
 			}
 			finally {
 				local.remove();
 			}
 		}
-		
-		if (fetch != null) {
-			fetch.trigger(o);
-		}
-		
+
 		return (T)o;
 	}
 
