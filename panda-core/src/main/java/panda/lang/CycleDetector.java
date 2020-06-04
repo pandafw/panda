@@ -1,28 +1,28 @@
 package panda.lang;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 
 /**
  */
 public class CycleDetector {
 	/** cycle detect value stack */
-	protected List<Object> stack = new ArrayList<Object>();
+	protected LinkedList<Object> stack = new LinkedList<Object>();
 
 	/** cycle detect name stack */
-	protected List<String> names = new ArrayList<String>();
-
+	protected LinkedList<String> names = new LinkedList<String>();
 
 	public void push(String name, Object value) {
 		names.add(name);
 		stack.add(value);
 	}
+
 	public void popup() {
-		names.remove(names.size() - 1);
-		stack.remove(stack.size() - 1);
+		names.pollLast();
+		stack.pollLast();
 	}
+
 	public boolean isCycled(Object value) {
 		return value != null && stack.contains(value);
 	}
