@@ -9,6 +9,8 @@ import panda.ioc.ObjectWeaver;
  * dynamic bean object proxy
  */
 public class DynamicObjectProxy implements ObjectProxy {
+	private ThreadLocal<Object> local = new ThreadLocal<Object>();
+	
 	/**
 	 * object weaver
 	 */
@@ -30,13 +32,29 @@ public class DynamicObjectProxy implements ObjectProxy {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> type, IocMaking im) {
-		Object r = weaver.onCreate(weaver.fill(im, weaver.born(im)));
-		
-		if (fetch != null) {
-			fetch.trigger(r);
+		Object o = local.get();
+
+		if (o == null) {
+			o = weaver.born(im);
+			
+			// avoid reference loop
+			local.set(o);
+
+			try {
+				weaver.fill(im, o);
+				
+				weaver.onCreate(o);
+			}
+			finally {
+				local.remove();
+			}
 		}
 		
-		return (T)r;
+		if (fetch != null) {
+			fetch.trigger(o);
+		}
+		
+		return (T)o;
 	}
 
 	@Override

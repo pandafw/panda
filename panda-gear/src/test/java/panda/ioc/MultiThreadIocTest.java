@@ -8,21 +8,23 @@ import org.junit.Test;
 import panda.ioc.a.A;
 import panda.ioc.a.B;
 import panda.ioc.a.C;
-import panda.ioc.a.D;
+import panda.ioc.a.D1;
+import panda.ioc.a.D2;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.AnnotationIocLoader;
 
 public class MultiThreadIocTest {
 	@Test
 	public void test_thread8() {
-		Ioc ioc = new DefaultIoc(new AnnotationIocLoader(C.class.getPackage().getName()));
+		final Ioc ioc = new DefaultIoc(new AnnotationIocLoader(C.class.getPackage().getName()));
 
-		StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer();
 		
-		A a0 = ioc.get(A.class);
-		B b0 = ioc.get(B.class);
-		C c0 = ioc.get(C.class);
-		D d0 = ioc.get(D.class);
+		final A a0 = ioc.get(A.class);
+		final B b0 = ioc.get(B.class);
+		final C c0 = ioc.get(C.class);
+		final D1 d01 = ioc.get(D1.class);
+		final D2 d02 = ioc.get(D2.class);
 
 		Assert.assertEquals(a0, b0);
 		Assert.assertEquals(c0.a, a0);
@@ -35,11 +37,12 @@ public class MultiThreadIocTest {
 			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					for (int i = 0; i < 10; i++) {
+					for (int i = 0; i < 1000; i++) {
 						A a = ioc.get(A.class);
 						B b = ioc.get(B.class);
 						C c = ioc.get(C.class);
-						D d = ioc.get(D.class);
+						D1 d1 = ioc.get(D1.class);
+						D2 d2 = ioc.get(D2.class);
 						
 						if (a0 != a) {
 							sb.append("a0 != a\n");
@@ -53,10 +56,31 @@ public class MultiThreadIocTest {
 							sb.append("c0 != c\n");
 							return;
 						}
-						if (d0 == d) {
-							sb.append("d0 != d\n");
+						if (d01 == d1) {
+							sb.append("d01 == d1\n");
 							return;
 						}
+						if (d02 == d2) {
+							sb.append("d02 == d2\n");
+							return;
+						}
+						if (d1.self != d1) {
+							sb.append("d1.self != d1\n");
+							return;
+						}
+						if (d2.self != d2) {
+							sb.append("d2.self != d2\n");
+							return;
+						}
+						if (d1.d2 == d2) {
+							sb.append("d1.d2 == d2\n");
+							return;
+						}
+						if (d2.d1 == d1) {
+							sb.append("d2.d1 == d1\n");
+							return;
+						}
+
 						if (!"{\"a\":0,\"b\":1}".equals(b.jo.toString())) {
 							sb.append("{\\\"a\\\":0,\\\"b\\\":1} != " + b.jo.toString() + "\n");
 							return;
