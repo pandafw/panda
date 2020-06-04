@@ -73,21 +73,21 @@ Panda HTML use the following software packages:
 
 | Name                    | License                                                       | Source                                                 |
 |-------------------------|---------------------------------------------------------------|--------------------------------------------------------|
-| Bootstrap               | [MIT](https://opensource.org/licenses/MIT)                    | http://getbootstrap.com/                               |
-| bootstrap-datepicker    | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | http://www.eyecon.ro/bootstrap-datepicker/             |
-| Chart.js                | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/chartjs/Chart.js                    |
-| flag-icon-css           | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/lipis/flag-icon-css                 |
-| Font Awesome            | [Font Awesome](http://fontawesome.io/license/)                | http://fontawesome.io/                                 |
-| Hammer.js               | [MIT](https://opensource.org/licenses/MIT)                    | http://hammerjs.github.io/                             |
-| jQuery                  | [jQuery](https://jquery.org/license/)                         | https://jquery.com/                                    |
-| jquery-cleditor         | [MIT](https://opensource.org/licenses/MIT)                    | http://premiumsoftware.net/cleditor/                   |
-| jquery-editable-select  | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/indrimuska/jquery-editable-select   |
-| jquery-lightbox         |                                                               | http://leandrovieira.com                               |
-| jquery-meiomask         | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/fabiomcosta/jquery-meiomask         |
-| jquery-mousewheel       | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/jquery/jquery-mousewheel            |
-| Notify.js               | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/jpillora/notifyjs                   |
-| Respond.js              | [MIT](https://opensource.org/licenses/MIT)                    | https://github.com/scottjehl/Respond                   |
-| summernote              | [MIT](https://opensource.org/licenses/MIT)                    | https://summernote.org                                 |
-| tablesorter             | [MIT](https://opensource.org/licenses/MIT)                    | http://tablesorter.com                                 |
-| TinyMCE                 | [LGPL](http://www.gnu.org/licenses/lgpl.html)                 | https://github.com/tinymce/tinymce                     |
+| Bootstrap               | [MIT](https://opensource.org/licenses/MIT)                    | [http://getbootstrap.com/](http://getbootstrap.com/) |
+| bootstrap-datepicker    | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | [http://www.eyecon.ro/bootstrap-datepicker/](http://www.eyecon.ro/bootstrap-datepicker/) |
+| Chart.js                | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/chartjs/Chart.js](https://github.com/chartjs/Chart.js) |
+| flag-icon-css           | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/lipis/flag-icon-css](https://github.com/lipis/flag-icon-css) |
+| Font Awesome            | [Font Awesome](http://fontawesome.io/license/)                | [http://fontawesome.io/](http://fontawesome.io/) |
+| Hammer.js               | [MIT](https://opensource.org/licenses/MIT)                    | [http://hammerjs.github.io/](http://hammerjs.github.io/) |
+| jQuery                  | [jQuery](https://jquery.org/license/)                         | [https://jquery.com/](https://jquery.com/) |
+| jquery-cleditor         | [MIT](https://opensource.org/licenses/MIT)                    | [http://premiumsoftware.net/cleditor/](http://premiumsoftware.net/cleditor/) |
+| jquery-editable-select  | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/indrimuska/jquery-editable-select](https://github.com/indrimuska/jquery-editable-select) |
+| jquery-lightbox         |                                                               | [http://leandrovieira.com](http://leandrovieira.com) |
+| jquery-meiomask         | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/fabiomcosta/jquery-meiomask](https://github.com/fabiomcosta/jquery-meiomask) |
+| jquery-mousewheel       | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/jquery/jquery-mousewheel](https://github.com/jquery/jquery-mousewheel) |
+| Notify.js               | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/jpillora/notifyjs](https://github.com/jpillora/notifyjs) |
+| Respond.js              | [MIT](https://opensource.org/licenses/MIT)                    | [https://github.com/scottjehl/Respond](https://github.com/scottjehl/Respond) |
+| summernote              | [MIT](https://opensource.org/licenses/MIT)                    | [https://summernote.org](https://summernote.org) |
+| tablesorter             | [MIT](https://opensource.org/licenses/MIT)                    | [http://tablesorter.com](http://tablesorter.com) |
+| TinyMCE                 | [LGPL](http://www.gnu.org/licenses/lgpl.html)                 | [https://github.com/tinymce/tinymce](https://github.com/tinymce/tinymce) |
 
