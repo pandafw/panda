@@ -183,7 +183,7 @@ public abstract class Locales {
 			if (locale.getCountry().length() > 0) {
 				list.add(new Locale(locale.getLanguage(), ""));
 			}
-			if (list.contains(defaultLocale) == false) {
+			if (!list.contains(defaultLocale)) {
 				list.add(defaultLocale);
 			}
 		}
@@ -256,8 +256,7 @@ public abstract class Locales {
 		if (langs == null) {
 			langs = new ArrayList<Locale>();
 			final List<Locale> locales = availableLocaleList();
-			for (int i = 0; i < locales.size(); i++) {
-				final Locale locale = locales.get(i);
+			for (final Locale locale : locales) {
 				if (countryCode.equals(locale.getCountry()) && locale.getVariant().isEmpty()) {
 					langs.add(locale);
 				}
@@ -290,8 +289,7 @@ public abstract class Locales {
 		if (countries == null) {
 			countries = new ArrayList<Locale>();
 			final List<Locale> locales = availableLocaleList();
-			for (int i = 0; i < locales.size(); i++) {
-				final Locale locale = locales.get(i);
+			for (final Locale locale : locales) {
 				if (languageCode.equals(locale.getLanguage()) && locale.getCountry().length() != 0
 						&& locale.getVariant().isEmpty()) {
 					countries.add(locale);

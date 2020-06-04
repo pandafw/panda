@@ -3,9 +3,10 @@ package panda.ioc.a;
 import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Exceptions;
 
-@IocBean(type=A.class)
-public class B extends A {
+@IocBean(singleton=false, create="onCreate", fetch="onFetch", depose="onDespose")
+public class D2 {
 	@IocInject("$ioc")
 	public Ioc ioc;
 
@@ -17,12 +18,12 @@ public class B extends A {
 
 	@IocInject("![ 0, 1 ]")
 	public String ja;
-
-	@IocInject
-	public B self;
 	
 	@IocInject
-	public C c;
+	public D2 self;
+	
+	@IocInject
+	public D1 d1;
 	
 	public void onCreate() {
 //		System.out.println("onCreate(): " + this);
@@ -33,6 +34,6 @@ public class B extends A {
 	}
 	
 	public void onDepose() {
-//		System.out.println("onDepose(): " + this);
+		throw Exceptions.impossible();
 	}
 }

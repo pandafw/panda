@@ -46,7 +46,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	private String defaultScope;
 
 	/**
-	 * 缓存对象上下文环境
+	 * singleton object context
 	 */
 	private IocContext context;
 
@@ -145,7 +145,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	@Override
 	public boolean has(String name) {
 		// 从上下文缓存中获取对象代理
-		ObjectProxy op = context.fetch(name);
+		ObjectProxy op = fetch(name);
 		if (op != null) {
 			return true;
 		}
@@ -155,10 +155,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 
 	@Override
 	public <T> T getIfExists(Class<T> type) throws IocException {
-		if (has(type)) {
-			return get(type);
-		}
-		return null;
+		return getIfExists(type, null);
 	}
 
 	@Override
@@ -197,7 +194,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 		IocMaking im = createIocMaking(name);
 
 		// 从上下文缓存中获取对象代理
-		ObjectProxy op = context.fetch(name);
+		ObjectProxy op = fetch(name);
 
 		try {
 			// 如果未发现对象
@@ -205,7 +202,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 				// 线程同步
 				synchronized (lock) {
 					// 再次读取
-					op = context.fetch(name);
+					op = fetch(name);
 
 					// 如果未发现对象
 					if (op == null) {
@@ -242,6 +239,10 @@ public class DefaultIoc implements Ioc, Cloneable {
 		}
 	}
 
+	protected ObjectProxy fetch(String name) {
+		return context.fetch(name);
+	}
+	
 	protected String getBeanName(Class<?> type) {
 		return AnnotationIocLoader.getBeanName(type, type.getAnnotation(IocBean.class));
 	}

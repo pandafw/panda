@@ -37,22 +37,21 @@ public class DefaultObjectMaker implements ObjectMaker {
 	private static final Log log = Logs.getLog(DefaultObjectMaker.class);
 
 	public ObjectProxy makeSingleton(IocMaking im, IocObject iobj) {
-		// 获取 Mirror， AOP 将在这个方法中进行
+		// get Mirror class for AOP
 		Class<?> mirror = im.getMirrors().getMirror(im.getIoc(), iobj.getType(), im.getName());
 
 		try {
 			SingletonObjectProxy sop = new SingletonObjectProxy();
 			
-			// 建立对象代理，并保存在上下文环境中 只有对象为 singleton
-			// 并且有一个非 null 的名称的时候才会保存
-			// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
+			// save singleton object to context
+			// !! important: avoid reference loop
 			if (im.getName() != null) {
 				if (!im.getIoc().getContext().save(iobj.getScope(), im.getName(), sop)) {
 					throw new IocException("Failed to save '" + im.getName() + "' to " + iobj.getScope() + " IocContext");
 				}
 			}
 
-			// 为对象代理设置触发事件
+			// set event handlers
 			if (iobj.getEvents() != null) {
 				sop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
 				sop.setDepose(createTrigger(mirror, iobj.getEvents().getDepose()));
@@ -66,37 +65,40 @@ public class DefaultObjectMaker implements ObjectMaker {
 			ObjectWeaver ow = makeWeaver(mirror, im, iobj);
 
 			// create singleton object
+			// !! important: avoid reference loop
 			Object obj = ow.born(im);
 
-			// set obj to proxy
-			// 这一步非常重要，它解除了字段互相引用的问题
+			// set object to proxy
+			// !! important: avoid reference loop
 			sop.setObject(obj);
 
-			// inject
+			// inject fields
 			ow.fill(im, obj);
 			
-			// 对象创建完毕，如果有 create 事件，调用它
+			// trigger create event
 			ow.onCreate(obj);
 
 			return sop;
 		}
 		catch (Throwable e) {
 			if (log.isWarnEnabled()) {
-				log.warn("Failed to make singleton IocObject: " + iobj);
+				log.warn("Failed to make singleton object proxy for " + iobj);
 			}
 			
 			// remove ObjectProxy from context
-			im.getIoc().getContext().remove(iobj.getScope(), im.getName());
+			if (im.getName() != null) {
+				im.getIoc().getContext().remove(iobj.getScope(), im.getName());
+			}
 			
 			if (e instanceof IocException) {
 				throw (IocException)e;
 			}
-			throw new IocException("Failed to create singleton ioc bean: " + im.getName(), Exceptions.unwrap(e));
+			throw new IocException("Failed to create singleton object proxy for " + im.getName(), Exceptions.unwrap(e));
 		}
 	}
 
 	public ObjectProxy makeDynamic(IocMaking im, IocObject iobj) {
-		// 获取 Mirror， AOP 将在这个方法中进行
+		// get Mirror class for AOP
 		Class<?> mirror = im.getMirrors().getMirror(im.getIoc(), iobj.getType(), im.getName());
 
 		try {
@@ -104,7 +106,16 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 			DynamicObjectProxy dop = new DynamicObjectProxy(ow);
 			
-			// 为对象代理设置触发事件
+			// save dynamic object to context
+			// !! important: avoid reference loop
+			if (im.getName() != null) {
+				if (!im.getIoc().getContext().save(iobj.getScope(), im.getName(), dop)) {
+					throw new IocException("Failed to save '" + im.getName() + "' to " + iobj.getScope() + " IocContext");
+				}
+			}
+
+			// set fetch event handler
+			// depose event is not support for dynamic object
 			if (iobj.getEvents() != null) {
 				dop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
 			}
@@ -113,13 +124,18 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 		catch (Throwable e) {
 			if (log.isWarnEnabled()) {
-				log.warn("Failed to make dynamic IocObject: " + iobj);
+				log.warn("Failed to make dynamic object proxy for " + iobj);
+			}
+			
+			// remove ObjectProxy from context
+			if (im.getName() != null) {
+				im.getIoc().getContext().remove(iobj.getScope(), im.getName());
 			}
 			
 			if (e instanceof IocException) {
 				throw (IocException)e;
 			}
-			throw new IocException("Failed to create dynamic ioc bean: " + im.getName(), Exceptions.unwrap(e));
+			throw new IocException("Failed to create dynamic object proxy for " + im.getName(), Exceptions.unwrap(e));
 		}
 	}
 

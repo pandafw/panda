@@ -15,7 +15,7 @@ import panda.ioc.loader.annotation.meta.Cat;
 import panda.ioc.loader.annotation.meta.DogMaster;
 import panda.ioc.loader.annotation.meta.Horse;
 import panda.ioc.loader.annotation.meta.HorseMP;
-import panda.ioc.loader.annotation.meta.SingletonService;
+import panda.ioc.loader.annotation.meta.DynamicService;
 import panda.ioc.loader.annotation.meta.WhiteHorse;
 
 public class SimpleIocTest {
@@ -82,15 +82,13 @@ public class SimpleIocTest {
 
 	@Test
 	public void test_no_singleton_depose() {
-		SingletonService.CreateCount = 0;
-		SingletonService.DeposeCount = 0;
-		Ioc ioc = new DefaultIoc(new AnnotationIocLoader(SingletonService.class.getPackage().getName()));
+		Ioc ioc = new DefaultIoc(new AnnotationIocLoader(DynamicService.class.getPackage().getName()));
 		for (int i = 0; i < 100; i++) {
-			ioc.get(SingletonService.class);
+			ioc.get(DynamicService.class);
 		}
 		ioc.depose();
-		System.gc();
-		assertEquals(100, SingletonService.CreateCount);
-		assertEquals(0, SingletonService.DeposeCount);
+
+		assertEquals(100, DynamicService.CreateCount);
+		assertEquals(0, DynamicService.DeposeCount);
 	}
 }

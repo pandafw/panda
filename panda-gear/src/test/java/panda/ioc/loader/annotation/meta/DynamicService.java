@@ -4,13 +4,13 @@ import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 
 @IocBean(singleton=false, create="create", depose="depose")
-public class SingletonService {
+public class DynamicService {
 	
 	public static int CreateCount;
 	public static int DeposeCount;
 	
 	public void create() {
-		CreateCount ++; 
+		CreateCount++; 
 	}
 
 	public String depose() {
