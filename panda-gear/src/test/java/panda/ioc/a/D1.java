@@ -24,12 +24,18 @@ public class D1 {
 	
 	@IocInject
 	public D2 d2;
+
+	private boolean created;
 	
 	public void onCreate() {
+		created = true;
 //		System.out.println("onCreate(): " + this);
 	}
 	
 	public void onFetch() {
+		if (!created) {
+			throw new IllegalStateException("onFetch() called before onCreate()");
+		}
 //		System.out.println("onFetch(): " + this);
 	}
 	
