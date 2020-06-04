@@ -1,4 +1,4 @@
-package panda.util.chardet ;
+package panda.lang.chardet ;
 
 public class nsCP1252Verifier extends nsVerifier {
 

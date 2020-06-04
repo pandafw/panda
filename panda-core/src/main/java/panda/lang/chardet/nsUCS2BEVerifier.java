@@ -1,6 +1,6 @@
-package panda.util.chardet ;
+package panda.lang.chardet ;
 
-public class nsUCS2LEVerifier extends nsVerifier {
+public class nsUCS2BEVerifier extends nsVerifier {
 
 	 static int[]  cclass   ; 
 	 static int[]  states   ; 
@@ -12,7 +12,7 @@ public class nsUCS2LEVerifier extends nsVerifier {
 	 public int    stFactor() { return stFactor ; }
 	 public String charset()  { return charset ;  }
 
-   public nsUCS2LEVerifier() {
+   public nsUCS2BEVerifier() {
 
       cclass = new int[256/8] ;
 
@@ -53,17 +53,17 @@ public class nsUCS2LEVerifier extends nsVerifier {
 
       states = new int[7] ;
 
-      states[0] = ((int)(((  ((int)(((  ((int)((( eError) << 4) | (eError)))  ) << 8) | (((int)(((     3) << 4) | (      4))) ))) ) << 16) | (  ((int)(((  ((int)(((     6) << 4) | (     7))) ) << 8) | (   ((int)(((     6) << 4) | (     6))) )))))) ;
+      states[0] = ((int)(((  ((int)(((  ((int)((( eError) << 4) | (eError)))  ) << 8) | (((int)(((     3) << 4) | (      4))) ))) ) << 16) | (  ((int)(((  ((int)(((eError) << 4) | (     7))) ) << 8) | (   ((int)(((     7) << 4) | (     5))) )))))) ;
       states[1] = ((int)(((  ((int)(((  ((int)((( eItsMe) << 4) | (eItsMe)))  ) << 8) | (((int)(((eItsMe) << 4) | ( eItsMe))) ))) ) << 16) | (  ((int)(((  ((int)(((eError) << 4) | (eError))) ) << 8) | (   ((int)(((eError) << 4) | (eError))) )))))) ;
-      states[2] = ((int)(((  ((int)(((  ((int)((( eError) << 4) | (eItsMe)))  ) << 8) | (((int)(((eError) << 4) | (      5))) ))) ) << 16) | (  ((int)(((  ((int)(((     5) << 4) | (     5))) ) << 8) | (   ((int)(((eItsMe) << 4) | (eItsMe))) )))))) ;
-      states[3] = ((int)(((  ((int)(((  ((int)(((      6) << 4) | (     6)))  ) << 8) | (((int)(((eError) << 4) | (      5))) ))) ) << 16) | (  ((int)(((  ((int)(((eError) << 4) | (     5))) ) << 8) | (   ((int)(((     5) << 4) | (     5))) )))))) ;
-      states[4] = ((int)(((  ((int)(((  ((int)((( eError) << 4) | (     5)))  ) << 8) | (((int)(((     5) << 4) | (      5))) ))) ) << 16) | (  ((int)(((  ((int)(((     8) << 4) | (     8))) ) << 8) | (   ((int)(((     6) << 4) | (     7))) )))))) ;
-      states[5] = ((int)(((  ((int)(((  ((int)(((      5) << 4) | (     5)))  ) << 8) | (((int)(((eError) << 4) | ( eError))) ))) ) << 16) | (  ((int)(((  ((int)(((eError) << 4) | (     5))) ) << 8) | (   ((int)(((     5) << 4) | (     5))) )))))) ;
-      states[6] = ((int)(((  ((int)(((  ((int)((( eStart) << 4) | (eStart)))  ) << 8) | (((int)(((eError) << 4) | (      5))) ))) ) << 16) | (  ((int)(((  ((int)(((eError) << 4) | (     5))) ) << 8) | (   ((int)(((     5) << 4) | (     5))) )))))) ;
+      states[2] = ((int)(((  ((int)(((  ((int)((( eError) << 4) | (eError)))  ) << 8) | (((int)(((     6) << 4) | (      6))) ))) ) << 16) | (  ((int)(((  ((int)(((     6) << 4) | (     6))) ) << 8) | (   ((int)(((eItsMe) << 4) | (eItsMe))) )))))) ;
+      states[3] = ((int)(((  ((int)(((  ((int)(((      6) << 4) | (     6)))  ) << 8) | (((int)(((eItsMe) << 4) | (      6))) ))) ) << 16) | (  ((int)(((  ((int)(((     6) << 4) | (     6))) ) << 8) | (   ((int)(((     6) << 4) | (     6))) )))))) ;
+      states[4] = ((int)(((  ((int)(((  ((int)((( eError) << 4) | (     7)))  ) << 8) | (((int)(((     7) << 4) | (      5))) ))) ) << 16) | (  ((int)(((  ((int)(((     6) << 4) | (     6))) ) << 8) | (   ((int)(((     6) << 4) | (     6))) )))))) ;
+      states[5] = ((int)(((  ((int)(((  ((int)(((      6) << 4) | (     6)))  ) << 8) | (((int)(((     6) << 4) | ( eError))) ))) ) << 16) | (  ((int)(((  ((int)(((     6) << 4) | (     6))) ) << 8) | (   ((int)(((     8) << 4) | (     5))) )))))) ;
+      states[6] = ((int)(((  ((int)(((  ((int)((( eStart) << 4) | (eStart)))  ) << 8) | (((int)(((eError) << 4) | ( eError))) ))) ) << 16) | (  ((int)(((  ((int)(((     6) << 4) | (     6))) ) << 8) | (   ((int)(((     6) << 4) | (     6))) )))))) ;
 
 
 
-      charset =  "UTF-16LE";
+      charset =  "UTF-16BE";
       stFactor =  6;
 
    }

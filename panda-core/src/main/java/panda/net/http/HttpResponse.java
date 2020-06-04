@@ -20,10 +20,10 @@ import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.lang.Strings;
+import panda.lang.chardet.CharDetects;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.net.Inets;
-import panda.util.chardet.CharDetects;
 
 /**
  */

@@ -1,4 +1,4 @@
-package panda.util.chardet ;
+package panda.lang.chardet ;
 
 public class nsHZVerifier extends nsVerifier {
 
