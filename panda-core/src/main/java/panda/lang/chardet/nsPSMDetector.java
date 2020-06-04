@@ -1,10 +1,6 @@
-package panda.util.chardet;
+package panda.lang.chardet;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import panda.io.Streams;
-import panda.lang.Exceptions;
+import panda.lang.Arrays;
 
 public abstract class nsPSMDetector {
 	public static final int MAX_VERIFIERS = 16;
@@ -194,87 +190,68 @@ public abstract class nsPSMDetector {
 
 	protected abstract void Report(String charset);
 
-	public boolean HandleData(InputStream ins) throws IOException {
-		byte st;
+	protected boolean HandleData(byte[] in, int len) {
+		byte b, st;
 
-		int b;
-		while ((b = ins.read()) != Streams.EOF) {
+		for (int i = 0; i < len; i++) {
+			b = in[i];
 			for (int j = 0; j < mItems;) {
 				st = nsVerifier.getNextState(mVerifier[mItemIdx[j]], b, mState[j]);
-				// if (st != 0)
-				// System.out.println( "state(0x" + Integer.toHexString(0xFF&b) +") =>"+
-				// Integer.toHexString(st&0xFF)+ " " + mVerifier[mItemIdx[j]].charset());
-
 				if (st == nsVerifier.eItsMe) {
-
-					// System.out.println( "eItsMe(0x" + Integer.toHexString(0xFF&b) +") =>"+
-					// mVerifier[mItemIdx[j]].charset());
-
 					Report(mVerifier[mItemIdx[j]].charset());
 					mDone = true;
 					return mDone;
-
 				}
-				else if (st == nsVerifier.eError) {
-
-					// System.out.println( "eNotMe(0x" + Integer.toHexString(0xFF&b) +") =>"+
-					// mVerifier[mItemIdx[j]].charset());
+				
+				if (st == nsVerifier.eError) {
 					mItems--;
 					if (j < mItems) {
 						System.arraycopy(mItemIdx, j + 1, mItemIdx, j, mItems - j);
 						System.arraycopy(mState, j + 1, mState, j, mItems - j);
-//						mItemIdx[j] = mItemIdx[mItems];
-//						mState[j] = mState[mItems];
 					}
-
 				}
 				else {
-
 					mState[j++] = st;
-
 				}
 			}
 
 			if (mItems <= 1) {
-
 				if (1 == mItems) {
 					Report(mVerifier[mItemIdx[0]].charset());
 				}
 				mDone = true;
 				return mDone;
-
 			}
-			else {
 
-				int nonUCS2Num = 0;
-				int nonUCS2Idx = 0;
+			int nonUCS2Num = 0;
+			int nonUCS2Idx = 0;
 
-				for (int j = 0; j < mItems; j++) {
-					if ((!(mVerifier[mItemIdx[j]].isUCS2()))
-							&& (!(mVerifier[mItemIdx[j]].isUCS2()))) {
-						nonUCS2Num++;
-						nonUCS2Idx = j;
-					}
-				}
-
-				if (1 == nonUCS2Num) {
-					Report(mVerifier[mItemIdx[nonUCS2Idx]].charset());
-					mDone = true;
-					return mDone;
+			for (int j = 0; j < mItems; j++) {
+				if ((!(mVerifier[mItemIdx[j]].isUCS2()))
+						&& (!(mVerifier[mItemIdx[j]].isUCS2()))) {
+					nonUCS2Num++;
+					nonUCS2Idx = j;
 				}
 			}
 
-		} // End of for( i=0; i < len ...
+			if (1 == nonUCS2Num) {
+				Report(mVerifier[mItemIdx[nonUCS2Idx]].charset());
+				mDone = true;
+				return mDone;
+			}
+		}
 
-		if (mRunSampler)
-			Sample(ins);
+		if (mRunSampler) {
+			Sample(in, len);
+		}
 
 		return mDone;
 	}
 
-	public void DataEnd() {
-		if (mDone == true)
+	protected void DataEnd() {
+		if (mDone == true) {
 			return;
+		}
 
 		if (mItems == 2) {
 			if ((mVerifier[mItemIdx[0]].charset()).equals("GB18030")) {
@@ -288,20 +265,15 @@ public abstract class nsPSMDetector {
 		}
 
 		if (mRunSampler) {
-			try {
-				Sample(Streams.closedInputStream(), true);
-			}
-			catch (IOException e) {
-				throw Exceptions.wrapThrow(e);
-			}
+			Sample(null, 0, true);
 		}
 	}
 
-	public void Sample(InputStream ins) throws IOException {
-		Sample(ins, false);
+	protected void Sample(byte[] in, int len) {
+		Sample(in, len, false);
 	}
 
-	public void Sample(InputStream ins, boolean aLastChance) throws IOException {
+	protected void Sample(byte[] in, int len, boolean aLastChance) {
 		int possibleCandidateNum = 0;
 		int j;
 		int eucNum = 0;
@@ -317,7 +289,7 @@ public abstract class nsPSMDetector {
 		mRunSampler = (eucNum > 1);
 
 		if (mRunSampler) {
-			mRunSampler = mSampler.Sample(ins);
+			mRunSampler = mSampler.Sample(in, len);
 			if (((aLastChance && mSampler.GetSomeData()) || mSampler.EnoughData())
 					&& (eucNum == possibleCandidateNum)) {
 				mSampler.CalFreq();
@@ -351,13 +323,13 @@ public abstract class nsPSMDetector {
 
 	public String[] getProbableCharsets() {
 		if (mItems <= 0) {
-			String[] nomatch = new String[0];
-			return nomatch;
+			return Arrays.EMPTY_STRING_ARRAY;
 		}
 
 		String ret[] = new String[mItems];
-		for (int i = 0; i < mItems; i++)
+		for (int i = 0; i < mItems; i++) {
 			ret[i] = mVerifier[mItemIdx[i]].charset();
+		}
 		return ret;
 	}
 
