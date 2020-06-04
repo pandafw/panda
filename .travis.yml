@@ -9,7 +9,7 @@ git:
 
 branches:
   only:
-  - b1.5.x
+  - b1.7.x
 
 cache:
   directories:
