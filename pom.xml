@@ -6,7 +6,7 @@
 	<groupId>com.github.pandafw</groupId>
 	<artifactId>panda</artifactId>
 	<packaging>pom</packaging>
-	<version>1.6.1-SNAPSHOT</version>
+	<version>1.8.0-SNAPSHOT</version>
 
 	<name>Panda Framework</name>
 	<description>Panda Framework is a Java development framework, it can help you quickly create a WEB application.</description>
