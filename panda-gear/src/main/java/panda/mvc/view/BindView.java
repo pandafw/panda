@@ -55,8 +55,10 @@ public abstract class BindView extends DataView {
 
 	protected boolean sitemesh = false;
 
+	protected boolean includeParams = false;
+
 	protected String fields;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -149,6 +151,20 @@ public abstract class BindView extends DataView {
 	}
 
 	/**
+	 * @return the includeParams
+	 */
+	public boolean isIncludeParams() {
+		return includeParams;
+	}
+
+	/**
+	 * @param includeParams the includeParams to set
+	 */
+	public void setIncludeParams(boolean includeParams) {
+		this.includeParams = includeParams;
+	}
+
+	/**
 	 * @return the fields
 	 */
 	public String getFields() {
@@ -218,7 +234,9 @@ public abstract class BindView extends DataView {
 		}
 		
 		result.put("success", success);
-		result.put("params", ac.getReqParams());
+		if (includeParams) {
+			result.put("params", ac.getReqParams());
+		}
 		result.put("result", ac.getResult());
 
 		if (Strings.isNotEmpty(fields)) {

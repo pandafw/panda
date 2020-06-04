@@ -13,9 +13,9 @@ import panda.mvc.view.Views;
 @To(Views.SJSON)
 public class MainModule {
 
-	@At("/param/a")
+	@At("/param/json")
 	@To(Views.SJSON)
-	public List<String> f_A(@Param("ids") long[] ids) {
+	public List<String> json(@Param("ids") long[] ids) {
 		List<String> ls = new ArrayList<String>();
 		for (long n : ids) {
 			ls.add(String.valueOf(n));
@@ -23,10 +23,19 @@ public class MainModule {
 		return ls;
 	}
 
-	@At("/param/b")
+	@At("/param/raw")
 	@To(Views.RAW)
-	public String f_B(@Param("ids") long[] ids) {
+	public String raw(@Param("ids") long[] ids) {
 		return Jsons.toJson(ids);
 	}
 
+	@At("/param/inc")
+	@To("sjson: { 'includeParams': true }")
+	public List<String> json_with_params(@Param("ids") long[] ids) {
+		List<String> ls = new ArrayList<String>();
+		for (long n : ids) {
+			ls.add(String.valueOf(n));
+		}
+		return ls;
+	}
 }
