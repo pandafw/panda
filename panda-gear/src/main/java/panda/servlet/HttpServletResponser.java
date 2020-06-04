@@ -299,12 +299,11 @@ public class HttpServletResponser {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public void writeHeader() throws IOException {
-		if (Strings.isNotEmpty(charset)) {
+		if (Charsets.isSupportedCharset(charset)) {
 			response.setCharacterEncoding(charset);
 		}
 
-		if (Strings.isEmpty(contentType)
-				&& Strings.isNotEmpty(fileName)) {
+		if (Strings.isEmpty(contentType) && Strings.isNotEmpty(fileName)) {
 			contentType = MimeTypes.getMimeType(fileName);
 		}
 
