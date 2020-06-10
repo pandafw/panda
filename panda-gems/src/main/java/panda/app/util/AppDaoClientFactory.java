@@ -38,11 +38,15 @@ public class AppDaoClientFactory {
 	private static final String GAE = "gae";
 	private static final String MONGO = "mongo";
 	private static final String JNDI = "jndi";
+	private static final String SIMPLE = "simple";
 	private static final String LOCAL = "local";
 	private static final String DBCP = "dbcp";
 	private static final String DBCP2 = "dbcp2";
 	private static final String DBCP_CLASS = "org.apache.commons.dbcp.BasicDataSource";
 	private static final String DBCP2_CLASS = "org.apache.commons.dbcp2.BasicDataSource";
+	private static final String DRUID = "druid";
+	private static final String DRUID_CLASS = "com.alibaba.druid.pool.DruidDataSource";
+	
 	
 	@IocInject(required=false)
 	protected ServletContext servlet;
@@ -84,13 +88,7 @@ public class AppDaoClientFactory {
 	public void destroy() {
 		if (daoClient instanceof SqlDaoClient) {
 			DataSource ds = ((SqlDaoClient)daoClient).getDataSource();
-			if (ds instanceof SimpleDataSource) {
-				((SimpleDataSource)ds).close();
-			}
-			else if (DBCP_CLASS.equals(ds.getClass().getName()) || 
-					DBCP2_CLASS.equals(ds.getClass().getName())) {
-				Methods.safeCall(ds, "close");
-			}
+			Methods.safeCall(ds, "close");
 		}
 	}
 	
@@ -107,7 +105,7 @@ public class AppDaoClientFactory {
 			}
 	
 			try {
-				String factory = settings.getProperty(SET.DATA + '.' + ds, ds);
+				String factory = settings.getProperty(SET.DATA + '.' + ds);
 				if (GAE.equalsIgnoreCase(factory)) {
 					Class cls = Classes.getClass("panda.gae.dao.GaeDaoClient");
 					DaoClient gdc = (DaoClient)Methods.invokeStaticMethod(cls, "i");
@@ -145,8 +143,17 @@ public class AppDaoClientFactory {
 				else if (DBCP2.equalsIgnoreCase(factory)) {
 					clazz = DBCP2_CLASS;
 				}
+				else if (DRUID.equalsIgnoreCase(factory)) {
+					clazz = DRUID_CLASS;
+				}
 				else if (LOCAL.equalsIgnoreCase(factory)) {
 					clazz = ThreadLocalDataSource.class.getName();
+				}
+				else if (SIMPLE.equalsIgnoreCase(factory)) {
+					clazz = SimpleDataSource.class.getName();
+				}
+				else if (Strings.isNotEmpty(factory)) {
+					clazz = factory;
 				}
 				
 				DataSource jds = createSqlDataSource(clazz, SET.DATA + '.' + ds + '.');
