@@ -61,5 +61,12 @@ public @interface IocBean {
 	 */
 	String[] fields() default {};
 
+	/**
+	 * bean factory method
+	 * ${xxx}: EL expression
+	 * %{xxx}: EL expression
+	 * #xx.yy: ioc bean method call
+	 * @return bean factory
+	 */
 	String factory() default "";
 }
