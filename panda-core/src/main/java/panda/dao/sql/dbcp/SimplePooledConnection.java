@@ -39,15 +39,6 @@ public class SimplePooledConnection extends ProxyConnection {
 	}
 
 	/**
-	 * Method to see if the connection is usable, run ping query if pingQuery is setted
-	 * 
-	 * @return True if the connection is usable
-	 */
-	public boolean testValid() {
-		return isValid() && dataSource.pingConnection(this);
-	}
-
-	/**
 	 * Getter for the time that the connection was created
 	 * 
 	 * @return The creation timestamp
