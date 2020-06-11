@@ -1,9 +1,11 @@
 package panda.dao.sql.dbcp;
 
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.Properties;
 
 import panda.cast.Castors;
+import panda.lang.Threads;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -34,25 +36,28 @@ public class SimpleDataSourceTest extends TestCase {
 	}
 	
 	class TestThread extends Thread {
+		int loops;
 		long timeout;
 		
-		TestThread(long timeout) {
+		TestThread(int loops, long timeout) {
+			this.loops = loops;
 			this.timeout = timeout;
 		}
 		
 		public void run() {
 			try {
 				log.debug(this.getName() + " start.");
-
-				SimplePooledConnection c = (SimplePooledConnection)simpleDataSource.getConnection();
 				
-				Statement s = c.createStatement();
-				s.execute("SELECT * FROM INFORMATION_SCHEMA.TABLES");
-				s.close();
-				
-				Thread.sleep(timeout);
-				c.close();
-				
+				for (int i = 0; i < loops; i++) {
+					SimplePooledConnection c = (SimplePooledConnection)simpleDataSource.getConnection();
+					
+					Statement s = c.createStatement();
+					s.execute("SELECT * FROM INFORMATION_SCHEMA.TABLES");
+					s.close();
+					
+					Thread.sleep(timeout);
+					c.close();
+				}
 				log.debug(this.getName() + " end.");
 			}
 			catch (Exception e) {
@@ -62,33 +67,24 @@ public class SimpleDataSourceTest extends TestCase {
 		}
 	}
 	
-	private void printStatus() {
-		do {
-			try {
-				Thread.sleep(1000);
-				log.debug(simpleDataSource.getStatus());
-			}
-			catch (InterruptedException e) {
-			}
-		} 
-		while (simpleDataSource.getActives() > 0);
-	}
-
 	/**
 	 * test01
 	 */
 	public void test01() {
-		log.debug("+++++++++++++test01+++++++++++++++");
-		try {
-			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaxCheckoutMillis() - 1000)).start();
-			}
-			printStatus();
+		System.out.println("+++++++++++++test01+++++++++++++++");
+
+		LinkedList<Thread> ts = new LinkedList<Thread>();
+		for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
+			Thread t = (new TestThread(100, 10));
+			t.start();
+			ts.push(t);
 		}
-		catch (Exception e) {
-			log.error("exception", e);
-			fail(e.getMessage());
+		
+		while (ts.size() > 0) {
+			Threads.safeJoin(ts.pop());
 		}
+
+		System.out.println(simpleDataSource.toString());
 		
 		if (lastError != null) {
 			fail(lastError.getMessage());
@@ -99,18 +95,21 @@ public class SimpleDataSourceTest extends TestCase {
 	 * test02
 	 */
 	public void test02() {
-		log.debug("+++++++++++++test02+++++++++++++++");
-		try {
-			for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
-				(new TestThread(simpleDataSource.getPool().getMaxCheckoutMillis() + 1000)).start();
-			}
-			printStatus();
-		}
-		catch (Exception e) {
-			log.error("exception", e);
-			fail(e.getMessage());
+		System.out.println("+++++++++++++test02+++++++++++++++");
+
+		LinkedList<Thread> ts = new LinkedList<Thread>();
+		for (int i = 0; i < simpleDataSource.getPool().getMaxActive() * 2; i++) {
+			Thread t = (new TestThread(10, 100));
+			t.start();
+			ts.push(t);
 		}
 		
+		while (ts.size() > 0) {
+			Threads.safeJoin(ts.pop());
+		}
+
+		System.out.println(simpleDataSource.toString());
+
 		if (lastError != null) {
 			fail(lastError.getMessage());
 		}

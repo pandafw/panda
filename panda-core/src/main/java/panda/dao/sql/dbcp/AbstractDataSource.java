@@ -112,7 +112,7 @@ public abstract class AbstractDataSource implements DataSource {
 		this.jdbc = jdbc;
 	}
 
-	protected void checkoutConnection(Connection con) throws SQLException {
+	protected void setConnectionProperties(Connection con) throws SQLException {
 		if (con.isReadOnly() != jdbc.readOnly) {
 			con.setReadOnly(jdbc.readOnly);
 		}
@@ -127,11 +127,10 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 	
 	/**
-	 * Returns the status of the connection pool
-	 * 
-	 * @return The status
+	 * @return the status of the connection pool
 	 */
-	public String getStatus() {
+	@Override
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n===============================================================");
