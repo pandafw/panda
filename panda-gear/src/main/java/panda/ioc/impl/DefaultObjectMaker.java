@@ -28,13 +28,23 @@ import panda.log.Logs;
 
 import reactor.core.Exceptions;
 
-/**
- * 在这里，需要考虑 AOP
- * 
- */
 public class DefaultObjectMaker implements ObjectMaker {
 
 	private static final Log log = Logs.getLog(DefaultObjectMaker.class);
+
+	protected void saveObjectProxy(IocMaking im, IocObject iobj, ObjectProxy op) {
+		if (im.getName() != null) {
+			if (!im.getIoc().getContext().save(iobj.getScope(), im.getName(), op)) {
+				throw new IocException("Failed to save '" + im.getName() + "' to " + iobj.getScope() + " IocContext");
+			}
+		}
+	}
+
+	protected void removeObjectProxy(IocMaking im, IocObject iobj) {
+		if (im.getName() != null) {
+			im.getIoc().getContext().remove(iobj.getScope(), im.getName());
+		}
+	}
 
 	public ObjectProxy makeSingleton(IocMaking im, IocObject iobj) {
 		// get Mirror class for AOP
@@ -43,14 +53,6 @@ public class DefaultObjectMaker implements ObjectMaker {
 		try {
 			SingletonObjectProxy sop = new SingletonObjectProxy();
 			
-			// save singleton object to context
-			// !! important: avoid reference loop
-			if (im.getName() != null) {
-				if (!im.getIoc().getContext().save(iobj.getScope(), im.getName(), sop)) {
-					throw new IocException("Failed to save '" + im.getName() + "' to " + iobj.getScope() + " IocContext");
-				}
-			}
-
 			// set event handlers
 			if (iobj.getEvents() != null) {
 				sop.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
@@ -59,18 +61,23 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 			if (iobj.getValue() != null) {
 				sop.setObject(iobj.getValue());
+
+				// save singleton object to context
+				saveObjectProxy(im, iobj, sop);
 				return sop;
 			}
 
 			ObjectWeaver ow = makeWeaver(mirror, im, iobj);
 
 			// create singleton object
-			// !! important: avoid reference loop
 			Object obj = ow.born(im);
 
 			// set object to proxy
-			// !! important: avoid reference loop
 			sop.setObject(obj);
+
+			// save singleton object to context
+			// !! important: avoid reference loop
+			saveObjectProxy(im, iobj, sop);
 
 			// inject fields
 			ow.fill(im, obj);
@@ -86,9 +93,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 			}
 			
 			// remove ObjectProxy from context
-			if (im.getName() != null) {
-				im.getIoc().getContext().remove(iobj.getScope(), im.getName());
-			}
+			removeObjectProxy(im, iobj);
 			
 			if (e instanceof IocException) {
 				throw (IocException)e;
@@ -108,11 +113,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 			
 			// save dynamic object to context
 			// !! important: avoid reference loop
-			if (im.getName() != null) {
-				if (!im.getIoc().getContext().save(iobj.getScope(), im.getName(), dop)) {
-					throw new IocException("Failed to save '" + im.getName() + "' to " + iobj.getScope() + " IocContext");
-				}
-			}
+			saveObjectProxy(im, iobj, dop);
 
 			// set fetch event handler
 			// depose event is not support for dynamic object
@@ -128,9 +129,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 			}
 			
 			// remove ObjectProxy from context
-			if (im.getName() != null) {
-				im.getIoc().getContext().remove(iobj.getScope(), im.getName());
-			}
+			removeObjectProxy(im, iobj);
 			
 			if (e instanceof IocException) {
 				throw (IocException)e;
@@ -139,28 +138,25 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 	}
 
-	public ObjectWeaver makeWeaver(Class<?> mirror, IocMaking im, IocObject iobj) {
-		ObjectWeaver ow;
-
+	protected ObjectWeaver makeWeaver(Class<?> mirror, IocMaking im, IocObject iobj) {
 		if (im.getName() == null) {
-			ow = createWeaver(mirror, im, iobj);
+			return createWeaver(mirror, im, iobj);
 		}
-		else {
-			ow = im.getWeavers().get(im.getName());
-			if (ow == null) {
-				synchronized (im.getWeavers()) {
-					ow = im.getWeavers().get(im.getName());
-					if (ow == null) {
-						ow = createWeaver(mirror, im, iobj);
-						im.getWeavers().put(im.getName(), ow);
-					}
+
+		ObjectWeaver ow = im.getWeavers().get(im.getName());
+		if (ow == null) {
+			synchronized (im.getWeavers()) {
+				ow = im.getWeavers().get(im.getName());
+				if (ow == null) {
+					ow = createWeaver(mirror, im, iobj);
+					im.getWeavers().put(im.getName(), ow);
 				}
 			}
 		}
 		return ow;
 	}
 
-	private ObjectWeaver createWeaver(Class<?> mirror, IocMaking im, IocObject iobj) {
+	protected ObjectWeaver createWeaver(Class<?> mirror, IocMaking im, IocObject iobj) {
 		// 准备对象的编织方式
 		DefaultObjectWeaver dw = new DefaultObjectWeaver();
 
