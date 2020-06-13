@@ -25,7 +25,6 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Classes;
 import panda.lang.Collections;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.Methods;
 import panda.log.Log;
@@ -98,8 +97,8 @@ public class AppDaoClientFactory {
 	}
 
 	public DaoClient buildDaoClient(String... dss) {
-		for (int i = 0; i < dss.length; i++) {
-			String ds = dss[i];
+		Throwable ex = null;
+		for (String ds : dss) {
 			if (Strings.isEmpty(ds)) {
 				continue;
 			}
@@ -162,16 +161,11 @@ public class AppDaoClientFactory {
 				return sqlDaoClient;
 			}
 			catch (Exception e) {
-				if (i < dss.length) {
-					log.warn("Failed to build DaoClient for [" + ds + "]: " + e.getMessage(), e);
-				}
-				else {
-					log.error("Failed to build DaoClient for [" + ds + "]", e);
-					throw Exceptions.wrapThrow(e);
-				}
+				ex = e;
+				log.warn("Failed to build DaoClient for [" + ds + "]: " + e.getMessage());
 			}
 		}
-		throw new DaoException("Failed to build DaoClient for [" + Strings.join(dss, ", ") + "]");
+		throw new DaoException("Failed to build DaoClient for [" + Strings.join(dss, ", ") + "]: " + ex.getMessage(), ex);
 	}
 	
 	private DataSource createSqlDataSource(String clazz, String prefix) {
