@@ -1,14 +1,14 @@
 <#macro snavi ap ac ic tx>
 	<#if a.canAccess(ac)>
-		<li<#if path?starts_with(ap)> class="active"</#if>><@p.a action=ac><i class="${a.getText(ic)}"></i> <span><@p.text name=tx/></span></@p.a></li>
+		<li class="nav-item<#if path?starts_with(ap)> active</#if>"><@p.a cssClass="nav-link" action=ac><i class="${a.getText(ic)}"></i> <span><@p.text name=tx/></span></@p.a></li>
 	</#if>
 </#macro>
-<div id="navi_super" class="panel panel-danger side-navi">
-	<div class="panel-heading">
+<div id="navi_super" class="panel panel-danger card side-navi">
+	<div class="panel-heading card-header bg-danger text-white">
 		<i class="fa fa-wrench"></i> <span><@p.text name="navi-super"/></span>
 	</div>
-	<div class="panel-body">
-		<ul class="nav nav-stacked">
+	<div class="panel-body card-body">
+		<ul class="nav nav-stacked flex-column">
 			<@snavi ap="/super/cmd"       ac="/super/cmd"           ic="icon-super-cmdexec"    tx="navi-super-cmdexec"/>
 			<@snavi ap="/super/el"        ac="/super/el"            ic="icon-super-eleval"     tx="navi-super-eleval"/>
 			<@snavi ap="/super/hash"      ac="/super/hash"          ic="icon-super-hash"       tx="navi-super-hash"/>
