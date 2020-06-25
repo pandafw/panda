@@ -21,6 +21,7 @@ import panda.dao.sql.Sqls;
 import panda.dao.sql.dbcp.SimpleDataSource;
 import panda.dao.sql.dbcp.ThreadLocalDataSource;
 import panda.io.Settings;
+import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Classes;
@@ -51,6 +52,9 @@ public class AppDaoClientFactory {
 	protected ServletContext servlet;
 	
 	@IocInject
+	protected Ioc ioc;
+	
+	@IocInject
 	protected Settings settings;
 
 	@IocInject(value=MVC.DAO_QUERY_TIMEOUT, required=false)
@@ -73,7 +77,8 @@ public class AppDaoClientFactory {
 	}
 
 	public void initialize() throws Exception {
-		daoClient = buildDaoClient();
+		String[] dss = Strings.split(settings.getProperty(SET.DATA_SOURCE), ", ");
+		daoClient = buildDaoClient(dss);
 		
 		String prefix = settings.getProperty(SET.DATA_PREFIX);
 		if (Strings.isNotEmpty(prefix)) {
@@ -91,11 +96,6 @@ public class AppDaoClientFactory {
 		}
 	}
 	
-	protected DaoClient buildDaoClient() {
-		String[] dss = Strings.split(settings.getProperty(SET.DATA_SOURCE), ", ");
-		return buildDaoClient(dss);
-	}
-
 	public DaoClient buildDaoClient(String... dss) {
 		Throwable ex = null;
 		for (String ds : dss) {
@@ -104,7 +104,7 @@ public class AppDaoClientFactory {
 			}
 	
 			try {
-				String factory = settings.getProperty(SET.DATA + '.' + ds);
+				String factory = settings.getProperty(SET.DATA + '.' + ds, ds);
 				if (GAE.equalsIgnoreCase(factory)) {
 					Class cls = Classes.getClass("panda.gae.dao.GaeDaoClient");
 					DaoClient gdc = (DaoClient)Methods.invokeStaticMethod(cls, "i");
@@ -135,27 +135,23 @@ public class AppDaoClientFactory {
 					return sqlDaoClient;
 				}
 
-				String clazz = SimpleDataSource.class.getName();
 				if (DBCP.equalsIgnoreCase(factory)) {
-					clazz = DBCP_CLASS;
+					factory = DBCP_CLASS;
 				}
 				else if (DBCP2.equalsIgnoreCase(factory)) {
-					clazz = DBCP2_CLASS;
+					factory = DBCP2_CLASS;
 				}
 				else if (DRUID.equalsIgnoreCase(factory)) {
-					clazz = DRUID_CLASS;
+					factory = DRUID_CLASS;
 				}
 				else if (LOCAL.equalsIgnoreCase(factory)) {
-					clazz = ThreadLocalDataSource.class.getName();
+					factory = ThreadLocalDataSource.class.getName();
 				}
-				else if (SIMPLE.equalsIgnoreCase(factory)) {
-					clazz = SimpleDataSource.class.getName();
-				}
-				else if (Strings.isNotEmpty(factory)) {
-					clazz = factory;
+				else if (SIMPLE.equalsIgnoreCase(factory) || ds.equalsIgnoreCase(factory)) {
+					factory = SimpleDataSource.class.getName();
 				}
 				
-				DataSource jds = createSqlDataSource(clazz, SET.DATA + '.' + ds + '.');
+				DataSource jds = createSqlDataSource(factory, SET.DATA + '.' + ds + '.');
 				SqlDaoClient sqlDaoClient = new SqlDaoClient();
 				sqlDaoClient.setDataSource(jds);
 				return sqlDaoClient;
@@ -168,9 +164,13 @@ public class AppDaoClientFactory {
 		throw new DaoException("Failed to build DaoClient for [" + Strings.join(dss, ", ") + "]: " + ex.getMessage(), ex);
 	}
 	
-	private DataSource createSqlDataSource(String clazz, String prefix) {
+	private DataSource createSqlDataSource(String clazz, String prefix) throws Exception {
 		log.info("Create SQL JDBC DataSource: " + clazz + " - " + prefix);
 
+		if (Strings.startsWithChar(clazz, '#')) {
+			return ioc.get(DataSource.class, Strings.substring(clazz, 1));
+		}
+		
 		Map<String, String> dps = new TreeMap<String, String>(Collections.subMap(settings, prefix));
 		String web = servlet != null ? servlet.getRealPath("/") : "web";
 		for (Entry<String, String> en : dps.entrySet()) {
@@ -201,6 +201,9 @@ public class AppDaoClientFactory {
 			throw new IllegalArgumentException(sb.toString());
 		}
 
+		if (clazz.equals(DRUID_CLASS)) {
+			Methods.invokeMethod(ds, "init");
+		}
 		return ds;
 	}
 }
