@@ -8,7 +8,6 @@ import java.util.List;
 import panda.app.auth.Auth;
 import panda.app.bean.ListResult;
 import panda.app.constant.AUTH;
-import panda.gems.files.action.FileItemListAction;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;

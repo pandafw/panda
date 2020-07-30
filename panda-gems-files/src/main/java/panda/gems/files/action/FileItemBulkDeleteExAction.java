@@ -7,7 +7,6 @@ import java.util.Map;
 
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.gems.files.action.FileItemBulkDeleteAction;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;

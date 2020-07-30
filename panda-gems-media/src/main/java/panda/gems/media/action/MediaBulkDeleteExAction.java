@@ -4,7 +4,6 @@ import java.util.List;
 
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.gems.media.action.MediaBulkDeleteAction;
 import panda.gems.media.entity.Media;
 import panda.gems.media.store.MediaDataStore;
 import panda.ioc.annotation.IocInject;

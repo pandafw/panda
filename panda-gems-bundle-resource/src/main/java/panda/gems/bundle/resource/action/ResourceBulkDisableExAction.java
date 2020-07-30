@@ -6,7 +6,6 @@ import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.constant.VAL;
 import panda.dao.query.DataQuery;
-import panda.gems.bundle.resource.action.ResourceBulkDisableAction;
 import panda.gems.bundle.resource.entity.Resource;
 import panda.mvc.annotation.At;
 
