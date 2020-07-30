@@ -4,7 +4,10 @@ title=Hash
 
 btn-hash=Hash
 
-p.s=String hash
-p.f=File hash
+tab-string=String hash
+tab-file=File hash
+
+p.s=String
+p.f=File
 p.s-dip=Press Ctrl+Enter to submit
 

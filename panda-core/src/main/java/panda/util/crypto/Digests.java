@@ -50,7 +50,7 @@ public class Digests {
 			return MessageDigest.getInstance(algorithm);
 		}
 		catch (NoSuchAlgorithmException e) {
-			throw new IllegalArgumentException(e);
+			throw new IllegalArgumentException("Failed to initialize MessageDigest for " + algorithm, e);
 		}
 	}
 
