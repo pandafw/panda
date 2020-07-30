@@ -1,4 +1,4 @@
 icon=fa fa-terminal
 
-title=Command
+title=Shell
 
