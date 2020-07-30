@@ -11,11 +11,11 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="dataexp" cssClass="p-eform" method="post" theme="bs3h">
-		<@p.select key="target" list="%{action.targets}"/>
+	<@p.form id="dataexp" cssClass="p-eform" method="post" theme="bs3h" loadmask="false">
+		<@p.select key="source" list="%{action.sources}"/>
 		<@p.textfield key="start" size="20" />
 		<@p.textfield key="limit" size="20" />
-		<@p.radio key="format" list=['CSV', 'TSV', 'XLS', 'XLSX' ] />
+		<@p.radio key="format" list=['CSV', 'TSV', 'XLS', 'XLSX'] />
 		<@p.div cssClass="p-buttons">
 			<@p.submit icon="download" label="#(btn-download)"/>
 		</@p.div>

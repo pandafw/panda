@@ -60,36 +60,36 @@ public class DataExportAction extends BaseAction {
 	}
 	
 	public static class Arg {
-		public String target;
+		public String source;
 		public int start = 0;
 		public int limit = 1000;
 		public String format = "CSV";
 	}
 
 	protected Arg arg;
-	protected Set<String> targetSet;
+	protected Set<String> sourceSet;
 	
 	/**
-	 * @return the targetSet
+	 * @return the sourceSet
 	 */
-	public Set<String> getTargets() {
-		if (targetSet == null) {
-			targetSet = new TreeSet<String>();
+	public Set<String> getSources() {
+		if (sourceSet == null) {
+			sourceSet = new TreeSet<String>();
 			for (Class<?> c : getDaoClient().getEntities().keySet()) {
-				targetSet.add(c.getName());
+				sourceSet.add(c.getName());
 			}
 		}
-		return targetSet;
+		return sourceSet;
 	}
 
-	protected Entity<?> resolveTargetEntity(String target) {
+	protected Entity<?> resolveSourceEntity(String source) {
 		for (Entry<Class<?>, Entity<?>> en : getDaoClient().getEntities().entrySet()) {
-			if (en.getKey().getName().equalsIgnoreCase(target)) {
+			if (en.getKey().getName().equalsIgnoreCase(source)) {
 				return en.getValue();
 			}
 		}
 
-		throw new IllegalArgumentException("Invalid target type: " + target);
+		throw new IllegalArgumentException("Invalid source: " + source);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class DataExportAction extends BaseAction {
 	public Object execute(@Param Arg arg) throws Exception {
 		this.arg = arg;
 
-		if (Strings.isEmpty(arg.target)) {
+		if (Strings.isEmpty(arg.source)) {
 			return null;
 		}
 
@@ -113,11 +113,11 @@ public class DataExportAction extends BaseAction {
 		}
 		else if ("XLS".equalsIgnoreCase(arg.format)) {
 			OutputStream os = getResponse().getOutputStream();
-			lw = new XlsWriter(os, arg.target);
+			lw = new XlsWriter(os, arg.source);
 		}
 		else if ("XLSX".equalsIgnoreCase(arg.format)) {
 			OutputStream os = getResponse().getOutputStream();
-			lw = new XlsxWriter(os, arg.target);
+			lw = new XlsxWriter(os, arg.source);
 		}
 		else {
 			PrintWriter pw = getResponse().getWriter();
@@ -134,12 +134,12 @@ public class DataExportAction extends BaseAction {
 
 			hss.setCharset(Charsets.UTF_8);
 			hss.setContentType(MimeTypes.getMimeType('.' + arg.format));
-			hss.setFileName(arg.target + '-' + DateTimes.datetimeLogFormat().format(DateTimes.getDate()) + '.' + Strings.lowerCase(arg.format));
+			hss.setFileName(arg.source + '-' + DateTimes.datetimeLogFormat().format(DateTimes.getDate()) + '.' + Strings.lowerCase(arg.format));
 			hss.writeHeader();
 			
 			List<String> line = new ArrayList<String>();
 			
-			Entity<?> en = resolveTargetEntity(arg.target);
+			Entity<?> en = resolveSourceEntity(arg.source);
 	
 			// head
 			for (EntityField ef : en.getFields()) {

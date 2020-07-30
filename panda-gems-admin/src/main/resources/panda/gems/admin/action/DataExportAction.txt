@@ -2,7 +2,7 @@ icon=fa fa-cloud-download
 
 title=Data Export
 
-p.target=Target
+p.source=Source
 p.start=Start
 p.limit=Limit
 p.format=Format
