@@ -1,14 +1,18 @@
 package panda.gems.admin.action;
 
+import java.io.File;
 import java.io.InputStream;
 
 import panda.app.action.BaseAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
+import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Processors;
 import panda.lang.Processors.Waiter;
+import panda.lang.Randoms;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.lang.time.StopWatch;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
@@ -18,22 +22,15 @@ import panda.mvc.view.Views;
 
 
 @Auth(AUTH.SUPER)
-@At("${!!super_path|||'/super'}/cmd")
+@At("${!!super_path|||'/super'}/shell")
 @To(Views.SFTL)
-public class CommandAction extends BaseAction {
+public class ShellAction extends BaseAction {
 	public static class Result {
-		private String command;
 		private int code = -1;
 		private String stdout;
 		private String stderr;
 		private String elapsed;
 
-		public String getCommand() {
-			return command;
-		}
-		public void setCommand(String command) {
-			this.command = command;
-		}
 		public int getCode() {
 			return code;
 		}
@@ -69,21 +66,14 @@ public class CommandAction extends BaseAction {
 	@At
 	@TokenProtect
 	@To(Views.SJSON)
-	public Object json(@Param("cmd") String cmd, @Param("wait") int wait) {
-		return exec(cmd, wait);
-	}
-	
-	@At
-	@TokenProtect
-	@To(Views.SXML)
-	public Object xml(@Param("cmd") String cmd, @Param("wait") int wait) {
-		return exec(cmd, wait);
-	}
-
-	protected Object exec(String cmd, int wait) {
+	public Object exec(@Param("cmd") String cmd, @Param("wait") int wait) throws Exception {
 		if (Strings.isEmpty(cmd)) {
 			return null;
 		}
+
+		File tf = File.createTempFile(Randoms.randUUID32(), Systems.IS_OS_WINDOWS ? ".bat" : ".sh");
+		tf.setExecutable(true);
+		Files.write(tf, Systems.IS_OS_WINDOWS ? cmd : Strings.remove(cmd, '\r'));
 
 		// check wait seconds
 		if (wait < 1 || wait > 300) {
@@ -93,12 +83,10 @@ public class CommandAction extends BaseAction {
 
 		Process p = null;
 		Result r = new Result();
-		r.setCommand(cmd);
 
-		StopWatch watch = new StopWatch();
-		
 		try {
-			p = Runtime.getRuntime().exec(cmd);
+			StopWatch watch = new StopWatch();
+			p = Runtime.getRuntime().exec(tf.getAbsolutePath());
 			Waiter w = new Waiter(p);
 			w.start();
 			
@@ -126,15 +114,11 @@ public class CommandAction extends BaseAction {
 			r.elapsed = watch.toString();
 			return r;
 		}
-		catch (Exception e) {
-			getContext().setError(e);
-			
+		finally {
 			if (p != null) {
 				p.destroy();
 			}
-			return null;
-		}
-		finally {
+			tf.delete();
 		}
 	}
 
