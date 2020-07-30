@@ -2,7 +2,6 @@ package panda.gems.media.action;
 
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.gems.media.action.MediaListAction;
 import panda.gems.media.entity.Media;
 import panda.mvc.annotation.At;
 
