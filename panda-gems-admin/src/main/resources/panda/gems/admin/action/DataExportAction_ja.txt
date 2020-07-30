@@ -1,0 +1,6 @@
+title=データエクスポート
+
+p.source=エクスポート元
+p.start=スタート
+p.limit=リミット
+p.format=フォーマット

@@ -1,0 +1,6 @@
+title=数据汇出
+
+p.source=数据源
+p.start=開始行
+p.limit=最大行数
+p.format=格式
