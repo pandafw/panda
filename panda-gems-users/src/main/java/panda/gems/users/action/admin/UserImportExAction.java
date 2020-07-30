@@ -16,29 +16,29 @@ public class UserImportExAction extends UserImportAction {
 	@IocInject
 	private PasswordHelper pwHelper;
 	
-	private int pwdhashLength = -1;
+	private int pwHashLength = -1;
 	
 	public UserImportExAction() {
 		super();
 	}
 
 	protected void checkNotNulls(User data) {
-		// disable pwd null check
-		String pwd = data.getPassword();
+		// disable password null check
+		String pw = data.getPassword();
 		data.setPassword("-");
 		try {
 			super.checkNotNulls(data);
 		}
 		finally {
-			data.setPassword(pwd);
+			data.setPassword(pw);
 		}
 	}
 
 	protected int getPasswordHashLength() {
-		if (pwdhashLength < 0) {
-			pwdhashLength = pwHelper.getPasswordHashLength();
+		if (pwHashLength < 0) {
+			pwHashLength = pwHelper.getPasswordHashLength();
 		}
-		return pwdhashLength;
+		return pwHashLength;
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class UserImportExAction extends UserImportAction {
 		if (Strings.isEmpty(data.getPassword())) {
 			data.setPassword(pwHelper.hashPassword(pwHelper.getDefaultPassword()));
 		}
-		else if (data.getPassword().length() != pwdhashLength) {
+		else if (data.getPassword().length() != getPasswordHashLength()) {
 			data.setPassword(pwHelper.hashPassword(data.getPassword()));
 		}
 
