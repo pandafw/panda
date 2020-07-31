@@ -83,7 +83,7 @@ public class JsonView extends BindView {
 		if (result != null) {
 			JsonSerializer js = Jsons.newJsonSerializer();
 
-			setSerializerOptions(js);
+			setSerializerOptions(ac, js);
 			js.setPrettyPrint(settings.getPropertyAsBoolean(SetConstants.MVC_VIEW_JSON_PRETTY, prettyPrint));
 
 			if (log.isDebugEnabled()) {

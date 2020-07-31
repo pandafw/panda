@@ -24,7 +24,6 @@ import panda.lang.CycleDetector;
 import panda.lang.Objects;
 import panda.lang.Strings;
 
-@SuppressWarnings("rawtypes")
 public abstract class AbstractSerializer extends AbstractBinder implements Serializer {
 	public static final int PRETTY_INDENT_FACTOR = 1;
 	
@@ -44,9 +43,6 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	/** serialize adapters */
 	protected Map<Class, SerializeAdapter> adapters = new HashMap<Class, SerializeAdapter>();
 
-	/** convert Date or Calendar object to milliseconds */
-	protected boolean dateToMillis = false;
-	
 	//-------------- internal --------------------- 
 	protected CycleDetector cycleDetector = new CycleDetector();
 
@@ -116,42 +112,32 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	}
 
 	/**
-	 * @return the dateToMillis
+	 * @param dateFormat the dateFormat to set
 	 */
-	public boolean isDateToMillis() {
-		return dateToMillis;
+	public void setDateFormat(String dateFormat) {
+		if (dateFormat == null) {
+			removeAdapter(Date.class);
+			removeAdapter(Calendar.class);
+		}
+		else if (Strings.isEmpty(dateFormat)) {
+			registerAdapter(Date.class, DateAdapter.toMillis);
+			registerAdapter(Calendar.class, CalendarAdapter.toMillis);
+		}
+		else {
+			registerAdapter(Date.class, new DateAdapter(dateFormat));
+			registerAdapter(Calendar.class, new CalendarAdapter(dateFormat));
+		}
 	}
-
-	/**
-	 * @param dateToMillis the dateToMillis to set
-	 */
-	public void setDateToMillis(boolean dateToMillis) {
-		this.dateToMillis = dateToMillis;
-	}
-
+	
 	//----------------------------------------------------------
 	public Map<Class, SerializeAdapter> getAdapters() {
 		return adapters;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> SerializeAdapter<T> getDateAdapter(Class<T> type) {
-		if (dateToMillis) {
-			if (Date.class.isAssignableFrom(type)) {
-				return (SerializeAdapter<T>)DateAdapter.toMillis;
-			}
-			if (Calendar.class.isAssignableFrom(type)) {
-				return (SerializeAdapter<T>)CalendarAdapter.toMillis;
-			}
-		}
-		
-		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
 	public <T> SerializeAdapter<T> getAdapter(Class<T> type) {
 		if (Collections.isEmpty(adapters)) {
-			return getDateAdapter(type);
+			return null;
 		}
 		
 		SerializeAdapter sa = adapters.get(type);
@@ -167,7 +153,6 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 			}
 		}
 		
-		sa = getDateAdapter(type);
 		adapters.put(type, sa == null ? SA_NONE : sa);
 		return sa;
 	}

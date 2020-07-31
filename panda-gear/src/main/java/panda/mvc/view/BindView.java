@@ -3,8 +3,6 @@ package panda.mvc.view;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,8 +10,6 @@ import java.util.Map;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractSerializer;
-import panda.bind.adapter.CalendarAdapter;
-import panda.bind.adapter.DateAdapter;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -35,15 +31,13 @@ import panda.net.http.HttpStatus;
 public abstract class BindView extends DataView {
 	protected static final String SEPERATOR = ", ";
 
-	protected static final String DATE_FORMAT_LONG = "long";
-
 	protected static final String CYCLE_DETECT_STRICT = "strict";
 	
 	protected static final String CYCLE_DETECT_LENIENT = "lenient";
 	
 	protected static final String CYCLE_DETECT_NOPROP = "noprop";
 	
-	protected String dateFormat = DATE_FORMAT_LONG;
+	protected String dateFormat;
 
 	protected String cycleDetect = CYCLE_DETECT_NOPROP;
 
@@ -288,7 +282,7 @@ public abstract class BindView extends DataView {
 		return list;
 	}
 	
-	protected void setSerializerOptions(AbstractSerializer as) {
+	protected void setSerializerOptions(ActionContext ac, AbstractSerializer as) {
 		if (cycleDetect != null) {
 			if (CYCLE_DETECT_STRICT.equals(cycleDetect)) {
 				as.setCycleDetectStrategy(CycleDetectStrategy.CYCLE_DETECT_STRICT);
@@ -301,13 +295,8 @@ public abstract class BindView extends DataView {
 			}
 		}
 
-		if (DATE_FORMAT_LONG.equalsIgnoreCase(dateFormat)) {
-			as.setDateToMillis(true);
-		}
-		else {
-			as.registerAdapter(Date.class, new DateAdapter(dateFormat));
-			as.registerAdapter(Calendar.class, new CalendarAdapter(dateFormat));
-		}
+		String datePattern = Mvcs.getDatePattern(ac, dateFormat);
+		as.setDateFormat(datePattern);
 
 		if (shortName) {
 			as.registerAdapter(Filter.class, FilterAdapter.s());

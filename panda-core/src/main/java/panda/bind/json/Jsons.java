@@ -9,13 +9,11 @@ import panda.lang.Charsets;
 
 public abstract class Jsons {
 	public static JsonDeserializer newJsonDeserializer() {
-		JsonDeserializer jd = new JsonDeserializer();
-		return jd;
+		return new JsonDeserializer();
 	}
 
 	public static JsonSerializer newJsonSerializer() {
-		JsonSerializer js = new JsonSerializer();
-		return js;
+		return new JsonSerializer();
 	}
 	
 	public static Object fromJson(InputStream json, String encoding) {
@@ -35,9 +33,7 @@ public abstract class Jsons {
 			return null;
 		}
 
-		Reader r = Streams.toReader(json, encoding);
-		JsonDeserializer jd = newJsonDeserializer();
-		return jd.deserialize(r, type);
+		return newJsonDeserializer().deserialize(Streams.toReader(json, encoding), type);
 	}
 
 	public static <T> T fromJson(InputStream json, Type type) {
@@ -48,20 +44,23 @@ public abstract class Jsons {
 		if (json == null) {
 			return null;
 		}
-		JsonDeserializer jd = newJsonDeserializer();
-		return jd.deserialize(json, type);
+		return newJsonDeserializer().deserialize(json, type);
 	}
 
 	public static <T> T fromJson(CharSequence json, Type type) {
 		if (json == null) {
 			return null;
 		}
-		JsonDeserializer jd = newJsonDeserializer();
-		return jd.deserialize(json, type);
+		return newJsonDeserializer().deserialize(json, type);
 	}
 
 	public static String toJson(Object value) {
+		return newJsonSerializer().serialize(value);
+	}
+
+	public static String toJson(Object value, String dateFormat) {
 		JsonSerializer js = newJsonSerializer();
+		js.setDateFormat(dateFormat);
 		return js.serialize(value);
 	}
 
@@ -79,8 +78,7 @@ public abstract class Jsons {
 	}
 	
 	public static void toJson(Object value, Appendable writer) {
-		JsonSerializer js = newJsonSerializer();
-		js.serialize(value, writer);
+		newJsonSerializer().serialize(value, writer);
 	}
 
 	public static void toJson(Object value, Appendable writer, boolean pretty) {
