@@ -1,30 +1,29 @@
 (function($) {
-	function setAlertType($p, s, t) {
+	function setAlertType($a, s, t) {
 		for (var i in s.types) {
-			$p.removeClass(s.types[i]);
+			$a.removeClass(s.types[i]);
 		}
-		$p.addClass(s.types[t]);
+		$a.addClass(s.types[t]);
 	}
 
-	function msg_li(tc, ic, m) {
-		return $('<li>').addClass(tc).append($('<i>').addClass(ic)).append($('<span>').html(m.escapePhtml()));
+	function msg_li(s, t, m, n) {
+		if (n && s.label) {
+			m = n + s.label + m;
+		}
+		return $('<li>').addClass(s.texts[t]).append($('<i>').addClass(s.icons[t])).append($('<span>').html(m.escapePhtml()));
 	}
 
-	function addMsg($p, s, m, t) {
-		var ic = s.icons[t];
-		var tc = s.texts[t];
-		$p.append($('<ul>').addClass(s.css).append(msg_li(tc, ic, m)));
-		setAlertType($p, s, t);
+	function addMsg($a, s, m, t) {
+		$a.append($('<ul>').addClass(s.css).append(msg_li(s, t, m)));
+		setAlertType($a, s, t);
 	}
 
-	function addMsgs($p, s, m, t) {
+	function addMsgs($a, s, m, t) {
 		if (m) {
-			var ic = s.icons[t];
-			var tc = s.texts[t];
 			var $u = $('<ul>').addClass(s.css);
 			if ($.isArray(m)) {
 				for (var i = 0; i < m.length; i++) {
-					$u.append(msg_li(tc, ic, m[i]));
+					$u.append(msg_li(s, t, m[i]));
 				}
 			}
 			else {
@@ -32,42 +31,69 @@
 					var v = m[n];
 					if ($.isArray(v)) {
 						for (var i = 0; i < v.length; i++) {
-							$u.append(msg_li(tc, ic, s.label ? (n + s.label + v[i]) : v[i]));
+							$u.append(msg_li(s, t, v[i], n));
 						}
 					}
 					else {
-						$u.append(msg_li(tc, ic, s.label ? (n + s.label + v) : v));
+						$u.append(msg_li(s, t, v, n));
 					}
 				}
 			}
-			$p.append($u);
-			setAlertType($p, s, t);
+			$a.append($u);
+			setAlertType($a, s, t);
 		}
 	}
-	
-	function addAlerts($p, s, m, t) {
+
+	function addInputErrors($f, s, m, t) {
+		if (m) {
+			for (var n in m) {
+				var $i = $f.find('input[name="' + n + '"]');
+				if ($i.length) {
+					$i.closest('.form-group').addClass('has-error').find('.p-field-errors').remove();
+					var $u = $('<ul>').attr('errorfor', n).addClass(s.css).addClass('p-field-errors');
+					var v = m[n];
+					if ($.isArray(v)) {
+						for (var i = 0; i < v.length; i++) {
+							$u.append(msg_li(s, t, v[i], n));
+						}
+					}
+					else {
+						$u.append(msg_li(s, t, v, n));
+					}
+					$u.insertAfter($i);
+				}
+			}
+		}
+	}
+
+	function addAlerts($a, s, m, t) {
 		if (typeof(m) == 'string') {
-			addMsg($p, s, m, t);
+			addMsg($a, s, m, t || 'info');
 		}
 		else if ($.isArray(m)) {
 			for (var i = 0; i < m.length; i++) {
 				if (typeof(m[i]) == 'string') {
-					addMsg($p, s, m[i], t);
+					addMsg($a, s, m[i], t || 'info');
 				}
 				else {
-					addMsg($p, s, m[i].html, m[i].type);
+					addMsg($a, s, m[i].html, m[i].type);
 				}
 			}
 		}
 		else if (m) {
 			if (m.params) {
-				addMsgs($p, s, m.params.errors, "error");
+				if (t) {
+					addInputErrors($(t), s, m.params.errors, 'error');
+				}
+				else {
+					addMsgs($a, s, m.params.errors, "error");
+				}
 			}
 			if (m.action) {
-				addMsgs($p, s, m.action.errors, "error");
-				addMsgs($p, s, m.action.warnings, "warn");
-				addMsgs($p, s, m.action.confirms, "help");
-				addMsgs($p, s, m.action.messages, "info");
+				addMsgs($a, s, m.action.errors, 'error');
+				addMsgs($a, s, m.action.warnings, 'warn');
+				addMsgs($a, s, m.action.confirms, 'help');
+				addMsgs($a, s, m.action.messages, 'info');
 			}
 		}
 	}
@@ -119,28 +145,28 @@
 				return this.add(m, 'info');
 			},
 			add: function(m, t) {
-				t = t || 'info';
-				var $p = $c.children('.p-alert');
-				var a = false;
-				if ($p.size() < 1) {
-					$p = $('<div></div>').addClass('p-alert alert alert-dismissable fade in').css('display', 'none');
-					$c.prepend($p);
-					$p.append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
+				var s = $.extend({}, $c.data('palert'), $.palert);
+				var a = false, $a = $c.children('.p-alert');
+				if ($a.size() < 1) {
+					$a = $('<div></div>').addClass('p-alert alert alert-dismissable fade in').css('display', 'none');
 					a = true;
 				}
 
-				var s = $.extend({}, $c.data('palert'), $.palert);
+				addAlerts($a, s, m, t);
 
-				addAlerts($p, s, m, t);
-
-				if (a) { 
-					$p.slideDown();
+				if (a && $a.children().length) {
+					$a.prepend("<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
+					$c.prepend($a);
+					$a.slideDown();
 				}
 				return this;
 			},
-			actionError: function(d) {
+			actionAlert: function(d, f) {
 				if (d.alerts) {
-					this.add(d.alerts);
+					this.add(d.alerts, f);
+					if (d.alerts.params && !d.alerts.params.empty) {
+						this.error($(f).data('ajaxInputError'));
+					}
 				}
 				if (d.exception) {
 					var e = d.exception;
@@ -152,7 +178,7 @@
 			ajaxJsonError: function(xhr, status, e, m) {
 				var d = xhr.responseJSON;
 				if (d && (d.alerts || d.exception)) {
-					return this.actionError(d);
+					return this.actionAlert(d);
 				}
 			
 				msg = '';
@@ -188,11 +214,10 @@
 
 	$.palert.notify = function(m, t, s) {
 		s = $.extend({}, $.palert, s);
-		t = t || 'info';
 		var ns = $.extend({ style: 'palert' }, $.palert.notifys);
 
-		var $p = $('<div></div>').addClass('p-alert alert');
-		addAlerts($p, s, m, t);
+		var $a = $('<div>').addClass('p-alert alert');
+		addAlerts($a, s, m, t);
 		
 		if ($.notify) {
 			if (!$.notify.getStyle('palert')) {
@@ -200,7 +225,7 @@
 					html: '<div data-notify-html="html"></div>'
 				});
 			}
-			$.notify({ html: $p}, ns);
+			$.notify({ html: $a}, ns);
 		}
 	};
 	
@@ -218,5 +243,5 @@
 		}
 		return false;
 	};
-	
+
 })(jQuery);

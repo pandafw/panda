@@ -62,7 +62,7 @@
 				dataType: 'json',
 				success: function(d) {
 					if (!d.success) {
-						$('#shell_alert').palert('actionError', d);
+						$('#shell_alert').palert('actionAlert', d);
 						return;
 					}
 
@@ -82,7 +82,7 @@
 					}
 				},
 				error: function(xhr, status, e) {
-					$('#shell_alert').palert('ajaxJsonError', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
+					$('#shell_alert').palert('ajaxJsonAlert', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
 				},
 				complete: function(xhr, ts) {
 					$o.unloadmask();

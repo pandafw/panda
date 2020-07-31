@@ -139,9 +139,8 @@
 		function _upload_on_success(d) {
 			_end_upload();
 
+			$ue.palert('actionAlert', d);
 			if (d.success) {
-				$ue.palert('actionError', d);
-
 				if (_on_success_uploaded(d)) {
 					return;
 				}
@@ -159,9 +158,6 @@
 				else {
 					_info(r);
 				}
-			}
-			else {
-				$ue.palert('actionError', d);
 			}
 		}
 
