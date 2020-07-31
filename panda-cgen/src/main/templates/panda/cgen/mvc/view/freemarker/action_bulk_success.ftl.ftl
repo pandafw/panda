@@ -8,7 +8,7 @@
 
 	<#include "bulk-success-toolbar.ftl"/>
 
-	${s}#include "/action-alert.ftl"/>
+	<div id="${formId}_alert">${s}#include "/action-alert.ftl"/></div>
 	<br/>
 
 ${s}#if result?has_content>

@@ -20,11 +20,7 @@
 				<#if _popup.fields?has_content>
 				<#list _popup.fields?keys?sort as fk>
 					<#list ui.fieldList as f2><#if f2.name == fk>
-						<#if f2.editTag?? && f2.editTag.name?ends_with(".viewfield")>
-				panda.viewfield("#${action.name}_${fk}").val(sd.${_popup.fields[fk]}, true);
-						<#else>
 				$("#${action.name}_${fk}").changeValue(sd.${_popup.fields[fk]});
-						</#if>
 						<#break/>
 					</#if></#list>
 				</#list>
@@ -37,11 +33,7 @@
 			function ${action.name}_${f.name}_onClearClick() {
 				<#list _clear as fk>
 					<#list ui.fieldList as f2><#if f2.name == fk>
-						<#if f2.editTag?? && f2.editTag.name?ends_with(".viewfield")>
-				panda.viewfield("#${action.name}_${fk}").val('', true);
-						<#else>
 				$("#${action.name}_${fk}").changeValue('');
-						</#if>
 						<#break/>
 					</#if></#list>
 				</#list>

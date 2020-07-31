@@ -5,7 +5,7 @@
 	<@sheader/>
 	<@swell/>
 
-	${s}#include "/action-alert.ftl"/>
+	<div id="${formId}_alert">${s}#include "/action-alert.ftl"/></div>
 </div>
 
 <@footer/>
