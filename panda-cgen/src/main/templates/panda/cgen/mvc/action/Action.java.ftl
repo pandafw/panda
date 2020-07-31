@@ -148,7 +148,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list(qr);
 	}
 	
-<#elseif ui.template == ("list_popup")>
+<#elseif ui.template == "list_popup">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
@@ -389,7 +389,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.view(key);
 	}
 
-<#elseif ui.template == ("print")>
+<#elseif ui.template == "print">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
@@ -414,7 +414,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.print_input(data);
 	}
 
-<#elseif ui.template == ("add")>
+<#elseif ui.template == "add">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @return result or view
@@ -528,6 +528,19 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.copy_execute(data);
 	}
 
+<#elseif [ "copy_json", "copy_xml" ]?seq_contains(ui.template)>
+	/**
+	 * ${gen.trimMethodName(ui.name)}
+	 * @param data the input data
+	 * @return result
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@To(Views.S${ui.template?keep_after('_')?upper_case})
+	public Object ${gen.trimMethodName(ui.name)}(@Param <@validates ui=ui/>${entityBeanClass} data) {
+		<@setInputDisplayFields ui=ui/>
+		return super.copy_execute(data, true);
+	}
+
 <#elseif ui.template == "edit">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
@@ -592,7 +605,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.edit_execute(data, true);
 	}
 
-<#elseif ui.template == ("delete")>
+<#elseif ui.template == "delete">
 	/**
 	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key

@@ -6,7 +6,7 @@
 	<@sheader steps=[ ui.name ]/>
 	<@swell/>
 
-	${s}#include "/action-alert.ftl"/>
+	<div id="${formId}_alert">${s}#include "/action-alert.ftl"/></div>
 
 	${s}#assign _columns_ = [{
 			"name": "_number_",

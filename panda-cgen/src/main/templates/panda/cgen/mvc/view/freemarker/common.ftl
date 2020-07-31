@@ -2,6 +2,11 @@
 <#assign e = ">"/>
 <#assign d = "$"/>
 <#if ui??>
+	<#if ui.formId?has_content>
+		<#assign formId = ui.formId/>
+	<#else>
+		<#assign formId = action.name/>
+	</#if>
 	<#if ui.params.actionList?has_content><#assign actionList = ui.params.actionList/></#if>
 	<#if ui.params.actionCopy?has_content><#assign actionCopy = ui.params.actionCopy/></#if>
 	<#if ui.params.actionView?has_content><#assign actionView = ui.params.actionView/></#if>

@@ -8,14 +8,14 @@
 
 	<#include "edit-toolbar.ftl"/>
 
-	${s}#include "/action-alert.ftl"/>
+	<div id="${formId}_alert">${s}#include "/action-alert.ftl"/></div>
 
 	<#list ui.orderedFieldList as f>
 		<#if f.editTag?? && f.editTag.name?ends_with(".file")>
 			<#assign _formenctype = "multipart/form-data" />
 		</#if>
 	</#list>
-	${s}@p.form cssClass="p-eform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" method="post"<#if _formenctype?has_content> enctype="${_formenctype}"</#if>${gen.focusme(ui)}>
+	${s}@p.form cssClass="p-eform" id="${formId}" method="post"<#if _formenctype?has_content> enctype="${_formenctype}"</#if>${gen.focusme(ui)}>
 		<#include "edit-insert-fields.ftl"/>
 		${s}#assign _buttons_ = [] />
 <#if "true" == props['ui.input.confirm']!>

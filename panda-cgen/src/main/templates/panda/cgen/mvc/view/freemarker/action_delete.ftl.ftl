@@ -8,10 +8,10 @@
 
 	<#include "edit-toolbar.ftl"/>
 
-	${s}#include "/action-alert.ftl"/>
+	<div id="${formId}_alert">${s}#include "/action-alert.ftl"/></div>
 
 ${s}#if r??>
-	${s}@p.form cssClass="p-cform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" method="post"${gen.focusme(ui)}>
+	${s}@p.form cssClass="p-cform" id="${formId}" method="post"${gen.focusme(ui)}>
 		<#include "edit-view-fields.ftl"/>
 		${s}#assign _buttons_ = [{
 			"icon": "icon-${ui.name}-execute",
