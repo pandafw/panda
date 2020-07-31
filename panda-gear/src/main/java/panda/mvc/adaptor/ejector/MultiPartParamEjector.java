@@ -61,10 +61,10 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 
 	/**
 	 * The timeout of drain a request.
-	 * default: 60s
+	 * default: 20s
 	 */
 	@IocInject(value=MvcConstants.MULTIPART_DRAIN_TIMEOUT, required=false)
-	private long drainTimeout = DateTimes.MS_MINUTE;
+	private long drainTimeout = 20 * DateTimes.MS_SECOND;
 
 	/**
 	 * the temporary directory of upload file.
@@ -106,6 +106,7 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 		FileUploader fu = new FileUploader();
 		fu.setBodySizeMax(bodySizeMax);
 		fu.setFileSizeMax(fileSizeMax);
+		fu.setDrainTimeout(drainTimeout);
 		fu.setHeaderEncoding(encoding);
 		FileItemIterator iter = fu.getItemIterator(req);
 		while (iter.hasNext()) {

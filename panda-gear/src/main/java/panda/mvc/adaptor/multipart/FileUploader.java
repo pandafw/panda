@@ -1,7 +1,5 @@
 package panda.mvc.adaptor.multipart;
 
-import static java.lang.String.format;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
@@ -11,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import panda.io.MimeTypes;
 import panda.io.SizeLimitExceededException;
+import panda.io.Streams;
 import panda.io.stream.LimitedInputStream;
+import panda.lang.time.DateTimes;
 import panda.net.http.MultipartStream;
 import panda.net.http.MultipartStream.ItemInputStream;
 import panda.net.http.MultipartStream.ProgressListener;
@@ -66,6 +66,12 @@ public class FileUploader {
 	private long fileSizeMax = UNLIMITED_SIZE;
 
 	/**
+	 * The timeout of drain a request.
+	 * default: 20s
+	 */
+	private long drainTimeout = 20 * DateTimes.MS_SECOND;
+
+	/**
 	 * The content encoding to use when reading part headers.
 	 */
 	private String headerEncoding;
@@ -118,6 +124,20 @@ public class FileUploader {
 	 */
 	public void setFileSizeMax(long fileSizeMax) {
 		this.fileSizeMax = fileSizeMax;
+	}
+
+	/**
+	 * @return the drainTimeout
+	 */
+	public long getDrainTimeout() {
+		return drainTimeout;
+	}
+
+	/**
+	 * @param drainTimeout the drainTimeout to set
+	 */
+	public void setDrainTimeout(long drainTimeout) {
+		this.drainTimeout = drainTimeout;
 	}
 
 	/**
@@ -384,6 +404,7 @@ public class FileUploader {
 					istream = new LimitedInputStream(istream, fileSizeMax) {
 						@Override
 						protected void raiseError(long pSizeMax, long pCount) throws IOException {
+							pCount += Streams.safeDrain(in, drainTimeout);
 							itemStream.close(true);
 							sizeExceeded(pSizeMax, pCount);
 						}
@@ -393,7 +414,7 @@ public class FileUploader {
 			}
 
 			protected void sizeExceeded(long pSizeMax, long pCount) throws IOException {
-				FileSizeLimitExceededException e = new FileSizeLimitExceededException(format(
+				FileSizeLimitExceededException e = new FileSizeLimitExceededException(String.format(
 					"The field %s exceeds it's maximum permitted size of %s bytes.", fieldName,
 					Long.valueOf(pSizeMax)), pCount, pSizeMax);
 				e.setFieldName(fieldName);
@@ -520,7 +541,6 @@ public class FileUploader {
 		 * Creates a new instance.
 		 * 
 		 * @param req The request context.
-		 * @throws FileUploadException An error occurred while parsing the request.
 		 * @throws IOException An I/O error occurred.
 		 */
 		FileItemIteratorImpl(final HttpServletRequest req) throws IOException {
@@ -535,6 +555,7 @@ public class FileUploader {
 				input = new LimitedInputStream(input, bodySizeMax) {
 					@Override
 					protected void raiseError(long pSizeMax, long pCount) throws IOException {
+						pCount += Streams.safeDrain(in, drainTimeout);
 						sizeExceeded(pSizeMax, pCount);
 					}
 				};
@@ -555,7 +576,7 @@ public class FileUploader {
 				multi = new MultipartStream(input, boundary, notifier);
 			}
 			catch (IllegalArgumentException iae) {
-				throw new InvalidContentTypeException(format("The boundary specified in the %s header is too long",
+				throw new InvalidContentTypeException(String.format("The boundary specified in the %s header is too long",
 					FileItemHeaders.CONTENT_TYPE), iae);
 			}
 			multi.setHeaderEncoding(charEncoding);
@@ -565,7 +586,7 @@ public class FileUploader {
 		}
 
 		private void sizeExceeded(long pSizeMax, long pCount) throws IOException {
-			throw new SizeLimitExceededException(format(
+			throw new SizeLimitExceededException(String.format(
 				"the request was rejected because its size (%s) exceeds the configured maximum (%s)",
 				Long.valueOf(pCount), Long.valueOf(pSizeMax)), pCount, pSizeMax);
 		}

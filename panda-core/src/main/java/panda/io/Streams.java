@@ -2400,16 +2400,18 @@ public class Streams {
 	 * Drain an <code>InputStream</code>.
 	 * 
 	 * @param input the input stream to drain
+	 * @return the number of bytes read
 	 */
-	public static void safeDrain(InputStream input) {
+	public static long safeDrain(InputStream input) {
 		try {
 			if (input != null) {
-				drain(input);
+				return drain(input);
 			}
 		}
 		catch (IOException ioe) {
 			// ignore
 		}
+		return 0;
 	}
 	
 	/**
@@ -2417,16 +2419,18 @@ public class Streams {
 	 * 
 	 * @param input the input stream to drain
 	 * @param timeout the timeout to stop drain (milliseconds)
+	 * @return the number of bytes read
 	 */
-	public static void safeDrain(InputStream input, long timeout) {
+	public static long safeDrain(InputStream input, long timeout) {
 		try {
 			if (input != null) {
-				drain(input, timeout);
+				return drain(input, timeout);
 			}
 		}
 		catch (IOException ioe) {
 			// ignore
 		}
+		return 0;
 	}
 	
 	/**
