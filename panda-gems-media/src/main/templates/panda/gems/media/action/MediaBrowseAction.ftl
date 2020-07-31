@@ -119,18 +119,16 @@
 	var media_active = null;
 	var media_method = '${methodName!}';
 	var media_base = '';
-	var media_date_format = '';
 	var media_has_next = false;
 	var media_loading = false;
 	var media_limit = ${a.mediaIndexLimit};
-	var media_items = <#if result?has_content>${assist.toJson(result)}<#else>[]</#if>;
+	var media_items = <#if result?has_content>${assist.toJson(result, "datetime")}<#else>[]</#if>;
 
 	function onPageLoadMediaBrowse() {
 		$.jcss('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>css?v=${assist.appVersion}');
 		$.jscript('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>js?v=${assist.appVersion}');
 
 		media_base = $('#media_form').attr('action');
-		media_date_format = new DateFormat("<@p.text name='date-format-datetime'/>");
 
 		media_has_next = (media_items.length >= media_limit);
 		$.each(media_items, function() {
@@ -248,7 +246,7 @@
 		return m.name 
 			+ '\r\n' + m.width + ' x ' + m.height
 			+ ' (' + String.formatSize(m.size) + ')'
-			+ '\r\n' + media_date_format.format(new Date(m.updatedAt));
+			+ '\r\n' + m.updatedAt;
 	}
 
 	function media_on_uploaded(d) {
@@ -375,11 +373,11 @@
 	}
 
 	function media_action_error(d) {
-		$('#media_alert').palert('actionError', d);
+		$('#media_alert').palert('actionAlert', d);
 	}
 	
 	function media_ajax_error(xhr, status, e) {
-		$('#media_alert').palert('ajaxJsonError', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
+		$('#media_alert').palert('ajaxJsonAlert', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
 	}
 </script>
 </body>

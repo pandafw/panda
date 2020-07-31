@@ -14,7 +14,6 @@ import panda.app.constant.MVC;
 import panda.app.constant.SES;
 import panda.app.constant.VAL;
 import panda.bind.json.JsonDeserializer;
-import panda.bind.json.JsonSerializer;
 import panda.bind.json.Jsons;
 import panda.codec.binary.Base64;
 import panda.ioc.annotation.IocInject;
@@ -396,9 +395,7 @@ public class UserAuthenticator {
 	// Users
 	//
 	protected String serializeUser(Object user) {
-		JsonSerializer js = Jsons.newJsonSerializer();
-		js.setDateToMillis(true);
-		return js.serialize(user);
+		return Jsons.toJson(user);
 	}
 	
 	protected <T> T deserializeUser(String ticket, Class<T> type) {
@@ -584,9 +581,6 @@ public class UserAuthenticator {
 	}
 
 	protected void saveUserToCookie(ActionContext ac, Object user) {
-		JsonSerializer js = Jsons.newJsonSerializer();
-		js.setDateToMillis(true);
-
 		String ticket = serializeUser(user);
 		String eticket = encrypt(ticket);
 		Integer cookieAge = getCookieAge(ac, user);

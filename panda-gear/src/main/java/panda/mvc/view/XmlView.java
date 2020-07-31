@@ -72,7 +72,7 @@ public class XmlView extends BindView {
 			if (Strings.isNotEmpty(rootName)) {
 				xs.setRootName(rootName);
 			}
-			setSerializerOptions(xs);
+			setSerializerOptions(ac, xs);
 			xs.setPrettyPrint(settings.getPropertyAsBoolean(SetConstants.MVC_VIEW_XML_PRETTY, prettyPrint));
 
 			if (log.isDebugEnabled()) {
