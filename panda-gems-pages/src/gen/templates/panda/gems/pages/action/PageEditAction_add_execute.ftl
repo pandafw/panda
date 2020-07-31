@@ -24,7 +24,7 @@
 </li></#if><#if a.canAccess("./list")><li><@p.a action="./list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
-	<#include "/action-alert.ftl"/>
+	<div id="pages_alert"><#include "/action-alert.ftl"/></div>
 
 <#if r??>
 	<@p.form cssClass="p-sform" id="pages" method="post">

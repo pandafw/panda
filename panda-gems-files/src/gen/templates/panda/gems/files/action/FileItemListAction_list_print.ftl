@@ -16,7 +16,7 @@
 	<div class="p-well">${_well}</div>
 </#if>
 
-	<#include "/action-alert.ftl"/>
+	<div id="files_alert"><#include "/action-alert.ftl"/></div>
 
 	<#assign _columns_ = [{
 			"name": "_number_",
