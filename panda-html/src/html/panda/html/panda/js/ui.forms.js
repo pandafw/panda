@@ -1,6 +1,52 @@
 if (typeof(panda) == "undefined") { panda = {}; }
 
 (function($) {
+	function ajaxFormSubmit() {
+		var $f = $(this);
+		var $a = $('#' + $f.attr('id') + '_alert').empty();
+
+		$f.find('.has-error').removeClass('has-error').end().find('.p-field-errors').remove();
+		if (!$f.isLoadMasked()) {
+			$f.loadmask();
+		}
+
+		$.ajax({
+			url: $f.data('ajaxAction'),
+			method: 'post',
+			data: $f.serializeArray(),
+			dataType: 'json',
+			success: function(d) {
+				$a.palert('actionAlert', d, $f);
+				if (d.result) {
+					$f.vals(d.result);
+					$f.find('div.p-datepicker, div.p-datetimepicker, div.p-timepicker').each(function() {
+						var v = $(this).find('input').val();
+						if (v) {
+							$(this).datetimepicker('setValue', new Date(v));
+						}
+					});
+				}
+				if ($a.children().length) {
+					$a.scrollIntoView();
+				}
+			},
+			error: function(xhr, status, e) {
+				$a.palert('ajaxJsonAlert', xhr, status, e, $f.data('ajaxServerError'));
+			},
+			complete: function() {
+				$f.unloadmask();
+			}
+		});
+		return false;
+	}
+			
+	function ajaxSubmitHook($f) {
+		// hook submit
+		if (!$f.data("ajaxSubmitHooked") && $f.data('ajaxAction')) {
+			$f.data('ajaxSubmitHooked', true).submit(ajaxFormSubmit);
+		}
+	}
+
 	function ajaxLoadInnerForm($f) {
 		var $c = $f.closest('.p-popup, .p-inner');
 		var data = $f.serializeArray();
@@ -91,6 +137,8 @@ if (typeof(panda) == "undefined") { panda = {}; }
 				if (panda.enable_loadmask_form) {
 					loadmaskHook($f);
 				}
+				
+				ajaxSubmitHook($f);
 			}
 		});
 	});

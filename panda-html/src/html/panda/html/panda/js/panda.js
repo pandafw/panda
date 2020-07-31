@@ -1937,32 +1937,31 @@ if (typeof String.formatSize != "function") {
 }
 
 (function($) {
-	function setAlertType($p, s, t) {
+	function setAlertType($a, s, t) {
 		for (var i in s.types) {
-			$p.removeClass(s.types[i]);
+			$a.removeClass(s.types[i]);
 		}
-		$p.addClass(s.types[t]);
+		$a.addClass(s.types[t]);
 	}
 
-	function msg_li(tc, ic, m) {
-		return $('<li>').addClass(tc).append($('<i>').addClass(ic)).append($('<span>').html(m.escapePhtml()));
+	function msg_li(s, t, m, n) {
+		if (n && s.label) {
+			m = n + s.label + m;
+		}
+		return $('<li>').addClass(s.texts[t]).append($('<i>').addClass(s.icons[t])).append($('<span>').html(m.escapePhtml()));
 	}
 
-	function addMsg($p, s, m, t) {
-		var ic = s.icons[t];
-		var tc = s.texts[t];
-		$p.append($('<ul>').addClass(s.css).append(msg_li(tc, ic, m)));
-		setAlertType($p, s, t);
+	function addMsg($a, s, m, t) {
+		$a.append($('<ul>').addClass(s.css).append(msg_li(s, t, m)));
+		setAlertType($a, s, t);
 	}
 
-	function addMsgs($p, s, m, t) {
+	function addMsgs($a, s, m, t) {
 		if (m) {
-			var ic = s.icons[t];
-			var tc = s.texts[t];
 			var $u = $('<ul>').addClass(s.css);
 			if ($.isArray(m)) {
 				for (var i = 0; i < m.length; i++) {
-					$u.append(msg_li(tc, ic, m[i]));
+					$u.append(msg_li(s, t, m[i]));
 				}
 			}
 			else {
@@ -1970,42 +1969,69 @@ if (typeof String.formatSize != "function") {
 					var v = m[n];
 					if ($.isArray(v)) {
 						for (var i = 0; i < v.length; i++) {
-							$u.append(msg_li(tc, ic, s.label ? (n + s.label + v[i]) : v[i]));
+							$u.append(msg_li(s, t, v[i], n));
 						}
 					}
 					else {
-						$u.append(msg_li(tc, ic, s.label ? (n + s.label + v) : v));
+						$u.append(msg_li(s, t, v, n));
 					}
 				}
 			}
-			$p.append($u);
-			setAlertType($p, s, t);
+			$a.append($u);
+			setAlertType($a, s, t);
 		}
 	}
-	
-	function addAlerts($p, s, m, t) {
+
+	function addInputErrors($f, s, m, t) {
+		if (m) {
+			for (var n in m) {
+				var $i = $f.find('input[name="' + n + '"]');
+				if ($i.length) {
+					$i.closest('.form-group').addClass('has-error').find('.p-field-errors').remove();
+					var $u = $('<ul>').attr('errorfor', n).addClass(s.css).addClass('p-field-errors');
+					var v = m[n];
+					if ($.isArray(v)) {
+						for (var i = 0; i < v.length; i++) {
+							$u.append(msg_li(s, t, v[i], n));
+						}
+					}
+					else {
+						$u.append(msg_li(s, t, v, n));
+					}
+					$u.insertAfter($i);
+				}
+			}
+		}
+	}
+
+	function addAlerts($a, s, m, t) {
 		if (typeof(m) == 'string') {
-			addMsg($p, s, m, t);
+			addMsg($a, s, m, t || 'info');
 		}
 		else if ($.isArray(m)) {
 			for (var i = 0; i < m.length; i++) {
 				if (typeof(m[i]) == 'string') {
-					addMsg($p, s, m[i], t);
+					addMsg($a, s, m[i], t || 'info');
 				}
 				else {
-					addMsg($p, s, m[i].html, m[i].type);
+					addMsg($a, s, m[i].html, m[i].type);
 				}
 			}
 		}
 		else if (m) {
 			if (m.params) {
-				addMsgs($p, s, m.params.errors, "error");
+				if (t) {
+					addInputErrors($(t), s, m.params.errors, 'error');
+				}
+				else {
+					addMsgs($a, s, m.params.errors, "error");
+				}
 			}
 			if (m.action) {
-				addMsgs($p, s, m.action.errors, "error");
-				addMsgs($p, s, m.action.warnings, "warn");
-				addMsgs($p, s, m.action.confirms, "help");
-				addMsgs($p, s, m.action.messages, "info");
+				addMsgs($a, s, m.action.errors, 'error');
+				addMsgs($a, s, m.action.warnings, 'warn');
+				addMsgs($a, s, m.action.confirms, 'help');
+				addMsgs($a, s, m.action.messages, 'info');
 			}
 		}
 	}
@@ -2057,28 +2083,28 @@ if (typeof String.formatSize != "function") {
 				return this.add(m, 'info');
 			},
 			add: function(m, t) {
-				t = t || 'info';
-				var $p = $c.children('.p-alert');
-				var a = false;
-				if ($p.size() < 1) {
-					$p = $('<div></div>').addClass('p-alert alert alert-dismissable fade in').css('display', 'none');
-					$c.prepend($p);
-					$p.append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
+				var s = $.extend({}, $c.data('palert'), $.palert);
+				var a = false, $a = $c.children('.p-alert');
+				if ($a.size() < 1) {
+					$a = $('<div></div>').addClass('p-alert alert alert-dismissable fade in').css('display', 'none');
 					a = true;
 				}
 
-				var s = $.extend({}, $c.data('palert'), $.palert);
+				addAlerts($a, s, m, t);
 
-				addAlerts($p, s, m, t);
-
-				if (a) { 
-					$p.slideDown();
+				if (a && $a.children().length) {
+					$a.prepend("<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
+					$c.prepend($a);
+					$a.slideDown();
 				}
 				return this;
 			},
-			actionError: function(d) {
+			actionAlert: function(d, f) {
 				if (d.alerts) {
-					this.add(d.alerts);
+					this.add(d.alerts, f);
+					if (d.alerts.params && !d.alerts.params.empty) {
+						this.error($(f).data('ajaxInputError'));
+					}
 				}
 				if (d.exception) {
 					var e = d.exception;
@@ -2090,7 +2116,7 @@ if (typeof String.formatSize != "function") {
 			ajaxJsonError: function(xhr, status, e, m) {
 				var d = xhr.responseJSON;
 				if (d && (d.alerts || d.exception)) {
-					return this.actionError(d);
+					return this.actionAlert(d);
 				}
 			
 				msg = '';
@@ -2126,11 +2152,10 @@ if (typeof String.formatSize != "function") {
 
 	$.palert.notify = function(m, t, s) {
 		s = $.extend({}, $.palert, s);
-		t = t || 'info';
 		var ns = $.extend({ style: 'palert' }, $.palert.notifys);
 
-		var $p = $('<div></div>').addClass('p-alert alert');
-		addAlerts($p, s, m, t);
+		var $a = $('<div>').addClass('p-alert alert');
+		addAlerts($a, s, m, t);
 		
 		if ($.notify) {
 			if (!$.notify.getStyle('palert')) {
@@ -2138,7 +2163,7 @@ if (typeof String.formatSize != "function") {
 					html: '<div data-notify-html="html"></div>'
 				});
 			}
-			$.notify({ html: $p}, ns);
+			$.notify({ html: $a}, ns);
 		}
 	};
 	
@@ -2156,7 +2181,7 @@ if (typeof String.formatSize != "function") {
 		}
 		return false;
 	};
-	
+
 })(jQuery);
 ///////////////////////////////////////////////////////
 // swipe for carousel
@@ -2249,6 +2274,52 @@ if (typeof String.formatSize != "function") {
 if (typeof(panda) == "undefined") { panda = {}; }
 
 (function($) {
+	function ajaxFormSubmit() {
+		var $f = $(this);
+		var $a = $('#' + $f.attr('id') + '_alert').empty();
+
+		$f.find('.has-error').removeClass('has-error').end().find('.p-field-errors').remove();
+		if (!$f.isLoadMasked()) {
+			$f.loadmask();
+		}
+
+		$.ajax({
+			url: $f.data('ajaxAction'),
+			method: 'post',
+			data: $f.serializeArray(),
+			dataType: 'json',
+			success: function(d) {
+				$a.palert('actionAlert', d, $f);
+				if (d.result) {
+					$f.vals(d.result);
+					$f.find('div.p-datepicker, div.p-datetimepicker, div.p-timepicker').each(function() {
+						var v = $(this).find('input').val();
+						if (v) {
+							$(this).datetimepicker('setValue', new Date(v));
+						}
+					});
+				}
+				if ($a.children().length) {
+					$a.scrollIntoView();
+				}
+			},
+			error: function(xhr, status, e) {
+				$a.palert('ajaxJsonAlert', xhr, status, e, $f.data('ajaxServerError'));
+			},
+			complete: function() {
+				$f.unloadmask();
+			}
+		});
+		return false;
+	}
+			
+	function ajaxSubmitHook($f) {
+		// hook submit
+		if (!$f.data("ajaxSubmitHooked") && $f.data('ajaxAction')) {
+			$f.data('ajaxSubmitHooked', true).submit(ajaxFormSubmit);
+		}
+	}
+
 	function ajaxLoadInnerForm($f) {
 		var $c = $f.closest('.p-popup, .p-inner');
 		var data = $f.serializeArray();
@@ -2339,6 +2410,8 @@ if (typeof(panda) == "undefined") { panda = {}; }
 				if (panda.enable_loadmask_form) {
 					loadmaskHook($f);
 				}
+				
+				ajaxSubmitHook($f);
 			}
 		});
 	});
@@ -3334,9 +3407,8 @@ panda.meta_props = function() {
 		function _upload_on_success(d) {
 			_end_upload();
 
+			$ue.palert('actionAlert', d);
 			if (d.success) {
-				$ue.palert('actionError', d);
-
 				if (_on_success_uploaded(d)) {
 					return;
 				}
@@ -3354,9 +3426,6 @@ panda.meta_props = function() {
 				else {
 					_info(r);
 				}
-			}
-			else {
-				$ue.palert('actionError', d);
 			}
 		}
 
@@ -3479,42 +3548,22 @@ panda.meta_props = function() {
 		$('[data-spy="puploader"]').puploader();
 	});
 })(jQuery);
-if (typeof(panda) == "undefined") { panda = {}; }
-
-panda.viewfield = function(o) {
-	var api = {
-		el: $(o),
-		val: function(v, t) {
-			if (typeof(v) == 'undefined') {
-				return this.el.val();
-			}
-
-			var o = this.el.val();
-			this.el.val(v).next('.p-viewfield').text(v == '' ? '\u3000' : v);
-			if (t && o != v) {
-				this.el.trigger('change');
-			}
-			return this;
-		}
-	};
-	
-	return api;
-};
-
 (function($) {	
 	$(window).on('load', function () {
+		$('.p-viewfield').prev('input').change(function() {
+			var v = $(this).val();
+			$(this).next('.p-viewfield').text(v == '' ? '\u3000' : v);
+		});
+		
 		$('.p-viewfield[data-format="html"]').each(function() {
-			var $t = $(this);
 			$('<a href="#" class="p-vf-code"><i class="fa fa-code"></i></a>').appendTo($(this).parent());
 		});
 		
 		$('.p-vf-code').click(function() {
 			var $t = $(this);
-			$t.toggleClass('active');
-			
-			var $p = $t.parent();
+			var $p = $t.toggleClass('active').parent();
 			var v = $p.find('input').val();
-			var $d = $p.find('.p-viewfield').html($t.hasClass('active') ? v.escapePhtml() : v);
+			$p.find('.p-viewfield').html($t.hasClass('active') ? v.escapePhtml() : v);
 			return false;
 		});
 	});
