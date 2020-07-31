@@ -217,7 +217,7 @@ public abstract class BindView extends DataView {
 		}
 		
 		ActionAlert ava = ac.getActionAlert();
-		if (ava != null && !ava.isEmpty()) {
+		if (ava != null && ava.hasContents()) {
 			if (ava.hasErrors()) {
 				success = false;
 			}

@@ -156,13 +156,13 @@ public class ActionAlertSupport implements ActionAlert {
 	}
 
 	/**
-	 * @see panda.mvc.alert.ActionAlert#isEmpty()
+	 * @see panda.mvc.alert.ActionAlert#hasContents()
 	 */
-	public boolean isEmpty() {
-		return Collections.isEmpty(errors) 
-				&& Collections.isEmpty(warnings) 
-				&& Collections.isEmpty(confirms) 
-				&& Collections.isEmpty(messages);
+	public boolean hasContents() {
+		return Collections.isNotEmpty(errors) 
+				|| Collections.isNotEmpty(warnings) 
+				|| Collections.isNotEmpty(confirms) 
+				|| Collections.isNotEmpty(messages);
 	}
 	
 	/**

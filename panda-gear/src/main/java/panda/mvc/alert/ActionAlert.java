@@ -147,9 +147,9 @@ public interface ActionAlert {
 	/**
 	 * Checks whether there are any error/warnings/confirms/messages.
 	 * 
-	 * @return true if empty
+	 * @return true if has any error/warnings/confirms/messages.
 	 */
-	boolean isEmpty();
+	boolean hasContents();
 	
 	/**
 	 * Clear all.
