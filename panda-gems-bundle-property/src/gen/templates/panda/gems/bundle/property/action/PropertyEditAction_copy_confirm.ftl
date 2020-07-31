@@ -22,7 +22,7 @@
 <#if a.canAccess("./list")><li><@p.a action="./list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
-	<#include "/action-alert.ftl"/>
+	<div id="property_alert"><#include "/action-alert.ftl"/></div>
 
 <#if r??>
 	<@p.form cssClass="p-cform" id="property" method="post">

@@ -16,7 +16,7 @@
 	<div class="p-well">${_well}</div>
 </#if>
 
-	<#include "/action-alert.ftl"/>
+	<div id="pages_alert"><#include "/action-alert.ftl"/></div>
 
 <#if r??>
 	<@p.form cssClass="p-vform" id="pages">
