@@ -46,7 +46,6 @@
 				key="source"
 				value="%{r.source}"
 				cssClass="p-code"
-				escape="phtml"
 			/>
 	</#if>
 	<#if a.displayField("status")>
