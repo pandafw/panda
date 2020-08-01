@@ -56,7 +56,6 @@
 				key="value"
 				value="%{r.value}"
 				cssClass="p-code"
-				escape="phtml"
 			/>
 	</#if>
 	<#if a.displayField("memo")>
