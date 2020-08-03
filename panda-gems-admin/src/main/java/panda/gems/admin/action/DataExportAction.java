@@ -97,6 +97,7 @@ public class DataExportAction extends BaseAction {
 	 * @return result list
 	 * @throws Exception if an error occurs
 	 */
+	@SuppressWarnings({ "resource", "unchecked" })
 	@At("")
 	public Object execute(@Param Arg arg) throws Exception {
 		this.arg = arg;
@@ -105,37 +106,31 @@ public class DataExportAction extends BaseAction {
 			return null;
 		}
 
-		ListWriter lw = null;
-		
-		if ("TSV".equalsIgnoreCase(arg.format)) {
-			PrintWriter pw = getResponse().getWriter();
-			lw = new TsvWriter(pw);
-		}
-		else if ("XLS".equalsIgnoreCase(arg.format)) {
-			OutputStream os = getResponse().getOutputStream();
-			lw = new XlsWriter(os, arg.source);
-		}
-		else if ("XLSX".equalsIgnoreCase(arg.format)) {
-			OutputStream os = getResponse().getOutputStream();
-			lw = new XlsxWriter(os, arg.source);
-		}
-		else {
-			PrintWriter pw = getResponse().getWriter();
-			lw = new CsvWriter(pw);
-		}
-		
-		return export(lw);
-	}
-
-	@SuppressWarnings("unchecked")
-	protected Object export(ListWriter lw) {
 		try {
 			HttpServletResponser hss = new HttpServletResponser(getRequest(), getResponse());
-
 			hss.setCharset(Charsets.UTF_8);
 			hss.setContentType(MimeTypes.getMimeType('.' + arg.format));
 			hss.setFileName(arg.source + '-' + DateTimes.datetimeLogFormat().format(DateTimes.getDate()) + '.' + Strings.lowerCase(arg.format));
 			hss.writeHeader();
+			
+			ListWriter lw = null;
+			
+			if ("TSV".equalsIgnoreCase(arg.format)) {
+				PrintWriter pw = getResponse().getWriter();
+				lw = new TsvWriter(pw);
+			}
+			else if ("XLS".equalsIgnoreCase(arg.format)) {
+				OutputStream os = getResponse().getOutputStream();
+				lw = new XlsWriter(os, arg.source);
+			}
+			else if ("XLSX".equalsIgnoreCase(arg.format)) {
+				OutputStream os = getResponse().getOutputStream();
+				lw = new XlsxWriter(os, arg.source);
+			}
+			else {
+				PrintWriter pw = getResponse().getWriter();
+				lw = new CsvWriter(pw);
+			}
 			
 			List<String> line = new ArrayList<String>();
 			
