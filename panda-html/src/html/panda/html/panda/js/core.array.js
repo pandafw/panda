@@ -32,6 +32,15 @@ if (typeof Array.prototype.empty != 'function') {
 	}
 }
 
+if (typeof Array.prototype.insert != 'function') {
+	Array.prototype.insert = function() {
+		var args = [ arguments[0], 0 ];
+		[].push.apply(args, [].slice.call(arguments, 1));
+		[].splice.apply(this, args);
+		return this;
+	}
+}
+
 if (typeof Array.prototype.remove != 'function') {
 	Array.prototype.remove = function(o) {
 		var c = 0;
