@@ -159,6 +159,8 @@ tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions
 }
 
 /* table - wrap */
+.p-lv-table td > div {
+}
 .table-responsive > .p-lv-table th, .table-responsive > .p-lv-table td {
 	white-space: nowrap;
 }

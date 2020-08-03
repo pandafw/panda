@@ -163,7 +163,7 @@
 
 		function _upload_on_error(xhr, status, e) {
 			_end_upload();
-			$ue.palert('error', (e ? (e + "").escapePhtml() : (xhr ? xhr.responseText : status)));
+			$ue.palert('error', (e ? (e + "") : (xhr ? xhr.responseText : status)));
 		}
 		
 		function _upload_on_change() {

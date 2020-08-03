@@ -27,7 +27,7 @@
 	<#if appDebug>
 	<div class="alert alert-warning p-exception">
 		<h5>${action.getText('servlet-error-exception')}</h5>
-		<div>${assist.escapePhtml(assist.servletExceptionStackTrace)}</div>
+		<div class="p-prewrap p-breakwork">${assist.escapeHtml(assist.servletExceptionStackTrace)}</div>
 	</div>
 	</#if>
 </#if>

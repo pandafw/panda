@@ -43,13 +43,13 @@
 	<div class="panel panel-success">
 		<div class="panel-heading">&lt;&lt;${t[0]}&gt;&gt; (${(t?size - 2)?c})</div>
 		<div class="table-responsive">
-			<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-nowrap">
+			<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-pre">
 			<thead>
-				<tr><th>##</th><#list t[1] as h><th>${assist.escapePhtml(h!"")}</th></#list></tr>
+				<tr><th>##</th><#list t[1] as h><th>${(h!"")?html}</th></#list></tr>
 			</thead>
 			<tbody>
 			<#list t as r><#if r_index gt 1>
-				<tr><th>${(r_index - 1)?c}</th><#list r as v><td>${assist.escapePhtml(v!"")}</td></#list></tr>
+				<tr><th>${(r_index - 1)?c}</th><#list r as v><td>${(v!"")?html}</td></#list></tr>
 			</#if></#list>
 			<tbody>
 			</table>

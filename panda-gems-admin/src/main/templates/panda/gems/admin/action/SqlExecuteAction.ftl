@@ -28,17 +28,17 @@
 <#if result??>
 <#list result as r>
 	<div class="panel panel-success">
-		<div class="panel-heading">${(r_index + 1)?c}. <@p.property value=r.sql format="phtml"/></div>
+		<div class="panel-heading p-prewrap p-breakword">${(r_index + 1)?c}. ${r.sql?html}</div>
 		<#if r.updateCount &gt; 0>${r.updateCount} rows updated.<br/></#if>
 		<#if r.resultSet?has_content>
 		<div class="table-responsive">
-		<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-nowrap">
+		<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-pre">
 			<#list r.resultSet as row>
 				<#if row_index == 0>
-					<thead><tr><#list row as _h><th>${assist.escapePhtml(_h!"")}</th></#list></tr></thead>
+					<thead><tr><#list row as _h><th>${(_h!"")?html}</th></#list></tr></thead>
 				<#else>
 					<#if row_index == 1><tbody></#if>
-					<tr><#list row as _v><td>${assist.escapePhtml(_v!"")}</td></#list></tr>
+					<tr><#list row as _v><td>${(_v!"")?html}</td></#list></tr>
 					<#if !row_has_next></tbody></#if>
 				</#if>
 			</#list>

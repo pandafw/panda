@@ -22,6 +22,8 @@
 }
 .p-alert li, ul.p-field-errors li {
 	padding: 5px 0;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
 }
 .p-alert i.fa-li, ul.p-field-errors i.fa-li {
 	font-size: 200%;

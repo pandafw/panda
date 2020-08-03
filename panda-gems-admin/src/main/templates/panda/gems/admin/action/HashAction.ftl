@@ -42,17 +42,15 @@
 <#if result??>
 	<hr/>
 	<div class="panel panel-success">
-		<div class="panel-heading"><#if (params.s)?has_content><@p.property value=params.s escape="phtml"/><#else>${params.f.name?html}</#if></div>
+		<div class="panel-heading p-breakword"><#if (params.s)?has_content>${assist.ellipsis(params.s, 30)?html}<#else>${params.f.name?html}</#if></div>
 		<div class="panel-body">
-			<div class="table-responsive">
-			<table class="table table-striped table-bordered p-fz80p p-th-nowrap">
+			<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-breakall">
 			<tbody>
 			<#list result?keys as k>
-				<tr><td>${k?html}</td><td>${result[k]?html}</td></tr>
+				<tr><th>${k?html}</th><td>${result[k]?html}</td></tr>
 			</#list>
 			</tbody>
 			</table>
-			</div>
 		</div>
 	</div>
 </#if>

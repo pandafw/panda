@@ -6,7 +6,7 @@ import panda.mvc.view.util.Escapes;
 
 @IocBean(singleton=false)
 public class ViewField extends ListUIBean {
-	protected String escape = Escapes.ESCAPE_PHTML;
+	protected String escape = Escapes.ESCAPE_HTML;
 	protected String fieldValue;
 	protected String format;
 	protected String icon;

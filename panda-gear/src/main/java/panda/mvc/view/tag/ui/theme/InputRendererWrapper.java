@@ -62,7 +62,7 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 		if (Strings.isNotEmpty(tag.getLabel())) {
 			writeLeftRequired();
 
-			write(phtml(tag.getLabel()));
+			write(html(tag.getLabel()));
 
 			if (tag.isReadonly() && "right".equals(tag.getRequiredPosition())) {
 				writeRequired();
@@ -90,7 +90,7 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 							write("<li class=\"text-danger\">");
 							write("<i class=\"fa-li fa fa-exclamation-circle\"></i>");
 							write("<span>");
-							write(phtml(fe));
+							write(html(fe));
 							write("</span>");
 							write("</li>");
 						}

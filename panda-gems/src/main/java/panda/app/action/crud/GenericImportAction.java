@@ -39,7 +39,6 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.validator.Validators;
-import panda.mvc.view.util.Escapes;
 import panda.vfs.FileItem;
 import panda.vfs.FileStores;
 
@@ -781,30 +780,6 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 */
 	protected String dataIncorrectError(T data, Collection<EntityField> efs) {
 		return dataFieldErrors(data, efs, RES.ERROR_DATA_INCORRECT);
-	}
-
-	// ------------------------------------------------------------
-	// html escape methods
-	//
-	/**
-	 * escape value
-	 * @param v value
-	 * @return escaped string
-	 */
-	public String escapeValue(Object v) {
-		String s = formatValue(v);
-		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
-	}
-
-	/**
-	 * escape value
-	 * @param v value
-	 * @param format format
-	 * @return escaped string
-	 */
-	protected String escapeValue(Object v, String format) {
-		String s = formatValue(v, format);
-		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
 	}
 
 	/**
