@@ -62,6 +62,10 @@
 }
 
 /** form control */
+.p-form .control-label {
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
+}
 .p-form .form-control {
 	color: #333;
 }

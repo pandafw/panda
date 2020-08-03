@@ -40,7 +40,7 @@
 	<div class="panel panel-${name}">
 		<div class="panel-heading"><@p.text name="result-${name}"><@p.param name="count" value=(data?size)/></@p.text></div>
 		<div class="table-responsive">
-		<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-nowrap">
+		<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-pre">
 		<thead>
 			<tr><th>##</th>
 <#assign headz = head?size/>
@@ -50,7 +50,7 @@
 	<#assign headz = headz - 1/>
 </#if>
 <#list head as _h>
-				<th>${a.escapeValue(_h!"")}</th>
+				<th>${(_h!"")?html}</th>
 </#list>
 			</tr>
 		</thead>
@@ -58,7 +58,7 @@
 <#list data as row>
 			<tr><td>${(row_index + 1)?c}</td>
 	<#list row as _v>
-				<td>${a.escapeValue(_v!"")}</td>
+				<td>${(_v!"")?html}</td>
 	</#list>
 	<#if row?size <= headz>
 		<#list (row?size)..headz as x>

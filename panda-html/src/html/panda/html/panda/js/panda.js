@@ -32,6 +32,15 @@ if (typeof Array.prototype.empty != 'function') {
 	}
 }
 
+if (typeof Array.prototype.insert != 'function') {
+	Array.prototype.insert = function() {
+		var args = [ arguments[0], 0 ];
+		[].push.apply(args, [].slice.call(arguments, 1));
+		[].splice.apply(this, args);
+		return this;
+	}
+}
+
 if (typeof Array.prototype.remove != 'function') {
 	Array.prototype.remove = function(o) {
 		var c = 0;
@@ -1948,7 +1957,12 @@ if (typeof String.formatSize != "function") {
 		if (n && s.label) {
 			m = n + s.label + m;
 		}
-		return $('<li>').addClass(s.texts[t]).append($('<i>').addClass(s.icons[t])).append($('<span>').html(m.escapePhtml()));
+		if (s.escape) {
+			m = m.escapeHtml();
+		}
+		return $('<li>').addClass(s.texts[t])
+			.append($('<i>').addClass(s.icons[t]))
+			.append($('<span>').html(m));
 	}
 
 	function addMsg($a, s, m, t) {
@@ -2039,6 +2053,7 @@ if (typeof String.formatSize != "function") {
 	$.palert = {
 		css: 'fa-ul',
 		label: false, //': ',
+		escape: true,
 		icons: {
 			'down': 'fa-caret-down',
 			'up': 'fa-caret-up',
@@ -3431,7 +3446,7 @@ panda.meta_props = function() {
 
 		function _upload_on_error(xhr, status, e) {
 			_end_upload();
-			$ue.palert('error', (e ? (e + "").escapePhtml() : (xhr ? xhr.responseText : status)));
+			$ue.palert('error', (e ? (e + "") : (xhr ? xhr.responseText : status)));
 		}
 		
 		function _upload_on_change() {
@@ -3563,7 +3578,7 @@ panda.meta_props = function() {
 			var $t = $(this);
 			var $p = $t.toggleClass('active').parent();
 			var v = $p.find('input').val();
-			$p.find('.p-viewfield').html($t.hasClass('active') ? v.escapePhtml() : v);
+			$p.find('.p-viewfield').html($t.hasClass('active') ? v.escapeHtml() : v);
 			return false;
 		});
 	});

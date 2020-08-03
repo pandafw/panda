@@ -4,7 +4,7 @@ import panda.mvc.view.util.Escapes;
 
 public abstract class EscapeUIBean extends UIBean {
 
-	protected String escape = Escapes.ESCAPE_PHTML;
+	protected String escape = Escapes.ESCAPE_HTML;
 
 	/**
 	 * @return the escape

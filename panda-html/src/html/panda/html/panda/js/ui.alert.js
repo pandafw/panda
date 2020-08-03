@@ -10,7 +10,12 @@
 		if (n && s.label) {
 			m = n + s.label + m;
 		}
-		return $('<li>').addClass(s.texts[t]).append($('<i>').addClass(s.icons[t])).append($('<span>').html(m.escapePhtml()));
+		if (s.escape) {
+			m = m.escapeHtml();
+		}
+		return $('<li>').addClass(s.texts[t])
+			.append($('<i>').addClass(s.icons[t]))
+			.append($('<span>').html(m));
 	}
 
 	function addMsg($a, s, m, t) {
@@ -101,6 +106,7 @@
 	$.palert = {
 		css: 'fa-ul',
 		label: false, //': ',
+		escape: true,
 		icons: {
 			'down': 'fa-caret-down',
 			'up': 'fa-caret-up',

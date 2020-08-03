@@ -28,7 +28,7 @@ import panda.mvc.view.util.Escapes;
 @IocBean(singleton=false)
 public class Text extends ContextBean {
 	protected String name;
-	protected String escape = Escapes.ESCAPE_PHTML;
+	protected String escape = Escapes.ESCAPE_HTML;
 
 	/**
 	 * @param name the name to set

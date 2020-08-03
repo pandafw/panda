@@ -1,5 +1,6 @@
 .p-viewfield {
-	word-wrap: break-word;
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
 }
 .p-vf-code {
 	padding: 0 4px;
