@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,13 +12,13 @@ import java.util.Set;
 import panda.bean.Beans;
 import panda.lang.Arrays;
 import panda.lang.Collections;
-import panda.lang.Iterators;
 import panda.lang.Strings;
 import panda.mvc.Mvcs;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Queryer;
 import panda.mvc.util.AccessHandler;
 import panda.mvc.view.tag.CUrl;
+import panda.mvc.view.tag.Property;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.ListView.ItemLink;
@@ -47,7 +46,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	
 	private AccessHandler accessor;
 	
-	private Map<String, Map> codemaps = new HashMap<String, Map>();
+	private Map<Object, Property> codetags = new HashMap<Object, Property>();
 
 	public ListViewRenderer(RenderingContext context) {
 		super(context);
@@ -519,19 +518,11 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 							}
 
 							if (c.format != null) {
-								if ("code".equals(c.format.type)) {
+								if (Strings.startsWithIgnoreCase(c.format.type, "code")) {
 									Object v = getBeanProperty(d, c.name);
-									Iterator iv = Iterators.asIterator(v);
-									if (iv != null) {
-										Map codemap = getCodeMap(c.format.codemap);
-										while (iv.hasNext()) {
-											String s = Mvcs.getCodeText(codemap, iv.next());
-											write(Escapes.escape(s, c.format.escape));
-											if (iv.hasNext()) {
-												write(" ");
-											}
-										}
-									}
+									Property p = getCodeProperty(c);
+									p.setValue(v);
+									write(p.formatValue());
 								}
 								else if ("eval".equals(c.format.type)) {
 									if (Strings.isEmpty(c.format.expr)) {
@@ -648,23 +639,15 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		return true;
 	}
 
-	private Map getCodeMap(Object cm) {
-		if (cm instanceof String) {
-			Map m = codemaps.get(cm);
-			if (m == null) {
-				m = (Map)tag.findValue((String)cm);
-			}
-			if (m == null) {
-				throw new IllegalArgumentException("Null codemap: " + cm);
-			}
-			codemaps.put((String)cm, m);
-			return m;
+	private Property getCodeProperty(ListColumn c) {
+		Property property = codetags.get(c);
+		if (property == null) {
+			property = newTag(Property.class);
+			property.setFormat(c.format.type);
+			property.setCodemap(c.format.codemap);
+			property.setEscape(Strings.defaultString(c.format.escape, Escapes.ESCAPE_HTML));
+			codetags.put(c.format.codemap, property);
 		}
-
-		if (cm instanceof Map) {
-			return (Map)cm;
-		}
-
-		throw new IllegalArgumentException("Invalid codemap: " + cm.getClass());
+		return property;
 	}
 }
