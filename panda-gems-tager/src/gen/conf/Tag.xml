@@ -31,7 +31,7 @@
 				<format type="code">
 					<param name="codemap" value="consts.tagKindMap"/>
 				</format>
-				<filter type="checklist">
+				<filter type="checklist" fixed="true">
 					<param name="list" value="consts.tagKindMap"/>
 				</filter>
 			</column>

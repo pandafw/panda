@@ -26,7 +26,7 @@
 </li></#if><#if a.canAccess("./list.print")><li><@p.a action="./list.print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
-	<#include "/action-alert.ftl"/>
+	<div id="tags_alert"><#include "/action-alert.ftl"/></div>
 
 	<#assign _columns_ = [{
 		"name": "_number_",
@@ -71,6 +71,7 @@
 			},
 			"filter": {
 				"type": "checklist",
+				"fixed": true,
 				"list": consts.tagKindMap,
 				"enable": a.filterField("kind")
 			},

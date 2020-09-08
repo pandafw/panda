@@ -1,4 +1,0 @@
-title=网页
-
-lbl-date=日期
-
