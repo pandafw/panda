@@ -1,7 +1,6 @@
 package panda.mvc;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
@@ -521,20 +520,6 @@ public abstract class Mvcs {
 		}
 
 		return pattern;
-	}
-
-	/**
-	 * get text from code map
-	 * @param cm code map
-	 * @param k key
-	 * @return text
-	 */
-	public static String getCodeText(Map cm, Object k) {
-		Object v = cm.get(k);
-		if (v == null && k != null && !(k instanceof String)) {
-			v = cm.get(k.toString());
-		}
-		return (v == null ? Strings.EMPTY : v.toString());
 	}
 }
 

@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import panda.bean.Beans;
 import panda.io.stream.ListWriter;
 import panda.lang.Collections;
-import panda.lang.Iterators;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -23,7 +21,7 @@ public class ListExporter extends Component {
 
 	private static final Log log = Logs.getLog(ListExporter.class);
 	
-	private Map<String, Map> codemaps = new HashMap<String, Map>();
+	private Map<Object, Property> codetags = new HashMap<Object, Property>();
 	private Property property;
 
 	protected Iterable list;
@@ -81,25 +79,16 @@ public class ListExporter extends Component {
 		}
 	}
 
-	private String getCodeText(Object cm, Object k) {
-		if (k == null) {
-			return Strings.EMPTY;
+	private Property getCodeProperty(ListColumn c) {
+		Property property = codetags.get(c);
+		if (property == null) {
+			property = newComponent(Property.class);
+			property.setFormat(c.format.type);
+			property.setCodemap(c.format.codemap);
+			property.setEscape(Strings.defaultString(c.format.escape, Escapes.ESCAPE_HTML));
+			codetags.put(c.format.codemap, property);
 		}
-		
-		if (cm instanceof String) {
-			Map m = codemaps.get(cm);
-			if (m == null) {
-				m = (Map)findValue((String)cm);
-				codemaps.put((String)cm, m);
-			}
-			cm = m;
-		}
-
-		if (cm instanceof Map) {
-			return Mvcs.getCodeText((Map)cm, k);
-		}
-		
-		return Strings.EMPTY;
+		return property;
 	}
 
 	public void export(ListWriter cw) throws IOException {
@@ -172,19 +161,11 @@ public class ListExporter extends Component {
 	
 				String value = null;
 				if (c.format != null) {
-					if ("code".equals(c.format.type)) {
+					if (Strings.startsWithIgnoreCase(c.format.type, "code")) {
 						Object v = getBeanProperty(d, c.name);
-						Iterator iv = Iterators.asIterator(v);
-						if (iv != null) {
-							StringBuilder sb = new StringBuilder();
-							while (iv.hasNext()) {
-								sb.append(getCodeText(c.format.codemap, iv.next()));
-								if (iv.hasNext()) {
-									sb.append(' ');
-								}
-							}
-							value = sb.toString();
-						}
+						Property p = getCodeProperty(c);
+						p.setValue(v);
+						value = p.formatValue();
 					}
 					else if ("eval".equals(c.format.type)) {
 						if (Strings.isEmpty(c.format.expr)) {

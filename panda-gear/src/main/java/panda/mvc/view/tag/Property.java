@@ -3,12 +3,17 @@ package panda.mvc.view.tag;
 import java.io.Writer;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 
 import panda.io.stream.StringBuilderWriter;
 import panda.ioc.annotation.IocBean;
+import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.view.util.Escapes;
 
 /**
@@ -69,6 +74,8 @@ import panda.mvc.view.util.Escapes;
  */
 @IocBean(singleton=false)
 public class Property extends ContextBean {
+	private static final Log log = Logs.getLog(Property.class);
+	
 	/**
 	 * PASSWORD_FORMAT = "password-format";
 	 */
@@ -83,6 +90,7 @@ public class Property extends ContextBean {
 	private String name;
 	private String format;
 	private String pattern;
+	private Object codemap;
 	private Object value;
 	private String escape = Escapes.ESCAPE_HTML;
 	
@@ -141,6 +149,29 @@ public class Property extends ContextBean {
 		String s;
 		if (Strings.isEmpty(format) && Strings.isEmpty(pattern)) {
 			s = escape(castString(v));
+		}
+		else if (Strings.startsWithIgnoreCase(format, "code")) {
+			Iterator iv = Iterators.asIterator(v);
+			if (iv == null) {
+				s = "";
+			}
+			else {
+				boolean ct = "codetext".equalsIgnoreCase(format);
+				StringBuilder sb = new StringBuilder();
+				Map codemap = getCodeMap();
+				while (iv.hasNext()) {
+					Object k = iv.next();
+					if (ct) {
+						sb.append(escape(castString(k)));
+						sb.append(':');
+					}
+					sb.append(escape(getCodeText(codemap, k)));
+					if (iv.hasNext()) {
+						sb.append(' ');
+					}
+				}
+				s = sb.toString();
+			}
 		}
 		else if ("password".equalsIgnoreCase(format)) {
 			s = context.getText().getText(PASSWORD_FORMAT, DEFAULT_PASSWORD_FORMAT);
@@ -204,6 +235,35 @@ public class Property extends ContextBean {
 		return s;
 	}
 
+	private Map getCodeMap() {
+		if (codemap instanceof Map) {
+			return (Map)codemap;
+		}
+
+		if (codemap instanceof String) {
+			Map m = (Map)findValue((String)codemap);
+			if (m == null) {
+				log.warn("Null codemap: " + codemap);
+				m = Collections.EMPTY_MAP;
+			}
+			codemap = m;
+			return m;
+		}
+
+		throw new IllegalArgumentException("Invalid codemap: " + codemap.getClass());
+	}
+
+	private String getCodeText(Map m, Object k) {
+		Object v = m.get(k);
+		if (v == null && k != null && !(k instanceof String)) {
+			v = m.get(k.toString());
+		}
+		if (v == null) {
+			v = k;
+		}
+		return (k == null ? Strings.EMPTY : k.toString());
+	}
+
 	private String escape(String value) {
 		return Escapes.escape(value, escape);
 	}
@@ -248,6 +308,13 @@ public class Property extends ContextBean {
 	 */
 	public void setPattern(String pattern) {
 		this.pattern = pattern;
+	}
+
+	/**
+	 * @param codemap the codemap to set
+	 */
+	public void setCodemap(Object codemap) {
+		this.codemap = codemap;
 	}
 
 }
