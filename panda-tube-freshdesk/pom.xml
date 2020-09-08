@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.pandafw</groupId>
 		<artifactId>panda</artifactId>
-		<version>1.7.0-SNAPSHOT</version>
+		<version>1.7.0</version>
 	</parent>
 
 	<artifactId>panda-tube-freshdesk</artifactId>
