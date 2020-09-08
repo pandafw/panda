@@ -1,8 +1,0 @@
-icon=fa fa-file-text-o
-
-title=Pages
-
-lbl-date=Date
-
-index-pagesize-default=20
-
