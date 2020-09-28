@@ -3,7 +3,7 @@
 
 ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-32.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-48.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-64.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-96.png) ![](https://github.com/pandafw/panda-demo/raw/master/web/site/logo/panda-128.png)
 
-[![Build Status](https://travis-ci.org/pandafw/panda.svg?branch=master)](https://travis-ci.org/pandafw/panda) [![codecov](https://codecov.io/gh/pandafw/panda/branch/master/graph/badge.svg)](https://codecov.io/gh/pandafw/panda) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pandafw/panda-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.pandafw/panda-core) [![Apache 2](https://img.shields.io/badge/license-Apache%202-green)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Build Status](https://travis-ci.com/pandafw/panda.svg?branch=master)](https://travis-ci.com/pandafw/panda) [![codecov](https://codecov.io/gh/pandafw/panda/branch/master/graph/badge.svg)](https://codecov.io/gh/pandafw/panda) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pandafw/panda-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.pandafw/panda-core) [![Apache 2](https://img.shields.io/badge/license-Apache%202-green)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 
 
