@@ -1,11 +1,9 @@
 package panda.mvc.view.tag.ui.theme;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
-import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.mvc.alert.ParamAlert;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.InputUIBean;
 
@@ -73,31 +71,34 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 	}
 
 	protected void writeFieldErrors() throws IOException {
-		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		if (Collections.isNotEmpty(fieldErrors)) {
-			for (String fn : getGroupTags()) {
-				List<String> fes = fieldErrors.get(fn);
-				if (Collections.isNotEmpty(fes)) {
-					boolean ul = false;
-					Attributes as = new Attributes();
-					for (String fe : fes) {
-						if (Strings.isNotEmpty(fe)) {
-							if (!ul) {
-								as.clear().add("errorFor", fn).cssClass("fa-ul p-field-errors");
-								stag("ul", as);
-								ul = true;
-							}
-							write("<li class=\"text-danger\">");
-							write("<i class=\"fa-li fa fa-exclamation-circle\"></i>");
-							write("<span>");
-							write(html(fe));
-							write("</span>");
-							write("</li>");
-						}
+		ParamAlert pa = context.getParamAlert();
+		if (!pa.hasErrors()) {
+			return;
+		}
+
+		for (String fn : getGroupTags()) {
+			if (pa.hasErrors(fn)) {
+				boolean ul = false;
+				Attributes as = new Attributes();
+				for (String fe : pa.getErrors(fn)) {
+					if (Strings.isEmpty(fe)) {
+						continue;
 					}
-					if (ul) {
-						etag("ul");
+					
+					if (!ul) {
+						as.clear().add("errorFor", fn).cssClass("fa-ul p-field-errors");
+						stag("ul", as);
+						ul = true;
 					}
+					write("<li class=\"text-danger\">");
+					write("<i class=\"fa-li fa fa-exclamation-circle\"></i>");
+					write("<span>");
+					write(html(fe));
+					write("</span>");
+					write("</li>");
+				}
+				if (ul) {
+					etag("ul");
 				}
 			}
 		}

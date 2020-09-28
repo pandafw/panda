@@ -1,10 +1,7 @@
 package panda.mvc.view.tag.ui.theme.bs3;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
-import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.Div;
 import panda.mvc.view.tag.ui.InputUIBean;
@@ -49,10 +46,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends InputRender
 	protected void renderHeader() throws Exception {
 		String name = tag.getName();
 
-		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		boolean hasFieldErrors = (name != null
-			&& Collections.isNotEmpty(fieldErrors)
-			&& fieldErrors.get(name) != null);
+		boolean hasFieldErrors = (name != null && context.getParamAlert().hasErrors(name));
 
 		Attributes attr = new Attributes();
 		attr.cssClass(join(tag.getCssClass(), "form-group", (hasFieldErrors ? "has-error" : null)));

@@ -14,13 +14,6 @@ public interface ActionAlert {
 	Collection<String> getErrors();
 
 	/**
-	 * Set the Collection of String error messages.
-	 * 
-	 * @param errors Collection of String error messages
-	 */
-	void setErrors(Collection<String> errors);
-	
-	/**
 	 * Add an error message to this Action.
 	 * 
 	 * @param error the error message
@@ -35,9 +28,9 @@ public interface ActionAlert {
 	boolean hasErrors();
 
 	/**
-	 * Clear errors.
+	 * Remove errors.
 	 */
-	void clearErrors();
+	void removeErrors();
 	
 	/**
 	 * Get the Collection of warn messages for this action. Error messages should not
@@ -47,13 +40,6 @@ public interface ActionAlert {
 	 * @return Collection of String warn messages
 	 */
 	Collection<String> getWarnings();
-
-	/**
-	 * Set the Collection of String warn messages.
-	 * 
-	 * @param warnings
-	 */
-	void setWarnings(Collection<String> warnings);
 
 	/**
 	 * Add an warning message to this Action.
@@ -70,9 +56,9 @@ public interface ActionAlert {
 	boolean hasWarnings();
 
 	/**
-	 * Clear warnings.
+	 * Remove warnings.
 	 */
-	void clearWarnings();
+	void removeWarnings();
 	
 	/**
 	 * Get the Collection of confirm messages for this action. Error messages should
@@ -82,13 +68,6 @@ public interface ActionAlert {
 	 * @return Collection of String confirm messages
 	 */
 	Collection<String> getConfirms();
-
-	/**
-	 * Set the Collection of String confirm messages.
-	 * 
-	 * @param confirms
-	 */
-	void setConfirms(Collection<String> confirms);
 
 	/**
 	 * Add an confirm message to this Action.
@@ -105,9 +84,9 @@ public interface ActionAlert {
 	boolean hasConfirms();
 
 	/**
-	 * Clear confirms.
+	 * Remove confirms.
 	 */
-	void clearConfirms();
+	void removeConfirms();
 	
 	/**
 	 * Get the Collection of messages for this action. Messages should not be added
@@ -117,13 +96,6 @@ public interface ActionAlert {
 	 * @return Collection of String messages
 	 */
 	Collection<String> getMessages();
-
-	/**
-	 * Set the Collection of String messages (not errors).
-	 * 
-	 * @param messages Collection of String messages (not errors).
-	 */
-	void setMessages(Collection<String> messages);
 
 	/**
 	 * Add an message to this Action.
@@ -140,9 +112,9 @@ public interface ActionAlert {
 	boolean hasMessages();
 	
 	/**
-	 * Clear messages.
+	 * Remove messages.
 	 */
-	void clearMessages();
+	void removeMessages();
 
 	/**
 	 * Checks whether there are any error/warnings/confirms/messages.

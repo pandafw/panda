@@ -588,13 +588,13 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(getMessage(RES.ERROR_INPUT));
-		for (Entry<String, List<String>> en : getParamAware().getErrors().entrySet()) {
+		for (Entry<String, List<String>> en : getParamAlert().getErrors().entrySet()) {
 			String label = getFieldLabel(en.getKey()) + ": ";
 			for (String s : en.getValue()) {
 				sb.append('\n').append(label).append(s);
 			}
 		}
-		getParamAware().clearErrors();
+		getParamAlert().removeErrors();
 
 		throw new IllegalArgumentException(sb.toString());
 	}

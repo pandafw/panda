@@ -10,24 +10,35 @@ public interface ParamAlert {
 	 * directly here, as implementations are free to return a new Collection or an Unmodifiable
 	 * Collection.
 	 * 
-	 * @return Map with errors mapped from fieldname (String) to Collection of String error messages
+	 * @return Map with errors mapped from name (String) to Collection of String error messages
 	 */
 	Map<String, List<String>> getErrors();
 
 	/**
-	 * Set the field error map of fieldname (String) to Collection of String error messages.
+	 * Get the field specific errors associated with this action. Error messages should not be added
+	 * directly here, as implementations are free to return a new Collection or an Unmodifiable
+	 * Collection.
 	 * 
-	 * @param errors field error map
+	 * @param name name of field
+	 * @return Map with errors mapped from name (String) to Collection of String error messages
 	 */
-	void setErrors(Map<String, List<String>> errors);
+	List<String> getErrors(String name);
 
 	/**
 	 * Add an error message for a given field.
 	 * 
-	 * @param fieldName name of field
+	 * @param name name of field
 	 * @param error the error message
 	 */
-	void addError(String fieldName, String error);
+	void addError(String name, String error);
+
+	/**
+	 * Check whether there are any field errors associated with this action.
+	 * 
+	 * @param name name field of field
+	 * @return whether there are any field errors
+	 */
+	boolean hasErrors(String name);
 
 	/**
 	 * Check whether there are any field errors associated with this action.
@@ -37,7 +48,12 @@ public interface ParamAlert {
 	boolean hasErrors();
 
 	/**
-	 * Clear errors.
+	 * Remove field errors.
 	 */
-	void clearErrors();
+	void removeErrors(String name);
+
+	/**
+	 * Remove all field errors.
+	 */
+	void removeErrors();
 }

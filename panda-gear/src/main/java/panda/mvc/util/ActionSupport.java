@@ -151,16 +151,16 @@ public class ActionSupport {
 	}
 
 	/**
-	 * @return the actionAware
+	 * @return the action alert
 	 */
-	public ActionAlert getActionAware() {
+	public ActionAlert getActionAlert() {
 		return context.getActionAlert();
 	}
 
 	/**
-	 * @return the param Aware
+	 * @return the param alert
 	 */
-	public ParamAlert getParamAware() {
+	public ParamAlert getParamAlert() {
 		return context.getParamAlert();
 	}
 
@@ -322,33 +322,33 @@ public class ActionSupport {
 	}
 	
 	//----------------------------------------------------------------------
-	// Aware
+	// Alert
 	//
 	public boolean hasFieldErrors() {
-		return getParamAware().hasErrors();
+		return getParamAlert().hasErrors();
 	}
-	
-	public void addFieldError(String field, String msg) {
-		getParamAware().addError(field, msg);
-	}
-	
+
 	public boolean hasActionErrors() {
-		return getActionAware().hasErrors();
+		return getActionAlert().hasErrors();
+	}
+
+	public void addFieldError(String field, String msg) {
+		getParamAlert().addError(field, msg);
 	}
 	
 	public void addActionError(String msg) {
-		getActionAware().addError(msg);
+		getActionAlert().addError(msg);
 	}
 
 	public void addActionWarning(String msg) {
-		getActionAware().addWarning(msg);
+		getActionAlert().addWarning(msg);
 	}
 
 	public void addActionConfirm(String msg) {
-		getActionAware().addConfirm(msg);
+		getActionAlert().addConfirm(msg);
 	}
 
 	public void addActionMessage(String msg) {
-		getActionAware().addMessage(msg);
+		getActionAlert().addMessage(msg);
 	}
 }

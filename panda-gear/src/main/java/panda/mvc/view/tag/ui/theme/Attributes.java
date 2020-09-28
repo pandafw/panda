@@ -1,7 +1,6 @@
 package panda.mvc.view.tag.ui.theme;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -12,6 +11,7 @@ import panda.lang.Objects;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.lang.Texts;
+import panda.mvc.alert.ParamAlert;
 import panda.mvc.view.tag.ui.Anchor;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
@@ -243,10 +243,10 @@ public class Attributes {
 
 		String name = tag.getName();
 		
-		Map<String, List<String>> errors = tr.context.getParamAlert().getErrors();
+		ParamAlert pa = tr.context.getParamAlert();
 		
-		boolean hasFieldErrors = (name != null && errors != null && errors.get(name) != null);
-		
+		boolean hasFieldErrors = (name != null && pa.hasErrors(name));
+
 		cssClass(basic, tag.getCssClass(), hasFieldErrors ? tag.getCssErrorClass() : null);
 		cssStyle(tag.getCssStyle(), hasFieldErrors ? tag.getCssErrorStyle() : null);
 		

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.mvc.alert.ParamAlert;
 import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
@@ -24,10 +25,12 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 
 	@Override
 	protected void render() throws IOException {
-		Map<String, List<String>> errors = context.getParamAlert().getErrors();
-		if (Collections.isEmpty(errors)) {
+		ParamAlert pa = context.getParamAlert();
+		if (!pa.hasErrors()) {
 			return;
 		}
+		
+		Map<String, List<String>> errors = pa.getErrors();
 		
 		Collection<String> fns = tag.getFieldNames();
 		if (Collections.isEmpty(fns)) {

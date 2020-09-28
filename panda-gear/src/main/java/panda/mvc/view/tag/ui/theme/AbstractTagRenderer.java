@@ -152,10 +152,6 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return "<i class=\"" + c + " p-cpointer\" onclick=\"" + onclick + "\"></i>";
 	}
 
-	protected String defs(Object s) {
-		return s == null ? "" : s.toString();
-	}
-
 	protected String join(String ... ss) {
 		StringBuilder sb = new StringBuilder();
 		for (String s : ss) {
@@ -169,8 +165,12 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return sb.toString();
 	}
 
-	protected int defi(Object i) {
-		return i instanceof Number ? ((Number)i).intValue() : 0;
+	protected int defi(Number i) {
+		return i.intValue();
+	}
+
+	protected String defs(Object s) {
+		return s == null ? "" : s.toString();
 	}
 
 	protected String defs(String s) {
@@ -181,16 +181,8 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return Strings.defaultIfEmpty((String)val, def);
 	}
 
-	protected String jsstr(Object s) {
-		return StringEscapes.escapeJavaScript((String)s);
-	}
-
 	protected String jsstr(String s) {
 		return StringEscapes.escapeJavaScript(s);
-	}
-
-	protected String html(Object s) {
-		return StringEscapes.escapeHtml((String)s);
 	}
 
 	protected String html(String s) {

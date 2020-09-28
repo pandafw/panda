@@ -210,18 +210,18 @@ public abstract class BindView extends DataView {
 		// put success to first position
 		result.put("success", success);
 		
-		ParamAlert pva = ac.getParamAlert();
-		if (pva != null && pva.hasErrors()) {
+		ParamAlert pa = ac.getParamAlert();
+		if (pa != null && pa.hasErrors()) {
 			success = false;
-			alerts.put("params", pva);
+			alerts.put("params", pa);
 		}
 		
-		ActionAlert ava = ac.getActionAlert();
-		if (ava != null && ava.hasContents()) {
-			if (ava.hasErrors()) {
+		ActionAlert aa = ac.getActionAlert();
+		if (aa != null && aa.hasContents()) {
+			if (aa.hasErrors()) {
 				success = false;
 			}
-			alerts.put("action", ava);
+			alerts.put("action", aa);
 		}
 		if (!alerts.isEmpty()) {
 			result.put("alerts", alerts);

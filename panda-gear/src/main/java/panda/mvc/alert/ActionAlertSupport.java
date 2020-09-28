@@ -18,6 +18,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#getErrors()
 	 */
+	@Override
 	public Collection<String> getErrors() {
 		return errors;
 	}
@@ -30,15 +31,9 @@ public class ActionAlertSupport implements ActionAlert {
 	}
 
 	/**
-	 * @see panda.mvc.alert.ActionAlert#setErrors(java.util.Collection)
-	 */
-	public void setErrors(Collection<String> errors) {
-		this.errors = errors;
-	}
-
-	/**
 	 * @see panda.mvc.alert.ActionAlert#addError(java.lang.String)
 	 */
+	@Override
 	public void addError(String error) {
 		_getErrors().add(error);
 	}
@@ -46,6 +41,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#getWarnings()
 	 */
+	@Override
 	public Collection<String> getWarnings() {
 		return warnings;
 	}
@@ -58,15 +54,9 @@ public class ActionAlertSupport implements ActionAlert {
 	}
 
 	/**
-	 * @see panda.mvc.alert.ActionAlert#setWarnings(java.util.Collection)
-	 */
-	public void setWarnings(Collection<String> warnings) {
-		this.warnings = warnings;
-	}
-
-	/**
 	 * @see panda.mvc.alert.ActionAlert#addWarning(java.lang.String)
 	 */
+	@Override
 	public void addWarning(String warning) {
 		_getWarnings().add(warning);
 	}
@@ -74,6 +64,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#getConfirms()
 	 */
+	@Override
 	public Collection<String> getConfirms() {
 		return confirms;
 	}
@@ -86,15 +77,9 @@ public class ActionAlertSupport implements ActionAlert {
 	}
 
 	/**
-	 * @see panda.mvc.alert.ActionAlert#setConfirms(java.util.Collection)
-	 */
-	public void setConfirms(Collection<String> confirms) {
-		this.confirms = confirms;
-	}
-
-	/**
 	 * @see panda.mvc.alert.ActionAlert#addConfirm(java.lang.String)
 	 */
+	@Override
 	public void addConfirm(String confirm) {
 		_getConfirms().add(confirm);
 	}
@@ -102,6 +87,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#getMessages()
 	 */
+	@Override
 	public Collection<String> getMessages() {
 		return messages;
 	}
@@ -114,15 +100,9 @@ public class ActionAlertSupport implements ActionAlert {
 	}
 
 	/**
-	 * @see panda.mvc.alert.ActionAlert#setMessages(java.util.Collection)
-	 */
-	public void setMessages(Collection<String> messages) {
-		this.messages = messages;
-	}
-
-	/**
 	 * @see panda.mvc.alert.ActionAlert#addMessage(java.lang.String)
 	 */
+	@Override
 	public void addMessage(String message) {
 		_getMessages().add(message);
 	}
@@ -130,6 +110,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#hasErrors()
 	 */
+	@Override
 	public boolean hasErrors() {
 		return Collections.isNotEmpty(errors);
 	}
@@ -137,6 +118,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#hasWarnings()
 	 */
+	@Override
 	public boolean hasWarnings() {
 		return Collections.isNotEmpty(warnings);
 	}
@@ -144,6 +126,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#hasConfirms()
 	 */
+	@Override
 	public boolean hasConfirms() {
 		return Collections.isNotEmpty(confirms);
 	}
@@ -151,6 +134,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#hasMessages()
 	 */
+	@Override
 	public boolean hasMessages() {
 		return Collections.isNotEmpty(messages);
 	}
@@ -158,6 +142,7 @@ public class ActionAlertSupport implements ActionAlert {
 	/**
 	 * @see panda.mvc.alert.ActionAlert#hasContents()
 	 */
+	@Override
 	public boolean hasContents() {
 		return Collections.isNotEmpty(errors) 
 				|| Collections.isNotEmpty(warnings) 
@@ -166,48 +151,53 @@ public class ActionAlertSupport implements ActionAlert {
 	}
 	
 	/**
-	 * Clears all error list.
+	 * Removes all error list.
 	 * <p/>
-	 * Will clear the list that contain errors.
+	 * Will remove the list that contain errors.
 	 */
-	public void clearErrors() {
+	@Override
+	public void removeErrors() {
 		Collections.clear(errors);
 	}
 
 	/**
-	 * Clears warning list.
+	 * Removes warning list.
 	 * <p/>
-	 * Will clear the list that contains warning.
+	 * Will remove the list that contains warning.
 	 */
-	public void clearWarnings() {
+	@Override
+	public void removeWarnings() {
 		Collections.clear(warnings);
 	}
 
 	/**
-	 * Clears confirm list.
+	 * Removes confirm list.
 	 * <p/>
-	 * Will clear the list that contains confirm.
+	 * Will remove the list that contains confirm.
 	 */
-	public void clearConfirms() {
+	@Override
+	public void removeConfirms() {
 		Collections.clear(confirms);
 	}
 
 	/**
-	 * Clears messages list.
+	 * Removes messages list.
 	 * <p/>
-	 * Will clear the list that contains messages.
+	 * Will remove the list that contains messages.
 	 */
-	public void clearMessages() {
+	@Override
+	public void removeMessages() {
 		Collections.clear(messages);
 	}
 
 	/**
 	 * Clear all.
 	 */
+	@Override
 	public void clear() {
-		clearErrors();
-		clearWarnings();
-		clearConfirms();
-		clearMessages();
+		removeErrors();
+		removeWarnings();
+		removeConfirms();
+		removeMessages();
 	}
 }

@@ -15,15 +15,9 @@ public class ParamAlertSupport implements ParamAlert {
 	private Map<String, List<String>> errors;
 
 	/**
-	 * @see panda.mvc.alert.ParamAlert#setErrors(java.util.Map)
-	 */
-	public void setErrors(Map<String, List<String>> errors) {
-		this.errors = errors;
-	}
-
-	/**
 	 * @see panda.mvc.alert.ParamAlert#getErrors()
 	 */
+	@Override
 	public Map<String, List<String>> getErrors() {
 		if (errors == null) {
 			errors = new LinkedHashMap<String, List<String>>();
@@ -32,10 +26,10 @@ public class ParamAlertSupport implements ParamAlert {
 	}
 
 	/**
-	 * @see panda.mvc.alert.ParamAlert#addError(java.lang.String,
-	 *      java.lang.String)
+	 * @see panda.mvc.alert.ParamAlert#getErrors(java.lang.String)
 	 */
-	public void addError(String name, String error) {
+	@Override
+	public List<String> getErrors(String name) {
 		final Map<String, List<String>> errors = getErrors();
 		List<String> perrors = errors.get(name);
 
@@ -43,23 +37,52 @@ public class ParamAlertSupport implements ParamAlert {
 			perrors = new ArrayList<String>();
 			errors.put(name, perrors);
 		}
-
-		perrors.add(error);
+		return perrors;
 	}
 
 	/**
 	 * @see panda.mvc.alert.ParamAlert#hasErrors()
 	 */
+	@Override
 	public boolean hasErrors() {
 		return Collections.isNotEmpty(errors);
 	}
 
 	/**
-	 * Clears field errors Map.
-	 * <p/>
-	 * Will clear the Map that contains field errors.
+	 * @see panda.mvc.alert.ParamAlert#hasErrors(java.lang.String)
 	 */
-	public void clearErrors() {
+	@Override
+	public boolean hasErrors(String name) {
+		if (Collections.isEmpty(errors)) {
+			return false;
+		}
+		return Collections.isNotEmpty(errors.get(name));
+	}
+
+	/**
+	 * @see panda.mvc.alert.ParamAlert#addError(java.lang.String,
+	 *      java.lang.String)
+	 */
+	@Override
+	public void addError(String name, String error) {
+		getErrors(name).add(error);
+	}
+
+	/**
+	 * remove field errors Map.
+	 */
+	@Override
+	public void removeErrors(String name) {
+		if (errors != null) {
+			errors.remove(name);
+		}
+	}
+
+	/**
+	 * Remove all field errors.
+	 */
+	@Override
+	public void removeErrors() {
 		Collections.clear(errors);
 	}
 }

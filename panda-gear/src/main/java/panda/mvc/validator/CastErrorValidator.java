@@ -30,7 +30,7 @@ public class CastErrorValidator extends AbstractValidator {
 			setValue(ac.getCastErrorParams().get(fullFieldName));
 			
 			if (clearErrors) {
-				ac.getParamAlert().getErrors().remove(fullFieldName);
+				ac.getParamAlert().removeErrors(fullFieldName);
 			}
 
 			addFieldError(ac);
