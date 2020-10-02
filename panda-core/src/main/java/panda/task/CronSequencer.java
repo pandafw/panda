@@ -257,11 +257,11 @@ public class CronSequencer {
 	 * @return a new string with the values from the list replaced
 	 */
 	private String replaceOrdinals(String value, String commaSeparatedList) {
-		String uv = value.toUpperCase();
+		value = value.toUpperCase();
 		String[] list = Strings.split(commaSeparatedList, ',');
 		for (int i = 0; i < list.length; i++) {
 			String item = list[i].toUpperCase();
-			value = Strings.replace(uv, item, String.valueOf(i));
+			value = Strings.replace(value, item, String.valueOf(i));
 		}
 		return value;
 	}
@@ -305,7 +305,7 @@ public class CronSequencer {
 			}
 			else {
 				String[] split = Strings.split(field, '/');
-				if (split.length > 2) {
+				if (split.length != 2) {
 					throw new IllegalArgumentException("Incrementer has more than two fields: '" +
 							field + "' in expression \"" + expression + "\"");
 				}
