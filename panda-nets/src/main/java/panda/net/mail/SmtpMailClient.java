@@ -29,6 +29,7 @@ import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.reflect.Methods;
 import panda.lang.time.DateTimes;
+import panda.log.Log;
 import panda.net.Mimes;
 import panda.net.PrintCommandListener;
 import panda.net.io.CRLFLineWriter;
@@ -57,7 +58,8 @@ public class SmtpMailClient extends MailClient {
 			email.setMsgId(generateMsgId());
 		}
 
-		if (log != null && log.isDebugEnabled()) {
+		Log log = getLog();
+		if (log.isDebugEnabled()) {
 			log.debug(Streams.EOL
 					+ "============ SEND EMAIL (SMTP Mail) =================="
 					+ Streams.EOL
@@ -149,6 +151,8 @@ public class SmtpMailClient extends MailClient {
 		// debug writer
 		StringBuilderWriter dbg = null;
 
+		Log log = getLog();
+
 		AuthenticatingSMTPClient client = null;
 		try {
 			// connect to the SMTP server
@@ -159,7 +163,7 @@ public class SmtpMailClient extends MailClient {
 				client.setConnectTimeout(connectTimeout);
 				client.setDefaultTimeout(defaultTimeout);
 
-				if (log != null && log.isDebugEnabled()) {
+				if (log.isDebugEnabled()) {
 					dbg = new StringBuilderWriter();
 					dbg.append("\n===================== SMTP DEBUG ====================\n");
 					client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(dbg), true));

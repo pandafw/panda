@@ -82,11 +82,6 @@ public interface SET extends SetConstants {
 	public static final String MAIL_CLIENT = "mail-client";
 
 	/**
-	 * MAIL_DEBUG = "mail-debug";
-	 */
-	public static final String MAIL_DEBUG = "mail-debug";
-
-	/**
 	 * MAIL_SMTP_HELO = "mail-smtp-helo";
 	 */
 	public static final String MAIL_SMTP_HELO = "mail-smtp-helo";

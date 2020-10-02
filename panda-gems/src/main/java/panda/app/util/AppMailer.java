@@ -105,7 +105,6 @@ public class AppMailer {
 			client.setPort(port);
 		}
 
-		client.setDebug(getMailSettingAsBoolean(SET.MAIL_DEBUG, false));
 		client.setSsl(getMailSettingAsBoolean(SET.MAIL_SMTP_SSL, false));
 		client.setStartTls(getMailSettingAsBoolean(SET.MAIL_SMTP_STARTTLS, true));
 

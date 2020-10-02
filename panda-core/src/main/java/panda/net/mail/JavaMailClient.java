@@ -25,6 +25,7 @@ import panda.io.Streams;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.log.Log;
 import panda.net.Mimes;
 import panda.vfs.FileItem;
 
@@ -40,7 +41,8 @@ public class JavaMailClient extends MailClient {
 		Asserts.notNull(email.getFrom(), "Email.From is required");
 		Asserts.notEmpty(email.getTos(), "Email.To is required");
 
-		if (log != null && log.isDebugEnabled()) {
+		Log log = getLog();
+		if (log.isDebugEnabled()) {
 			log.debug(Streams.EOL
 					+ "============ SEND EMAIL (Java Mail) =================="
 					+ Streams.EOL
@@ -61,7 +63,7 @@ public class JavaMailClient extends MailClient {
 		}
 		props.put("mail.smtp.ssl.enable", ssl);
 		props.put("mail.smtp.starttls.enable", startTls);
-		props.put("mail.debug", debug);
+		props.put("mail.debug", log.isDebugEnabled());
 
 		javax.mail.Authenticator auth = null;
 		if (Strings.isNotEmpty(username)) {

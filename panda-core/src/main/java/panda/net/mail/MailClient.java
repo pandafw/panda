@@ -45,14 +45,13 @@ public abstract class MailClient {
 		return (MailClient)Classes.born(type);
 	}
 	
-	protected Log log;
+	private Log log;
 
 	protected String helo = "localhost";
 	protected String host;
 	protected int port;
 	protected boolean ssl = false;
 	protected boolean startTls = true;
-	protected boolean debug;
 	protected String username;
 	protected String password;
 
@@ -63,6 +62,14 @@ public abstract class MailClient {
 	 * @return the log
 	 */
 	public Log getLog() {
+		if (log == null) {
+			if (LOG == null) {
+				// !IMPORTANT: panda.log.impl.SmtpLogAdapter use this class
+				// do not use static final log instance, it will cause dead loop
+				LOG = Logs.getLog(getClass());
+			}
+			log = LOG;
+		}
 		return log;
 	}
 
@@ -141,33 +148,6 @@ public abstract class MailClient {
 	 */
 	public void setStartTls(boolean startTls) {
 		this.startTls = startTls;
-	}
-
-	/**
-	 * @return the debug
-	 */
-	public boolean isDebug() {
-		return debug;
-	}
-
-	/**
-	 * @param debug the debug to set
-	 */
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-		if (debug) {
-			if (log == null) {
-				if (LOG == null) {
-					// !IMPORTANT: panda.log.impl.SmtpLogAdapter use this class
-					// do not use static final log instance, it will cause dead loop
-					LOG = Logs.getLog(getClass());
-				}
-				log = LOG;
-			}
-		}
-		else {
-			log = null;
-		}
 	}
 
 	/**

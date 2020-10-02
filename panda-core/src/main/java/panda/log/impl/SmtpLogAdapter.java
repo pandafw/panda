@@ -142,11 +142,9 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 			ConsoleLog log = new ConsoleLog(logs, getClass().getName());
 			log.setLogLevel(LogLevel.DEBUG);
 			mc.setLog(log);
-
-			mc.setDebug(smtpDebug);
 		}
 		else {
-			mc.setLog(null);
+			mc.setLog(NopLog.INSTANCE);
 		}
 
 		return mc;
