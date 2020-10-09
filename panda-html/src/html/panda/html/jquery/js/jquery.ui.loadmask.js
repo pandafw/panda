@@ -31,7 +31,7 @@
 		if (c.mask !== false) {
 			var $m = $('<div class="ui-loadmask-mask"></div>');
 			//auto height fix for IE
-			if ($.browser.msie) {
+			if ($.browser && $.browser.msie) {
 				$m.height($el.height() + parseInt($el.css("padding-top")) + parseInt($el.css("padding-bottom")));
 				$m.width($el.width() + parseInt($el.css("padding-left")) + parseInt($el.css("padding-right")));
 			}
@@ -39,7 +39,7 @@
 		}
 		
 		//fix for z-index bug with selects in IE6
-		if (parseInt($.browser.version,10) < 7) {
+		if ($.browser && $.browser.msie && parseInt($.browser.version, 10) < 7) {
 			$el.find("select").addClass("ui-loadmasked-hidden");
 		}
 		
