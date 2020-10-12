@@ -6,7 +6,7 @@
 		c = c || {};
 		return this.each(function() {
 			var $s = $(this);
-				$t = c.target ? $(c.target) : $s.parent();
+			var $t = c.target ? $(c.target) : $s.parent();
 
 			var tl = $t.scrollLeft(),
 				tt = $t.scrollTop(),
