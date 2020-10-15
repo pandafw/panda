@@ -11,7 +11,7 @@ import panda.mvc.View;
 import panda.mvc.view.Views;
 
 @IocBean
-public class InvokeProcessor extends AbstractProcessor {
+public class InvokeProcessor extends AbstractActionProcessor {
 
 	@Override
 	public void process(ActionContext ac) {

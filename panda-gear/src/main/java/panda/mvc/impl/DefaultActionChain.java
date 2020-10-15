@@ -11,7 +11,7 @@ import panda.log.Logs;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionConfig;
-import panda.mvc.Processor;
+import panda.mvc.ActionProcessor;
 
 public class DefaultActionChain implements ActionChain {
 	private static final Log log = Logs.getLog(DefaultActionChain.class);
@@ -47,18 +47,18 @@ public class DefaultActionChain implements ActionChain {
 			}
 			
 			String name = procs.get(current);
-			Processor processor = initProcessor(name, ac);
+			ActionProcessor processor = initProcessor(name, ac);
 			processor.process(ac);
 		}
 
-		protected Processor initProcessor(String name, ActionContext ac) {
+		protected ActionProcessor initProcessor(String name, ActionContext ac) {
 			try {
-				Processor p;
+				ActionProcessor p;
 				if (Strings.startsWithChar(name, IocValue.KIND_REF)) {
-					p = ac.getIoc().get(Processor.class, name.substring(1));
+					p = ac.getIoc().get(ActionProcessor.class, name.substring(1));
 				}
 				else {
-					p = (Processor)Classes.newInstance(name);
+					p = (ActionProcessor)Classes.newInstance(name);
 				}
 				return p;
 			}

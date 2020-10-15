@@ -10,7 +10,7 @@ import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 
 @IocBean
-public class FatalProcessor extends AbstractProcessor {
+public class FatalProcessor extends AbstractActionProcessor {
 	private static final Log log = Logs.getLog(FatalProcessor.class);
 
 	@Override

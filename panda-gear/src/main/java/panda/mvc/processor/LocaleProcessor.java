@@ -23,7 +23,7 @@ import panda.net.http.HttpHeader;
 import panda.servlet.HttpServlets;
 
 @IocBean
-public class LocaleProcessor extends AbstractProcessor {
+public class LocaleProcessor extends AbstractActionProcessor {
 
 	/**
 	 * DEFAULT_HEADER = "X-WW-LOCALE";

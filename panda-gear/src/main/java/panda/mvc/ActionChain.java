@@ -1,7 +1,7 @@
 package panda.mvc;
 
 /**
- * Mvc action process chain
+ * Mvc action processor chain
  * 
  * <p>
  * !! thread safe !!

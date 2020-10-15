@@ -33,7 +33,7 @@ import panda.servlet.HttpServlets;
  * /a.do?__redir=/pdf.do&__param=url&b=1&c=2 -> redirect to: /thisContext/pdf?url=escape(/thisContext/a.do?b=1&c=2)
  */
 @IocBean
-public class RedirectProcessor extends AbstractProcessor {
+public class RedirectProcessor extends AbstractActionProcessor {
 	private static final Log log = Logs.getLog(RedirectProcessor.class);
 
 	/**

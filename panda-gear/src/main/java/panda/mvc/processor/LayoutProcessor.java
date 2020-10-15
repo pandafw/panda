@@ -12,7 +12,7 @@ import panda.net.http.UserAgent;
 import panda.servlet.HttpServlets;
 
 @IocBean
-public class LayoutProcessor extends AbstractProcessor {
+public class LayoutProcessor extends AbstractActionProcessor {
 
 	/**
 	 * DEFAULT_HEADER = "X-WW-LAYOUT";

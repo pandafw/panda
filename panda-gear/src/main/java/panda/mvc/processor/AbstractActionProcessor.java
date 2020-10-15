@@ -1,12 +1,12 @@
 package panda.mvc.processor;
 
 import panda.mvc.ActionContext;
-import panda.mvc.Processor;
+import panda.mvc.ActionProcessor;
 
 /**
  * 抽象的Processor实现. 任何Processor实现都应该继承这个类,以获取正确的执行逻辑.
  */
-public abstract class AbstractProcessor implements Processor {
+public abstract class AbstractActionProcessor implements ActionProcessor {
 	/**
 	 * 继续执行下一个Processor
 	 * <p/>

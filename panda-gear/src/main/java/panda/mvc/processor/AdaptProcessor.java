@@ -10,7 +10,7 @@ import panda.mvc.adaptor.multipart.FileSizeLimitExceededException;
 import panda.mvc.view.Views;
 
 @IocBean
-public class AdaptProcessor extends AbstractProcessor {
+public class AdaptProcessor extends AbstractActionProcessor {
 	public static final String MULTIPART_BODY_SIZE_EXCEEDED_MSGID = "multipart-body-size-exceeded";
 	public static final String MULTIPART_BODY_SIZE_EXCEEDED_DEFAULT = "The request was rejected because its size (${top.displayActualSize}) exceeds the maximum permitted size (${top.displayLimitedSize}).";
 	public static final String MULTIPART_FILE_SIZE_EXCEEDED_MSGID = "multipart-file-size-exceeded";

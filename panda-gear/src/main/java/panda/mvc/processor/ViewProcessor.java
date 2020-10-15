@@ -6,7 +6,7 @@ import panda.mvc.View;
 import panda.mvc.view.Views;
 
 @IocBean
-public class ViewProcessor extends AbstractProcessor {
+public class ViewProcessor extends AbstractActionProcessor {
 	@Override
 	public void process(ActionContext ac) {
 		View view = ac.getView();

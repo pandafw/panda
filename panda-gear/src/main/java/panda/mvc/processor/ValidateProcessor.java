@@ -16,7 +16,7 @@ import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
 
 @IocBean
-public class ValidateProcessor extends AbstractProcessor {
+public class ValidateProcessor extends AbstractActionProcessor {
 	@Override
 	public void process(ActionContext ac) {
 		ValidateHandler vh = Validators.getValidateHandler(ac);

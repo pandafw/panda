@@ -1,5 +1,5 @@
 package panda.mvc;
 
-public interface Processor {
+public interface ActionProcessor {
 	void process(ActionContext ac);
 }

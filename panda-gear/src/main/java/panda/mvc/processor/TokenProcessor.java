@@ -24,7 +24,7 @@ import panda.util.crypto.Cryptor;
 import panda.util.crypto.Token;
 
 @IocBean
-public class TokenProcessor extends AbstractProcessor {
+public class TokenProcessor extends AbstractActionProcessor {
 	private static final Log log = Logs.getLog(TokenProcessor.class);
 
 	/**
