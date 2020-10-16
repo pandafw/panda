@@ -280,7 +280,7 @@ public class CmdLineParser {
 	}
 	
 	protected void injectArguments(List<String> as) throws CmdLineException {
-		if (Collections.isEmpty(as) || !needArguments()) {
+		if (Collections.isEmpty(as) || Collections.isEmpty(argInjectors)) {
 			return;
 		}
 
@@ -325,22 +325,18 @@ public class CmdLineParser {
 	}
 
 	protected void validateArguments() throws CmdLineException {
-		if (needArguments()) {
-			for (Argument a : argInjectors.keySet()) {
-				if (a.required()) {
-					if (!argValues.containsKey(a)) {
-						StringBuilder sb = new StringBuilder();
-						sb.append("The argument <");
-						sb.append(a.name());
-						sb.append("> is required!");
-						throw new CmdLineException(sb.toString());
-					}
-				}
-			}
-		}
-		else {
+		if (Collections.isEmpty(argInjectors)) {
 			if (Collections.isNotEmpty(cmdLineArgs)) {
 				throw new CmdLineException("Invalid arguments - " + Strings.join(cmdLineArgs, ' '));
+			}
+			return;
+		}
+		
+		for (Argument a : argInjectors.keySet()) {
+			if (a.required()) {
+				if (!argValues.containsKey(a)) {
+					throw new CmdLineException("The argument <" + a.name() + "> is required!");
+				}
 			}
 		}
 	}

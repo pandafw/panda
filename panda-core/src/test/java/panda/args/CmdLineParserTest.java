@@ -32,6 +32,14 @@ public class CmdLineParserTest {
 	
 	@Option(opt='2', option="22", hidden=true)
 	private boolean b2;
+
+	public static class Arg1 {
+		@Argument(name="A1", index=0)
+		private String a1;
+
+		@Option(opt='h', option="help")
+		private boolean help;
+	}
 	
 	@Test
 	public void testUsage() {
@@ -200,5 +208,13 @@ public class CmdLineParserTest {
 		Assert.assertEquals(new File("test.txt"), f);
 		Assert.assertEquals("aa0", a0);
 		Assert.assertEquals("aa1", a1);
+	}
+	
+	@Test
+	public void testArgument() throws CmdLineException {
+		Arg1 arg1 = new Arg1();
+		CmdLineParser clp = new CmdLineParser(arg1);
+		clp.parse(new String[] { "-h", "arg1" });
+		Assert.assertEquals("arg1", arg1.a1);
 	}
 }
