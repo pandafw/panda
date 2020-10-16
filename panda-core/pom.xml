@@ -27,20 +27,6 @@
 	</build>
 
 	<dependencies>
-		<!-- Servlet -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet.api.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>javax.servlet.jsp-api</artifactId>
-			<version>${servlet.jsp.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Logging -->
 		<dependency>
 			<groupId>commons-logging</groupId>
