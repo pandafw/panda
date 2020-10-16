@@ -3,12 +3,10 @@ package panda.bind.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.ss.formula.functions.T;
-
 import panda.io.FileNames;
 import panda.lang.Collections;
 
-public class WildcardPropertyFilter extends AbstractSerializeAdapter<T> {
+public class WildcardPropertyFilter<T> extends AbstractSerializeAdapter<T> {
 	private List<String> filterNames;
 	private List<String> filterTypes;
 	
