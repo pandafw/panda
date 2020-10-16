@@ -65,7 +65,9 @@ public class FreemarkerTemplateLoader extends MultiTemplateLoader {
 		else {
 			// presume that most apps will require the class and webapp template loader
 			// if people wish to
-			addTemplateLoader(new WebappTemplateLoader(servlet, webpath));
+			if (servlet != null) {
+				addTemplateLoader(new WebappTemplateLoader(servlet, webpath));
+			}
 			addTemplateLoader(new ClassTemplateLoader());
 		}
 	}

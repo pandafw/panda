@@ -163,7 +163,7 @@ public abstract class Mvcs {
 		String sp = ac.getIoc().getIfExists(String.class, MvcConstants.STATIC_PATH);
 		
 		if (Strings.isEmpty(sp)) {
-			sp = ac.getServlet().getContextPath() + STATIC_PATH;
+			sp = ac.getRequest().getContextPath() + STATIC_PATH;
 		}
 		else if (sp.startsWith("//")) {
 			sp = sp.substring(1);
