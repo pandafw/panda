@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.naming.CompositeName;
@@ -34,69 +35,158 @@ import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-
+import panda.args.Argument;
+import panda.args.CmdLineException;
+import panda.args.CmdLineParser;
+import panda.args.Option;
 import panda.lang.Strings;
-import webapp.runner.launch.CommandLineParams;
-import webapp.runner.launch.SessionStore;
+
 import webapp.runner.launch.valves.StdoutAccessLogValve;
 
-public class AppLaunch {
+public class TomcatLauncher {
 
 	private static final String AUTH_ROLE = "user";
 
-	public static class CommandLineParamsEx extends CommandLineParams {
-		@Parameter(names = "--sslport", description = "The SSL port that the server will accept http requests on.")
+	public static class CommandLineArgs {
+		@Option(opt='h', option="help", usage="print usage")
+		public boolean help;
+
+		@Option(option="session-timeout", arg="TIMEOUT", usage="The number of minutes of inactivity before a user's session is timed out.")
+		public Integer sessionTimeout;
+
+		@Option(option="port", arg="PORT", usage="The port that the server will accept http requests on.")
+		public Integer port = 8080;
+
+		@Option(option="context-xml", arg="XML", usage="The path to the context xml to use.")
+		public String contextXml;
+
+		@Option(option="path", arg="PATH", usage="The context path")
+		public String contextPath = "";
+
+		@Option(option="shutdown-override", usage="Overrides the default behavior and casues Tomcat to ignore lifecycle failure events rather than shutting down when they occur.")
+		public boolean shutdownOverride;
+
+		@Option(option="enable-compression", usage="Enable GZIP compression on responses")
+		public boolean enableCompression;
+
+		@Option(option="compressable-mime-types", arg="TYPES", usage="Comma delimited list of mime types that will be compressed when using GZIP compression.")
+		public String compressableMimeTypes = "text/html,text/xml,text/plain,text/css,application/json,application/xml,text/javascript,application/javascript";
+
+		@Option(option="enable-ssl", usage="Specify -Djavax.net.ssl.keyStore, -Djavax.net.ssl.keystoreStorePassword, -Djavax.net.ssl.trustStore and -Djavax.net.ssl.trustStorePassword in JAVA_OPTS. Note: should not be used if a reverse proxy is terminating SSL for you (such as on Heroku)")
+		public boolean enableSSL;
+
+		@Option(option="enable-client-auth", usage="Specify -Djavax.net.ssl.keyStore and -Djavax.net.ssl.keyStorePassword in JAVA_OPTS")
+		public boolean enableClientAuth;
+
+		@Option(option="enable-basic-auth", usage="Secure the app with basic auth. Use with --basic-auth-user and --basic-auth-pw or --tomcat-users-location")
+		public boolean enableBasicAuth;
+
+		@Option(option="basic-auth-user", arg="AUTH", usage="Username to be used with basic auth. Defaults to BASIC_AUTH_USER env variable.")
+		public String basicAuthUser;
+
+		@Option(option="basic-auth-pw", arg="PWD", usage="Password to be used with basic auth. Defaults to BASIC_AUTH_PW env variable.")
+		public String basicAuthPw;
+
+		@Option(option="tomcat-users-location", arg="LOCATION", usage="Location of the tomcat-users.xml file. (relative to the location of the webapp-runner jar file)")
+		public String tomcatUsersLocation;
+
+		@Option(option="uri-encoding", arg="ENCODING", usage="Set the URI encoding to be used for the Connector.")
+		public String uriEncoding;
+
+		@Option(option="use-body-encoding-for-uri", usage="Set if the entity body encoding should be used for the URI.")
+		public boolean useBodyEncodingForURI;
+
+		@Option(option="scanBootstrapClassPath", usage="Set jar scanner scan bootstrap classpath.")
+		public boolean scanBootstrapClassPath;
+
+		@Option(option="temp-directory", arg="DIR", usage="Define the temp directory, default value: ~/tomcat")
+		public String tempDirectory = null;
+
+		@Option(option="bind-on-start", usage="Controls when the socket used by the connector is bound. By default it is bound when the connector is initiated and unbound when the connector is destroyed. If set to true, the socket will be bound when the connector is started and unbound when it is stopped.")
+		public boolean bindOnStart;
+
+		@Option(option="proxy-base-url", usage="Set proxy URL if tomcat is running behind reverse proxy")
+		public String proxyBaseUrl = "";
+
+		@Option(option="max-threads", usage="Set the maximum number of worker threads")
+		public Integer maxThreads = 0;
+
+		public Map<String, String> attributes = new HashMap<String, String>();
+
+		@Option(opt='A', option="attr", usage="Allows setting HTTP connector attributes. For example: -Acompression=on")
+		public void setAttribute(String attr) {
+			String[] as = Strings.split(attr, '-');
+			if (as.length != 2) {
+				throw new IllegalArgumentException("Invalid option -A" + attr);
+			}
+			attributes.put(Strings.strip(as[0]), Strings.strip(as[1]));
+		}
+		
+		@Option(option="enable-naming", usage="Enables JNDI naming")
+		public boolean enableNaming;
+
+		@Option(option="access-log", usage="Enables AccessLogValue to STDOUT")
+		public boolean accessLog;
+
+		@Option(option="access-log-pattern", arg="PATTERN", usage="If --access-log is enabled, sets the logging pattern")
+		public String accessLogPattern = "common";
+
+		@Option(option="sslport", arg="PORT", usage="The SSL port that the server will accept http requests on.")
 		public Integer sslport = 0;
 
-		@Parameter(names = "--keystoreFile", description = "The keystore file.")
+		@Option(option="keystoreFile", arg="PATH", usage="The keystore file.")
 		public String keystoreFile;
 
-		@Parameter(names = "--keystorePass", description = "The keystore password.")
+		@Option(option="keystorePass", arg="PASSWORD", usage="The keystore password.")
 		public String keystorePass;
 
-		@Parameter(names = "--keystoreType", description = "The keystore type.")
+		@Option(option="keystoreType", arg="TYPE", usage="The keystore type.")
 		public String keystoreType;
 		
-		@Parameter(names = "--relaxedPathChars", description = "relaxedPathChars.")
+		@Option(option="relaxedPathChars", arg="CHARS", usage="relaxedPathChars.")
 		public String relaxedPathChars;
 
-		@Parameter(names = "--relaxedQueryChars", description = "relaxedQueryChars.")
+		@Option(option="relaxedQueryChars", arg="CHARS", usage="relaxedQueryChars.")
 		public String relaxedQueryChars;
-		
+
+		@Argument(name="WAR", index=0, usage="The war path.")
+		public String war = "web";
 	}
 	
 	public static void main(String[] args) throws Exception {
+		CommandLineArgs clas = new CommandLineArgs();
 
-		CommandLineParamsEx commandLineParams = new CommandLineParamsEx();
+		CmdLineParser clp = new CmdLineParser(clas);
+		try {
+			clp.parse(args);
 
-		@SuppressWarnings("deprecation")
-		JCommander jCommander = new JCommander(commandLineParams, args);
+			if (clas.help) {
+				System.out.print(clp.usage());
+				return;
+			}
 
-		if (commandLineParams.help) {
-			jCommander.usage();
-			System.exit(1);
+			clp.validate();
 		}
-
-		// default to src/main/webapp
-		if (commandLineParams.paths.size() == 0) {
-			commandLineParams.paths.add("web");
+		catch (CmdLineException e) {
+			System.out.println("ERROR: " + e.getMessage());
+			System.out.println();
+			System.out.println(clp.usage());
+			return;
 		}
 
 		final Tomcat tomcat = new Tomcat();
 
 		// set directory for temp files
-		tomcat.setBaseDir(resolveTomcatBaseDir(commandLineParams.port, commandLineParams.tempDirectory));
+		tomcat.setBaseDir(resolveTomcatBaseDir(clas.port, clas.tempDirectory));
 
 		// initialize the connector
 		Connector nioConnector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-		nioConnector.setPort(commandLineParams.port);
+		nioConnector.setPort(clas.port);
 
 		Connector snioConnector = null;
-		if (commandLineParams.sslport > 0) {
+		if (clas.sslport > 0) {
 			snioConnector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-			snioConnector.setPort(commandLineParams.sslport);
+			snioConnector.setPort(clas.sslport);
 			snioConnector.setSecure(true);
 			snioConnector.setProperty("SSLEnabled", "true");
 			snioConnector.setProperty("allowUnsafeLegacyRenegotiation", "false");
@@ -110,26 +200,26 @@ public class AppLaunch {
 				snioConnector.setAttribute("trustStorePassword", System.getProperty("javax.net.ssl.trustStorePassword"));
 			}
 
-			String pathToKeystore = commandLineParams.keystoreFile;
+			String pathToKeystore = clas.keystoreFile;
 			if (pathToKeystore != null) {
 				File keystoreFile = new File(pathToKeystore);
 				snioConnector.setAttribute("keystoreFile", keystoreFile.getAbsolutePath());
 				System.out.println(keystoreFile.getAbsolutePath());
-				snioConnector.setAttribute("keystorePass", commandLineParams.keystorePass);
-				if (Strings.isNotEmpty(commandLineParams.keystoreType)) {
-					snioConnector.setAttribute("keystoreType", commandLineParams.keystoreType);
+				snioConnector.setAttribute("keystorePass", clas.keystorePass);
+				if (Strings.isNotEmpty(clas.keystoreType)) {
+					snioConnector.setAttribute("keystoreType", clas.keystoreType);
 				}
 			}
-			if (commandLineParams.enableClientAuth) {
+			if (clas.enableClientAuth) {
 				snioConnector.setAttribute("clientAuth", true);
 			}
 		}
 
-		if (commandLineParams.maxThreads > 0) {
+		if (clas.maxThreads > 0) {
 			ProtocolHandler handler = nioConnector.getProtocolHandler();
 			if (handler instanceof AbstractProtocol) {
 				AbstractProtocol protocol = (AbstractProtocol)handler;
-				protocol.setMaxThreads(commandLineParams.maxThreads);
+				protocol.setMaxThreads(clas.maxThreads);
 			}
 			else {
 				System.out.println("WARNING: Could not set maxThreads!");
@@ -137,42 +227,25 @@ public class AppLaunch {
 		}
 
 		if (nioConnector != null) {
-			setConnectorProperties(nioConnector, commandLineParams);
+			setConnectorProperties(nioConnector, clas);
 			tomcat.setConnector(nioConnector);
-			tomcat.setPort(commandLineParams.port);
+			tomcat.setPort(clas.port);
 		}
 		if (snioConnector != null) {
-			setConnectorProperties(snioConnector, commandLineParams);
+			setConnectorProperties(snioConnector, clas);
 			tomcat.getService().addConnector(snioConnector);
 		}
 
-		if (commandLineParams.paths.size() > 1) {
-			System.out.println("WARNING: multiple paths are specified, but no longer supported. First path will be used.");
-		}
-
-		// Get the first path
-		String path = commandLineParams.paths.get(0);
-
-		Context ctx;
-
-		File war = new File(path);
-
+		File war = new File(clas.war);
 		if (!war.exists()) {
-			System.err.println("The specified path \"" + path + "\" does not exist.");
-			jCommander.usage();
+			System.err.println("The specified path \"" + clas.war + "\" does not exist.");
 			System.exit(1);
 		}
 
-		// Use the commandline context-path (or default)
-		// warn if the contextPath doesn't start with a '/'. This causes issues serving content at the context root.
-		if (commandLineParams.contextPath.length() > 0 && !commandLineParams.contextPath.startsWith("/")) {
-			System.out.println("WARNING: You entered a path: [" + commandLineParams.contextPath
-					+ "]. Your path should start with a '/'. Tomcat will update this for you, but you may still experience issues.");
-		}
+		Context ctx;
 
-		final String ctxName = commandLineParams.contextPath;
-
-		if (commandLineParams.expandWar && war.isFile()) {
+		final String ctxName = clas.contextPath;
+		if (war.isFile()) {
 			File appBase = new File(System.getProperty(Globals.CATALINA_BASE_PROP), tomcat.getHost().getAppBase());
 			if (appBase.exists()) {
 				appBase.delete();
@@ -193,7 +266,7 @@ public class AppLaunch {
 		// we'll do it ourselves (see above)
 		((StandardContext)ctx).setUnpackWAR(false);
 
-		if (!commandLineParams.shutdownOverride) {
+		if (!clas.shutdownOverride) {
 			// allow Tomcat to shutdown if a context failure is detected
 			ctx.addLifecycleListener(new LifecycleListener() {
 				public void lifecycleEvent(LifecycleEvent event) {
@@ -209,43 +282,38 @@ public class AppLaunch {
 			});
 		}
 
-		if (commandLineParams.scanBootstrapClassPath) {
+		if (clas.scanBootstrapClassPath) {
 			StandardJarScanner scanner = new StandardJarScanner();
 			scanner.setScanBootstrapClassPath(true);
 			ctx.setJarScanner(scanner);
 		}
 
 		// set the context xml location if there is only one war
-		if (commandLineParams.contextXml != null) {
-			System.out.println("Using context config: " + commandLineParams.contextXml);
-			ctx.setConfigFile(new File(commandLineParams.contextXml).toURI().toURL());
-		}
-
-		// set the session manager
-		if (commandLineParams.sessionStore != null) {
-			SessionStore.getInstance(commandLineParams.sessionStore).configureSessionStore(commandLineParams, ctx);
+		if (clas.contextXml != null) {
+			System.out.println("Using context config: " + clas.contextXml);
+			ctx.setConfigFile(new File(clas.contextXml).toURI().toURL());
 		}
 
 		// set the session timeout
-		if (commandLineParams.sessionTimeout != null) {
-			ctx.setSessionTimeout(commandLineParams.sessionTimeout);
+		if (clas.sessionTimeout != null) {
+			ctx.setSessionTimeout(clas.sessionTimeout);
 		}
 
 		addShutdownHook(tomcat);
 
-		if (commandLineParams.enableNaming || commandLineParams.enableBasicAuth || commandLineParams.tomcatUsersLocation != null) {
+		if (clas.enableNaming || clas.enableBasicAuth || clas.tomcatUsersLocation != null) {
 			tomcat.enableNaming();
 		}
 
-		if (commandLineParams.enableBasicAuth) {
-			enableBasicAuth(ctx, commandLineParams.enableSSL);
+		if (clas.enableBasicAuth) {
+			enableBasicAuth(ctx, clas.enableSSL);
 		}
 
-		if (commandLineParams.accessLog) {
+		if (clas.accessLog) {
 			Host host = tomcat.getHost();
 			StdoutAccessLogValve valve = new StdoutAccessLogValve();
 			valve.setEnabled(true);
-			valve.setPattern(commandLineParams.accessLogPattern);
+			valve.setPattern(clas.accessLogPattern);
 			host.getPipeline().addValve(valve);
 		}
 
@@ -256,16 +324,16 @@ public class AppLaunch {
 		 * NamingContextListener.lifecycleEvent(LifecycleEvent event) cannot initialize GlobalNamingContext for Tomcat until the Lifecycle.CONFIGURE_START_EVENT occurs, so this block must sit after
 		 * the call to tomcat.start() and it requires tomcat.enableNaming() to be called much earlier in the code.
 		 */
-		if (commandLineParams.enableBasicAuth || commandLineParams.tomcatUsersLocation != null) {
-			configureUserStore(tomcat, commandLineParams);
+		if (clas.enableBasicAuth || clas.tomcatUsersLocation != null) {
+			configureUserStore(tomcat, clas);
 		}
 
-		commandLineParams = null;
+		clas = null;
 
 		tomcat.getServer().await();
 	}
 
-	static void setConnectorProperties(Connector nioConnector, CommandLineParamsEx commandLineParams) throws URISyntaxException {
+	static void setConnectorProperties(Connector nioConnector, CommandLineArgs commandLineParams) throws URISyntaxException {
 		if (Strings.isNotEmpty(commandLineParams.relaxedPathChars)) {
 			nioConnector.setProperty("relaxedPathChars", commandLineParams.relaxedPathChars);
 		}
@@ -301,7 +369,7 @@ public class AppLaunch {
 			nioConnector.setProperty("compressableMimeType", commandLineParams.compressableMimeTypes);
 		}
 
-		if (!commandLineParams.bindOnInit) {
+		if (commandLineParams.bindOnStart) {
 			nioConnector.setProperty("bindOnInit", "false");
 		}
 
@@ -324,7 +392,7 @@ public class AppLaunch {
 	 * @throws IOException if dir fails to be created
 	 */
 	static String resolveTomcatBaseDir(Integer port, String tempDirectory) throws IOException {
-		final File baseDir = tempDirectory != null ? new File(tempDirectory) : new File(System.getProperty("user.dir") + "/target/tomcat." + port);
+		final File baseDir = tempDirectory != null ? new File(tempDirectory) : new File(System.getProperty("user.dir") + "/tomcat");
 
 		if (!baseDir.isDirectory() && !baseDir.mkdirs()) {
 			throw new IOException("Could not create temp dir: " + baseDir);
@@ -358,7 +426,7 @@ public class AppLaunch {
 		ctx.addConstraint(securityConstraint);
 	}
 
-	static void configureUserStore(final Tomcat tomcat, final CommandLineParams commandLineParams) throws Exception {
+	static void configureUserStore(final Tomcat tomcat, final CommandLineArgs commandLineParams) throws Exception {
 		String tomcatUsersLocation = commandLineParams.tomcatUsersLocation;
 		if (tomcatUsersLocation == null) {
 			tomcatUsersLocation = "../../tomcat-users.xml";
