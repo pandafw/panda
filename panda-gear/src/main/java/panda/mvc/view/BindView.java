@@ -174,6 +174,14 @@ public abstract class BindView extends DataView {
 
 	@Override
 	public void render(ActionContext ac) {
+		String pretty = ac.getRequest().getParameter("__pretty");
+		if (Strings.isNotEmpty(pretty)) {
+			Boolean p = Mvcs.castValue(ac, pretty, Boolean.class);
+			if (p != null) {
+				setPrettyPrint(p);
+			}
+		}
+
 		Throwable ex = ac.getError();
 		if (ex != null) {
 			writeError(ac, ex);
