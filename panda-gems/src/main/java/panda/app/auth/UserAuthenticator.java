@@ -520,7 +520,7 @@ public class UserAuthenticator {
 	public void saveUserToContext(ActionContext ac, Object user, Date time) {
 		ac.getSes().put(SES.USER, user);
 		if (time != null) {
-			ac.getSes().put(SES.USER_LOGIN_TIME, user);
+			ac.getSes().put(SES.USER_LOGIN_TIME, time);
 		}
 	}
 
