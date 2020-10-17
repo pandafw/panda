@@ -57,7 +57,10 @@ public class ActionHash extends SimpleHash {
 
 	public void setModel(Object model) {
 		this.model = model;
-		if (model != null) {
+		if (model == null) {
+			mbh = null;
+		}
+		else {
 			if (Classes.isImmutable(model.getClass())) {
 				this.model = new TopModel(model);
 			}
@@ -73,6 +76,7 @@ public class ActionHash extends SimpleHash {
 			return tm;
 		}
 
+		// Lookup in the specified model
 		if (mbh != null) {
 			Object obj = mbh.getBeanValue(model, key);
 			if (obj != null) {
@@ -80,6 +84,7 @@ public class ActionHash extends SimpleHash {
 			}
 		}
 
+		// Lookup in the action context
 		if (acb != null) {
 			Object obj = acb.getBeanValue(ac, key);
 			if (obj != null) {

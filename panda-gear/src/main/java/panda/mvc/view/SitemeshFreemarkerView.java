@@ -35,12 +35,12 @@ public class SitemeshFreemarkerView extends FreemarkerView {
 			Sitemesher sm = ac.getIoc().get(Sitemesher.class);
 			if (sm.needMesh()) {
 				StringBuilderWriter sbw = new StringBuilderWriter();
-				fh.execTemplate(sbw, path, ac.getResult());
+				fh.execTemplate(sbw, path);
 				
 				sm.meshup(ac.getResponse().getWriter(), sbw.toString());
 			}
 			else {
-				fh.execTemplate(ac.getResponse().getWriter(), path, ac.getResult());
+				fh.execTemplate(ac.getResponse().getWriter(), path);
 			}
 		}
 		catch (Exception e) {
