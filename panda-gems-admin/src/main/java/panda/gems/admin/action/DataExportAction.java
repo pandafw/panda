@@ -39,7 +39,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.Views;
 import panda.servlet.HttpServletResponser;
 
-@At("${!!super_path|||'/super'}/dataexp")
+@At("${!!super_path|||'/super'}/data")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class DataExportAction extends BaseAction {
@@ -98,8 +98,8 @@ public class DataExportAction extends BaseAction {
 	 * @throws Exception if an error occurs
 	 */
 	@SuppressWarnings({ "resource", "unchecked" })
-	@At("")
-	public Object execute(@Param Arg arg) throws Exception {
+	@At
+	public Object exp(@Param Arg arg) throws Exception {
 		this.arg = arg;
 
 		if (Strings.isEmpty(arg.source)) {

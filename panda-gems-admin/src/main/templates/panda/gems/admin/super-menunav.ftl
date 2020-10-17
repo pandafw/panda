@@ -9,9 +9,9 @@
 
 		<@sitem ac="/super/crons"           ic="icon-super-crons"        tx="navi-super-crons"/>
 
-		<@sitem ac="/super/dataexp"         ic="icon-super-dataexp"      tx="navi-super-dataexp"/>
-		<@sitem ac="/super/dataimp"         ic="icon-super-dataimp"      tx="navi-super-dataimp"/>
-		<@sitem ac="/super/datacpy"         ic="icon-super-datacpy"      tx="navi-super-datacpy"/>
+		<@sitem ac="/super/data/exp"        ic="icon-super-dataexp"      tx="navi-super-dataexp"/>
+		<@sitem ac="/super/data/imp"        ic="icon-super-dataimp"      tx="navi-super-dataimp"/>
+		<@sitem ac="/super/data/cpy"        ic="icon-super-datacpy"      tx="navi-super-datacpy"/>
 
 		<@sitem ac="/super/property/list"   ic="icon-super-property"     tx="navi-super-property"/>
 		<@sitem ac="/super/resource/list"   ic="icon-super-resource"     tx="navi-super-resource"/>
@@ -22,7 +22,7 @@
 		<@sitem ac="/super/html2pdf"        ic="icon-super-html2pdf"     tx="navi-super-html2pdf"/>
 		<@sitem ac="/super/sendmail"        ic="icon-super-sendmail"     tx="navi-super-sendmail"/>
 
-		<@sitem ac="/super/sysdump"         ic="icon-super-sysdump"      tx="navi-super-sysdump"/>
+		<@sitem ac="/super/sys/dump"        ic="icon-super-sysdump"      tx="navi-super-sysdump"/>
 		<@sitem ac="/super/el"              ic="icon-super-eleval"       tx="navi-super-eleval"/>
 		<@sitem ac="/super/shell"           ic="icon-super-shell"        tx="navi-super-shell"/>
 	<#if !assist.gaeSupport>

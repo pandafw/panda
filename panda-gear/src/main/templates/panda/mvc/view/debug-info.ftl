@@ -56,7 +56,7 @@
 			<tr><th width="200">Name</th><th>Value</th></tr>
 		</thead>
 		<tbody>
-<#list reqHeader?keys?sort as k> 
+<#list reqHeader?keys?sort as k>
 			<tr><td>${k!''?html}</td><td><#list reqHeader[k]![] as v>${v!''?html}<br/></#list></td></tr>
 </#list>
 		</tbody>
@@ -126,7 +126,7 @@
 		<tbody>
 			<tr><td>AuthType</td><td>${(request.authType)!''?html}</td></tr>
 			<tr><td>CharacterEncoding</td><td>${(request.characterEncoding)!''?html}</td></tr>
-			<tr><td>ContentLength</td><td>${(request.contentLength)?html}</td></tr>
+			<tr><td>ContentLength</td><td>${(request.contentLength?string)!''?html}</td></tr>
 			<tr><td>ContentType</td><td>${(request.contentType)!''?html}</td></tr>
 			<tr><td>ContextPath</td><td>${(request.contextPath)!''?html}</td></tr>
 			<tr><td>isSecure</td><td>${(request.secure?string)!''?html}</td></tr>
@@ -136,14 +136,14 @@
 			<tr><td>Locale</td><td>${(request.locale)!''?html}</td></tr>
 			<tr><td>LocalAddr</td><td>${(request.localAddr)!''?html}</td></tr>
 			<tr><td>LocalName</td><td>${(request.localName)!''?html}</td></tr>
-			<tr><td>LocalPort</td><td>${(request.localPort)?html}</td></tr>
+			<tr><td>LocalPort</td><td>${(request.localPort?string)!''?html}</td></tr>
 			<tr><td>Method</td><td>${(request.method)!''?html}</td></tr>
 			<tr><td>PathInfo</td><td>${(request.pathInfo)!''?html}</td></tr>
 			<tr><td>PathTranslated</td><td>${(request.pathTranslated)!''?html}</td></tr>
 			<tr><td>Protocol</td><td>${(request.protocol)!''?html}</td></tr>
 			<tr><td>QueryString</td><td>${(request.queryString)!''?html}</td></tr>
 			<tr><td>RemoteAddr</td><td>${(request.remoteAddr)!''?html}</td></tr>
-			<tr><td>RemotePort</td><td>${(request.remotePort)?html}</td></tr>
+			<tr><td>RemotePort</td><td>${(request.remotePort?string)!''?html}</td></tr>
 			<tr><td>RequestedSessionId</td><td>${(request.requestedSessionId)!''?html}</td></tr>
 			<tr><td>RequestURI</td><td>${(request.requestURI)!''?html}</td></tr>
 			<tr><td>RequestURL</td><td>${(request.requestURL)!''?html}</td></tr>
@@ -192,9 +192,7 @@
 		<tbody>
 <#list ses?keys?sort as k>
 			<tr><td>${k?html}</td>
-				<td><#if ses[k]??><i>${(ses[k].class.name)!''?html}</i>
-					</div><@p.property name="ses['${k?js_string}']"/></div>
-				</#if></td>
+				<td><#if ses[k]??><i>${(ses[k].class.name)!''?html}</i><div><@p.property name="ses['${k?js_string}']"/></div></#if></td>
 			</tr>
 </#list>
 <#assign _sic = assist.findValue("'panda.mvc.ioc.SessionIocContext'@dump(session)")/>
@@ -222,9 +220,7 @@
 		<tbody>
 <#list app?keys?sort as k>
 			<tr><td>${k?html}</td>
-				<td><#if app[k]??><i>${(app[k].class.name)!''?html}</i>
-					<div><@p.property name="app['${k?js_string}']"/></div>
-				</#if></td>
+				<td><#if app[k]??><i>${(app[k].class.name)!''?html}</i><div><@p.property name="app['${k?js_string}']"/></div></#if></td>
 			</tr>
 </#list>
 		</tbody>
@@ -292,7 +288,8 @@
 			</tr>
 		</thead>
 		<tbody>
-<#list s?keys?sort as k>
+<#list s?keys?sort as k><#assign f = s.getFrom(k)!'' />
+<#if f?starts_with("$")><#continue></#if>
 			<tr>
 				<td>${k?html}</td>
 				<td><#if s[k]??><div>${s[k]!''?html}</div></#if></td>

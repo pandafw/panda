@@ -11,9 +11,9 @@
 		<ul class="nav nav-stacked flex-column">
 			<@snavi ap="/super/crons"     ac="/super/crons"         ic="icon-super-crons"      tx="navi-super-crons"/>
 
-			<@snavi ap="/super/dataexp"   ac="/super/dataexp"       ic="icon-super-dataexp"    tx="navi-super-dataexp"/>
-			<@snavi ap="/super/dataimp"   ac="/super/dataimp"       ic="icon-super-dataimp"    tx="navi-super-dataimp"/>
-			<@snavi ap="/super/datacpy"   ac="/super/datacpy"       ic="icon-super-datacpy"    tx="navi-super-datacpy"/>
+			<@snavi ap="/super/data/exp"  ac="/super/data/exp"      ic="icon-super-dataexp"    tx="navi-super-dataexp"/>
+			<@snavi ap="/super/data/imp"  ac="/super/data/imp"      ic="icon-super-dataimp"    tx="navi-super-dataimp"/>
+			<@snavi ap="/super/data/cpy"  ac="/super/data/cpy"      ic="icon-super-datacpy"    tx="navi-super-datacpy"/>
 
 			<@snavi ap="/super/property/" ac="/super/property/list" ic="icon-super-property"   tx="navi-super-property"/>
 			<@snavi ap="/super/resource/" ac="/super/resource/list" ic="icon-super-resource"   tx="navi-super-resource"/>
@@ -24,7 +24,7 @@
 			<@snavi ap="/super/html2pdf"  ac="/super/html2pdf"      ic="icon-super-html2pdf"   tx="navi-super-html2pdf"/>
 			<@snavi ap="/super/sendmail"  ac="/super/sendmail"      ic="icon-super-sendmail"   tx="navi-super-sendmail"/>
 
-			<@snavi ap="/super/sysdump"   ac="/super/sysdump"       ic="icon-super-sysdump"    tx="navi-super-sysdump"/>
+			<@snavi ap="/super/sys/dump"  ac="/super/sys/dump"      ic="icon-super-sysdump"    tx="navi-super-sysdump"/>
 			<@snavi ap="/super/el"        ac="/super/el"            ic="icon-super-eleval"     tx="navi-super-eleval"/>
 			<@snavi ap="/super/shell"     ac="/super/shell"         ic="icon-super-shell"      tx="navi-super-shell"/>
 		<#if !assist.gaeSupport>

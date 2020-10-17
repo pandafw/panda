@@ -23,7 +23,7 @@
 		<#include "/action-alert.ftl"/>
 	</div>
 
-	<@p.form id="shell" method="post" theme="simple" action="+/exec" onsubmit="return shellExecute();">
+	<@p.form id="shell" method="post" theme="simple" action="+/exec.json" onsubmit="return shellExecute();">
 	<table width="100%">
 		<tr><td>Command: (Ctrl+Enter to execute)</td>
 			<td align="right">

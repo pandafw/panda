@@ -49,10 +49,11 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.validate.VisitValidate;
 import panda.mvc.validator.Validators;
 import panda.mvc.view.Views;
+import panda.net.http.HttpMethod;
 import panda.vfs.FileItem;
 import panda.vfs.FileStores;
 
-@At("${!!super_path|||'/super'}/dataimp")
+@At("${!!super_path|||'/super'}/data")
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class DataImportAction extends BaseAction {
@@ -101,9 +102,33 @@ public class DataImportAction extends BaseAction {
 	 * @return result list
 	 * @throws Exception if an error occurs
 	 */
-	@At("")
+	@At
+	@To(Views.SJSON)
 	@TokenProtect
-	public Object execute(@Param @VisitValidate Arg arg) throws Exception {
+	public Object imp_json(@Param @VisitValidate Arg arg) throws Exception {
+		return imp(arg);
+	}
+
+	/**
+	 * @param arg the input arguments
+	 * @return result list
+	 * @throws Exception if an error occurs
+	 */
+	@At
+	@To(Views.SXML)
+	@TokenProtect
+	public Object imp_xml(@Param @VisitValidate Arg arg) throws Exception {
+		return imp(arg);
+	}
+
+	/**
+	 * @param arg the input arguments
+	 * @return result list
+	 * @throws Exception if an error occurs
+	 */
+	@At
+	@TokenProtect(HttpMethod.POST)
+	public Object imp(@Param @VisitValidate Arg arg) throws Exception {
 		this.arg = arg;
 		if (arg.file == null) {
 			return null;

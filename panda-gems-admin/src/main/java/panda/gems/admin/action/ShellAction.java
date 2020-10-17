@@ -23,7 +23,6 @@ import panda.mvc.view.Views;
 
 @Auth(AUTH.SUPER)
 @At("${!!super_path|||'/super'}/shell")
-@To(Views.SFTL)
 public class ShellAction extends BaseAction {
 	public static class Result {
 		private int code = -1;
@@ -66,7 +65,18 @@ public class ShellAction extends BaseAction {
 	@At
 	@TokenProtect
 	@To(Views.SJSON)
-	public Object exec(@Param("cmd") String cmd, @Param("wait") int wait) throws Exception {
+	public Object exec_json(@Param("cmd") String cmd, @Param("wait") int wait) throws Exception {
+		return exec(cmd, wait);
+	}
+
+	@At
+	@TokenProtect
+	@To(Views.SXML)
+	public Object exec_xml(@Param("cmd") String cmd, @Param("wait") int wait) throws Exception {
+		return exec(cmd, wait);
+	}
+	
+	protected Object exec(String cmd, int wait) throws Exception {
 		if (Strings.isEmpty(cmd)) {
 			return null;
 		}

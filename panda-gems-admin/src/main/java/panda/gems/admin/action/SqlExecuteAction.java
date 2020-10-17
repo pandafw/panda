@@ -31,7 +31,7 @@ import panda.mvc.view.Views;
 @Auth(AUTH.SUPER)
 @To(Views.SFTL)
 public class SqlExecuteAction extends BaseAction {
-	public static class Option {
+	public static class Arg {
 		protected boolean autoCommit = true;
 		protected boolean ignoreError = false;
 		protected String sql;
@@ -185,31 +185,39 @@ public class SqlExecuteAction extends BaseAction {
 
 	@At("")
 	@Redirect(toslash=true)
-	public void input(@Param Option o) throws Exception {
+	public void input(@Param Arg arg) throws Exception {
 	}
-	
-	/**
-	 * execute
-	 * @param o the input option
-	 * @return results
-	 * @throws Exception if an error occurs
-	 */
+
 	@At
 	@TokenProtect
-	public Object execute(@Param Option o) throws Exception {
-		if (Strings.isEmpty(o.sql)) {
+	@To(Views.SJSON)
+	public Object exec_json(@Param Arg arg) throws Exception {
+		return exec(arg);
+	}
+
+	@At
+	@TokenProtect
+	@To(Views.SXML)
+	public Object exec_xml(@Param Arg arg) throws Exception {
+		return exec(arg);
+	}
+
+	@At
+	@TokenProtect
+	public Object exec(@Param Arg arg) throws Exception {
+		if (Strings.isEmpty(arg.sql)) {
 			return null;
 		}
 		
 		@SuppressWarnings("resource")
-		SqlIterator si = new SqlIterator(o.sql);
+		SqlIterator si = new SqlIterator(arg.sql);
 		if (!si.hasNext()) {
 			return null;
 		}
 		
 		Connection con = getDataSource().getConnection();
 		try {
-			con.setAutoCommit(o.autoCommit);
+			con.setAutoCommit(arg.autoCommit);
 			
 			List<Result> results = new ArrayList<Result>();
 			while (si.hasNext()) {
@@ -225,15 +233,15 @@ public class SqlExecuteAction extends BaseAction {
 					}
 					catch (Exception e) {
 						r.setError(Exceptions.getStackTrace(e));
-						if (!o.ignoreError) {
+						if (!arg.ignoreError) {
 							break;
 						}
 					}
 				}
 				else if (s.length() > 0) {
-					Result r = execSql(con, s, o.fetchLimit);
+					Result r = execSql(con, s, arg.fetchLimit);
 					if (r == null) {
-						if (!o.ignoreError) {
+						if (!arg.ignoreError) {
 							break;
 						}
 					}

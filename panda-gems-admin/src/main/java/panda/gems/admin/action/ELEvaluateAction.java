@@ -23,14 +23,14 @@ public class ELEvaluateAction extends BaseAction {
 	@At
 	@TokenProtect
 	@To(Views.SJSON)
-	public Object json(@Param("expr") String expr) {
+	public Object exec_json(@Param("expr") String expr) {
 		return exec(expr);
 	}
 	
 	@At
 	@TokenProtect
 	@To(Views.SXML)
-	public Object xml(@Param("expr") String expr) {
+	public Object exec_xml(@Param("expr") String expr) {
 		return exec(expr);
 	}
 
