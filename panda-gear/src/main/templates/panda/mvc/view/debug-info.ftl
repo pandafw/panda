@@ -57,7 +57,7 @@
 		</thead>
 		<tbody>
 <#list reqHeader?keys?sort as k>
-			<tr><td>${k!''?html}</td><td><#list reqHeader[k]![] as v>${v!''?html}<br/></#list></td></tr>
+			<tr><td>${k!''?html}</td><td><@p.property name="reqHeader['${k?js_string}']"/></td></tr>
 </#list>
 		</tbody>
 		</table>

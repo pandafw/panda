@@ -73,7 +73,7 @@ public class SysDumpAction extends BaseAction {
 		req.put("ServletPath", request.getServletPath());
 
 		req.put("headers", getReqHeader());
-		req.put("parameters", toStringMap(getReqParams()));
+		req.put("parameters", getReqParams());
 		req.put("attributes", toStringMap(getReq()));
 		r.put("request", req);
 

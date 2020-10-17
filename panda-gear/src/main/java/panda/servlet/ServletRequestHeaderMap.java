@@ -34,29 +34,30 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 	/**
 	 * Removes all attributes from the request as well as clears entries in this map.
 	 */
+	@Override
 	public void clear() {
 		throw Exceptions.unsupported("clear");
 	}
 
+	@Override
 	public Set<String> keySet() {
 		Set<String> keys = new HashSet<String>();
 
-		Enumeration em = request.getHeaderNames();
+		Enumeration<String> em = request.getHeaderNames();
 		while (em.hasMoreElements()) {
-			keys.add(em.nextElement().toString());
+			keys.add(em.nextElement());
 		}
 
 		return keys;
 	}
 
+	@Override
 	public Collection<Object> values() {
 		List<Object> vals = new ArrayList<Object>();
 
-		Enumeration em = request.getHeaderNames();
+		Enumeration<String> em = request.getHeaderNames();
 		while (em.hasMoreElements()) {
-			final String key = em.nextElement().toString();
-			final Object value = request.getHeaders(key);
-			vals.add(value);
+			vals.add(getHeader(em.nextElement()));
 		}
 
 		return vals;
@@ -67,14 +68,15 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 	 * 
 	 * @return a Set of attributes from the http request.
 	 */
+	@Override
 	public Set<Entry<String, Object>> entrySet() {
 		Set<Entry<String, Object>> entries = new HashSet<Entry<String, Object>>();
 
-		Enumeration em = request.getHeaderNames();
+		Enumeration<String> em = request.getHeaderNames();
 		while (em.hasMoreElements()) {
-			final String key = em.nextElement().toString();
-			final Object value = request.getHeaders(key);
-			entries.add(new MapEntry<String, Object>(this, key, value));
+			final String key = em.nextElement();
+			final Object val = getHeader(key);
+			entries.add(new MapEntry<String, Object>(this, key, val));
 		}
 
 		return entries;
@@ -87,8 +89,9 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 	 * @param key the name of the request attribute.
 	 * @return the request attribute or <tt>null</tt> if it doesn't exist.
 	 */
+	@Override
 	public Object get(Object key) {
-		return request.getHeaders(key.toString());
+		return getHeader(key.toString());
 	}
 
 	/**
@@ -98,6 +101,7 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 	 * @param value the value to set.
 	 * @return the object that was just set.
 	 */
+	@Override
 	public Object put(String key, Object value) {
 		throw Exceptions.unsupported("put");
 	}
@@ -109,14 +113,16 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 	 * @return the value that was removed or <tt>null</tt> if the value was not found (and hence,
 	 *         not removed).
 	 */
+	@Override
 	public Object remove(Object key) {
 		throw Exceptions.unsupported("remove");
 	}
 
+	@Override
 	public int size() {
 		int sz = 0;
 
-		Enumeration em = request.getHeaderNames();
+		Enumeration<String> em = request.getHeaderNames();
 		while (em.hasMoreElements()) {
 			em.nextElement();
 			sz++;
@@ -124,10 +130,12 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 		return sz;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return request.getHeaderNames().hasMoreElements();
 	}
 
+	@Override
 	public boolean containsKey(Object key) {
 		Enumeration em = request.getHeaderNames();
 		while (em.hasMoreElements()) {
@@ -138,11 +146,12 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 		return false;
 	}
 
+	@Override
 	public boolean containsValue(Object value) {
-		Enumeration em = request.getHeaderNames();
+		Enumeration<String> em = request.getHeaderNames();
 		while (em.hasMoreElements()) {
-			final String key = em.nextElement().toString();
-			final Object val = request.getHeaders(key);
+			final String key = em.nextElement();
+			final Object val = getHeader(key);
 			if (Objects.equals(val, value)) {
 				return true;
 			}
@@ -150,7 +159,23 @@ public class ServletRequestHeaderMap implements Map<String, Object> {
 		return false;
 	}
 
+	@Override
 	public void putAll(Map<? extends String, ? extends Object> m) {
 		throw Exceptions.unsupported("putAll");
 	}
+
+	private Object getHeader(String key) {
+		Enumeration<String> em = request.getHeaders(key);
+		if (em == null) {
+			return null;
+		}
+		
+		List<String> vs = new ArrayList<String>();
+		while (em.hasMoreElements()) {
+			vs.add(em.nextElement());
+		}
+
+		return vs.size() > 1 ? vs : vs.get(0);
+	}
+
 }

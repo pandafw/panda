@@ -34,10 +34,12 @@ public class ServletRequestParamMap implements Map<String, Object> {
 	/**
 	 * Removes all attributes from the request as well as clears entries in this map.
 	 */
+	@Override
 	public void clear() {
 		throw Exceptions.unsupported("clear");
 	}
 
+	@Override
 	public Set<String> keySet() {
 		Set<String> keys = new HashSet<String>();
 
@@ -49,25 +51,16 @@ public class ServletRequestParamMap implements Map<String, Object> {
 		return keys;
 	}
 
+	@Override
 	public Collection<Object> values() {
 		List<Object> vals = new ArrayList<Object>();
 
 		Enumeration<String> em = request.getParameterNames();
 		while (em.hasMoreElements()) {
-			final String key = em.nextElement();
-			vals.add(getParameter(key));
+			vals.add(getParameter(em.nextElement()));
 		}
 
 		return vals;
-	}
-
-	private Object getParameter(String key) {
-		final String[] vs = request.getParameterValues(key);
-		if (vs != null && vs.length == 1) {
-			return vs[0];
-		}
-		
-		return vs;
 	}
 
 	/**
@@ -75,14 +68,15 @@ public class ServletRequestParamMap implements Map<String, Object> {
 	 * 
 	 * @return a Set of attributes from the http request.
 	 */
+	@Override
 	public Set<Entry<String, Object>> entrySet() {
 		Set<Entry<String, Object>> entries = new HashSet<Entry<String, Object>>();
 
 		Enumeration<String> em = request.getParameterNames();
 		while (em.hasMoreElements()) {
 			final String key = em.nextElement();
-			final Object value = getParameter(key);
-			entries.add(new MapEntry<String, Object>(this, key, value));
+			final Object val = getParameter(key);
+			entries.add(new MapEntry<String, Object>(this, key, val));
 		}
 
 		return entries;
@@ -95,6 +89,7 @@ public class ServletRequestParamMap implements Map<String, Object> {
 	 * @param key the name of the request attribute.
 	 * @return the request attribute or <tt>null</tt> if it doesn't exist.
 	 */
+	@Override
 	public Object get(Object key) {
 		return getParameter(key.toString());
 	}
@@ -106,6 +101,7 @@ public class ServletRequestParamMap implements Map<String, Object> {
 	 * @param value the value to set.
 	 * @return the object that was just set.
 	 */
+	@Override
 	public Object put(String key, Object value) {
 		throw Exceptions.unsupported("put");
 	}
@@ -117,10 +113,12 @@ public class ServletRequestParamMap implements Map<String, Object> {
 	 * @return the value that was removed or <tt>null</tt> if the value was not found (and hence,
 	 *         not removed).
 	 */
+	@Override
 	public Object remove(Object key) {
 		throw Exceptions.unsupported("remove");
 	}
 
+	@Override
 	public int size() {
 		int sz = 0;
 
@@ -132,10 +130,12 @@ public class ServletRequestParamMap implements Map<String, Object> {
 		return sz;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return request.getParameterNames().hasMoreElements();
 	}
 
+	@Override
 	public boolean containsKey(Object key) {
 		Enumeration em = request.getParameterNames();
 		while (em.hasMoreElements()) {
@@ -146,6 +146,7 @@ public class ServletRequestParamMap implements Map<String, Object> {
 		return false;
 	}
 
+	@Override
 	public boolean containsValue(Object value) {
 		Enumeration<String> em = request.getParameterNames();
 		while (em.hasMoreElements()) {
@@ -158,7 +159,17 @@ public class ServletRequestParamMap implements Map<String, Object> {
 		return false;
 	}
 
+	@Override
 	public void putAll(Map<? extends String, ? extends Object> m) {
 		throw Exceptions.unsupported("putAll");
+	}
+
+	private Object getParameter(String key) {
+		final String[] vs = request.getParameterValues(key);
+		if (vs != null && vs.length == 1) {
+			return vs[0];
+		}
+		
+		return vs;
 	}
 }
