@@ -11,9 +11,16 @@ import java.lang.annotation.Target;
 @Documented
 public @interface TokenProtect {
 	/**
-	 * @return true if need token protect
+	 * All Token Protect Methods
 	 */
-	boolean value() default true;
+	public static final String ALL = "*";
+
+	/**
+	 * protect methods
+	 * 
+	 * @return protect methods
+	 */
+	String[] value() default { ALL };
 
 	/**
 	 * > 0 for token time stamp check

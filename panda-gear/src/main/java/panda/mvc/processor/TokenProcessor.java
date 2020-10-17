@@ -1,14 +1,12 @@
 package panda.mvc.processor;
 
 import java.lang.reflect.Method;
-import java.util.Set;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
@@ -18,7 +16,6 @@ import panda.mvc.MvcConstants;
 import panda.mvc.View;
 import panda.mvc.annotation.TokenProtect;
 import panda.mvc.view.Views;
-import panda.net.http.HttpMethod;
 import panda.servlet.HttpServlets;
 import panda.util.crypto.Cryptor;
 import panda.util.crypto.Token;
@@ -52,11 +49,6 @@ public class TokenProcessor extends AbstractActionProcessor {
 	 */
 	public static final int DEFAULT_COOKIE_MAXAGE = DateTimes.SEC_MONTH; //1M
 
-	/**
-	 * Token Protect Methods
-	 */
-	public static final Set<String> PROTECT_METHODS = Arrays.toSet(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT);
-	
 	@IocInject(value=MvcConstants.TOKEN_HEADER_NAME, required=false)
 	protected String headerName = DEFAULT_HEADER;
 
@@ -112,25 +104,36 @@ public class TokenProcessor extends AbstractActionProcessor {
 
 	@Override
 	public void process(ActionContext ac) {
-		if (isProtectMethod(ac.getRequest().getMethod())) {
-			Token token = getSourceToken(ac);
-			if (!validate(ac, token)) {
-				ac.getActionAlert().addError(ac.getText().getText("servlet-error-message-400", "Invalid Request Token."));
-				doErrorView(ac);
-				return;
-			}
+		if (!validate(ac)) {
+			ac.getActionAlert().addError(ac.getText().getText("servlet-error-message-400", "Invalid Request Token."));
+			doErrorView(ac);
+			return;
 		}
 
 		doNext(ac);
 		return;
 	}
 
-	public static boolean isProtectMethod(String method) {
-		method = Strings.upperCase(method);
-		return PROTECT_METHODS.contains(method);
+	private boolean isProtectMethod(ActionContext ac, TokenProtect tp) {
+		if (tp.value().length == 0) {
+			return false;
+		}
+
+		if (tp.value().length == 1 && TokenProtect.ALL.equals(tp.value()[0])) {
+			return true;
+		}
+
+		String method = Strings.upperCase(ac.getRequest().getMethod());
+		for (String m : tp.value()) {
+			if (Strings.equals(m, method)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
-	
-	protected boolean validate(ActionContext ac, Token stoken) {
+
+	protected boolean validate(ActionContext ac) {
 		Method method = ac.getMethod();
 
 		TokenProtect tp = method.getAnnotation(TokenProtect.class);
@@ -138,33 +141,40 @@ public class TokenProcessor extends AbstractActionProcessor {
 			tp = ac.getAction().getClass().getAnnotation(TokenProtect.class);
 		}
 		
-		if (tp != null && tp.value()) {
-			if (stoken == null) {
-				log.warn("Missing cookie or session token: " + ac.getPath());
-				return false;
-			}
+		if (tp == null) {
+			return true;
+		}
 
-			Token rtoken = getRequestToken(ac);
-			if (rtoken == null) {
+		if (!isProtectMethod(ac, tp)) {
+			return true;
+		}
+
+		Token stoken = getSourceToken(ac);
+		if (stoken == null) {
+			log.warn("Missing cookie or session token: " + ac.getPath());
+			return false;
+		}
+
+		Token rtoken = getRequestToken(ac);
+		if (rtoken == null) {
+			return false;
+		}
+		
+		if (rtoken.getTimestamp() <= 0) {
+			log.warn("Request token (" + rtoken + ") has invalid timestamp: " + ac.getPath());
+			return false;
+		}
+		
+		if (!Token.isSameSecret(stoken, rtoken)) {
+			log.warn("Request token (" + rtoken + ") is not same as (" + stoken + "): " + ac.getPath());
+			return false;
+		}
+		
+		if (tp.expire() > 0) {
+			long now = System.currentTimeMillis();
+			if (rtoken.getTimestamp() + tp.expire() < now) {
+				log.warn("Request token (" + rtoken + ") expired " + tp.expire() + " ms: " + ac.getPath());
 				return false;
-			}
-			
-			if (rtoken.getTimestamp() <= 0) {
-				log.warn("Request token (" + rtoken + ") has invalid timestamp: " + ac.getPath());
-				return false;
-			}
-			
-			if (!Token.isSameSecret(stoken, rtoken)) {
-				log.warn("Request token (" + rtoken + ") is not same as (" + stoken + "): " + ac.getPath());
-				return false;
-			}
-			
-			if (tp.expire() > 0) {
-				long now = System.currentTimeMillis();
-				if (rtoken.getTimestamp() + tp.expire() < now) {
-					log.warn("Request token (" + rtoken + ") expired " + tp.expire() + " ms: " + ac.getPath());
-					return false;
-				}
 			}
 		}
 
