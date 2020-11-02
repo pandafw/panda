@@ -18,10 +18,7 @@
 <@p.actionerror/>
 <#if paramErrors?has_content && !(actionErrors?has_content)>
 	<ul class="fa-ul">
-		<li class="text-danger">
-			<i class="fa-li fa fa-exclamation-circle"></i>
-			<span><@p.text name="error-input"/></span>
-		</li>
+		<li class="text-danger"><i class="fa-li fa fa-exclamation-circle"></i><span><@p.text name="error-input"/></span></li>
 	</ul>
 </#if>
 <@p.actionwarning/>
