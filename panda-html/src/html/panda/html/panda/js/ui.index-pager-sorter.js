@@ -2,7 +2,7 @@ if (typeof(panda) == "undefined") { panda = {}; }
 
 //------------------------------------------------------
 panda.loading = function(timeout) {
-	$('body').loadmask({ mask: false, window: true, timeout: timeout || 1000 });
+	$('body').loadmask({ mask: false, fixed: true, timeout: timeout || 1000 });
 };
 
 panda.page_sort = function(name, dir) {

@@ -3,31 +3,18 @@
  * https://icons8.com/preloaders/
  * Foreground color: #435BD1   Background color: #FFFFFF
  */
-.ui-loadmask {
-	background-color: #fff;
-	border: solid 1px #ADD8E6;
-	opacity: 0.9;
-}
-.ui-loadmask-img {
+.ui-loadmask-loading {
 	background-image: url('../img/loader/fountain.gif');
 	width: 160px;
 	height: 20px;
 }
-.ui-loadmask-hasmsg {
-	padding: 18px 20px 18px 64px;
-}
-.ui-loadmask-hasmsg .ui-loadmask-img {
+.ui-loadmask-hasmsg .ui-loadmask-loading {
 	background-image: url('../img/loader/squares-circle.gif');
 	width: 32px;
 	height: 32px;
-	margin-top: -16px;
 }
-.ui-loadmask-big.ui-loadmask-hasmsg {
-	padding: 24px 30px 24px 100px;
-}
-.ui-loadmask-big.ui-loadmask-hasmsg .ui-loadmask-img {
+.ui-loadmask-big .ui-loadmask-loading {
 	background-image: url('../img/loader/squares-circle-big.gif');
 	width: 64px;
 	height: 64px;
-	margin-top: -32px;
 }

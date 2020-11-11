@@ -998,8 +998,15 @@ jQuery.jcookie = function(name, value, options) {
 			clearTimeout(t);
 			$el.removeData("_unmask_timeout");
 		}
+
+		//if this element has center timeout scheduled then remove it
+		t = $el.data("_maskc_timeout");
+		if (t) {
+			clearTimeout(t);
+			$el.removeData("_maskc_timeout");
+		}
 	}
-	
+
 	function maskElement($el, c) {
 		if ($el.isLoadMasked()) {
 			unmaskElement($el);
@@ -1028,23 +1035,42 @@ jQuery.jcookie = function(name, value, options) {
 			$el.find("select").addClass("ui-loadmasked-hidden");
 		}
 		
-		var $mb = $('<div class="ui-loadmask" style="display:none;"><div class="ui-loadmask-img"></div></div>');
+		var $mb = $('<div class="ui-loadmask" style="display:none;"></div>');
 		if (c.cssClass) {
 			$mb.addClass(c.cssClass);
 		}
-		if (c.html) {
-			$mb.html(html);
+		if (c.content) {
+			$mb.append($(c.content));
 		}
-		else if (c.label) {
-			$mb.addClass('ui-loadmask-hasmsg').append('<table class="ui-loadmask-msg"><tr><td>' + c.label + '</td></tr></table>');
+		else {
+			var $tb = $('<table class="ui-loadmask-tb"></table>'),
+				$tr = $('<tr>'),
+				$ti = $('<td class="ui-loadmask-icon">').append($('<i>').addClass(c.iconClass));
+			$tr.append($ti);
+
+			if (c.html || c.text) {
+				$mb.addClass('ui-loadmask-hasmsg');
+				var $tx = $('<td class="ui-loadmask-text">');
+				if (c.html) {
+					$tx.html(c.html);
+				}
+				else {
+					$tx.text(c.text);
+				}
+				$tr.append($tx);
+			}
+			$mb.append($tb.append($tr));
 		}
 		$el.append($mb);
 
-		if (c.window) {
+		if (c.fixed || typeof($.fn.center) != 'function') {
 			$mb.addClass('ui-loadmask-fixed');
 		}
 		else {
 			$mb.center();
+			$el.data("_maskc_timeout", setInterval(function() {
+				$mb.center();
+			}, 250));
 		}
 		$mb.show();
 		
@@ -1054,7 +1080,7 @@ jQuery.jcookie = function(name, value, options) {
 			}, c.timeout));
 		}
 	}
-	
+
 	function unmaskElement($el) {
 		clearMaskTimeout($el);
 
@@ -1062,23 +1088,31 @@ jQuery.jcookie = function(name, value, options) {
 		$el.removeClass("ui-loadmasked ui-loadmasked-relative");
 		$el.find("select").removeClass("ui-loadmasked-hidden");
 	}
- 
+
+	$.loadmask = {
+		defaults: {
+			iconClass: 'ui-loadmask-loading'
+		}
+	};
+
 	/**
 	 * Displays loading mask over selected element(s). Accepts both single and multiple selectors.
 	 * @param cssClass css class for the mask element
-	 * @param html  html content for the mask body
-	 * @param label text message that will be display
+	 * @param iconClass css class for the icon (default: ui-loadmask-loading)
+	 * @param content  html content that will be add to the loadmask
+	 * @param html  html message that will be display
+	 * @param text  text message that will be display (html tag will be escaped)
+	 * @param mask  add mask layer (default: true)
+	 * @param fixed fixed position (default: false)
 	 * @param delay Delay in milliseconds before element is masked (optional). If unloadmask() is called 
 	 *              before the delay times out, no mask is displayed. This can be used to prevent unnecessary 
 	 *              mask display for quick processes.
 	 */
 	$.fn.loadmask = function(c) {
 		if (typeof(c) == 'string') {
-			c = { label: c };
+			c = { text: c };
 		}
-		else {
-			c = c || {};
-		}
+		c = $.extend({}, $.loadmask.defaults, c);
 		return this.each(function() {
 			if (c.delay !== undefined && c.delay > 0) {
 				var $el = $(this);
