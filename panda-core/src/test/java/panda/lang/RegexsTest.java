@@ -16,6 +16,8 @@ public class RegexsTest {
 		Assert.assertTrue(Regexs.isEmail("a_F@a.co"));
 
 		Assert.assertFalse(Regexs.isEmail("a/_F@a.co"));
+		Assert.assertFalse(Regexs.isEmail("a.b.c@a.c"));
+		Assert.assertFalse(Regexs.isEmail("a.b.c@a.c."));
 	}
 
 	@Test

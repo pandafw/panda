@@ -1,7 +1,7 @@
-/.idea
-/.project
-/.settings
-/out
+.idea
+.project
+.settings
+.vscode
+*.iml
 /panda-demo*
 /panda-repo
-*.iml
