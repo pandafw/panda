@@ -708,6 +708,28 @@ public final class Mimes {
 			return word;
 	}
 
+	public static String unquote(String s) {
+		if (Strings.isEmpty(s)) {
+			return s;
+		}
+		
+		if (s.startsWith("\"") && s.endsWith("\"")) {
+			s = s.substring(1, s.length() - 1);
+			// check for any escaped characters
+			if (s.indexOf('\\') >= 0) {
+				StringBuilder sb = new StringBuilder(s.length()); // approx
+				for (int i = 0; i < s.length(); i++) {
+					char c = s.charAt(i);
+					if (c == '\\' && i < s.length() - 1)
+						c = s.charAt(++i);
+					sb.append(c);
+				}
+				s = sb.toString();
+			}
+		}
+		return s;
+	}
+
 	// TODO
 	public static String foldLine(String s) {
 		StringBuilder sb = new StringBuilder();

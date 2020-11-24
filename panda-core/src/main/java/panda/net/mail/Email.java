@@ -444,9 +444,6 @@ public class Email {
 		if (bccs != null) {
 			rcpts.addAll(bccs);
 		}
-		if (replyTos != null) {
-			rcpts.addAll(replyTos);
-		}
 		return rcpts;
 	}
 
