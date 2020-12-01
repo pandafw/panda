@@ -129,9 +129,11 @@
 						</resource>
 					</webResources>
 					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
 						<manifestEntries>
-							<Version>${project.version}</Version>
-							<Revision>${git.commit.id.abbrev}</Revision>
+							<Implementation-Revision>${git.commit.id.abbrev}</Implementation-Revision>
 						</manifestEntries>
 					</archive>
 					<archiveClasses>true</archiveClasses>
