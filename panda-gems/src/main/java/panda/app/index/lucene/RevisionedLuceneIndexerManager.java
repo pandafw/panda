@@ -59,7 +59,7 @@ public class RevisionedLuceneIndexerManager extends LuceneIndexerManager impleme
 		}
 		Files.makeDirs(location);
 
-		cleanOldRevisionDirectory();
+		cleanup();
 	}
 
 	@Override
@@ -113,36 +113,6 @@ public class RevisionedLuceneIndexerManager extends LuceneIndexerManager impleme
 			}
 		}
 	}
-	
-	private void cleanOldRevisionDirectory() throws IOException {
-		File root = new File(location);
-
-		Map<String, Long> vs = new HashMap<String, Long>();
-		for (String s : root.list()) {
-			String n = FileNames.getBaseName(s);
-			String e = FileNames.getExtension(s);
-			Long i = Numbers.toLong(e);
-			
-			File f = new File(root, s);
-			if (i == null || !Files.isDirectory(f)) {
-				// Remove invalid lucene file
-				removeLuceneDirectory(root, s);
-				continue;
-			}
-
-			Long latest = vs.get(n);
-			if (latest == null) {
-				vs.put(n, i);
-			}
-			else if (latest.longValue() < i) {
-				vs.put(n, i);
-				removeLuceneDirectory(root, n + "." + latest);
-			}
-			else {
-				removeLuceneDirectory(root, s);
-			}
-		}
-	}
 
 	@Override
 	protected Analyzer getAnalyzer(String name) {
@@ -189,5 +159,36 @@ public class RevisionedLuceneIndexerManager extends LuceneIndexerManager impleme
 
 		log.info("set lucene indexer: " + indexer);
 		addIndexer((LuceneIndexer)indexer);
+	}
+	
+	@Override
+	public void cleanup() {
+		File root = new File(location);
+
+		Map<String, Long> vs = new HashMap<String, Long>();
+		for (String s : root.list()) {
+			String n = FileNames.getBaseName(s);
+			String e = FileNames.getExtension(s);
+			Long i = Numbers.toLong(e);
+			
+			File f = new File(root, s);
+			if (i == null || !Files.isDirectory(f)) {
+				// Remove invalid lucene file
+				removeLuceneDirectory(root, s);
+				continue;
+			}
+
+			Long latest = vs.get(n);
+			if (latest == null) {
+				vs.put(n, i);
+			}
+			else if (latest.longValue() < i) {
+				vs.put(n, i);
+				removeLuceneDirectory(root, n + "." + latest);
+			}
+			else {
+				removeLuceneDirectory(root, s);
+			}
+		}
 	}
 }

@@ -10,4 +10,6 @@ public interface RevisionedIndexerManager extends IndexerManager {
 	public Indexer newIndexer(String name);
 	
 	public void setIndexer(Indexer indexer);
+	
+	public void cleanup();
 }

@@ -168,4 +168,8 @@ public class RevisionedGaeIndexerManager extends GaeIndexerManager implements Re
 		log.info("set gae indexer: " + indexer);
 		addIndexer((GaeIndexer)indexer);
 	}
+
+	@Override
+	public void cleanup() {
+	}
 }
