@@ -357,15 +357,15 @@ public class URLHelper {
 			v = decodeURL(v, encoding);
 			if (qparams.containsKey(k)) {
 				Object cv = qparams.get(k);
-				if (cv instanceof String) {
+				if (cv instanceof List) {
+					List<String> ss = (List<String>)cv;
+					ss.add(v);
+				}
+				else {
 					List<String> ss = new ArrayList<String>();
 					ss.add((String)cv);
 					ss.add(v);
 					qparams.put(k, ss);
-				}
-				else {
-					List<String> ss = (List<String>)cv;
-					ss.add(v);
 				}
 			}
 			else {
