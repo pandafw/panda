@@ -19,7 +19,7 @@
 	<div class="alert alert-danger">
 		<ul class="fa-ul p-servlet-errors">
 			<li class="p-servlet-error"><i class="fa-li fa fa-exclamation-circle"></i> ${_msg}<br/>
-					${action.getText('servlet-error-request-url', assist.requestLink, assist.requestLink )} 
+<#assign _url = assist.escapeHtml(assist.requestLink)/>${action.getText('servlet-error-request-url', _url, _url)}
 			</li>
 		</ul>
 	</div>
