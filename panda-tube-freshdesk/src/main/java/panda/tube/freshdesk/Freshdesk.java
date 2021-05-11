@@ -26,21 +26,20 @@ public class Freshdesk {
 	
 	public static final int SOURCE_CHAT = 7;
 	
-	public static final int SOURCE_MOBIHELP = 8;
-	
 	public static final int SOURCE_FEEDBACK_WIDGET = 9;
 	
 	public static final int SOURCE_OUTBOUND_EMAIL = 10;
 	
 	
-	public static final int STATUS_OPEN = 1;
+	public static final int STATUS_OPEN = 2;
 
-	public static final int STATUS_PENDING = 2;
+	public static final int STATUS_PENDING = 3;
 
-	public static final int STATUS_RESOLVED = 3;
+	public static final int STATUS_RESOLVED = 4;
 
-	public static final int STATUS_CLOSED = 4;
+	public static final int STATUS_CLOSED = 5;
 	
+
 	public static final int PRIORITY_LOW = 1;
 
 	public static final int PRIORITY_MEDIUM = 2;
@@ -49,6 +48,7 @@ public class Freshdesk {
 
 	public static final int PRIORITY_URGENT = 4;
 
+	
 	public static final String API_TICKETS = "/api/v2/tickets";
 	
 	private boolean sslHostnameCheck = true;
@@ -207,7 +207,7 @@ public class Freshdesk {
 
 	protected String serialize(Object o) {
 		JsonSerializer js = Jsons.newJsonSerializer();
-		js.registerAdapter(Date.class, new DateAdapter(DateTimes.ISO_DATE_TIMEZONE_FORMAT));
+		js.registerAdapter(Date.class, new DateAdapter(DateTimes.ISO_DATETIME_TIMEZONE_FORMAT));
 		return js.serialize(o);
 	}
 
