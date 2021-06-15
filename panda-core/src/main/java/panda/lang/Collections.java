@@ -1021,6 +1021,17 @@ public abstract class Collections {
 	}
 
 	/**
+	 * create a reverse map<V,K> from map<K,V>
+	 */
+	public static <K, V> Map<V, K> toReverse(Map<K, V> sm) {
+		Map<V,K> rm = new HashMap<V,K>();
+		for (Entry<K,V> en : sm.entrySet()) {
+			rm.put(en.getValue(), en.getKey());
+		}
+		return rm;
+	}
+	
+	/**
 	 * Swaps the key and value of the map.
 	 * Map<K, V> -> Map<V,K>
 	 * 
