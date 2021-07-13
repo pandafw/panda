@@ -100,6 +100,26 @@ build-js          --> Merge & minify javascript files
 		<antcall target="minjs">
 			<param name="src" value="${dir.p}/js/panda" />
 		</antcall>
+
+		<!-- panda core -->
+		<concat destfile="${dir.p}/js/panda-core.js" binary="true">
+			<fileset dir="${dir.p}/js">
+				<include name="core.*.js" />
+			</fileset>
+		</concat>
+		<antcall target="minjs">
+			<param name="src" value="${dir.p}/js/panda-core" />
+		</antcall>
+
+		<!-- panda ui -->
+		<concat destfile="${dir.p}/js/panda-ui.js" binary="true">
+			<fileset dir="${dir.p}/js">
+				<include name="ui.*.js" />
+			</fileset>
+		</concat>
+		<antcall target="minjs">
+			<param name="src" value="${dir.p}/js/panda-ui" />
+		</antcall>
 	</target>
 
 	<target name="build-css" description="Merge &amp; minify css files">
