@@ -2129,9 +2129,11 @@ if (typeof String.formatSize != "function") {
 				return this;
 			},
 			ajaxJsonError: function(xhr, status, e, m) {
-				var d = xhr.responseJSON;
-				if (d && (d.alerts || d.exception)) {
-					return this.actionAlert(d);
+				if (xhr && xhr.responseJSON) {
+					var d = xhr.responseJSON;
+					if (d && (d.alerts || d.exception)) {
+						return this.actionAlert(d);
+					}
 				}
 			
 				msg = '';
@@ -2139,7 +2141,7 @@ if (typeof String.formatSize != "function") {
 					msg += e + '\n';
 				}
 				
-				if (xhr) {
+				if (xhr && xhr.responseText) {
 					try {
 						var r = JSON.parse(xhr.responseText);
 						msg += JSON.stringify(r, null, 2);
