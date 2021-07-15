@@ -1,35 +1,36 @@
 package panda.net.telnet;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import panda.io.Streams;
+import org.junit.Assume;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+import panda.io.Streams;
 
 /***
  * JUnit functional test for TelnetClient. Connects to the weather forecast service
  * rainmaker.wunderground.com and asks for Los Angeles forecast.
  ***/
-public class TelnetClientFunctionalTest extends TestCase {
-	protected TelnetClient tc1;
-
-	/***
-	 * test setUp
-	 ***/
-	@Override
-	protected void setUp() {
-		tc1 = new TelnetClient();
-	}
-
+public class TelnetClientFunctionalTest {
 	/*
 	 * Do the functional test: - connect to the weather service - press return on the first menu -
 	 * send LAX on the second menu - send X to exit*
 	 */
+	@Test
 	public void testFunctionalTest() throws Exception {
-		boolean testresult = false;
-		tc1.connect("rainmaker.wunderground.com", 3000);
+		TelnetClient tc1 = new TelnetClient();
+		try {
+			tc1.connect("rainmaker.wunderground.com", 3000);
+		}
+		catch (Exception e) {
+			System.out.println("SKIP testFunctionalTest(rainmaker.wunderground.com): " + e.getMessage());
+			Assume.assumeTrue(false);
+		}
 
+		boolean testresult = false;
 		InputStream is = tc1.getInputStream();
 		OutputStream os = tc1.getOutputStream();
 
