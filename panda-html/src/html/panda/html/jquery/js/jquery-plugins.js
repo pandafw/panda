@@ -911,9 +911,9 @@ jQuery.jcookie = function(name, value, options) {
 	});
 })(jQuery);
 (function($) {
-	function focusme() {
+	$.fn.focusme = function() {
 		var f = false;
-		$('[focusme]').each(function() {
+		$(this).each(function() {
 			var $i = $(this);
 			if (f) {
 				$i.removeAttr('focusme');
@@ -944,10 +944,10 @@ jQuery.jcookie = function(name, value, options) {
 				$(window).scrollTop(st).scrollLeft(sl);
 			}
 		});
-	}
+	};
 
 	$(window).on('load', function() {
-		focusme();
+		$('[focusme]').focusme();
 	});
 })(jQuery);
 (function($) {
@@ -1598,8 +1598,8 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
-	function enterfire() {
-		$('textarea[enterfire]').each(function() {
+	$.fn.enterfire = function() {
+		$(this).each(function() {
 			var f = $(this).attr('enterfire');
 			if (f != 'hooked') {
 				$(this).attr('enterfire', 'hooked').keyup(function(evt) {
@@ -1614,22 +1614,24 @@ jQuery.jcookie = function(name, value, options) {
 				});
 			}
 		});
-	}
+	};
 	
-	function autosize() {
-		$('textarea[autosize]').each(function() {
-			var a = $(this).attr('autosize').charAt(0).toLowerCase();
-			if ('1tye'.indexOf(a) >= 0) {
+	$.fn.autosize = function() {
+		$(this).each(function() {
+			var a = $(this).attr('autosize');
+			if (a == 'hooked') {
+				$(this).css('height', 'auto').height($(this).prop('scrollHeight'));
+			}
+			else {
 				$(this).css('overflow-y', 'hidden').attr('autosize', 'hooked').on('input', function() {
-					var $t = $(this);
-					$t.css('height', 'auto').height($t.prop('scrollHeight'));
+					$(this).css('height', 'auto').height($(this).prop('scrollHeight'));
 				});
 			}
 		});
-	}
+	};
 
 	$(window).on('load', function() {
-		enterfire();
-		autosize();
+		$('textarea[enterfire]').enterfire();
+		$('textarea[autosize]').autosize();
 	});
 })(jQuery);

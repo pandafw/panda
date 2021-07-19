@@ -1,7 +1,7 @@
 (function($) {
-	function focusme() {
+	$.fn.focusme = function() {
 		var f = false;
-		$('[focusme]').each(function() {
+		$(this).each(function() {
 			var $i = $(this);
 			if (f) {
 				$i.removeAttr('focusme');
@@ -32,9 +32,9 @@
 				$(window).scrollTop(st).scrollLeft(sl);
 			}
 		});
-	}
+	};
 
 	$(window).on('load', function() {
-		focusme();
+		$('[focusme]').focusme();
 	});
 })(jQuery);

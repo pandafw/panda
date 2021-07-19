@@ -1,6 +1,6 @@
 (function($) {
-	function enterfire() {
-		$('textarea[enterfire]').each(function() {
+	$.fn.enterfire = function() {
+		$(this).each(function() {
 			var f = $(this).attr('enterfire');
 			if (f != 'hooked') {
 				$(this).attr('enterfire', 'hooked').keyup(function(evt) {
@@ -15,22 +15,24 @@
 				});
 			}
 		});
-	}
+	};
 	
-	function autosize() {
-		$('textarea[autosize]').each(function() {
-			var a = $(this).attr('autosize').charAt(0).toLowerCase();
-			if ('1tye'.indexOf(a) >= 0) {
+	$.fn.autosize = function() {
+		$(this).each(function() {
+			var a = $(this).attr('autosize');
+			if (a == 'hooked') {
+				$(this).css('height', 'auto').height($(this).prop('scrollHeight'));
+			}
+			else {
 				$(this).css('overflow-y', 'hidden').attr('autosize', 'hooked').on('input', function() {
-					var $t = $(this);
-					$t.css('height', 'auto').height($t.prop('scrollHeight'));
+					$(this).css('height', 'auto').height($(this).prop('scrollHeight'));
 				});
 			}
 		});
-	}
+	};
 
 	$(window).on('load', function() {
-		enterfire();
-		autosize();
+		$('textarea[enterfire]').enterfire();
+		$('textarea[autosize]').autosize();
 	});
 })(jQuery);
