@@ -26,7 +26,7 @@
 		<mariadb.version>2.4.3</mariadb.version>
 		<mongodb.version>3.11.0</mongodb.version>
 		<mysql.version>8.0.17</mysql.version>
-		<postgresql.version>42.2.6</postgresql.version>
+		<postgresql.version>42.2.25</postgresql.version>
 		<sqlite.version>3.28.0</sqlite.version>
 		<tomcat.version>9.0.27.1</tomcat.version>
 		<servlet.api.version>4.0.1</servlet.api.version>
