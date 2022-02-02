@@ -19,7 +19,6 @@ services:
   - docker
   - mysql
   - postgresql
-  - mongodb
 
 addons:
   hosts:
@@ -41,7 +40,6 @@ before_script:
   - psql -U postgres -c "CREATE USER panda PASSWORD 'panda';"
   - psql -U postgres -c "CREATE DATABASE ptest WITH OWNER = panda ENCODING = 'UTF-8';"
   - psql -U postgres -c "GRANT ALL ON DATABASE ptest TO panda;"
-  - mongo ptest --eval 'db.createUser({user:"panda",pwd:"panda",roles:["readWrite"]});'
 
 script: 
   - mvn -B -s .travis.settings.xml -Dgpg.skip=false clean source:jar javadoc:jar gpg:sign cobertura:cobertura deploy
