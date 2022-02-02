@@ -121,7 +121,7 @@ public class HttpClientTest {
 		HttpClient hc = new HttpClient();
 		hc.setSslProtocols(SSLProtocols.TLSv1_2);
 		hc.setSslHostnameCheck(false);
-		hc.getRequest().setUrl("https://kagoya.aska-soft.com");
+		hc.getRequest().setUrl("https://github.com");
 		HttpResponse response = hc.doGet();
 		assertTrue(Strings.isNotEmpty(response.getContentText()));
 	}
