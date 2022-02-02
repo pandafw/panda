@@ -19,19 +19,21 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
-		<panda.version>1.6.0</panda.version>
+		<panda.version>1.8.1-SNAPSHOT</panda.version>
 		<lucene.version>7.7.2</lucene.version>
 		<poi.version>4.1.0</poi.version>
 		<hsqldb.version>2.5.0</hsqldb.version>
 		<mariadb.version>2.4.3</mariadb.version>
 		<mongodb.version>3.11.0</mongodb.version>
 		<mysql.version>8.0.17</mysql.version>
-		<postgresql.version>42.2.6</postgresql.version>
+		<postgresql.version>42.2.25</postgresql.version>
 		<sqlite.version>3.28.0</sqlite.version>
-		<tomcat.version>9.0.27.1</tomcat.version>
 		<servlet.api.version>4.0.1</servlet.api.version>
 		<servlet.jsp.version>2.3.3</servlet.jsp.version>
 		<websocket.version>1.1</websocket.version>
+		<tomcat.version>9.0.27.1</tomcat.version>
+		<jetty.version>9.4.32.v20200930</jetty.version>
+		<junit.version>4.13.2</junit.version>
 		<log.hostname>localhost</log.hostname>
 		<log.slack.channel>${env.LOG_SLACK_CHANNEL}</log.slack.channel>
 		<log.slack.webhook>${env.LOG_SLACK_WEBHOOK}</log.slack.webhook>
@@ -362,7 +364,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
