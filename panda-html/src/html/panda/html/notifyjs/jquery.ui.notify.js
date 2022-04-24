@@ -296,8 +296,7 @@
 	}
 
 	Notification.prototype.loadHTML = function() {
-		var style;
-		style = this.getStyle();
+		var style = this.getStyle();
 		this.userContainer = $(style.html);
 		this.userFields = style.fields;
 	};

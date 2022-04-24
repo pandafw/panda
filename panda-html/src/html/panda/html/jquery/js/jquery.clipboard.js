@@ -8,11 +8,11 @@
 
 		var $t = $('<textarea>').css({ 'width' : '0px', 'height': '0px' }).text(s);
 		$('body').append($t);
-		
+
 		$t.get(0).select();
 		document.execCommand('copy');
 
-		$('body').remove($t);
-	}
+		$t.remove();
+	};
 })(jQuery);
 
