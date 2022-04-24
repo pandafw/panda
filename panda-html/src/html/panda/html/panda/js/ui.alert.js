@@ -167,12 +167,15 @@
 				}
 				return this;
 			},
-			actionAlert: function(d, f) {
+			actionAlert: function(d, t) {
 				if (d.alerts) {
-					this.add(d.alerts, f);
+					this.add(d.alerts, t);
 					if (d.alerts.params && !d.alerts.params.empty) {
 						this.error($(f).data('ajaxInputError'));
 					}
+				}
+				if (d.errors) {
+					this.add(d.errors, 'error');
 				}
 				if (d.exception) {
 					var e = d.exception;
@@ -184,7 +187,7 @@
 			ajaxJsonError: function(xhr, status, e, m) {
 				if (xhr && xhr.responseJSON) {
 					var d = xhr.responseJSON;
-					if (d && (d.alerts || d.exception)) {
+					if (d && (d.alerts || d.exception || d.errors)) {
 						return this.actionAlert(d);
 					}
 				}

@@ -30,8 +30,8 @@ if (typeof(panda) == "undefined") { panda = {}; }
 					$a.scrollIntoView();
 				}
 			},
-			error: function(xhr, status, e) {
-				$a.palert('ajaxJsonAlert', xhr, status, e, $f.data('ajaxServerError'));
+			error: function(xhr, status, err) {
+				$a.palert('ajaxJsonError', xhr, status, err, $f.data('ajaxServerError'));
 			},
 			complete: function() {
 				$f.unloadmask();

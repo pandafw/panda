@@ -417,18 +417,6 @@ DateFormat.prototype = {
 	}
 };
 
-function panda_call(f, p) {
-	switch (typeof(f)) {
-	case "function":
-		f.call(p);
-		break;
-	case "string":
-		f = new Function(f);
-		f.call(p);
-		break;
-	}
-}
-
 if (typeof Function.prototype.callback != "function") {
 	/**
 	 * Creates a callback that passes arguments[0], arguments[1], arguments[2], ...
@@ -1155,40 +1143,6 @@ if (typeof JSON !== "object") {
     }
 }());
 	
-if (typeof Number.trim != "function") {
-	Number.trim = function(s) {
-		if (typeof(s) != 'string') {
-			return s;
-		}
-		var h = '1234567890';
-		var z = '１２３４５６７８９０';
-		var ss = s.replace(/,/g, '').split('');
-		for (i = 0; i < ss.length; i++) {
-			var j = z.indexOf(ss[i]);
-			if (j >= 0) {
-				ss[i] = h[j];
-			}
-		}
-		return ss.join('');
-	};
-}
-if (typeof Number.parseInt != "function") {
-	Number.parseInt = function(s, r) {
-		return parseInt(Number.trim(s), r);
-	};
-}
-if (typeof Number.parseFloat != "function") {
-	Number.parseFloat = function(s) {
-		return parseFloat(Number.trim(s));
-	};
-}
-
-if (typeof Number.prototype.format != "function") {
-	Number.prototype.format = function(pattern) {
-		return (new DecimalFormat(pattern)).format(this);
-	};
-}
-
 /**
  * @class DecimalFormat
  * @constructor
@@ -1475,6 +1429,79 @@ DecimalFormat.prototype.getNumericString = function(str){
 	}
 	return str;
 }
+
+//--------------------------------------------------
+if (typeof Number.trim != "function") {
+	Number.trim = function(s) {
+		if (typeof(s) != 'string') {
+			return s;
+		}
+		var h = '1234567890';
+		var z = '１２３４５６７８９０';
+		var ss = s.replace(/,/g, '').split('');
+		for (i = 0; i < ss.length; i++) {
+			var j = z.indexOf(ss[i]);
+			if (j >= 0) {
+				ss[i] = h[j];
+			}
+		}
+		return ss.join('');
+	};
+}
+if (typeof Number.parseInt != "function") {
+	Number.parseInt = function(s, r) {
+		return parseInt(Number.trim(s), r);
+	};
+}
+if (typeof Number.parseFloat != "function") {
+	Number.parseFloat = function(s) {
+		return parseFloat(Number.trim(s));
+	};
+}
+if (typeof Number.format != "function") {
+	Number.format = function(pattern, n) {
+		return (new DecimalFormat(pattern)).format(n);
+	};
+}
+if (typeof Number.comma != "function") {
+	var CDF = new DecimalFormat('###,###.#########');
+	Number.comma = function(n) {
+		return CDF.format(n);
+	};
+}
+if (typeof Number.formatSize != "function") {
+	var KB = 1024,
+		MB = KB * KB,
+		GB = MB * KB,
+		TB = GB * KB,
+		PB = TB * KB;
+	
+	Number.formatSize = function(n, p) {
+		p = Math.pow(10, p || 2);
+		var sz = "";
+		if (n >= PB) {
+			sz = Math.round(n * p / PB) / p + ' PB';
+		}
+		else if (n >= TB) {
+			sz = Math.round(n * p / TB) / p + ' TB';
+		}
+		else if (n >= GB) {
+			sz = Math.round(n * p / GB) / p + ' GB';
+		}
+		else if (n >= MB) {
+			sz = Math.round(n * p / MB) / p + ' MB';
+		}
+		else if (n >= KB) {
+			sz = Math.round(n * p / KB) / p + ' KB';
+		}
+		else if (n != '') {
+			sz = n + ' bytes';
+		}
+		return sz;
+	};
+}
+
+
 if (typeof String.prototype.hashCode != "function") {
 	String.prototype.hashCode = function() {
 		var h = 0;
@@ -1497,44 +1524,44 @@ if (typeof String.prototype.contains != "function") {
 	};
 }
 if (typeof String.prototype.trimLeft != "function") {
+	var re = /^\s+/;
 	String.prototype.trimLeft = function() {
-		var re = /^\s+/;
 		return this.replace(re, "");
 	};
 }
 if (typeof String.prototype.trimRight != "function") {
+	var re = /\s+$/;
 	String.prototype.trimRight = function() {
-		var re = /\s+$/;
 		return this.replace(re, "");
 	};
 }
 if (typeof String.prototype.trim != "function") {
+	var re = /^\s+|\s+$/g;
 	String.prototype.trim = function() {
-		var re = /^\s+|\s+$/g;
 		return this.replace(re, "");
 	};
 }
 if (typeof String.prototype.stripLeft != "function") {
+	var re = /^[\s\u3000]+/;
 	String.prototype.stripLeft = function() {
-		var re = /^[\s\u3000]+/;
 		return this.replace(re, "");
 	};
 }
 if (typeof String.prototype.stripRight != "function") {
+	var re = /[\s\u3000]+$/;
 	String.prototype.stripRight = function() {
-		var re = /[\s\u3000]+$/;
 		return this.replace(re, "");
 	};
 }
 if (typeof String.prototype.strip != "function") {
+	var re = /^[\s\u3000]+|[\s\u3000]+$/g;
 	String.prototype.strip = function() {
-		var re = /^[\s\u3000]+|[\s\u3000]+$/g;
 		return this.replace(re, "");
 	};
 }
 if (typeof String.prototype.left != "function") {
 	String.prototype.left = function(len) {
-		return this.substr(0, len);
+		return this.slice(0, len);
 	};
 }
 if (typeof String.prototype.mid != "function") {
@@ -1549,24 +1576,20 @@ if (typeof String.prototype.right != "function") {
 	};
 }
 if (typeof String.prototype.leftPad != "function") {
-	String.prototype.leftPad = function(ch, size) {
-		if (!ch) {
-			ch = " ";
-		}
+	String.prototype.leftPad = function(sz, ch) {
+		ch = ch || ' ';
 		var r = this;
-		while (r.length < size) {
+		while (r.length < sz) {
 			r = ch + r;
 		}
 		return r;
 	};
 }
 if (typeof String.prototype.rightPad != "function") {
-	String.prototype.rightPad = function(ch, size) {
-		if (!ch) {
-			ch = " ";
-		}
+	String.prototype.rightPad = function(sz, ch) {
+		ch = ch || ' ';
 		var r = this;
-		while (r.length < size) {
+		while (r.length < sz) {
 			r += chr;
 		}
 		return r;
@@ -1582,16 +1605,42 @@ if (typeof String.prototype.endsWith != "function") {
 		return this.startsWith(suffix, this.length - suffix.length);
 	};
 }
+
 if (typeof String.prototype.capitalize != "function") {
 	String.prototype.capitalize = function() {
-		return this.substr(0, 1).toUpperCase() + this.substr(1);
+		return this.charAt(0).toUpperCase() + this.slice(1);
 	};
 }
 if (typeof String.prototype.uncapitalize != "function") {
 	String.prototype.uncapitalize = function() {
-		return this.substr(0, 1).toLowerCase() + this.substr(1);
+		return this.charAt(0).toLowerCase() + this.slice(1);
 	};
 }
+
+
+if (typeof String.prototype.snakeCase != "function") {
+	String.prototype.snakeCase = function(c) {
+		c = c || '_';
+		var s = this.camelCase();
+		return s.replace(/[A-Z]/g, function(m) {
+			return c + m.charAt(0).toLowerCase();
+		});
+	};
+}
+if (typeof String.prototype.camelCase != "function") {
+	String.prototype.camelCase = function() {
+		s = this.charAt(0).toLowerCase() + this.slice(1);
+		return s.replace(/[-_](.)/g, function(m, g) {
+			return g.toUpperCase();
+		});
+	};
+}
+if (typeof String.prototype.pascalCase != "function") {
+	String.prototype.pascalCase = function(c) {
+		return this.camelCase().capitalize();
+	};
+}
+
 if (typeof String.prototype.format != "function") {
 	String.prototype.format = function() {
 		var args = arguments;
@@ -1603,13 +1652,13 @@ if (typeof String.prototype.format != "function") {
 if (typeof String.prototype.substrAfter != 'function') {
 	String.prototype.substrAfter = function(c) {
 		var s = this, i = s.indexOf(c);
-		return (i >= 0) ? s.substring(i + 1) : "";
+		return (i >= 0) ? s.slice(i + 1) : "";
 	};
 }
 if (typeof String.prototype.substrBefore != 'function') {
 	String.prototype.substrBefore = function(c) {
 		var s = this, i = s.indexOf(c);
-		return (i >= 0) ? s.substring(0, i) : s;
+		return (i >= 0) ? s.slice(0, i) : s;
 	};
 }
 if (typeof String.prototype.ellipsis != 'function') {
@@ -1636,7 +1685,7 @@ if (typeof String.prototype.ellipsiz != 'function') {
 				sz++;
 			}
 			if (sz > len) {
-				return this.substring(0, i) + '...';
+				return this.slice(0, i) + '...';
 			}
 		}
 		return this;
@@ -1649,27 +1698,41 @@ if (typeof String.prototype.escapeRegExp != "function") {
 	};
 }
 if (typeof String.prototype.escapeHtml != "function") {
+	var ehm = {
+		'&': '&amp;',
+		"'": '&apos;',
+		'`': '&#x60;',
+		'"': '&quot;',
+		'<': '&lt;',
+		'>': '&gt;'
+	};
+
 	String.prototype.escapeHtml = function() {
-		return this.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+		return this.replace(/[&'`"<>]/g, function(c) {
+			return ehm[c];
+		});
 	};
 }
 if (typeof String.prototype.unescapeHtml != "function") {
+	// a simple version, complete version: https://stackoverflow.com/questions/994331/how-to-unescape-html-character-entities-in-java
+	var uhm = {
+		'&lt;'   : '<',
+		'&gt;'   : '>',
+		'&amp;'  : '&',
+		'&quot;' : '"',
+		'&apos;' : "'",
+		'&#x27;' : "'",
+		'&#x60;' : '`'
+	};
+
 	String.prototype.unescapeHtml = function() {
-		return this.replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
+		return this.replace(/&(lt|gt|amp|quot|apos|#x27|#x60);/g, function(t) {
+			return uhm[t];
+		});
 	};
 }
-if (typeof String.prototype.escapePhtml != "function") {
-	String.prototype.escapePhtml = function() {
-		return this.escapeHtml().replace(/\r?\n/g, "<br/>");
-	};
-}
-if (typeof String.prototype.unescapePhtml != "function") {
-	String.prototype.unescapePhtml = function() {
-		return this.replace(/<br\/>/g, "\n").unescapeHtml();
-	};
-}
-if (typeof String.prototype.prettifyXml != "function") {
-	String.prototype.prettifyXml = function() {
+if (typeof String.prototype.prettifyXML != "function") {
+	String.prototype.prettifyXML = function() {
 		var xml = '';
 		var pad = 0;
 		var ss = this.replace(/(>)(<)(\/*)/g, '$1\r\n$2$3').split('\r\n');
@@ -1687,15 +1750,15 @@ if (typeof String.prototype.prettifyXml != "function") {
 				indent = 1;
 			}
 	
-			xml += ('').leftPad(' ', pad * 2) + s + '\r\n';
+			xml += ('').leftPad(pad * 2) + s + '\r\n';
 			pad += indent;
 		}
 	
 		return xml;
 	};
 }
-if (typeof String.prototype.encodeUtf8 != "function") {
-	String.prototype.encodeUtf8 = function() {
+if (typeof String.prototype.encodeUTF8 != "function") {
+	String.prototype.encodeUTF8 = function() {
 		string = this.replace(/rn/g,"\n");
 		var utftext = "";
 
@@ -1720,8 +1783,8 @@ if (typeof String.prototype.encodeUtf8 != "function") {
 		return utftext;
 	};
 }
-if (typeof String.prototype.decodeUtf8 != "function") {
-	String.prototype.decodeUtf8 = function() {
+if (typeof String.prototype.decodeUTF8 != "function") {
+	String.prototype.decodeUTF8 = function() {
 		var string = "";
 		var i = 0;
 		var c = c1 = c2 = 0;
@@ -1784,10 +1847,10 @@ if (typeof String.prototype.decodeBase64 != "function") {
 			decOut += String.fromCharCode((bits & 0xff0000) >>16, (bits & 0xff00) >>8, bits & 0xff);
 		}
 		if (this.charCodeAt(i -2) == 61) {
-			return(decOut.substring(0, decOut.length -2));
+			return(decOut.slice(0, decOut.length - 2));
 		}
 		else if (this.charCodeAt(i -1) == 61) {
-			return(decOut.substring(0, decOut.length -1));
+			return(decOut.slice(0, decOut.length - 1));
 		}
 		else {
 			return(decOut);
@@ -1795,156 +1858,17 @@ if (typeof String.prototype.decodeBase64 != "function") {
 	};
 }
 
-//-----------------------------------
-//  Static functions
-//-----------------------------------
-if (typeof String.defaults != "function") {
-	String.defaults = function(s, d) {
-		return s == null ? d : s;
-	};
+function panda_call(f, p) {
+	switch (typeof(f)) {
+	case "function":
+		f.call(p);
+		break;
+	case "string":
+		f = new Function(f);
+		f.call(p);
+		break;
+	}
 }
-if (typeof String.hashCode != "function") {
-	String.hashCode = function(s) {
-		return s == null ? 0 : s.hashCode();
-	};
-}
-if (typeof String.isEmpty != "function") {
-	String.isEmpty = function(s) {
-		return s == null || s.length < 1;
-	};
-}
-if (typeof String.isNotEmpty != "function") {
-	String.isNotEmpty = function(s) {
-		return s != null && s.length > 0;
-	};
-}
-if (typeof String.leftPad != "function") {
-	String.leftPad = function(s, ch, size) {
-		return s != null ? String(s).leftPad(ch, size) : "".leftPad(ch, size);
-	};
-}
-if (typeof String.rightPad != "function") {
-	String.rightPad = function(s, ch, size) {
-		return s != null ? String(s).rightPad(ch, size) : "".rightPad(ch, size);
-	};
-}
-if (typeof String.startsWith != "function") {
-	String.startsWith = function(s, w) {
-		return s != null ? String(s).startsWith(w) : false;
-	};
-}
-if (typeof String.endsWith != "function") {
-	String.endsWith = function(s, w) {
-		return s != null ? String(s).endsWith(w) : false;
-	};
-}
-if (typeof String.substrAfter != "function") {
-	String.substrAfter = function(s, c) {
-		return s != null ? String(s).substrAfter(c) : "";
-	};
-}
-if (typeof String.substrBefore != "function") {
-	String.substrBefore = function(s, c) {
-		return s != null ? String(s).substrBefore(c) : "";
-	};
-}
-if (typeof String.ellipsis != "function") {
-	String.ellipsis = function(s, l) {
-		return s != null ? String(s).ellipsis(l) : "";
-	};
-}
-if (typeof String.ellipsis != "function") {
-	String.ellipsis = function(s, l) {
-		return s != null ? String(s).ellipsis(l) : "";
-	};
-}
-if (typeof String.ellipsiz != "function") {
-	String.ellipsiz = function(s, l) {
-		return s != null ? String(s).ellipsiz(l) : "";
-	};
-}
-if (typeof String.escapeHtml != "function") {
-	String.escapeHtml = function(s) {
-		return s != null ? String(s).escapeHtml() : "";
-	};
-}
-if (typeof String.unescapeHtml != "function") {
-	String.unescapeHtml = function(s) {
-		return s != null ? String(s).unescapeHtml() : "";
-	};
-}
-if (typeof String.escapePhtml != "function") {
-	String.escapePhtml = function(s) {
-		return s != null ? String(s).escapePhtml() : "";
-	};
-}
-if (typeof String.unescapePhtml != "function") {
-	String.unescapePhtml = function(s) {
-		return s != null ? String(s).unescapePhtml() : "";
-	};
-}
-if (typeof String.prettifyXml != "function") {
-	String.prettifyXml = function(s) {
-		return s != null ? String(s).prettifyXml() : "";
-	};
-}
-if (typeof String.encodeUtf8 != 'function') {
-	String.encodeUtf8 = function(s) {
-		return s != null ? String(s).encodeUtf8() : "";
-	};
-}
-if (typeof String.decodeUtf8 != 'function') {
-	String.decodeUtf8 = function(s) {
-		return s != null ? String(s).decodeUtf8() : "";
-	};
-}
-if (typeof String.encodeBase64 != 'function') {
-	String.encodeBase64 = function(s) {
-		return s != null ? String(s).encodeBase64() : "";
-	};
-}
-if (typeof String.decodeBase64 != 'function') {
-	String.decodeBase64 = function(s) {
-		return s != null ? String(s).decodeBase64() : "";
-	};
-}
-if (typeof String.escapeRegExp != 'function') {
-	String.escapeRegExp = function(s) {
-		return s != null ? String(s).escapeRegExp() : "";
-	};
-}
-if (typeof String.formatSize != "function") {
-	var KB = 1024,
-		MB = KB * KB,
-		GB = MB * KB,
-		TB = GB * KB,
-		PB = TB * KB;
-	
-	String.formatSize = function(n, p) {
-		p = Math.pow(10, p || 2);
-		var sz = "";
-		if (n >= PB) {
-			sz = Math.round(n * p / PB) / p + ' PB';
-		}
-		else if (n >= TB) {
-			sz = Math.round(n * p / TB) / p + ' TB';
-		}
-		else if (n >= GB) {
-			sz = Math.round(n * p / GB) / p + ' GB';
-		}
-		else if (n >= MB) {
-			sz = Math.round(n * p / MB) / p + ' MB';
-		}
-		else if (n >= KB) {
-			sz = Math.round(n * p / KB) / p + ' KB';
-		}
-		else if (n != '') {
-			sz = n + ' bytes';
-		}
-		return sz;
-	};
-}
-
 (function($) {
 	function setAlertType($a, s, t) {
 		for (var i in s.types) {
@@ -2114,12 +2038,15 @@ if (typeof String.formatSize != "function") {
 				}
 				return this;
 			},
-			actionAlert: function(d, f) {
+			actionAlert: function(d, t) {
 				if (d.alerts) {
-					this.add(d.alerts, f);
+					this.add(d.alerts, t);
 					if (d.alerts.params && !d.alerts.params.empty) {
 						this.error($(f).data('ajaxInputError'));
 					}
+				}
+				if (d.errors) {
+					this.add(d.errors, 'error');
 				}
 				if (d.exception) {
 					var e = d.exception;
@@ -2131,7 +2058,7 @@ if (typeof String.formatSize != "function") {
 			ajaxJsonError: function(xhr, status, e, m) {
 				if (xhr && xhr.responseJSON) {
 					var d = xhr.responseJSON;
-					if (d && (d.alerts || d.exception)) {
+					if (d && (d.alerts || d.exception || d.errors)) {
 						return this.actionAlert(d);
 					}
 				}
@@ -2320,8 +2247,8 @@ if (typeof(panda) == "undefined") { panda = {}; }
 					$a.scrollIntoView();
 				}
 			},
-			error: function(xhr, status, e) {
-				$a.palert('ajaxJsonAlert', xhr, status, e, $f.data('ajaxServerError'));
+			error: function(xhr, status, err) {
+				$a.palert('ajaxJsonError', xhr, status, err, $f.data('ajaxServerError'));
 			},
 			complete: function() {
 				$f.unloadmask();

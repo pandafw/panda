@@ -1,3 +1,14 @@
+function panda_call(f, p) {
+	switch (typeof(f)) {
+	case "function":
+		f.call(p);
+		break;
+	case "string":
+		f = new Function(f);
+		f.call(p);
+		break;
+	}
+}
 (function($) {
 	function setAlertType($a, s, t) {
 		for (var i in s.types) {
@@ -167,12 +178,15 @@
 				}
 				return this;
 			},
-			actionAlert: function(d, f) {
+			actionAlert: function(d, t) {
 				if (d.alerts) {
-					this.add(d.alerts, f);
+					this.add(d.alerts, t);
 					if (d.alerts.params && !d.alerts.params.empty) {
 						this.error($(f).data('ajaxInputError'));
 					}
+				}
+				if (d.errors) {
+					this.add(d.errors, 'error');
 				}
 				if (d.exception) {
 					var e = d.exception;
@@ -184,7 +198,7 @@
 			ajaxJsonError: function(xhr, status, e, m) {
 				if (xhr && xhr.responseJSON) {
 					var d = xhr.responseJSON;
-					if (d && (d.alerts || d.exception)) {
+					if (d && (d.alerts || d.exception || d.errors)) {
 						return this.actionAlert(d);
 					}
 				}
@@ -373,8 +387,8 @@ if (typeof(panda) == "undefined") { panda = {}; }
 					$a.scrollIntoView();
 				}
 			},
-			error: function(xhr, status, e) {
-				$a.palert('ajaxJsonAlert', xhr, status, e, $f.data('ajaxServerError'));
+			error: function(xhr, status, err) {
+				$a.palert('ajaxJsonError', xhr, status, err, $f.data('ajaxServerError'));
 			},
 			complete: function() {
 				$f.unloadmask();
