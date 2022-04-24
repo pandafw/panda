@@ -81,8 +81,8 @@
 						$('#shell_result').show();
 					}
 				},
-				error: function(xhr, status, e) {
-					$('#shell_alert').palert('ajaxJsonAlert', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
+				error: function(xhr, status, err) {
+					$('#shell_alert').palert('ajaxJsonError', xhr, status, err, "<@p.text name='error-server-connect' escape='js'/>");
 				},
 				complete: function(xhr, ts) {
 					$o.unloadmask();

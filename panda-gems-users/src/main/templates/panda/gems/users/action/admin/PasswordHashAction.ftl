@@ -64,8 +64,8 @@
 						$('#pwhash_result').show();
 					}
 				},
-				error: function(xhr, status, e) {
-					$('#pwhash_alert').palert('ajaxJsonAlert', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
+				error: function(xhr, status, err) {
+					$('#pwhash_alert').palert('ajaxJsonError', xhr, status, err, "<@p.text name='error-server-connect' escape='js'/>");
 				},
 				complete: function(xhr, ts) {
 					$o.unloadmask();
