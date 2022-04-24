@@ -1,37 +1,3 @@
-if (typeof Number.trim != "function") {
-	Number.trim = function(s) {
-		if (typeof(s) != 'string') {
-			return s;
-		}
-		var h = '1234567890';
-		var z = '１２３４５６７８９０';
-		var ss = s.replace(/,/g, '').split('');
-		for (i = 0; i < ss.length; i++) {
-			var j = z.indexOf(ss[i]);
-			if (j >= 0) {
-				ss[i] = h[j];
-			}
-		}
-		return ss.join('');
-	};
-}
-if (typeof Number.parseInt != "function") {
-	Number.parseInt = function(s, r) {
-		return parseInt(Number.trim(s), r);
-	};
-}
-if (typeof Number.parseFloat != "function") {
-	Number.parseFloat = function(s) {
-		return parseFloat(Number.trim(s));
-	};
-}
-
-if (typeof Number.prototype.format != "function") {
-	Number.prototype.format = function(pattern) {
-		return (new DecimalFormat(pattern)).format(this);
-	};
-}
-
 /**
  * @class DecimalFormat
  * @constructor
@@ -318,3 +284,76 @@ DecimalFormat.prototype.getNumericString = function(str){
 	}
 	return str;
 }
+
+//--------------------------------------------------
+if (typeof Number.trim != "function") {
+	Number.trim = function(s) {
+		if (typeof(s) != 'string') {
+			return s;
+		}
+		var h = '1234567890';
+		var z = '１２３４５６７８９０';
+		var ss = s.replace(/,/g, '').split('');
+		for (i = 0; i < ss.length; i++) {
+			var j = z.indexOf(ss[i]);
+			if (j >= 0) {
+				ss[i] = h[j];
+			}
+		}
+		return ss.join('');
+	};
+}
+if (typeof Number.parseInt != "function") {
+	Number.parseInt = function(s, r) {
+		return parseInt(Number.trim(s), r);
+	};
+}
+if (typeof Number.parseFloat != "function") {
+	Number.parseFloat = function(s) {
+		return parseFloat(Number.trim(s));
+	};
+}
+if (typeof Number.format != "function") {
+	Number.format = function(pattern, n) {
+		return (new DecimalFormat(pattern)).format(n);
+	};
+}
+if (typeof Number.comma != "function") {
+	var CDF = new DecimalFormat('###,###.#########');
+	Number.comma = function(n) {
+		return CDF.format(n);
+	};
+}
+if (typeof Number.formatSize != "function") {
+	var KB = 1024,
+		MB = KB * KB,
+		GB = MB * KB,
+		TB = GB * KB,
+		PB = TB * KB;
+	
+	Number.formatSize = function(n, p) {
+		p = Math.pow(10, p || 2);
+		var sz = "";
+		if (n >= PB) {
+			sz = Math.round(n * p / PB) / p + ' PB';
+		}
+		else if (n >= TB) {
+			sz = Math.round(n * p / TB) / p + ' TB';
+		}
+		else if (n >= GB) {
+			sz = Math.round(n * p / GB) / p + ' GB';
+		}
+		else if (n >= MB) {
+			sz = Math.round(n * p / MB) / p + ' MB';
+		}
+		else if (n >= KB) {
+			sz = Math.round(n * p / KB) / p + ' KB';
+		}
+		else if (n != '') {
+			sz = n + ' bytes';
+		}
+		return sz;
+	};
+}
+
+

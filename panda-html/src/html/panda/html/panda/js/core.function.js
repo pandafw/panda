@@ -1,15 +1,3 @@
-function panda_call(f, p) {
-	switch (typeof(f)) {
-	case "function":
-		f.call(p);
-		break;
-	case "string":
-		f = new Function(f);
-		f.call(p);
-		break;
-	}
-}
-
 if (typeof Function.prototype.callback != "function") {
 	/**
 	 * Creates a callback that passes arguments[0], arguments[1], arguments[2], ...
