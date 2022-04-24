@@ -245,7 +245,7 @@
 	function media_title(m) {
 		return m.name 
 			+ '\r\n' + m.width + ' x ' + m.height
-			+ ' (' + String.formatSize(m.size) + ')'
+			+ ' (' + Number.formatSize(m.size) + ')'
 			+ '\r\n' + m.updatedAt;
 	}
 
@@ -376,8 +376,8 @@
 		$('#media_alert').palert('actionAlert', d);
 	}
 	
-	function media_ajax_error(xhr, status, e) {
-		$('#media_alert').palert('ajaxJsonAlert', xhr, status, e, "<@p.text name='error-server-connect' escape='js'/>");
+	function media_ajax_error(xhr, status, err) {
+		$('#media_alert').palert('ajaxJsonError', xhr, status, err, "<@p.text name='error-server-connect' escape='js'/>");
 	}
 </script>
 </body>
