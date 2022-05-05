@@ -1590,7 +1590,7 @@ if (typeof String.prototype.rightPad != "function") {
 		ch = ch || ' ';
 		var r = this;
 		while (r.length < sz) {
-			r += chr;
+			r += ch;
 		}
 		return r;
 	};
@@ -1785,31 +1785,27 @@ if (typeof String.prototype.encodeUTF8 != "function") {
 }
 if (typeof String.prototype.decodeUTF8 != "function") {
 	String.prototype.decodeUTF8 = function() {
-		var string = "";
-		var i = 0;
-		var c = c1 = c2 = 0;
+		var s = "", i = 0, c = 0, c2 = 0;
 
-		while ( i < this.length ) {
+		while (i < this.length) {
 			c = this.charCodeAt(i);
 
 			if (c < 128) {
-				string += String.fromCharCode(c);
+				s += String.fromCharCode(c);
 				i++;
-			}
-			else if((c > 191) && (c < 224)) {
+			} else if (c > 191 && c < 224) {
 				c2 = this.charCodeAt(i+1);
-				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+				s += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
 				i += 2;
-			}
-			else {
+			} else {
 				c2 = this.charCodeAt(i+1);
 				c3 = this.charCodeAt(i+2);
-				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+				s += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
 				i += 3;
 			}
 		}
 
-		return string;
+		return s;
 	};
 }
 if (typeof String.prototype.encodeBase64 != "function") {

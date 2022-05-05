@@ -31,15 +31,13 @@
 		$form.files = [];
 		
 		function addFile($f, n) {
-			var $c = $f.clone();
-			$c.insertAfter($f);
+			var $c = $f.clone().insertAfter($f);
 
 			n = n || $f.attr('name');
 			$f.attr({
 				id: '',
 				name: n
-			})
-			.appendTo($form);
+			}).appendTo($form);
 			
 			$form.files[$form.files.length] = { real: $f, clon: $c};
 		}
@@ -52,16 +50,14 @@
 
 			if (typeof(s.file) == "string") {
 				addFile($(s.file));
-			}
-			else if ($.isArray(s.file)) {
-				for (var i = 0; i < s.file.length; i++) {
-					addFile($(s.file[i]));
-				}
-			}
-			else {
-				for (var n in s.file) {
-					addFile($(s.file[n]), n);
-				}
+			} else if ($.isArray(s.file)) {
+				$.each(s.file, function(i, f) {
+					addFile($(f));
+				});
+			} else {
+				$.each(s.file, function(n, f) {
+					addFile($(f), n);
+				});
 			}
 		}
 		
@@ -74,28 +70,25 @@
 
 		function addParams(n, v) {
 			if ($.isArray(v)) {
-				for (var i = 0; i < v.length; i++) {
-					addParam(n, v[i]);
-				}
-			}
-			else {
+				$.each(v, function(i, v) {
+					addParam(n, v);
+				});
+			} else {
 				addParam(n, v);
 			}
 		}
 
 		if (s.data) {
 			if ($.isArray(s.data)) {
-				for (var i = 0; i < s.data.length; i++) {
-					addParams(s.data[i].name, s.data[i].value);
-				}
-			}
-			else {
-				for (var n in s.data) {
-					var v = s.data[n];
+				$.each(s.data, function(i, d) {
+					addParams(d.name, d.value);
+				});
+			} else {
+				$.each(s.data, function(n, v) {
 					if (v) {
 						addParams(n, v)
 					}
-				}
+				});
 			}
 		}
 
@@ -105,17 +98,19 @@
 	function httpData(xhr, type) {
 		var data = type == "xml" ? xhr.responseXML : xhr.responseText;
 		
-		if (type == "script") {
+		switch (type) {
+		case "script":
 			// If the type is "script", eval it in global context
 			$.globalEval(data);
-		}
-		else if (type == "json") {
+			break;
+		case "json":
 			// Get the JavaScript object, if JSON is used.
 			data = $.parseJSON(data);
-		}
-		else if (type == "html") {
+			break;
+		case "html":
 			// evaluate scripts within html
 			$("<div>").html(data).evalScripts();
+			break;
 		}
 		
 		return data;
@@ -139,7 +134,7 @@
 		var done = false, xhr = {};
 
 		// Wait for a response to come back
-		var callback = function(timeout) {
+		function callback(timeout) {
 			if (done) {
 				return;
 			}
@@ -152,28 +147,21 @@
 				if (doc && doc.body) {
 					if (s.selector) {
 						xhr.responseText = $(doc.body).find(s.selector).html();
-					}
-					else {
+					} else {
 						var fc = doc.body.firstChild;
 						var tn = (fc && fc.tagName) ? fc.tagName.toUpperCase() : "";
 						if (tn == "TEXTAREA") {
 							xhr.responseText = fc.value;
-						}
-						else if (tn == "PRE") {
+						} else if (tn == "PRE") {
 							xhr.responseText = $(fc).text();
-						}
-						else {
+						} else {
 							xhr.responseText = doc.body.innerHTML;
 						}
 					}
 				}
 				xhr.responseXML = (doc && doc.XMLDocument) ? doc.XMLDocument : doc;
-
-				if (typeof(console) != "undefined") {
-					console.debug("jquery.ajaf(" + s.url + "): " + (xhr.responseText || xhr.responseXML));
-				}
-			}
-			catch(e) {
+				// console.debug("jquery.ajaf(" + s.url + "): " + (xhr.responseText || xhr.responseXML));
+			} catch (e) {
 				status = "error";
 				if (s.error) {
 					s.error(xhr, status, e);
@@ -195,8 +183,7 @@
 				if (s.error) {
 					s.error(xhr, status);
 				}
-			}
-			else if (status == "success") {
+			} else if (status == "success") {
 				// Make sure that the request was successful or not modified
 				try {
 					// process the data (runs the xhr through httpData regardless of callback)
@@ -206,8 +193,7 @@
 					if (s.success) {
 						s.success(data, xhr);
 					}
-				}
-				catch(e) {
+				} catch(e) {
 					if (s.error) {
 						s.error(xhr, status, e);
 					}
@@ -219,19 +205,11 @@
 				if (s.complete) {
 					s.complete(xhr, status);
 				}
-			}
-			finally {
+			} finally {
 				//clear up the created iframe after file uploaded.
 				$if.unbind();
 				setTimeout(function() {
-					try {
-						$if.remove();
-					}
-					catch(e) {
-						if (typeof(console) != "undefined") {
-							console.debug("jquery.ajaf(" + s.url + "): failed to remove " + $if);
-						}
-					}
+					$if.remove();
 				}, 100);
 				xhr = null;
 			}
@@ -243,7 +221,7 @@
 
 		// Timeout checker
 		if (s.timeout > 0) {
-			setTimeout(function(){
+			setTimeout(function() {
 				// Check to see if the request is still happening
 				if (!done) {
 					callback("timeout");
@@ -253,8 +231,7 @@
 		
 		try {
 			$form.submit();
-		}
-		catch(e) {
+		} catch(e) {
 			if (s.error) {
 				s.error(xhr, "send", e);
 			}
