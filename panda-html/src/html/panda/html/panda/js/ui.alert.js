@@ -10,12 +10,9 @@
 		if (n && s.label) {
 			m = n + s.label + m;
 		}
-		if (s.escape) {
-			m = m.escapeHtml();
-		}
 		return $('<li>').addClass(s.texts[t])
 			.append($('<i>').addClass(s.icons[t]))
-			.append($('<span>').html(m));
+			.append($('<span>')[s.escape ? 'text' : 'html'](m));
 	}
 
 	function addMsg($a, s, m, t) {

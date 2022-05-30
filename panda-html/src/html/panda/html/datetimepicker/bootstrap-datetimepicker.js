@@ -27,17 +27,9 @@
 (function($) {
 
   // Picker object
-  var smartPhone = (window.orientation != undefined);
-  var DateTimePicker = function(element, options) {
+  function DateTimePicker(element, options) {
     this.id = dpgId++;
     this.init(element, options);
-  };
-
-  var dateToDate = function(dt) {
-    if (typeof dt === 'string') {
-      return new Date(dt);
-    }
-    return dt;
   };
 
   DateTimePicker.prototype = {
@@ -847,7 +839,7 @@
     },
 
     parseDate: function(str) {
-      var match, i, property, methodName, value, parsed = {};
+      var match, i, property, value, parsed = {};
       if (!(match = this._formatPattern.exec(str)))
         return null;
       for (i = 1; i < match.length; i++) {

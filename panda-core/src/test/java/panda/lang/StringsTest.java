@@ -2120,9 +2120,9 @@ public class StringsTest {
 		assertEquals("\uD800\uDC00", StringEscapes.escapeCsv("\uD800\uDC00"));
 		assertEquals("\uD834\uDD1E", StringEscapes.escapeCsv("\uD834\uDD1E"));
 		assertEquals("\uDBFF\uDFFD", StringEscapes.escapeCsv("\uDBFF\uDFFD"));
-		assertEquals("\uDBFF\uDFFD", StringEscapes.escapeHtml3("\uDBFF\uDFFD"));
-		assertEquals("\uDBFF\uDFFD", StringEscapes.escapeHtml4("\uDBFF\uDFFD"));
-		assertEquals("\uDBFF\uDFFD", StringEscapes.escapeXml("\uDBFF\uDFFD"));
+		assertEquals("\uDBFF\uDFFD", StringEscapes.escapeHTML3("\uDBFF\uDFFD"));
+		assertEquals("\uDBFF\uDFFD", StringEscapes.escapeHTML4("\uDBFF\uDFFD"));
+		assertEquals("\uDBFF\uDFFD", StringEscapes.escapeXML("\uDBFF\uDFFD"));
 	}
 
 	/**
@@ -2143,8 +2143,8 @@ public class StringsTest {
 		assertEquals("\uD800\uDC00", StringEscapes.unescapeCsv("\uD800\uDC00"));
 		assertEquals("\uD834\uDD1E", StringEscapes.unescapeCsv("\uD834\uDD1E"));
 		assertEquals("\uDBFF\uDFFD", StringEscapes.unescapeCsv("\uDBFF\uDFFD"));
-		assertEquals("\uDBFF\uDFFD", StringEscapes.unescapeHtml3("\uDBFF\uDFFD"));
-		assertEquals("\uDBFF\uDFFD", StringEscapes.unescapeHtml4("\uDBFF\uDFFD"));
+		assertEquals("\uDBFF\uDFFD", StringEscapes.unescapeHTML3("\uDBFF\uDFFD"));
+		assertEquals("\uDBFF\uDFFD", StringEscapes.unescapeHTML4("\uDBFF\uDFFD"));
 	}
 
 	/**

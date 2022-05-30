@@ -13,8 +13,7 @@
 	function createForm(s) {
 		var id = 'ajaf_form_' + s.id;
 
-		var $form = $('<form></form>')
-			.attr({
+		var $form = $('<form></form>', {
 				id: id,
 				name: id,
 				action: s.url,
@@ -39,7 +38,7 @@
 				name: n
 			}).appendTo($form);
 			
-			$form.files[$form.files.length] = { real: $f, clon: $c};
+			$form.files.push({ real: $f, clon: $c});
 		}
 		
 		if (s.file) {
@@ -119,9 +118,9 @@
 	$.ajaf = function(s) {
 		// TODO introduce global settings, allowing the client to modify them for all requests, not only timeout
 		s = $.extend({
-				id: new Date().getTime(),
-				secureUrl: 'javascript:false'
-			}, s);
+			id: new Date().getTime(),
+			secureUrl: 'javascript:false'
+		}, s);
 		
 		var $if = createIFrame(s);
 		var $form = createForm(s);
@@ -168,7 +167,7 @@
 				}
 			}
 
-			// Revert files
+			// Recover real files
 			for (var i = 0; i < $form.files.length; i++) {
 				var f = $form.files[i];
 				f.real.attr({
@@ -237,9 +236,8 @@
 			}
 		}
 		
-		$if.load(callback);
-
-		return { abort: function(){} };	
+		$if.on('load', callback);
+		return;
 	};
 })(jQuery);
 
@@ -302,10 +300,13 @@
 			return;
 		}
 
-		var $t = $('<textarea>').css({ 'width' : '0px', 'height': '0px' }).text(s);
-		$('body').append($t);
+		var $t = $('<textarea>')
+			.css({ width: 0, height: 0 })
+			.text(s)
+			.appendTo('body');
 
 		$t.get(0).select();
+
 		document.execCommand('copy');
 
 		$t.remove();
@@ -380,8 +381,7 @@ jQuery.cookie = function(name, value, options) {
 			if (typeof options.expires == 'number') {
 				date = new Date();
 				date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
-			}
-			else {
+			} else {
 				date = options.expires;
 			}
 			expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
@@ -393,8 +393,7 @@ jQuery.cookie = function(name, value, options) {
 		var domain = options.domain ? '; domain=' + (options.domain) : '';
 		var secure = options.secure ? '; secure' : '';
 		document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
-	}
-	else { // only name given, get cookie
+	} else { // only name given, get cookie
 		var cookieValue = null;
 		if (document.cookie && document.cookie != '') {
 			var cookies = document.cookie.split(';');
@@ -410,17 +409,16 @@ jQuery.cookie = function(name, value, options) {
 		return cookieValue;
 	}
 };
+
 jQuery.cookie.defaults = {};
 
 jQuery.jcookie = function(name, value, options) {
 	if (typeof value != 'undefined') { // name and value given, set cookie
-		$.cookie(name, String.encodeBase64(JSON.stringify(value)), options);
-	}
-	else {
+		$.cookie(name, btoa(JSON.stringify(value)), options);
+	} else {
 		try {
-			return JSON.parse(String.decodeBase64($.cookie(name)));
-		}
-		catch (ex) {
+			return JSON.parse(atob($.cookie(name)));
+		} catch (ex) {
 			return {};
 		}
 	}

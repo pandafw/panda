@@ -6,10 +6,13 @@
 			return;
 		}
 
-		var $t = $('<textarea>').css({ 'width' : '0px', 'height': '0px' }).text(s);
-		$('body').append($t);
+		var $t = $('<textarea>')
+			.css({ width: 0, height: 0 })
+			.text(s)
+			.appendTo('body');
 
 		$t.get(0).select();
+
 		document.execCommand('copy');
 
 		$t.remove();

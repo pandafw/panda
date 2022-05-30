@@ -144,7 +144,7 @@ public class XmlSerializer extends AbstractSerializer {
 				return;
 			}
 			
-			StringEscapes.escapeXml(str, writer);
+			StringEscapes.escapeXML(str, writer);
 		}
 		catch (IOException e) {
 			throw new XmlException(e);

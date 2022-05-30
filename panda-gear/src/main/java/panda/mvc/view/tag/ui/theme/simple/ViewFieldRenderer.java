@@ -73,7 +73,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 							if (label != null) {
 								String sl = label.toString();
 								if (Strings.isNotEmpty(sl)) {
-									body.append(StringEscapes.escapeHtml(sl)).append(sp);
+									body.append(StringEscapes.escapeHTML(sl)).append(sp);
 								}
 							}
 						}
@@ -83,7 +83,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 							if (v != null) {
 								String sl = v.toString();
 								if (Strings.isNotEmpty(sl)) {
-									body.append(StringEscapes.escapeHtml(sl)).append(sp);
+									body.append(StringEscapes.escapeHTML(sl)).append(sp);
 								}
 							}
 						}
@@ -94,7 +94,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 						boolean selected = tag.contains(value, kv.getKey());
 	
 						if (selected && kv.getValue() != null) {
-							body.append(StringEscapes.escapeHtml(kv.getValue().toString())).append(sp);
+							body.append(StringEscapes.escapeHTML(kv.getValue().toString())).append(sp);
 						}
 					}
 				}

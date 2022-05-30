@@ -1697,7 +1697,7 @@ if (typeof String.prototype.escapeRegExp != "function") {
 		return this.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
 	};
 }
-if (typeof String.prototype.escapeHtml != "function") {
+if (typeof String.prototype.escapeHTML != "function") {
 	var ehm = {
 		'&': '&amp;',
 		"'": '&apos;',
@@ -1707,13 +1707,13 @@ if (typeof String.prototype.escapeHtml != "function") {
 		'>': '&gt;'
 	};
 
-	String.prototype.escapeHtml = function() {
+	String.prototype.escapeHTML = function() {
 		return this.replace(/[&'`"<>]/g, function(c) {
 			return ehm[c];
 		});
 	};
 }
-if (typeof String.prototype.unescapeHtml != "function") {
+if (typeof String.prototype.unescapeHTML != "function") {
 	// a simple version, complete version: https://stackoverflow.com/questions/994331/how-to-unescape-html-character-entities-in-java
 	var uhm = {
 		'&lt;'   : '<',
@@ -1725,7 +1725,7 @@ if (typeof String.prototype.unescapeHtml != "function") {
 		'&#x60;' : '`'
 	};
 
-	String.prototype.unescapeHtml = function() {
+	String.prototype.unescapeHTML = function() {
 		return this.replace(/&(lt|gt|amp|quot|apos|#x27|#x60);/g, function(t) {
 			return uhm[t];
 		});

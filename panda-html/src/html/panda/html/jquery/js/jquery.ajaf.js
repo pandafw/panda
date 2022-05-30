@@ -13,8 +13,7 @@
 	function createForm(s) {
 		var id = 'ajaf_form_' + s.id;
 
-		var $form = $('<form></form>')
-			.attr({
+		var $form = $('<form></form>', {
 				id: id,
 				name: id,
 				action: s.url,
@@ -39,7 +38,7 @@
 				name: n
 			}).appendTo($form);
 			
-			$form.files[$form.files.length] = { real: $f, clon: $c};
+			$form.files.push({ real: $f, clon: $c});
 		}
 		
 		if (s.file) {
@@ -119,9 +118,9 @@
 	$.ajaf = function(s) {
 		// TODO introduce global settings, allowing the client to modify them for all requests, not only timeout
 		s = $.extend({
-				id: new Date().getTime(),
-				secureUrl: 'javascript:false'
-			}, s);
+			id: new Date().getTime(),
+			secureUrl: 'javascript:false'
+		}, s);
 		
 		var $if = createIFrame(s);
 		var $form = createForm(s);
@@ -168,7 +167,7 @@
 				}
 			}
 
-			// Revert files
+			// Recover real files
 			for (var i = 0; i < $form.files.length; i++) {
 				var f = $form.files[i];
 				f.real.attr({
@@ -237,9 +236,8 @@
 			}
 		}
 		
-		$if.load(callback);
-
-		return { abort: function(){} };	
+		$if.on('load', callback);
+		return;
 	};
 })(jQuery);
 

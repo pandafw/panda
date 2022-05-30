@@ -23,12 +23,9 @@
 
 	<script type="text/javascript">
 		function elSetResult(s) {
-			var $or = $('#eleval_result');
+			var $or = $('#eleval_result').empty();
 			if (s) {
-				$or.html("<hr/><pre>" + s.escapeHtml() + "</pre>");
-			}
-			else {
-				$or.empty();
+				$or.append($('<hr>')).append($('<pre>').text(s));
 			}
 		}
 

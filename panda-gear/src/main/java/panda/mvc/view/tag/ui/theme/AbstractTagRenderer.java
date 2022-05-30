@@ -186,7 +186,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 
 	protected String html(String s) {
-		return StringEscapes.escapeHtml(s);
+		return StringEscapes.escapeHTML(s);
 	}
 
 	protected String phtml(String s) {

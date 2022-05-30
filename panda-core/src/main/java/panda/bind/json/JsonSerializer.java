@@ -108,7 +108,7 @@ public class JsonSerializer extends AbstractSerializer {
 			}
 			
 			writer.append('"');
-			StringEscapes.escapeJson(str, writer);
+			StringEscapes.escapeJSON(str, writer);
 			writer.append('"');
 		}
 		catch (IOException e) {

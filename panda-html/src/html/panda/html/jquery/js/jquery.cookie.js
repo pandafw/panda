@@ -66,8 +66,7 @@ jQuery.cookie = function(name, value, options) {
 			if (typeof options.expires == 'number') {
 				date = new Date();
 				date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
-			}
-			else {
+			} else {
 				date = options.expires;
 			}
 			expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
@@ -79,8 +78,7 @@ jQuery.cookie = function(name, value, options) {
 		var domain = options.domain ? '; domain=' + (options.domain) : '';
 		var secure = options.secure ? '; secure' : '';
 		document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
-	}
-	else { // only name given, get cookie
+	} else { // only name given, get cookie
 		var cookieValue = null;
 		if (document.cookie && document.cookie != '') {
 			var cookies = document.cookie.split(';');
@@ -96,17 +94,16 @@ jQuery.cookie = function(name, value, options) {
 		return cookieValue;
 	}
 };
+
 jQuery.cookie.defaults = {};
 
 jQuery.jcookie = function(name, value, options) {
 	if (typeof value != 'undefined') { // name and value given, set cookie
-		$.cookie(name, String.encodeBase64(JSON.stringify(value)), options);
-	}
-	else {
+		$.cookie(name, btoa(JSON.stringify(value)), options);
+	} else {
 		try {
-			return JSON.parse(String.decodeBase64($.cookie(name)));
-		}
-		catch (ex) {
+			return JSON.parse(atob($.cookie(name)));
+		} catch (ex) {
 			return {};
 		}
 	}

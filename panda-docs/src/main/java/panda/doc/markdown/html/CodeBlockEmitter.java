@@ -14,13 +14,13 @@ public class CodeBlockEmitter implements BlockEmitter {
 			out.append("<pre><code");
 			if (meta.length() > 0) {
 				out.append(" class=\"");
-				StringEscapes.escapeHtml(meta, out);
+				StringEscapes.escapeHTML(meta, out);
 				out.append('\"');
 			}
 			out.append('>');
 	
 			for (final String s : lines) {
-				StringEscapes.escapeHtml(s, out);
+				StringEscapes.escapeHTML(s, out);
 				out.append('\n');
 			}
 			out.append("</code></pre>\n");

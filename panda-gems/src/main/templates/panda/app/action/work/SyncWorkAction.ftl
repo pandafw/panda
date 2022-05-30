@@ -172,7 +172,7 @@
 
 		function work_print_status(time, level, msg, count, total) {
 			if (msg) {
-				var $m = $('<div class="' + work_status_cls(level) + '">' + String.escapeHtml(work_status_msg(time, level, msg, count, total)) + '</div>');
+				var $m = $('<div>', { 'class': work_status_cls(level) }).text(work_status_msg(time, level, msg, count, total));
 
 				var $sl = $('#syncw_log');
 				

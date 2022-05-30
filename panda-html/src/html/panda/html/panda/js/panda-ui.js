@@ -21,12 +21,9 @@ function panda_call(f, p) {
 		if (n && s.label) {
 			m = n + s.label + m;
 		}
-		if (s.escape) {
-			m = m.escapeHtml();
-		}
 		return $('<li>').addClass(s.texts[t])
 			.append($('<i>').addClass(s.icons[t]))
-			.append($('<span>').html(m));
+			.append($('<span>')[s.escape ? 'text' : 'html'](m));
 	}
 
 	function addMsg($a, s, m, t) {
@@ -1382,7 +1379,7 @@ panda.meta_props = function() {
 		}
 
 		function _filesize(fs) {
-			var sz = String.formatSize(fs);
+			var sz = Number.formatSize(fs);
 			if (sz.length > 0) {
 				sz = '(' + sz + ')';
 			}
@@ -1397,7 +1394,7 @@ panda.meta_props = function() {
 		}
 		
 		function _info(fi) {
-			var fid = fi.name, fnm = _filename(fi.name), fsz = fi.size, fct = fi.type;
+			var fid = fi.name, fnm = _filename(fi.name), fsz = fi.size, fct = fi.typ || '';
 			var pdl = $u.data('dnloadLink');
 			var pdn = $u.data('dnloadName');
 			var pdd = JSON.sparse($u.data('dnloadData'));
@@ -1418,7 +1415,7 @@ panda.meta_props = function() {
 				durl = pdl + '?' + $.param(ps);
 			}
 			
-			var img = String.startsWith(fct, 'image/');
+			var img = fct.startsWith('image/');
 			if (fnm) {
 				var s = '<i class="fa fa-' + (img ? 'image' : 'paperclip') + ' p-uploader-icon"></i> ' + fnm + ' ' + _filesize(fsz);
 				if (durl) {
@@ -1647,7 +1644,7 @@ panda.meta_props = function() {
 			var $t = $(this);
 			var $p = $t.toggleClass('active').parent();
 			var v = $p.find('input').val();
-			$p.find('.p-viewfield').html($t.hasClass('active') ? v.escapeHtml() : v);
+			$p.find('.p-viewfield')[$t.hasClass('active') ? 'text' : 'html'](v);
 			return false;
 		});
 	});

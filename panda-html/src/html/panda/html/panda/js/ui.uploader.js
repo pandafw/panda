@@ -30,7 +30,7 @@
 		}
 
 		function _filesize(fs) {
-			var sz = String.formatSize(fs);
+			var sz = Number.formatSize(fs);
 			if (sz.length > 0) {
 				sz = '(' + sz + ')';
 			}
@@ -45,7 +45,7 @@
 		}
 		
 		function _info(fi) {
-			var fid = fi.name, fnm = _filename(fi.name), fsz = fi.size, fct = fi.type;
+			var fid = fi.name, fnm = _filename(fi.name), fsz = fi.size, fct = fi.typ || '';
 			var pdl = $u.data('dnloadLink');
 			var pdn = $u.data('dnloadName');
 			var pdd = JSON.sparse($u.data('dnloadData'));
@@ -66,7 +66,7 @@
 				durl = pdl + '?' + $.param(ps);
 			}
 			
-			var img = String.startsWith(fct, 'image/');
+			var img = fct.startsWith('image/');
 			if (fnm) {
 				var s = '<i class="fa fa-' + (img ? 'image' : 'paperclip') + ' p-uploader-icon"></i> ' + fnm + ' ' + _filesize(fsz);
 				if (durl) {

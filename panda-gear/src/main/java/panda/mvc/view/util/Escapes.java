@@ -45,7 +45,7 @@ public class Escapes {
 
 		switch (escape.charAt(0)) {
 		case 'h':
-			return StringEscapes.escapeHtml(value);
+			return StringEscapes.escapeHTML(value);
 		case 'p':
 			return StringEscapes.escapePhtml(value);
 		case 'j':
@@ -53,7 +53,7 @@ public class Escapes {
 		case 'c':
 			return StringEscapes.escapeCsv(value);
 		case 'x':
-			return StringEscapes.escapeXml(value);
+			return StringEscapes.escapeXML(value);
 		default:
 			return value.toString();
 		}

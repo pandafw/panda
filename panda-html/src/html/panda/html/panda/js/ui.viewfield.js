@@ -13,7 +13,7 @@
 			var $t = $(this);
 			var $p = $t.toggleClass('active').parent();
 			var v = $p.find('input').val();
-			$p.find('.p-viewfield').html($t.hasClass('active') ? v.escapeHtml() : v);
+			$p.find('.p-viewfield')[$t.hasClass('active') ? 'text' : 'html'](v);
 			return false;
 		});
 	});

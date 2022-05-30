@@ -56,7 +56,7 @@ public class Attributes {
 	public Attributes add(String key, Object value, boolean encode) {
 		String sv = value == null ? "" : value.toString();
 		if (encode) {
-			sv = StringEscapes.escapeHtml(sv);
+			sv = StringEscapes.escapeHTML(sv);
 		}
 		attributes.put(key, sv);
 		return this;
@@ -87,7 +87,7 @@ public class Attributes {
 			String val = value.toString();
 			if (Strings.isNotEmpty(val)) {
 				if (encode) {
-					val = StringEscapes.escapeHtml(val);
+					val = StringEscapes.escapeHTML(val);
 				}
 				attributes.put(name, val);
 				return this;

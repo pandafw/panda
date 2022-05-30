@@ -219,7 +219,7 @@ public class XmlRpcSerializer extends AbstractSerializer {
 	private void writeName(String str) {
 		try {
 			writeBeginTag(XmlRpcTags.T_NAME);
-			StringEscapes.escapeXml(str, writer);
+			StringEscapes.escapeXML(str, writer);
 			writeEndTag();
 		}
 		catch (IOException e) {
@@ -271,11 +271,11 @@ public class XmlRpcSerializer extends AbstractSerializer {
 		try {
 			if (nodes.size() > 2) {
 				writeBeginTag(XmlRpcTags.T_STRING);
-				StringEscapes.escapeXml(str, writer);
+				StringEscapes.escapeXML(str, writer);
 				writeEndTag();
 			}
 			else {
-				StringEscapes.escapeXml(str, writer);
+				StringEscapes.escapeXML(str, writer);
 			}
 		}
 		catch (IOException e) {

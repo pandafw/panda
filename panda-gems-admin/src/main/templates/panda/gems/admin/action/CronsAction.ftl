@@ -81,14 +81,10 @@
 				url: $a.text(),
 				dataType: 'text',
 				success: function(data, ts, xhr) {
-					$r.html($r.html() 
-						+ '<pre class="alert alert-info">' + data.escapeHtml() + '</pre>');
+					$r.append($('<pre>', { 'class': 'alert alert-info' }).text(data));
 				},
 				error: function(xhr, ts, err) {
-					$r.html($r.html()
-						+ '<pre class="alert alert-danger">'
-						+ ((err ? (err + '\r\n') : '') + xhr.responseText).escapeHtml()
-						+ '</pre>');
+					$r.append($('<pre>', { 'class': 'alert alert-danger' }).text((err ? (err + '\r\n') : '') + xhr.responseText));
 				},
 				complete: function(xhr, ts) {
 					$d.unloadmask();

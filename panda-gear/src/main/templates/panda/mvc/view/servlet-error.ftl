@@ -19,7 +19,7 @@
 	<div class="alert alert-danger">
 		<ul class="fa-ul p-servlet-errors">
 			<li class="p-servlet-error"><i class="fa-li fa fa-exclamation-circle"></i> ${_msg}<br/>
-<#assign _url = assist.escapeHtml(assist.requestLink)/>${action.getText('servlet-error-request-url', _url, _url)}
+<#assign _url = assist.escapeHTML(assist.requestLink)/>${action.getText('servlet-error-request-url', _url, _url)}
 			</li>
 		</ul>
 	</div>
@@ -27,7 +27,7 @@
 	<#if appDebug>
 	<div class="alert alert-warning p-exception">
 		<h5>${action.getText('servlet-error-exception')}</h5>
-		<div class="p-prewrap p-breakwork">${assist.escapeHtml(assist.servletExceptionStackTrace)}</div>
+		<div class="p-prewrap p-breakwork">${assist.escapeHTML(assist.servletExceptionStackTrace)}</div>
 	</div>
 	</#if>
 </#if>

@@ -212,10 +212,10 @@ public class ActionAssist extends ActionSupport {
 	/**
 	 * @param o the object to escape
 	 * @return escaped html string
-	 * @see StringEscapes#escapeHtml(CharSequence)
+	 * @see StringEscapes#escapeHTML(CharSequence)
 	 */
-	public String escapeHtml(Object o) {
-		return StringEscapes.escapeHtml(Objects.toString(o));
+	public String escapeHTML(Object o) {
+		return StringEscapes.escapeHTML(Objects.toString(o));
 	}
 
 	/**
@@ -248,10 +248,10 @@ public class ActionAssist extends ActionSupport {
 	/**
 	 * @param o the object to escape
 	 * @return escaped xml string
-	 * @see StringEscapes#escapeXml(CharSequence)
+	 * @see StringEscapes#escapeXML(CharSequence)
 	 */
-	public String escapeXml(Object o) {
-		return StringEscapes.escapeXml(Objects.toString(o));
+	public String escapeXML(Object o) {
+		return StringEscapes.escapeXML(Objects.toString(o));
 	}
 	
 	/**
