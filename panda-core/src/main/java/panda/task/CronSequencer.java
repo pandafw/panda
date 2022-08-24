@@ -1,17 +1,16 @@
 package panda.task;
 
-import panda.lang.Objects;
-import panda.lang.Strings;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
+
+import panda.lang.Objects;
+import panda.lang.Strings;
 
 
 /**
@@ -125,8 +124,7 @@ public class CronSequencer {
 		List<Integer> resets = new ArrayList<Integer>();
 
 		int second = calendar.get(Calendar.SECOND);
-		List<Integer> emptyList = Collections.emptyList();
-		int updateSecond = findNext(seconds, second, calendar, Calendar.SECOND, Calendar.MINUTE, emptyList);
+		int updateSecond = findNext(seconds, second, calendar, Calendar.SECOND, Calendar.MINUTE, resets);
 		if (second == updateSecond) {
 			resets.add(Calendar.SECOND);
 		}
@@ -151,7 +149,7 @@ public class CronSequencer {
 
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 		int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-		int updateDayOfMonth = findNextDay(calendar, daysOfMonth, dayOfMonth, daysOfWeek, dayOfWeek, resets);
+		int updateDayOfMonth = findNextDay(calendar, dayOfMonth, dayOfWeek, resets);
 		if (dayOfMonth == updateDayOfMonth) {
 			resets.add(Calendar.DAY_OF_MONTH);
 		}
@@ -171,9 +169,7 @@ public class CronSequencer {
 
 	}
 
-	private int findNextDay(Calendar calendar, BitSet daysOfMonth, int dayOfMonth, BitSet daysOfWeek, int dayOfWeek,
-			List<Integer> resets) {
-
+	private int findNextDay(Calendar calendar, int dayOfMonth, int dayOfWeek, List<Integer> resets) {
 		int count = 0;
 		int max = 366;
 		// the DAY_OF_WEEK values in java.util.Calendar start with 1 (Sunday),
