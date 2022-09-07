@@ -143,8 +143,8 @@ public class Pager implements Cloneable, Serializable {
 		return pages;
 	}
 
-	private long calcPage() {
-		return (long)Math.ceil(start.doubleValue() / limit) + 1;
+	protected long calcPage() {
+		return (long)Math.ceil((start.doubleValue() + 1) / limit);
 	}
 	
 	//--------------------------------------------------------------
