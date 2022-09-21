@@ -1,16 +1,20 @@
 (function($) {
-	$(window).on('load', function() {
-		var $t = $('.p-totop');
-		if ($t.size() > 0) {
+	$.fn.totop = function() {
+		$(this).each(function() {
+			var $t = $(this);
 			$t.click(function() {
 				$('html,body').animate({ scrollTop: 0 }, 'slow');
-			});
+			}).css({cursor: 'pointer'});
 	
 			var $w = $(window);
 			$w.scroll(function() {
 				$t[$w.scrollTop() > $w.height() ? 'show' : 'hide']();
 			});
-		}
+		});
+	};
+
+	$(window).on('load', function() {
+		$('[totop="true"]').totop();
 	});
 })(jQuery);
 

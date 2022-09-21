@@ -57,10 +57,10 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (css) {
 			js = false;
 			writeJquery();
-			writeJqueryPlugins();
 			writeBootstrap();
 			writeFontawesome();
 			writeFlagIconCss();
+			writeJqueryPlugins();
 			writePanda();
 			writeStyleSheets();
 		}
@@ -69,10 +69,10 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (js) {
 			css = false;
 			writeJquery();
-			writeJqueryPlugins();
 			writeBootstrap();
 			writeRespondJs();
 			writeNotifyJs();
+			writeJqueryPlugins();
 			writeCoreJs();
 			writePanda();
 			writeJscripts();
@@ -197,7 +197,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				if (tag.useCdn()) {
 					writeCdnCss(FONTAWESOME_CDN_BASE + FONTAWESOME4_VERSION + "/css/font-awesome");
 				} else {
-					writeStaticCss("/font-awesome/css/font-awesome");
+					writeStaticCss("/fontawesome4/css/font-awesome");
 				}
 			}
 		}
