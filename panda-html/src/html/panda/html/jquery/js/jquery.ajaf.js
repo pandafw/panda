@@ -63,8 +63,8 @@
 		function addParam(n, v) {
 			$('<input type="hidden">')
 				.attr('name', n)
-				.val(v)
-				.appendTo($form);
+				.appendTo($form)
+				.val(v);
 		}
 
 		function addParams(n, v) {
@@ -84,9 +84,7 @@
 				});
 			} else {
 				$.each(s.data, function(n, v) {
-					if (v) {
-						addParams(n, v)
-					}
+					addParams(n, v)
 				});
 			}
 		}

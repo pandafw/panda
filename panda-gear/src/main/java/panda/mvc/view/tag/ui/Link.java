@@ -32,6 +32,7 @@ import panda.mvc.Mvcs;
  *    <li>bootstrap4</li>
  *    <li>fontawesome</li>
  *    <li>flagiconcss</li>
+ *    <li>corejs</li>
  *    <li>panda</li>
  *    <li>notifyjs</li>
  *    <li>respondjs</li>
@@ -72,6 +73,7 @@ public class Link extends UIBean {
 	protected boolean bootstrap4;
 	protected boolean fontawesome;
 	protected boolean flagiconcss;
+	protected boolean corejs;
 	protected boolean panda;
 	protected boolean notifyjs;
 	protected boolean respondjs;
@@ -105,6 +107,7 @@ public class Link extends UIBean {
 			jqplugins = true;
 			bootstrap = true;
 			fontawesome = true;
+			corejs = true;
 		}
 		
 		if (cdn == null) {
@@ -351,6 +354,20 @@ public class Link extends UIBean {
 	 */
 	public void setFlagiconcss(boolean flagiconcss) {
 		this.flagiconcss = flagiconcss;
+	}
+
+	/**
+	 * @return the corejs
+	 */
+	public boolean isCorejs() {
+		return corejs;
+	}
+
+	/**
+	 * @param corejs the corejs to set
+	 */
+	public void setCorejs(boolean corejs) {
+		this.corejs = corejs;
 	}
 
 	/**

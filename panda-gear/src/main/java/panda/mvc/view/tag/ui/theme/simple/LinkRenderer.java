@@ -36,20 +36,20 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String BOOTSTRAP3_BIND_JS_PATH = "/bootstrap3/js/bootstrap";
 	private static final String BOOTSTRAP4_BIND_CSS_PATH = "/bootstrap4/css/bootstrap";
 	private static final String BOOTSTRAP4_BIND_JS_PATH = "/bootstrap4/js/bootstrap.bundle";
-	
+
 	private static final String FONTAWESOME_CDN_BASE = "https://netdna.bootstrapcdn.com/font-awesome/";
 	private static final String FONTAWESOME4_VERSION = "4.7.0";
 
 	private static final String FLAGICONCSS_CDN_BASE = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/";
 	private static final String FLAGICONCSS_VERSION = "3.4.3";
-	
+
 	private boolean js;
 	private boolean css;
 
 	public LinkRenderer(RenderingContext rc) {
 		super(rc);
 	}
-	
+
 	@Override
 	protected void render() throws IOException {
 		// output css first for client performance
@@ -73,6 +73,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeBootstrap();
 			writeRespondJs();
 			writeNotifyJs();
+			writeCoreJs();
 			writePanda();
 			writeJscripts();
 		}
@@ -85,8 +86,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				UserAgent ua = context.getUserAgent();
 				if (ua.isMsie()) {
 					v = ua.getBrowser().getMajor() < 9 ? 1 : 2;
-				}
-				else {
+				} else {
 					v = 2;
 				}
 			}
@@ -95,24 +95,21 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			case 3:
 				if (tag.getCdn()) {
 					writeCdnJs(JQUERY3_CDN_PATH);
-				}
-				else {
+				} else {
 					writeStaticJs(JQUERY3_BIND_PATH);
 				}
 				break;
 			case 2:
 				if (tag.getCdn()) {
 					writeCdnJs(JQUERY2_CDN_PATH);
-				}
-				else {
+				} else {
 					writeStaticJs(JQUERY2_BIND_PATH);
 				}
 				break;
 			case 1:
 				if (tag.getCdn()) {
 					writeCdnJs(JQUERY1_CDN_PATH);
-				}
-				else {
+				} else {
 					writeStaticJs(JQUERY1_BIND_PATH);
 				}
 				break;
@@ -125,16 +122,14 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			if (css) {
 				if (tag.useCdn()) {
 					writeCdnCss(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/jquery/css/jquery-plugins");
-				}
-				else {
+				} else {
 					writeStaticCss("/jquery/css/jquery-plugins");
 				}
 			}
 			if (js) {
 				if (tag.useCdn()) {
 					writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/jquery/js/jquery-plugins");
-				}
-				else {
+				} else {
 					writeStaticJs("/jquery/js/jquery-plugins");
 				}
 			}
@@ -146,32 +141,30 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			int v = tag.isBootstrap4() ? 4 : 3;
 
 			// TODO: default use bs4
-//			int v = tag.isBootstrap4() ? 4 : (tag.isBootstrap3() ? 3 : 0);
-//			if (v == 0) {
-//				UserAgent ua = context.getUserAgent();
-//				if (ua.isMsie()) {
-//					v = ua.getBrowser().getMajor() < 10 ? 3 : 4;
-//				}
-//				else {
-//					v = 4;
-//				}
-//			}
+			// int v = tag.isBootstrap4() ? 4 : (tag.isBootstrap3() ? 3 : 0);
+			// if (v == 0) {
+			// UserAgent ua = context.getUserAgent();
+			// if (ua.isMsie()) {
+			// v = ua.getBrowser().getMajor() < 10 ? 3 : 4;
+			// }
+			// else {
+			// v = 4;
+			// }
+			// }
 
 			if (css) {
 				switch (v) {
 				case 4:
 					if (tag.getCdn()) {
 						writeCdnCss(BOOTSTRAP4_CDN_CSS_PATH);
-					}
-					else {
+					} else {
 						writeStaticCss(BOOTSTRAP4_BIND_CSS_PATH);
 					}
 					break;
 				case 3:
 					if (tag.getCdn()) {
 						writeCdnCss(BOOTSTRAP3_CDN_CSS_PATH);
-					}
-					else {
+					} else {
 						writeStaticCss(BOOTSTRAP3_BIND_CSS_PATH);
 					}
 					break;
@@ -182,16 +175,14 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				case 4:
 					if (tag.getCdn()) {
 						writeCdnJs(BOOTSTRAP4_CDN_JS_PATH);
-					}
-					else {
+					} else {
 						writeStaticJs(BOOTSTRAP4_BIND_JS_PATH);
 					}
 					break;
 				case 3:
 					if (tag.getCdn()) {
 						writeCdnJs(BOOTSTRAP3_CDN_JS_PATH);
-					}
-					else {
+					} else {
 						writeStaticJs(BOOTSTRAP3_BIND_JS_PATH);
 					}
 					break;
@@ -205,8 +196,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			if (css) {
 				if (tag.useCdn()) {
 					writeCdnCss(FONTAWESOME_CDN_BASE + FONTAWESOME4_VERSION + "/css/font-awesome");
-				}
-				else {
+				} else {
 					writeStaticCss("/font-awesome/css/font-awesome");
 				}
 			}
@@ -218,9 +208,20 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			if (css) {
 				if (tag.useCdn()) {
 					writeCdnCss(FLAGICONCSS_CDN_BASE + FLAGICONCSS_VERSION + "/css/flag-icon");
-				}
-				else {
+				} else {
 					writeStaticCss("/flag-icon-css/css/flag-icon");
+				}
+			}
+		}
+	}
+
+	private void writeCoreJs() throws IOException {
+		if (tag.isCorejs()) {
+			if (js) {
+				if (tag.useCdn()) {
+					writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/corejs/corejs");
+				} else {
+					writeStaticJs("/corejs/corejs");
 				}
 			}
 		}
@@ -231,47 +232,43 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			if (css) {
 				if (tag.useCdn()) {
 					writeCdnCss(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/panda/css/panda");
-				}
-				else {
+				} else {
 					writeStaticCss("/panda/css/panda");
 				}
 			}
 			if (js) {
 				if (tag.useCdn()) {
 					writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/panda/js/panda");
-				}
-				else {
+				} else {
 					writeStaticJs("/panda/js/panda");
 				}
 			}
 		}
 	}
-	
+
 	private void writeNotifyJs() throws IOException {
 		if (js && tag.isNotifyjs()) {
 			if (tag.useCdn()) {
 				writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/notifyjs/jquery.ui.notify");
-			}
-			else {
+			} else {
 				writeStaticJs("/notifyjs/jquery.ui.notify");
 			}
 		}
 	}
-	
+
 	private void writeRespondJs() throws IOException {
 		if (js && tag.isRespondjs()) {
 			UserAgent ua = context.getUserAgent();
 			if (ua.isMsie() && ua.getBrowser().getMajor() < 9) {
 				if (tag.useCdn()) {
 					writeCdnJs("https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond");
-				}
-				else {
+				} else {
 					writeStaticJs("/respondjs/respond");
 				}
 			}
 		}
 	}
-	
+
 	private void writeStyleSheets() throws IOException {
 		if (js && Collections.isNotEmpty(tag.getStylesheets())) {
 			for (String css : tag.getStylesheets()) {
@@ -279,7 +276,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			}
 		}
 	}
-	
+
 	private void writeJscripts() throws IOException {
 		if (js && Collections.isNotEmpty(tag.getJscripts())) {
 			for (String js : tag.getJscripts()) {
@@ -288,7 +285,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 
-	//-------------------------------
+	// -------------------------------
 	private String debug() {
 		return (tag.useDebug() ? "" : ".min");
 	}
@@ -304,7 +301,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeJs(jsl + debug() + ".js");
 		}
 	}
-	
+
 	protected void writeCdnCss(String cssl) throws IOException {
 		if (css) {
 			writeCss(cssl + debug() + ".css");
@@ -327,7 +324,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (Strings.isEmpty(tag.getVersion())) {
 			return Strings.EMPTY;
 		}
-		
+
 		return "?v=" + URLHelper.encodeURL(tag.getVersion());
 	}
 
