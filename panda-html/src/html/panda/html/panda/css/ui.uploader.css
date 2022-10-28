@@ -28,8 +28,8 @@
 }
 .p-uploader-image img {
 	margin: 5px 0;
-	max-width: 192px;
-	max-height: 192px;
+	max-width: 100%;
+	height: auto;
 }
 
 /* drag & drop */

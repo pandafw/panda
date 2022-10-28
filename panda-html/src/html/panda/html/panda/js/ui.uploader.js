@@ -30,7 +30,7 @@
 		}
 
 		function _filesize(fs) {
-			var sz = Number.formatSize(fs);
+			var sz = Number.humanSize(fs);
 			if (sz.length > 0) {
 				sz = '(' + sz + ')';
 			}
@@ -45,7 +45,7 @@
 		}
 		
 		function _info(fi) {
-			var fid = fi.name, fnm = _filename(fi.name), fsz = fi.size, fct = fi.typ || '';
+			var fid = fi.name, fnm = _filename(fi.name), fsz = fi.size, fct = fi.type || '';
 			var pdl = $u.data('dnloadLink');
 			var pdn = $u.data('dnloadName');
 			var pdd = JSON.sparse($u.data('dnloadData'));
