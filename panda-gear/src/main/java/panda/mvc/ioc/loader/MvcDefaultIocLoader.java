@@ -20,6 +20,7 @@ import panda.mvc.filter.DispatchFilter;
 import panda.mvc.filter.HttpDumpFilter;
 import panda.mvc.filter.HttpsRedirectFilter;
 import panda.mvc.filter.LoggingFilter;
+import panda.mvc.filter.ResponseHeaderFilter;
 import panda.mvc.impl.DefaultActionChainCreator;
 import panda.mvc.impl.DefaultServletChain;
 import panda.mvc.impl.DefaultValidateHandler;
@@ -210,6 +211,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			DefaultServletChain.class,
 			DecodingFilter.class,
 			HttpDumpFilter.class,
+			ResponseHeaderFilter.class,
 			HttpsRedirectFilter.class,
 			LoggingFilter.class,
 			DispatchFilter.class,

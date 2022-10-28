@@ -72,6 +72,9 @@ public interface MvcConstants {
 	/** Request encoding */
 	public static final String REQUEST_ENCODING = "panda.request.encoding";
 
+	/** Response headers */
+	public static final String RESPONSE_HEADERS = "panda.response.headers";
+
 	/** Parse empty parameters for http request */
 	public static final String REQUEST_EMPTY_PARAMS = "panda.request.empty.params";
 
