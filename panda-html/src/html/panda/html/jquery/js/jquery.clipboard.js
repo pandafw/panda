@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.copyToClipboard = function(s) {
 		if (window.clipboardData) {
 			// ie

@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.fn.focusme = function() {
 		var f = false;
 		$(this).each(function() {
@@ -35,6 +37,7 @@
 	};
 
 	$(window).on('load', function() {
-		$('[focusme]').focusme();
+		$('[focusme="true"]').focusme();
 	});
+
 })(jQuery);

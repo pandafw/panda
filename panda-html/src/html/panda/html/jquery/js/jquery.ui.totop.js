@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.fn.totop = function() {
 		$(this).each(function() {
 			var $t = $(this);
@@ -16,5 +18,5 @@
 	$(window).on('load', function() {
 		$('[totop="true"]').totop();
 	});
-})(jQuery);
 
+})(jQuery);

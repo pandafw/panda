@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.fn.changeValue = function(v) {
 		var o = this.val();
 		

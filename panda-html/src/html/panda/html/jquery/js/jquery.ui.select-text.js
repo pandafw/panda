@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.fn.selectText = function() {
 		var $t = $(this);
 		if ($t.length) {
@@ -20,4 +22,5 @@
 			}
 		}
 	};
+
 })(jQuery);

@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	var jss = {};
 	
 	$.jscript = function(url, callback) {

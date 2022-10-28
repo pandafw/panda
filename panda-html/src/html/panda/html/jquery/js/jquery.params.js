@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.queryArrays = function(s, f) {
 		var qs = [], i = s.indexOf('#');
 		if (i >= 0) {
@@ -59,5 +61,3 @@
 	};
 	
 })(jQuery);
-
-

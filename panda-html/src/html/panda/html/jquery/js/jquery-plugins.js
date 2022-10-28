@@ -291,6 +291,8 @@
 	});
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.copyToClipboard = function(s) {
 		if (window.clipboardData) {
 			// ie
@@ -366,63 +368,71 @@
  * @cat Plugins/Cookie
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
-jQuery.cookie = function(name, value, options) {
-	options = $.extend({}, $.cookie.defaults, options);
-	if (typeof value != 'undefined') { // name and value given, set cookie
-		if (value === null) {
-			value = '';
-			options.expires = -1;
-		}
-		var expires = '';
-		if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
-			var date;
-			if (typeof options.expires == 'number') {
-				date = new Date();
-				date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
-			} else {
-				date = options.expires;
+
+(function($) {
+	"use strict";
+
+	$.cookie = function(name, value, options) {
+		options = $.extend({}, $.cookie.defaults, options);
+		if (typeof value != 'undefined') { // name and value given, set cookie
+			if (value === null) {
+				value = '';
+				options.expires = -1;
 			}
-			expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
-		}
-		// NOTE Needed to parenthesize options.path and options.domain
-		// in the following expressions, otherwise they evaluate to undefined
-		// in the packed version for some reason...
-		var path = options.path ? '; path=' + (options.path) : '';
-		var domain = options.domain ? '; domain=' + (options.domain) : '';
-		var secure = options.secure ? '; secure' : '';
-		document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
-	} else { // only name given, get cookie
-		var cookieValue = null;
-		if (document.cookie && document.cookie != '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = cookies[i].replace(/^[\s\u3000\u0022]+|[\s\u3000\u0022]+$/g, '');
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) == (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
+			var expires = '';
+			if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+				var date;
+				if (typeof options.expires == 'number') {
+					date = new Date();
+					date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+				} else {
+					date = options.expires;
+				}
+				expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+			}
+			// NOTE Needed to parenthesize options.path and options.domain
+			// in the following expressions, otherwise they evaluate to undefined
+			// in the packed version for some reason...
+			var path = options.path ? '; path=' + (options.path) : '';
+			var domain = options.domain ? '; domain=' + (options.domain) : '';
+			var secure = options.secure ? '; secure' : '';
+			document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+		} else { // only name given, get cookie
+			var cookieValue = null;
+			if (document.cookie && document.cookie != '') {
+				var cookies = document.cookie.split(';');
+				for (var i = 0; i < cookies.length; i++) {
+					var cookie = cookies[i].replace(/^[\s\u3000\u0022]+|[\s\u3000\u0022]+$/g, '');
+					// Does this cookie string begin with the name we want?
+					if (cookie.substring(0, name.length + 1) == (name + '=')) {
+						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+						break;
+					}
 				}
 			}
+			return cookieValue;
 		}
-		return cookieValue;
-	}
-};
+	};
 
-jQuery.cookie.defaults = {};
+	$.cookie.defaults = {};
 
-jQuery.jcookie = function(name, value, options) {
-	if (typeof value != 'undefined') { // name and value given, set cookie
-		$.cookie(name, btoa(JSON.stringify(value)), options);
-	} else {
-		try {
-			return JSON.parse(atob($.cookie(name)));
-		} catch (ex) {
-			return {};
+	$.jcookie = function(name, value, options) {
+		if (typeof value != 'undefined') { // name and value given, set cookie
+			$.cookie(name, btoa(JSON.stringify(value)), options);
+		} else {
+			try {
+				return JSON.parse(atob($.cookie(name)));
+			} catch (ex) {
+				return {};
+			}
 		}
-	}
-};
+	};
+
+})(jQuery);
 
 (function ($) {
+	"use strict";
+
 	$.fn.disable = function(state) {
 		return this.each(function() {
 			this.disabled = state;
@@ -430,6 +440,8 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.jcss = function(url) {
 		if ($('link[href="' + url + '"]').size()) {
 			return false;
@@ -440,6 +452,8 @@ jQuery.jcookie = function(name, value, options) {
 })(jQuery);
 
 (function($) {
+	"use strict";
+
 	var jss = {};
 	
 	$.jscript = function(url, callback) {
@@ -462,6 +476,8 @@ jQuery.jcookie = function(name, value, options) {
 })(jQuery);
 
 (function($) {
+	"use strict";
+
 	$.queryArrays = function(s, f) {
 		var qs = [], i = s.indexOf('#');
 		if (i >= 0) {
@@ -522,9 +538,9 @@ jQuery.jcookie = function(name, value, options) {
 	};
 	
 })(jQuery);
-
-
 (function ($) {
+	"use strict";
+
 	$.fn.replaceClass = function(s, t) {
 		return this.removeClass(s).addClass(t);
 	};
@@ -874,6 +890,8 @@ jQuery.jcookie = function(name, value, options) {
 	});
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.fn.focusme = function() {
 		var f = false;
 		$(this).each(function() {
@@ -910,10 +928,13 @@ jQuery.jcookie = function(name, value, options) {
 	};
 
 	$(window).on('load', function() {
-		$('[focusme]').focusme();
+		$('[focusme="true"]').focusme();
 	});
+
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.fn.changeValue = function(v) {
 		var o = this.val();
 		
@@ -1539,6 +1560,8 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.fn.scrollIntoView = function(speed, easing, callback) {
 		if (!this.length) {
 			return this;
@@ -1558,8 +1581,11 @@ jQuery.jcookie = function(name, value, options) {
 		$('html').animate(ss, speed, easing, callback);
 		return this;
 	};
+
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.fn.selectText = function() {
 		var $t = $(this);
 		if ($t.length) {
@@ -1581,8 +1607,11 @@ jQuery.jcookie = function(name, value, options) {
 			}
 		}
 	};
+
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.fn.enterfire = function() {
 		$(this).each(function() {
 			var f = $(this).attr('enterfire');
@@ -1619,8 +1648,11 @@ jQuery.jcookie = function(name, value, options) {
 		$('textarea[enterfire]').enterfire();
 		$('textarea[autosize]').autosize();
 	});
+
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$.fn.totop = function() {
 		$(this).each(function() {
 			var $t = $(this);
@@ -1638,5 +1670,26 @@ jQuery.jcookie = function(name, value, options) {
 	$(window).on('load', function() {
 		$('[totop="true"]').totop();
 	});
-})(jQuery);
 
+})(jQuery);
+(function($) {
+	"use strict";
+
+	$.each({
+		zoomIn: { opacity: 'show' },
+		zoomOut: { opacity: 'hide' },
+	}, function(name, props) {
+		$.fn[name] = function(speed, easing, callback) {
+			var opt = $.speed(speed, easing, callback);
+			var old = opt.step;
+			opt.step = function(s) {
+				$(this).css({transform: 'scale(' + s + ')'});
+				if (old) {
+					old.call(this, s);
+				}
+			}
+			return this.animate(props, opt);
+		};
+	});
+
+})(jQuery);

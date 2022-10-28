@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.jcss = function(url) {
 		if ($('link[href="' + url + '"]').size()) {
 			return false;

@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.fn.scrollIntoView = function(speed, easing, callback) {
 		if (!this.length) {
 			return this;
@@ -18,4 +20,5 @@
 		$('html').animate(ss, speed, easing, callback);
 		return this;
 	};
+
 })(jQuery);

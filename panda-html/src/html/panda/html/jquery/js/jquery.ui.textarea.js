@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.fn.enterfire = function() {
 		$(this).each(function() {
 			var f = $(this).attr('enterfire');
@@ -35,4 +37,5 @@
 		$('textarea[enterfire]').enterfire();
 		$('textarea[autosize]').autosize();
 	});
+
 })(jQuery);
