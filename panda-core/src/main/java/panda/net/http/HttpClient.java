@@ -318,7 +318,7 @@ public class HttpClient {
 				.append(" - ").append(response.getStatusLine());
 			msg.append(" (");
 			if (response.getContentLength() != null) {
-				msg.append(Numbers.formatSize(response.getContentLength())).append(" / ");
+				msg.append(Numbers.humanSize(response.getContentLength())).append(" / ");
 			}
 			msg.append(sw).append(')');
 			if (response.getHeader() != null) {

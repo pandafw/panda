@@ -245,7 +245,7 @@
 	function media_title(m) {
 		return m.name 
 			+ '\r\n' + m.width + ' x ' + m.height
-			+ ' (' + Number.formatSize(m.size) + ')'
+			+ ' (' + Number.humanSize(m.size) + ')'
 			+ '\r\n' + m.updatedAt;
 	}
 

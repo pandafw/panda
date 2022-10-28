@@ -1,10 +1,12 @@
 /**
  * @class DecimalFormat
  * @constructor
- * @param {String} formatStr
+ * @param {String} pattern
  * @author Oskan Savli
  */
-function DecimalFormat(formatStr) {
+function DecimalFormat(pattern) {
+	"use strict";
+
 	/**
 	 * @fieldOf DecimalFormat
 	 * @type String
@@ -41,319 +43,310 @@ function DecimalFormat(formatStr) {
 	this.maxFrac = 0;
 
 	// get prefix
-	for (var i = 0; i < formatStr.length; i++) {
-		if (formatStr.charAt(i) == '#' || formatStr.charAt(i) == '0') {
-			this.prefix = formatStr.substring(0, i);
-			formatStr = formatStr.substring(i);
+	for (var i = 0; i < pattern.length; i++) {
+		if (pattern.charAt(i) == '#' || pattern.charAt(i) == '0') {
+			this.prefix = pattern.substring(0, i);
+			pattern = pattern.substring(i);
 			break;
 		}
 	}
 
 	// get suffix
-	this.suffix = formatStr.replace(/[#]|[0]|[,]|[.]/g, '');
+	this.suffix = pattern.replace(/[#]|[0]|[,]|[.]/g, '');
 
 	// get number as string
-	var numberStr = formatStr.replace(/[^0#,.]/g, '');
+	var snum = pattern.replace(/[^0#,.]/g, '');
 
-	var intStr = '';
-	var fracStr = '';
-	var point = numberStr.indexOf('.');
+	var sint = '',
+		frac = '',
+		point = snum.indexOf('.');
 	if (point != -1) {
-		intStr = numberStr.substring(0, point);
-		fracStr = numberStr.substring(point + 1);
-	}
-	else {
-		intStr = numberStr;
-	}
-
-	var commaPos = intStr.lastIndexOf(',');
-	if (commaPos != -1) {
-		this.comma = intStr.length - 1 - commaPos;
+		sint = snum.substring(0, point);
+		frac = snum.substring(point + 1);
+	} else {
+		sint = snum;
 	}
 
-	intStr = intStr.replace(/[,]/g, ''); // remove commas
+	var comma = sint.lastIndexOf(',');
+	if (comma != -1) {
+		this.comma = sint.length - 1 - comma;
+	}
 
-	fracStr = fracStr.replace(/[,]|[.]+/g, '');
+	sint = sint.replace(/[,]/g, ''); // remove commas
 
-	this.maxFrac = fracStr.length;
-	var tmp = intStr.replace(/[^0]/g, ''); // remove all except zero
-	if (tmp.length > this.minInt)
+	frac = frac.replace(/[,]|[.]+/g, '');
+
+	this.maxFrac = frac.length;
+	var tmp = sint.replace(/[^0]/g, ''); // remove all except zero
+	if (tmp.length > this.minInt) {
 		this.minInt = tmp.length;
-	tmp = fracStr.replace(/[^0]/g, '');
+	}
+	tmp = frac.replace(/[^0]/g, '');
 	this.minFrac = tmp.length;
 }
 
-/**
- * @description Formats given value
- * @methodOf DecimalFormat
- * @param {String}
- *            numberStr
- * @return {String} Formatted number
- * @author Oskan Savli
- */
-DecimalFormat.prototype.format = function(numStr) { // 1223.06 --> $1,223.06
-    // remove prefix, suffix and commas
-	var numberStr = this.parse(numStr).toLowerCase();
+(function() {
+	"use strict";
 
-	// do not format if not a number
-	if (isNaN(numberStr) || numberStr.length == 0)
-		return numStr;
+	/**
+	 * @description Formats given value
+	 * @methodOf DecimalFormat
+	 * @param {String} num
+	 * @return {String} Formatted number
+	 * @author Oskan Savli
+	 */
+	DecimalFormat.prototype.format = function(num) {
+		// remove prefix, suffix and commas
+		var snum = this.parse(num).toLowerCase();
 
-	// scientific numbers
-	if (i = numberStr.indexOf("e") != -1) {
-		var n = Number(numberStr);
-		if (n == "Infinity" || n == "-Infinity")
-			return numberStr;
-		numberStr = n + "";
-		if (numberStr.indexOf('e') != -1)
-			return numberStr;
-	}
+		// do not format if not a number
+		if (isNaN(snum) || snum.length == 0) {
+			return num;
+		}
 
-	var negative = false;
-	// remove sign
-	if (numberStr.charAt(0) == '-') {
-		negative = true;
-		numberStr = numberStr.substring(1);
-	}
-	else if (numberStr.charAt(0) == '+') {
-		numberStr = numberStr.substring(1);
-	}
-
-	var point = numberStr.indexOf('.'); // position of point character
-	var intStr = '';
-	var fracStr = '';
-	if (point != -1) {
-		intStr = numberStr.substring(0, point);
-		fracStr = numberStr.substring(point + 1);
-	}
-	else {
-		intStr = numberStr;
-	}
-	fracStr = fracStr.replace(/[.]/, ''); // remove other point characters
-
-	var isPercentage = this.suffix && this.suffix.charAt(0) === '%';
-	// if percentage, number will be multiplied by 100.
-	var minInt = this.minInt, minFrac = this.minFrac, maxFrac = this.maxFrac;
-	if (isPercentage) {
-		minInt -= 2;
-		minFrac += 2;
-		maxFrac += 2;
-	}
-
-	if (fracStr.length > maxFrac) { // round
-		// case 6143
-		var num = new Number('0.' + fracStr);
-		num = (maxFrac == 0) ? Math.round(num) : num.toFixed(maxFrac);
-		// toFixed method has bugs on IE (0.7 --> 0)
-		fracStr = num.toString(10).substr(2);
-		var c = (num >= 1) ? 1 : 0; // carry
-		var x, i = intStr.length - 1;
-		while (c) { // increment intStr
-			if (i == -1) {
-				intStr = '1' + intStr;
-				break;
+		// scientific numbers
+		if (i = snum.indexOf("e") != -1) {
+			var n = Number(snum);
+			if (n == "Infinity" || n == "-Infinity") {
+				return snum;
 			}
-			else {
-				x = intStr.charAt(i);
+
+			snum = n + "";
+			if (snum.indexOf('e') != -1) {
+				return snum;
+			}
+		}
+
+		// remove sign
+		var negative = false;
+		if (snum.charAt(0) == '-') {
+			negative = true;
+			snum = snum.substring(1);
+		} else if (snum.charAt(0) == '+') {
+			snum = snum.substring(1);
+		}
+
+		var point = snum.indexOf('.'); // position of point character
+		var sint = '';
+		var frac = '';
+		if (point != -1) {
+			sint = snum.substring(0, point);
+			frac = snum.substring(point + 1);
+		} else {
+			sint = snum;
+		}
+		frac = frac.replace(/[.]/, ''); // remove other point characters
+
+		var isPercentage = this.suffix && this.suffix.charAt(0) === '%';
+		// if percentage, number will be multiplied by 100.
+		var minInt = this.minInt, minFrac = this.minFrac, maxFrac = this.maxFrac;
+		if (isPercentage) {
+			minInt -= 2;
+			minFrac += 2;
+			maxFrac += 2;
+		}
+
+		if (frac.length > maxFrac) { // round
+			// case 6143
+			var num = new Number('0.' + frac);
+			num = (maxFrac == 0) ? Math.round(num) : num.toFixed(maxFrac);
+			// toFixed method has bugs on IE (0.7 --> 0)
+			frac = num.toString(10).substring(2);
+			var c = (num >= 1) ? 1 : 0; // carry
+			var x, i = sint.length - 1;
+			while (c) { // increment sint
+				if (i == -1) {
+					sint = '1' + sint;
+					break;
+				}
+
+				x = sint.charAt(i);
 				if (x == 9) {
 					x = '0';
 					c = 1;
-				}
-				else {
+				} else {
 					x = (++x) + '';
 					c = 0;
 				}
-				intStr = intStr.substring(0, i) + x
-						+ intStr.substring(i + 1, intStr.length);
+				sint = sint.substring(0, i) + x + sint.substring(i + 1, sint.length);
 				i--;
 			}
 		}
-	}
-	for ( var i = fracStr.length; i < minFrac; i++) { // if minFrac=4 then
-														// 1.12 --> 1.1200
-		fracStr = fracStr + '0';
-	}
-	while (fracStr.length > minFrac
-			&& fracStr.charAt(fracStr.length - 1) == '0') { // if minInt=4 then
-															// 00034 --> 0034)
-		fracStr = fracStr.substring(0, fracStr.length - 1);
-	}
 
-	for (var i = intStr.length; i < minInt; i++) { // if minInt=4 then 034 -->
-													// 0034
-		intStr = '0' + intStr;
-	}
-	
-	while (intStr.length > minInt && intStr.charAt(0) == '0') { // if minInt=4
-																// then 00034
-																// --> 0034)
-		intStr = intStr.substring(1);
-	}
-
-	if (isPercentage) { // multiply by 100
-		intStr += fracStr.substring(0, 2);
-		fracStr = fracStr.substring(2);
-	}
-
-	var j = 0;
-	for (var i = intStr.length; i > 0; i--) { // add commas
-		if (j != 0 && j % this.comma == 0) {
-			intStr = intStr.substring(0, i) + ',' + intStr.substring(i);
-			j = 0;
+		for (var i = frac.length; i < minFrac; i++) {
+			// if minFrac=4 then 1.12 --> 1.1200
+			frac = frac + '0';
 		}
-		j++;
-	}
 
-	var formattedValue;
-	if (fracStr.length > 0)
-		formattedValue = this.prefix + intStr + '.' + fracStr + this.suffix;
-	else
-		formattedValue = this.prefix + intStr + this.suffix;
-
-	if (negative) {
-		formattedValue = '-' + formattedValue;
-	}
-
-	return formattedValue;
-}
-
-
-/**
- * @description Converts formatted value back to non-formatted value
- * @methodOf DecimalFormat
- * @param {String}
- *            fNumberStr Formatted number
- * @return {String} Original number
- * @author Oskan Savli
- */
-DecimalFormat.prototype.parse = function(fNumStr) { // $1,223.06 -->
-															// 1223.06
-  fNumStr += ''; // ensure it is string
-	if (!fNumStr)
-		return ''; // do not return undefined or null
-	if (!isNaN(fNumStr))
-		return this.getNumericString(fNumStr);
-	var fNumberStr = fNumStr;
-	var negative = false;
-	if (fNumStr.charAt(0) == '-') {
-		fNumberStr = fNumberStr.substr(1);
-		negative = true;
-	}
-	var pIndex = fNumberStr.indexOf(this.prefix);
-	var sIndex = (this.suffix == '') ? fNumberStr.length : fNumberStr.indexOf(
-			this.suffix, this.prefix.length + 1);
-	if (pIndex == 0 && sIndex > 0) {
-		// remove suffix
-		fNumberStr = fNumberStr.substr(0, sIndex);
-		// remove prefix
-		fNumberStr = fNumberStr.substr(this.prefix.length);
-		// remove commas
-		fNumberStr = fNumberStr.replace(/,/g, '');
-		if (negative)
-			fNumberStr = '-' + fNumberStr;
-		if (!isNaN(fNumberStr))
-			return this.getNumericString(fNumberStr);
-	}
-	return fNumStr;
-}
-
-/**
- * @description We shouldn't return strings like 1.000 in parse method.
- *              However, using only Number(str) is not enough, because it omits .
- *              in big numbers like 23423423423342234.34 => 23423423423342236 .
- *              There's a conflict in cases 6143 and 6541.
- * @methodOf DecimalFormat
- * @param {String}
- *            str Numberic string
- * @return {String} Corrected numeric string
- * @author Serdar Bicer
- */
-DecimalFormat.prototype.getNumericString = function(str){
-	// first convert to number
-	var num = new Number(str);
-	// check if there is a missing dot
-	var numStr = num + '';
-	if (str.indexOf('.') > -1 && numStr.indexOf('.') < 0) {
-		// check if original string has all zeros after dot or not
-		for ( var i = str.indexOf('.') + 1; i < str.length; i++) {
-			// if not, this means we lost precision
-			if (str.charAt(i) !== '0')
-				return str;
+		while (frac.length > minFrac && frac.charAt(frac.length - 1) == '0') {
+			// if minInt=4 then 00034 --> 0034)
+			frac = frac.substring(0, frac.length - 1);
 		}
-		return numStr;
-	}
-	return str;
-}
 
-//--------------------------------------------------
-if (typeof Number.trim != "function") {
-	Number.trim = function(s) {
-		if (typeof(s) != 'string') {
-			return s;
+		for (var i = sint.length; i < minInt; i++) {
+			// if minInt=4 then 034 --> 0034
+			sint = '0' + sint;
 		}
-		var h = '1234567890';
-		var z = '１２３４５６７８９０';
-		var ss = s.replace(/,/g, '').split('');
-		for (i = 0; i < ss.length; i++) {
-			var j = z.indexOf(ss[i]);
-			if (j >= 0) {
-				ss[i] = h[j];
+
+		while (sint.length > minInt && sint.charAt(0) == '0') {
+			// if minInt=4 then 00034--> 0034)
+			sint = sint.substring(1);
+		}
+
+		if (isPercentage) {
+			// multiply by 100
+			sint += frac.substring(0, 2);
+			frac = frac.substring(2);
+		}
+
+		var j = 0;
+		for (var i = sint.length; i > 0; i--) {
+			// add commas
+			if (j != 0 && j % this.comma == 0) {
+				sint = sint.substring(0, i) + ',' + sint.substring(i);
+				j = 0;
+			}
+			j++;
+		}
+
+		var result = this.prefix + sint + (frac.length > 0 ? '.' + frac : '') + this.suffix;
+		if (negative) {
+			result = '-' + result;
+		}
+
+		return result;
+	}
+
+
+	/**
+	 * @description Converts formatted value back to non-formatted value
+	 * @methodOf DecimalFormat
+	 * @param {String} snum Formatted number
+	 * @return {String} Original number
+	 * @author Oskan Savli
+	 */
+	DecimalFormat.prototype.parse = function(snum) {
+		// $1,223.06 --> 1223.06
+		snum += ''; // ensure it is string
+		if (!snum) {
+			return ''; // do not return undefined or null
+		}
+
+		if (!isNaN(snum)) {
+			return this.getNumericString(snum);
+		}
+
+		var anum = snum, negative = false;
+		if (snum.charAt(0) == '-') {
+			anum = anum.substring(1);
+			negative = true;
+		}
+
+		var pIndex = anum.indexOf(this.prefix);
+		var sIndex = (this.suffix == '') ? anum.length : anum.indexOf(this.suffix, this.prefix.length + 1);
+
+		if (pIndex == 0 && sIndex > 0) {
+			// remove suffix
+			anum = anum.substring(0, sIndex);
+			// remove prefix
+			anum = anum.substring(this.prefix.length);
+			// remove commas
+			anum = anum.replace(/,/g, '');
+			if (negative) {
+				anum = '-' + anum;
+			}
+			if (!isNaN(anum)) {
+				return this.getNumericString(anum);
 			}
 		}
-		return ss.join('');
-	};
-}
-if (typeof Number.parseInt != "function") {
-	Number.parseInt = function(s, r) {
-		return parseInt(Number.trim(s), r);
-	};
-}
-if (typeof Number.parseFloat != "function") {
-	Number.parseFloat = function(s) {
-		return parseFloat(Number.trim(s));
-	};
-}
-if (typeof Number.format != "function") {
-	Number.format = function(pattern, n) {
-		return (new DecimalFormat(pattern)).format(n);
-	};
-}
-if (typeof Number.comma != "function") {
-	var CDF = new DecimalFormat('###,###.#########');
-	Number.comma = function(n) {
-		return CDF.format(n);
-	};
-}
-if (typeof Number.formatSize != "function") {
-	var KB = 1024,
-		MB = KB * KB,
-		GB = MB * KB,
-		TB = GB * KB,
-		PB = TB * KB;
-	
-	Number.formatSize = function(n, p) {
-		p = Math.pow(10, p || 2);
-		var sz = "";
-		if (n >= PB) {
-			sz = Math.round(n * p / PB) / p + ' PB';
-		}
-		else if (n >= TB) {
-			sz = Math.round(n * p / TB) / p + ' TB';
-		}
-		else if (n >= GB) {
-			sz = Math.round(n * p / GB) / p + ' GB';
-		}
-		else if (n >= MB) {
-			sz = Math.round(n * p / MB) / p + ' MB';
-		}
-		else if (n >= KB) {
-			sz = Math.round(n * p / KB) / p + ' KB';
-		}
-		else if (n != '') {
-			sz = n + ' bytes';
-		}
-		return sz;
-	};
-}
+		return snum;
+	}
 
+	/**
+	 * @description We shouldn't return strings like 1.000 in parse method.
+	 *              However, using only Number(str) is not enough, because it omits .
+	 *              in big numbers like 23423423423342234.34 => 23423423423342236 .
+	 *              There's a conflict in cases 6143 and 6541.
+	 * @methodOf DecimalFormat
+	 * @param {String}  str Numberic string
+	 * @return {String} Corrected numeric string
+	 * @author Serdar Bicer
+	 */
+	DecimalFormat.prototype.getNumericString = function(str) {
+		// first convert to number string
+		var snum = '' + new Number(str);
+
+		// check if there is a missing dot
+		if (str.indexOf('.') > -1 && snum.indexOf('.') < 0) {
+			// check if original string has all zeros after dot or not
+			for (var i = str.indexOf('.') + 1; i < str.length; i++) {
+				// if not, this means we lost precision
+				if (str.charAt(i) !== '0') {
+					return str;
+				}
+			}
+			return snum;
+		}
+		return str;
+	}
+
+	//--------------------------------------------------
+	if (typeof Number.trim != "function") {
+		Number.trim = function(s) {
+			if (typeof (s) != 'string') {
+				return s;
+			}
+			var h = '1234567890';
+			var z = '１２３４５６７８９０';
+			var ss = s.replace(/,/g, '').split('');
+			for (i = 0; i < ss.length; i++) {
+				var j = z.indexOf(ss[i]);
+				if (j >= 0) {
+					ss[i] = h[j];
+				}
+			}
+			return ss.join('');
+		};
+	}
+
+	if (typeof Number.parseInt != "function") {
+		Number.parseInt = function(s, r) {
+			return parseInt(Number.trim(s), r);
+		};
+	}
+
+	if (typeof Number.parseFloat != "function") {
+		Number.parseFloat = function(s) {
+			return parseFloat(Number.trim(s));
+		};
+	}
+
+	if (typeof Number.format != "function") {
+		Number.format = function(pattern, n) {
+			return (new DecimalFormat(pattern)).format(n);
+		};
+	}
+
+	if (typeof Number.comma != "function") {
+		var CDF = new DecimalFormat('###,###.#########');
+		Number.comma = function(n) {
+			return CDF.format(n);
+		};
+	}
+
+	if (typeof Number.humanSize != "function") {
+		var UNITS = [ "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
+
+		Number.humanSize = function(n, p) {
+			var i = 0, l = UNITS.length - 1;
+			while (n >= 1024 && i < l) {
+				n /= 1024
+				i++
+			}
+
+			p = Math.pow(10, p || 2);
+			return Math.round(n * p) / p + UNITS[i];
+		};
+	}
+})();
 

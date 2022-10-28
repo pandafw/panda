@@ -174,7 +174,7 @@ public class UploaderRenderer extends AbstractTagRenderer<Uploader> {
 	}
 	
 	private String filesize(Integer fs) {
-		String sz = Numbers.formatSize(fs);
+		String sz = Numbers.humanSize(fs);
 
 		if (sz.length() > 0) {
 			sz = '(' + sz + ')';

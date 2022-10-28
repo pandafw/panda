@@ -56,7 +56,7 @@ public class SizeLimitExceededException extends IOException {
 	 * @return The actual size of the request.
 	 */
 	public String getDisplayActualSize() {
-		return Numbers.formatSize(actual);
+		return Numbers.humanSize(actual);
 	}
 
 	/**
@@ -65,6 +65,6 @@ public class SizeLimitExceededException extends IOException {
 	 * @return The limited size of the request.
 	 */
 	public String getDisplayLimitedSize() {
-		return Numbers.formatSize(limited);
+		return Numbers.humanSize(limited);
 	}
 }

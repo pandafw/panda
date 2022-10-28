@@ -267,7 +267,7 @@ public class HttpResponse implements Closeable {
 
 				if (log.isDebugEnabled()) {
 					log.debug("DOWN " + url + " - (" 
-							+ Numbers.formatSize(content.length) + " / " + sw 
+							+ Numbers.humanSize(content.length) + " / " + sw 
 							+ ") [" + Inets.toSpeedString(content.length, sw.getTime()) + "]");
 				}
 			}

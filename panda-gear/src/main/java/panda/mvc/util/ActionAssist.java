@@ -267,8 +267,8 @@ public class ActionAssist extends ActionSupport {
 	 * @param size size
 	 * @return formatted string
 	 */
-	public String formatSize(Number size) {
-		return Numbers.formatSize(size);
+	public String humanSize(Number size) {
+		return Numbers.humanSize(size);
 	}
 	
 	/**
@@ -276,8 +276,8 @@ public class ActionAssist extends ActionSupport {
 	 * @param frac maximum fraction digits
 	 * @return formatted string
 	 */
-	public String formatSize(Number size, int frac) {
-		return Numbers.formatSize(size, frac);
+	public String humanSize(Number size, int frac) {
+		return Numbers.humanSize(size, frac);
 	}
 	
 	/**

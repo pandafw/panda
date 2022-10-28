@@ -82,21 +82,21 @@ public class FileValidator extends AbstractValidator {
 	 * @return minFileSize
 	 */
 	public String getMinFileSize() {
-		return Numbers.formatSize(minLength);
+		return Numbers.humanSize(minLength);
 	}
 	
 	/**
 	 * @return maxFileSize
 	 */
 	public String getMaxFileSize() {
-		return Numbers.formatSize(maxLength);
+		return Numbers.humanSize(maxLength);
 	}
 	
 	/**
 	 * @return fileSize
 	 */
 	public String getFileSize() {
-		return Numbers.formatSize(length);
+		return Numbers.humanSize(length);
 	}
 	
 	@Override

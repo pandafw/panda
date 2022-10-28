@@ -73,7 +73,7 @@ public class CNumber extends ContextBean {
 			String msg = null;
 
 			if ("size".equalsIgnoreCase(format)) {
-				msg = Numbers.formatSize(value); 
+				msg = Numbers.humanSize(value); 
 			}
 			else {
 				if (pattern == null) {

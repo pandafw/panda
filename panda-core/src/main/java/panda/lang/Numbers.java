@@ -2261,10 +2261,6 @@ public class Numbers {
 	}
 
 	// -----------------------------------------------------------------------
-	private static String _formatSize(final double size, int frac) {
-		return cutFormat(size, frac);
-	}
-	
 	/**
 	 * Returns a human-readable version of the file size, where the input represents a specific
 	 * number of bytes.
@@ -2279,8 +2275,8 @@ public class Numbers {
 	 * @param size the number of bytes
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final BigInteger size) {
-		return formatSize(size, 2);
+	public static String humanSize(final BigInteger size) {
+		return humanSize(size, 2);
 	}
 
 	/**
@@ -2298,12 +2294,12 @@ public class Numbers {
 	 * @param frac maximum fraction digits
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final BigInteger size, int frac) {
+	public static String humanSize(final BigInteger size, int frac) {
 		if (size == null) {
 			return Strings.EMPTY;
 		}
 
-		return formatSize(new BigDecimal(size), frac);
+		return humanSize(new BigDecimal(size), frac);
 	}
 	
 	/**
@@ -2320,8 +2316,8 @@ public class Numbers {
 	 * @param size the number of bytes
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final BigDecimal size) {
-		return formatSize(size, 2);
+	public static String humanSize(final BigDecimal size) {
+		return humanSize(size, 2);
 	}
 	
 	/**
@@ -2339,22 +2335,12 @@ public class Numbers {
 	 * @param frac maximum fraction digits
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final BigDecimal size, int frac) {
+	public static String humanSize(final BigDecimal size, int frac) {
 		if (size == null) {
 			return Strings.EMPTY;
 		}
 
-		String sz;
-		if (size.compareTo(Numbers.BD_YB) > 0) {
-			sz = _formatSize(size.divide(BD_YB).doubleValue(), frac) + " YB";
-		}
-		else if (size.compareTo(BD_ZB) > 0) {
-			sz = _formatSize(size.divide(BD_ZB).doubleValue(), frac) + " ZB";
-		}
-		else {
-			sz = formatSize(size.longValue(), frac);
-		}
-		return sz;
+		return humanSize(size.doubleValue(), frac);
 	}
 
 	/**
@@ -2371,8 +2357,8 @@ public class Numbers {
 	 * @param size the number of bytes
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final Number size) {
-		return formatSize(size, 2);
+	public static String humanSize(final Number size) {
+		return humanSize(size, 2);
 	}
 	
 	/**
@@ -2390,12 +2376,12 @@ public class Numbers {
 	 * @param frac maximum fraction digits
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final Number size, int frac) {
+	public static String humanSize(final Number size, int frac) {
 		if (size == null) {
 			return Strings.EMPTY;
 		}
 
-		return formatSize(size.doubleValue(), frac);
+		return hunmanSize(size.doubleValue(), frac);
 	}
 
 	/**
@@ -2412,8 +2398,8 @@ public class Numbers {
 	 * @param size the number of bytes
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final long size) {
-		return formatSize(size, 2);
+	public static String humanSize(final long size) {
+		return humanSize(size, 2);
 	}
 	
 	/**
@@ -2431,8 +2417,8 @@ public class Numbers {
 	 * @param frac maximum fraction digits
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final long size, int frac) {
-		return formatSize((double)size, frac);
+	public static String humanSize(final long size, int frac) {
+		return hunmanSize((double)size, frac);
 	}
 
 	/**
@@ -2449,9 +2435,11 @@ public class Numbers {
 	 * @param size the number of bytes
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final double size) {
-		return formatSize(size, 2);
+	public static String humanSize(final double size) {
+		return hunmanSize(size, 2);
 	}
+
+	private static final String[] UNITS = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
 	/**
 	 * Returns a human-readable version of the file size, where the input represents a specific
@@ -2467,30 +2455,15 @@ public class Numbers {
 	 * @param size the number of bytes
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
-	public static String formatSize(final double size, int frac) {
-		String sz;
-		if (size >= EB) {
-			sz = _formatSize(size / EB, frac) + " EB";
+	public static String hunmanSize(double size, int frac) {
+		int i = 0, l = UNITS.length - 1;
+		while (size >= 1024 && i < l) {
+			size /= 1024;
+			i++;
 		}
-		else if (size >= PB) {
-			sz = _formatSize(size / PB, frac) + " PB";
-		}
-		else if (size >= TB) {
-			sz = _formatSize(size / TB, frac) + " TB";
-		}
-		else if (size >= GB) {
-			sz = _formatSize(size / GB, frac) + " GB";
-		}
-		else if (size >= MB) {
-			sz = _formatSize(size / MB, frac) + " MB";
-		}
-		else if (size >= KB) {
-			sz = _formatSize(size / KB, frac) + " KB";
-		}
-		else {
-			sz = _formatSize(size, frac) + " bytes";
-		}
-		return sz;
+
+		double p = Math.pow(10, frac);
+		return Math.round(size * p) / p + UNITS[i];
 	}
 
 	/**

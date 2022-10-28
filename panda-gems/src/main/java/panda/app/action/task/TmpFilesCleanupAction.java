@@ -70,7 +70,7 @@ public class TmpFilesCleanupAction extends SyncWorkAction {
 					String m = (d == null ? "Skipped" : (d ? "Succeeded" : "Failed")) 
 							+ " to delete " 
 							+ f.getPath() 
-							+ " (" + Numbers.formatSize(l) + ") [" 
+							+ " (" + Numbers.humanSize(l) + ") [" 
 							+ DateTimes.isoDatetimeFormat().format(t) + "]";
 
 					if (d == null || d) {

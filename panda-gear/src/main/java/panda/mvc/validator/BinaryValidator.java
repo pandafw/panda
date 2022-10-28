@@ -60,21 +60,21 @@ public class BinaryValidator extends AbstractValidator {
 	 * @return minBinSize
 	 */
 	public String getMinBinSize() {
-		return Numbers.formatSize(minLength);
+		return Numbers.humanSize(minLength);
 	}
 
 	/**
 	 * @return maxBinSize
 	 */
 	public String getMaxBinSize() {
-		return Numbers.formatSize(maxLength);
+		return Numbers.humanSize(maxLength);
 	}
 
 	/**
 	 * @return BinSize
 	 */
 	public String getBinSize() {
-		return Numbers.formatSize(length);
+		return Numbers.humanSize(length);
 	}
 
 	@Override

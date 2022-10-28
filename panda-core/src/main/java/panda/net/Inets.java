@@ -25,7 +25,7 @@ public class Inets {
 	 * @return speed string
 	 */
 	public static String toSpeedString(double speed) {
-		return Numbers.formatSize(speed) + "/s";
+		return Numbers.humanSize(speed) + "/s";
 	}
 
 	/**

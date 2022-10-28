@@ -1414,7 +1414,7 @@ public class NumbersTest {
 	
 	// -----------------------------------------------------------------------
 	// 
-	public void testFormatSize() {
+	public void testHumanSize() {
 		final BigInteger b1023 = BigInteger.valueOf(1023);
 		final BigInteger b1025 = BigInteger.valueOf(1025);
 		final BigInteger KB1 = BigInteger.valueOf(1024);
@@ -1424,51 +1424,51 @@ public class NumbersTest {
 		final BigInteger TB1 = GB1.multiply(KB1);
 		final BigInteger PB1 = TB1.multiply(KB1);
 		final BigInteger EB1 = PB1.multiply(KB1);
-		assertEquals(Numbers.formatSize(BigInteger.ZERO), "0 bytes");
-		assertEquals(Numbers.formatSize(BigInteger.ONE), "1 bytes");
-		assertEquals(Numbers.formatSize(b1023), "1023 bytes");
-		assertEquals(Numbers.formatSize(KB1), "1 KB");
-		assertEquals(Numbers.formatSize(b1025), "1 KB");
-		assertEquals(Numbers.formatSize(MB1.subtract(KB1)), "1023 KB");
-		assertEquals(Numbers.formatSize(MB1), "1 MB");
-		assertEquals(Numbers.formatSize(MB1.add(BigInteger.ONE)), "1 MB");
-		assertEquals(Numbers.formatSize(GB1.subtract(KB1.multiply(BigInteger.valueOf(12)))), "1023.98 MB");
-		assertEquals(Numbers.formatSize(GB1), "1 GB");
-		assertEquals(Numbers.formatSize(GB1.add(BigInteger.ONE)), "1 GB");
-		assertEquals(Numbers.formatSize(GB2), "2 GB");
-		assertEquals(Numbers.formatSize(GB2.subtract(BigInteger.ONE)), "1.99 GB");
-		assertEquals(Numbers.formatSize(TB1), "1 TB");
-		assertEquals(Numbers.formatSize(PB1), "1 PB");
-		assertEquals(Numbers.formatSize(EB1), "1 EB");
-		assertEquals(Numbers.formatSize(Long.MAX_VALUE), "8 EB");
+		assertEquals(Numbers.humanSize(BigInteger.ZERO), "0 bytes");
+		assertEquals(Numbers.humanSize(BigInteger.ONE), "1 bytes");
+		assertEquals(Numbers.humanSize(b1023), "1023 bytes");
+		assertEquals(Numbers.humanSize(KB1), "1 KB");
+		assertEquals(Numbers.humanSize(b1025), "1 KB");
+		assertEquals(Numbers.humanSize(MB1.subtract(KB1)), "1023 KB");
+		assertEquals(Numbers.humanSize(MB1), "1 MB");
+		assertEquals(Numbers.humanSize(MB1.add(BigInteger.ONE)), "1 MB");
+		assertEquals(Numbers.humanSize(GB1.subtract(KB1.multiply(BigInteger.valueOf(12)))), "1023.98 MB");
+		assertEquals(Numbers.humanSize(GB1), "1 GB");
+		assertEquals(Numbers.humanSize(GB1.add(BigInteger.ONE)), "1 GB");
+		assertEquals(Numbers.humanSize(GB2), "2 GB");
+		assertEquals(Numbers.humanSize(GB2.subtract(BigInteger.ONE)), "1.99 GB");
+		assertEquals(Numbers.humanSize(TB1), "1 TB");
+		assertEquals(Numbers.humanSize(PB1), "1 PB");
+		assertEquals(Numbers.humanSize(EB1), "1 EB");
+		assertEquals(Numbers.humanSize(Long.MAX_VALUE), "8 EB");
 		// Other MAX_VALUEs
-		assertEquals(Numbers.formatSize(BigInteger.valueOf(Character.MAX_VALUE)), "63.99 KB");
-		assertEquals(Numbers.formatSize(BigInteger.valueOf(Short.MAX_VALUE)), "31.99 KB");
-		assertEquals(Numbers.formatSize(BigInteger.valueOf(Integer.MAX_VALUE)), "1.99 GB");
+		assertEquals(Numbers.humanSize(BigInteger.valueOf(Character.MAX_VALUE)), "63.99 KB");
+		assertEquals(Numbers.humanSize(BigInteger.valueOf(Short.MAX_VALUE)), "31.99 KB");
+		assertEquals(Numbers.humanSize(BigInteger.valueOf(Integer.MAX_VALUE)), "1.99 GB");
 	}
 
-	public void testFormatSizeLong() {
-		assertEquals(Numbers.formatSize(0), "0 bytes");
-		assertEquals(Numbers.formatSize(1), "1 bytes");
-		assertEquals(Numbers.formatSize(1023), "1023 bytes");
-		assertEquals(Numbers.formatSize(1024), "1 KB");
-		assertEquals(Numbers.formatSize(1025), "1 KB");
-		assertEquals(Numbers.formatSize(1024 * 1023), "1023 KB");
-		assertEquals(Numbers.formatSize(1024 * 1024), "1 MB");
-		assertEquals(Numbers.formatSize(1024 * 1025), "1 MB");
-		assertEquals(Numbers.formatSize(1024 * 1024 * 1023), "1023 MB");
-		assertEquals(Numbers.formatSize(1024 * 1024 * 1024), "1 GB");
-		assertEquals(Numbers.formatSize(1024 * 1024 * 1025), "1 GB");
-		assertEquals(Numbers.formatSize(1024L * 1024 * 1024 * 2), "2 GB");
-		assertEquals(Numbers.formatSize(1024 * 1024 * 1024 * 2 - 1), "1.99 GB");
-		assertEquals(Numbers.formatSize(1024L * 1024 * 1024 * 1024), "1 TB");
-		assertEquals(Numbers.formatSize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
-		assertEquals(Numbers.formatSize(1024L * 1024 * 1024 * 1024 * 1024 * 1024), "1 EB");
-		assertEquals(Numbers.formatSize(Long.MAX_VALUE), "8 EB");
+	public void testHumanSizeLong() {
+		assertEquals(Numbers.humanSize(0), "0 bytes");
+		assertEquals(Numbers.humanSize(1), "1 bytes");
+		assertEquals(Numbers.humanSize(1023), "1023 bytes");
+		assertEquals(Numbers.humanSize(1024), "1 KB");
+		assertEquals(Numbers.humanSize(1025), "1 KB");
+		assertEquals(Numbers.humanSize(1024 * 1023), "1023 KB");
+		assertEquals(Numbers.humanSize(1024 * 1024), "1 MB");
+		assertEquals(Numbers.humanSize(1024 * 1025), "1 MB");
+		assertEquals(Numbers.humanSize(1024 * 1024 * 1023), "1023 MB");
+		assertEquals(Numbers.humanSize(1024 * 1024 * 1024), "1 GB");
+		assertEquals(Numbers.humanSize(1024 * 1024 * 1025), "1 GB");
+		assertEquals(Numbers.humanSize(1024L * 1024 * 1024 * 2), "2 GB");
+		assertEquals(Numbers.humanSize(1024 * 1024 * 1024 * 2 - 1), "1.99 GB");
+		assertEquals(Numbers.humanSize(1024L * 1024 * 1024 * 1024), "1 TB");
+		assertEquals(Numbers.humanSize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
+		assertEquals(Numbers.humanSize(1024L * 1024 * 1024 * 1024 * 1024 * 1024), "1 EB");
+		assertEquals(Numbers.humanSize(Long.MAX_VALUE), "8 EB");
 		// Other MAX_VALUEs
-		assertEquals(Numbers.formatSize(Character.MAX_VALUE), "63.99 KB");
-		assertEquals(Numbers.formatSize(Short.MAX_VALUE), "31.99 KB");
-		assertEquals(Numbers.formatSize(Integer.MAX_VALUE), "1.99 GB");
+		assertEquals(Numbers.humanSize(Character.MAX_VALUE), "63.99 KB");
+		assertEquals(Numbers.humanSize(Short.MAX_VALUE), "31.99 KB");
+		assertEquals(Numbers.humanSize(Integer.MAX_VALUE), "1.99 GB");
 	}
 
 	// -----------------------------------------------------------------------
