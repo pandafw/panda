@@ -1,0 +1,24 @@
+div.ui-simple-color-picker {
+	border: 1px solid #000;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	padding: 0px;
+	background-color: #fff;
+}
+
+div.ui-simple-color-picker ul {
+	height: 17px;
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	white-space: nowrap;
+}
+
+div.ui-simple-color-picker ul li {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	margin: 1px;
+	cursor: pointer;
+}

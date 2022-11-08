@@ -1,20 +1,50 @@
-fieldset.ui-collapsible {
+fieldset.ui-fieldset {
 	border: solid 1px #ccc;
 	margin: 10px 0;
 	padding: 10px;
 }
-fieldset.ui-collapsible legend {
+
+fieldset.ui-fieldset legend {
 	border: 0;
 	cursor: pointer;
 	font-size: inherit;
 	margin: 0;
-	padding: 0 5px;
+	padding: 0 10px 0 25px;
+	position: relative;
 	width: auto;
 }
-fieldset.ui-collapsed {
-	border-width: 1px 0 0 0;
+
+fieldset.ui-fieldset legend::before {
+	border-top: 2px solid #999;
+	border-right: 2px solid #999;
+	content: "";
+	display: block;
+	position: absolute;
+	margin-top: -4px;
+	left: 10px;
+	top: 50%;
+	width: 5px;
+	height: 5px;
+	-webkit-transform-origin: 66% 66%;
+	-ms-transform-origin: 66% 66%;
+	transform-origin: 66% 66%;
+	-webkit-transform: rotate(135deg);
+	-ms-transform: rotate(135deg);
+	transform: rotate(135deg);
+	-webkit-transition: all 0.15s ease-in-out;
+	transition: all 0.15s ease-in-out;
 }
-.ui-fieldset-icon {
-	color: #36a;
-	margin-right: 5px;
+
+fieldset.ui-fieldset.collapsed {
+	border-color: #ccc transparent transparent transparent;
+	border-radius: 0;
+	-webkit-transition: all 0.4s;
+	transition: all 0.4s;
+}
+
+fieldset.ui-fieldset.collapsed legend::before {
+	margin-top: -2px;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }

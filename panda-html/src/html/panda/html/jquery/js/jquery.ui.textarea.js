@@ -1,36 +1,32 @@
 (function($) {
 	"use strict";
 
+	function _enterfire(evt) {
+		if (evt.ctrlKey && evt.which == 13) {
+			var $t = $(this), ef = $t.attr('enterfire');
+			if (ef == 'form' || ef == 'submit' || ef == 'true') {
+				$t.closest('form').submit();
+			} else {
+				$(ef).click();
+			}
+		}
+	}
+
 	$.fn.enterfire = function() {
-		$(this).each(function() {
-			var f = $(this).attr('enterfire');
-			if (f != 'hooked') {
-				$(this).attr('enterfire', 'hooked').keyup(function(evt) {
-					if (evt.ctrlKey && evt.which == 13) {
-						if (f == 'form' || f == 'submit' || f == 'true') {
-							$(this).closest('form').submit();
-						}
-						else {
-							$(f).click();
-						}
-					}
-				});
-			}
-		});
+		$(this).off('keyup.enterfire').on('keyup.enterfire', _enterfire);
 	};
-	
+
+	function _autosize() {
+		var $t = $(this);
+		$t.css('height', 'auto').height($t.prop('scrollHeight'));
+	}
+
 	$.fn.autosize = function() {
-		$(this).each(function() {
-			var a = $(this).attr('autosize');
-			if (a == 'hooked') {
-				$(this).css('height', 'auto').height($(this).prop('scrollHeight'));
-			}
-			else {
-				$(this).css('overflow-y', 'hidden').attr('autosize', 'hooked').on('input', function() {
-					$(this).css('height', 'auto').height($(this).prop('scrollHeight'));
-				});
-			}
+		$(this).off('input.autosize').on('input.autosize', _autosize).css({ 
+			'overflow-y': 'hidden',
+			'resize': 'none'
 		});
+		_autosize.call(this);
 	};
 
 	$(window).on('load', function() {

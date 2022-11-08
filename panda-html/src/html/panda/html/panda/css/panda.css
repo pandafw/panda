@@ -697,26 +697,6 @@ tbody.p-lv-tbody > tr > td:first-child {
 }
 
 
-/**
- * ui-loadmask hack
- * https://icons8.com/preloaders/
- * Foreground color: #435BD1   Background color: #FFFFFF
- */
-.ui-loadmask-loading {
-	background-image: url('../img/loader/fountain.gif');
-	width: 160px;
-	height: 20px;
-}
-.ui-loadmask-hasmsg .ui-loadmask-loading {
-	background-image: url('../img/loader/squares-circle.gif');
-	width: 32px;
-	height: 32px;
-}
-.ui-loadmask-big .ui-loadmask-loading {
-	background-image: url('../img/loader/squares-circle-big.gif');
-	width: 64px;
-	height: 64px;
-}
 /** navbar toogle */
 .navbar-default .navbar-toggle, .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
 	background: transparent;
@@ -998,49 +978,7 @@ tbody.p-lv-tbody > tr > td:first-child {
 .p-form select.form-control.p-has-trigger {
 	padding-right: 20px;
 }
-.p-uploader-btn {
-	margin-right: 20px;
-}
-.p-uploader-progress {
-	margin: 5px 0;
-}
-.p-uploader-sep {
-	margin: 7px 0 0 0;
-}
-.p-uploader-item {
-	border: 1px solid #ccc;
-	display: inline-block;
-	padding: 8px;
-	margin: 0 7px 7px 0;
-	vertical-align: top;
-}
-.p-uploader-text {
-	display: inline-block;
-}
-.p-uploader-remove {
-	color: #999;
-	cursor: pointer;
-	margin-left: 10px;
-	padding: 3px;
-}
-.p-uploader-remove:hover {
-	color: #235273;
-}
-.p-uploader-image img {
-	margin: 5px 0;
-	max-width: 100%;
-	height: auto;
-}
-
-/* drag & drop */
-.p-uploader-draggable {
-	padding: 20px;
-	outline: 2px dashed #ccc;
-	outline-offset: -10px;
-}
-.p-uploader-dragover {
-	background-color: #eee;
-}.p-viewfield {
+.p-viewfield {
 	overflow-wrap: break-word;
 	white-space: pre-wrap;
 }

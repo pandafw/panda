@@ -1,0 +1,207 @@
+.ui-nice-select {
+	-webkit-tap-highlight-color: transparent;
+	background-color: #fff;
+	border-radius: 5px;
+	border: solid 1px #ccc;
+	box-sizing: border-box;
+	cursor: pointer;
+	display: inline-block;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: normal;
+	height: 34px;
+	line-height: 32px;
+	outline: none;
+	padding-left: 18px;
+	padding-right: 30px;
+	position: relative;
+	text-align: left !important;
+	-webkit-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	vertical-align: middle;
+	white-space: nowrap;
+	width: auto;
+}
+
+.ui-nice-select:hover {
+	border-color: #bbb;
+}
+
+.ui-nice-select:active,
+.ui-nice-select.open,
+.ui-nice-select:focus {
+	border-color: #66afe9;
+	-webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+	box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+}
+
+.ui-nice-select:after {
+	border-bottom: 2px solid #999;
+	border-right: 2px solid #999;
+	content: '';
+	display: block;
+	height: 5px;
+	margin-top: -4px;
+	pointer-events: none;
+	position: absolute;
+	right: 12px;
+	top: 50%;
+	-webkit-transform-origin: 66% 66%;
+	-ms-transform-origin: 66% 66%;
+	transform-origin: 66% 66%;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+	-webkit-transition: all 0.15s ease-in-out;
+	transition: all 0.15s ease-in-out;
+	width: 5px;
+}
+
+.ui-nice-select.disabled {
+	border-color: #ededed;
+	color: #999;
+	pointer-events: none;
+}
+.ui-nice-select.disabled:after {
+	border-color: #cccccc;
+}
+
+.ui-nice-select>ul {
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11);
+	box-sizing: border-box;
+	margin-top: 4px;
+	overflow: auto;
+	opacity: 0;
+	padding: 0;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	height: 0px;
+	max-height: 0px;
+	pointer-events: none;
+	-webkit-transform-origin: 50% 0;
+	-ms-transform-origin: 50% 0;
+	transform-origin: 50% 0;
+	-webkit-transform: scale(0.75) translateY(-21px);
+	-ms-transform: scale(0.75) translateY(-21px);
+	transform: scale(0.75) translateY(-21px);
+	-webkit-transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+	transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+	z-index: 9;
+}
+
+.ui-nice-select>ul>li {
+	cursor: pointer;
+	font-weight: 400;
+	line-height: 40px;
+	list-style: none;
+	min-height: 40px;
+	outline: none;
+	padding-left: 18px;
+	padding-right: 29px;
+	text-align: left;
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s;
+}
+.ui-nice-select>ul>li:hover,
+.ui-nice-select>ul>li.focus,
+.ui-nice-select>ul>li.selected.focus {
+	background-color: #f6f6f6;
+}
+.ui-nice-select>ul>li.selected {
+	font-weight: bold;
+}
+.ui-nice-select>ul>li.disabled {
+	background-color: transparent;
+	color: #999;
+	cursor: default;
+}
+.ui-nice-select>ul:hover>li:not(:hover) {
+	background-color: transparent !important;
+}
+
+.ui-nice-select.open:after {
+	-webkit-transform: rotate(-135deg);
+	-ms-transform: rotate(-135deg);
+	transform: rotate(-135deg);
+}
+.ui-nice-select.open>ul {
+	opacity: 1;
+	height: auto;
+	max-height: 365px;
+	overflow: auto;
+	pointer-events: auto;
+	-webkit-transform: scale(1) translateY(0);
+	-ms-transform: scale(1) translateY(0);
+	transform: scale(1) translateY(0);
+}
+
+.ui-nice-select.wide {
+	width: 100%;
+}
+.ui-nice-select.wide>ul {
+	left: 0 !important;
+	right: 0 !important;
+}
+
+.ui-nice-select.right>ul {
+	left: auto;
+	right: 0;
+}
+
+.ui-nice-select.small {
+	font-size: 12px;
+	height: 32px;
+	line-height: 30px;
+}
+.ui-nice-select.small:after {
+	height: 4px;
+	width: 4px;
+}
+.ui-nice-select.small>ul>li {
+	line-height: 34px;
+	min-height: 34px;
+}
+
+.ui-nice-select.col2>ul {
+	width: 600px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.ui-nice-select.col2.open>ul {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.ui-nice-select.col2>ul>li {
+	display: block;
+	flex: 0 0 50%;
+	white-space: nowrap;
+}
+
+.ui-nice-select.col3>ul {
+	width: 750px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.ui-nice-select.col3.open>ul {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.ui-nice-select.col3>ul>li {
+	display: block;
+	flex: 0 0 33%;
+	white-space: nowrap;
+}
+
+.ui-nice-select-no-csspointerevents .ui-nice-select>ul {
+	display: none;
+}
+.ui-nice-select-no-csspointerevents .ui-nice-select.open>ul {
+	display: block;
+}

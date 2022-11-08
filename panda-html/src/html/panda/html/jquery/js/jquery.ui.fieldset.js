@@ -1,59 +1,45 @@
 (function($) {
-	function collapse($el) {
-		if (!$el.hasClass('ui-collapsed')) {
-			$el.addClass('ui-collapsed')
-				.children(':not(legend)').slideUp().end()
-				.find('legend>i.ui-fieldset-icon')
-					.removeClass('fa-caret-down')
-					.addClass('fa-caret-right');
+	"use strict";
+
+	function collapse($f) {
+		if (!$f.hasClass('collapsed')) {
+			$f.addClass('collapsed').children(':not(legend)').slideUp();
 		}
 	}
 	
-	function expand($el) {
-		if ($el.hasClass('ui-collapsed')) {
-			$el.removeClass('ui-collapsed')
-				.children(':not(legend)').slideDown().end()
-				.find('legend>i.ui-fieldset-icon')
-					.removeClass('fa-caret-right')
-					.addClass('fa-caret-down');
+	function expand($f) {
+		if ($f.hasClass('collapsed')) {
+			$f.removeClass('collapsed').children(':not(legend)').slideDown();
 		}
 	}
 	
 	$.fn.fieldset = function(config) {
 		config = config || {};
 		return this.each(function() {
-			var $t = $(this);
-			if (!$t.data('fieldset')) {
-				var c = config.collapsed && !($t.hasClass('ui-collapsed'));
-				$t.data('fieldset', true)
-					.addClass('ui-collapsible' + (c ? ' ui-collapsed' : ''))
-					.children('legend')
-						.click(function() {
-							var $el = $(this).closest('fieldset');
-							if ($el.hasClass('ui-collapsed')) {
-								expand($el);
-							}
-							else {
-								collapse($el);
-							}
-						});
+			var $f = $(this);
+			if (!$f.data('fieldset')) {
+				var $l = $f.children('legend'), c = config.collapsed && !($f.hasClass('collapsed'));
+				$f.data('fieldset', config).addClass('ui-fieldset' + (c ? ' collapsed' : ''));
+				$l.click(function() {
+					var $f = $(this).closest('fieldset');
+					if ($f.hasClass('collapsed')) {
+						expand($f);
+					}
+					else {
+						collapse($f);
+					}
+				});
 
-				c = $t.hasClass('ui-collapsed');
-				if (config.icon !== false && $t.find('legend>i.ui-fieldset-icon').size() == 0) {
-					$t.children('legend')
-						.prepend('<i class="ui-fieldset-icon fa fa-caret-'
-								+ (c ? 'right' : 'down')
-								+ '"></i>');
-				}
-				$t.children(':not(legend)')[c ? 'hide' : 'show']();
+				c = $f.hasClass('collapsed');
+				$f.children(':not(legend)')[c ? 'hide' : 'show']();
 			}
 			
 			switch(config) {
 			case 'collapse':
-				collapse($t);
+				collapse($f);
 				break;
 			case 'expand':
-				expand($t);
+				expand($f);
 				break;
 			}
 		});

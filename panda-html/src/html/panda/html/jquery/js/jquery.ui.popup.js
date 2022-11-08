@@ -1,402 +1,492 @@
 (function($) {
-	var __inited = false;
-	var __active = null;
-	var __tclose = null;
-	var __tenter = null;
+	var ArrowClasses = {
+		'top left': 'dn hr1 vb',
+		'top right': 'dn hl1 vb',
+		'top center': 'dn hc vb',
+		'bottom left': 'up hr1 vt',
+		'bottom right': 'up hl1 vt',
+		'bottom center': 'up hc vt',
+		'left bottom': 'rt hr vt1',
+		'left top': 'rt hr vb1',
+		'left middle': 'rt hr vm',
+		'right bottom': 'lt hl vt1',
+		'right top': 'lt hl vb1',
+		'right middle': 'lt hl vm'
+	};
 
-	function __emptyFn() {
-	}
-	
-	function __init() {
-		if (!__inited) {
-			__inited = true;
-			$('<div id="ui_popup_loader" style="display:none"></div>').appendTo('body');
-			$('<div id="ui_popup_shadow" style="display:none">'
-				+ ($.browser.msie && parseInt($.browser.version, 10) < 7 ?
-						'<iframe src="javascript:false;" frameborder="0"></iframe>' : '')
-				+ '</div>').appendTo('body');
-			$('<i id="ui_popup_closer" class="fa fa-times-circle" style="display:none"></i>')
-				.appendTo('body')
-				.mousedown(__mousedown);
+	function _position($p, $t, position) {
+		var tw = $t.outerWidth(), th = $t.outerHeight(), p = $t.offset();
+		var pw = $p.outerWidth(), ph = $p.outerHeight();
 
-			$(document).mousedown(__mousedown);
+		switch (position) {
+		case 'top left':
+			p.top -= (ph + 11);
+			p.left -= (pw - 50);
+			break;
+		case 'top right':
+			p.top -= (ph + 11);
+			p.left += (tw - 50);
+			break;
+		case 'top center':
+			p.top -= (ph + 11);
+			p.left += (tw - pw) / 2;
+			break;
+		case 'bottom left':
+			p.top += th + 11;
+			p.left -= (pw - 50);
+			break;
+		case 'bottom right':
+			p.top += th + 11;
+			p.left += (tw - 50);
+			break;
+		case 'bottom center':
+			p.top += th + 11;
+			p.left += (tw - pw) / 2;
+			break;
+		case 'left bottom':
+			p.left -= (pw + 11);
+			p.top -= 20;
+			break;
+		case 'left top':
+			p.left -= (pw + 11);
+			p.top += th - ph + 20;
+			break;
+		case 'left middle':
+			p.left -= (pw + 11);
+			p.top -= (ph - th) / 2;
+			break;
+		case 'right bottom':
+			p.left += tw + 11;
+			p.top -= 20;
+			break;
+		case 'right top':
+			p.left += tw + 11;
+			p.top += th - ph + 20;
+			break;
+		case 'right middle':
+			p.left += tw + 11;
+			p.top -= (ph - th) / 2;
+			break;
 		}
+
+		return p;
 	}
 
-	function __mousedown(e) {
-		if (__active && !__tclose) {
-			__tclose = setTimeout(function() { 
-				__tclose = null;
-				__close(e.target); 
-			}, 200);
+	function _in_screen($p, p) {
+		var $w = $(window),
+			wt = $w.scrollTop(), wl = $w.scrollLeft(),
+			wb = wt + $w.height(), wr = wl + $w.width(),
+			pr = p.left + $p.outerWidth(), pb = p.top + $p.outerHeight();
+
+		return p.left >= wl && p.left <= wr
+			&& p.top >= wt && p.top <= wb
+			&& pr >= wl && pr <= wr
+			&& pb >= wt && pb <= wb;
+	}
+
+	function _positions($p, $t, ps) {
+		for (var i = 0; i < ps.length; i++) {
+			var p = _position($p, $t, ps[i]);
+			p.position = ps[i];
+			if (_in_screen($p, p)) {
+				return p;
+			}
+			ps[i] = p;
 		}
+		return ps[0];
 	}
 
-	function __center($p) {
-		var $w = $(window);
+	function _center($p, $w) {
+		var p = {
+			left: $w.scrollLeft() + ($w.outerWidth() - $p.outerWidth()) / 2,
+			top: $w.scrollTop() + ($w.outerHeight() - $p.outerHeight()) / 2
+		};
+
+		p.left = (p.left < 10 ? 10 : p.left);
+		p.top = (p.top < 10 ? 10 : p.top);
+		return p;
+	}
+
+	function _align($p, trigger, position) {
 		$p.css({
-			top: ($w.scrollTop() + 30) + "px",
-			left: ($w.scrollLeft() + 30) + "px",
-			width: ($.browser.width() - 60) + "px",
-			height: ($.browser.height() - 60) + "px"
+			display: 'block',
+			visibility: 'hidden'
+		});
+
+		var p, ac, $a = $p.find('.ui-popup-arrow').hide();
+		if (position == 'center') {
+			p = _center($p, $(window));
+		} else {
+			var $t = $(trigger);
+
+			ac = ArrowClasses[position];
+			if (ac) {
+				p = _position($p, $t, position);
+			} else {
+				switch (position) {
+				case 'top':
+					p = _positions($p, $t, ['top center', 'top left', 'top right']);
+					break;
+				case 'bottom':
+					p = _positions($p, $t, ['bottom center', 'bottom left', 'bottom right']);
+					break;
+				case 'left':
+					p = _positions($p, $t, ['left middle', 'left bottom', 'left top']);
+					break;
+				case 'right':
+					p = _positions($p, $t, ['right middle', 'right bottom', 'right top']);
+					break;
+				//case 'auto':
+				default:
+					p = _positions($p, $t, [
+						'bottom center', 'bottom left', 'bottom right',
+						'right middle', 'right bottom', 'right top',
+						'top center', 'top left', 'top right',
+						'right middle', 'right bottom', 'right top'
+					]);
+					break;
+				}
+				ac = ArrowClasses[p.position];
+			}
+		}
+
+		$p.css({
+			top: p.top,
+			left: p.left,
+			visibility: 'visible'
+		});
+		if (ac) {
+			$a.attr('class', 'ui-popup-arrow ' + ac).show();
+		}
+	}
+
+	function _masker() {
+		return $('.ui-popup-mask');
+	}
+	function _active() {
+		return $('.ui-popup-wrap:visible>.ui-popup-frame>.ui-popup');
+	}
+	function _wrapper($c) {
+		return $c.parent().parent('.ui-popup-wrap');
+	}
+	function _data($c) {
+		return $c.data('popup');
+	}
+
+	function toggle($c, trigger) {
+		trigger = trigger || window;
+		var $p = _wrapper($c);
+		if ($p.is(':hidden')) {
+			show($c, trigger);
+			return;
+		}
+
+		if (_data($c).trigger === trigger) {
+			hide($c);
+			return;
+		}
+
+		show($c, trigger);
+	}
+
+	function hide($c) {
+		var $p = _wrapper($c);
+		if ($p.is(':visible')) {
+			$c.trigger('hide.popup');
+			$p.hide();
+			$(document).off('.popup');
+			$(window).off('.popup');
+			$c.trigger('hidden.popup');
+		}
+		_masker().hide();
+	}
+
+	function show($c, trigger) {
+		hide(_active());
+
+		var $p = _wrapper($c), c = _data($c);
+
+		if (c.mask) {
+			_masker().show();
+		}
+
+		if (c.loaded || !c.ajax.url) {
+			_show($p, $c, c, trigger);
+			return;
+		}
+
+		c.showing = trigger || window;
+		load($c, c);
+	}
+
+	function _bind(c) {
+		$(document).off('.popup');
+		if (c.mouse) {
+			$(document).on('click.popup', __doc_click);
+		}
+		if (c.keyboard) {
+			$(document).on('keydown.popup', __doc_keydown);
+		}
+		if (c.resize) {
+			$(window).on('resize.popup', __doc_resize);
+		}
+	}
+
+	function _show($p, $c, c, trigger) {
+		$c.trigger('show.popup');
+
+		$p.find('.ui-popup-closer')[c.closer ? 'show' : 'hide']();
+
+		c.trigger = trigger || window;
+
+		_align($p, c.trigger, c.position);
+
+		$p.children('.ui-popup-frame').hide()[c.transition](function() {
+			$c.trigger('shown.popup');
+			_bind(c);
+		}).focus();
+	}
+
+	function __doc_click() {
+		hide(_active());
+	}
+
+	function __doc_keydown(evt) {
+		if (evt.keyCode == 27) { // Esc
+			hide(_active());
+		}
+	}
+
+	function __doc_resize() {
+		var $c = _active(), $p = _wrapper($c), c = _data($c);
+		_align($p, c.trigger, c.position);
+	}
+
+	function load($c, c) {
+		var $p = _wrapper($c);
+
+		c = $.extend(_data($c), c);
+
+		if (c.loader) {
+			$c.html('<div class="ui-popup-loader"></div>');
+			_align($p, c.showing, c.position);
+		}
+
+		_load($p, $c, c);
+	}
+
+	function _load($p, $c, c) {
+		var seq = ++c.sequence;
+
+		$p.addClass('loading').find('.ui-popup-closer, .ui-popup-arrow').hide();
+
+		$c.trigger('load.popup');
+
+		$.ajax($.extend({}, c.ajax, {
+			success: function(data, status, xhr) {
+				if (seq == c.sequence) {
+					c.ajaxDone.call($c, data, status, xhr);
+					$c.find('[popup-dismiss="true"]').click(function() {
+						hide($c);
+					});
+					c.loaded = true;
+					$c.trigger('loaded.popup', data);
+				}
+			},
+			error: function(xhr, status, err) {
+				if (seq == c.sequence) {
+					c.ajaxFail.call($c, xhr, status, err);
+					$c.trigger('failed.popup');
+				}
+			},
+			complete: function() {
+				$p.removeClass('loading');
+				if (seq == c.sequence && c.showing) {
+					_show($p, $c, c, c.showing);
+					delete c.showing;
+				}
+			}
+		}));
+	}
+
+	function _ajaxFail(xhr, status, err) {
+		var $c = $(this), $e = $('<div class="ui-popup-error">');
+
+		if (xhr.responseJSON) {
+			$e.addClass('json').text(JSON.stringify(xhr.responseJSON, null, 4));
+		} else if (xhr.responseText) {
+			$e.html(xhr.responseText);
+		} else {
+			$e.text(err || status || 'Server error!');
+		}
+		
+		$c.empty().append($e);
+	}
+
+	function _ajaxDone(data, status, xhr) {
+		$(this).html(xhr.responseText);
+	}
+
+	function update($c, c) {
+		if (c) {
+			c = $.extend(_data($c), c);
+			var $p = _wrapper($c);
+			if (!$p.is(':hidden')) {
+				_bind(c);
+				_masker()[c.mask ? 'show' : 'hide']();
+			}
+		}
+	}
+
+	function trigger($c, evt) {
+		var a = [].slice.call(arguments, 2);
+		$(_data($c).trigger).trigger(evt, a);
+	}
+
+	function destroy($c) {
+		_wrapper($c).remove();
+	}
+
+	function _camelCase(s) {
+		s = s.charAt(0).toLowerCase() + s.slice(1);
+		return s.replace(/[-_](.)/g, function(m, g) {
+			return g.toUpperCase();
 		});
 	}
 
-	function __shadow() {
-		if (__active) {
-			var $p = $('#' + __active);
-			if ($p.hasClass('ui-popup-center')) {
-				__center($p);
-			}
-			var p = $p[0];
-			$('#ui_popup_shadow').css({
-				top: p.offsetTop + 'px',
-				left: p.offsetLeft + 'px',
-				width: p.offsetWidth + 'px',
-				height: p.offsetHeight + 'px',
-				display: 'block'
-			}).children('iframe').css({
-				width: p.firstChild.offsetWidth + 'px',
-				height: p.firstChild.offsetHeight + 'px'
-			});
-			$('#ui_popup_closer').css({
-				top: p.offsetTop - 4 + 'px',
-				left: p.offsetLeft + p.offsetWidth - 12 + 'px',
-				display: 'block'
-			})
-			setTimeout(__shadow, 100);
-		}
-		else {
-			$('#ui_popup_shadow, #ui_popup_closer').css('display', 'none');
-		}
-	}
+	function _options($c) {
+		var fs = ['ajax-done', 'ajax-fail'];
+		var bs = ['loaded', 'autoload', 'mask', 'loader', 'closer', 'mouse', 'keyboard', 'resize'];
 
-	function __close(el) {
-		if (!__active || (el && el.tagName == "HTML")) {
-			return;
-		}
+		var c = {};
+		$.each($c[0].attributes, function(i, a) {
+			var p = a.name.substring(0, 6),
+				n = a.name.substring(6),
+				v = a.value;
 
-		if (el.id == 'ui_popup_closer') {
-			_hide();
-			return;
-		}
-		
-		var $p = $("#" + __active), p = $p.get(0);
-		var elt = $p.data('popup').trigger;
-
-		// is self or trigger clicked?
-		while (el && el.tagName != 'BODY') {
-			if (el === p || el === elt || $(el).css('position') == 'absolute') {
+			if ('popup-' != p || !v) {
 				return;
 			}
-			el = el.parentNode;
-		}
-		
-		if (el) {
-			_hide({silent: true});
-		}
+
+			if ($.inArray(n, fs) >= 0) {
+				c[_camelCase(n)] = new Function(v);
+				return;
+			}
+
+			if ($.inArray(n, bs) >= 0) {
+				v = (v === 'true');
+			}
+
+			if ('ajax-' == n.substring(0, 5)) {
+				c.ajax ||= {};
+				c.ajax[_camelCase(n.substring(5))] = v;
+			} else {
+				c[_camelCase(n)] = v;
+			}
+		});
+		return c;
 	}
-	
-	function __align(c, $el) {
-		var $t = $(c.target || c.trigger);
-		if (c.popover || $t.length < 1) {
-			$el.addClass('ui-popup-center');
+
+	function _init($c, c) {
+		if (_masker().length == 0) {
+			$('<div class="ui-popup-mask">').appendTo('body');
+		}
+
+		var $p = _wrapper($c);
+		if ($p.length) {
+			update($c, c);
 			return;
 		}
 
-		var p = $t.offset();
-		p.top += $t.outerHeight();
+		c = $.extend({ sequence: 0 }, $.popup.defaults, _options($c), c);
 
-		var bw = $.browser.width();
-		var ow = $el.outerWidth();
-		if (p.left + ow > bw) {
-			p.left = bw - ow - 20;
-			if (p.left < 0) {
-				p.left = 0;
+		var $f = $('<div class="ui-popup-frame" tabindex="0">')
+			.append($('<div class="ui-popup-arrow">'))
+			.append($('<i class="ui-popup-closer">&times;</i>').click(function() {
+				hide($c);
+			}));
+
+		$p = $('<div class="ui-popup-wrap">').append($f).appendTo('body').click(function(evt) {
+			evt.stopPropagation();
+		});
+
+		if (c.cssClass) {
+			$p.addClass(c.cssClass);
+		}
+
+		$c.appendTo($f).data('popup', c).addClass('ui-popup').show();
+
+		if (c.ajax.url) {
+			c.loaded = false;
+			if (c.autoload) {
+				_load($p, $c, c);
 			}
-		}
-		
-		$el.css({
-			top: p.top + "px",
-			left: p.left + "px"
-		}).removeClass('ui-popup-center');
-	}
-	
-	function __activeTarget($t) {
-		if ($t.length > 0) {
-			var el = $t.get(0);
-			if (el.setActive) {
-				el.setActive();
-			}
-			else {
-				el.focus();
-			}
-		}
-	}
-
-	function __clearTimer() {
-		if (__tclose) {
-			clearTimeout(__tclose);
-			__tclose = null;
-		}
-	}
-	
-	function _toggle(c) {
-		c = $.extend({ id: __active }, c);
-		if (!c.id) {
-			return this;
-		}
-	
-		__clearTimer();
-		
-		if (c.id == __active) {
-			var $p = $("#" + c.id), trigger = $p.data('popup').trigger;
-			if (c.trigger === trigger) {
-				c.silent = true;
-			}
-			_hide(c);
-			return this;
-		}
-
-		_show(c);
-		return this;
-	}
-
-	function __popup($pc, c) {
-		$pc.css({
-			top : "0px",
-			left : "0px",
-		}).addClass('ui-popup-opacity0').show();
-
-		__align(c, $pc.parent(), true);
-		
-		$pc.hide().removeClass('ui-popup-opacity0').slideDown('fast', c.onpopup);
-		
-		__shadow();
-	}
-	
-	function _show(c) {
-		c = $.extend({ id: __active }, c);
-		if (!c.id) {
-			return this;
-		}
-	
-		__clearTimer();
-
-		if (c.id == __active) {
-			return this;
-		}
-		
-		_hide({silent: true});
-
-		__active = c.id;
-	
-		__activeTarget($(c.target || c.trigger));
-	
-		var $p = $("#" + c.id), $pc = $p.children(".ui-popup-content");
-
-		c = $.extend($p.data('popup'), { slient: null, trigger: null }, c);
-
-		if (c.autoClear) {
-			c.loaded = null;
-		}
-		
-		if (c.loaded) {
-			__popup($pc, c);
-		}
-		else if (c.loaded !== false){
-			_load(c);
-		}
-		return this;
-	}
-	
-	function _hide(c) {
-		c = $.extend({ id: __active }, c);
-		if (c.id) {
-			__clearTimer();
-
-			__active = null;
-			__shadow();
-		
-			var $p = $("#" + c.id); 
-
-			$p.css({
-				top : "-999999px",
-				left : "-999999px"
+		} else {
+			c.loaded = true;
+			$c.find('[popup-dismiss="true"]').click(function() {
+				hide($c);
 			});
-
-			c = $.extend($p.data('popup'), c);
-
-			if (c.silent !== true) {
-				__activeTarget($(c.target || c.trigger));
-			}
-
-			if (typeof(c.onhide) == 'function') {
-				c.onhide();
-			}
-		}
-		$('body').removeClass('ui-popop-over');
-		return this;
-	}
-
-	function __loadPage(c, html, e) {
-		html = (html || "").trim();
-		
-		var $p = $("#" + c.id);
-		var $pc = $p.children(".ui-popup-content");
-
-		if (c.prepare) {
-			var $c = c.prepare(html, e);
-			if ($c) {
-				$pc.append($c);
-				$p.data('popup').loaded = true;
-				return $pc;
-			}
-		}
-		else {
-			if (html) {
-				$pc.html(html);
-				$p.data('popup').loaded = true;
-				return $pc;
-			}
-		}
-		$p.data('popup').loaded = false;
-		return null;
-	}
-	
-	function _load(c) {
-		c = $.extend({ id: __active }, c);
-		if (c.id) {
-			__align(c, $("#ui_popup_loader").show(), false);
-
-			var $pc = null;
-			$.ajax({
-				url: c.url, 
-				data: c.params,
-				dataType: 'html',
-				success: function(html) {
-					$pc = __loadPage(c, html);
-				},
-				error: function(xhr, status, e) {
-					$pc = __loadPage(c, null, e);
-				},
-				complete: function(xhr, status) {
-					if (c.id == __active) {
-						$("#ui_popup_loader").hide();
-						if ($pc) {
-							if ($pc.is(':hidden')) {
-								__popup($pc, c);
-							}
-							else {
-								__align(c, $pc.parent(), true);
-							}
-						}
-					}
-				}
-			});
-		}
-		return this;
-	}
-	
-	function _callback(data) {
-		if (__active) {
-			var pd = $('#' + __active).data('popup');
-			if (pd && pd.callback) {
-				pd.callback(data, pd.trigger);
-			}
 		}
 	}
 
 	var api = {
-			load: _load,
-			callback: _callback,
-			toggle: _toggle,
-			show: _show,
-			hide: _hide
-		};
-
-	$.popup = function(c) {
-		__init();
-		
-		c = c || {};
-		if (c.id) {
-			var $p = $('#' + c.id);
-			if ($p.length < 1) {
-				$p = $('<div id="' + c.id + '" class="ui-popup">'
-					+ '<div class="ui-popup-content"></div></div>').appendTo('body');
-
-				if (c.cssClass) {
-					$p.addClass(c.cssClass);
-				}
-				$p.data('popup', c);
-				if (c.content) {
-					var $pc = $p.children(".ui-popup-content");
-					$(c.content).detach().appendTo($pc);
-					c.loaded = true;
-					delete c.content;
-				}
-				else if (c.autoload) {
-					$.ajax({
-						url: c.url, 
-						data: c.params, 
-						dataType: 'html',
-						success: function(html) {
-							__loadPage(c, html);
-						},
-						error: function(xhr, status, e) {
-							__loadPage(c, null, e);
-						}
-					});
-				}
-			}
-		}
-
-		return api; 
+		load: load,
+		show: show,
+		hide: hide,
+		toggle: toggle,
+		update: update,
+		trigger: trigger,
+		destroy: destroy
 	};
-	
-	function __onclick() {
-		$.popup().toggle($.extend({trigger: this}, $(this).data('popup')));
-		return false;
-	}
-	function __onleave() {
-		if (__tenter) {
-			clearTimeout(__tenter);
-			__tenter = null;
-		}
-	}
-	function __onenter() {
-		__onleave();
 
-		var c = $.extend({trigger: this}, $(this).data('popup'));
-		if (c.mouseenter === true) {
-			$.popup().show(c);
-		}
-		else {
-			__tenter = setTimeout(function() {
-				$.popup().show(c);
-			}, c.mouseenter);
-		}
-		return false;
-	}
-	
 	$.fn.popup = function(c) {
-		c = c || {};
+		var args = [].slice.call(arguments);
+		return this.each(function() {
+			var $c = $(this);
 
-		this.data('popup', c)
-			.unbind('click', __onclick)
-			.unbind('mouseenter', __onenter)
-			.unbind('mouseleave', __onleave);
-		
-		if (c.mouseclick !== false) {
-			this.click(__onclick);
-		}
-		if (c.mouseenter === true) {
-			this.mouseenter(__onenter);
-		}
-		else if (c.mouseenter > 0) {
-			this.mouseenter(__onenter).mouseleave(__onleave);
-		}
-		
-		return this;
+			if (typeof(c) == 'string') {
+				var p = _data($c);
+				if (!p) {
+					_init($c);
+				}
+				args[0] = $c;
+				api[c].apply($c, args);
+				return;
+			}
+
+			_init($c, c);
+		});
 	};
+
+	$.popup = function() {
+		var $c = _active();
+		$c.popup.apply($c, arguments);
+		return $c;
+	};
+
+	$.popup.defaults = {
+		position: 'auto',
+		transition: 'slideDown',
+		mask: false,
+		loader: false,
+		closer: false,
+		mouse: true,
+		keyboard: true,
+		resize: true,
+		ajax: {},
+		ajaxDone: _ajaxDone,
+		ajaxFail: _ajaxFail
+	};
+
+	// POPUP DATA-API
+	// ==================
+	$(window).on('load', function() {
+		$('[data-spy="popup"]').popup();
+		$('body').on('click.popup', '[popup-target]', function(evt) {
+			evt.stopPropagation();
+			var $t = $(this), c = _options($t);
+			$($t.attr('popup-target')).popup(c).popup('toggle', this);
+		});
+	});
+
 })(jQuery);

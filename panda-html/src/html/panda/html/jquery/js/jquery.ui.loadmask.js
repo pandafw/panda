@@ -1,5 +1,7 @@
 (function($) {
-	function clearMaskTimeout($el) {
+	"use strict";
+
+	function _clearTimeout($el) {
 		//if this element has delayed mask scheduled then remove it
 		var t = $el.data("_mask_timeout");
 		if (t) {
@@ -13,115 +15,87 @@
 			clearTimeout(t);
 			$el.removeData("_unmask_timeout");
 		}
-
-		//if this element has center timeout scheduled then remove it
-		t = $el.data("_maskc_timeout");
-		if (t) {
-			clearTimeout(t);
-			$el.removeData("_maskc_timeout");
-		}
 	}
 
-	function maskElement($el, c) {
+	function _stopEvent(evt) {
+		evt.preventDefault();
+		evt.stopPropagation();
+	}
+
+	function doMask($el, c) {
 		if ($el.isLoadMasked()) {
-			unmaskElement($el);
-		}
-		else {
-			clearMaskTimeout($el);
+			unMask($el);
+		} else {
+			_clearTimeout($el);
 		}
 		
+		var $lm = $('<div class="ui-loadmask">');
+		if (c.cssClass) {
+			$lm.addClass(c.cssClass);
+		}
+
+		var $ll = $('<div class="ui-loadmask-load">');
+		if (c.content) {
+			$lm.append($(c.content));
+		} else {
+			var $li = $('<div class="ui-loadmask-icon">'),
+				$lt = $('<div class="ui-loadmask-text">');
+
+			$ll.append($li).append($lt);
+
+			if (c.html || c.text) {
+				$ll.addClass('ui-loadmask-hasmsg');
+				if (c.html) {
+					$lt.html(c.html);
+				} else {
+					$lt.text(c.text);
+				}
+			}
+			$lm.append($ll);
+		}
+
 		if ($el.css("position") == "static") {
 			$el.addClass("ui-loadmasked-relative");
 		}
-		$el.addClass("ui-loadmasked");
-
-		if (c.mask !== false) {
-			var $m = $('<div class="ui-loadmask-mask"></div>');
-			//auto height fix for IE
-			if ($.browser && $.browser.msie) {
-				$m.height($el.height() + parseInt($el.css("padding-top")) + parseInt($el.css("padding-bottom")));
-				$m.width($el.width() + parseInt($el.css("padding-left")) + parseInt($el.css("padding-right")));
-			}
-			$el.append($m);
+		if (c.mask) {
+			$el.append($('<div class="ui-loadmask-mask"></div>'));
 		}
 		
-		//fix for z-index bug with selects in IE6
-		if ($.browser && $.browser.msie && parseInt($.browser.version, 10) < 7) {
-			$el.find("select").addClass("ui-loadmasked-hidden");
-		}
-		
-		var $mb = $('<div class="ui-loadmask" style="display:none;"></div>');
-		if (c.cssClass) {
-			$mb.addClass(c.cssClass);
-		}
-		if (c.content) {
-			$mb.append($(c.content));
-		}
-		else {
-			var $tb = $('<table class="ui-loadmask-tb"></table>'),
-				$tr = $('<tr>'),
-				$ti = $('<td class="ui-loadmask-icon">').append($('<i>').addClass(c.iconClass));
-			$tr.append($ti);
+		$el.append($lm).addClass("ui-loadmasked");
 
-			if (c.html || c.text) {
-				$mb.addClass('ui-loadmask-hasmsg');
-				var $tx = $('<td class="ui-loadmask-text">');
-				if (c.html) {
-					$tx.html(c.html);
-				}
-				else {
-					$tx.text(c.text);
-				}
-				$tr.append($tx);
-			}
-			$mb.append($tb.append($tr));
-		}
-		$el.append($mb);
-
-		if (c.fixed || typeof($.fn.center) != 'function') {
-			$mb.addClass('ui-loadmask-fixed');
-		}
-		else {
-			$mb.center();
-			$el.data("_maskc_timeout", setInterval(function() {
-				$mb.center();
-			}, 250));
-		}
-		$mb.show();
-		
 		if (c.timeout > 0) {
 			$el.data("_unmask_timeout", setTimeout(function() {
-				unmaskElement($el);
+				unMask($el);
 			}, c.timeout));
+		}
+		if (c.keyboard) {
+			$el.on('keydown.loadmask', _stopEvent);
 		}
 	}
 
-	function unmaskElement($el) {
-		clearMaskTimeout($el);
+	function unMask($el) {
+		_clearTimeout($el);
 
+		$el.off('.loadmask');
 		$el.find(".ui-loadmask-mask, .ui-loadmask").remove();
 		$el.removeClass("ui-loadmasked ui-loadmasked-relative");
-		$el.find("select").removeClass("ui-loadmasked-hidden");
 	}
 
 	$.loadmask = {
 		defaults: {
-			iconClass: 'ui-loadmask-loading'
+			cssClass: '',		// css class for the mask element
+			mask: true,			// add mask layer
+			keyboard: true,		// add keydown event handler for the mask element to prevent input
+			delay: 0,			// delay in milliseconds before element is masked. If unloadmask() is called before the delay times out, no mask is displayed. This can be used to prevent unnecessary mask display for quick processes.
+			timeout: 0,			// timeout in milliseconds for automatically unloadmask
 		}
 	};
 
 	/**
 	 * Displays loading mask over selected element(s). Accepts both single and multiple selectors.
-	 * @param cssClass css class for the mask element
-	 * @param iconClass css class for the icon (default: ui-loadmask-loading)
 	 * @param content  html content that will be add to the loadmask
 	 * @param html  html message that will be display
 	 * @param text  text message that will be display (html tag will be escaped)
-	 * @param mask  add mask layer (default: true)
-	 * @param fixed fixed position (default: false)
-	 * @param delay Delay in milliseconds before element is masked (optional). If unloadmask() is called 
-	 *              before the delay times out, no mask is displayed. This can be used to prevent unnecessary 
-	 *              mask display for quick processes.
 	 */
 	$.fn.loadmask = function(c) {
 		if (typeof(c) == 'string') {
@@ -129,14 +103,14 @@
 		}
 		c = $.extend({}, $.loadmask.defaults, c);
 		return this.each(function() {
-			if (c.delay !== undefined && c.delay > 0) {
-				var $el = $(this);
+			var $el = $(this);
+			if (c.delay > 0) {
 				$el.data("_mask_timeout", setTimeout(function() {
-					maskElement($el, c);
+					doMask($el, c);
 				}, c.delay));
 			}
 			else {
-				maskElement($(this), c);
+				doMask($el, c);
 			}
 		});
 	};
@@ -146,7 +120,7 @@
 	 */
 	$.fn.unloadmask = function() {
 		return this.each(function() {
-			unmaskElement($(this));
+			unMask($(this));
 		});
 	};
 	

@@ -1,0 +1,122 @@
+ul.ui-tree, ul.ui-tree ul {
+	list-style: none;
+	margin: 0 0 0 1em;
+	padding: 0;
+}
+ul.ui-tree ul {
+	position: relative;
+}
+ul.ui-tree ul:before {
+	content: "";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 0px;
+	z-index: -1;
+}
+ul.ui-tree li {
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+ul.ui-tree li:before {
+	content: "";
+	display: block;
+	position: absolute;
+	font: normal 1em monospace;
+	left: 0;
+	top: 0.5em;
+	width: 1em;
+	height: 1em;
+	line-height: 1em;
+	z-index: -1;
+}
+ul.ui-tree li>.item {
+	white-space: nowrap;
+}
+ul.ui-tree li.node>.item {
+	cursor: pointer;
+}
+
+/* arrow */
+ul.ui-tree.arrow li {
+	padding: 0 0 0 0.5em;
+}
+ul.ui-tree.arrow li:before {
+	content: ">";
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s;
+}
+ul.ui-tree.arrow li.collapsed:before, ul.ui-tree.arrow li.leaf:before {
+	left: 0.2em;
+	top: 0.25em;
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+}
+ul.ui-tree.arrow li.leaf:before {
+	content: "-";
+}
+ul.ui-tree.arrow li>.item {
+	padding: 0 1em;
+}
+
+/* lined */
+ul.ui-tree.lined ul:before {
+	border-left: 1px solid #aaa;
+}
+ul.ui-tree.lined li {
+	padding: 0 0 0 1em;
+}
+ul.ui-tree.lined li:before {
+	border-top: 1px solid #aaa;
+	top: 0.7em;
+	height: 100%;
+}
+ul.ui-tree.lined>li:before {
+	border-top: none;
+}
+ul.ui-tree.lined li:last-child:before {
+	background: #fff;
+	bottom: 0;
+	height: auto;
+}
+ul.ui-tree.lined li>.item {
+	padding: 0 0.5em;
+}
+
+/* boxed */
+ul.ui-tree.boxed li>.item {
+	background: #fff;
+	border-radius: 5px;
+	border: 1px solid #afafaf;
+	box-shadow: 1px 1px 4px #8F949A;
+	width: 15em;
+	min-width: 15em;
+	padding: 0.5em 1em;
+}
+ul.ui-tree.boxed li {
+	padding: 1em 0 0 1.5em;
+}
+ul.ui-tree.lined.boxed li:before {
+	top: 2.2em;
+	width: 2em;
+}
+ul.ui-tree.arrow.boxed li:before {
+	top: 1.7em;
+}
+
+/* sticky */
+ul.ui-tree.sticky ul {
+	margin: 0 0 0 14em;
+}
+ul.ui-tree.sticky li>.item {
+	position: sticky;
+	top: 0px;
+	width: 100%;
+	max-width: 15em;
+}
+

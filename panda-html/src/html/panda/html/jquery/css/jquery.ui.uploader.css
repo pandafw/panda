@@ -1,0 +1,57 @@
+.ui-uploader-btn {
+	margin-right: 20px;
+}
+.ui-uploader-progress {
+	margin: 5px 0;
+}
+.ui-uploader-sep {
+	margin: 7px 0 0 0;
+}
+.ui-uploader-item {
+	border: 1px solid #ccc;
+	display: inline-block;
+	padding: 8px;
+	margin: 0 7px 7px 0;
+	vertical-align: top;
+}
+.ui-uploader-text {
+	display: inline-block;
+}
+.ui-uploader-remove {
+	color: #999;
+	cursor: pointer;
+	margin-left: 10px;
+	padding: 3px;
+}
+.ui-uploader-remove:hover {
+	color: #235273;
+}
+.ui-uploader-image img {
+	margin: 5px 0;
+	padding: 4px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	transition: all .2s ease-in-out;
+	display: inline-block;
+	max-width: 100%;
+	height: auto;
+}
+.ui-uploader-error {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	border-radius: 4px;
+	margin: 5px 0;
+	padding: 15px;
+}
+
+/* drag & drop */
+.ui-uploader-draggable {
+	padding: 20px;
+	outline: 2px dashed #ccc;
+	outline-offset: -10px;
+}
+.ui-uploader-dragover {
+	background-color: #eee;
+}
+
