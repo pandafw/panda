@@ -22,7 +22,7 @@
 		<panda.version>1.8.1-SNAPSHOT</panda.version>
 		<lucene.version>7.7.2</lucene.version>
 		<poi.version>4.1.0</poi.version>
-		<hsqldb.version>2.5.0</hsqldb.version>
+		<hsqldb.version>2.7.1</hsqldb.version>
 		<mariadb.version>2.4.3</mariadb.version>
 		<mongodb.version>3.11.3</mongodb.version>
 		<mysql.version>8.0.28</mysql.version>
