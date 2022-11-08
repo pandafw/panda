@@ -22,10 +22,8 @@ import panda.servlet.ServletURLBuilder;
 @IocBean(singleton = false)
 public class MvcURLBuilder extends ServletURLBuilder {
 	/**
-	 * The includeParams attribute may have the value 'none', 'get' or 'all'. 
-	 * none - include no parameters in the URL 
-	 * get - include only GET parameters in the URL (default) 
-	 * all - include both GET and POST parameters in the URL
+	 * The includeParams attribute may have the value 'none', 'get' or 'all'. none - include no parameters in the URL get - include only GET parameters in the URL (default) all - include both GET and
+	 * POST parameters in the URL
 	 */
 	public static final String INCLUDE_NONE = "none";
 	public static final String INCLUDE_GET = "get";
@@ -34,7 +32,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	public static final String SUPPRESS_NONE = "none";
 	public static final String SUPPRESS_EMPTY = "empty";
 	public static final String SUPPRESS_NULL = "null";
-	
+
 	protected ActionContext context;
 
 	protected String action;
@@ -59,7 +57,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	public void setContext(ActionContext context) {
 		this.context = context;
 	}
-	
+
 	/**
 	 * @return the action
 	 */
@@ -137,11 +135,9 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	public void setSuppressParam(String suppress) {
 		if (SUPPRESS_EMPTY.equalsIgnoreCase(suppress)) {
 			setSuppress(URLHelper.SUPPRESS_EMPTY);
-		}
-		else if (SUPPRESS_NONE.equalsIgnoreCase(suppress)) {
+		} else if (SUPPRESS_NONE.equalsIgnoreCase(suppress)) {
 			setSuppress(URLHelper.SUPPRESS_NONE);
-		}
-		else {
+		} else {
 			setSuppress(URLHelper.SUPPRESS_NULL);
 		}
 	}
@@ -159,27 +155,25 @@ public class MvcURLBuilder extends ServletURLBuilder {
 		Map ps = null;
 		if (params == null) {
 			ps = new LinkedHashMap();
-		}
-		else if (params instanceof Map) {
+		} else if (params instanceof Map) {
 			ps = new LinkedHashMap((Map)params);
-		}
-		else {
+		} else {
 			ps = castors.cast(params, LinkedHashMap.class);
 		}
 		return ps;
 	}
 
-	//-------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	public void addParams(Map ps) {
 		if (Collections.isEmpty(ps)) {
 			return;
 		}
-		
+
 		params = getParamsMap();
 		((Map)params).putAll(ps);
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public String build() {
@@ -195,13 +189,12 @@ public class MvcURLBuilder extends ServletURLBuilder {
 				action = action.substring(0, q);
 				if (Strings.isEmpty(query)) {
 					query = qs;
-				}
-				else {
+				} else {
 					query += '&' + qs;
 				}
 			}
 		}
-		
+
 		if (path == null) {
 			path = buildPath(context, action, includeContext);
 		}
@@ -219,8 +212,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 				}
 				params = ps;
 			}
-		}
-		else if (INCLUDE_ALL.equalsIgnoreCase(includeParams)) {
+		} else if (INCLUDE_ALL.equalsIgnoreCase(includeParams)) {
 			Map ps = getParamsMap();
 			Map<String, String[]> qm = request.getParameterMap();
 			for (Entry<String, String[]> en : qm.entrySet()) {
@@ -240,11 +232,11 @@ public class MvcURLBuilder extends ServletURLBuilder {
 		return Mvcs.castString(context, value);
 	}
 
-	//-------------------------------------------------------------------
+	// -------------------------------------------------------------------
 	public static String buildPath(ActionContext context, String action) {
 		return buildPath(context, action, true);
 	}
-	
+
 	public static String buildPath(ActionContext context, String action, boolean includeContext) {
 		String uri;
 
@@ -252,8 +244,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 			if (action.startsWith("//")) {
 				// absolute site path
 				uri = action.substring(1);
-			}
-			else {
+			} else {
 				uri = action;
 
 				char c = action.charAt(0);
@@ -264,8 +255,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 					if (includeContext) {
 						uri = context.getBase() + uri;
 					}
-				}
-				else if (c == '~') {
+				} else if (c == '~') {
 					// resolve URL ( ~/xxx = ./xxx)
 					String self = context.getPath();
 					String path = '.' + action.substring(1);
@@ -273,39 +263,36 @@ public class MvcURLBuilder extends ServletURLBuilder {
 					if (includeContext) {
 						uri = context.getBase() + uri;
 					}
-				}
-				else if (c == '+') {
+				} else if (c == '+') {
 					// append path
 					String self = context.getPath();
 					uri = URLHelper.appendPath(self, action.substring(1));
 					if (includeContext) {
 						uri = context.getBase() + uri;
 					}
-				}
-				else if (c == '/') {
+				} else if (c == '/') {
 					if (includeContext) {
 						uri = context.getBase() + uri;
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			// Go to "same page"
 			uri = context.getPath();
 			if (includeContext) {
 				uri = context.getBase() + uri;
 			}
 		}
-		
+
 		return uri;
 	}
-	
+
 	public static String buildURL(ActionContext context, Object params) {
 		MvcURLBuilder ub = context.getIoc().get(MvcURLBuilder.class);
 		ub.setParams(params);
 		return ub.build();
 	}
-	
+
 	public static String buildQueryString(ActionContext context, Object params) {
 		MvcURLBuilder ub = context.getIoc().get(MvcURLBuilder.class);
 		ub.setPath("");

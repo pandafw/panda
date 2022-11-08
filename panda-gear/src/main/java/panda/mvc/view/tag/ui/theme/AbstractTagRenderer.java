@@ -32,29 +32,28 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		if (Strings.isEmpty(css)) {
 			return;
 		}
-		
+
 		String cssClass = tag.getCssClass();
 		if (Strings.isEmpty(cssClass)) {
 			tag.setCssClass(css);
-		}
-		else {
+		} else {
 			tag.setCssClass(cssClass + ' ' + css);
 		}
 	}
 
-//	private String base;
-//	protected String base() {
-//		if (base == null) {
-//			base = context.getBase();
-//			if ("/".equals(base)) {
-//				base = "";
-//			}
-//		}
-//		return base;
-//	}
-//	protected String uri(String uri) {
-//		return base() + uri;
-//	}
+	// private String base;
+	// protected String base() {
+	// if (base == null) {
+	// base = context.getBase();
+	// if ("/".equals(base)) {
+	// base = "";
+	// }
+	// }
+	// return base;
+	// }
+	// protected String uri(String uri) {
+	// return base() + uri;
+	// }
 
 	protected String button(String text, String icon) {
 		return button(text, icon, null, null);
@@ -67,25 +66,25 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		}
 		return button(text, icon, null, attrs);
 	}
-	
+
 	protected String button(String text, String icon, String sicon, Map<String, String> attrs) {
 		String cssClass = null;
 		if (attrs != null) {
 			cssClass = attrs.remove("class");
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("<button class=\"btn btn-default")
-		  .append(cssClass == null ? "" : " " + cssClass)
-		  .append("\" type=\"submit\"");
-		
+			.append(cssClass == null ? "" : " " + cssClass)
+			.append("\" type=\"submit\"");
+
 		if (attrs != null) {
 			for (Entry<String, String> en : attrs.entrySet()) {
 				sb.append(" ")
-				  .append(en.getKey())
-				  .append("=\"")
-				  .append(html(en.getValue()))
-				  .append("\"");
+					.append(en.getKey())
+					.append("=\"")
+					.append(html(en.getValue()))
+					.append("\"");
 			}
 		}
 		sb.append('>');
@@ -101,45 +100,42 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 			sb.append(xicon(icon));
 		}
 		sb.append("</button>");
-		
+
 		return sb.toString();
 	}
-	
+
 	protected String ticon(String i) {
 		if (i.startsWith("fa ")) {
 			return i;
 		}
-		else if (i.startsWith("fa-")) {
+
+		if (i.startsWith("fa-")) {
 			i = "fa " + i;
-		}
-		else {
+		} else {
 			String[] ss = Strings.split(i);
 
 			if ("icon".equals(ss[0])) {
 				i = getText(ss[0], ss[0]);
-			}
-			else {
+			} else {
 				if (ss[0].startsWith("icon-")) {
 					ss[0] = ss[0].substring(5);
 				}
 				i = getText("icon-" + ss[0], ss[0]);
 			}
-			
+
 			if (i.startsWith("fa ")) {
 				ss[0] = i;
-			}
-			else if (i.startsWith("fa-")) {
+			} else if (i.startsWith("fa-")) {
 				ss[0] = "fa " + i;
-			}
-			else {
+			} else {
 				ss[0] = "fa fa-" + i;
 			}
-			
+
 			i = Strings.join(ss, " ");
 		}
 		return i;
 	}
-	
+
 	protected String xicon(String c) {
 		return icon(ticon(c));
 	}
@@ -152,7 +148,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return "<i class=\"" + c + " p-cpointer\" onclick=\"" + onclick + "\"></i>";
 	}
 
-	protected String join(String ... ss) {
+	protected String join(String... ss) {
 		StringBuilder sb = new StringBuilder();
 		for (String s : ss) {
 			if (Strings.isNotEmpty(s)) {
@@ -216,7 +212,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	protected void writeCss(String css) throws IOException {
 		writeCss(css, null);
 	}
-	
+
 	protected void writeCss(String css, String cls) throws IOException {
 		write("<link");
 		if (Strings.isNotEmpty(cls)) {
@@ -232,23 +228,23 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	protected void writeln() throws IOException {
 		writer.write('\n');
 	}
-	
+
 	protected void write(String s) throws IOException {
 		if (Strings.isNotEmpty(s)) {
 			writer.write(s);
 		}
 	}
-	
+
 	protected void write(char c) throws IOException {
 		writer.write(c);
 	}
-	
+
 	protected void writeIfExists(String s, Object v) throws IOException {
 		if (v != null) {
 			write(s);
 		}
 	}
-	
+
 	protected void body(String text) throws IOException {
 		body(text, true);
 	}
@@ -268,11 +264,11 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	protected void stag(String name) throws IOException {
 		stag(name, null, false);
 	}
-	
+
 	protected void stag(String name, Attributes attrs) throws IOException {
 		stag(name, attrs, false);
 	}
-	
+
 	protected void stag(String name, Attributes attrs, boolean end) throws IOException {
 		write("<");
 		write(name);
@@ -301,15 +297,15 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	protected String getText(String key) {
 		return context.getText().getText(key);
 	}
-	
+
 	protected String getText(String key, String defaultValue) {
 		return context.getText().getText(key, defaultValue);
 	}
-	
+
 	protected void putInContext(String key, Object value) {
 		context.getVars().put(key, value);
 	}
-	
+
 	protected Object findInContext(String key) {
 		return context.getVars().get(key);
 	}
@@ -320,6 +316,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 
 	/**
 	 * format and escape value
+	 * 
 	 * @param v value
 	 * @return formatted string
 	 */
@@ -329,6 +326,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 
 	/**
 	 * format and escape value
+	 * 
 	 * @param v value
 	 * @param format format
 	 * @return formatted string
@@ -336,9 +334,10 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	public String formatValue(Object v, String format) {
 		return formatValue(v, format, null);
 	}
-	
+
 	/**
 	 * format and escape value
+	 * 
 	 * @param value value
 	 * @param format format
 	 * @param escape escape method
@@ -347,9 +346,10 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	public String formatValue(Object value, String format, String escape) {
 		return formatValue(value, format, null, escape);
 	}
-	
+
 	/**
 	 * format and escape value
+	 * 
 	 * @param value value
 	 * @param format format
 	 * @param pattern pattern

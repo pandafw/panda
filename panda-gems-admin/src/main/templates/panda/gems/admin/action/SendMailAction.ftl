@@ -29,10 +29,8 @@
 			key="files"
 			size="30"
 			multiple="true"
-			uploadAction="%{b['super_path'] + '/tmp/uploads'}"
-			uploadName="files"
-			dnloadAction="%{b['super_path'] + '/tmp/download'}"
-			dnloadName="file"
+			uploadUrl="%{b.super_path + '/tmp/uploads'}"
+			dnloadUrl="%{b.super_path + '/tmp/download?file=$'}"
 		/>
 		<@p.div cssClass="p-buttons">
 			<@p.submit icon="icon-sendmail" label="#(btn-send)"/>

@@ -27,13 +27,12 @@ public class Uploader extends InputUIBean {
 	@IocInject
 	protected MvcURLBuilder defaulter;
 
-	protected String uploadLink;
+	protected String uploadUrl;
 	protected String uploadName;
 	protected String uploadData;
-	protected String dnloadLink;
-	protected String dnloadName;
-	protected String dnloadData;
-	protected String defaultLink;
+	protected String dnloadUrl;
+	protected String dnloadHolder;
+	protected String defaultUrl;
 	protected String defaultText;
 	protected Map<String, Object> defaultParams;
 	protected boolean defaultEnable;
@@ -47,17 +46,17 @@ public class Uploader extends InputUIBean {
 			value = null;
 		}
 
-		if (uploadLink == null) {
-			uploadLink = uploader.build();
+		if (uploadUrl == null) {
+			uploadUrl = uploader.build();
 		}
 		
-		if (dnloadLink == null) {
-			dnloadLink = dnloader.build();
+		if (dnloadUrl == null) {
+			dnloadUrl = dnloader.build();
 		}
 		
-		if (defaultLink == null) {
+		if (defaultUrl == null) {
 			if (defaultParams == null) {
-				defaultLink = defaulter.build();
+				defaultUrl = defaulter.build();
 			}
 			else {
 				for (Entry<String, Object> en : defaultParams.entrySet()) {
@@ -65,7 +64,7 @@ public class Uploader extends InputUIBean {
 					en.setValue(v);
 				}
 				defaulter.setParams(defaultParams);
-				defaultLink = defaulter.build();
+				defaultUrl = defaulter.build();
 			}
 		}
 	}
@@ -120,17 +119,17 @@ public class Uploader extends InputUIBean {
 	}
 
 	/**
-	 * @return the uploadLink
+	 * @return the uploadUrl
 	 */
-	public String getUploadLink() {
-		return uploadLink;
+	public String getUploadUrl() {
+		return uploadUrl;
 	}
 
 	/**
-	 * @param uploadLink the uploadLink to set
+	 * @param uploadUrl the uploadUrl to set
 	 */
-	public void setUploadLink(String uploadLink) {
-		this.uploadLink = uploadLink;
+	public void setUploadUrl(String uploadUrl) {
+		this.uploadUrl = uploadUrl;
 	}
 
 	/**
@@ -169,45 +168,31 @@ public class Uploader extends InputUIBean {
 	}
 
 	/**
-	 * @return the dnloadLink
+	 * @return the dnloadUrl
 	 */
-	public String getDnloadLink() {
-		return dnloadLink;
+	public String getDnloadUrl() {
+		return dnloadUrl;
 	}
 
 	/**
-	 * @param dnloadLink the dnloadLink to set
+	 * @param dnloadUrl the dnloadUrl to set
 	 */
-	public void setDnloadLink(String dnloadLink) {
-		this.dnloadLink = dnloadLink;
+	public void setDnloadUrl(String dnloadUrl) {
+		this.dnloadUrl = dnloadUrl;
 	}
 
 	/**
-	 * @return the dnloadName
+	 * @return the dnloadHolder
 	 */
-	public String getDnloadName() {
-		return dnloadName;
+	public String getDnloadHolder() {
+		return dnloadHolder;
 	}
 
 	/**
-	 * @param dnloadName the dnloadName to set
+	 * @param dnloadHolder the dnloadHolder to set
 	 */
-	public void setDnloadName(String dnloadName) {
-		this.dnloadName = dnloadName;
-	}
-
-	/**
-	 * @return the dnloadData
-	 */
-	public String getDnloadData() {
-		return dnloadData;
-	}
-
-	/**
-	 * @param dnloadData the dnloadData to set
-	 */
-	public void setDnloadData(String dnloadData) {
-		this.dnloadData = dnloadData;
+	public void setDnloadHolder(String dnloadHolder) {
+		this.dnloadHolder = dnloadHolder;
 	}
 
 	/**
@@ -218,17 +203,17 @@ public class Uploader extends InputUIBean {
 	}
 
 	/**
-	 * @return the defaultLink
+	 * @return the defaultUrl
 	 */
-	public String getDefaultLink() {
-		return defaultLink;
+	public String getDefaultUrl() {
+		return defaultUrl;
 	}
 
 	/**
-	 * @param defaultLink the defaultLink to set
+	 * @param defaultUrl the defaultUrl to set
 	 */
-	public void setDefaultLink(String defaultLink) {
-		this.defaultLink = defaultLink;
+	public void setDefaultUrl(String defaultUrl) {
+		this.defaultUrl = defaultUrl;
 	}
 
 	/**

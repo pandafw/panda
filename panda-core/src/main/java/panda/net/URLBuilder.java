@@ -18,25 +18,25 @@ public class URLBuilder {
 	public static final char SEPARATOR = '/';
 	public static final String AMP = "&";
 	public static final String EAMP = "&amp;";
-	
+
 	public static final int SUPPRESS_NONE = 0;
 	public static final int SUPPRESS_NULL = 1;
 	public static final int SUPPRESS_EMPTY = 2;
 
 	protected Beans beans = Beans.i();
-	
+
 	protected Castors castors = Castors.i();
-	
+
 	protected String scheme;
 
 	protected String host;
 
 	protected int port;
-	
+
 	protected String path;
 
 	protected String query;
-	
+
 	protected Object params;
 
 	protected String anchor;
@@ -44,9 +44,8 @@ public class URLBuilder {
 	protected boolean escapeAmp;
 
 	protected int suppress = SUPPRESS_NULL;
-	
-	protected String encoding = Charsets.UTF_8;
 
+	protected String encoding = Charsets.UTF_8;
 
 	/**
 	 * @return the beans
@@ -218,6 +217,7 @@ public class URLBuilder {
 
 	/**
 	 * build url
+	 * 
 	 * @return url
 	 */
 	public String build() {
@@ -231,7 +231,7 @@ public class URLBuilder {
 			url.append(host);
 			appendPort(url, scheme, port);
 		}
-		
+
 		if (Strings.isNotEmpty(path)) {
 			url.append(path);
 		}
@@ -242,7 +242,7 @@ public class URLBuilder {
 			Map<String, Object> qs = URLHelper.parseQueryString(query);
 			appendQueryParameters(url, qs);
 		}
-		
+
 		if (Objects.isNotEmpty(params)) {
 			appendQuerySeparator(url);
 			appendQueryParameters(url, params);
@@ -257,7 +257,7 @@ public class URLBuilder {
 	protected void appendPort(StringBuilder link, String scheme, int port) {
 		if (port > 0) {
 			if ((Scheme.HTTP.equals(scheme) && (port != 80))
-					|| (Scheme.HTTPS.equals(scheme) && port != 443)) {
+				|| (Scheme.HTTPS.equals(scheme) && port != 443)) {
 				link.append(":").append(port);
 			}
 		}
@@ -267,19 +267,18 @@ public class URLBuilder {
 		if (link.length() <= 0) {
 			return;
 		}
-		
+
 		if (Strings.contains(link, '?')) {
 			if (link.charAt(link.length() - 1) != '?') {
 				link.append(escapeAmp ? EAMP : AMP);
 			}
-		}
-		else {
+		} else {
 			if (link.charAt(link.length() - 1) != '?') {
 				link.append('?');
 			}
 		}
 	}
-	
+
 	/**
 	 * @param link link
 	 * @param params parameter map
@@ -295,7 +294,7 @@ public class URLBuilder {
 
 		BeanHandler bh = beans.getBeanHandler(params.getClass());
 		String[] pns = bh.getReadPropertyNames(params);
-		
+
 		Iterator iter = Iterators.asIterator(pns);
 		while (iter.hasNext()) {
 			String name = (String)iter.next();
@@ -305,11 +304,10 @@ public class URLBuilder {
 
 			Object value = bh.getPropertyValue(params, name);
 			if (Iterators.isIterable(value)) {
-				for (Iterator it = Iterators.asIterator(value); it.hasNext(); ) {
+				for (Iterator it = Iterators.asIterator(value); it.hasNext();) {
 					addAmp = appendQueryParameter(link, name, it.next(), addAmp);
 				}
-			}
-			else {
+			} else {
 				addAmp = appendQueryParameter(link, name, value, addAmp);
 			}
 		}
@@ -330,24 +328,24 @@ public class URLBuilder {
 		appendQueryParameter(url, name, value);
 		return true;
 	}
-	
+
 	protected void appendQueryParameter(StringBuilder url, String name, Object value) {
 		url.append(name);
 		url.append('=');
 		String s = castString(value);
 		url.append(value == null ? "" : URLHelper.encodeURL(s, encoding));
 	}
-	
+
 	protected String castString(Object value) {
 		return castors.cast(value, String.class);
 	}
-	
+
 	@Override
 	public String toString() {
 		return build();
 	}
 
-	//------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	/**
 	 * build the request URL, append parameters as query string
 	 * 

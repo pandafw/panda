@@ -36,16 +36,16 @@
 	margin: 10px 0;
 	min-height: 400px;
 }
-#media_uploader.p-uploader-draggable {
+#media_uploader.ui-uploader-draggable {
 	padding: 0;
 	outline: 0;
 }
-#media_uploader.p-uploader-dragover {
+#media_uploader.ui-uploader-dragover {
 	outline: 2px dashed #ccc;
 	outline-offset: 10px;
 }
-#media_uploader .p-uploader-btn {
-	display: none;
+#media_uploader .ui-uploader-btn, #media_uploader .ui-uploader-item {
+	display: none !important;
 }
 #media_browser {
 	margin: 15px 0;
@@ -104,11 +104,8 @@
 		accept="image/*,video/*,audio/*"
 		size="30"
 		multiple="true"
-		uploadAction="./uploads"
-		uploadName="files"
-		dataOnUploaded="media_on_uploaded"
+		uploadUrl="./uploads"
 	>
-		<div class="p-uploader-error"></div>
 		<div id="media_browser">
 			<div id="media_end"></div>
 		</div>
@@ -125,9 +122,6 @@
 	var media_items = <#if result?has_content>${assist.toJson(result, "datetime")}<#else>[]</#if>;
 
 	function onPageLoadMediaBrowse() {
-		$.jcss('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>css?v=${assist.appVersion}');
-		$.jscript('${statics!}/lightbox/jquery.ui.lightbox.<#if !(appDebug!false)>min.</#if>js?v=${assist.appVersion}');
-
 		media_base = $('#media_form').attr('action');
 
 		media_has_next = (media_items.length >= media_limit);
@@ -138,7 +132,7 @@
 
 		$('#media_btn_upload').click(function(e) {
 			e.preventDefault();
-			$('#media_uploader .p-uploader-btn').trigger('click');
+			$('#media_uploader .ui-uploader-btn').trigger('click');
 		});
 		$('#media_btn_slides').click(function(e) {
 			e.preventDefault();
@@ -156,6 +150,7 @@
 		$('#media_form div.p-datepicker').on('changeDate', media_on_change);
 		$('#media_form_ds, #media_form_de, #media_form_qs').change(media_on_change);
 
+		$('#media_uploader').on('uploaded.uploader', media_on_uploaded);
 		$(window).scroll(media_on_scroll);
 	}
 
@@ -249,14 +244,13 @@
 			+ '\r\n' + m.updatedAt;
 	}
 
-	function media_on_uploaded(d) {
+	function media_on_uploaded(e, d) {
 		var r = d.result;
 		if ($.isArray(r)) {
 			for (var i = 0; i < r.length; i++) {
 				media_prepend(r[i]);
 			}
-		}
-		else {
+		} else {
 			media_prepend(r);
 		}
 		media_lightbox();

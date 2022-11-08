@@ -100,10 +100,8 @@
 				<editTag name="${tag.uploader}">
 					<param name="accept" value="image/*"/>
 					<param name="size" value="${tag.uploader.size}"/>
-					<param name="uploadAction" value="%{b.files_path + '/upload'}"/>
-					<param name="uploadName" value="file"/>
-					<param name="dnloadAction" value="%{b.files_path + '/download'}"/>
-					<param name="dnloadName" value="file"/>
+					<param name="uploadUrl" value="%{b.files_path + '/upload'}"/>
+					<param name="dnloadUrl" value="%{b.files_path + '/download?file=$'}"/>
 					<param name="defaultAction" value="media"/>
 					<param name="defaultParams" value="!{'slug': '%{r.slug}'}"/>
 					<param name="defaultEnable" value="%{r.id != null &amp;&amp; r.size > 0}"/>
