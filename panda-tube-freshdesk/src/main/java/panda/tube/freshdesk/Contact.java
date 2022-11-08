@@ -44,7 +44,7 @@ public class Contact {
 	private String language;
 	
 	/** Mobile number of the contact*/
-	private Long mobile;
+	private String mobile;
 
 	/** Name of the contact*/
 	private String name;
@@ -244,14 +244,14 @@ public class Contact {
 	/**
 	 * @return the mobile
 	 */
-	public Long getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
 	/**
 	 * @param mobile the mobile to set
 	 */
-	public void setMobile(Long mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
