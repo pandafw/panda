@@ -5,9 +5,6 @@ REM npm install -g uglify-js clean-css-cli
 set BASEDIR=%~dp0
 set HTMLDIR=%BASEDIR%\src\html\panda\html\
 
-cd /d %HTMLDIR%\switch\
-call :mincss bootstrap-switch
-
 cd /d %HTMLDIR%\lightbox\
 call :mincss jquery.ui.lightbox
 
@@ -25,9 +22,6 @@ cd /d %HTMLDIR%\panda\css\
 copy /b ui.*.css panda.css 
 call :mincss panda
 
-
-cd /d %HTMLDIR%\switch\
-call :minjs bootstrap-switch
 
 cd /d %HTMLDIR%\hammer\
 call :minjs jquery.ui.hammer

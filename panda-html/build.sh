@@ -19,9 +19,6 @@ mincss() {
 	cleancss -d -o $1.min.css $1.css
 }
 
-cd $HTMLDIR/switch/
-mincss bootstrap-switch
-
 cd $HTMLDIR/lightbox/
 mincss jquery.ui.lightbox
 
@@ -39,9 +36,6 @@ cd $HTMLDIR/panda/css/
 cat ui.*.css > panda.css
 mincss panda
 
-
-cd $HTMLDIR/switch/
-minjs bootstrap-switch
 
 cd $HTMLDIR/hammer/
 minjs jquery.ui.hammer
