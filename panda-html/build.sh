@@ -19,9 +19,6 @@ mincss() {
 	cleancss -d -o $1.min.css $1.css
 }
 
-cd $HTMLDIR/lightbox/
-mincss jquery.ui.lightbox
-
 cd $HTMLDIR/tablesorter/
 mincss jquery.ui.tablesorter
 
@@ -39,9 +36,6 @@ mincss panda
 
 cd $HTMLDIR/hammer/
 minjs jquery.ui.hammer
-
-cd $HTMLDIR/lightbox/
-minjs jquery.ui.lightbox
 
 cd $HTMLDIR/meiomask/
 minjs jquery.ui.meio.mask

@@ -5,9 +5,6 @@ REM npm install -g uglify-js clean-css-cli
 set BASEDIR=%~dp0
 set HTMLDIR=%BASEDIR%\src\html\panda\html\
 
-cd /d %HTMLDIR%\lightbox\
-call :mincss jquery.ui.lightbox
-
 cd /d %HTMLDIR%\tablesorter\
 call :mincss jquery.ui.tablesorter
 
@@ -25,9 +22,6 @@ call :mincss panda
 
 cd /d %HTMLDIR%\hammer\
 call :minjs jquery.ui.hammer
-
-cd /d %HTMLDIR%\lightbox\
-call :minjs jquery.ui.lightbox
 
 cd /d %HTMLDIR%\meiomask\
 call :minjs jquery.ui.meio.mask
