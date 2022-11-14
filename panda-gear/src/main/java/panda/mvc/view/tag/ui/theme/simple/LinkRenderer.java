@@ -26,7 +26,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String JQUERY3_BIND_PATH = JQUERY_BIND_BASE + JQUERY3_VERSION;
 
 	private static final String BOOTSTRAP3_VERSION = "3.4.1";
-	private static final String BOOTSTRAP4_VERSION = "4.6.0";
+	private static final String BOOTSTRAP4_VERSION = "4.6.2";
 	private static final String BOOTSTRAP_CDN_BASE = "https://netdna.bootstrapcdn.com/bootstrap/";
 	private static final String BOOTSTRAP3_CDN_CSS_PATH = BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/css/bootstrap";
 	private static final String BOOTSTRAP3_CDN_JS_PATH = BOOTSTRAP_CDN_BASE + BOOTSTRAP3_VERSION + "/js/bootstrap";
