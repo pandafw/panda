@@ -35,7 +35,6 @@
 		<jetty.version>9.4.32.v20200930</jetty.version>
 		<junit.version>4.13.2</junit.version>
 		<log.hostname>localhost</log.hostname>
-		<log.slack.channel>${env.LOG_SLACK_CHANNEL}</log.slack.channel>
 		<log.slack.webhook>${env.LOG_SLACK_WEBHOOK}</log.slack.webhook>
 	</properties>
 

@@ -25,7 +25,6 @@ import panda.log.LogLog;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
 
-
 public class SlackLogAdapter extends AbstractLogAdapter {
 
 	/** subject format */
@@ -34,15 +33,9 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 	/** slack web hook url */
 	protected URL webhook;
 
-	/** slack user name */
-	protected String username;
-
-	/** slack channel */
-	protected String channel;
-	
 	/** connection timeout */
 	protected int connTimeout = 5000;
-	
+
 	/** read timeout */
 	protected int readTimeout = 30000;
 
@@ -55,28 +48,17 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 	protected void setProperty(String name, String value) {
 		if ("subject".equalsIgnoreCase(name)) {
 			setSubject(value);
-		}
-		else if ("webhook".equalsIgnoreCase(name)) {
+		} else if ("webhook".equalsIgnoreCase(name)) {
 			try {
 				setWebhook(value);
-			}
-			catch (MalformedURLException e) {
+			} catch (MalformedURLException e) {
 				throw new IllegalArgumentException("Malformed URL: " + webhook, e);
 			}
-		}
-		else if ("username".equalsIgnoreCase(name)) {
-			setUsername(value);
-		}
-		else if ("channel".equalsIgnoreCase(name)) {
-			setChannel(value);
-		}
-		else if ("connTimeout".equalsIgnoreCase(name)) {
+		} else if ("connTimeout".equalsIgnoreCase(name)) {
 			setConnTimeout(Numbers.toInt(value, 0));
-		}
-		else if ("readTimeout".equalsIgnoreCase(name)) {
+		} else if ("readTimeout".equalsIgnoreCase(name)) {
 			setReadTimeout(Numbers.toInt(value, 0));
-		}
-		else {
+		} else {
 			super.setProperty(name, value);
 		}
 	}
@@ -114,13 +96,12 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 		}
 
 		String emoji = getEmojiIcon(event.getLevel());
-		
+
 		Message smsg = new Message();
 
-		smsg.setUsername(username);
 		smsg.setText(title);
 		smsg.setIcon_emoji(emoji);
-		
+
 		Attachment a = new Attachment();
 		a.setText(body.toString());
 		smsg.addAttachment(a);
@@ -140,7 +121,7 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 			conn.addRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.APP_JAVASCRIPT + "; charset=UTF-8");
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
-			
+
 			hos = conn.getOutputStream();
 			hos = conn.getOutputStream();
 
@@ -152,11 +133,9 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 			writer.flush();
 			bos.flush();
 			hos.flush();
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			LogLog.error("Error occured while sending slack notification.", e);
-		}
-		finally {
+		} finally {
 			Streams.safeClose(hos);
 		}
 
@@ -164,18 +143,15 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 		try {
 			his = conn.getInputStream();
 			Streams.safeDrain(his, readTimeout);
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			LogLog.error("Error occured while getting slack response.", e);
-		}
-		finally {
+		} finally {
 			Streams.safeClose(his);
 		}
 	}
 
 	/**
-	 * The <b>Subject</b> option takes a string value which should be a the subject of the e-mail
-	 * message.
+	 * The <b>Subject</b> option takes a string value which should be a the subject of the e-mail message.
 	 * 
 	 * @param subject the subject
 	 */
@@ -185,25 +161,10 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 
 	/**
 	 * @param webhook the webhook to set
-	 * @throws MalformedURLException if no protocol is specified, or an
-     *               unknown protocol is found, or <tt>spec</tt> is <tt>null</tt>. 
+	 * @throws MalformedURLException if no protocol is specified, or an unknown protocol is found, or <tt>spec</tt> is <tt>null</tt>.
 	 */
 	public void setWebhook(String webhook) throws MalformedURLException {
 		this.webhook = new URL(webhook);
-	}
-
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * @param channel the channel to set
-	 */
-	public void setChannel(String channel) {
-		this.channel = channel;
 	}
 
 	/**
@@ -229,7 +190,7 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 	 */
 	protected static class SlackLog extends AbstractLog {
 		protected SlackLogAdapter adapter;
-		
+
 		protected SlackLog(SlackLogAdapter adapter, String name) {
 			super(adapter.logs, name, adapter.threshold);
 			this.adapter = adapter;
