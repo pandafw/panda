@@ -5,16 +5,15 @@ import panda.lang.Randoms;
 import panda.lang.Strings;
 
 public class Token {
-	public static final int SECRET_LENGTH = 32;
-	public static final int SALT_LENGTH = 16;
+	public static final int SALT_LENGTH = 8;
 	public static final int TIMESTAMP_LENGTH = 16;
-	public static final int TOKEN_LENGTH = SALT_LENGTH + SECRET_LENGTH + TIMESTAMP_LENGTH;
-	public static final String SECRET_CHARS = Strings.DIGIT_LETTERS;
+	public static final int SECRET_LENGTH = 16;
+	public static final String SECRET_CHARS = Strings.BASE64URL;
 
-	private String token;
-	private String secret;
 	private String salt;
 	private long timestamp;
+	private String secret;
+	private String token;
 
 	public static boolean isSameSecret(Token t1, Token t2) {
 		if (t1 == null || t2 == null) {
@@ -27,44 +26,39 @@ public class Token {
 		if (token == null) {
 			return null;
 		}
-		if (token.length() != TOKEN_LENGTH) {
+		if (token.length() <= SALT_LENGTH + TIMESTAMP_LENGTH) {
 			return null;
 		}
-		
+
 		Token t = new Token(token);
 
 		t.salt = Strings.left(token, SALT_LENGTH);
-		t.secret = unsalt(Strings.mid(token, SALT_LENGTH, SECRET_LENGTH), t.salt);
 		try {
-			String s = Strings.right(token, TIMESTAMP_LENGTH);
+			String s = Strings.mid(token, SALT_LENGTH, TIMESTAMP_LENGTH);
 			s = unsalt(s, t.salt);
 			t.timestamp = Long.parseLong(s, 16);
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return null;
 		}
+		t.secret = unsalt(Strings.substring(token, SALT_LENGTH + TIMESTAMP_LENGTH), t.salt);
 		return t;
 	}
 
-	private Token(String token) {
-		this.token = token;
-	}
-	
 	public Token() {
-		this((Token)null, System.currentTimeMillis());
+		this(null);
 	}
 
-	public Token(Token token) {
-		this(token, System.currentTimeMillis());
+	public Token(String secret) {
+		this.secret = Strings.isEmpty(secret) ? newSecret() : secret;
+		refresh();
+	}
+
+	public void refresh() {
+		this.salt = newSalt();
+		this.timestamp = System.currentTimeMillis();
+		this.token = salt + saltTimestamp() + saltSecret();
 	}
 	
-	public Token(Token token, long timestamp) {
-		this.secret = token == null ? newSecret() : token.secret;
-		this.salt = newSalt();
-		this.timestamp = timestamp;
-		this.token = salt + saltSecret() + saltTimestamp();
-	}
-
 	/**
 	 * @return the token
 	 */
@@ -135,7 +129,7 @@ public class Token {
 
 	@Override
 	public String toString() {
-		return token + ' ' + secret + ' ' + timestamp;
+		return timestamp + ' ' + secret;
 	}
 
 	/**
@@ -150,8 +144,7 @@ public class Token {
 		int len = str.length();
 		if (i < 0) {
 			i = (i % len) + len;
-		}
-		else if (i >= len) {
+		} else if (i >= len) {
 			i %= len;
 		}
 		return str.charAt(i);
@@ -170,7 +163,7 @@ public class Token {
 			int y = SECRET_CHARS.indexOf(getChar(salt, i));
 			salted.append(getChar(SECRET_CHARS, x + y));
 		}
-		
+
 		return salted.toString();
 	}
 

@@ -47,41 +47,41 @@ public class TokenProcessor extends AbstractActionProcessor {
 	/**
 	 * DEFAULT_COOKIE_MAXAGE = 60 * 60 * 24 * 30; //1M
 	 */
-	public static final int DEFAULT_COOKIE_MAXAGE = DateTimes.SEC_MONTH; //1M
+	public static final int DEFAULT_COOKIE_MAXAGE = DateTimes.SEC_MONTH; // 1M
 
-	@IocInject(value=MvcConstants.TOKEN_HEADER_NAME, required=false)
+	@IocInject(value = MvcConstants.TOKEN_HEADER_NAME, required = false)
 	protected String headerName = DEFAULT_HEADER;
 
-	@IocInject(value=MvcConstants.TOKEN_PARAMETER_NAME, required=false)
+	@IocInject(value = MvcConstants.TOKEN_PARAMETER_NAME, required = false)
 	protected String parameterName = DEFAULT_PARAMETER;
 
-	@IocInject(value=MvcConstants.TOKEN_REQUEST_ATTR, required=false)
+	@IocInject(value = MvcConstants.TOKEN_REQUEST_ATTR, required = false)
 	protected String requestName = DEFAULT_ATTRIBUTE;
 
-	@IocInject(value=MvcConstants.TOKEN_SESSION_ATTR, required=false)
+	@IocInject(value = MvcConstants.TOKEN_SESSION_ATTR, required = false)
 	protected String sessionName = DEFAULT_ATTRIBUTE;
 
-	@IocInject(value=MvcConstants.TOKEN_COOKIE_NAME, required=false)
+	@IocInject(value = MvcConstants.TOKEN_COOKIE_NAME, required = false)
 	protected String cookieName = DEFAULT_COOKIE;
 
-	@IocInject(value=MvcConstants.TOKEN_COOKIE_DOMAIN, required=false)
+	@IocInject(value = MvcConstants.TOKEN_COOKIE_DOMAIN, required = false)
 	protected String cookieDomain;
 
-	@IocInject(value=MvcConstants.TOKEN_COOKIE_PATH, required=false)
+	@IocInject(value = MvcConstants.TOKEN_COOKIE_PATH, required = false)
 	protected String cookiePath;
 
-	@IocInject(value=MvcConstants.TOKEN_COOKIE_MAXAGE, required=false)
+	@IocInject(value = MvcConstants.TOKEN_COOKIE_MAXAGE, required = false)
 	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
 
-	@IocInject(value=MvcConstants.TOKEN_SAVE_TO_SESSION, required=false)
+	@IocInject(value = MvcConstants.TOKEN_SAVE_TO_SESSION, required = false)
 	protected boolean saveToSession = false;
 
-	@IocInject(value=MvcConstants.TOKEN_SAVE_TO_COOKIE, required=false)
+	@IocInject(value = MvcConstants.TOKEN_SAVE_TO_COOKIE, required = false)
 	protected boolean saveToCookie = true;
 
 	@IocInject
 	protected Cryptor cryptor;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -129,7 +129,7 @@ public class TokenProcessor extends AbstractActionProcessor {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -140,7 +140,7 @@ public class TokenProcessor extends AbstractActionProcessor {
 		if (tp == null) {
 			tp = ac.getAction().getClass().getAnnotation(TokenProtect.class);
 		}
-		
+
 		if (tp == null) {
 			return true;
 		}
@@ -159,17 +159,17 @@ public class TokenProcessor extends AbstractActionProcessor {
 		if (rtoken == null) {
 			return false;
 		}
-		
+
 		if (rtoken.getTimestamp() <= 0) {
 			log.warn("Request token (" + rtoken + ") has invalid timestamp: " + ac.getPath());
 			return false;
 		}
-		
+
 		if (!Token.isSameSecret(stoken, rtoken)) {
 			log.warn("Request token (" + rtoken + ") is not same as (" + stoken + "): " + ac.getPath());
 			return false;
 		}
-		
+
 		if (tp.expire() > 0) {
 			long now = System.currentTimeMillis();
 			if (rtoken.getTimestamp() + tp.expire() < now) {
@@ -180,7 +180,7 @@ public class TokenProcessor extends AbstractActionProcessor {
 
 		return true;
 	}
-	
+
 	protected void doErrorView(ActionContext ac) {
 		View view = Views.createErrorView(ac);
 		if (view == null) {
@@ -192,7 +192,7 @@ public class TokenProcessor extends AbstractActionProcessor {
 	protected String encrypt(String s) {
 		return cryptor.encrypt(s);
 	}
-	
+
 	protected String decrypt(String s) {
 		return cryptor.decrypt(s);
 	}
@@ -202,11 +202,10 @@ public class TokenProcessor extends AbstractActionProcessor {
 			if (Strings.isEmpty(s)) {
 				return null;
 			}
-			
+
 			String token = decrypt(s);
 			return Token.parse(token);
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}
@@ -222,10 +221,10 @@ public class TokenProcessor extends AbstractActionProcessor {
 				ac.getReq().put(requestName, token);
 			}
 		}
-		
+
 		return token;
 	}
-	
+
 	protected Token getTokenFromSession(ActionContext ac) {
 		HttpSession session = ac.getRequest().getSession(false);
 		if (session != null && Strings.isNotEmpty(sessionName)) {
@@ -235,7 +234,7 @@ public class TokenProcessor extends AbstractActionProcessor {
 			}
 			return token;
 		}
-		
+
 		return null;
 	}
 
@@ -254,7 +253,7 @@ public class TokenProcessor extends AbstractActionProcessor {
 		}
 		return token;
 	}
-	
+
 	protected Token getTokenFromParameter(ActionContext ac) {
 		Token token = parseToken(ac.getRequest().getParameter(parameterName));
 		if (token != null && log.isDebugEnabled()) {
@@ -273,7 +272,7 @@ public class TokenProcessor extends AbstractActionProcessor {
 
 	protected void saveToken(ActionContext ac, Token token) {
 		ac.getReq().put(requestName, token);
-		
+
 		if (saveToSession) {
 			ac.getSes().put(sessionName, token);
 			if (log.isDebugEnabled()) {
@@ -286,44 +285,39 @@ public class TokenProcessor extends AbstractActionProcessor {
 	}
 
 	protected void saveTokenToCookie(ActionContext ac, Token token) {
-		// refresh salt and clear timestamp
-		token = new Token(token, 0);
-
 		String et = encrypt(token.getToken());
-		
+
 		Cookie c = new Cookie(cookieName, et);
 		if (Strings.isNotEmpty(cookieDomain)) {
 			c.setDomain(cookieDomain);
 		}
-		
+
 		if (Strings.isNotEmpty(cookiePath)) {
 			c.setPath(cookiePath);
-		}
-		else {
+		} else {
 			c.setPath(ac.getRequest().getContextPath());
 			if (Strings.isEmpty(c.getPath())) {
 				c.setPath("/");
 			}
 		}
-		
+
 		c.setMaxAge(cookieMaxAge);
-		
+
 		ac.getResponse().addCookie(c);
 
 		if (log.isDebugEnabled()) {
 			log.debug("Save Cookie Token " + cookieName + ": " + token);
 		}
 	}
-	
-	public String getTokenString(ActionContext ac) {
+
+	public String refreshToken(ActionContext ac) {
 		Token token = getSourceToken(ac);
 		if (token == null) {
 			token = new Token();
 			saveToken(ac, token);
-		}
-		else {
+		} else {
 			// refresh salt and timestamp
-			token = new Token(token);
+			token.refresh();
 		}
 		return encrypt(token.getToken());
 	}

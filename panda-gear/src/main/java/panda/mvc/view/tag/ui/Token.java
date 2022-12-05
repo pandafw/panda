@@ -17,7 +17,7 @@ public class Token extends InputUIBean {
 		if (name == null) {
 			name = tokener.getParameterName();
 		}
-		token = tokener.getTokenString(context);
+		token = tokener.refreshToken(context);
 
 		super.evaluateParams();
 	}
