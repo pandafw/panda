@@ -8,7 +8,7 @@ import panda.bind.json.Jsons;
 
 public class Ticket {
 	/** Unique ID of the ticket*/
-	private Integer id;
+	private Long id;
 	
 	/** Name of the requester */
 	private String name;
@@ -26,10 +26,10 @@ public class Ticket {
 	private String twitter_id;
 	
 	/** User ID of the requester. For existing contacts, the requester_id can be passed instead of the requester's email.*/
-	private Integer requester_id;
+	private Long requester_id;
 	
 	/** ID of the agent to whom the ticket has been assigned.*/
-	private Integer responder_id;
+	private Long responder_id;
 
 	/** Helps categorize the ticket according to the different kinds of issues your support team deals with.*/
 	private String type;
@@ -75,7 +75,7 @@ public class Ticket {
 	private List<String> reply_cc_emails;
 	
 	/** ID of email config which is used for this ticket. (i.e., support@yourcompany.com/sales@yourcompany.com)*/
-	private Integer email_config_id;
+	private Long email_config_id;
 
 	/** Ticket creation timestamp*/
 	private Date created_at;
@@ -84,13 +84,13 @@ public class Ticket {
 	private Date updated_at;
 
 	/** ID of the product to which the ticket is associated*/
-	private Integer product_id;
+	private Long product_id;
 
 	/** ID of the group to which the ticket has been assigned*/
-	private Integer group_id;
+	private Long group_id;
 	
 	/** ID of the company to which this ticket belongs*/
-	private Integer company_id;
+	private Long company_id;
 
 	/** Subject of the ticket*/
 	private String subject;
@@ -116,14 +116,14 @@ public class Ticket {
 	/**
 	 * @return the id
 	 */
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -200,28 +200,28 @@ public class Ticket {
 	/**
 	 * @return the requester_id
 	 */
-	public Integer getRequester_id() {
+	public Long getRequester_id() {
 		return requester_id;
 	}
 
 	/**
 	 * @param requester_id the requester_id to set
 	 */
-	public void setRequester_id(Integer requester_id) {
+	public void setRequester_id(Long requester_id) {
 		this.requester_id = requester_id;
 	}
 
 	/**
 	 * @return the responder_id
 	 */
-	public Integer getResponder_id() {
+	public Long getResponder_id() {
 		return responder_id;
 	}
 
 	/**
 	 * @param responder_id the responder_id to set
 	 */
-	public void setResponder_id(Integer responder_id) {
+	public void setResponder_id(Long responder_id) {
 		this.responder_id = responder_id;
 	}
 
@@ -424,14 +424,14 @@ public class Ticket {
 	/**
 	 * @return the email_config_id
 	 */
-	public Integer getEmail_config_id() {
+	public Long getEmail_config_id() {
 		return email_config_id;
 	}
 
 	/**
 	 * @param email_config_id the email_config_id to set
 	 */
-	public void setEmail_config_id(Integer email_config_id) {
+	public void setEmail_config_id(Long email_config_id) {
 		this.email_config_id = email_config_id;
 	}
 
@@ -466,42 +466,42 @@ public class Ticket {
 	/**
 	 * @return the product_id
 	 */
-	public Integer getProduct_id() {
+	public Long getProduct_id() {
 		return product_id;
 	}
 
 	/**
 	 * @param product_id the product_id to set
 	 */
-	public void setProduct_id(Integer product_id) {
+	public void setProduct_id(Long product_id) {
 		this.product_id = product_id;
 	}
 
 	/**
 	 * @return the group_id
 	 */
-	public Integer getGroup_id() {
+	public Long getGroup_id() {
 		return group_id;
 	}
 
 	/**
 	 * @param group_id the group_id to set
 	 */
-	public void setGroup_id(Integer group_id) {
+	public void setGroup_id(Long group_id) {
 		this.group_id = group_id;
 	}
 
 	/**
 	 * @return the company_id
 	 */
-	public Integer getCompany_id() {
+	public Long getCompany_id() {
 		return company_id;
 	}
 
 	/**
 	 * @param company_id the company_id to set
 	 */
-	public void setCompany_id(Integer company_id) {
+	public void setCompany_id(Long company_id) {
 		this.company_id = company_id;
 	}
 

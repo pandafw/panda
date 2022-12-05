@@ -17,7 +17,7 @@ public class Contact {
 	private Avatar avatar;
 	
 	/** ID of the primary company to which this contact belongs*/
-	private Integer company_id;
+	private Long company_id;
 	
 	/** Set to true if the contact can see all tickets that are associated with the company to which he belong */
 	private Boolean view_all_tickets;
@@ -118,14 +118,14 @@ public class Contact {
 	/**
 	 * @return the company_id
 	 */
-	public Integer getCompany_id() {
+	public Long getCompany_id() {
 		return company_id;
 	}
 
 	/**
 	 * @param company_id the company_id to set
 	 */
-	public void setCompany_id(Integer company_id) {
+	public void setCompany_id(Long company_id) {
 		this.company_id = company_id;
 	}
 
