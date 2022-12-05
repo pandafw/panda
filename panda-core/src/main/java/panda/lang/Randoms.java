@@ -11,9 +11,9 @@ public abstract class Randoms {
 	public static final int UUID32_LENGTH = 32;
 	
 	private static final Random rand = new Random();
-	private static final char[] DIGITS = Strings.DIGITS.toCharArray();
-	private static final char[] DIGIT_LETTERS = Strings.DIGIT_LETTERS.toCharArray();
-	private static final char[] SYMDIT_LETTERS = Strings.SYMBOL_DIGIT_LETTERS.toCharArray();
+	private static final char[] NUMBERS = Strings.NUMBERS.toCharArray();
+	private static final char[] LETTER_NUMBERS = Strings.LETTER_NUMBERS.toCharArray();
+	private static final char[] LETTER_SYMNUMS = Strings.SYMBOL_NUMBER_LETTERS.toCharArray();
 
 	public static int randInt() {
 		return rand.nextInt();
@@ -65,16 +65,16 @@ public abstract class Randoms {
 				Strings.leftPad(Long.toHexString(uuid.getLeastSignificantBits()), 16, '0');
 	}
 	
-	public static String randDigits(int len) {
-		return randString(len, DIGITS);
+	public static String randNumbers(int len) {
+		return randString(len, NUMBERS);
 	}
 	
-	public static String randDigitLetters(int len) {
-		return randString(len, DIGIT_LETTERS);
+	public static String randLetterNumbers(int len) {
+		return randString(len, LETTER_NUMBERS);
 	}
 	
 	public static String randString(int len) {
-		return randString(len, SYMDIT_LETTERS);
+		return randString(len, LETTER_SYMNUMS);
 	}
 	
 	public static String randString(int len, char[] chars) {

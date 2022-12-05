@@ -401,7 +401,7 @@ public class HttpRequest {
 
 	public String getMultipartBoundary() {
 		if (boundary == null) {
-			boundary = Randoms.randDigitLetters(30);
+			boundary = Randoms.randLetterNumbers(30);
 		}
 		return boundary;
 	}

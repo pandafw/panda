@@ -118,7 +118,7 @@ public class SmtpMailClient extends MailClient {
 	}
 	
 	private String generateMsgId() {
-		return '<' + Randoms.randDigits(24) + ".SMTPMail@" + helo + '>';
+		return '<' + Randoms.randNumbers(24) + ".SMTPMail@" + helo + '>';
 	}
 
 	private String errmsg(String host, int port, String msg) {
@@ -280,7 +280,7 @@ public class SmtpMailClient extends MailClient {
 			header.set(SMTPHeader.MIME_VERSION, SMTPHeader.MIME_VERSION_10);
 
 			if (email.isHtml() || email.hasAttachments()) {
-				boundary = Randoms.randDigitLetters(28);
+				boundary = Randoms.randLetterNumbers(28);
 				header.set(SMTPHeader.CONTENT_TYPE, "multipart/mixed; boundary=" + boundary);
 			}
 			else {
