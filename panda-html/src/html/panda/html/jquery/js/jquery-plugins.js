@@ -3085,10 +3085,17 @@
 
 		function __ajaf_upload(file) {
 			__start_upload();
-	
+
+			var ud = {};
+			$u.find('.ui-uploader-data').each(function() {
+				var $i = $(this);
+				ud[$i.attr('name')] = $i.val();
+			});
+			$.extend(ud, uc.uploadData);
+
 			$.ajaf({
 				url: uc.uploadUrl,
-				data: uc.uploadData,
+				data: ud,
 				file: file,
 				dataType: 'json',
 				forceAjaf: uc.forceAjaf,
@@ -3207,12 +3214,14 @@
 
 	$.fn.uploader = function(c) {
 		return this.each(function() {
-			var $u = $(this);
-			if ($u.data('uploader')) {
+			var $u = $(this), uc = $u.data('uploader');
+			if (uc) {
+				$.extend(uc, c);
 				return;
 			}
 	
-			_init($u, $.extend({}, $.uploader.defaults, _options($u), c));
+			uc = $.extend({}, $.uploader.defaults, _options($u), c);
+			_init($u, uc);
 		});
 	};
 	
