@@ -74,7 +74,7 @@
 				right: 'auto',
 				bottom: 'auto'
 			};
-		
+
 		if (typeof sp === 'object') {
 			$.extend(op, sp);
 		} else {
@@ -311,13 +311,13 @@
 					$t.remove();
 				}
 			},
-	
+
 			update: function(options) {
 				setOptions(os, {}, options);
 				setup($t, os);
 				bindToast($t, os);
 			},
-	
+
 			clsose: function() {
 				transitionOut($t, os);
 			}

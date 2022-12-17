@@ -3,7 +3,7 @@
 
 	$.fn.changeValue = function(v) {
 		var o = this.val();
-		
+
 		this.val(v);
 		if (o != v) {
 			this.trigger('change');
@@ -57,7 +57,7 @@
 				ov.push(v.value);
 				return;
 			}
-			m[v.name] = [ ov, v.value ];
+			m[v.name] = [ov, v.value];
 		});
 		return m;
 	};

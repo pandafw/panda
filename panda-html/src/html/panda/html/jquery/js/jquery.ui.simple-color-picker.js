@@ -81,9 +81,7 @@
 				if ($box) {
 					$box.remove();
 				}
-			})
-			.off('.simple_color_picker')
-			.removeData('simpleColorPicker');
+			}).off('.simple_color_picker').removeData('simpleColorPicker');
 		}
 	};
 

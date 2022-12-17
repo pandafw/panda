@@ -282,12 +282,12 @@
 					o += String.fromCharCode(c);
 					i++;
 				} else if (c > 191 && c < 224) {
-					c2 = this.charCodeAt(i + 1);
+					c2 = s.charCodeAt(i + 1);
 					o += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
 					i += 2;
 				} else {
-					c2 = this.charCodeAt(i + 1);
-					c3 = this.charCodeAt(i + 2);
+					c2 = s.charCodeAt(i + 1);
+					c3 = s.charCodeAt(i + 2);
 					o += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
 					i += 3;
 				}

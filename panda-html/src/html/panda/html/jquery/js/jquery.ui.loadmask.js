@@ -28,7 +28,7 @@
 		} else {
 			_clearTimeout($el);
 		}
-		
+
 		var $lm = $('<div class="ui-loadmask">');
 		if (c.cssClass) {
 			$lm.addClass(c.cssClass);
@@ -60,7 +60,7 @@
 		if (c.mask) {
 			$el.append($('<div class="ui-loadmask-mask"></div>'));
 		}
-		
+
 		$el.append($lm).addClass("ui-loadmasked");
 
 		if (c.timeout > 0) {
@@ -98,7 +98,7 @@
 	 * @param text  text message that will be display (html tag will be escaped)
 	 */
 	$.fn.loadmask = function(c) {
-		if (typeof(c) == 'string') {
+		if (typeof (c) == 'string') {
 			c = { text: c };
 		}
 		c = $.extend({}, $.loadmask.defaults, c);
@@ -114,7 +114,7 @@
 			}
 		});
 	};
-	
+
 	/**
 	 * Removes mask from the element(s). Accepts both single and multiple selectors.
 	 */
@@ -123,7 +123,7 @@
 			unMask($(this));
 		});
 	};
-	
+
 	/**
 	 * Checks if a single element is masked. Returns false if mask is delayed or not displayed. 
 	 */

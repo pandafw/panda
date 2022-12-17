@@ -61,7 +61,7 @@
 
 	function __dropdown_click(evt) {
 		evt.stopPropagation();
-		
+
 		var $dropdown = $(this);
 
 		$('.ui-nice-select').not($dropdown).removeClass('open');
@@ -81,7 +81,7 @@
 			$(document).off('.nice_select');
 		}
 	}
-	
+
 	function __dropdown_option_click() {
 		var $option = $(this);
 		var $dropdown = $option.closest('.ui-nice-select');

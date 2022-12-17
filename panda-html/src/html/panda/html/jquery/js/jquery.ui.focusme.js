@@ -13,7 +13,7 @@
 			var a = $i.attr('focusme');
 			$i.removeAttr('focusme');
 
-			var $a = null;
+			var $a;
 			if (a == 'true') {
 				$a = $i.find('input,select,textarea,button').not(':hidden,:disabled,[readonly]').eq(0);
 				if ($a.length < 1) {
@@ -22,8 +22,7 @@
 						$a = $i;
 					}
 				}
-			}
-			else if (a != '' && a != 'false') {
+			} else if (a != '' && a != 'false') {
 				$a = $i.find(a).eq(0);
 			}
 			

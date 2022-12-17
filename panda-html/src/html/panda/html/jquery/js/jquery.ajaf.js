@@ -6,14 +6,14 @@
 			xhr = new XMLHttpRequest();
 		input.type = 'file';
 		return ('multiple' in input)
-			&& typeof(xhr.upload) != 'undefined'
-			&& typeof(FileList) != 'undefined'
-			&& typeof(File) != 'undefined';
+			&& typeof (xhr.upload) != 'undefined'
+			&& typeof (FileList) != 'undefined'
+			&& typeof (File) != 'undefined';
 	})();
 
 	function addFiles(fs, fadd) {
 		if (fs) {
-			if (typeof(fs) == "string") {
+			if (typeof (fs) == "string") {
 				fs = $(fs);
 			}
 
@@ -46,7 +46,7 @@
 					padd(n, v);
 				}
 			}
-		
+
 			if ($.isArray(ps)) {
 				$.each(ps, function(i, d) {
 					_addParams(d.name, d.value);
@@ -111,7 +111,7 @@
 
 		return $.ajax(s);
 	}
-	
+
 	function createIFrame(s) {
 		var id = "ajaf_if_" + s.id;
 		return $('<iframe id="' + id + '" name="' + id + '" src="' + s.secureUrl + '"></iframe>')
@@ -122,23 +122,21 @@
 			})
 			.appendTo('body');
 	}
-	
+
 	function createForm(s) {
 		var id = 'ajaf_form_' + s.id;
 
 		var $form = $('<form></form>', {
-				id: id,
-				name: id,
-				action: s.url,
-				method: s.method,
-				target: 'ajaf_if_' + s.id
-			})
-			.css({
-				position: 'absolute',
-				top: '-9999px',
-				left: '-9999px'
-			})
-			.appendTo('body');
+			id: id,
+			name: id,
+			action: s.url,
+			method: s.method,
+			target: 'ajaf_if_' + s.id
+		}).css({
+			position: 'absolute',
+			top: '-9999px',
+			left: '-9999px'
+		}).appendTo('body');
 
 		addParams(s.data, function(n, v) {
 			$('<input type="hidden">')
@@ -157,14 +155,14 @@
 
 			addFiles(s.file, function(f, n) {
 				var $f = $(f), $c = $f.clone().insertAfter($f);
-	
+
 				n = n || $f.attr('name');
 				$f.attr({
 					id: '',
 					name: n
 				}).appendTo($form);
-				
-				$form.files.push({ real: $f, copy: $c});
+
+				$form.files.push({ real: $f, copy: $c });
 			});
 		}
 
@@ -173,7 +171,7 @@
 
 	function httpData(xhr, type) {
 		var data = type == "xml" ? xhr.responseXML : xhr.responseText;
-		
+
 		switch (type) {
 		case "script":
 			// If the type is "script", eval it in global context
@@ -188,7 +186,7 @@
 			$("<div>").html(data).evalScripts();
 			break;
 		}
-		
+
 		return data;
 	}
 
@@ -202,7 +200,7 @@
 		if (s.forceAjax || ((_xhrOK) && !s.forceAjaf)) {
 			return ajax(s);
 		}
-		
+
 		s = $.extend({
 			id: new Date().getTime(),
 			secureUrl: 'javascript:false',
@@ -210,7 +208,7 @@
 
 		var $if = createIFrame(s);
 		var $form = createForm(s);
-		
+
 		// Watch for a new set of requests
 		if (s.start) {
 			s.start();
@@ -228,7 +226,7 @@
 			var status = timeout == "timeout" ? "error" : "success";
 			try {
 				var ioe = $if.get(0);
-				var	doc = ioe.contentWindow.document || ioe.contentDocument || window.frames[ioe.id].document;
+				var doc = ioe.contentWindow.document || ioe.contentDocument || window.frames[ioe.id].document;
 				if (doc && doc.body) {
 					if (s.selector) {
 						xhr.responseText = $(doc.body).find(s.selector).html();
@@ -262,7 +260,7 @@
 				}).insertAfter(f.copy);
 				f.copy.remove();
 			}
-			$form.remove();	
+			$form.remove();
 
 			if (status == "timeout") {
 				if (s.error) {
@@ -278,7 +276,7 @@
 					if (s.success) {
 						s.success(data, xhr);
 					}
-				} catch(e) {
+				} catch (e) {
 					if (s.error) {
 						s.error(xhr, status, e);
 					}
@@ -299,7 +297,7 @@
 				xhr = null;
 			}
 		};
-		
+
 		if (s.send) {
 			s.send(xhr, s);
 		}
@@ -329,12 +327,12 @@
 		// submit
 		try {
 			$form.submit();
-		} catch(e) {
+		} catch (e) {
 			if (s.error) {
 				s.error(xhr, "send", e);
 			}
 		}
-		
+
 		$if.on('load', callback);
 		return xhr;
 	};

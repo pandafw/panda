@@ -31,12 +31,12 @@
 		if (i >= 0) {
 			s = s.substring(0, i);
 		}
-		
+
 		i = s.indexOf('?');
 		if (i >= 0) {
 			s = s.substring(i + 1);
 		}
-		
+
 		var ss = s.split('&');
 		for (i = 0; i < ss.length; i++) {
 			var pv = ss[i].split('=');
@@ -59,5 +59,5 @@
 		}
 		return u + '?' + $.param(p);
 	};
-	
+
 })(jQuery);

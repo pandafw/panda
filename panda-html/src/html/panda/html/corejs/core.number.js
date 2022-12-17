@@ -335,7 +335,7 @@ function DecimalFormat(pattern) {
 	}
 
 	if (typeof Number.humanSize != "function") {
-		var UNITS = [ "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
+		var UNITS = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
 		Number.humanSize = function(n, p) {
 			var i = 0, l = UNITS.length - 1;

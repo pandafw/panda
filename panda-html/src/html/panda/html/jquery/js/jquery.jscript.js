@@ -2,7 +2,7 @@
 	"use strict";
 
 	var jss = {};
-	
+
 	$.jscript = function(url, callback) {
 		if (jss[url]) {
 			return false;
@@ -11,7 +11,7 @@
 		$.getScript(url, callback);
 		return true;
 	};
-	
+
 	// enable script cache
 	$.enableScriptCache = function() {
 		$.ajaxPrefilter(function(options, org, xhr) {

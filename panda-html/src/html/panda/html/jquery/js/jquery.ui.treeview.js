@@ -22,7 +22,7 @@
 	function _expand($n) {
 		$n.removeClass('collapsed').children('.item').next().slideDown();
 	}
-	
+
 	function _toggle($n) {
 		$n.hasClass('collapsed') ? _expand($n) : _collapse($n);
 	}

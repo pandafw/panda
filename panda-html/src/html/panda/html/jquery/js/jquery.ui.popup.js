@@ -319,7 +319,7 @@
 		} else {
 			$e.text(err || status || 'Server error!');
 		}
-		
+
 		$c.empty().append($e);
 	}
 
@@ -444,7 +444,7 @@
 		return this.each(function() {
 			var $c = $(this);
 
-			if (typeof(c) == 'string') {
+			if (typeof (c) == 'string') {
 				var p = _data($c);
 				if (!p) {
 					_init($c);

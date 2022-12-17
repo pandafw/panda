@@ -9,7 +9,7 @@
 			var opt = $.speed(speed, easing, callback);
 			var old = opt.step;
 			opt.step = function(s) {
-				$(this).css({transform: 'scale(' + s + ')'});
+				$(this).css({ transform: 'scale(' + s + ')' });
 				if (old) {
 					old.call(this, s);
 				}

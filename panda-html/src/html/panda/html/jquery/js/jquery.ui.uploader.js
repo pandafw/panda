@@ -6,7 +6,7 @@
 		return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
 	}();
 
-	var UNITS = [ "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
+	var UNITS = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 	function _filesize(n, p) {
 		var i = 0, l = UNITS.length - 1;
 		while (n >= 1024 && i < l) {
@@ -24,7 +24,7 @@
 		var i = u > w ? u : w;
 		return fn.substr(i + 1);
 	}
-	
+
 	function _filetype(s) {
 		var i = s.indexOf('/');
 		return (i >= 0) ? s.slice(0, i) : s;
@@ -47,13 +47,13 @@
 			$fim = $('<div>').addClass('ui-uploader-image').appendTo($fit);
 
 		$fid.val(fid || '');
-		
+
 		fnm = fnm || fid || $u.children('.ui-upload-file').val();
 		var durl;
 		if (uc.dnloadUrl && fid) {
 			durl = uc.dnloadUrl.replace(uc.dnloadHolder, encodeURIComponent(fid));
 		}
-		
+
 		if (fnm) {
 			var ii = uc.cssIcons[fct] || uc.cssIcons['file'];
 			var s = '<i class="' + ii + ' ui-uploader-icon"></i> ' + fnm + ' ' + _filesize(fsz);
@@ -63,7 +63,7 @@
 				$('<span>').html(s).appendTo($ftx);
 			}
 		}
-		
+
 		$ftx.append($('<i>').addClass('ui-uploader-remove fa fa-remove').click(function() {
 			$(this).closest('.ui-uploader-item').fadeOut(function() {
 				$(this).remove();
@@ -102,7 +102,7 @@
 			.text(e ? (e + "") : (xhr ? xhr.responseText : status))
 			.show();
 	}
-	
+
 	function _init($u, uc) {
 		$u.addClass('ui-uploader').data('uploader', uc);
 
@@ -120,7 +120,7 @@
 			$ue = $('<div class="ui-uploader-error"></div>').insertAfter($up);
 		}
 		$ue.hide();
-		
+
 		if ($us.length < 1) {
 			$us = $('<div class="ui-uploader-sep"></div>').insertAfter($ue);
 		}
@@ -130,34 +130,34 @@
 
 		// functions
 		function _set_progress(v) {
-			$up.children('.ui-uploader-progressbar').css({width: v + '%'});
+			$up.children('.ui-uploader-progressbar').css({ width: v + '%' });
 		}
-		
+
 		function __start_upload() {
 			loading = true;
-	
+
 			($ub.length ? $ub : $uf).hide();
 			$ue.hide().empty();
-	
+
 			_set_progress(0);
 			$up.show();
 		}
-	
+
 		function __end_upload() {
 			loading = false;
-	
+
 			$up.hide();
 			_set_progress(0);
 
 			$uf.val("");
 			($ub.length ? $ub : $uf).show();
 		}
-	
+
 		function __upload_on_progress(loaded, total) {
 			var p = Math.round(loaded * 100 / total);
 			_set_progress(p);
 		}
-		
+
 		function __upload_on_success(data, status, xhr) {
 			uc.ajaxDone.call($u, data, status, xhr);
 			$u.trigger('uploaded.uploader', data);
@@ -189,16 +189,16 @@
 				complete: __end_upload
 			});
 		}
-	
+
 		function __file_on_change() {
 			if (loading || $uf.val() == "") {
 				return;
 			}
-	
+
 			var f = {}; f[uc.uploadName] = $uf;
 			__ajaf_upload(f);
 		}
-	
+
 		function __file_on_drop(e) {
 			e.preventDefault();
 			if (loading) {
@@ -211,12 +211,12 @@
 				__ajaf_upload(f);
 			}
 		}
-	
+
 		// event handler
 		$uf.change(function() {
 			setTimeout(__file_on_change, 10);
 		});
-		
+
 		$ub.click(function(e) {
 			e.preventDefault();
 			$uf.trigger('click');
@@ -257,7 +257,7 @@
 			var v = $u.data(k);
 			if (v) {
 				if ($.inArray(k, ds) >= 0) {
-					if (typeof(v) == 'string') {
+					if (typeof (v) == 'string') {
 						try {
 							v = JSON.parse(v);
 						} catch (e) {
@@ -303,12 +303,12 @@
 				$.extend(uc, c);
 				return;
 			}
-	
+
 			uc = $.extend({}, $.uploader.defaults, _options($u), c);
 			_init($u, uc);
 		});
 	};
-	
+
 	// UPLOADER DATA-API
 	// ==================
 	$(window).on('load', function() {

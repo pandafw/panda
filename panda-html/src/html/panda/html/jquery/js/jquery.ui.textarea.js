@@ -22,7 +22,7 @@
 	}
 
 	$.fn.autosize = function() {
-		$(this).off('input.autosize').on('input.autosize', _autosize).css({ 
+		$(this).off('input.autosize').on('input.autosize', _autosize).css({
 			'overflow-y': 'hidden',
 			'resize': 'none'
 		});
