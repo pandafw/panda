@@ -1,6 +1,13 @@
 (function() {
 	"use strict";
 
+	if (typeof Array.prototype.empty != 'function') {
+		Array.prototype.empty = function() {
+			this.splice(0, this.length);
+			return this;
+		}
+	}
+
 	if (typeof Array.prototype.indexOf != 'function') {
 		Array.prototype.indexOf = function(o) {
 			for (var i = 0; i < this.length; i++) {
@@ -18,23 +25,6 @@
 		}
 	}
 
-	if (typeof Array.prototype.each != 'function') {
-		Array.prototype.each = function(fn, scope) {
-			scope = scope || window;
-			for (var i = 0; i < this.length; i++) {
-				if (fn.call(scope, this[i], i, this) === false) {
-					break;
-				}
-			}
-		}
-	}
-
-	if (typeof Array.prototype.empty != 'function') {
-		Array.prototype.empty = function() {
-			return this.splice(0, this.length);
-		}
-	}
-
 	if (typeof Array.prototype.insert != 'function') {
 		Array.prototype.insert = function() {
 			var args = [arguments[0], 0];
@@ -46,24 +36,37 @@
 
 	if (typeof Array.prototype.remove != 'function') {
 		Array.prototype.remove = function(o) {
-			var c = 0;
-			for (var i = this.length - 1; i >= 0; i--) {
-				if (this[i] === o) {
-					this.splice(i, 1);
-					c++;
+			var a = this;
+			for (var i = a.length - 1; i >= 0; i--) {
+				if (a[i] === o) {
+					a.splice(i, 1);
 				}
 			}
-			return c;
+			return a;
 		}
 	}
 
 	if (typeof Array.prototype.removeDuplicates != 'function') {
 		Array.prototype.removeDuplicates = function() {
-			for (var i = 0; i < this.length; i++) {
-				for (var j = this.length - 1; j > i; j--) {
-					if (this[i] === this[j]) {
-						this.splice(j, 1);
+			var a = this;
+			for (var i = 0; i < a.length; i++) {
+				for (var j = a.length - 1; j > i; j--) {
+					if (a[i] === a[j]) {
+						a.splice(j, 1);
 					}
+				}
+			}
+			return a;
+		}
+	}
+
+	if (typeof Array.prototype.each != 'function') {
+		Array.prototype.each = function(fn, scope) {
+			var a = this;
+			scope = scope || window;
+			for (var i = 0; i < a.length; i++) {
+				if (fn.call(scope, a[i], i, a) === false) {
+					break;
 				}
 			}
 		}
