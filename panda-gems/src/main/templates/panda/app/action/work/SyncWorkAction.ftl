@@ -48,10 +48,10 @@
 
 		function syncw_status() {
 			work_on_start();
-			$.ajaf({
+			$.ajax({
 				url: "<@p.url action='+/status' includeParams='get'/>",
-				success: function(data) {
-					var o = JSON.parse(data);
+				dataType: "json",
+				success: function(o) {
 					if (!o.success) {
 						work_error(data);
 						setTimeout(syncw_status, 1000);
@@ -88,7 +88,7 @@
 			];
 			$.merge(data, $('#syncw').serializeArray());
 			
-			$.ajaf({
+			$.ajax({
 				url: url,
 				data: data,
 				success: function(d) {
@@ -104,10 +104,9 @@
 		}
 		
 		function syncw_stop() {
-			$.ajaf({
+			$.ajax({
 				url: "<@p.url action='+/stop' includeParams='get'/>",
-				success: function(data) {
-					var o = JSON.parse(data);
+				success: function(o) {
 					if (!o.success) {
 						work_error(data);
 						return;

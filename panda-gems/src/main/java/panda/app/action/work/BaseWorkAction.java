@@ -59,7 +59,7 @@ public abstract class BaseWorkAction extends BaseAction {
 		/** date */
 		public Date time;
 		/** last level */
-		public char level;
+		public char level = L_DEBUG;
 		/** last message */
 		public String status;
 
