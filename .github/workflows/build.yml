@@ -1,0 +1,31 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: build
+    env:
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    steps:
+      - name: Setup
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8.0.352+8'
+          distribution: 'adopt'
+      - name: Import GPG Key
+        run: |
+          echo -n "${{ secrets.GPG_SIGNING_KEY }}" | base64 --decode | gpg --batch --import
+          echo 'pinentry-mode loopback' > ~/.gnupg/gpg.conf
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        run:  mvn -B -s settings.xml -Dgpg.skip=false clean source:jar javadoc:jar gpg:sign cobertura:cobertura deploy
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
