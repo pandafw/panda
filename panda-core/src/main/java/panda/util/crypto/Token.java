@@ -30,8 +30,9 @@ public class Token {
 			return null;
 		}
 
-		Token t = new Token(token);
+		Token t = new Token();
 
+		t.token = token;
 		t.salt = Strings.left(token, SALT_LENGTH);
 		try {
 			String s = Strings.mid(token, SALT_LENGTH, TIMESTAMP_LENGTH);
@@ -48,7 +49,7 @@ public class Token {
 		this(null);
 	}
 
-	public Token(String secret) {
+	protected Token(String secret) {
 		this.secret = Strings.isEmpty(secret) ? newSecret() : secret;
 		refresh();
 	}
