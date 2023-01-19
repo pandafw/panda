@@ -21,11 +21,11 @@ public class MultiByteCharsTest {
 	// fullLetter 全角英字: ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ
 	protected static final String fullLetter = ("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ");
 
-	// halfSymbol 半角記号: !"""#$%&'()*+,----./:;<=>?@[\]^_`{|}~~
-	protected static final String halfSymbol = (" !\"\"\"#$%&'()*+,----./:;<=>?@[\\]^_`{|}~~");
+	// halfSymbol 半角記号: !""""#$%&'()*+,----./:;<=>?@[\]^_`{|}~~
+	protected static final String halfSymbol = (" !\"\"\"\"#$%&'()*+,----./:;<=>?@[\\]^_`{|}~~");
 
-	// fullSymbol 全角記号: ！″“”＃＄％＆’（）＊＋，－ー‐−．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～〜
-	protected static final String fullSymbol = ("　！″”“＃＄％＆’（）＊＋，－ー‐−．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～〜");
+	// fullSymbol 全角記号: ！″＂“”＃＄％＆’（）＊＋，－ー‐−．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～〜
+	protected static final String fullSymbol = ("　！″＂”“＃＄％＆’（）＊＋，－ー‐−．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～〜");
 
 	// halfASCII 半角: !"#$%&'()*+,-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~~
 	protected static final String halfASCII      = halfNumber + halfLetter + halfSymbol;
@@ -43,9 +43,14 @@ public class MultiByteCharsTest {
 		switch (c) {
 		case '“':
 		case '”':
-			return '″';
+		case '″':
+			return '＂';
 		case '〜':
 			return '～';
+		case '’':
+			return '＇';
+		case '￥':
+			return '＼';
 		case 'ー':
 		case '‐':
 		case '−':
