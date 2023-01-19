@@ -31,6 +31,5 @@ $ curl -i http://localhost:8201/hello/world
 
 ## Environment
 
-- go version:
-- xin version (or commit ref):
+- java version:
 - operating system:

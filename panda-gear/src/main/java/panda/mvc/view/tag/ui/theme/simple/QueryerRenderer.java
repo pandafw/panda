@@ -206,7 +206,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 			write(" ui-collapsed");
 		}
 		write("\" data-spy=\"fieldset\"><legend>");
-		write("<i class=\"ui-fieldset-icon fa fa-caret-" + (collapsed ? "right" : "down") + "\"></i>");
+		write("<i class=\"" + (collapsed ? "collapsed" : "") + "\"></i>");
 		write(tag.getLabelCaption());
 		write("</legend>");
 

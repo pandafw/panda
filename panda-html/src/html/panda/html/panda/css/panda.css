@@ -797,7 +797,6 @@ tbody.p-lv-tbody > tr > td:first-child {
 /* queryer.css                                 */
 /*---------------------------------------------*/
 .p-qr {
-	font-size: 90%;
 	position: relative;
 }
 .p-qr .form-control {
@@ -808,8 +807,6 @@ tbody.p-lv-tbody > tr > td:first-child {
 }
 .p-qr > fieldset {
 	padding: 5px;
-}
-.p-qr > fieldset > legend {
 }
 .p-qr-form {
 	background-color: #f9f9f9;
@@ -862,7 +859,6 @@ tbody.p-lv-tbody > tr > td:first-child {
 	width: auto;
 }
 .p-qr .p-qr-select {
-	font-size: 12px;
 	margin: 0 10px;
 	padding: 0 10px;
 	position: absolute;

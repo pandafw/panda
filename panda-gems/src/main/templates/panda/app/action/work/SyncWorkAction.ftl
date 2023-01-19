@@ -88,9 +88,10 @@
 			];
 			$.merge(data, $('#syncw').serializeArray());
 			
-			$.ajax({
+			$.ajaf({
 				url: url,
 				data: data,
+				forceAjaf: true,
 				success: function(d) {
 					work_on_stop();
 				},
