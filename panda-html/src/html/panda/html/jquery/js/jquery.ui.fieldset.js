@@ -1,19 +1,19 @@
 (function($) {
 	"use strict";
 
-	function collapse($f) {
+	function collapse($f, t) {
 		if (!$f.hasClass('collapsed')) {
-			$f.addClass('collapsed').children(':not(legend)').slideUp();
+			$f.addClass('collapsed').children(':not(legend)')[t || 'slideUp']();
 		}
 	}
 
-	function expand($f) {
+	function expand($f, t) {
 		if ($f.hasClass('collapsed')) {
-			$f.removeClass('collapsed').children(':not(legend)').slideDown();
+			$f.removeClass('collapsed').children(':not(legend)')[t || 'slideDown']();
 		}
 	}
 
-	$.fn.fieldset = function(config) {
+	$.fn.fieldset = function(config, transition) {
 		config = config || {};
 		return this.each(function() {
 			var $f = $(this);
@@ -35,10 +35,10 @@
 
 			switch (config) {
 			case 'collapse':
-				collapse($f);
+				collapse($f, transition);
 				break;
 			case 'expand':
-				expand($f);
+				expand($f, transition);
 				break;
 			}
 		});

@@ -13,7 +13,7 @@
 				if (old) {
 					old.call(this, s);
 				}
-			}
+			};
 			return this.animate(props, opt);
 		};
 	});
