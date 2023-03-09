@@ -1,6 +1,12 @@
 (function($) {
 	"use strict";
 
+	var _cssHidden = {
+		position: 'absolute',
+		top: '-9999px',
+		left: '-9999px'
+	};
+
 	var _xhrOK = (function() {
 		var input = document.createElement('input'),
 			xhr = new XMLHttpRequest();
@@ -95,48 +101,100 @@
 		});
 		delete s.file;
 
-		if (s.progress) {
-			var fp = s.progress;
-			s.xhr = function() {
-				var xhr = $.ajaxSettings.xhr();
+		var xhr = $.ajaxSettings.xhr();
+		var ufp = s.uprogress, dfp = s.dprogress;
+		if (ufp || dfp) {
+			if (ufp) {
 				xhr.upload.addEventListener('progress', function(e) {
 					if (e.lengthComputable) {
-						fp(e.loaded, e.total);
+						ufp(e.loaded, e.total);
 					}
 				});
-				return xhr;
-			};
-			delete s.progress;
+				delete s.uprogress;
+			}
+
+			if (dfp) {
+				xhr.addEventListener('progress', function(e) {
+					if (e.lengthComputable) {
+						dfp(e.loaded, e.total);
+					}
+				});
+				delete s.dprogress;
+			}
 		}
+
+		xhr.addEventListener('readystatechange', function(e) {
+			switch (xhr.readyState) {
+			case XMLHttpRequest.HEADERS_RECEIVED:
+				var cd = xhr.getResponseHeader('Content-Disposition');
+				if (cd) {
+					xhr.responseType = 'arraybuffer';
+					var cds = cd.split(';');
+					$.each(cds, function(i, v) {
+						var sp = v.indexOf('=');
+						if (sp > 0) {
+							let k = v.substring(0, sp).trim().toLowerCase();
+							if (k == 'filename' || k == 'filename*') {
+								var fn = v.substring(sp+1).trim();
+								if (fn.length > 1 && fn.charAt(0) == '"' && fn.charAt(fn.length-1) == '"') {
+									fn = fn.substring(1, fn.length-1);
+								}
+								if (k == 'filename*') {
+									var cp = fn.indexOf("''");
+									if (sp >= 0) {
+										fn = fn.substring(cp + 2);
+									}
+								}
+								fn = decodeURIComponent(fn);
+								if (!xhr.download || k == 'filename*') {
+									xhr.download = fn;
+								}
+							}
+						}
+					});
+					if (!xhr.download) {
+						xhr.download = cd;
+					}
+				}
+				break;
+			case XMLHttpRequest.DONE:
+				if (xhr.download) {
+					var blob = new Blob([xhr.response]),
+						url = window.URL.createObjectURL(blob),
+						$a = $('<a>', { download: xhr.download, href: url }).css(_cssHidden);
+					
+					$('body').append($a);
+					$a.get(0).click();
+					setTimeout(function() {
+						window.URL.revokeObjectURL(url);
+						$a.remove();
+					}, 200);
+				}
+				break;
+			}
+		});
+		s.xhr = function() {
+			return xhr;
+		};
 
 		return $.ajax(s);
 	}
 
 	function createIFrame(s) {
 		var id = "ajaf_if_" + s.id;
-		return $('<iframe id="' + id + '" name="' + id + '" src="' + s.secureUrl + '"></iframe>')
-			.css({
-				position: 'absolute',
-				top: '-9999px',
-				left: '-9999px'
-			})
-			.appendTo('body');
+		return $('<iframe>', { id: id, name: id, src: s.secureUrl }).css(_cssHidden).appendTo('body');
 	}
 
 	function createForm(s) {
 		var id = 'ajaf_form_' + s.id;
 
-		var $form = $('<form></form>', {
+		var $form = $('<form>', {
 			id: id,
 			name: id,
 			action: s.url,
 			method: s.method,
 			target: 'ajaf_if_' + s.id
-		}).css({
-			position: 'absolute',
-			top: '-9999px',
-			left: '-9999px'
-		}).appendTo('body');
+		}).css(_cssHidden).appendTo('body');
 
 		addParams(s.data, function(n, v) {
 			$('<input type="hidden">')
@@ -206,15 +264,9 @@
 			secureUrl: 'javascript:false',
 		}, s);
 
-		var $if = createIFrame(s);
-		var $form = createForm(s);
-
-		// Watch for a new set of requests
-		if (s.start) {
-			s.start();
-		}
-
-		var done = false, loaded = 0, xhr = {};
+		var $if = createIFrame(s),
+			$form = createForm(s),
+			done = false, xhr = {};
 
 		// Wait for a response to come back
 		function callback(timeout) {
@@ -243,7 +295,6 @@
 					}
 				}
 				xhr.responseXML = (doc && doc.XMLDocument) ? doc.XMLDocument : doc;
-				// console.debug("jquery.ajaf(" + s.url + "): " + (xhr.responseText || xhr.responseXML));
 			} catch (e) {
 				status = "error";
 				if (s.error) {
@@ -252,21 +303,22 @@
 			}
 
 			// Recover real files
-			for (var i = 0; i < $form.files.length; i++) {
-				var f = $form.files[i];
+			$.each($form.files, function(i, f) {
 				f.real.attr({
 					id: f.copy.attr('id'),
 					name: f.copy.attr('name')
 				}).insertAfter(f.copy);
 				f.copy.remove();
-			}
+			});
 			$form.remove();
 
-			if (status == "timeout") {
+			switch (status) {
+			case "timeout":
 				if (s.error) {
 					s.error(xhr, status);
 				}
-			} else if (status == "success") {
+				break;
+			case "success":
 				// Make sure that the request was successful or not modified
 				try {
 					// process the data (runs the xhr through httpData regardless of callback)
@@ -281,6 +333,7 @@
 						s.error(xhr, status, e);
 					}
 				}
+				break;
 			}
 
 			try {
@@ -298,10 +351,6 @@
 			}
 		};
 
-		if (s.send) {
-			s.send(xhr, s);
-		}
-
 		// timeout checker
 		if (s.timeout > 0) {
 			setTimeout(function() {
@@ -313,15 +362,20 @@
 		}
 
 		// fake progress
-		if (s.progress) {
-			loaded++;
+		var fudp = s.uprogress || s.dprogress;
+		if (fudp) {
+			var loaded = 0;
 			function _fake_progress() {
-				s.progress(loaded < 95 ? ++loaded : loaded, 100);
+				fudp(loaded < 95 ? ++loaded : loaded, 100);
 				if (!done) {
 					setTimeout(_fake_progress, 10 + loaded);
 				}
 			}
 			setTimeout(_fake_progress, 10);
+		}
+
+		if (s.beforeSend) {
+			s.beforeSend(xhr, s);
 		}
 
 		// submit
@@ -2038,6 +2092,7 @@
 					c.ajaxDone.call($c, data, status, xhr);
 					$c.find('[popup-dismiss="true"]').click(function() {
 						hide($c);
+						return false;
 					});
 					c.loaded = true;
 					$c.trigger('loaded.popup', data);
@@ -2175,6 +2230,7 @@
 			c.loaded = true;
 			$c.find('[popup-dismiss="true"]').click(function() {
 				hide($c);
+				return false;
 			});
 		}
 	}
@@ -3088,7 +3144,7 @@
 				file: file,
 				dataType: 'json',
 				forceAjaf: uc.forceAjaf,
-				progress: __upload_on_progress,
+				uprogress: __upload_on_progress,
 				success: __upload_on_success,
 				error: __upload_on_error,
 				complete: __end_upload

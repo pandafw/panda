@@ -183,7 +183,7 @@
 				file: file,
 				dataType: 'json',
 				forceAjaf: uc.forceAjaf,
-				progress: __upload_on_progress,
+				uprogress: __upload_on_progress,
 				success: __upload_on_success,
 				error: __upload_on_error,
 				complete: __end_upload

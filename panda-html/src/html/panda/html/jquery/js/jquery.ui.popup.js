@@ -288,6 +288,7 @@
 					c.ajaxDone.call($c, data, status, xhr);
 					$c.find('[popup-dismiss="true"]').click(function() {
 						hide($c);
+						return false;
 					});
 					c.loaded = true;
 					$c.trigger('loaded.popup', data);
@@ -425,6 +426,7 @@
 			c.loaded = true;
 			$c.find('[popup-dismiss="true"]').click(function() {
 				hide($c);
+				return false;
 			});
 		}
 	}
