@@ -69,13 +69,13 @@ public class SmtpMailClient extends MailClient {
 		}
 
 		if (Strings.isEmpty(host)) {
-			Map<String, List<EmailAddress>> rm = email.getRcptsByDomain();
+			Map<String, List<EmailAddress>> rm = email.getRecipientsByDomain();
 			for (Entry<String, List<EmailAddress>> en : rm.entrySet()) {
 				send(en.getKey(), en.getValue(), email);
 			}
 		}
 		else {
-			send(Arrays.asList(host), port, username, password, email.getRcpts(), email);
+			send(Arrays.asList(host), port, username, password, email.getRecipients(), email);
 		}
 	}
 

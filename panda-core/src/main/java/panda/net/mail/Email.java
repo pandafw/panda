@@ -431,9 +431,9 @@ public class Email {
 	}
 	
 	/**
-	 * @return the rcpts
+	 * @return the recipients
 	 */
-	public Set<EmailAddress> getRcpts() {
+	public Set<EmailAddress> getRecipients() {
 		Set<EmailAddress> rcpts = new HashSet<EmailAddress>();
 		if (tos != null) {
 			rcpts.addAll(tos);
@@ -447,9 +447,9 @@ public class Email {
 		return rcpts;
 	}
 
-	public Map<String, List<EmailAddress>> getRcptsByDomain() {
+	public Map<String, List<EmailAddress>> getRecipientsByDomain() {
 		Map<String, List<EmailAddress>> m = new HashMap<String, List<EmailAddress>>();
-		Set<EmailAddress> rcpts = getRcpts();
+		Set<EmailAddress> rcpts = getRecipients();
 		for (EmailAddress r : rcpts) {
 			String d = r.getDomain();
 			List<EmailAddress> rs = m.get(d);
