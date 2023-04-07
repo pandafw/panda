@@ -2051,7 +2051,10 @@
 		}).focus();
 	}
 
-	function __doc_click() {
+	function __doc_click(evt) {
+		if ($(evt.target).closest('.ui-popup-wrap').length) {
+			return;
+		}
 		hide(_active());
 	}
 
@@ -2211,9 +2214,7 @@
 				hide($c);
 			}));
 
-		$p = $('<div class="ui-popup-wrap">').append($f).appendTo('body').click(function(evt) {
-			evt.stopPropagation();
-		});
+		$p = $('<div class="ui-popup-wrap">').append($f).appendTo('body');
 
 		if (c.cssClass) {
 			$p.addClass(c.cssClass);
@@ -2394,7 +2395,7 @@
 
 	function initBox($txt, opts) {
 		var $box = $('<div>', {
-			'id': ($txt.attr('id') || new Date().getTime()) + '_color_picker',
+			'id': 'color_picker_' + ($txt.attr('id') || new Date().getTime()),
 			'class': 'ui-simple-color-picker'
 		}).hide().appendTo('body');
 
@@ -2463,8 +2464,9 @@
 			});
 
 			$txt.on('click.simple_color_picker', function(evt) {
-				evt.stopPropagation();
-				positionAndShowBox($txt, $box);
+				setTimeout(function() {
+					positionAndShowBox($txt, $box);
+				})
 			});
 
 			if ($txt.is('input')) {

@@ -11,7 +11,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 10090;
+	z-index: 10120;
 	width: 100%;
 	height: 100%;
 }
@@ -22,7 +22,7 @@
 	width: 100%;
 	height: 100%;
 	padding: 50px;
-	z-index: 10100;
+	z-index: 10130;
 	text-align: center;
 	line-height: 0;
 }
@@ -43,7 +43,7 @@
 	left: 0;
 	height: 100%;
 	width: 100%;
-	z-index: 10010;
+	z-index: 10110;
 }
 #lightbox-imagebox > #lightbox-nav { left: 0; }
 #lightbox-nav a { outline: none;}

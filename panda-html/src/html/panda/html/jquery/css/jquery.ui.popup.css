@@ -11,13 +11,13 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: 2100;
+	z-index: 10200;
 }
 
 .ui-popup-wrap {
 	display: none;
 	position: absolute;
-	z-index: 2101;
+	z-index: 10210;
 }
 
 .ui-popup-frame {
@@ -109,7 +109,7 @@
 }
 
 .ui-popup-closer {
-	z-index: 2101;
+	z-index: 10210;
 	position: absolute;
 	display: block;
 	top: -8px;

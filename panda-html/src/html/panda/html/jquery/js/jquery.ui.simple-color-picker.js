@@ -51,7 +51,7 @@
 
 	function initBox($txt, opts) {
 		var $box = $('<div>', {
-			'id': ($txt.attr('id') || new Date().getTime()) + '_color_picker',
+			'id': 'color_picker_' + ($txt.attr('id') || new Date().getTime()),
 			'class': 'ui-simple-color-picker'
 		}).hide().appendTo('body');
 
@@ -120,8 +120,9 @@
 			});
 
 			$txt.on('click.simple_color_picker', function(evt) {
-				evt.stopPropagation();
-				positionAndShowBox($txt, $box);
+				setTimeout(function() {
+					positionAndShowBox($txt, $box);
+				})
 			});
 
 			if ($txt.is('input')) {

@@ -247,7 +247,10 @@
 		}).focus();
 	}
 
-	function __doc_click() {
+	function __doc_click(evt) {
+		if ($(evt.target).closest('.ui-popup-wrap').length) {
+			return;
+		}
 		hide(_active());
 	}
 
@@ -407,9 +410,7 @@
 				hide($c);
 			}));
 
-		$p = $('<div class="ui-popup-wrap">').append($f).appendTo('body').click(function(evt) {
-			evt.stopPropagation();
-		});
+		$p = $('<div class="ui-popup-wrap">').append($f).appendTo('body');
 
 		if (c.cssClass) {
 			$p.addClass(c.cssClass);
