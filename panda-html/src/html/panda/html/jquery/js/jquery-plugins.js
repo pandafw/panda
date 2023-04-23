@@ -708,8 +708,8 @@
 	$.fn.center = function(c) {
 		c = c || {};
 		return this.each(function() {
-			var $s = $(this);
-			var $t = c.target ? $(c.target) : $s.parent();
+			var $s = $(this),
+				$t = c.target ? $(c.target) : $s.parent();
 
 			var tl = $t.scrollLeft(),
 				tt = $t.scrollTop(),
