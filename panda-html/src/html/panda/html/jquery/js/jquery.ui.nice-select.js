@@ -136,31 +136,29 @@
 	}
 
 	function create_nice_select($select) {
-		$select.after($('<div></div>')
-			.addClass('ui-nice-select')
-			.addClass($select.attr('class') || '')
-			.addClass($select.attr('disabled') ? 'disabled' : '')
-			.attr('tabindex', $select.attr('disabled') ? null : '0')
-			.html('<span class="current"></span><ul></ul>')
-		);
+		var $options = $select.find('option'),
+			$selected = $select.find('option:selected'),
+			$current = $('<span class="current"></span>'),
+			$ul = $('<ul></ul>'),
+			$dropdown = $('<div></div>')
+				.addClass('ui-nice-select')
+				.addClass($select.attr('class') || '')
+				.addClass($select.attr('disabled') ? 'disabled' : '')
+				.attr('tabindex', $select.attr('disabled') ? null : ($select.attr('tabindex') || '0'))
+				.append($current, $ul);
 
-		var $dropdown = $select.next();
-		var $options = $select.find('option');
-		var $selected = $select.find('option:selected');
-
-		$dropdown.find('.current').html($selected.data('display') || $selected.text());
+		$current.text($selected.data('display') || $selected.text());
 
 		$options.each(function() {
 			var $option = $(this);
-			var display = $option.data('display');
 
-			$dropdown.find('ul').append($('<li></li>')
+			$ul.append($('<li></li>')
 				.attr('data-value', $option.val())
-				.attr('data-display', (display || null))
+				.attr('data-display', ($option.data('display') || null))
 				.addClass(
 					($option.is(':selected') ? ' selected' : '') +
 					($option.is(':disabled') ? ' disabled' : ''))
-				.html($option.text())
+				.text($option.text())
 			);
 		});
 
@@ -172,6 +170,8 @@
 
 		// Option click
 		$dropdown.on('click', 'li:not(.disabled)', __dropdown_option_click);
+
+		$select.after($dropdown);
 	}
 
 	var api = {
@@ -191,10 +191,11 @@
 
 		// Create custom markup
 		this.each(function() {
-			var $select = $(this);
-
-			if (!$select.next().hasClass('ui-nice-select')) {
-				create_nice_select($select);
+			var $s = $(this);
+			if ($s.next().hasClass('ui-nice-select')) {
+				update.apply($s);
+			} else {
+				create_nice_select($s);
 			}
 		});
 

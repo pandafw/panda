@@ -17,8 +17,7 @@
 				, '#990000', '#b45f06', '#bf9000', '#38761d', '#134f5c', '#0b5394', '#351c75', '#741b47'
 				, '#660000', '#783f04', '#7f6000', '#274e13', '#0c343d', '#073763', '#20124d', '#4C1130'],
 			showEffect: 'show',
-			hideEffect: 'hide',
-			onChangeColor: false
+			hideEffect: 'hide'
 		}
 	};
 
@@ -93,25 +92,15 @@
 		}
 
 		return this.each(function() {
-			var $txt = $(this);
-
-			var opts = $.extend({}, $.simpleColorPicker.defaults, options);
-			if (!opts.onChangeColor) {
-				var occ = $txt.attr('onChangeColor');
-				if (occ) {
-					opts.onChangeColor = new Function(occ);
-				}
-			}
-
-			var $box = initBox($txt, opts);
+			var $txt = $(this),
+				opts = $.extend({}, $.simpleColorPicker.defaults, options),
+				$box = initBox($txt, opts);
 
 			$box.find('li').click(function() {
 				if ($txt.is('input')) {
 					$txt.val($(this).attr('title'));
 				}
-				if ($.isFunction(opts.onChangeColor)) {
-					opts.onChangeColor.call($txt, $(this).attr('title'));
-				}
+				$txt.trigger('change', $(this).attr('title'));
 				hideBox($box);
 			});
 
@@ -119,7 +108,7 @@
 				evt.stopPropagation();
 			});
 
-			$txt.on('click.simple_color_picker', function(evt) {
+			$txt.on('click.simple_color_picker', function() {
 				setTimeout(function() {
 					positionAndShowBox($txt, $box);
 				})

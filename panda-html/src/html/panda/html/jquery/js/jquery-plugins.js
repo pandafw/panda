@@ -1729,31 +1729,29 @@
 	}
 
 	function create_nice_select($select) {
-		$select.after($('<div></div>')
-			.addClass('ui-nice-select')
-			.addClass($select.attr('class') || '')
-			.addClass($select.attr('disabled') ? 'disabled' : '')
-			.attr('tabindex', $select.attr('disabled') ? null : '0')
-			.html('<span class="current"></span><ul></ul>')
-		);
+		var $options = $select.find('option'),
+			$selected = $select.find('option:selected'),
+			$current = $('<span class="current"></span>'),
+			$ul = $('<ul></ul>'),
+			$dropdown = $('<div></div>')
+				.addClass('ui-nice-select')
+				.addClass($select.attr('class') || '')
+				.addClass($select.attr('disabled') ? 'disabled' : '')
+				.attr('tabindex', $select.attr('disabled') ? null : ($select.attr('tabindex') || '0'))
+				.append($current, $ul);
 
-		var $dropdown = $select.next();
-		var $options = $select.find('option');
-		var $selected = $select.find('option:selected');
-
-		$dropdown.find('.current').html($selected.data('display') || $selected.text());
+		$current.text($selected.data('display') || $selected.text());
 
 		$options.each(function() {
 			var $option = $(this);
-			var display = $option.data('display');
 
-			$dropdown.find('ul').append($('<li></li>')
+			$ul.append($('<li></li>')
 				.attr('data-value', $option.val())
-				.attr('data-display', (display || null))
+				.attr('data-display', ($option.data('display') || null))
 				.addClass(
 					($option.is(':selected') ? ' selected' : '') +
 					($option.is(':disabled') ? ' disabled' : ''))
-				.html($option.text())
+				.text($option.text())
 			);
 		});
 
@@ -1765,6 +1763,8 @@
 
 		// Option click
 		$dropdown.on('click', 'li:not(.disabled)', __dropdown_option_click);
+
+		$select.after($dropdown);
 	}
 
 	var api = {
@@ -1784,10 +1784,11 @@
 
 		// Create custom markup
 		this.each(function() {
-			var $select = $(this);
-
-			if (!$select.next().hasClass('ui-nice-select')) {
-				create_nice_select($select);
+			var $s = $(this);
+			if ($s.next().hasClass('ui-nice-select')) {
+				update.apply($s);
+			} else {
+				create_nice_select($s);
 			}
 		});
 
@@ -2361,8 +2362,7 @@
 				, '#990000', '#b45f06', '#bf9000', '#38761d', '#134f5c', '#0b5394', '#351c75', '#741b47'
 				, '#660000', '#783f04', '#7f6000', '#274e13', '#0c343d', '#073763', '#20124d', '#4C1130'],
 			showEffect: 'show',
-			hideEffect: 'hide',
-			onChangeColor: false
+			hideEffect: 'hide'
 		}
 	};
 
@@ -2437,25 +2437,15 @@
 		}
 
 		return this.each(function() {
-			var $txt = $(this);
-
-			var opts = $.extend({}, $.simpleColorPicker.defaults, options);
-			if (!opts.onChangeColor) {
-				var occ = $txt.attr('onChangeColor');
-				if (occ) {
-					opts.onChangeColor = new Function(occ);
-				}
-			}
-
-			var $box = initBox($txt, opts);
+			var $txt = $(this),
+				opts = $.extend({}, $.simpleColorPicker.defaults, options),
+				$box = initBox($txt, opts);
 
 			$box.find('li').click(function() {
 				if ($txt.is('input')) {
 					$txt.val($(this).attr('title'));
 				}
-				if ($.isFunction(opts.onChangeColor)) {
-					opts.onChangeColor.call($txt, $(this).attr('title'));
-				}
+				$txt.trigger('change', $(this).attr('title'));
 				hideBox($box);
 			});
 
@@ -2463,7 +2453,7 @@
 				evt.stopPropagation();
 			});
 
-			$txt.on('click.simple_color_picker', function(evt) {
+			$txt.on('click.simple_color_picker', function() {
 				setTimeout(function() {
 					positionAndShowBox($txt, $box);
 				})
