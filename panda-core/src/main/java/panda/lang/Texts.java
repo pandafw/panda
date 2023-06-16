@@ -876,53 +876,6 @@ public abstract class Texts {
 		}
 		return str;
 	}
-	
-	// -----------------------------------------------------------------------
-	private static class XmlPattern {
-		static Pattern p0 = Pattern.compile(".+</\\w[^>]*>$");
-		static Pattern p1 = Pattern.compile("^</\\w*>$");
-		static Pattern p2 = Pattern.compile("^<\\w[^>]*[^/]>.*$");
-		static Pattern p3 = Pattern.compile("(>)(<)(/*)");
-	}
-	
-	/**
-	 * prettify xml
-	 * 
-	 * @param xml xml string
-	 * @return prettified xml
-	 */
-	public static String prettifyXml(String xml) {
-		StringBuilder fmt = new StringBuilder();
-
-		xml = XmlPattern.p3.matcher(xml).replaceAll("$1\n$2$3");
-
-		String[] xs = Strings.split(xml, Strings.CRLF);
-
-		int pad = 0;
-		for (int i = 0; i < xs.length; i++) {
-			String node = xs[i];
-			int indent = 0;
-			if (XmlPattern.p0.matcher(node).matches()) {
-				indent = 0;
-			}
-			else if (XmlPattern.p1.matcher(node).matches()) {
-				if (pad != 0) {
-					pad -= 1;
-				}
-			}
-			else if (XmlPattern.p2.matcher(node).matches()) {
-				indent = 1;
-			}
-			else {
-				indent = 0;
-			}
-
-			fmt.append(Strings.leftPad(Strings.EMPTY, pad * 2, ' ')).append(node).append(Strings.CRLF);
-			pad += indent;
-		}
-
-		return fmt.toString();
-	}
 
 	// -----------------------------------------------------------------------
 	/**

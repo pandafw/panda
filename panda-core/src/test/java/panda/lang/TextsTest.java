@@ -479,16 +479,4 @@ public class TextsTest {
 		assertEquals(".", Texts.ellipsiz("あいうえお", 1));
 		assertEquals("", Texts.ellipsiz("あいうえお", 0));
 	}
-	
-	// -----------------------------------------------------------------------
-	/**
-	 * test method: prettifyXml
-	 * @throws Exception if an error occurs
-	 */
-	@Test
-	public void testPrettifyXml() throws Exception {
-		assertEquals("<a>1</a>\r\n<b>2</b>\r\n", Texts.prettifyXml("<a>1</a><b>2</b>"));
-		//assertEquals("<a>\r\n  <b>2</b>\r\n</a>\r\n", Texts.prettifyXml("<a><b>2</b></a>"));
-	}
-	
 }

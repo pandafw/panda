@@ -11,7 +11,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="eleval" method="post" theme="simple" action="+/exec.xml" onsubmit="return elEvaluate();">
+	<@p.form id="eleval" method="post" theme="simple" action="+/exec.json" onsubmit="return elEvaluate();">
 	<table width="100%">
 		<tr><td>Expression: (Ctrl+Enter to evaluate)</td></tr>
 		<tr><td><@p.textarea name="expr" rows="8" cssStyle="width:100%" enterfire="#eleval_submit"/></td></tr>
@@ -40,9 +40,9 @@
 				url: $o.attr('action'),
 				method: 'post',
 				data: $o.serializeArray(),
-				dataType: 'text',
+				dataType: 'json',
 				success: function(data, ts, xhr) {
-					elSetResult(data.prettifyXml());
+					elSetResult(JSON.stringify(data, null, '  '));
 				},
 				error: function(xhr, ts, err) {
 					elSetResult(err + '\r\n' + xhr.responseText);
