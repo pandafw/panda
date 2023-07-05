@@ -10,7 +10,7 @@
 			}).css({ cursor: 'pointer' });
 
 			$w.scroll(function() {
-				$t[$w.scrollTop() > $w.height() ? 'show' : 'hide']();
+				$t.toggle($w.scrollTop() > $w.height());
 			});
 		});
 	};

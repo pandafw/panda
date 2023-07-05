@@ -235,7 +235,7 @@
 	function _show($p, $c, c, trigger) {
 		$c.trigger('show.popup');
 
-		$p.find('.ui-popup-closer')[c.closer ? 'show' : 'hide']();
+		$p.find('.ui-popup-closer').toggle(c.closer);
 
 		c.trigger = trigger || window;
 
@@ -337,7 +337,7 @@
 			var $p = _wrapper($c);
 			if (!$p.is(':hidden')) {
 				_bind(c);
-				_masker()[c.mask ? 'show' : 'hide']();
+				_masker().toggle(c.mask);
 			}
 		}
 	}

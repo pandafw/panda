@@ -8,9 +8,10 @@ HTMLDIR=$BASEDIR/src/html/panda/html
 minjs() {
 	echo --------------------------------------
 	echo --  minify js: $1
-	uglifyjs $1.js --warn --compress --mangle -o $1.min.js
-	echo "
-//# sourceMappingURL=$1.min.js.map" >> $1.min.js
+	uglifyjs $1.js --warn --compress --mangle --source-map url=$1.min.js.map -o $1.min.js
+#	uglifyjs $1.js --warn --compress --mangle -o $1.min.js
+#	echo "
+#//# sourceMappingURL=$1.min.js.map" >> $1.min.js
 }
 
 mincss() {

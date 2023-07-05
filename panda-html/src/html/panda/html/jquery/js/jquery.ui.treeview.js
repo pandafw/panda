@@ -67,4 +67,4 @@
 		$('ul[data-spy="treeview"]').treeview();
 	});
 
-}(jQuery));
+})(jQuery);

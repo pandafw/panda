@@ -209,4 +209,4 @@
 		$('[data-spy="niceSelect"]').niceSelect();
 	});
 
-}(jQuery));
+})(jQuery);

@@ -230,31 +230,6 @@
 		};
 	}
 
-	if (typeof String.prototype.prettifyXML != "function") {
-		String.prototype.prettifyXML = function(space) {
-			space ||= '  ';
-			var pad = 0, ss = this.replace(/(>)(<)(\/*)/g, '$1\n$2$3').split('\n');
-			for (var i = 0; i < ss.length; i++) {
-				var s = ss[i], indent = 0;
-				if (s.match(/.+<\/\w[^>]*>$/)) {
-					// ...<abc>
-				} else if (s.match(/(^<\/\w)|(.*\/>$)/)) {
-					// </... or .../>
-					if (pad > 0) {
-						pad -= 1;
-					}
-				} else if (s.match(/^<\w[^>\/]*>.*$/)) {
-					// <abc>...
-					indent = 1;
-				}
-
-				ss[i] = space.repeat(pad) + s;
-				pad += indent;
-			}
-			return ss.join('\r\n');
-		};
-	}
-
 	if (typeof String.prototype.encodeUTF8 != "function") {
 		String.prototype.encodeUTF8 = function() {
 			var s = this, utf8 = "";

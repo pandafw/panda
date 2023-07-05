@@ -128,4 +128,4 @@
 		$('[data-spy="simpleColorPicker"]').simpleColorPicker();
 	});
 
-}(jQuery));
+})(jQuery);
