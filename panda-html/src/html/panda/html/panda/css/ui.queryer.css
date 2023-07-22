@@ -18,7 +18,7 @@
 	padding: 10px;
 }
 .p-qr-form.form-horizontal .form-group {
-	border-bottom: none;
+	border: none;
 }
 .p-qr-form .p-qr-remove {
 	color: #999;
