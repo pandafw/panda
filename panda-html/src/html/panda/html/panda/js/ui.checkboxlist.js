@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$(window).on('load', function() {
 		$(".p-checkboxlist.order")
 			.removeClass("order")

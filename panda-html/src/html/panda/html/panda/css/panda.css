@@ -167,27 +167,6 @@ ul.p-field-errors i.fa-li {
 	color: #777;
 }
 
-/** xhtml table layout */
-.p-xhtml {
-	width: 100%;
-}
-.p-xhtml > tbody > tr > th, .p-xhtml > tbody > tr > td {
-	padding: 2px 5px;
-	vertical-align: top;
-}
-.p-xhtml > tbody > tr > th > label,
-.p-xhtml > tbody > tr > td > .radio,
-.p-xhtml > tbody > tr > td > .checkbox,
-.p-xhtml > tbody > tr > td > .radio-inline,
-.p-xhtml > tbody > tr > td > .checkbox-inline {
-	padding-top: 5px;
-}
-.p-xform input.form-control[size], .p-xform select.form-control,
-.p-xform .p-radiomap input.form-control, .p-xform .p-checkboxlist input.form-control, .p-xform input.p-checkbox,
-.p-xform .input-group-addon, .p-xform .input-group-btn {
-	width: auto;
-}
-
 /** bootstrap form layout */
 .p-form.form-horizontal {
 	color: #333;
@@ -200,22 +179,13 @@ ul.p-field-errors i.fa-li {
 .p-form.form-horizontal > .p-buttons.form-group {
 	padding: 10px 0;
 }
-.p-eform.form-horizontal,
-.p-cform.form-horizontal,
-.p-vform.form-horizontal,
-.p-sform.form-horizontal {
+.p-form.form-horizontal {
 	background-color: #f9f9f9;
 }
-.p-eform.form-horizontal > .form-group,
-.p-cform.form-horizontal > .form-group,
-.p-vform.form-horizontal > .form-group,
-.p-sform.form-horizontal > .form-group {
+.p-form.form-horizontal > .form-group {
 	border-top: 1px solid #ccc;
 }
-.p-eform.form-horizontal > div.form-group:first-of-type,
-.p-cform.form-horizontal > div.form-group:first-of-type,
-.p-vform.form-horizontal > div.form-group:first-of-type,
-.p-sform.form-horizontal > div.form-group:first-of-type {
+.p-form.form-horizontal > div.form-group:first-of-type {
 	border-top: 0;
 }
 
@@ -942,8 +912,7 @@ tbody.p-lv-tbody > tr > td:first-child {
 	-khtml-user-select: none;    /* Konqueror */
 	-moz-user-select: none;      /* Firefox */
 	-ms-user-select: none;       /* IE/Edge */
-	user-select: none;           /* non-prefixed version, currently
-	                                not supported by any browser */
+	user-select: none;           /* non-prefixed version, currently not supported by any browser */
 }
 
 .p-frame {
@@ -987,4 +956,24 @@ tbody.p-lv-tbody > tr > td:first-child {
 .p-vf-code:active, .p-vf-code.active {
 	box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
 	-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+/** xhtml table layout */
+.p-xhtml {
+	width: 100%;
+}
+.p-xhtml > tbody > tr > th, .p-xhtml > tbody > tr > td {
+	padding: 2px 5px;
+	vertical-align: top;
+}
+.p-xhtml > tbody > tr > th > label,
+.p-xhtml > tbody > tr > td > .radio,
+.p-xhtml > tbody > tr > td > .checkbox,
+.p-xhtml > tbody > tr > td > .radio-inline,
+.p-xhtml > tbody > tr > td > .checkbox-inline {
+	padding-top: 5px;
+}
+.p-xform input.form-control[size], .p-xform select.form-control,
+.p-xform .p-radiomap input.form-control, .p-xform .p-checkboxlist input.form-control, .p-xform input.p-checkbox,
+.p-xform .input-group-addon, .p-xform .input-group-btn {
+	width: auto;
 }

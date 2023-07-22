@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	function setAlertType($a, s, t) {
 		for (var i in s.types) {
 			$a.removeClass(s.types[i]);

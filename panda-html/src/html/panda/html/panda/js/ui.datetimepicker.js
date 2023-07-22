@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	var langs = {};
 	var dps = 'div.p-datepicker, div.p-datetimepicker, div.p-timepicker';
 

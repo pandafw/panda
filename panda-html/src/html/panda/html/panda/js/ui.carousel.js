@@ -2,6 +2,8 @@
 // swipe for carousel
 //
 (function($) {
+	"use strict";
+
 	var regTouchGestures = function($e) {
 		$e.hammer()
 			.on("swipeleft", function(e) {

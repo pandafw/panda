@@ -747,8 +747,6 @@
 +(function ($) {
 	// jQuery Editable Select
 	EditableSelect = function (select, options) {
-		var that     = this;
-		
 		this.options = options;
 		this.$select = $(select);
 		this.$input  = $('<input type="text" autocomplete="off">');
@@ -1072,6 +1070,17 @@
 	});
 
 })(jQuery);
+(function($) {
+	"use strict";
+
+	$(window).on('load', function() {
+		$('input[data-action], button[data-action]').off('click.action').on('click.action', function() {
+			$(this).closest('form').attr('action', $(this).data('action'));
+		});
+	});
+
+})(jQuery);
+
 (function($) {
 	"use strict";
 

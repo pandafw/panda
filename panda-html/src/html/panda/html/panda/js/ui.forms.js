@@ -1,6 +1,8 @@
 if (typeof(panda) == "undefined") { panda = {}; }
 
 (function($) {
+	"use strict";
+
 	function ajaxFormSubmit() {
 		var $f = $(this);
 		var $a = $('#' + $f.attr('id') + '_alert').empty();
@@ -77,16 +79,6 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		});
 	}
 
-	function actionHook($f) {
-		// hook action
-		if (!$f.data("actionHooked")) {
-			$f.data('actionHooked', true)
-				.find('input[data-action], button[data-action]').click(function() {
-					$(this).closest('form').attr('action', $(this).data('action'));
-				});
-		}
-	}
-
 	function isSelfForm($f) {
 		var t = $f.attr('target') || '_self';
 		return t == '_self' || t == '_top' || t == '_parent';
@@ -125,9 +117,6 @@ if (typeof(panda) == "undefined") { panda = {}; }
 	$(window).on('load', function() {
 		$('form').each(function() {
 			var $f = $(this);
-
-			// hook action
-			actionHook($f);
 
 			if (isSelfForm($f)) {
 				// hook inner, popup

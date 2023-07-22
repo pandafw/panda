@@ -1,5 +1,7 @@
 (function($) {	
-	$(window).on('load', function () {
+	"use strict";
+
+	$(window).on('load', function() {
 		$('.p-viewfield').prev('input').change(function() {
 			var v = $(this).val();
 			$(this).next('.p-viewfield').text(v == '' ? '\u3000' : v);

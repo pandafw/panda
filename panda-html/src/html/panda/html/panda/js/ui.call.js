@@ -1,4 +1,6 @@
-function panda_call(f, p) {
+if (typeof(panda) == "undefined") { panda = {}; }
+
+panda.call = function(f, p) {
 	switch (typeof(f)) {
 	case "function":
 		f.call(p);
@@ -8,4 +10,4 @@ function panda_call(f, p) {
 		f.call(p);
 		break;
 	}
-}
+};

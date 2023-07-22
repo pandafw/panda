@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	function _pqr_init($qr) {
 		if ($qr.data("pqueryer")) {
 			return;

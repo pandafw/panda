@@ -1,15 +1,6 @@
-function panda_call(f, p) {
-	switch (typeof(f)) {
-	case "function":
-		f.call(p);
-		break;
-	case "string":
-		f = new Function(f);
-		f.call(p);
-		break;
-	}
-}
 (function($) {
+	"use strict";
+
 	function setAlertType($a, s, t) {
 		for (var i in s.types) {
 			$a.removeClass(s.types[i]);
@@ -264,10 +255,25 @@ function panda_call(f, p) {
 	};
 
 })(jQuery);
+if (typeof(panda) == "undefined") { panda = {}; }
+
+panda.call = function(f, p) {
+	switch (typeof(f)) {
+	case "function":
+		f.call(p);
+		break;
+	case "string":
+		f = new Function(f);
+		f.call(p);
+		break;
+	}
+};
 ///////////////////////////////////////////////////////
 // swipe for carousel
 //
 (function($) {
+	"use strict";
+
 	var regTouchGestures = function($e) {
 		$e.hammer()
 			.on("swipeleft", function(e) {
@@ -289,6 +295,8 @@ function panda_call(f, p) {
 	});
 })(jQuery);
 (function($) {
+	"use strict";
+
 	$(window).on('load', function() {
 		$(".p-checkboxlist.order")
 			.removeClass("order")
@@ -310,6 +318,8 @@ function panda_call(f, p) {
 	});
 })(jQuery);
 (function($) {
+	"use strict";
+
 	var langs = {};
 	var dps = 'div.p-datepicker, div.p-datetimepicker, div.p-timepicker';
 
@@ -355,6 +365,8 @@ function panda_call(f, p) {
 if (typeof(panda) == "undefined") { panda = {}; }
 
 (function($) {
+	"use strict";
+
 	function ajaxFormSubmit() {
 		var $f = $(this);
 		var $a = $('#' + $f.attr('id') + '_alert').empty();
@@ -431,16 +443,6 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		});
 	}
 
-	function actionHook($f) {
-		// hook action
-		if (!$f.data("actionHooked")) {
-			$f.data('actionHooked', true)
-				.find('input[data-action], button[data-action]').click(function() {
-					$(this).closest('form').attr('action', $(this).data('action'));
-				});
-		}
-	}
-
 	function isSelfForm($f) {
 		var t = $f.attr('target') || '_self';
 		return t == '_self' || t == '_top' || t == '_parent';
@@ -480,9 +482,6 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		$('form').each(function() {
 			var $f = $(this);
 
-			// hook action
-			actionHook($f);
-
 			if (isSelfForm($f)) {
 				// hook inner, popup
 				innerHook($f);
@@ -498,6 +497,8 @@ if (typeof(panda) == "undefined") { panda = {}; }
 	});
 })(jQuery);
 (function($) {
+	"use strict";
+
 	var langs = {};
 	
 	function initSummerNotePlugins() {
@@ -669,31 +670,6 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		}
 	});
 })(jQuery);
-if (typeof(panda) == "undefined") { panda = {}; }
-
-//------------------------------------------------------
-panda.loading = function(timeout) {
-	$('body').loadmask({ mask: false, fixed: true, timeout: timeout || 1000 });
-};
-
-panda.page_sort = function(name, dir) {
-	panda.loading();
-	location.href = $.addQueryParams(location.href, { 's.c': name, 's.d': dir });
-	return false;
-};
-panda.page_sort_reverse = function(name, dir) {
-	return panda.page_sort(name, dir.toLowerCase() == "asc" ? "desc" : "asc");
-};
-panda.page_goto = function(s) {
-	panda.loading();
-	location.href = $.addQueryParams(location.href, { 'p.s': s });
-	return false;
-};
-panda.page_limit = function(l) {
-	panda.loading();
-	location.href = $.addQueryParams(location.href, { 'p.l': l });
-	return false;
-};
 function plv_options(id, options) {
 	var lv = document.getElementById(id);
 	for (var p in options) {
@@ -979,15 +955,13 @@ function _plv_setCheckAll($lv, check, crows) {
 }
 
 function _plv_onAllCheck() {
-	var c = this.checked;
-	var $lv = $(this).closest(".p-lv");
-
+	var c = this.checked, $lv = $(this).closest(".p-lv");
 	_plv_setCheckAll($lv, c, true);
 }
 
 function _plv_onAllClick(el) {
-	var c = !($(el).prop('checked') || false);
-	var $lv = $(el).closest(".p-lv");
+	var c = $(el).prop('checked') ? false : true,
+		$lv = $(el).closest(".p-lv");
 	_plv_setCheckAll($lv, c, true);
 }
 
@@ -1010,7 +984,7 @@ function _plv_onTBodyClick(evt) {
 		
 		var $lv = $tr.closest("div.p-lv");
 		var handler = $lv.get(0).onrowclick || $lv.data("onrowclick");
-		panda_call(handler, $tr.get(0));
+		panda.call(handler, $tr.get(0));
 	}
 }
 
@@ -1049,6 +1023,8 @@ panda.meta_props = function() {
 };
 
 (function($) {
+	"use strict";
+
 	$(window).on('load', function () {
 		$('.navbar-toggle').click(function() {
 			$(this).toggleClass('active');
@@ -1066,7 +1042,35 @@ panda.meta_props = function() {
 		}
 	});
 })(jQuery);
+if (typeof(panda) == "undefined") { panda = {}; }
+
 (function() {
+	"use strict";
+
+	$.extend(panda, {
+		page_loading: function(timeout) {
+			$('body').loadmask({ mask: false, fixed: true, timeout: timeout || 1000 });
+		},
+		page_sort: function(name, dir) {
+			panda.page_loading();
+			location.href = $.addQueryParams(location.href, { 's.c': name, 's.d': dir });
+			return false;
+		},
+		page_sort_reverse: function(name, dir) {
+			return panda.page_sort(name, dir.toLowerCase() == "asc" ? "desc" : "asc");
+		},
+		page_goto: function(s) {
+			panda.page_loading();
+			location.href = $.addQueryParams(location.href, { 'p.s': s });
+			return false;
+		},
+		page_limit: function(l) {
+			panda.page_loading();
+			location.href = $.addQueryParams(location.href, { 'p.l': l });
+			return false;
+		}
+	});
+
 	function _click(evt) {
 		var $el = $(this);
 		if ($el.parent().hasClass('disabled')) {
@@ -1175,6 +1179,8 @@ panda.meta_props = function() {
 	});
 })();
 (function($) {
+	"use strict";
+
 	function _pqr_init($qr) {
 		if ($qr.data("pqueryer")) {
 			return;
@@ -1295,6 +1301,8 @@ panda.meta_props = function() {
 })(jQuery);
 
 (function($) {
+	"use strict";
+
 	$.fn.ptrigger = function(option) {
 		option = $.extend({ 'icon' : 'fa fa-remove' }, option);
 		return this.each(function() {
@@ -1311,17 +1319,15 @@ panda.meta_props = function() {
 			var i = option.icon || $t.data('ptrigger-icon');
 			var $i = $('<i class="p-trigger ' + i + '"></i>');
 			$t.addClass('p-has-trigger');
-			$i.insertAfter($t)
-			  .click(function() {
-					if (f && f != "true" && f != true) {
-						panda_call(f, $t.get(0));
+			$i.insertAfter($t).click(function() {
+				if (f && f !== "true" && f !== true) {
+					panda.call(f, $t.get(0));
+				} else {
+					if ($t.val() != '') {
+						$t.val('').trigger('change');
 					}
-					else {
-						if ($t.val() != '') {
-							$t.val('').trigger('change');
-						}
-					}
-				});
+				}
+			});
 		});
 	};
 	
@@ -1332,7 +1338,9 @@ panda.meta_props = function() {
 	});
 })(jQuery);
 (function($) {	
-	$(window).on('load', function () {
+	"use strict";
+
+	$(window).on('load', function() {
 		$('.p-viewfield').prev('input').change(function() {
 			var v = $(this).val();
 			$(this).next('.p-viewfield').text(v == '' ? '\u3000' : v);

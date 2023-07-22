@@ -1,4 +1,6 @@
 (function($) {
+	"use strict";
+
 	$.fn.ptrigger = function(option) {
 		option = $.extend({ 'icon' : 'fa fa-remove' }, option);
 		return this.each(function() {
@@ -15,17 +17,15 @@
 			var i = option.icon || $t.data('ptrigger-icon');
 			var $i = $('<i class="p-trigger ' + i + '"></i>');
 			$t.addClass('p-has-trigger');
-			$i.insertAfter($t)
-			  .click(function() {
-					if (f && f != "true" && f != true) {
-						panda_call(f, $t.get(0));
+			$i.insertAfter($t).click(function() {
+				if (f && f !== "true" && f !== true) {
+					panda.call(f, $t.get(0));
+				} else {
+					if ($t.val() != '') {
+						$t.val('').trigger('change');
 					}
-					else {
-						if ($t.val() != '') {
-							$t.val('').trigger('change');
-						}
-					}
-				});
+				}
+			});
 		});
 	};
 	

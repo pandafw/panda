@@ -283,15 +283,13 @@ function _plv_setCheckAll($lv, check, crows) {
 }
 
 function _plv_onAllCheck() {
-	var c = this.checked;
-	var $lv = $(this).closest(".p-lv");
-
+	var c = this.checked, $lv = $(this).closest(".p-lv");
 	_plv_setCheckAll($lv, c, true);
 }
 
 function _plv_onAllClick(el) {
-	var c = !($(el).prop('checked') || false);
-	var $lv = $(el).closest(".p-lv");
+	var c = $(el).prop('checked') ? false : true,
+		$lv = $(el).closest(".p-lv");
 	_plv_setCheckAll($lv, c, true);
 }
 
@@ -314,7 +312,7 @@ function _plv_onTBodyClick(evt) {
 		
 		var $lv = $tr.closest("div.p-lv");
 		var handler = $lv.get(0).onrowclick || $lv.data("onrowclick");
-		panda_call(handler, $tr.get(0));
+		panda.call(handler, $tr.get(0));
 	}
 }
 
