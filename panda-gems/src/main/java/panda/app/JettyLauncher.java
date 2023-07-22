@@ -143,7 +143,7 @@ public class JettyLauncher {
 			return;
 		}
 
-		Server server = new Server(8080);
+		Server server = new Server(clas.port);
 
 		WebAppContext webapp = new WebAppContext();
 		webapp.setContextPath(clas.contextPath);

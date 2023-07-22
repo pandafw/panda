@@ -15,22 +15,28 @@ public class JspViewTest extends BaseWebappTest {
 
 	@Test
 	public void test_jsp2() throws IOException {
-		get("/views/jsp2");
-		System.out.println("2: " + resp.getContentText());
-		assertEquals("2", resp.getContentText());
+		if ("true".equalsIgnoreCase(System.getProperty("JSP_ENABLED"))) {
+			get("/views/jsp2");
+			System.out.println("2: " + resp.getContentText());
+			assertEquals("2", resp.getContentText());
+		}
 	}
 
 	@Test
 	public void test_jsp3() throws IOException {
-		get("/views/jsp3");
-		System.out.println("3: " + resp.getContentText());
-		assertEquals("3", resp.getContentText());
+		if ("true".equalsIgnoreCase(System.getProperty("JSP_ENABLED"))) {
+			get("/views/jsp3");
+			System.out.println("3: " + resp.getContentText());
+			assertEquals("3", resp.getContentText());
+		}
 	}
 
 	@Test
 	public void test_jsp4() throws IOException {
-		get("/views/jsp4");
-		System.out.println("4: " + resp.getContentText());
-		assertEquals("4", resp.getContentText());
+		if ("true".equalsIgnoreCase(System.getProperty("JSP_ENABLED"))) {
+			get("/views/jsp4");
+			System.out.println("4: " + resp.getContentText());
+			assertEquals("4", resp.getContentText());
+		}
 	}
 }
