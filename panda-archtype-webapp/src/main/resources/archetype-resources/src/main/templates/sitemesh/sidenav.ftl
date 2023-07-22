@@ -4,7 +4,7 @@
 	</#if>
 </#macro>
 
-<div id="navi_pets" class="panel panel-info side-navi">
+<div id="navi_pets" class="panel panel-info p-sidenav-card">
 	<div class="panel-heading">
 		<i class="fa fa-qq"></i> <span><@p.text name="navi-pets"/></span>
 	</div>
@@ -16,7 +16,7 @@
 </div>
 
 <#if assist.loginUser??>
-<div id="navi_user" class="panel panel-primary side-navi">
+<div id="navi_user" class="panel panel-primary p-sidenav-card">
 	<div class="panel-heading">
 		<i class="fa fa-user"></i> <span><@p.text name="navi-user-account"/></span>
 	</div>
