@@ -51,41 +51,39 @@
 				return false;
 			}
 
-			$('#shell_alert').empty();
-			$('#shell_result').find('tbody').empty().end().hide();
-			
-			var $o = $('#shell').loadmask("Executing...");
+			var $a = $('#shell_alert').empty(),
+				$r = $('#shell_result').find('tbody').empty().end().hide(),
+				$f = $('#shell').loadmask("Executing...");
+
 			$.ajax({
-				url: $o.attr('action'),
+				url: $f.attr('action'),
 				method: 'post',
-				data: $o.serializeArray(),
+				data: $f.serializeArray(),
 				dataType: 'json',
 				success: function(d) {
 					if (!d.success) {
-						$('#shell_alert').palert('actionAlert', d);
+						$a.palert('ajaxDataAlert', d);
 						return;
 					}
 
 					if (d.result) {
-						var $srt = $('#shell_result tbody');
-						function addResult(d, p) {
+						var $tb = $r.find('tbody'),
+							ps = [ 'code', 'elapsed', 'stdout', 'stderr' ];
+						
+						$.each(ps, function(i, p) {
 							var $tr = $('<tr>');
 							$tr.append($('<td>').text(p));
-							$tr.append($('<td>').append($('<pre>').text(d[p])));
-							$srt.append($tr);
+							$tr.append($('<td>').append($('<pre>').text(d.result[p])));
+							$tb.append($tr);
 						}
-						addResult(d.result, 'code');
-						addResult(d.result, 'elapsed');
-						addResult(d.result, 'stdout');
-						addResult(d.result, 'stderr');
-						$('#shell_result').show();
+						$r.show();
 					}
 				},
 				error: function(xhr, status, err) {
-					$('#shell_alert').palert('ajaxJsonError', xhr, status, err, "<@p.text name='error-server-connect' escape='js'/>");
+					$a.palert('ajaxJsonError', xhr, status, err, "<@p.text name='error-server-connect' escape='js'/>");
 				},
 				complete: function(xhr, ts) {
-					$o.unloadmask();
+					$f.unloadmask();
 				}
 			});
 			return false;

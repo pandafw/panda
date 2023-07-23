@@ -367,7 +367,7 @@
 	}
 
 	function media_action_error(d) {
-		$('#media_alert').palert('actionAlert', d);
+		$('#media_alert').palert('ajaxDataAlert', d);
 	}
 	
 	function media_ajax_error(xhr, status, err) {

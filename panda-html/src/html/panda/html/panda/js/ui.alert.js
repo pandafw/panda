@@ -29,16 +29,14 @@
 				for (var i = 0; i < m.length; i++) {
 					$u.append(msg_li(s, t, m[i]));
 				}
-			}
-			else {
+			} else {
 				for (var n in m) {
 					var v = m[n];
 					if ($.isArray(v)) {
 						for (var i = 0; i < v.length; i++) {
 							$u.append(msg_li(s, t, v[i], n));
 						}
-					}
-					else {
+					} else {
 						$u.append(msg_li(s, t, v, n));
 					}
 				}
@@ -60,8 +58,7 @@
 						for (var i = 0; i < v.length; i++) {
 							$u.append(msg_li(s, t, v[i], n));
 						}
-					}
-					else {
+					} else {
 						$u.append(msg_li(s, t, v, n));
 					}
 					$u.insertAfter($i);
@@ -70,26 +67,22 @@
 		}
 	}
 
-	function addAlerts($a, s, m, t) {
+	function addAlerts($a, s, m, t, $f) {
 		if (typeof(m) == 'string') {
 			addMsg($a, s, m, t || 'info');
-		}
-		else if ($.isArray(m)) {
+		} else if ($.isArray(m)) {
 			for (var i = 0; i < m.length; i++) {
 				if (typeof(m[i]) == 'string') {
 					addMsg($a, s, m[i], t || 'info');
-				}
-				else {
+				} else {
 					addMsg($a, s, m[i].html, m[i].type);
 				}
 			}
-		}
-		else if (m) {
+		} else if (m) {
 			if (m.params) {
-				if (t) {
-					addInputErrors($(t), s, m.params.errors, 'error');
-				}
-				else {
+				if ($f) {
+					addInputErrors($f, s, m.params.errors, 'error');
+				} else {
 					addMsgs($a, s, m.params.errors, "error");
 				}
 			}
@@ -149,7 +142,7 @@
 			info: function(m) {
 				return this.add(m, 'info');
 			},
-			add: function(m, t) {
+			add: function(m, t, $f) {
 				var s = $.extend({}, $c.data('palert'), $.palert);
 				var a = false, $a = $c.children('.p-alert');
 				if ($a.size() < 1) {
@@ -157,7 +150,7 @@
 					a = true;
 				}
 
-				addAlerts($a, s, m, t);
+				addAlerts($a, s, m, t, $f);
 
 				if (a && $a.children().length) {
 					$a.prepend("<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
@@ -166,20 +159,20 @@
 				}
 				return this;
 			},
-			actionAlert: function(d, t) {
+			ajaxDataAlert: function(d, $f) {
 				if (d.alerts) {
-					this.add(d.alerts, t);
-					if (d.alerts.params && !d.alerts.params.empty) {
-						this.error($(f).data('ajaxInputError'));
+					this.add(d.alerts, '', $f);
+					if ($f && d.alerts.params && !d.alerts.params.empty) {
+						this.error($f.data('ajaxInputError'));
 					}
 				}
 				if (d.errors) {
-					this.add(d.errors, 'error');
+					this.error(d.errors);
 				}
 				if (d.exception) {
 					var e = d.exception;
 					var m = e.message + (e.stackTrace ? ("\n" + e.stackTrace) : "");
-					this.add(m, 'error');
+					this.error(m);
 				}
 				return this;
 			},
@@ -187,7 +180,7 @@
 				if (xhr && xhr.responseJSON) {
 					var d = xhr.responseJSON;
 					if (d && (d.alerts || d.exception || d.errors)) {
-						return this.actionAlert(d);
+						return this.ajaxDataAlert(d);
 					}
 				}
 			
@@ -198,10 +191,8 @@
 				
 				if (xhr && xhr.responseText) {
 					try {
-						var r = JSON.parse(xhr.responseText);
-						msg += JSON.stringify(r, null, 2);
-					}
-					catch (ex) {
+						msg += JSON.stringify(JSON.parse(xhr.responseText), null, 2);
+					} catch (ex) {
 						msg += xhr.responseText;
 					}
 				}
@@ -222,23 +213,6 @@
 		});
 	};
 
-	$.palert.notify = function(m, t, s) {
-		s = $.extend({}, $.palert, s);
-		var ns = $.extend({ style: 'palert' }, $.palert.notifys);
-
-		var $a = $('<div>').addClass('p-alert alert');
-		addAlerts($a, s, m, t);
-		
-		if ($.notify) {
-			if (!$.notify.getStyle('palert')) {
-				$.notify.addStyle('palert', {
-					html: '<div data-notify-html="html"></div>'
-				});
-			}
-			$.notify({ html: $a}, ns);
-		}
-	};
-	
 	$.palert.toggleFieldErrors = function(el) {
 		var $fes = $(el).closest('.p-field-errors-alert').next('.p-field-errors');
 		var id = $.palert.icons.down;
@@ -252,6 +226,23 @@
 			$(el).children('i').removeClass(iu).addClass(id);
 		}
 		return false;
+	};
+
+	$.palert.notify = function(m, t, s) {
+		if ($.notify) {
+			s = $.extend({}, $.palert, s);
+			var ns = $.extend({ style: 'palert' }, $.palert.notifys);
+	
+			var $a = $('<div>').addClass('p-alert alert');
+			addAlerts($a, s, m, t);
+		
+			if (!$.notify.getStyle('palert')) {
+				$.notify.addStyle('palert', {
+					html: '<div data-notify-html="html"></div>'
+				});
+			}
+			$.notify({ html: $a}, ns);
+		}
 	};
 
 })(jQuery);

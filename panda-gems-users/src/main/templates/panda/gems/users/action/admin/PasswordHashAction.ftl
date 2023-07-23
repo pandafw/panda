@@ -39,18 +39,18 @@
 				return false;
 			}
 			
-			$('#pwhash_alert').empty();
-			$('#pwhash_result').find('tbody').empty().end().hide();
+			var $a = $('#pwhash_alert').empty(),
+				$r = $('#pwhash_result').find('tbody').empty().end().hide(),
+				$f = $('#pwhash').loadmask("Hashing...");
 
-			var $o = $('#pwhash').loadmask("Hashing...");
 			$.ajax({
-				url: $o.attr('action'),
+				url: $f.attr('action'),
 				method: 'post',
-				data: $o.serializeArray(),
+				data: $f.serializeArray(),
 				dataType: 'json',
 				success: function(d) {
 					if (!d.success) {
-						$('#pwhash_alert').palert('actionAlert', d);
+						$a.palert('ajaxDataAlert', d);
 						return;
 					}
 	
@@ -59,16 +59,16 @@
 							var $tr = $('<tr>');
 							$tr.append($('<td>').text(this.key));
 							$tr.append($('<td>').text(this.value));
-							$('#pwhash_result tbody').append($tr);
+							$r.find('tbody').append($tr);
 						});
-						$('#pwhash_result').show();
+						$r.show();
 					}
 				},
 				error: function(xhr, status, err) {
-					$('#pwhash_alert').palert('ajaxJsonError', xhr, status, err, "<@p.text name='error-server-connect' escape='js'/>");
+					$a.palert('ajaxJsonError', xhr, status, err, "<@p.text name='error-server-connect' escape='js'/>");
 				},
 				complete: function(xhr, ts) {
-					$o.unloadmask();
+					$f.unloadmask();
 				}
 			});
 			return false;

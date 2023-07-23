@@ -18,9 +18,9 @@ if (typeof(panda) == "undefined") { panda = {}; }
 			data: $f.serializeArray(),
 			dataType: 'json',
 			success: function(d) {
-				$a.palert('actionAlert', d, $f);
+				$a.palert('ajaxDataAlert', d, $f);
 				if (d.result) {
-					$f.vals(d.result);
+					$f.values(d.result);
 					$f.find('div.p-datepicker, div.p-datetimepicker, div.p-timepicker').each(function() {
 						var v = $(this).find('input').val();
 						if (v) {
