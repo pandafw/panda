@@ -3,7 +3,7 @@
 		<li class="nav-item<#if path?starts_with(ap)> active</#if>"><@p.a cssClass="nav-link" action=ac><i class="${a.getText(ic)}"></i> <span><@p.text name=tx/></span></@p.a></li>
 	</#if>
 </#macro>
-<div id="navi_super" class="panel panel-danger card p-sidenav-card">
+<div id="navi_super" class="panel panel-danger card">
 	<div class="panel-heading card-header bg-danger text-white">
 		<i class="fa fa-wrench"></i> <span><@p.text name="navi-super"/></span>
 	</div>

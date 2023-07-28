@@ -2,9 +2,7 @@
 	<div id="content" class="col-md-9 col-sm-11">
 		${body}
 	</div>
-	<div id="sidenav" class="col-md-3 col-sm-1 p-sidenav">
-		<div class="p-sidenav-body">
-			<#include "sidenav.ftl"/>
-		</div>
+	<div id="sidenavi" class="col-md-3 col-sm-1 p-sidenavi">
+		<#include "sidenavi.ftl"/>
 	</div>
 </div></div>

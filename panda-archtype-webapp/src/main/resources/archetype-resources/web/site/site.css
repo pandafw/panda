@@ -28,7 +28,7 @@ blockquote {
 #content {
 	padding: 20px 15px;
 }
-#sidenav {
+#sidenavi {
 	padding: 20px 15px;
 }
 #footer {
@@ -36,7 +36,7 @@ blockquote {
 	border-width: 1px 0 0 0;
 	margin: 0;
 }
-#footer_navi {
+#footnavi {
 	padding-top: 15px;
 	text-align: center;
 }

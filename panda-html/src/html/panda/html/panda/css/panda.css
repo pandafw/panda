@@ -309,7 +309,6 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 
 /*--------------------------------------------------
  * p-toolbar (ul)
- * p-navih (ul, ol)
 --------------------------------------------------*/
 .p-toolbar-wrap {
 	text-align: right;
@@ -323,26 +322,26 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 	background-color: #f5f5f5;
 	border-radius: 4px;
 }
-.p-toolbar, .p-navih {
+.p-toolbar {
 	display: block;
 	list-style-type: none;
 	margin: 0;
 	padding: 0.5em 0;
 }
-.p-toolbar li, .p-navih li {
+.p-toolbar li {
 	border-left: 1px solid #fff;
 	border-right: 1px solid #c6bcaa;
 	display: inline-block;
 	margin: 0;
 	padding: 0 1em;
 }
-.p-toolbar li:first-child, .p-navih li:first-child {
+.p-toolbar li:first-child {
 	border-left: none;
 }
-.p-toolbar li:last-child, .p-navih li:last-child {
+.p-toolbar li:last-child {
 	border-right: none;
 }
-.p-toolbar li > a, .p-navih li > a {
+.p-toolbar li > a {
 	border-radius: 4px;
 	margin: -0.5em -1em;
 	padding: 0.5em 1em;
@@ -399,13 +398,6 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 	min-width: 400px;
 }
 
-/*--------------------------------------------------
- * Adblock
---------------------------------------------------*/
-.p-adblock {
-	font-size: 150%;
-	color: #666;
-}
 
 /*---------------------------------------------*/
 /* listview.css                                */
@@ -837,77 +829,76 @@ tbody.p-lv-tbody > tr > td:first-child {
 	width: auto;
 }
 
-/* SIDENAV */
-.p-sidenav-card {
+/* SIDENAVI */
+.p-sidenavi > .panel, .p-sidenavi > .card {
 	margin-bottom: 20px;
 }
-.p-sidenav-card .panel-body, .p-sidenav-card .card-body {
-	padding: 2px 5px;
-}
-.p-sidenav-card .panel-heading, .p-sidenav-card .card-header {
+.p-sidenavi > .panel > .panel-heading, .p-sidenavi > .card > .card-header {
 	position: relative;
 }
-.p-sidenav-card ul.nav > li > a {
+.p-sidenavi > .panel > .panel-heading > i, .p-sidenavi-card .card > .card-header > i {
+	font-size: 120%;
+}
+.p-sidenavi > .panel > .panel-body, .p-sidenavi > .card > .card-body {
+	padding: 2px 5px;
+}
+.p-sidenavi ul.nav > li > a {
 	padding: 5px 0.5em;
 }
-.p-sidenav-card ul.nav > li > a:focus, .p-sidenav-card ul.nav > li > a:hover {
+.p-sidenavi ul.nav > li > a:focus, .p-sidenavi ul.nav > li > a:hover {
 	background-color: #eee;
 }
-.p-sidenav-card ul.nav > li > a > i {
+.p-sidenavi ul.nav > li > a > i {
 	display: inline-block;
 	text-align: center;
 	width: 20px;
 }
-.p-sidenav-card .panel-heading > i, .p-sidenav-card .card-header > i {
-	font-size: 120%;
-}
-.p-sidenav-card ul.nav  > li.active {
+.p-sidenavi ul.nav > li.active {
 	font-weight: bold;
 }
 
 @media (max-width: 991px) {
-	.p-sidenav {
+	.p-sidenavi {
 		text-align: right;
 	}
-	.p-sidenav-body {
-		display: inline-block;
+	.p-sidenavi > .panel, .p-sidenavi > .card {
 		text-align: center;
 		width: 45px;
 	}
-	.p-sidenav-card .panel-heading, .p-sidenav-card .card-header {
+	.p-sidenavi > .panel > .panel-heading, .p-sidenavi > .card > .card-header {
 		padding: 10px 5px;
 	}
-	.p-sidenav-card .panel-heading span, .p-sidenav-body .panel-body a>span,
-	.p-sidenav-card .card-header span, .p-sidenav-body .card-body a>span {
+	.p-sidenavi > .panel > .panel-heading span, .p-sidenavi > .panel > .panel-body a > span,
+	.p-sidenavi > .card > .card-header span, .p-sidenavi > .card > .card-body a > span {
 		display: none;
 	}
 }
 @media (min-width: 768px) {
-	.p-sidenav-card ul.nav > li {
+	.p-sidenavi ul.nav > li {
 		border-bottom: solid 1px #ccc;
 	}
-	.p-sidenav-card ul.nav > li:last-child {
+	.p-sidenavi ul.nav > li:last-child {
 		border-bottom: none;
 	}
 }
 @media (max-width: 767px) {
-	.p-sidenav {
+	.p-sidenavi {
 		text-align: left;
 	}
-	.p-sidenav-body {
-		display: block;
+	.p-sidenavi > .panel, .p-sidenavi > .card {
+		display: inline-block;
 		text-align: left;
 		width: auto;
 	}
-	.p-sidenav-card.panel, .side-card.panel {
+	.p-sidenavi > .panel, .side-card.panel {
 		margin-bottom: 5px;
 	}
-	.p-sidenav-card.panel, .p-sidenav-card .panel-body, .p-sidenav-card.panel ul.nav, .p-sidenav-card.panel ul.nav>li,
-	.p-sidenav-card.panel, .p-sidenav-card .card-body, .p-sidenav-card.card ul.nav, .p-sidenav-card.card ul.nav>li {
-		display: inline-block;
-	}
-	.p-sidenav-card .panel-heading, .p-sidenav-card .card-header {
+	.p-sidenavi > .panel > .panel-heading, .p-sidenavi > .card > .card-header {
 		display: none;
+	}
+	.p-sidenavi > .panel-body, .p-sidenavi > .panel ul.nav, .p-sidenavi > .panel ul.nav > li,
+	.p-sidenavi > .card-body, .p-sidenavi > .card ul.nav, .p-sidenavi > .card ul.nav > li {
+		display: inline-block;
 	}
 }/* TOOLS */
 .p-btrans		{ background: transparent; }

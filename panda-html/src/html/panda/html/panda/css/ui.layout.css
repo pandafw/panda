@@ -32,7 +32,6 @@
 
 /*--------------------------------------------------
  * p-toolbar (ul)
- * p-navih (ul, ol)
 --------------------------------------------------*/
 .p-toolbar-wrap {
 	text-align: right;
@@ -46,26 +45,26 @@
 	background-color: #f5f5f5;
 	border-radius: 4px;
 }
-.p-toolbar, .p-navih {
+.p-toolbar {
 	display: block;
 	list-style-type: none;
 	margin: 0;
 	padding: 0.5em 0;
 }
-.p-toolbar li, .p-navih li {
+.p-toolbar li {
 	border-left: 1px solid #fff;
 	border-right: 1px solid #c6bcaa;
 	display: inline-block;
 	margin: 0;
 	padding: 0 1em;
 }
-.p-toolbar li:first-child, .p-navih li:first-child {
+.p-toolbar li:first-child {
 	border-left: none;
 }
-.p-toolbar li:last-child, .p-navih li:last-child {
+.p-toolbar li:last-child {
 	border-right: none;
 }
-.p-toolbar li > a, .p-navih li > a {
+.p-toolbar li > a {
 	border-radius: 4px;
 	margin: -0.5em -1em;
 	padding: 0.5em 1em;
@@ -122,11 +121,4 @@
 	min-width: 400px;
 }
 
-/*--------------------------------------------------
- * Adblock
---------------------------------------------------*/
-.p-adblock {
-	font-size: 150%;
-	color: #666;
-}
 

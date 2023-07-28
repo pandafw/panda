@@ -1,6 +1,6 @@
 <div id="footer" class="navbar navbar-default">
 	<div class="container">
-		<!--div id="footer_navi"></div-->
+		<!--div id="footnavi"></div-->
 		<div id="footer_site">
 			<div id="site_cpr">&copy; ${assist.systemYear?c} ${request.serverName!}</div>
 			<div id="site_ver">Version: ${assist.appVersion} Cost: ${assist.requestElapsedTime}</div>

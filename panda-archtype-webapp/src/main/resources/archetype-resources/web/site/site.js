@@ -31,7 +31,7 @@ $(function() {
 	$('[data-toggle=tooltip]').tooltip();
 	$('[data-toggle=popover]').popover();
 
-	$('#sidenav i').each(function() {
+	$('#sidenavi i').each(function() {
 		$(this).attr('title', $(this).next('span').text());
 	})
 
