@@ -21,70 +21,61 @@ public class Pager implements Cloneable, Serializable {
 
 	/** page no */
 	private Long page;
-	
+
 	/** start offset */
 	private Long start;
-	
+
 	/** page limit */
 	private Long limit;
-	
+
 	/** the item count of the page */
 	private Long count;
-	
+
 	/** total count */
 	private Long total;
 
-	//--------------------------------------------------------------
+	// --------------------------------------------------------------
 	public void normalize() {
-		// total is unknown
 		if (total == null) {
+			// total is unknown
 			if (page != null) {
 				start = (page - 1) * (limit == null ? 0 : limit);
-			}
-			else if (start != null) {
+			} else if (start != null) {
 				if (limit == null || limit == 0) {
 					page = start > 0 ? 2L : 1L;
-				}
-				else {
+				} else {
 					page = calcPage();
 				}
-			}
-			else {
+			} else {
 				page = 1L;
 				start = 0L;
 			}
-		}
-		// total is known
-		else {
+		} else {
+			// total is known
 			if (start != null) {
 				// fix start & calculate page
 				if (start >= total) {
 					if (limit == null || limit < 1) {
 						start = 0L;
 						page = 1L;
-					}
-					else {
+					} else {
 						start = total - limit;
 						if (start < 0) {
 							start = 0L;
 							page = 1L;
-						}
-						else {
+						} else {
 							page = calcPage();
 						}
 					}
-				}
-				else {
+				} else {
 					page = calcPage();
 				}
-			}
-			else if (page != null) {
+			} else if (page != null) {
 				// fix page & calculate start
 				if (limit == null || limit < 1) {
 					page = 1L;
 					start = 0L;
-				}
-				else {
+				} else {
 					long p = total / limit;
 					if (total % limit != 0) {
 						p++;
@@ -94,8 +85,7 @@ public class Pager implements Cloneable, Serializable {
 					}
 					start = (page - 1) * limit;
 				}
-			}
-			else {
+			} else {
 				page = 1L;
 				start = 0L;
 			}
@@ -116,6 +106,7 @@ public class Pager implements Cloneable, Serializable {
 
 	/**
 	 * normalize() must be called before.
+	 * 
 	 * @return the pages according to the start, total, count, limit
 	 */
 	public long getPages() {
@@ -128,15 +119,12 @@ public class Pager implements Cloneable, Serializable {
 					pages = page;
 				}
 			}
-		}
-		else if (count != null) {
+		} else if (count != null) {
 			if (limit == null || limit < 1) {
 				pages = page;
-			}
-			else if (count < limit) {
+			} else if (count < limit) {
 				pages = page;
-			}
-			else {
+			} else {
 				pages = page + 1;
 			}
 		}
@@ -146,36 +134,36 @@ public class Pager implements Cloneable, Serializable {
 	protected long calcPage() {
 		return (long)Math.ceil((start.doubleValue() + 1) / limit);
 	}
-	
-	//--------------------------------------------------------------
+
+	// --------------------------------------------------------------
 	/**
 	 * @return the begin no (start + 1)
 	 */
 	public Long getBegin() {
 		return start == null ? null : start + 1;
 	}
-	
+
 	/**
 	 * @return the end no (start + count)
 	 */
 	public Long getEnd() {
 		return start == null || count == null ? null : start + count;
 	}
-	
+
 	/**
 	 * @return page
 	 */
 	public Long getPage() {
 		return page == null ? 1 : page;
 	}
-	
+
 	/**
 	 * @param page the page to set
 	 */
 	public void setPage(int page) {
 		setPage((long)page);
 	}
-	
+
 	/**
 	 * @param page the page to set
 	 */
@@ -207,7 +195,7 @@ public class Pager implements Cloneable, Serializable {
 			this.start = start;
 		}
 	}
-	
+
 	/**
 	 * @return the count
 	 */
@@ -243,14 +231,14 @@ public class Pager implements Cloneable, Serializable {
 	public Long getLimit() {
 		return limit == null ? 0 : limit;
 	}
-	
+
 	/**
 	 * @param limit the limit to set
 	 */
 	public void setLimit(int limit) {
 		setLimit((long)limit);
 	}
-	
+
 	/**
 	 * @param limit the limit to set
 	 */
@@ -259,21 +247,21 @@ public class Pager implements Cloneable, Serializable {
 			this.limit = limit;
 		}
 	}
-	
+
 	/**
 	 * @return the total
 	 */
 	public Long getTotal() {
 		return total;
 	}
-	
+
 	/**
 	 * @param total the total to set
 	 */
 	public void setTotal(int total) {
 		setTotal((long)total);
 	}
-	
+
 	/**
 	 * @param total the total to set
 	 */
@@ -283,39 +271,39 @@ public class Pager implements Cloneable, Serializable {
 		}
 	}
 
-	//------------------------------------------------
+	// ------------------------------------------------
 	// short name
-	//------------------------------------------------
+	// ------------------------------------------------
 	/**
 	 * @return the page
 	 */
 	public Long getP() {
 		return getPage();
 	}
-	
+
 	/**
 	 * @param page the page to set
 	 */
 	public void setP(Long page) {
 		setPage(page);
 	}
-	
+
 	/**
 	 * @return the start
 	 */
-	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
-	@NumberValidate(min="0")
+	@CastErrorValidate(msgId = Validators.MSGID_INTEGER)
+	@NumberValidate(min = "0")
 	public Long getS() {
 		return getStart();
 	}
-	
+
 	/**
 	 * @param start the start to set
 	 */
 	public void setS(Long start) {
 		setStart(start);
 	}
-	
+
 	/**
 	 * @return the count
 	 */
@@ -329,52 +317,52 @@ public class Pager implements Cloneable, Serializable {
 	public void setC(Long count) {
 		setCount(count);
 	}
-	
+
 	/**
 	 * @return the limit
 	 */
-	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
-	@NumberValidate(min="0")
+	@CastErrorValidate(msgId = Validators.MSGID_INTEGER)
+	@NumberValidate(min = "0")
 	public Long getL() {
 		return getLimit();
 	}
-	
+
 	/**
 	 * @param limit the limit to set
 	 */
 	public void setL(Long limit) {
 		setLimit(limit);
 	}
-	
+
 	/**
 	 * @return the total
 	 */
-	@CastErrorValidate(msgId=Validators.MSGID_INTEGER)
-	@NumberValidate(min="0")
+	@CastErrorValidate(msgId = Validators.MSGID_INTEGER)
+	@NumberValidate(min = "0")
 	public Long getT() {
 		return getTotal();
 	}
-	
+
 	/**
 	 * @param total the total to set
 	 */
 	public void setT(Long total) {
 		setTotal(total);
 	}
-	
+
 	/**
 	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
-				.append("start", getStart())
-				.append("limit", getLimit())
-				.append("count", getCount())
-				.append("total", getTotal())
-				.append("page", getPage())
-				.append("pages", getPages())
-				.toString();
+			.append("start", getStart())
+			.append("limit", getLimit())
+			.append("count", getCount())
+			.append("total", getTotal())
+			.append("page", getPage())
+			.append("pages", getPages())
+			.toString();
 	}
 
 	/**
@@ -390,24 +378,22 @@ public class Pager implements Cloneable, Serializable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
 
 		Pager rhs = (Pager)obj;
 		return Objects.equalsBuilder()
-				.append(start, rhs.start)
-				.append(limit, rhs.limit)
-				.append(count, rhs.count)
-				.append(total, rhs.total)
-				.isEquals();
+			.append(start, rhs.start)
+			.append(limit, rhs.limit)
+			.append(count, rhs.count)
+			.append(total, rhs.total)
+			.isEquals();
 	}
 
 	/**
 	 * Clone
+	 * 
 	 * @return Clone Object
 	 */
 	public Pager clone() {
@@ -418,7 +404,7 @@ public class Pager implements Cloneable, Serializable {
 		clone.limit = this.limit;
 		clone.count = this.count;
 		clone.total = this.total;
-		
+
 		return clone;
 	}
 

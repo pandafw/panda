@@ -694,11 +694,11 @@ tbody.p-lv-tbody > tr > td:first-child {
 	margin: 10px 0;
 	text-align: center;
 }
-.p-pager > .p-pager-info {
+.p-pager > .infos {
 	float: left;
 	padding: 8px;
 }
-.p-pager > .p-pager-limit {
+.p-pager > .limits {
 	float: right;
 }
 .p-pager > .pagination {
@@ -727,8 +727,8 @@ tbody.p-lv-tbody > tr > td:first-child {
 	border-bottom: 3px solid #337ab7;
 }
 
-.p-pager > .pagination > li.p-pager-ellipsis-left > span,
-.p-pager > .pagination > li.p-pager-ellipsis-right > span {
+.p-pager > .pagination > li.eleft > span,
+.p-pager > .pagination > li.eright > span {
 	border: 0 none;
 	border-bottom: 3px solid transparent;
 	padding-left: 8px;

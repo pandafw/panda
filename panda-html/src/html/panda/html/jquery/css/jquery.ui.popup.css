@@ -112,8 +112,8 @@
 	z-index: 10210;
 	position: absolute;
 	display: block;
-	top: -8px;
-	right: -8px;
+	top: -6px;
+	right: -6px;
 	width: 16px;
 	height: 16px;
 	line-height: 14px;
@@ -122,10 +122,16 @@
 	font-family: monospace;
 	font-weight: bold;
 	cursor: pointer;
-	background-color: #eee;
-	border: 1px solid #999;
+	background-color: #fff;
+	border: 1px solid #aaa;
 	border-radius: 50%;
 	text-align: center;
+	color: #999;
+}
+.ui-popup-closer:hover {
+	background-color: #eee;
+	border-color: #999;
+	color: #666;
 }
 
 .ui-popup-loader {

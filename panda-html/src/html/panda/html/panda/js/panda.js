@@ -353,8 +353,6 @@ panda.call = function(f, p) {
 		}
 	});
 })(jQuery);
-if (typeof(panda) == "undefined") { panda = {}; }
-
 (function($) {
 	"use strict";
 
@@ -396,24 +394,22 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		});
 		return false;
 	}
-			
+
 	function ajaxSubmitHook($f) {
-		// hook submit
 		if (!$f.data("ajaxSubmitHooked") && $f.data('ajaxAction')) {
 			$f.data('ajaxSubmitHooked', true).submit(ajaxFormSubmit);
 		}
 	}
 
-	function ajaxLoadInnerForm($f) {
+	function ajaxInnerFormLoad($f) {
 		var $c = $f.closest('.p-popup, .p-inner');
+
 		var data = $f.serializeArray();
-		if ($c.hasClass('p-inner')) {
-			data.push({ name: '__inner', value: 'true' });
-		}
-		else {
-			data.push({ name: '__popup', value: 'true' });
-		}
-		
+		data.push({
+			name: $c.hasClass('p-inner') ? '__inner' : '__popup',
+			value: 'true'
+		});
+
 		if ($f.attr('loadmask') != 'false') {
 			$c.parent().loadmask();
 		}
@@ -444,12 +440,13 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		if ($f.data("hooked")) {
 			return;
 		}
+
 		var $c = $f.closest('.p-popup, .p-inner');
 		if ($c.length > 0) {
 			$f.data('hooked', true);
 			$f.submit(function(e) {
 				e.preventDefault();
-				ajaxLoadInnerForm($(this));
+				ajaxInnerFormLoad($(this));
 				return false;
 			});
 		}
@@ -478,10 +475,10 @@ if (typeof(panda) == "undefined") { panda = {}; }
 				innerHook($f);
 
 				// hook loadmask
-				if (panda.enable_loadmask_form) {
+				if (!$.disable_loadmask_form) {
 					loadmaskHook($f);
 				}
-				
+
 				ajaxSubmitHook($f);
 			}
 		});
@@ -1033,119 +1030,96 @@ panda.meta_props = function() {
 		}
 	});
 })(jQuery);
-if (typeof(panda) == "undefined") { panda = {}; }
-
 (function() {
 	"use strict";
 
-	$.extend(panda, {
-		page_loading: function(timeout) {
-			$('body').loadmask({ mask: false, fixed: true, timeout: timeout || 1000 });
-		},
-		page_sort: function(name, dir) {
-			panda.page_loading();
-			location.href = $.addQueryParams(location.href, { 's.c': name, 's.d': dir });
-			return false;
-		},
-		page_sort_reverse: function(name, dir) {
-			return panda.page_sort(name, dir.toLowerCase() == "asc" ? "desc" : "asc");
-		},
-		page_goto: function(s) {
-			panda.page_loading();
-			location.href = $.addQueryParams(location.href, { 'p.s': s });
-			return false;
-		},
-		page_limit: function(l) {
-			panda.page_loading();
-			location.href = $.addQueryParams(location.href, { 'p.l': l });
-			return false;
-		}
-	});
-
 	function _click(evt) {
 		var $el = $(this);
+
 		if ($el.parent().hasClass('disabled')) {
 			evt.preventDefault();
+			return;
 		}
-		else {
-			var pn = $el.attr('pageno');
-			if (pn >= 0) {
-				var $pg = $el.closest('.p-pager');
-				var js = $pg.data('click');
-				if (js) {
-					js = js.replace('$', pn);
-					js = js.replace('#', (pn - 1) * $pg.data('limit'));
-					if (eval(js) === false) {
-						evt.preventDefault();
-					}
+
+		var pn = $el.attr('pageno');
+		if (pn >= 0) {
+			var $pg = $el.closest('.p-pager');
+			var js = $pg.data('onclick');
+			if (js) {
+				js = js.replace('$', pn);
+				js = js.replace('#', (pn - 1) * $pg.data('limit'));
+				if (eval(js) === false) {
+					evt.preventDefault();
 				}
 			}
 		}
 	}
 
 	function _setActivePage($p, n) {
-		var $u = $p.find('ul.pagination');
+		var $u = $p.children('ul.pagination'),
+			$n = $u.children('li.page');
+
 		$u.find('li.active').removeClass('active');
 
-		var $n = $u.find('li.p-pager-page');
+		var m = $p.data('pages'), b = n - Math.floor($n.size() / 2);
 
-		var m = $p.data('pages');
-		var b = n - Math.floor($n.size() / 2);
-		if (b + $n.size() > m) b = m - $n.size() + 1;
-		if (b < 1) b = 1;
+		if (b + $n.size() > m) {
+			b = m - $n.size() + 1;
+		}
+		if (b < 1) {
+			b = 1;
+		}
 
 		var s = $p.data('style');
 		if (n > 1) {
-			$u.find('.p-pager-first, .p-pager-prev').removeClass('hidden disabled');
+			$u.children('li.first, li.prev').removeClass('hidden disabled');
 			$u.find('.p-pager-prev>a').attr('pageno', n - 1);
-		}
-		else {
-			$u.find('.p-pager-first').addClass(s.contains('F') ? 'disabled' : 'hidden');
-			$u.find('.p-pager-prev').addClass(s.contains('P') ? 'disabled' : 'hidden');
+		} else {
+			$u.children('li.first').addClass(s.contains('F') ? 'disabled' : 'hidden');
+			$u.children('li.prev').addClass(s.contains('P') ? 'disabled' : 'hidden');
 		}
 
-		$u.find('.p-pager-ellipsis-left')[b > 1 ? 'removeClass' : 'addClass']('hidden');
+		$u.children('li.eleft')[b > 1 ? 'removeClass' : 'addClass']('hidden');
 		$n.each(function() {
-			var $a = $(this).find('a');
-			$a.attr('pageno', b).text(b);
+			var $li = $(this);
+			$li.find('a').attr('pageno', b).text(b);
 			if (b == n) {
-				$(this).addClass('active');
+				$li.addClass('active');
 			}
 			b++;
 		});
-		$u.find('.p-pager-ellipsis-right')[b <= m ? 'removeClass' : 'addClass']('hidden');
+		$u.children('li.eright')[b <= m ? 'removeClass' : 'addClass']('hidden');
 
 		if (n < m) {
-			$u.find('.p-pager-next, .p-pager-last').removeClass('hidden disabled');
-			$u.find('.p-pager-next>a').attr('pageno', n + 1);
-		}
-		else {
-			$u.find('.p-pager-next').addClass(s.contains('N') ? 'disabled' : 'hidden');
-			$u.find('.p-pager-last').addClass(s.contains('L') ? 'disabled' : 'hidden');
+			$u.children('li.next, li.last').removeClass('hidden disabled');
+			$u.children('li.next>a').attr('pageno', n + 1);
+		} else {
+			$u.children('li.next').addClass(s.contains('N') ? 'disabled' : 'hidden');
+			$u.children('li.last').addClass(s.contains('L') ? 'disabled' : 'hidden');
 		}
 	}
-	
+
 	$.fn.ppager = function(api, pno) {
-		if (api == 'getActivePage') {
+		if (api == 'page') {
+			if (pno > 0) {
+				return this.each(function() { _setActivePage($(this), pno); });
+			}
 			return this.find('ul.pagination>li.active>a').attr('pageno');
-		}
-		if (api == 'setActivePage') {
-			return this.each(function() { _setActivePage($(this), pno); });
 		}
 		return this.each(function() {
 			var $p = $(this);
 			if ($p.attr("ppager") != "true") {
 				$p.attr("ppager", "true");
-				if ($p.data("click")) {
+				if ($p.data("onclick")) {
 					$p.find("a[pageno]").click(_click);
 				}
 			}
 		});
 	};
-	
+
 	// PAGER DATA-API
 	// ==================
-	$(window).on('load', function () {
+	$(window).on('load', function() {
 		$('[data-spy="ppager"]').ppager();
 	});
 })();

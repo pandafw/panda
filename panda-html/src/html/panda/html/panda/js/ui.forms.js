@@ -1,5 +1,3 @@
-if (typeof(panda) == "undefined") { panda = {}; }
-
 (function($) {
 	"use strict";
 
@@ -41,24 +39,22 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		});
 		return false;
 	}
-			
+
 	function ajaxSubmitHook($f) {
-		// hook submit
 		if (!$f.data("ajaxSubmitHooked") && $f.data('ajaxAction')) {
 			$f.data('ajaxSubmitHooked', true).submit(ajaxFormSubmit);
 		}
 	}
 
-	function ajaxLoadInnerForm($f) {
+	function ajaxInnerFormLoad($f) {
 		var $c = $f.closest('.p-popup, .p-inner');
+
 		var data = $f.serializeArray();
-		if ($c.hasClass('p-inner')) {
-			data.push({ name: '__inner', value: 'true' });
-		}
-		else {
-			data.push({ name: '__popup', value: 'true' });
-		}
-		
+		data.push({
+			name: $c.hasClass('p-inner') ? '__inner' : '__popup',
+			value: 'true'
+		});
+
 		if ($f.attr('loadmask') != 'false') {
 			$c.parent().loadmask();
 		}
@@ -89,12 +85,13 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		if ($f.data("hooked")) {
 			return;
 		}
+
 		var $c = $f.closest('.p-popup, .p-inner');
 		if ($c.length > 0) {
 			$f.data('hooked', true);
 			$f.submit(function(e) {
 				e.preventDefault();
-				ajaxLoadInnerForm($(this));
+				ajaxInnerFormLoad($(this));
 				return false;
 			});
 		}
@@ -123,10 +120,10 @@ if (typeof(panda) == "undefined") { panda = {}; }
 				innerHook($f);
 
 				// hook loadmask
-				if (panda.enable_loadmask_form) {
+				if (!$.disable_loadmask_form) {
 					loadmaskHook($f);
 				}
-				
+
 				ajaxSubmitHook($f);
 			}
 		});

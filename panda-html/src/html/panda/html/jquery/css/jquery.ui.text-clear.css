@@ -1,0 +1,24 @@
+.ui-text-clear {
+	cursor: pointer;
+	color: #ccc;
+	display: block;
+	top: 7px;
+	right: 18px;
+	width: 16px;
+	height: 16px;
+	line-height: 18px;
+	font-size: 18px;
+	font-style: normal;
+	font-family: monospace;
+	font-weight: bold;
+	position: absolute;
+	z-index: 3;
+}
+.ui-text-clear:hover {
+	color: #999;
+}
+.ui-has-text-clear {
+	display: inline-block;
+	padding-right: 22px;
+}
+

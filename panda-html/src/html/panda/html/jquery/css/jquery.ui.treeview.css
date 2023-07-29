@@ -33,9 +33,6 @@ ul.ui-tree li:before {
 	line-height: 1em;
 	z-index: -1;
 }
-ul.ui-tree li>.item {
-	white-space: nowrap;
-}
 ul.ui-tree li.node>.item {
 	cursor: pointer;
 }

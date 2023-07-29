@@ -636,8 +636,8 @@ fieldset.ui-fieldset.collapsed>legend::before {
 	z-index: 10210;
 	position: absolute;
 	display: block;
-	top: -8px;
-	right: -8px;
+	top: -6px;
+	right: -6px;
 	width: 16px;
 	height: 16px;
 	line-height: 14px;
@@ -646,10 +646,16 @@ fieldset.ui-fieldset.collapsed>legend::before {
 	font-family: monospace;
 	font-weight: bold;
 	cursor: pointer;
-	background-color: #eee;
-	border: 1px solid #999;
+	background-color: #fff;
+	border: 1px solid #aaa;
 	border-radius: 50%;
 	text-align: center;
+	color: #999;
+}
+.ui-popup-closer:hover {
+	background-color: #eee;
+	border-color: #999;
+	color: #666;
 }
 
 .ui-popup-loader {
@@ -721,6 +727,30 @@ div.ui-simple-color-picker ul li {
 	margin: 1px;
 	cursor: pointer;
 }
+.ui-text-clear {
+	cursor: pointer;
+	color: #ccc;
+	display: block;
+	top: 7px;
+	right: 18px;
+	width: 16px;
+	height: 16px;
+	line-height: 18px;
+	font-size: 18px;
+	font-style: normal;
+	font-family: monospace;
+	font-weight: bold;
+	position: absolute;
+	z-index: 3;
+}
+.ui-text-clear:hover {
+	color: #999;
+}
+.ui-has-text-clear {
+	display: inline-block;
+	padding-right: 22px;
+}
+
 /**
  * jQuery toast plugin created by Kamran Ahmed copyright MIT license 2014
  */
@@ -874,9 +904,6 @@ ul.ui-tree li:before {
 	height: 1em;
 	line-height: 1em;
 	z-index: -1;
-}
-ul.ui-tree li>.item {
-	white-space: nowrap;
 }
 ul.ui-tree li.node>.item {
 	cursor: pointer;

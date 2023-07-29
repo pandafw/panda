@@ -2486,20 +2486,33 @@
 (function($) {
 	"use strict";
 
-	function _enterfire(evt) {
-		if (evt.ctrlKey && evt.which == 13) {
-			var $t = $(this), ef = $t.attr('enterfire');
-			if (ef == 'form' || ef == 'submit' || ef == 'true') {
-				$t.closest('form').submit();
-			} else {
-				$(ef).click();
+	$.fn.textClear = function() {
+		return this.each(function() {
+			var $t = $(this);
+			if ($t.data('textClear')) {
+				return;
 			}
-		}
-	}
 
-	$.fn.enterfire = function() {
-		$(this).off('keyup.enterfire').on('keyup.enterfire', _enterfire);
+			$t.data('textClear', true);
+
+			var $i = $('<i class="ui-text-clear">&times;</i>');
+			$t.addClass('ui-has-text-clear');
+			$i.insertAfter($t).click(function() {
+				if ($t.val() != '') {
+					$t.focus().val('').trigger('change');
+				}
+			});
+		});
 	};
+	
+	// DATA-API
+	// ==================
+	$(window).on('load', function () {
+		$('[text-clear]').textClear();
+	});
+})(jQuery);
+(function($) {
+	"use strict";
 
 	function _autosize() {
 		var $t = $(this);
@@ -2515,8 +2528,30 @@
 	};
 
 	$(window).on('load', function() {
-		$('textarea[enterfire]').enterfire();
 		$('textarea[autosize]').autosize();
+	});
+
+})(jQuery);
+(function($) {
+	"use strict";
+
+	function _enterfire(evt) {
+		if (evt.ctrlKey && evt.which == 13) {
+			var $t = $(this), ef = $t.attr('enterfire');
+			if (ef == 'form' || ef == 'submit' || ef == 'true') {
+				$t.closest('form').submit();
+			} else {
+				$(ef).click();
+			}
+		}
+	}
+
+	$.fn.enterfire = function() {
+		$(this).off('keyup.enterfire').on('keyup.enterfire', _enterfire);
+	};
+
+	$(window).on('load', function() {
+		$('textarea[enterfire]').enterfire();
 	});
 
 })(jQuery);

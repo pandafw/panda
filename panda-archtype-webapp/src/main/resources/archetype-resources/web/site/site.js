@@ -1,5 +1,3 @@
-panda.enable_loadmask_form = true;
-
 //------------------------------------------------------
 function s_setbase(c) {
 	c = $.extend(site, c);
@@ -11,7 +9,33 @@ function s_setbase(c) {
 //site vars
 //
 var site = {
-	statics: '/static'
+	statics: '/static',
+	page_loading: function(timeout) {
+		$('body').loadmask({ mask: false, fixed: true, timeout: timeout || 1000 });
+	},
+	page_sort: function(name, dir) {
+		site.page_loading();
+		location.href = $.addQueryParams(location.href, { 's.c': name, 's.d': dir});
+		return false;
+	},
+	page_sort_reverse: function(name, dir) {
+		return site.page_sort(name, dir.toLowerCase() == "asc" ? "desc" : "asc");
+	},
+	page_goto_start: function(s) {
+		site.page_loading();
+		location.href = $.addQueryParams(location.href, { 'p.s': s });
+		return false;
+	},
+	page_goto_page: function(p) {
+		site.page_loading();
+		location.href = $.addQueryParams(location.href, { 'p.p': p });
+		return false;
+	},
+	page_limit: function(l) {
+		site.page_loading();
+		location.href = $.addQueryParams(location.href, { 'p.l': l });
+		return false;
+	}
 };
 
 //set default
