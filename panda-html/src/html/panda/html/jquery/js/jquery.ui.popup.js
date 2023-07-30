@@ -406,7 +406,7 @@
 
 		var $f = $('<div class="ui-popup-frame" tabindex="0">')
 			.append($('<div class="ui-popup-arrow">'))
-			.append($('<i class="ui-popup-closer">&times;</i>').click(function() {
+			.append($('<i class="ui-close circle ui-popup-closer"></i>').click(function() {
 				hide($c);
 			}));
 

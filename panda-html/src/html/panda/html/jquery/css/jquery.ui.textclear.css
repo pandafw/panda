@@ -1,0 +1,18 @@
+.ui-textclear {
+	cursor: pointer;
+	top: 50%;
+	margin-top: -8px;
+	right: 22px;
+	position: absolute;
+	z-index: 3;
+}
+.ui-has-textclear {
+	padding-right: 22px;
+}
+.input-group > .ui-textclear {
+	position: relative;
+	display: inline-block;
+	margin: 10px 0 0 -20px;
+	top: auto;
+	right: auto;
+}

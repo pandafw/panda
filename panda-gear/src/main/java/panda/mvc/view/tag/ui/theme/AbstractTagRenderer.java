@@ -276,9 +276,11 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 			for (Entry<String, String> en : attrs.entrySet()) {
 				write(" ");
 				write(en.getKey());
-				write("=\"");
-				write(en.getValue());
-				write("\"");
+				if (Strings.isNotEmpty(en.getValue())) {
+					write("=\"");
+					write(en.getValue());
+					write("\"");
+				}
 			}
 		}
 

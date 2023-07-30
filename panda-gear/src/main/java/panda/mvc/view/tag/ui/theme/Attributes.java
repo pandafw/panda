@@ -49,6 +49,10 @@ public class Attributes {
 		return attributes.get(key);
 	}
 	
+	public Attributes add(String key) {
+		return add(key, null);
+	}
+
 	public Attributes add(String key, Object value) {
 		return add(key, value, true);
 	}

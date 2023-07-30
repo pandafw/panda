@@ -1,0 +1,37 @@
+.ui-close {
+	display: block;
+	width: 16px;
+	height: 16px;
+	opacity: 0.3;
+}
+
+.ui-close:hover {
+	opacity: 1;
+}
+
+.ui-close:before,
+.ui-close:after {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -5px;
+	margin-left: -1px;
+	content: ' ';
+	height: 10px;
+	width: 2px;
+	background-color: #333;
+}
+
+.ui-close.circle {
+	background-color: #fff;
+	border: 1px solid #333;
+	border-radius: 50%;
+}
+
+.ui-close:before {
+	transform: rotate(45deg);
+}
+
+.ui-close:after {
+	transform: rotate(-45deg);
+}

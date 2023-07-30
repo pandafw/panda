@@ -2220,7 +2220,7 @@
 
 		var $f = $('<div class="ui-popup-frame" tabindex="0">')
 			.append($('<div class="ui-popup-arrow">'))
-			.append($('<i class="ui-popup-closer">&times;</i>').click(function() {
+			.append($('<i class="ui-close circle ui-popup-closer"></i>').click(function() {
 				hide($c);
 			}));
 
@@ -2486,34 +2486,6 @@
 (function($) {
 	"use strict";
 
-	$.fn.textClear = function() {
-		return this.each(function() {
-			var $t = $(this);
-			if ($t.data('textClear')) {
-				return;
-			}
-
-			$t.data('textClear', true);
-
-			var $i = $('<i class="ui-text-clear">&times;</i>');
-			$t.addClass('ui-has-text-clear');
-			$i.insertAfter($t).click(function() {
-				if ($t.val() != '') {
-					$t.focus().val('').trigger('change');
-				}
-			});
-		});
-	};
-	
-	// DATA-API
-	// ==================
-	$(window).on('load', function () {
-		$('[text-clear]').textClear();
-	});
-})(jQuery);
-(function($) {
-	"use strict";
-
 	function _autosize() {
 		var $t = $(this);
 		$t.css('height', 'auto').height($t.prop('scrollHeight'));
@@ -2554,6 +2526,36 @@
 		$('textarea[enterfire]').enterfire();
 	});
 
+})(jQuery);
+(function($) {
+	"use strict";
+
+	$.fn.textClear = function() {
+		return this.each(function() {
+			var $t = $(this);
+			if ($t.hasClass('ui-has-textclear')) {
+				return;
+			}
+
+			$t.addClass('ui-has-textclear');
+
+			var $i = $('<i class="ui-close ui-textclear"></i>');
+			$i.insertAfter($t).click(function() {
+				if ($t.val() != '') {
+					$t.val('').trigger('change');
+					if ($t.attr('textclear') == 'focus') {
+						$.focus();
+					}
+				}
+			});
+		});
+	};
+	
+	// DATA-API
+	// ==================
+	$(window).on('load', function () {
+		$('[textclear]').textClear();
+	});
 })(jQuery);
 // jQuery toast plugin created by Kamran Ahmed copyright MIT license 2015 (modified by Frank Wang)
 (function($) {
