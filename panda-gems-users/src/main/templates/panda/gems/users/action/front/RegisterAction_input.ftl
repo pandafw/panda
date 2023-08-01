@@ -6,7 +6,7 @@
 <body>
 
 <div class="p-section" id="a_register_input">
-	<div class="p-header">
+	<div class="ui-headline">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
 		</ol>

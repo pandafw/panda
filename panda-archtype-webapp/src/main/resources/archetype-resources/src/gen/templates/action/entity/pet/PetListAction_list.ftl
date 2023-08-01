@@ -5,7 +5,7 @@
 <body>
 
 <div class="p-section">
-	<div class="p-header">
+	<div class="ui-headline">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
 			<li class="active"><@p.text name="step-list"/></li>
@@ -17,7 +17,7 @@
 </#if>
 
 
-	<div class="p-toolbar-wrap"><ul class="p-toolbar">
+	<div class="ui-toolbar"><ul>
 <#if a.canAccess("./add")><li><@p.a action="./add" icon="icon-new" label="#(btn-new)"/>
 </li></#if><#if a.canAccess("./import")><li><@p.a action="./import" icon="icon-import" label="#(btn-import)"/>
 </li></#if><#if a.canAccess("./expo.xlsx")><li><@p.a action="./expo.xlsx" includeParams="all" icon="icon-xlsx" label="#(btn-xlsx)" target="_blank"/>
@@ -26,7 +26,7 @@
 </li></#if><#if a.canAccess("./list.xml")><li><@p.a action="./list.xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
 </li></#if><#if a.canAccess("./list.pdf")><li><@p.a action="./list.pdf?__redir=/pdf&__query=url" includeParams="all" icon="icon-pdf" label="#(btn-pdf)" target="_blank"/>
 </li></#if><#if a.canAccess("./list.print")><li><@p.a action="./list.print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
-</li></#if>	</ul><div class="clearfix"></div></div>
+</li></#if>	</ul></div>
 
 	<#include "/action-alert.ftl"/>
 

@@ -15,7 +15,7 @@
 </style>
 
 <div class="p-section" id="a_shell">
-	<div class="p-header">
+	<div class="ui-headline">
 		<h3><@p.i icon="icon"/> <@p.text name="title"/> (<@p.text name="%{'panda.lang.Systems'@OS_NAME}"/>)</h3>
 	</div>
 

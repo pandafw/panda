@@ -67,7 +67,7 @@ public class Link extends UIBean {
 	protected boolean jquery1;
 	protected boolean jquery2;
 	protected boolean jquery3;
-	protected boolean jqplugins;
+	protected boolean plugins;
 	protected boolean bootstrap;
 	protected boolean bootstrap3;
 	protected boolean bootstrap4;
@@ -99,12 +99,12 @@ public class Link extends UIBean {
 			jquery = true;
 		}
 		
-		if (bootstrap || jqplugins) {
+		if (bootstrap || plugins) {
 			jquery = true;
 		}
 		if (panda) {
 			jquery = true;
-			jqplugins = true;
+			plugins = true;
 			bootstrap = true;
 			fontawesome = true;
 			corejs = true;
@@ -273,17 +273,17 @@ public class Link extends UIBean {
 	}
 
 	/**
-	 * @return the jqplugins
+	 * @return the plugins
 	 */
-	public boolean isJqplugins() {
-		return jqplugins;
+	public boolean isPlugins() {
+		return plugins;
 	}
 
 	/**
-	 * @param jqplugins the jqplugins to set
+	 * @param plugins the plugins to set
 	 */
-	public void setJqplugins(boolean jqplugins) {
-		this.jqplugins = jqplugins;
+	public void setPlugins(boolean plugins) {
+		this.plugins = plugins;
 	}
 
 	/**

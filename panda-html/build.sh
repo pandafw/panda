@@ -26,9 +26,11 @@ mincss jquery.ui.tablesorter
 cd $HTMLDIR/datetimepicker/
 mincss bootstrap-datetimepicker
 
-cd $HTMLDIR/jquery/css/
-cat jquery.*.css > jquery-plugins.css
-mincss jquery-plugins
+cd $HTMLDIR/plugins/css/
+cat jquery.*.css    >  plugins.css
+cat bootstrap.*.css >> plugins.css
+cat ui.*.css        >> plugins.css
+mincss plugins
 
 cd $HTMLDIR/panda/css/
 cat ui.*.css > panda.css
@@ -60,9 +62,10 @@ cd $HTMLDIR/corejs/
 cat core.*.js > corejs.js
 minjs corejs
 
-cd $HTMLDIR/jquery/js/
-cat jquery.*.js > jquery-plugins.js
-minjs jquery-plugins
+cd $HTMLDIR/plugins/js/
+cat jquery.*.js    >  plugins.js
+cat bootstrap.*.js >> plugins.js
+minjs plugins
 
 cd $HTMLDIR/panda/js/
 cat ui.*.js > panda.js
@@ -71,4 +74,4 @@ minjs panda
 
 echo --------------------------------------
 echo DONE.
-echo
+echo 

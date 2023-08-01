@@ -1,6 +1,6 @@
 <#macro aitem ac ic tx>
 	<#if a.canAccess(ac)>
-		<@p.a cssClass="p-menu-item" action=ac>
+		<@p.a cssClass="ui-menu-item" action=ac>
 			<i class="fa-4x ${a.getText(ic)}"></i>
 			<div><@p.text name=tx/></div>
 		</@p.a>

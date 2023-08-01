@@ -6,7 +6,7 @@
 <body>
 
 <div class="p-section" id="a_login_logout">
-	<div class="p-header">
+	<div class="ui-headline">
 		<h3><i class="fa fa-sign-out"></i> <@p.text name="title"/></h3>
 	</div>
 

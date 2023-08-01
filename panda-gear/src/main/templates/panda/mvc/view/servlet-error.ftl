@@ -11,8 +11,8 @@
 </head>
 <body>
 <div class="p-section">
-	<div class="p-header">
-		<h3 class="p-error"><i class="fa fa-exclamation-circle"></i>
+	<div class="ui-headline">
+		<h3 class="error"><i class="fa fa-exclamation-circle"></i>
 			${_tt}
 		</h3>
 	</div>

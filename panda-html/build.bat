@@ -11,9 +11,11 @@ call :mincss jquery.ui.tablesorter
 cd /d %HTMLDIR%\datetimepicker\
 call :mincss bootstrap-datetimepicker
 
-cd /d %HTMLDIR%\jquery\css\
-copy /b jquery.*.css jquery-plugins.css 
-call :mincss jquery-plugins
+cd /d %HTMLDIR%\plugins\css\
+type jquery.*.css    >  plugins.css
+type bootstrap.*.css >> plugins.css
+type ui.*.css        >> plugins.css
+call :mincss plugins
 
 cd /d %HTMLDIR%\panda\css\
 copy /b ui.*.css panda.css 
@@ -45,9 +47,10 @@ cd /d %HTMLDIR%\corejs\
 copy /b core.*.js corejs.js
 call :minjs corejs
 
-cd /d %HTMLDIR%\jquery\js\
-copy /b jquery.*.js jquery-plugins.js 
-call :minjs jquery-plugins
+cd /d %HTMLDIR%\plugins\js\
+type jquery.*.js    >  plugins.js
+type bootstrap.*.js >> plugins.js
+call :minjs plugins
 
 cd /d %HTMLDIR%\panda\js\
 copy /b ui.*.js panda.js 

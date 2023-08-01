@@ -4,12 +4,12 @@
 		<#assign t = _t?substring(1)/>
 	<#if !_tb>
 
-	<div class="p-toolbar-wrap"><ul class="p-toolbar">
+	<div class="ui-toolbar text-right"><ul>
 		<#assign _tb = true/>
 	</#if>
 		<#include "edit-toolbar-item.ftl"/>
 	</#if></#list>
 	<#if _tb>
-	</ul><div class="clearfix"></div></div>
+	</ul></div>
 	</#if>
 </#if>

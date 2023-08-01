@@ -1,0 +1,35 @@
+label {
+	font-weight: normal;
+}
+
+.required:after {
+	color: #f00;
+	content: '*';
+	position: absolute;
+	top: 50%;
+	right: -2px;
+	margin-top: -2px;
+	line-height: 16px;
+	font-size: 22px;
+	font-family: monospace;
+}
+
+/** disable bootstrap not-allowed cursor */
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+	cursor: auto;
+}
+
+/** bootstrap form layout */
+.form-horizontal.grey {
+	color: #333;
+	background-color: #f9f9f9;
+	padding: 10px;
+}
+.form-horizontal.lined > .form-group {
+	border-bottom: 1px solid #ccc;
+	margin: 0;
+	padding: 7px;
+}
+.form-horizontal.lined > .form-group:last-of-type {
+	border-bottom: 0;
+}

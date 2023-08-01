@@ -1,0 +1,26 @@
+/*--------------------------------------------------
+ * ui-menu
+--------------------------------------------------*/
+.ui-menu {
+}
+.ui-menu-item {
+	background-color: #eee;
+	display: block;
+	float: left;
+	width: 130px;
+	height: 120px;
+	padding: 10px;
+	margin: 10px;
+	border: solid 1px #ccc;
+	border-radius: 5px;
+	text-align: center;
+}
+.ui-menu-item > div {
+	line-height: 1em;
+	padding: 10px 0 0 0;
+}
+.ui-menu-item:hover {
+	background-color: #FFF8DC;
+	text-decoration: none;
+}
+

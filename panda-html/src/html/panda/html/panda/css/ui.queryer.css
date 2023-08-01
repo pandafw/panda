@@ -3,6 +3,7 @@
 /*---------------------------------------------*/
 .p-qr {
 	position: relative;
+	margin: 15px 0;
 }
 .p-qr .form-control {
 	height: 28px;

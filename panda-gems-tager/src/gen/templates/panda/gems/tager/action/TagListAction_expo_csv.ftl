@@ -5,7 +5,7 @@
 <body>
 
 <div class="p-section">
-	<div class="p-header">
+	<div class="ui-headline">
 		<h3><@p.i icon="icon"/> <@p.text name="title-expo_csv"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
 <#assign _well = a.getText("well-expo_csv", "")/>

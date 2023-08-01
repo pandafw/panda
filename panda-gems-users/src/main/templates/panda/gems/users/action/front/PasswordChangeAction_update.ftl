@@ -5,7 +5,7 @@
 <body>
 
 <div class="p-section" id="a_passwordchange_update">
-	<div class="p-header">
+	<div class="ui-headline">
 		<h3><i class="fa fa-key"></i> <@p.text name="title"/></h3>
 	</div>
 

@@ -5,7 +5,7 @@
 <body>
 
 <div class="p-section">
-	<div class="p-header">
+	<div class="ui-headline">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
 			<li class="active"><@p.text name="step-list"/></li>
@@ -17,14 +17,14 @@
 </#if>
 
 
-	<div class="p-toolbar-wrap"><ul class="p-toolbar">
+	<div class="ui-toolbar text-right"><ul>
 <#if a.canAccess("./expo.csv")><li><@p.a action="./expo.csv" includeParams="all" icon="icon-csv" label="#(btn-csv)" target="_blank"/>
 </li></#if><#if a.canAccess("./expo.json")><li><@p.a action="./expo.json" includeParams="all" icon="icon-json" label="#(btn-json)" target="_blank"/>
 </li></#if><#if a.canAccess("./expo.xml")><li><@p.a action="./expo.xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
 </li></#if><#if a.canAccess("./list.json")><li><@p.a action="./list.json" includeParams="all" icon="icon-json" label="#(btn-json)" target="_blank"/>
 </li></#if><#if a.canAccess("./list.xml")><li><@p.a action="./list.xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
 </li></#if><#if a.canAccess("./list.print")><li><@p.a action="./list.print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
-</li></#if>	</ul><div class="clearfix"></div></div>
+</li></#if>	</ul></div>
 
 	<div id="tags_alert"><#include "/action-alert.ftl"/></div>
 

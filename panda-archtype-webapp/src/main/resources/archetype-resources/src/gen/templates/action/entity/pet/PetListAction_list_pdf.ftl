@@ -5,7 +5,7 @@
 <body>
 
 <div class="p-section">
-	<div class="p-header">
+	<div class="ui-headline">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
 			<li class="active"><@p.text name="step-list_pdf"/></li>

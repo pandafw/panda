@@ -66,7 +66,7 @@
 	</#macro>
 	<#macro sheader steps=[]>
 		<#if steps?has_content>
-	<div class="p-header">
+	<div class="ui-headline">
 		<ol class="breadcrumb">
 			<li>${s}@p.i icon="icon"/> ${s}@p.text name="title"/></li>
 		<#list steps as st>
@@ -75,7 +75,7 @@
 		</ol>
 	</div>
 		<#else>
-	<div class="p-header">
+	<div class="ui-headline">
 		<h3>${s}@p.i icon="icon"/> ${s}@p.text name="title-${gen.trimUiName(ui.name)}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></h3>
 	</div>
 		</#if>

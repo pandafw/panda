@@ -20,7 +20,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String JQUERY1_CDN_PATH = JQUERY_CDN_BASE + JQUERY1_VERSION;
 	private static final String JQUERY2_CDN_PATH = JQUERY_CDN_BASE + JQUERY2_VERSION;
 	private static final String JQUERY3_CDN_PATH = JQUERY_CDN_BASE + JQUERY3_VERSION;
-	private static final String JQUERY_BIND_BASE = "/jquery/js/jquery-";
+	private static final String JQUERY_BIND_BASE = "/jquery/jquery-";
 	private static final String JQUERY1_BIND_PATH = JQUERY_BIND_BASE + JQUERY1_VERSION;
 	private static final String JQUERY2_BIND_PATH = JQUERY_BIND_BASE + JQUERY2_VERSION;
 	private static final String JQUERY3_BIND_PATH = JQUERY_BIND_BASE + JQUERY3_VERSION;
@@ -60,7 +60,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeBootstrap();
 			writeFontawesome();
 			writeFlagIconCss();
-			writeJqueryPlugins();
+			writePlugins();
 			writePanda();
 			writeStyleSheets();
 		}
@@ -72,7 +72,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeBootstrap();
 			writeRespondJs();
 			writeNotifyJs();
-			writeJqueryPlugins();
+			writePlugins();
 			writeCoreJs();
 			writePanda();
 			writeJscripts();
@@ -117,20 +117,20 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 
-	private void writeJqueryPlugins() throws IOException {
-		if (tag.isJqplugins()) {
+	private void writePlugins() throws IOException {
+		if (tag.isPlugins()) {
 			if (css) {
 				if (tag.useCdn()) {
-					writeCdnCss(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/jquery/css/jquery-plugins");
+					writeCdnCss(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/plugins/css/plugins");
 				} else {
-					writeStaticCss("/jquery/css/jquery-plugins");
+					writeStaticCss("/plugins/css/plugins");
 				}
 			}
 			if (js) {
 				if (tag.useCdn()) {
-					writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/jquery/js/jquery-plugins");
+					writeCdnJs(Mvcs.PANDA_CDN + '/' + Panda.VERSION + "/plugins/js/plugins");
 				} else {
-					writeStaticJs("/jquery/js/jquery-plugins");
+					writeStaticJs("/plugins/js/plugins");
 				}
 			}
 		}

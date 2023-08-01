@@ -45,35 +45,3 @@
 	}
 }
 
-/** disable bootstrap not-allowed cursor */
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-	cursor: auto;
-}
-
-/** modal-dialog */
-.modal-dialog {
-	z-index: 1050;
-}
-
-/** navbar-nav */
-.navbar-nav > li > span {
-	padding: 10px 15px;
-	line-height: 20px;
-	position: relative;
-	display: block;
-}
-
-@media (min-width: 768px) {
-	.navbar-nav > li > span {
-		padding: 15px;
-	}
-}
-.navbar-default .navbar-nav > li > span {
-	color: #777;
-}
-.navbar-inverse .navbar-nav > li > span {
-	color: #9d9d9d;
-}
-.navbar-right, .navbar-right .dropdown-menu {
-	text-align: right;
-}

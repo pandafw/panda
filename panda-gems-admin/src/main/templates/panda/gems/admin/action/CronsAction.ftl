@@ -32,7 +32,7 @@
 <body>
 
 <div class="p-section a_cronjobs">
-	<div class="p-header">
+	<div class="ui-headline">
 		<h3><@p.i icon="icon"/> <@p.text name="title"/></h3>
 	</div>
 

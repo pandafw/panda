@@ -7,12 +7,12 @@
 	z-index: 3;
 }
 .ui-has-textclear {
-	padding-right: 22px;
+	padding-right: 24px;
 }
 .input-group > .ui-textclear {
 	position: relative;
 	display: inline-block;
-	margin: 10px 0 0 -20px;
+	margin: 10px 0 0 -22px;
 	top: auto;
 	right: auto;
 }

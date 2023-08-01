@@ -6,8 +6,8 @@
 <body>
 
 <div class="p-section" id="a_error">
-	<div class="p-header">
-		<h3 class="p-error">
+	<div class="ui-headline">
+		<h3 class="error">
 			<i class="fa fa-exclamation-circle"></i> &lt;&lt;<@p.text name="title-error"/>&gt;&gt;
 		</h3>
 	</div>
