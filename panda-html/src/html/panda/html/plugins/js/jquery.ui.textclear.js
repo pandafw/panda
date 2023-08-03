@@ -15,7 +15,7 @@
 				if ($t.val() != '') {
 					$t.val('').trigger('change');
 					if ($t.attr('textclear') == 'focus') {
-						$.focus();
+						$t.focus();
 					}
 				}
 			});

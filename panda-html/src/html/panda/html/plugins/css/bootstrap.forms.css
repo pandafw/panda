@@ -10,8 +10,8 @@ label {
 	right: -2px;
 	margin-top: -2px;
 	line-height: 16px;
-	font-size: 22px;
-	font-family: monospace;
+	font-size: 20px;
+	font-family: Consolas, monospace;
 }
 
 /** disable bootstrap not-allowed cursor */

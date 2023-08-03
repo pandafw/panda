@@ -757,11 +757,11 @@ div.ui-simple-color-picker ul li {
 }
 
 .ui-sortable .sorted.asc {
-	background-image: url('data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7');
+	background-image: url('data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7');
 }
 
 .ui-sortable .sorted.desc {
-	background-image: url('data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7');
+	background-image: url('data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7');
 }
 .ui-textclear {
 	cursor: pointer;
@@ -1135,8 +1135,8 @@ label {
 	right: -2px;
 	margin-top: -2px;
 	line-height: 16px;
-	font-size: 22px;
-	font-family: monospace;
+	font-size: 20px;
+	font-family: Consolas, monospace;
 }
 
 /** disable bootstrap not-allowed cursor */
@@ -1207,6 +1207,64 @@ label {
 }
 .navbar-right, .navbar-right .dropdown-menu {
 	text-align: right;
+}
+/** pagination **/
+.ui-pager {
+	margin: 20px 0;
+	text-align: center;
+}
+.ui-pager > .infos {
+	float: left;
+	padding: 8px;
+}
+.ui-pager > .limits {
+	float: right;
+}
+.ui-pager > .pagination {
+	border-radius: 0;
+	margin: 0;
+}
+.ui-pager > .pagination > li:first-child > a,
+.ui-pager > .pagination > li:first-child > span,
+.ui-pager > .pagination > li:last-child > a,
+.ui-pager > .pagination > li:last-child > span {
+	border-radius: 0;
+}
+.ui-pager > .pagination > li > a,
+.ui-pager > .pagination > li > span {
+	background-color: #fff;
+	border: 0 none;
+	border-bottom: 3px solid #ddd;
+	color: #888;
+	margin-left: 3px;
+	padding: 5px 11px;
+}
+.ui-pager > .pagination > li > a:hover,
+.ui-pager > .pagination > li > span:hover {
+	background-color: #eee;
+	border: 0 none;
+	border-bottom: 3px solid #337ab7;
+}
+
+.ui-pager > .pagination > li.eleft > span,
+.ui-pager > .pagination > li.eright > span {
+	border: 0 none;
+	border-bottom: 3px solid transparent;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.ui-pager > .pagination > .active > a,
+.ui-pager > .pagination > .active > span,
+.ui-pager > .pagination > .active > a:hover,
+.ui-pager > .pagination > .active > span:hover,
+.ui-pager > .pagination > .active > a:focus,
+.ui-pager > .pagination > .active > span:focus {
+	background-color: #fff;
+	border: 0 none;
+	border-bottom: 3px solid #337ab7;
+	color: #000;
+	font-weight: bold;
 }
 /* SIDENAVI */
 .ui-sidenavi > .panel, .ui-sidenavi > .card {
