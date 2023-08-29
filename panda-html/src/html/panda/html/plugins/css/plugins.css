@@ -34,40 +34,7 @@
 
 .ui-close:after {
 	transform: rotate(-45deg);
-}.ui-corner {
-	border: solid 1px #ddd;
-	border-radius: 20px;
-	color: #aaa;
-	position: fixed;
-	text-align: center;
-	width: 40px;
-	height: 40px;
-}
-.ui-corner:hover {
-	background-color: #4c87bb;
-	color: #fff;
-}
-.ui-corner > * {
-	font-size: 20px;
-	line-height: 40px;
-}
-.ui-corner-tl {
-	top: 5px;
-	left: 5px;
-}
-.ui-corner-tr {
-	top: 5px;
-	right: 5px;
-}
-.ui-corner-bl {
-	bottom: 5px;
-	left: 5px;
-}
-.ui-corner-br {
-	bottom: 5px;
-	right: 5px;
-}
-/**
+}/**
  * jQuery Editable Select
  * Indri Muska <indrimuska@gmail.com>
  *
@@ -1230,8 +1197,9 @@ label {
 .ui-pager > .pagination > li:last-child > span {
 	border-radius: 0;
 }
-.ui-pager > .pagination > li > a,
-.ui-pager > .pagination > li > span {
+
+.ui-pager.lined > .pagination > li > a,
+.ui-pager.lined > .pagination > li > span {
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #ddd;
@@ -1239,27 +1207,27 @@ label {
 	margin-left: 3px;
 	padding: 5px 11px;
 }
-.ui-pager > .pagination > li > a:hover,
-.ui-pager > .pagination > li > span:hover {
+.ui-pager.lined > .pagination > li > a:hover,
+.ui-pager.lined > .pagination > li > span:hover {
 	background-color: #eee;
 	border: 0 none;
 	border-bottom: 3px solid #337ab7;
 }
 
-.ui-pager > .pagination > li.eleft > span,
-.ui-pager > .pagination > li.eright > span {
+.ui-pager.lined > .pagination > li.eleft > span,
+.ui-pager.lined > .pagination > li.eright > span {
 	border: 0 none;
 	border-bottom: 3px solid transparent;
 	padding-left: 8px;
 	padding-right: 8px;
 }
 
-.ui-pager > .pagination > .active > a,
-.ui-pager > .pagination > .active > span,
-.ui-pager > .pagination > .active > a:hover,
-.ui-pager > .pagination > .active > span:hover,
-.ui-pager > .pagination > .active > a:focus,
-.ui-pager > .pagination > .active > span:focus {
+.ui-pager.lined > .pagination > .active > a,
+.ui-pager.lined > .pagination > .active > span,
+.ui-pager.lined > .pagination > .active > a:hover,
+.ui-pager.lined > .pagination > .active > span:hover,
+.ui-pager.lined > .pagination > .active > a:focus,
+.ui-pager.lined > .pagination > .active > span:focus {
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #337ab7;
@@ -1337,7 +1305,70 @@ label {
 	.ui-sidenavi > .card-body, .ui-sidenavi > .card ul.nav, .ui-sidenavi > .card ul.nav > li {
 		display: inline-block;
 	}
-}/*--------------------------------------------------
+}.ui-corner {
+	border: solid 1px #ddd;
+	border-radius: 20px;
+	color: #aaa;
+	position: fixed;
+	text-align: center;
+	width: 40px;
+	height: 40px;
+}
+.ui-corner:hover {
+	background-color: #4c87bb;
+	color: #fff;
+}
+.ui-corner > * {
+	font-size: 20px;
+	line-height: 40px;
+}
+.ui-corner-tl {
+	top: 5px;
+	left: 5px;
+}
+.ui-corner-tr {
+	top: 5px;
+	right: 5px;
+}
+.ui-corner-bl {
+	bottom: 5px;
+	left: 5px;
+}
+.ui-corner-br {
+	bottom: 5px;
+	right: 5px;
+}
+/** checks */
+.ui-checks > label {
+	padding: 0 20px 0 0;
+}
+.ui-checks > label > input {
+	margin: 0 7px 0 0;
+	vertical-align: middle;
+}
+.ui-checks.vertical > label {
+	display: block;
+}
+.form-horizontal .ui-checks {
+	padding-top: 7px;
+}
+
+/** radios */
+.ui-radios > label {
+	padding: 0 20px 0 0;
+}
+.ui-radios > label > input {
+	margin: 0 7px 0 0;
+	vertical-align: middle;
+}
+.ui-radios.vertical > label {
+	display: block;
+}
+.form-horizontal .ui-radios {
+	padding-top: 7px;
+}
+
+/*--------------------------------------------------
  * headline
 --------------------------------------------------*/
 .ui-headline {
@@ -1350,7 +1381,7 @@ label {
 	margin: 0;
 	padding: 8px 10px 4px 10px;
 }
-.ui-headline i {
+.ui-headline > h3 i, .ui-headline > .breadcrumb i {
 	color: #2f6f9f;
 	font-size: 150%;
 	vertical-align: middle;
@@ -1427,9 +1458,10 @@ label {
 	border-radius: 4px;
 	margin: -0.5em -1em;
 	padding: 0.5em 1em;
+	text-decoration: none;
 	white-space: nowrap;
 }
-.ui-toolbar > ul > li > a:hover {
+.ui-toolbar > ul > li > a:hover, .ui-toolbar > ul > li > a:focus {
 	text-decoration: none;
 	background-color: #e5e5e5;
 }

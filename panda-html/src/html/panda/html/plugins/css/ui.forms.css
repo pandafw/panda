@@ -1,0 +1,30 @@
+/** checks */
+.ui-checks > label {
+	padding: 0 20px 0 0;
+}
+.ui-checks > label > input {
+	margin: 0 7px 0 0;
+	vertical-align: middle;
+}
+.ui-checks.vertical > label {
+	display: block;
+}
+.form-horizontal .ui-checks {
+	padding-top: 7px;
+}
+
+/** radios */
+.ui-radios > label {
+	padding: 0 20px 0 0;
+}
+.ui-radios > label > input {
+	margin: 0 7px 0 0;
+	vertical-align: middle;
+}
+.ui-radios.vertical > label {
+	display: block;
+}
+.form-horizontal .ui-radios {
+	padding-top: 7px;
+}
+

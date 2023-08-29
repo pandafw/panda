@@ -22,7 +22,6 @@ import panda.mvc.util.TextProvider;
  *  1: #1 first page (depends on '#')
  *  #: page number links
  *  x: #x last page (depends on '#')
- *  .: ellipsis
  *  >: </ul>
  *  i: pager info text
  *  s: limit size select

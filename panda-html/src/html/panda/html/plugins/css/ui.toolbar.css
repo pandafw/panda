@@ -30,9 +30,10 @@
 	border-radius: 4px;
 	margin: -0.5em -1em;
 	padding: 0.5em 1em;
+	text-decoration: none;
 	white-space: nowrap;
 }
-.ui-toolbar > ul > li > a:hover {
+.ui-toolbar > ul > li > a:hover, .ui-toolbar > ul > li > a:focus {
 	text-decoration: none;
 	background-color: #e5e5e5;
 }

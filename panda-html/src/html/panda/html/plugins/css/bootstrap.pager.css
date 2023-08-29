@@ -20,8 +20,9 @@
 .ui-pager > .pagination > li:last-child > span {
 	border-radius: 0;
 }
-.ui-pager > .pagination > li > a,
-.ui-pager > .pagination > li > span {
+
+.ui-pager.lined > .pagination > li > a,
+.ui-pager.lined > .pagination > li > span {
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #ddd;
@@ -29,27 +30,27 @@
 	margin-left: 3px;
 	padding: 5px 11px;
 }
-.ui-pager > .pagination > li > a:hover,
-.ui-pager > .pagination > li > span:hover {
+.ui-pager.lined > .pagination > li > a:hover,
+.ui-pager.lined > .pagination > li > span:hover {
 	background-color: #eee;
 	border: 0 none;
 	border-bottom: 3px solid #337ab7;
 }
 
-.ui-pager > .pagination > li.eleft > span,
-.ui-pager > .pagination > li.eright > span {
+.ui-pager.lined > .pagination > li.eleft > span,
+.ui-pager.lined > .pagination > li.eright > span {
 	border: 0 none;
 	border-bottom: 3px solid transparent;
 	padding-left: 8px;
 	padding-right: 8px;
 }
 
-.ui-pager > .pagination > .active > a,
-.ui-pager > .pagination > .active > span,
-.ui-pager > .pagination > .active > a:hover,
-.ui-pager > .pagination > .active > span:hover,
-.ui-pager > .pagination > .active > a:focus,
-.ui-pager > .pagination > .active > span:focus {
+.ui-pager.lined > .pagination > .active > a,
+.ui-pager.lined > .pagination > .active > span,
+.ui-pager.lined > .pagination > .active > a:hover,
+.ui-pager.lined > .pagination > .active > span:hover,
+.ui-pager.lined > .pagination > .active > a:focus,
+.ui-pager.lined > .pagination > .active > span:focus {
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #337ab7;

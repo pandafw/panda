@@ -11,7 +11,7 @@
 	margin: 0;
 	padding: 8px 10px 4px 10px;
 }
-.ui-headline i {
+.ui-headline > h3 i, .ui-headline > .breadcrumb i {
 	color: #2f6f9f;
 	font-size: 150%;
 	vertical-align: middle;
