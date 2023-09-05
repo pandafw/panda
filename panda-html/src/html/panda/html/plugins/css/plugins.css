@@ -717,6 +717,7 @@ div.ui-simple-color-picker ul li {
 	background-position: right center;
 	background-repeat: no-repeat;
 	background-image: url('data:image/gif;base64,R0lGODlhFQAJAMIEAJWVlZeXl5iYmJmZmf///////////////yH5BAEKAAQALAAAAAAVAAkAAAMdSLoM/JCJIaJVQeh63/jg0I0kNn1aqZypulKu1CUAOw==');
+	padding-right: 20px;
 }
 
 .ui-sortable .sortable:hover {
