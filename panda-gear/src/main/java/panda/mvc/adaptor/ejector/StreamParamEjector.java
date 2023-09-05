@@ -13,12 +13,12 @@ import panda.net.URLHelper;
 import panda.vfs.FileItem;
 import panda.vfs.FileStore;
 
-@IocBean(singleton=false)
+@IocBean(singleton = false)
 public class StreamParamEjector extends AbstractParamEjector {
 	/**
 	 * the temporary directory of upload file.
 	 */
-	@IocInject(value=MvcConstants.FILE_UPLOAD_TMPDIR, required=false)
+	@IocInject(value = MvcConstants.FILE_UPLOAD_TMPDIR, required = false)
 	private String tmpdir = MultiPartParamEjector.DEFAULT_TMPDIR;
 
 	private Map<String, Object> params;
@@ -31,7 +31,7 @@ public class StreamParamEjector extends AbstractParamEjector {
 		if (params == null) {
 			try {
 				HttpServletRequest req = ac.getRequest();
-				
+
 				String qs = req.getQueryString();
 				params = URLHelper.parseQueryString(qs);
 
@@ -43,14 +43,13 @@ public class StreamParamEjector extends AbstractParamEjector {
 				fi.save(req.getInputStream());
 
 				params.put(ALL, fi);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw Exceptions.wrapThrow(e);
 			}
 		}
 		return params;
 	}
-	
+
 	@Override
 	public Object eject() {
 		return getParams().get(ALL);

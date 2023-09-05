@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractDeserializer;
+import panda.lang.Strings;
 
 /**
  * 
@@ -60,21 +62,28 @@ public class XmlDeserializer extends AbstractDeserializer {
 	 */
 	public <T> T deserialize(Reader xml, Type type) {
 		try {
-			XMLReader xr = XMLReaderFactory.createXMLReader();
+			SAXParserFactory spf = SAXParserFactory.newInstance();
 
-			SaxHandler handler = new SaxHandler(this, type);
-			xr.setContentHandler(handler);
-			
-			xr.parse(new InputSource(xml));
-			
-			T obj = convertValue(handler.root(), type);
+			// https://rules.sonarsource.com/java/RSPEC-2755
+			// prevent XXE, completely disable DOCTYPE declaration:
+			spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+			spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
+			SAXParser sp = spf.newSAXParser();
+
+			SaxHandler sh = new SaxHandler(this, type);
+
+			sp.parse(new InputSource(xml), sh);
+
+			T obj = convertValue(sh.root(), type);
 			return obj;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw wrapError(e);
 		}
 	}
-	
+
 	protected XmlException wrapError(Throwable e) {
 		if (e instanceof XmlException) {
 			return (XmlException)e;
@@ -92,7 +101,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 			private BeanHandler beanh;
 			private int leaf = 0;
 		}
-		
+
 		private XmlDeserializer deser;
 		private Type type;
 		private Object root;
@@ -103,7 +112,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 			this.type = type;
 			elems = new ArrayList<Elem>();
 		}
-		
+
 		protected XmlException error(String message) {
 			return new XmlException(message + at());
 		}
@@ -115,7 +124,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 		protected Object root() {
 			return root;
 		}
-		
+
 		protected String at() {
 			StringBuilder sb = new StringBuilder(128);
 			sb.append(" at ");
@@ -136,12 +145,12 @@ public class XmlDeserializer extends AbstractDeserializer {
 		protected Elem lastElem() {
 			return elems.get(elems.size() - 1);
 		}
-		
+
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			Elem em = new Elem();
-			em.name = localName;
-			
+			em.name = Strings.isEmpty(localName) ? qName : localName;
+
 			if (elems.isEmpty()) {
 				em.type = type;
 				elems.add(em);
@@ -154,7 +163,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 			if (ep.type == null) {
 				return;
 			}
-			
+
 			if (ep.beanh == null) {
 				// initialize parent element
 				if (deser.isArrayType(ep.type)) {
@@ -162,21 +171,18 @@ public class XmlDeserializer extends AbstractDeserializer {
 					ep.value = ep.beanh.createObject();
 					em.type = deser.getArrayElementType(ep.type);
 					em.name = String.valueOf(ep.leaf);
-				}
-				else if (Object.class == ep.type && em.name.equals("i")) {
+				} else if (Object.class == ep.type && em.name.equals("i")) {
 					// <i> is special tag for array
 					ep.type = deser.getDefaultXmlArrayType();
 					ep.beanh = deser.getBeanHandler(ep.type);
 					ep.value = ep.beanh.createObject();
 					em.type = deser.getArrayElementType(ep.type);
 					em.name = String.valueOf(ep.leaf);
-				}
-				else if (Object.class == ep.type) {
+				} else if (Object.class == ep.type) {
 					ep.beanh = deser.getBeanHandler(deser.getDefaultXmlObjectType());
 					ep.value = ep.beanh.createObject();
 					em.type = Object.class;
-				}
-				else {
+				} else {
 					ep.beanh = deser.getBeanHandler(ep.type);
 					ep.value = ep.beanh.createObject();
 				}
@@ -186,15 +192,12 @@ public class XmlDeserializer extends AbstractDeserializer {
 				if (deser.isArrayType(ep.type)) {
 					em.type = deser.getArrayElementType(ep.type);
 					em.name = String.valueOf(ep.leaf);
-				}
-				else if (Object.class == ep.type) {
+				} else if (Object.class == ep.type) {
 					em.type = Object.class;
-				}
-				else {
+				} else {
 					if (ep.beanh.canWriteProperty(em.name)) {
 						em.type = ep.beanh.getPropertyType(em.name);
-					}
-					else {
+					} else {
 						em.type = null;
 
 						if (!deser.isIgnoreReadonlyProperty() || !deser.isIgnoreMissingProperty()) {
@@ -204,7 +207,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 								}
 								throw error("readonly property [" + em.name + "] of " + ep.type);
 							}
-	
+
 							if (deser.isIgnoreMissingProperty()) {
 								return;
 							}
@@ -225,8 +228,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 
 			try {
 				return deser.convertValue(v, em.type);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw error("Failed to convert text of property '" + em.name + "'", e);
 			}
 		}
@@ -238,8 +240,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 
 			try {
 				return deser.convertValue(em.value, em.type);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw error("Failed to convert value of property '" + em.name + "'", e);
 			}
 		}
@@ -251,26 +252,26 @@ public class XmlDeserializer extends AbstractDeserializer {
 			if (em.type == null) {
 				return;
 			}
-			
+
 			if (em.leaf == 0) {
 				em.value = convertText(em);
 			}
-			
+
 			if (elems.isEmpty()) {
 				root = em.value;
 				return;
 			}
-			
+
 			Object ev = convertValue(em);
 			Elem ep = lastElem();
 			if (ep.beanh.setPropertyValue(ep.value, em.name, ev)) {
 				return;
 			}
-			
+
 			if (deser.isIgnoreReadonlyProperty() && deser.isIgnoreMissingProperty()) {
 				return;
 			}
-			
+
 			if (ep.beanh.canReadProperty(em.name)) {
 				if (deser.isIgnoreReadonlyProperty()) {
 					return;
