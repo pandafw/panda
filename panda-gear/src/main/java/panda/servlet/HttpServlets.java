@@ -42,7 +42,6 @@ import panda.net.http.HttpStatus;
 import panda.net.http.ParameterParser;
 import panda.net.http.UserAgent;
 
-
 /**
  * utility class for http servlet
  */
@@ -50,24 +49,22 @@ public class HttpServlets {
 	private static final Log log = Logs.getLog(HttpServlets.class);
 
 	/**
-	 * Standard Servlet spec context attribute that specifies a temporary
-	 * directory for the current web application, of type <code>java.io.File</code>.
+	 * Standard Servlet spec context attribute that specifies a temporary directory for the current web application, of type <code>java.io.File</code>.
 	 */
 	public static final String SERVLET_TEMP_DIR_CONTEXT = "javax.servlet.context.tempdir";
 
 	/**
 	 * Standard Servlet 2.4+ spec request attributes for forward URI and paths.
-	 * <p>If forwarded to via a RequestDispatcher, the current resource will see its
-	 * own URI and paths. The originating URI and paths are exposed as request attributes.
+	 * <p>
+	 * If forwarded to via a RequestDispatcher, the current resource will see its own URI and paths. The originating URI and paths are exposed as request attributes.
 	 */
 	public static final String SERVLET_FORWARD_REQUEST_URI = "javax.servlet.forward.request_uri";
 	public static final String SERVLET_FORWARD_QUERY_STRING = "javax.servlet.forward.query_string";
 
 	/**
 	 * Standard Servlet 2.3+ spec request attributes for error pages.
-	 * <p>To be exposed to JSPs that are marked as error pages, when forwarding
-	 * to them directly rather than through the servlet container's error page
-	 * resolution mechanism.
+	 * <p>
+	 * To be exposed to JSPs that are marked as error pages, when forwarding to them directly rather than through the servlet container's error page resolution mechanism.
 	 */
 	public static final String SERVLET_ERROR_STATUS_CODE = "javax.servlet.error.status_code";
 	public static final String SERVLET_ERROR_MESSAGE = "javax.servlet.error.message";
@@ -75,22 +72,21 @@ public class HttpServlets {
 	public static final String SERVLET_ERROR_JSP_EXCEPTION = "javax.servlet.error.JspException";
 
 	public static final String CONTENT_TYPE_BOUNDARY = "boundary";
-	
+
 	/**
 	 * Prefix of the charset clause in a content type String: "charset="
 	 */
 	public static final String CONTENT_TYPE_CHARSET_PREFIX = "charset=";
 
 	/**
-	 * Default character encoding to use when <code>request.getCharacterEncoding</code>
-	 * returns <code>null</code>, according to the Servlet spec.
+	 * Default character encoding to use when <code>request.getCharacterEncoding</code> returns <code>null</code>, according to the Servlet spec.
 	 */
 	public static final String DEFAULT_CHARACTER_ENCODING = Charsets.ISO_8859_1;
 
 	public static boolean isFormUrlEncoded(HttpServletRequest request) {
 		String ct = request.getContentType();
-		if (HttpMethod.POST.equalsIgnoreCase(request.getMethod()) 
-				&& Strings.startsWithIgnoreCase(ct, MimeTypes.X_WWW_FORM_URLECODED)) {
+		if (HttpMethod.POST.equalsIgnoreCase(request.getMethod())
+			&& Strings.startsWithIgnoreCase(ct, MimeTypes.X_WWW_FORM_URLECODED)) {
 			return true;
 		}
 		return false;
@@ -98,6 +94,7 @@ public class HttpServlets {
 
 	/**
 	 * get scheme from X_FORWARD_FOR, request.getScheme()
+	 * 
 	 * @param request request
 	 * @return scheme
 	 */
@@ -111,6 +108,7 @@ public class HttpServlets {
 
 	/**
 	 * get server port from X_FORWARD_PORT, request.getServerPort()
+	 * 
 	 * @param request request
 	 * @return port
 	 */
@@ -122,11 +120,9 @@ public class HttpServlets {
 			String proto = request.getHeader(HttpHeader.X_FORWARDED_PROTO);
 			if (Scheme.HTTP.equals(proto)) {
 				port = 80;
-			}
-			else if (Scheme.HTTPS.equals(proto)) {
+			} else if (Scheme.HTTPS.equals(proto)) {
 				port = 443;
-			}
-			else {
+			} else {
 				port = request.getServerPort();
 			}
 		}
@@ -135,6 +131,7 @@ public class HttpServlets {
 
 	/**
 	 * get remote ip from X_FORWARD_FOR (last), request.getRemoteAddr
+	 * 
 	 * @param request request
 	 * @return remote ip
 	 */
@@ -150,8 +147,7 @@ public class HttpServlets {
 		ip = Strings.strip(ip);
 		if (Strings.isEmpty(ip)) {
 			ip = request.getRemoteAddr();
-		}
-		else {
+		} else {
 			// fix ipv4:port for IIS httpPlatformHandler
 			int i = ip.lastIndexOf(':');
 			if (i > 0 && ip.indexOf('.') > 0) {
@@ -161,7 +157,7 @@ public class HttpServlets {
 		}
 		return ip;
 	}
-	
+
 	/**
 	 * @param request request
 	 * @return relative URI
@@ -170,7 +166,7 @@ public class HttpServlets {
 		if (request == null) {
 			return null;
 		}
-		
+
 		String uri = request.getRequestURI();
 		uri = uri.substring(request.getContextPath().length());
 		uri = Strings.substringBefore(uri, ";jsessionid=");
@@ -189,7 +185,7 @@ public class HttpServlets {
 		}
 		return url;
 	}
-	
+
 	/**
 	 * @param request request
 	 * @return requestURL + QueryString
@@ -200,8 +196,7 @@ public class HttpServlets {
 		if (Strings.isEmpty(uri)) {
 			uri = request.getRequestURI();
 			query = request.getQueryString();
-		}
-		else {
+		} else {
 			query = (String)request.getAttribute(SERVLET_FORWARD_QUERY_STRING);
 		}
 
@@ -224,7 +219,7 @@ public class HttpServlets {
 		ub.setForceAddSchemeHostAndPort(true);
 		return ub.build();
 	}
-	
+
 	/**
 	 * @param request request
 	 * @return requestURI
@@ -258,7 +253,7 @@ public class HttpServlets {
 		String s = Strings.substringBefore(q, '#');
 		return s;
 	}
-	
+
 	/**
 	 * @param request request
 	 * @return request query string
@@ -272,19 +267,18 @@ public class HttpServlets {
 	public static void safeReset(ServletResponse response) {
 		try {
 			response.reset();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 	}
-	
+
 	public static Integer getServletErrorCode(ServletRequest request) {
 		return (Integer)request.getAttribute(SERVLET_ERROR_STATUS_CODE);
 	}
-	
+
 	public static String getServletErrorMessage(ServletRequest request) {
 		return (String)request.getAttribute(SERVLET_ERROR_MESSAGE);
 	}
-	
+
 	public static Throwable getServletException(ServletRequest request) {
 		// support for JSP exception pages, exposing the servlet or JSP exception
 		Throwable ex = (Throwable)request.getAttribute(SERVLET_ERROR_EXCEPTION);
@@ -292,17 +286,17 @@ public class HttpServlets {
 		if (ex == null) {
 			ex = (Throwable)request.getAttribute(SERVLET_ERROR_JSP_EXCEPTION);
 		}
-		
+
 		return ex;
 	}
-	
+
 	public static void saveServletException(ServletRequest request, Throwable e) {
 		request.setAttribute(SERVLET_ERROR_EXCEPTION, e);
 
 		// for compatibility
 		request.setAttribute(SERVLET_ERROR_JSP_EXCEPTION, e);
 	}
-	
+
 	public static void clearServletException(ServletRequest request, Throwable e) {
 		request.removeAttribute(SERVLET_ERROR_EXCEPTION);
 
@@ -317,15 +311,16 @@ public class HttpServlets {
 
 		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
-	
+
 	private static Set<String> CLIENT_ABORT_ERRORS = Arrays.toSet("org.apache.catalina.connector.ClientAbortException");
-	
-	public static void addClientAbortErrors(String ... args) {
+
+	public static void addClientAbortErrors(String... args) {
 		CLIENT_ABORT_ERRORS.addAll(Arrays.asList(args));
 	}
 
 	/**
 	 * check the exception or the e.getCause() is a ClientAbortException
+	 * 
 	 * @param e exception
 	 * @return true if e or e.getCause() is a ClientAbortException
 	 */
@@ -338,7 +333,7 @@ public class HttpServlets {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @param request http servlet request
 	 * @param e error
@@ -352,27 +347,15 @@ public class HttpServlets {
 		if (request != null) {
 			sb.append(Streams.EOL);
 			if (trace) {
-				dumpRequestTrace(request, sb);
-			}
-			else {
-				dumpRequestPath(request, sb);
+				dumpRequestFull(request, sb);
+			} else {
+				dumpRequestInfo(request, sb);
 			}
 		}
 		return sb.toString();
 	}
 
-	/**
-	 * dump request trace
-	 * @param request request 
-	 * @return string
-	 */
-	public static String dumpRequestTrace(HttpServletRequest request) {
-		StringBuilder sb = new StringBuilder();
-		dumpRequestTrace(request, sb);
-		return sb.toString();
-	}
-
-	public static void dumpRequestPath(HttpServletRequest request, Appendable writer) {
+	public static void dumpRequestInfo(HttpServletRequest request, Appendable writer) {
 		try {
 			writer.append(request.getRemoteAddr());
 			String ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
@@ -388,58 +371,35 @@ public class HttpServlets {
 			if (Strings.isNotEmpty(request.getQueryString())) {
 				writer.append('?').append(request.getQueryString());
 			}
-		}
-		catch (IOException e) {
-		}
-	}
-
-	public static void dumpRequestTrace(HttpServletRequest request, Appendable writer) {
-		try {
-			dumpRequestPath(request, writer);
-
-			writer.append(Streams.EOL);
-			dumpRequestHeaders(request, writer);
-			
-			if (Arrays.isNotEmpty(request.getCookies())) {
-				writer.append(Streams.EOL);
-				dumpRequestCookies(request, writer);
-			}
-
-			if (HttpMethod.POST.equalsIgnoreCase(request.getMethod())
-					&& !request.getParameterMap().isEmpty()) {
-				writer.append(Streams.EOL);
-				dumpRequestParameters(request, writer);
-			}
-		}
-		catch (IOException e) {
+		} catch (Throwable e) {
 		}
 	}
 
 	/**
-	 * dump request debug
-	 * @param request request 
+	 * dump request head and body
+	 * 
+	 * @param request request
 	 * @return string
 	 */
-	public static String dumpRequestDebug(HttpServletRequest request) {
+	public static String dumpRequestFull(HttpServletRequest request) {
 		StringBuilder sb = new StringBuilder();
-		dumpRequestDebug(request, sb);
+		dumpRequestFull(request, sb);
 		return sb.toString();
 	}
 
-	public static void dumpRequestDebug(HttpServletRequest request, Appendable writer) {
+	public static void dumpRequestFull(HttpServletRequest request, Appendable writer) {
 		try {
-			dumpRequestPath(request, writer);
+			dumpRequestInfo(request, writer);
 
 			writer.append(Streams.EOL);
 			dumpRequestHeaders(request, writer);
 
 			if (HttpMethod.POST.equalsIgnoreCase(request.getMethod())
-					&& !request.getParameterMap().isEmpty()) {
+				&& !request.getParameterMap().isEmpty()) {
 				writer.append(Streams.EOL);
 				dumpRequestParameters(request, writer);
 			}
-		}
-		catch (IOException e) {
+		} catch (Throwable e) {
 		}
 	}
 
@@ -451,7 +411,7 @@ public class HttpServlets {
 
 	public static void dumpContextAttributes(ServletContext context, Appendable writer) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		for (Enumeration e = context.getAttributeNames(); e.hasMoreElements(); ) {
+		for (Enumeration e = context.getAttributeNames(); e.hasMoreElements();) {
 			String key = (String)e.nextElement();
 			Object value = context.getAttribute(key);
 			map.put(key, value);
@@ -472,17 +432,19 @@ public class HttpServlets {
 
 	/**
 	 * dump request info
-	 * @param request request 
+	 * 
+	 * @param request request
 	 * @return string
 	 */
 	public static String dumpRequestInfo(HttpServletRequest request) {
 		StringBuilder sb = new StringBuilder();
-		dumpRequestPath(request, sb);
+		dumpRequestInfo(request, sb);
 		return sb.toString();
 	}
 
 	/**
 	 * dump request properties
+	 * 
 	 * @param request request
 	 * @return properties dump string
 	 */
@@ -493,8 +455,7 @@ public class HttpServlets {
 	}
 
 	public static void dumpRequestProperties(HttpServletRequest request, Appendable writer) {
-		if (request == null)
-			return;
+		if (request == null) return;
 
 		Map<String, Object> m = new LinkedHashMap<String, Object>();
 		m.put("characterEncoding", request.getCharacterEncoding());
@@ -522,6 +483,7 @@ public class HttpServlets {
 
 	/**
 	 * dump request attributes
+	 * 
 	 * @param request request
 	 * @return attributes dump string
 	 */
@@ -532,8 +494,7 @@ public class HttpServlets {
 	}
 
 	public static void dumpRequestAttributes(ServletRequest request, Appendable writer) {
-		if (request == null)
-			return;
+		if (request == null) return;
 
 		ServletRequestAttrMap rm = new ServletRequestAttrMap(request);
 		Jsons.toJson(rm, writer, 2);
@@ -541,6 +502,7 @@ public class HttpServlets {
 
 	/**
 	 * dump request headers
+	 * 
 	 * @param request request
 	 * @return header dump string
 	 */
@@ -552,9 +514,9 @@ public class HttpServlets {
 
 	public static void dumpRequestHeaders(HttpServletRequest request, Appendable writer) {
 		JsonObject m = new JsonObject();
-		for (Enumeration ek = request.getHeaderNames(); ek.hasMoreElements(); ) {
+		for (Enumeration ek = request.getHeaderNames(); ek.hasMoreElements();) {
 			String key = (String)ek.nextElement();
-			for (Enumeration ev = request.getHeaders(key); ev.hasMoreElements(); ) {
+			for (Enumeration ev = request.getHeaders(key); ev.hasMoreElements();) {
 				m.accumulate(key, String.valueOf(ev.nextElement()));
 			}
 		}
@@ -563,6 +525,7 @@ public class HttpServlets {
 
 	/**
 	 * dump request parameters
+	 * 
 	 * @param request request
 	 * @return parameters dump string
 	 */
@@ -576,13 +539,14 @@ public class HttpServlets {
 		if (request == null) {
 			return;
 		}
-		
-		Map<?,?> pm = request.getParameterMap();
+
+		Map<?, ?> pm = request.getParameterMap();
 		Jsons.toJson(pm, writer, 2);
 	}
 
 	/**
 	 * dump request cookies
+	 * 
 	 * @param request request
 	 * @return cookies dump string
 	 */
@@ -596,7 +560,7 @@ public class HttpServlets {
 		if (request == null) {
 			return;
 		}
-		
+
 		Cookie[] cs = request.getCookies();
 		Jsons.toJson(cs, writer, 2);
 	}
@@ -607,16 +571,13 @@ public class HttpServlets {
 		try {
 			if (Strings.isEmpty(encoding)) {
 				in = new InputStreamReader(request.getInputStream());
-			}
-			else {
+			} else {
 				in = new InputStreamReader(request.getInputStream(), encoding);
 			}
 			Streams.copy(in, sb);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			sb.append(Exceptions.getStackTrace(e));
-		}
-		finally {
+		} finally {
 			Streams.safeClose(in);
 		}
 		return sb.toString();
@@ -663,11 +624,11 @@ public class HttpServlets {
 	public static String getBoundary(HttpServletRequest request) {
 		return getBoundary(request.getContentType());
 	}
-	
+
 	public static byte[] getBoundaryBytes(HttpServletRequest request) {
 		return getBoundaryBytes(request.getContentType());
 	}
-	
+
 	public static String getBoundary(String contentType) {
 		if (Strings.isEmpty(contentType)) {
 			return null;
@@ -677,7 +638,7 @@ public class HttpServlets {
 		// Parameter parser can handle null input
 		return parser.get(contentType, CONTENT_TYPE_BOUNDARY, ";,");
 	}
-	
+
 	public static byte[] getBoundaryBytes(String contentType) {
 		String boundaryStr = getBoundary(contentType);
 
@@ -688,8 +649,7 @@ public class HttpServlets {
 		byte[] boundary;
 		try {
 			boundary = boundaryStr.getBytes(Charsets.ISO_8859_1);
-		}
-		catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			boundary = boundaryStr.getBytes(); // Intentionally falls back to default charset
 		}
 		return boundary;
@@ -697,6 +657,7 @@ public class HttpServlets {
 
 	/**
 	 * Retrieve the content length of the request.
+	 * 
 	 * @param request http servlet request
 	 * @return The content length of the request.
 	 */
@@ -704,8 +665,7 @@ public class HttpServlets {
 		long size;
 		try {
 			size = Long.parseLong(request.getHeader(HttpHeader.CONTENT_LENGTH));
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			size = request.getContentLength();
 		}
 		return size;
@@ -726,7 +686,6 @@ public class HttpServlets {
 	public static String getEncoding(HttpServletRequest request) {
 		return getEncoding(request, Charsets.UTF_8);
 	}
-	
 
 	/**
 	 * @param request request
@@ -740,10 +699,9 @@ public class HttpServlets {
 		}
 		return cs;
 	}
-	
+
 	/**
-	 * getCookie will return the cookie object that has the name in the Cookies
-	 * of the request
+	 * getCookie will return the cookie object that has the name in the Cookies of the request
 	 * 
 	 * @param request request
 	 * @param name the cookie's name
@@ -762,8 +720,7 @@ public class HttpServlets {
 	}
 
 	/**
-	 * getCookie will return the cookie object that has the name in the Cookies
-	 * of the request
+	 * getCookie will return the cookie object that has the name in the Cookies of the request
 	 * 
 	 * @param request request
 	 * @param name the cookie's name
@@ -805,11 +762,12 @@ public class HttpServlets {
 
 	/**
 	 * encode file name by User-Agent
+	 * 
 	 * @param request request
 	 * @param charset the charset
 	 * @param filename file name
 	 * @return encoded file name
-	 * @throws UnsupportedEncodingException  if an error occurs
+	 * @throws UnsupportedEncodingException if an error occurs
 	 */
 	public static String EncodeFileName(HttpServletRequest request, String charset, String filename) throws UnsupportedEncodingException {
 		if (Strings.isEmpty(charset)) {
@@ -819,12 +777,12 @@ public class HttpServlets {
 		if (request == null) {
 			return quoteFileName(URLEncoder.encode(filename, charset));
 		}
-		
+
 		UserAgent ua = getUserAgent(request);
 		if (ua.isMsie() || ua.isEdge()) {
 			return quoteFileName(URLEncoder.encode(filename, charset));
 		}
-		
+
 		if (ua.isSafari()) {
 			if (ua.getBrowser().getMajor() < 6) {
 				return quoteFileName(filename);
@@ -837,51 +795,53 @@ public class HttpServlets {
 
 	/**
 	 * Set response header
+	 * 
 	 * @param response HttpServletResponse
 	 * @param params params map
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static void setResponseHeader(
-			HttpServletResponse response, 
-			Map<?, ?> params) throws IOException {
+		HttpServletResponse response,
+		Map<?, ?> params) throws IOException {
 		setResponseHeader(null, response, params);
 	}
 
 	/**
 	 * Set response header
+	 * 
 	 * @param request HttpServletRequest
 	 * @param response HttpServletResponse
 	 * @param params params map
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void setResponseHeader(HttpServletRequest request, 
-			HttpServletResponse response, 
-			Map<?, ?> params) throws IOException {
+	public static void setResponseHeader(HttpServletRequest request,
+		HttpServletResponse response,
+		Map<?, ?> params) throws IOException {
 
 		HttpServletResponser hss = Castors.scast(params, HttpServletResponser.class);
 		hss.setRequest(request);
 		hss.setResponse(response);
-		
+
 		hss.writeHeader();
 	}
 
 	/**
 	 * Set cache control to response header
+	 * 
 	 * @param response HttpServletResponse
 	 * @param maxAge max age for the response
 	 */
 	public static void setResponseCache(HttpServletResponse response, int maxAge) {
 		setResponseCache(response, maxAge, HttpHeader.CACHE_CONTROL_PUBLIC);
 	}
-	
+
 	public static boolean checkAndSetNotModified(HttpServletRequest request, HttpServletResponse response, Date lastModified, int maxage) {
 		// check for if-modified-since, prior to any other headers
 		long ifModifiedSince = 0;
 		if (request != null) {
 			try {
 				ifModifiedSince = request.getDateHeader(HttpHeader.IF_MODIFIED_SINCE);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.warn("Ignore invalid If-Modified-Since header value: " + request.getHeader(HttpHeader.IF_MODIFIED_SINCE));
 			}
 		}
@@ -898,9 +858,10 @@ public class HttpServlets {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Set cache control to response header
+	 * 
 	 * @param response HttpServletResponse
 	 * @param maxAge max age
 	 * @param cacheControl cache control
@@ -915,7 +876,7 @@ public class HttpServlets {
 		long tm = System.currentTimeMillis();
 		String now = HttpDates.format(tm);
 		response.setHeader(HttpHeader.DATE, now);
-		
+
 		tm += (maxAge * 1000L);
 		String expires = HttpDates.format(tm);
 		response.setHeader(HttpHeader.EXPIRES, expires);
@@ -924,6 +885,7 @@ public class HttpServlets {
 
 	/**
 	 * Set no cache to response header
+	 * 
 	 * @param response HttpServletResponse
 	 */
 	public static void setResponseNoCache(HttpServletResponse response) {
@@ -939,12 +901,12 @@ public class HttpServlets {
 			ifModifiedSince = request.getDateHeader(HttpHeader.IF_MODIFIED_SINCE);
 		} catch (Exception e) {
 		}
-		
+
 		return (ifModifiedSince > 0 && ifModifiedSince <= lastModifiedMillis);
 	}
 
 	/**
-	 * @param res response 
+	 * @param res response
 	 * @param url redirect url
 	 */
 	public static void sendRedirect(HttpServletResponse res, String url) {
@@ -952,7 +914,7 @@ public class HttpServlets {
 	}
 
 	/**
-	 * @param res response 
+	 * @param res response
 	 * @param url redirect url
 	 * @param permanently 301 or 302
 	 */
@@ -962,16 +924,16 @@ public class HttpServlets {
 	}
 
 	/**
-	 * @param res response 
+	 * @param res response
 	 * @param url redirect url
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static void writeRedirect(HttpServletResponse res, String url) throws IOException {
 		writeRedirect(res, url, true);
 	}
-	
+
 	/**
-	 * @param res response 
+	 * @param res response
 	 * @param url redirect url
 	 * @param encode encode redirect url
 	 * @throws IOException if an I/O error occurs
@@ -982,7 +944,7 @@ public class HttpServlets {
 		hss.setContentType(MimeTypes.TEXT_HTML);
 		hss.setMaxAge(0);
 		hss.writeHeader();
-		
+
 		PrintWriter pw = res.getWriter();
 		pw.write("<html><head><meta http-equiv=\"refresh\" content=\"0; url=");
 		if (encode) {
@@ -994,53 +956,51 @@ public class HttpServlets {
 	}
 
 	/**
-	 * @param res response 
+	 * @param res response
 	 * @param sc status code
 	 */
 	public static void safeSendError(HttpServletResponse res, int sc) {
 		try {
 			res.sendError(sc);
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 		}
 	}
 
 	/**
-	 * @param res response 
+	 * @param res response
 	 * @param sc status code
 	 */
 	public static void sendError(HttpServletResponse res, int sc) {
 		try {
 			res.sendError(sc);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
 	 * safe drain request stream
+	 * 
 	 * @param req http servlet request
 	 */
 	public static void safeDrain(HttpServletRequest req) {
 		try {
 			Streams.drain(req.getInputStream());
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			//
 		}
 	}
 
 	/**
 	 * safe drain request stream
+	 * 
 	 * @param req http servlet request
 	 * @param timeout the timeout to stop drain (milliseconds)
 	 */
 	public static void safeDrain(HttpServletRequest req, long timeout) {
 		try {
 			Streams.drain(req.getInputStream(), timeout);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			//
 		}
 	}

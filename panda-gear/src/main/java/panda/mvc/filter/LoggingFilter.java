@@ -94,11 +94,7 @@ public class LoggingFilter implements ServletFilter {
 	private void logRequest(HttpServletRequest request) {
 		try {
 			if (log.isTraceEnabled()) {
-				log.trace(HttpServlets.dumpRequestTrace(request));
-				return;
-			}
-			if (log.isDebugEnabled()) {
-				log.debug(HttpServlets.dumpRequestDebug(request));
+				log.trace(HttpServlets.dumpRequestFull(request));
 				return;
 			}
 			if (log.isInfoEnabled()) {
