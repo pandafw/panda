@@ -1428,39 +1428,43 @@ label {
 }
 
 /*--------------------------------------------------
- * ui-toolbar (ul)
+ * ui-toolbar, ui-navibar (ul)
 --------------------------------------------------*/
-.ui-toolbar {
+.ui-toolbar, .ui-navibar {
 	margin-bottom: 10px;
 }
-.ui-toolbar > ul {
+.ui-toolbar > ul, .ui-navibar > ul {
 	font-size: 90%;
-	background-color: #f5f5f5;
-	border-radius: 4px;
 	display: inline-block;
 	list-style-type: none;
 	margin: 0;
 	padding: 0.5em 0;
 }
-.ui-toolbar > ul > li {
+.ui-toolbar > ul {
+	background-color: #f5f5f5;
+	border-radius: 4px;
+}
+.ui-toolbar > ul > li, .ui-navibar > ul > li {
 	border-left: 1px solid #fff;
 	border-right: 1px solid #c6bcaa;
 	display: inline-block;
 	margin: 0;
 	padding: 0 1em;
 }
-.ui-toolbar > ul > li:first-child {
+.ui-toolbar > ul > li:first-child, .ui-navibar > ul > li:first-child {
 	border-left: none;
 }
-.ui-toolbar > ul > li:last-child {
+.ui-toolbar > ul > li:last-child, .ui-navibar > ul > li:last-child {
 	border-right: none;
+}
+.ui-toolbar > ul > li > a, .ui-navibar > ul > li > a {
+	margin: -0.5em -1em;
+	padding: 0.5em 1em;
+	white-space: nowrap;
 }
 .ui-toolbar > ul > li > a {
 	border-radius: 4px;
-	margin: -0.5em -1em;
-	padding: 0.5em 1em;
 	text-decoration: none;
-	white-space: nowrap;
 }
 .ui-toolbar > ul > li > a:hover, .ui-toolbar > ul > li > a:focus {
 	text-decoration: none;
