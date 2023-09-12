@@ -1408,8 +1408,7 @@ label {
 }
 .ui-menu-item {
 	background-color: #eee;
-	display: block;
-	float: left;
+	display: inline-block;
 	width: 130px;
 	height: 120px;
 	padding: 10px;
@@ -1417,6 +1416,7 @@ label {
 	border: solid 1px #ccc;
 	border-radius: 5px;
 	text-align: center;
+	vertical-align: middle;
 }
 .ui-menu-item > div {
 	line-height: 1em;
