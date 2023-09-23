@@ -242,8 +242,11 @@
 		_align($p, c.trigger, c.position);
 
 		$p.children('.ui-popup-frame').hide()[c.transition](function() {
-			$c.trigger('shown.popup');
 			_bind(c);
+			if (c.focus) {
+				$(c.focus).focus();
+			}
+			$c.trigger('shown.popup');
 		}).focus();
 	}
 
@@ -473,6 +476,7 @@
 		mask: false,
 		loader: false,
 		closer: false,
+		focus: '',
 		mouse: true,
 		keyboard: true,
 		resize: true,

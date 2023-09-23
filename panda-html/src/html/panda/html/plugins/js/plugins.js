@@ -737,6 +737,39 @@
 		});
 	};
 })(jQuery);
+(function($) {
+	"use strict";
+
+	$.fn.checkAll = function(target) {
+		$(this).each(function() {
+			var $a = $(this), $g = $(target || $a.attr('checkall'));
+			$a.change(function(evt, sup) {
+				if (!sup) {
+					var c = $a.prop('checked');
+					$g.each(function() {
+						var $t = $(this), o = $t.prop('checked');
+						if (c != o) {
+							$t.prop('checked', c).trigger('change');
+						}
+					});
+				}
+			});
+			$g.change(function() {
+				var gz = $g.length, cz = $g.filter(':checked').length, c = (gz > 0 && gz == cz);
+				if (c != $a.prop('checked')) {
+					$a.prop('checked', c).trigger('change', true);
+				}
+			});
+		});
+	};
+
+
+	// POPUP DATA-API
+	// ==================
+	$(window).on('load', function() {
+		$('[checkall]').checkAll();
+	});
+})(jQuery);
 /**
  * jQuery Editable Select
  * Indri Muska <indrimuska@gmail.com>
@@ -2056,8 +2089,11 @@
 		_align($p, c.trigger, c.position);
 
 		$p.children('.ui-popup-frame').hide()[c.transition](function() {
-			$c.trigger('shown.popup');
 			_bind(c);
+			if (c.focus) {
+				$(c.focus).focus();
+			}
+			$c.trigger('shown.popup');
 		}).focus();
 	}
 
@@ -2287,6 +2323,7 @@
 		mask: false,
 		loader: false,
 		closer: false,
+		focus: '',
 		mouse: true,
 		keyboard: true,
 		resize: true,
@@ -2535,11 +2572,10 @@
 	}
 
 	$.fn.autosize = function() {
-		$(this).off('input.autosize').on('input.autosize', _autosize).css({
+		return $(this).off('input.autosize').on('input.autosize', _autosize).css({
 			'overflow-y': 'hidden',
 			'resize': 'none'
-		});
-		_autosize.call(this);
+		}).trigger('input');
 	};
 
 	$(window).on('load', function() {
@@ -2585,7 +2621,7 @@
 			var $i = $('<i class="ui-close ui-textclear"></i>');
 			$i.insertAfter($t).click(function() {
 				if ($t.val() != '') {
-					$t.val('').trigger('change');
+					$t.val('').trigger('input').trigger('change');
 					if ($t.attr('textclear') == 'focus') {
 						$t.focus();
 					}

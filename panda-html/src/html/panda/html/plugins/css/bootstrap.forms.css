@@ -14,6 +14,14 @@ label {
 	font-family: Consolas, monospace;
 }
 
+input.form-control[type="month"],
+input.form-control[type="date"],
+input.form-control[type="time"],
+input.form-control[type="datetime-local"] {
+	display: inline-block;
+	width: auto;
+}
+
 /** disable bootstrap not-allowed cursor */
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
 	cursor: auto;
