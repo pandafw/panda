@@ -51,7 +51,7 @@
 	cursor: pointer;
 }
 
-.ui-toast-single>h2.ui-toast-heading {
+.ui-toast-single > h2.ui-toast-heading {
 	font-family: arial, sans-serif;
 	font-size: 14px;
 	margin: 0px 0px 7px;
@@ -61,12 +61,12 @@
 	letter-spacing: normal;
 }
 
-.ui-toast-single>ul.ui-toast-ul {
+.ui-toast-single > ul.ui-toast-ul {
 	margin: 0px 0px 0px 15px;
 	background: none;
 	padding: 0px;
 }
-.ui-toast-single>ul.ui-toast-ul>li {
+.ui-toast-single > ul.ui-toast-ul>li {
 	list-style-type: disc;
 	line-height: 17px;
 	background: none;

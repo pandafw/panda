@@ -809,7 +809,7 @@ textarea.ui-has-textclear + .ui-textclear {
 	cursor: pointer;
 }
 
-.ui-toast-single>h2.ui-toast-heading {
+.ui-toast-single > h2.ui-toast-heading {
 	font-family: arial, sans-serif;
 	font-size: 14px;
 	margin: 0px 0px 7px;
@@ -819,12 +819,12 @@ textarea.ui-has-textclear + .ui-textclear {
 	letter-spacing: normal;
 }
 
-.ui-toast-single>ul.ui-toast-ul {
+.ui-toast-single > ul.ui-toast-ul {
 	margin: 0px 0px 0px 15px;
 	background: none;
 	padding: 0px;
 }
-.ui-toast-single>ul.ui-toast-ul>li {
+.ui-toast-single > ul.ui-toast-ul>li {
 	list-style-type: disc;
 	line-height: 17px;
 	background: none;
@@ -877,10 +877,11 @@ textarea.ui-has-textclear + .ui-textclear {
 
 ul.ui-tree, ul.ui-tree ul {
 	list-style: none;
-	margin: 0 0 0 1em;
+	margin: 0;
 	padding: 0;
 }
 ul.ui-tree ul {
+	margin: 0 0 0 1em;
 	position: relative;
 }
 ul.ui-tree ul:before {
@@ -915,8 +916,8 @@ ul.ui-tree li.node>.item {
 }
 
 /* arrow */
-ul.ui-tree.arrow li {
-	padding: 0 0 0 0.5em;
+ul.ui-tree.arrow ul {
+	margin: 0 0 0 1.5em;
 }
 ul.ui-tree.arrow li:before {
 	content: ">";
@@ -934,15 +935,15 @@ ul.ui-tree.arrow li.collapsed:before, ul.ui-tree.arrow li.leaf:before {
 ul.ui-tree.arrow li.leaf:before {
 	content: "-";
 }
-ul.ui-tree.arrow li>.item {
-	padding: 0 1em;
+ul.ui-tree.arrow li > .item {
+	padding: 0 1em 0 1.5em;
 }
 
 /* lined */
 ul.ui-tree.lined ul:before {
 	border-left: 1px solid #aaa;
 }
-ul.ui-tree.lined li {
+ul.ui-tree.lined ul > li {
 	padding: 0 0 0 1em;
 }
 ul.ui-tree.lined li:before {
@@ -963,7 +964,10 @@ ul.ui-tree.lined li>.item {
 }
 
 /* boxed */
-ul.ui-tree.boxed li>.item {
+ul.ui-tree.boxed {
+	padding: 1em 0;
+}
+ul.ui-tree.boxed li > .item {
 	background: #fff;
 	border-radius: 5px;
 	border: 1px solid #afafaf;
@@ -972,15 +976,27 @@ ul.ui-tree.boxed li>.item {
 	min-width: 15em;
 	padding: 0.5em 1em;
 }
-ul.ui-tree.boxed li {
-	padding: 1em 0 0 1.5em;
+ul.ui-tree.boxed > li {
+	padding: 1em 0 0 0;
+}
+ul.ui-tree.boxed ul > li {
+	padding: 1em 0 0 1em;
 }
 ul.ui-tree.lined.boxed li:before {
 	top: 2.2em;
 	width: 2em;
 }
+ul.ui-tree.arrow.boxed ul {
+	margin: 0;
+}
 ul.ui-tree.arrow.boxed li:before {
-	top: 1.7em;
+	top: 2em;
+}
+ul.ui-tree.arrow.boxed li.collapsed:before, ul.ui-tree.arrow.boxed li.leaf:before {
+	top: 1.75em;
+}
+ul.ui-tree.arrow.boxed > li, ul.ui-tree.arrow.boxed ul > li {
+	padding: 1em 0 0 1.5em;
 }
 
 /* sticky */

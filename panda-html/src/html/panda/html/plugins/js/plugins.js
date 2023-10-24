@@ -599,7 +599,7 @@
 	"use strict";
 
 	$.jcss = function(url) {
-		if ($('link[href="' + url + '"]').size()) {
+		if ($('link[href="' + url + '"]').length) {
 			return false;
 		}
 		$('<link>').attr({ type: 'text/css', rel: 'stylesheet', href: url }).appendTo('head');
@@ -742,11 +742,11 @@
 
 	$.fn.checkAll = function(target) {
 		$(this).each(function() {
-			var $a = $(this), $g = $(target || $a.attr('checkall'));
-			$a.change(function(evt, sup) {
+			var $ca = $(this), $ct = $(target || $ca.attr('checkall'));
+			$ca.change(function(evt, sup) {
 				if (!sup) {
-					var c = $a.prop('checked');
-					$g.each(function() {
+					var c = $ca.prop('checked');
+					$ct.each(function() {
 						var $t = $(this), o = $t.prop('checked');
 						if (c != o) {
 							$t.prop('checked', c).trigger('change');
@@ -754,12 +754,12 @@
 					});
 				}
 			});
-			$g.change(function() {
-				var gz = $g.length, cz = $g.filter(':checked').length, c = (gz > 0 && gz == cz);
-				if (c != $a.prop('checked')) {
-					$a.prop('checked', c).trigger('change', true);
+			$ct.change(function() {
+				var tz = $ct.length, cz = $ct.filter(':checked').length, c = (tz > 0 && tz == cz);
+				if (c != $ca.prop('checked')) {
+					$ca.prop('checked', c).trigger('change', true);
 				}
-			});
+			}).first().trigger('change');
 		});
 	};
 
@@ -2727,15 +2727,15 @@
 				op.right = 20;
 				break;
 			case 'bottom center':
+				op.bottom = 5;
 				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
-				op.bottom = 20;
 				break;
 			case 'bottom left':
-				op.bottom = 20;
+				op.bottom = 5;
 				op.left = 20;
 				break;
 			case 'bottom right':
-				op.bottom = 20;
+				op.bottom = 5;
 				op.right = 20;
 				break;	
 			case 'top':
@@ -2744,16 +2744,16 @@
 				op.right = 20;
 				break;
 			case 'top center':
+				op.top = 5;
 				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
-				op.top = 20;
 				break;
 			case 'top left':
-				op.top = 20;
+				op.top = 5;
 				op.left = 20;
 				break;
 			//case 'top right':
 			default:
-				op.top = 20;
+				op.top = 5;
 				op.right = 20;
 				break;
 			}
@@ -3010,15 +3010,18 @@
 	"use strict";
 
 	function init($t) {
-		$t.find('li').removeClass('node leaf').children('.item').off('.treeview').each(function() {
+		$t.find('li').removeClass('node leaf').children('.item').each(function() {
 			var $i = $(this), $n = $i.parent();
 			if ($i.next('ul').length) {
 				$n.addClass('node');
-				$i.on('click.treeview', function() {
-					_toggle($n);
-				});
 			} else {
 				$n.addClass('leaf');
+			}
+		});
+		$t.off('.treeview').on('click.treeview', '.item', function(evt) {
+			var $i = $(evt.target), $n = $i.parent();
+			if ($n.hasClass('node')) {
+				_toggle($n);
 			}
 		});
 	}
@@ -3448,10 +3451,10 @@
 
 		$u.find('li.active').removeClass('active');
 
-		var m = $p.data('pages'), b = n - Math.floor($n.size() / 2);
+		var m = $p.data('pages'), b = n - Math.floor($n.length / 2);
 
-		if (b + $n.size() > m) {
-			b = m - $n.size() + 1;
+		if (b + $n.length > m) {
+			b = m - $n.length + 1;
 		}
 		if (b < 1) {
 			b = 1;

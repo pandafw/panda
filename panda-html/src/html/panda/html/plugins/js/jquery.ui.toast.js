@@ -89,15 +89,15 @@
 				op.right = 20;
 				break;
 			case 'bottom center':
+				op.bottom = 5;
 				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
-				op.bottom = 20;
 				break;
 			case 'bottom left':
-				op.bottom = 20;
+				op.bottom = 5;
 				op.left = 20;
 				break;
 			case 'bottom right':
-				op.bottom = 20;
+				op.bottom = 5;
 				op.right = 20;
 				break;	
 			case 'top':
@@ -106,16 +106,16 @@
 				op.right = 20;
 				break;
 			case 'top center':
+				op.top = 5;
 				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
-				op.top = 20;
 				break;
 			case 'top left':
-				op.top = 20;
+				op.top = 5;
 				op.left = 20;
 				break;
 			//case 'top right':
 			default:
-				op.top = 20;
+				op.top = 5;
 				op.right = 20;
 				break;
 			}
