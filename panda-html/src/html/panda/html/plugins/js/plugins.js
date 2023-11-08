@@ -1012,6 +1012,29 @@
 })(jQuery);(function($) {
 	"use strict";
 
+	$.fn.enableBy = function(target) {
+		$(this).each(function() {
+			var $a = $(this), $cs = $(target || $a.attr('enableby'));
+			if ($cs.length) {
+				$cs.change(function() {
+					$a.prop('disabled', $cs.filter(':checked').length == 0);
+				}).trigger('change');
+			} else {
+				$a.prop('disabled', true);
+			}
+		});
+	};
+
+
+	// POPUP DATA-API
+	// ==================
+	$(window).on('load', function() {
+		$('[enableby]').enableBy();
+	});
+})(jQuery);
+(function($) {
+	"use strict";
+
 	function collapse($f, t) {
 		if (!$f.hasClass('collapsed')) {
 			$f.addClass('collapsed').children(':not(legend)')[t || 'slideUp']();
@@ -3010,20 +3033,19 @@
 	"use strict";
 
 	function init($t) {
-		$t.find('li').removeClass('node leaf').children('.item').each(function() {
+		$t.find('li').removeClass('node leaf').children('.item').off('.treeview').each(function() {
 			var $i = $(this), $n = $i.parent();
 			if ($i.next('ul').length) {
 				$n.addClass('node');
+				$i.on('click.treeview', _on_item_click);
 			} else {
 				$n.addClass('leaf');
 			}
 		});
-		$t.off('.treeview').on('click.treeview', '.item', function(evt) {
-			var $i = $(evt.target), $n = $i.parent();
-			if ($n.hasClass('node')) {
-				_toggle($n);
-			}
-		});
+	}
+
+	function _on_item_click() {
+		_toggle($(this).parent());
 	}
 
 	function _collapse($n) {
