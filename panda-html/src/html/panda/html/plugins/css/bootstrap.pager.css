@@ -3,22 +3,20 @@
 	margin: 20px 0;
 	text-align: center;
 }
-.ui-pager > .infos {
+.ui-pager > div.infos {
 	float: left;
 	padding: 8px;
 }
-.ui-pager > .limits {
+.ui-pager > div.limits {
 	float: right;
 }
 .ui-pager > .pagination {
-	border-radius: 0;
 	margin: 0;
 }
-.ui-pager > .pagination > li:first-child > a,
-.ui-pager > .pagination > li:first-child > span,
-.ui-pager > .pagination > li:last-child > a,
-.ui-pager > .pagination > li:last-child > span {
-	border-radius: 0;
+.ui-pager > .pagination > li.limits > select {
+	display: inline;
+	float: left;
+	width: auto;
 }
 
 .ui-pager.lined > .pagination > li > a,
@@ -26,6 +24,7 @@
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #ddd;
+	border-radius: 0;
 	color: #888;
 	margin-left: 3px;
 	padding: 5px 11px;
@@ -33,13 +32,11 @@
 .ui-pager.lined > .pagination > li > a:hover,
 .ui-pager.lined > .pagination > li > span:hover {
 	background-color: #eee;
-	border: 0 none;
 	border-bottom: 3px solid #337ab7;
 }
 
 .ui-pager.lined > .pagination > li.eleft > span,
 .ui-pager.lined > .pagination > li.eright > span {
-	border: 0 none;
 	border-bottom: 3px solid transparent;
 	padding-left: 8px;
 	padding-right: 8px;
@@ -52,7 +49,6 @@
 .ui-pager.lined > .pagination > .active > a:focus,
 .ui-pager.lined > .pagination > .active > span:focus {
 	background-color: #fff;
-	border: 0 none;
 	border-bottom: 3px solid #337ab7;
 	color: #000;
 	font-weight: bold;

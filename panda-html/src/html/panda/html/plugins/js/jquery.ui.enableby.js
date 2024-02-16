@@ -15,7 +15,6 @@
 	};
 
 
-	// POPUP DATA-API
 	// ==================
 	$(window).on('load', function() {
 		$('[enableby]').enableBy();

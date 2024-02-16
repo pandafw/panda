@@ -151,6 +151,10 @@
 	padding: 15px;
 	border-bottom: 1px solid #e5e5e5;
 }
+.ui-popup-header h1, .ui-popup-header h2, .ui-popup-header h3, .ui-popup-header h4, .ui-popup-header h5, .ui-popup-header h6 {
+	margin: 0;
+}
+
 .ui-popup-body {
 	position: relative;
 	padding: 15px;

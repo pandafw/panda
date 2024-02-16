@@ -4,27 +4,37 @@
 .ui-uploader-progress {
 	margin: 5px 0;
 }
-.ui-uploader-sep {
+.ui-uploader-items {
 	margin: 7px 0 0 0;
 }
 .ui-uploader-item {
-	border: 1px solid #ccc;
+	border: 1px dashed #ccc;
 	display: inline-block;
-	padding: 8px;
+	padding: 8px 24px;
 	margin: 0 7px 7px 0;
 	vertical-align: top;
+	position: relative;
 }
-.ui-uploader-text {
-	display: inline-block;
+.ui-uploader-item.loading {
+	border: 1px dotted #ccc;
 }
-.ui-uploader-remove {
-	color: #999;
+.ui-uploader-item.success {
+	border: 1px solid #ccc;
+}
+.ui-uploader-item.error {
+	border: 1px solid #a94442;
+}
+.ui-uploader-item.error .ui-uploader-icon {
+	color: #a94442;
+}
+.ui-uploader-item .ui-close {
 	cursor: pointer;
-	margin-left: 10px;
-	padding: 3px;
+	position: absolute;
+	top: 6px;
+	right: 4px;
 }
-.ui-uploader-remove:hover {
-	color: #235273;
+.ui-uploader-icon {
+	margin: 0 8px 0 -14px;
 }
 .ui-uploader-image img {
 	margin: 5px 0;
@@ -44,6 +54,9 @@
 	margin: 5px 0;
 	padding: 15px;
 }
+.ui-uploader-error.json {
+	white-space: pre-wrap;
+}
 
 /* drag & drop */
 .ui-uploader-draggable {
@@ -55,3 +68,21 @@
 	background-color: #eee;
 }
 
+/* blink */
+.ui-uploader-item.blinking {
+	animation: ui-uploader-blinking 2s infinite;
+}
+
+@keyframes ui-uploader-blinking {
+	0%   { background-color: #fff; }
+	10%  { background-color: #eee; }
+	20%  { background-color: #ddd; }
+	30%  { background-color: #ccc; }
+	40%  { background-color: #bbb; }
+	50%  { background-color: #aaa; }
+	60%  { background-color: #bbb; }
+	70%  { background-color: #ccc; }
+	80%  { background-color: #ddd; }
+	90%  { background-color: #eee; }
+	100% { background-color: #fff; }
+}

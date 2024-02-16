@@ -330,6 +330,7 @@
 
 	$.toast.defaults = {
 		icon: false,
+		html: false,
 		text: '',
 		heading: '',
 		loader: true,

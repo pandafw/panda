@@ -14,11 +14,16 @@ label {
 	font-family: Consolas, monospace;
 }
 
+input.form-control[size],
 input.form-control[type="month"],
 input.form-control[type="date"],
 input.form-control[type="time"],
 input.form-control[type="datetime-local"] {
 	display: inline-block;
+	width: auto;
+}
+
+select.form-control {
 	width: auto;
 }
 
@@ -33,11 +38,11 @@ input.form-control[type="datetime-local"] {
 	background-color: #f9f9f9;
 	padding: 10px;
 }
-.form-horizontal.lined > .form-group {
+.form-horizontal.lined .form-group {
 	border-bottom: 1px solid #ccc;
 	margin: 0;
 	padding: 7px;
 }
-.form-horizontal.lined > .form-group:last-of-type {
+.form-horizontal.lined .form-group:last-of-type {
 	border-bottom: 0;
 }

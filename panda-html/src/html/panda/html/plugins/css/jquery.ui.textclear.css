@@ -1,25 +1,22 @@
 .ui-textclear {
 	cursor: pointer;
-	right: 22px;
+	display: inline-block;
 	position: absolute;
 	z-index: 3;
 }
+
 .ui-has-textclear {
 	padding-right: 24px;
 }
 
-input.ui-has-textclear + .ui-textclear {
-	margin-top: -8px;
-	top: 50%;
+.ui-has-textclear + .ui-textclear {
+	top: 8px;
+	right: 22px;
 }
+
+input[size].ui-has-textclear + .ui-textclear,
 .input-group > input.ui-has-textclear + .ui-textclear {
-	position: relative;
-	display: inline-block;
-	margin: 10px 0 0 -22px;
-	top: auto;
+	margin-left: -22px;
 	right: auto;
 }
 
-textarea.ui-has-textclear + .ui-textclear {
-	top: 8px;
-}

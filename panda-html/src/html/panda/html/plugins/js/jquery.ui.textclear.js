@@ -14,15 +14,13 @@
 			$i.insertAfter($t).click(function() {
 				if ($t.val() != '') {
 					$t.val('').trigger('input').trigger('change');
-					if ($t.attr('textclear') == 'focus') {
-						$t.focus();
-					}
 				}
+				$t.focus();
+				return false;
 			});
 		});
 	};
 	
-	// DATA-API
 	// ==================
 	$(window).on('load', function () {
 		$('[textclear]').textClear();

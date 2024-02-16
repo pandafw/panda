@@ -25,7 +25,6 @@
 	};
 
 
-	// POPUP DATA-API
 	// ==================
 	$(window).on('load', function() {
 		$('[checkall]').checkAll();

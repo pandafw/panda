@@ -678,6 +678,10 @@ fieldset.ui-fieldset.collapsed>legend::before {
 	padding: 15px;
 	border-bottom: 1px solid #e5e5e5;
 }
+.ui-popup-header h1, .ui-popup-header h2, .ui-popup-header h3, .ui-popup-header h4, .ui-popup-header h5, .ui-popup-header h6 {
+	margin: 0;
+}
+
 .ui-popup-body {
 	position: relative;
 	padding: 15px;
@@ -733,29 +737,26 @@ div.ui-simple-color-picker ul li {
 }
 .ui-textclear {
 	cursor: pointer;
-	right: 22px;
+	display: inline-block;
 	position: absolute;
 	z-index: 3;
 }
+
 .ui-has-textclear {
 	padding-right: 24px;
 }
 
-input.ui-has-textclear + .ui-textclear {
-	margin-top: -8px;
-	top: 50%;
+.ui-has-textclear + .ui-textclear {
+	top: 8px;
+	right: 22px;
 }
+
+input[size].ui-has-textclear + .ui-textclear,
 .input-group > input.ui-has-textclear + .ui-textclear {
-	position: relative;
-	display: inline-block;
-	margin: 10px 0 0 -22px;
-	top: auto;
+	margin-left: -22px;
 	right: auto;
 }
 
-textarea.ui-has-textclear + .ui-textclear {
-	top: 8px;
-}
 /**
  * jQuery toast plugin created by Kamran Ahmed copyright MIT license 2014
  */
@@ -1016,27 +1017,37 @@ ul.ui-tree.sticky li>.item {
 .ui-uploader-progress {
 	margin: 5px 0;
 }
-.ui-uploader-sep {
+.ui-uploader-items {
 	margin: 7px 0 0 0;
 }
 .ui-uploader-item {
-	border: 1px solid #ccc;
+	border: 1px dashed #ccc;
 	display: inline-block;
-	padding: 8px;
+	padding: 8px 24px;
 	margin: 0 7px 7px 0;
 	vertical-align: top;
+	position: relative;
 }
-.ui-uploader-text {
-	display: inline-block;
+.ui-uploader-item.loading {
+	border: 1px dotted #ccc;
 }
-.ui-uploader-remove {
-	color: #999;
+.ui-uploader-item.success {
+	border: 1px solid #ccc;
+}
+.ui-uploader-item.error {
+	border: 1px solid #a94442;
+}
+.ui-uploader-item.error .ui-uploader-icon {
+	color: #a94442;
+}
+.ui-uploader-item .ui-close {
 	cursor: pointer;
-	margin-left: 10px;
-	padding: 3px;
+	position: absolute;
+	top: 6px;
+	right: 4px;
 }
-.ui-uploader-remove:hover {
-	color: #235273;
+.ui-uploader-icon {
+	margin: 0 8px 0 -14px;
 }
 .ui-uploader-image img {
 	margin: 5px 0;
@@ -1056,6 +1067,9 @@ ul.ui-tree.sticky li>.item {
 	margin: 5px 0;
 	padding: 15px;
 }
+.ui-uploader-error.json {
+	white-space: pre-wrap;
+}
 
 /* drag & drop */
 .ui-uploader-draggable {
@@ -1067,6 +1081,24 @@ ul.ui-tree.sticky li>.item {
 	background-color: #eee;
 }
 
+/* blink */
+.ui-uploader-item.blinking {
+	animation: ui-uploader-blinking 2s infinite;
+}
+
+@keyframes ui-uploader-blinking {
+	0%   { background-color: #fff; }
+	10%  { background-color: #eee; }
+	20%  { background-color: #ddd; }
+	30%  { background-color: #ccc; }
+	40%  { background-color: #bbb; }
+	50%  { background-color: #aaa; }
+	60%  { background-color: #bbb; }
+	70%  { background-color: #ccc; }
+	80%  { background-color: #ddd; }
+	90%  { background-color: #eee; }
+	100% { background-color: #fff; }
+}
 /** grid fix */
 .container {
 	width: 100%;
@@ -1130,11 +1162,16 @@ label {
 	font-family: Consolas, monospace;
 }
 
+input.form-control[size],
 input.form-control[type="month"],
 input.form-control[type="date"],
 input.form-control[type="time"],
 input.form-control[type="datetime-local"] {
 	display: inline-block;
+	width: auto;
+}
+
+select.form-control {
 	width: auto;
 }
 
@@ -1149,12 +1186,12 @@ input.form-control[type="datetime-local"] {
 	background-color: #f9f9f9;
 	padding: 10px;
 }
-.form-horizontal.lined > .form-group {
+.form-horizontal.lined .form-group {
 	border-bottom: 1px solid #ccc;
 	margin: 0;
 	padding: 7px;
 }
-.form-horizontal.lined > .form-group:last-of-type {
+.form-horizontal.lined .form-group:last-of-type {
 	border-bottom: 0;
 }
 /** navbar toogle */
@@ -1212,22 +1249,20 @@ input.form-control[type="datetime-local"] {
 	margin: 20px 0;
 	text-align: center;
 }
-.ui-pager > .infos {
+.ui-pager > div.infos {
 	float: left;
 	padding: 8px;
 }
-.ui-pager > .limits {
+.ui-pager > div.limits {
 	float: right;
 }
 .ui-pager > .pagination {
-	border-radius: 0;
 	margin: 0;
 }
-.ui-pager > .pagination > li:first-child > a,
-.ui-pager > .pagination > li:first-child > span,
-.ui-pager > .pagination > li:last-child > a,
-.ui-pager > .pagination > li:last-child > span {
-	border-radius: 0;
+.ui-pager > .pagination > li.limits > select {
+	display: inline;
+	float: left;
+	width: auto;
 }
 
 .ui-pager.lined > .pagination > li > a,
@@ -1235,6 +1270,7 @@ input.form-control[type="datetime-local"] {
 	background-color: #fff;
 	border: 0 none;
 	border-bottom: 3px solid #ddd;
+	border-radius: 0;
 	color: #888;
 	margin-left: 3px;
 	padding: 5px 11px;
@@ -1242,13 +1278,11 @@ input.form-control[type="datetime-local"] {
 .ui-pager.lined > .pagination > li > a:hover,
 .ui-pager.lined > .pagination > li > span:hover {
 	background-color: #eee;
-	border: 0 none;
 	border-bottom: 3px solid #337ab7;
 }
 
 .ui-pager.lined > .pagination > li.eleft > span,
 .ui-pager.lined > .pagination > li.eright > span {
-	border: 0 none;
 	border-bottom: 3px solid transparent;
 	padding-left: 8px;
 	padding-right: 8px;
@@ -1261,7 +1295,6 @@ input.form-control[type="datetime-local"] {
 .ui-pager.lined > .pagination > .active > a:focus,
 .ui-pager.lined > .pagination > .active > span:focus {
 	background-color: #fff;
-	border: 0 none;
 	border-bottom: 3px solid #337ab7;
 	color: #000;
 	font-weight: bold;
@@ -1338,6 +1371,9 @@ input.form-control[type="datetime-local"] {
 		display: inline-block;
 	}
 }
+.table > thead > tr > th {
+	vertical-align: middle;
+}
 .ui-corner {
 	border: solid 1px #ddd;
 	border-radius: 20px;
@@ -1371,33 +1407,22 @@ input.form-control[type="datetime-local"] {
 	bottom: 5px;
 	right: 5px;
 }
-/** checks */
-.ui-checks > label {
+/** checks, radios */
+.ui-checks > label, .ui-radios > label {
 	padding: 0 20px 0 0;
 }
-.ui-checks > label > input {
+.ui-checks > label > input, .ui-radios > label > input {
 	margin: 0 7px 0 0;
 	vertical-align: middle;
 }
-.ui-checks.vertical > label {
+.ui-checks.vertical > label, .ui-radios.vertical > label {
 	display: block;
+	padding-left: 21px;
 }
-.form-horizontal .ui-checks {
-	padding-top: 7px;
+.ui-checks.vertical > label > input, .ui-radios.vertical > label > input {
+	margin-left: -21px;
 }
-
-/** radios */
-.ui-radios > label {
-	padding: 0 20px 0 0;
-}
-.ui-radios > label > input {
-	margin: 0 7px 0 0;
-	vertical-align: middle;
-}
-.ui-radios.vertical > label {
-	display: block;
-}
-.form-horizontal .ui-radios {
+.form-horizontal .ui-checks, .form-horizontal .ui-radios {
 	padding-top: 7px;
 }
 
