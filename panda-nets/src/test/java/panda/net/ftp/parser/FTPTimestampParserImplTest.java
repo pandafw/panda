@@ -382,8 +382,8 @@ public class FTPTimestampParserImplTest extends TestCase {
 	public void testFeb29IfLeapYear() throws Exception {
 		GregorianCalendar now = new GregorianCalendar();
 		final int thisYear = now.get(Calendar.YEAR);
-		if (now.isLeapYear(thisYear) && now.before(new GregorianCalendar(thisYear, Calendar.AUGUST, 29))) {
-			GregorianCalendar target = new GregorianCalendar(thisYear, Calendar.FEBRUARY, 29);
+		if (now.isLeapYear(thisYear) && now.before(new GregorianCalendar(thisYear, Calendar.FEBRUARY, 29))) {
+			GregorianCalendar target = new GregorianCalendar(thisYear-1, Calendar.FEBRUARY, 29);
 			checkShortParse("Feb 29th", now, target);
 		}
 		else {
