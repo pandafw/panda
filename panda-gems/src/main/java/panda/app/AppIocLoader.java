@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import panda.app.auth.UserAuthenticateProcessor;
 import panda.app.auth.UserAuthenticator;
-import panda.app.index.lucene.RevisionedLuceneIndexerManager;
 import panda.app.task.ActionTaskSubmitter;
 import panda.app.task.java.JavaTaskExecutor;
 import panda.app.task.java.JavaTaskScheduler;
@@ -51,10 +50,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 				// task
 				ActionTaskSubmitter.class,
 				JavaTaskExecutor.class,
-				JavaTaskScheduler.class,
-				
-				// lucene
-				RevisionedLuceneIndexerManager.class
+				JavaTaskScheduler.class
 			);
 		}
 	}
