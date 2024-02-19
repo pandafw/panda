@@ -26,7 +26,7 @@
 		<mongodb.version>3.11.0</mongodb.version>
 		<mysql.version>8.0.17</mysql.version>
 		<postgresql.version>42.2.25</postgresql.version>
-		<sqlite.version>3.28.0</sqlite.version>
+		<sqlite.version>3.41.2.2</sqlite.version>
 		<servlet.api.version>4.0.1</servlet.api.version>
 		<servlet.jsp.version>2.3.3</servlet.jsp.version>
 		<websocket.version>1.1</websocket.version>
