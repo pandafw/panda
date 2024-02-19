@@ -90,13 +90,6 @@ public interface MVC {
 	public static final String AUTH_TOKEN_LIFE = "panda.auth.token.life";
 
 	//------------------------------------------------
-	// The lucene settings
-	//
-	public static final String LUCENE_LOCATION = "panda.lucene.location";
-
-	public static final String LUCENE_ANALYZER = "panda.lucene.analyzer";
-
-	//------------------------------------------------
 	// The gae search settings
 	//
 	public static final String GAE_SEARCH_LOCALE = "panda.gae.search.locale";

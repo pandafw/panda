@@ -50,10 +50,6 @@ public interface SET extends SetConstants {
 	/** The task error limit */
 	public static final String TASK_ERROR_LIMIT = "task.error.limit";
 
-	//--------------------------------------------------------
-	/** lucene location */
-	public static final String LUCENE_LOCATION = "lucene.location";
-
 	/** File Store */
 	public static final String FILESTORE_LOCATION = "filestore.location";
 

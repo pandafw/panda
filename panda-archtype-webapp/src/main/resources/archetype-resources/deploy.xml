@@ -10,7 +10,6 @@
 	<property name="sqlite.dir" value="${app.dir}/sqlite"/>
 	<property name="filestore.dir" value="${app.dir}/files"/>
 	<property name="media.dir" value="${app.dir}/media"/>
-	<property name="lucene.dir" value="${app.dir}/lucene"/>
 	<property name="cls.dir" value="${web.dir}/WEB-INF/classes"/>
 
 	<!-- deploy -->
@@ -21,7 +20,6 @@
 		<mkdir dir="${sqlite.dir}"/>
 		<mkdir dir="${filestore.dir}"/>
 		<mkdir dir="${media.dir}"/>
-		<mkdir dir="${lucene.dir}"/>
 
 		<delete includeemptydirs="true">
 			<fileset dir="${web.dir}"/>
@@ -78,11 +76,6 @@
 		<replaceregexp file="${cls.dir}/app.properties" 
 			match=".*media.location=.*"
 			replace="media.location=${media.dir}"
-			byline="true"
-			encoding="ISO-8859-1"/>
-		<replaceregexp file="${cls.dir}/app.properties" 
-			match=".*lucene.location=.*"
-			replace="lucene.location=${lucene.dir}"
 			byline="true"
 			encoding="ISO-8859-1"/>
 		<replaceregexp file="${cls.dir}/app.properties" 

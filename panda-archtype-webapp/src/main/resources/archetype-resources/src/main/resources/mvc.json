@@ -31,12 +31,6 @@
 	// media location (default: ${web.dir}/WEB-INF/_media)
 	//"panda.media.location": "/app/${artifactId}/media",
 	
-	// lucene location (default: ${web.dir}/WEB-INF/_lucene)
-	//"panda.lucene.location": "/app/${artifactId}/lucene",
-	
-	// lucene analyzer
-	//"panda.lucene.analyzer": "org.apache.lucene.analysis.cjk.CJKAnalyzer",
-
 	// local filestore storage local path (default: ${web.dir}/WEB-INF/_files)
 	//"panda.filestore.location": "/app/${artifactId}/files",
 
