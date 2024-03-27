@@ -261,7 +261,7 @@ public class Property extends ContextBean {
 		if (v == null) {
 			v = k;
 		}
-		return (k == null ? Strings.EMPTY : k.toString());
+		return (v == null ? Strings.EMPTY : v.toString());
 	}
 
 	private String escape(String value) {
