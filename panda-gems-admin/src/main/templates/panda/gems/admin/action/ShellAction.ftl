@@ -75,7 +75,7 @@
 							$tr.append($('<td>').text(p));
 							$tr.append($('<td>').append($('<pre>').text(d.result[p])));
 							$tb.append($tr);
-						}
+						});
 						$r.show();
 					}
 				},
