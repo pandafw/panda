@@ -7,14 +7,14 @@ Panda.EL就是执行这个EL并且返回结果的引擎。
 
 ### 最简单的用法
 ```Java
-	System.out.println(EL.eval("3+4*5"));  // 将打印 23，够简单吧
+	System.out.println(EL.calculate("3+4*5"));  // 将打印 23，够简单吧
 ```
 
 ### 它支持变量，比如
 ```Java
 	Map m = new HashMap();
 	m.put("a", 10);
-	System.out.println(EL.eval("a*10", m));  // 将打印 100 
+	System.out.println(EL.calculate("a*10", m));  // 将打印 100 
 ```
 
 你可以为你的表达式随意设置变量的值。它支持如下类型的 Java 数据
@@ -93,29 +93,29 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	map.put("a", new BigDecimal("7"));
 	map.put("b", new BigDecimal("3"));
-	assertEquals(10, EL.eval(map, "a.add(b).intValue()"));
+	assertEquals(10, EL.calculate("a.add(b).intValue()", map));
 ```
 
 ### 支持静态方法调用
 比如:  
 
 ```Java
-	assertFalse((Boolean)EL.eval("'java.lang.Boolean'@FALSE"));
-	assertEquals(Boolean.TRUE, EL.eval("'java.lang.Boolean'@parseBoolean('true')"));
+	assertFalse((Boolean)EL.calculate("'java.lang.Boolean'@FALSE"));
+	assertEquals(Boolean.TRUE, EL.calculate("'java.lang.Boolean'@parseBoolean('true')"));
 ```
 
 ### 一些表达式的例子
 #### 普通运算
 
 ```Java
-	System.out.println(EL.eval("3+2*5"));
+	System.out.println(EL.calculate("3+2*5"));
 	// 输出为  13
 ```
 
 #### 字符串操作
 
 ```Java
-	System.out.println(EL.eval("'  abc  '.trim()"));
+	System.out.println(EL.calculate("'  abc  '.trim()"));
 	// 输出为  abc
 ```
 
@@ -126,7 +126,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Pet pet = new Pet();
 	pet.setName("GFW");
 	map.put("pet", pet);
-	System.out.println(EL.eval("pet.name", map));
+	System.out.println(EL.calculate("pet.name", map));
 	// 输出为  GFW
 ```
 
@@ -136,9 +136,9 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	Pet pet = new Pet();
 	map.put("pet", pet);
-	EL.eval("pet.setName('XiaoBai')", map);
+	EL.calculate("pet.setName('XiaoBai')", map);
 
-	System.out.println(EL.eval("pet.getName()", map));
+	System.out.println(EL.calculate("pet.getName()", map));
 	// 输出为  XiaoBai
 ```
 
@@ -148,7 +148,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	map.put("x", new String[] { "A", "B", "C" });
 
-	System.out.println(EL.eval("x[0].toLowerCase()"), map);
+	System.out.println(EL.calculate("x[0].toLowerCase()"), map);
 	// 输出为  a
 ```
 
@@ -158,7 +158,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	map.put("x", Arrays.asList("A", "B", "C"));
 
-	System.out.println(EL.eval("x.get(0).toLowerCase()", map));
+	System.out.println(EL.calculate("x.get(0).toLowerCase()", map));
 	// 输出为  a
 ```
 
@@ -168,7 +168,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	map.put("map", Jsons.toJson("{x:10, y:5}"));
 
-	System.out.println(EL.eval("map['x'] * map['y']", map));
+	System.out.println(EL.calculate("map['x'] * map['y']", map));
 	// 输出为  50
 ```
 
@@ -178,11 +178,11 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	map.put("a",5);
 
-	System.out.println(EL.eval("a>10", map));
+	System.out.println(EL.calculate("a>10", map));
 	// 输出为  false
 
 	map.put("a",20);
-	System.out.println(EL.eval("a>10", map));
+	System.out.println(EL.calculate("a>10", map));
 	// 输出为  true
 ```
 
@@ -194,7 +194,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	map.set("obj", "pet");
 	ELContext ctx = new ELContext(map, true);
-	assertTrue((Boolean)EL.eval("!!(obj.pet.name) == null", ctx));
+	assertTrue((Boolean)EL.calculate("!!(obj.pet.name) == null", ctx));
 ```
 
 #### A或者B
@@ -204,7 +204,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 ```Java
 	Map map = new HashMap();
 	map.set("obj", "pet");
-	assertEquals("cat", EL.eval("!!(obj.pet.name) ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("!!(obj.pet.name) ||| 'cat'", map));
 ```
 
 ### 严格模式(strict)和非严格模式
@@ -213,7 +213,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 ```Java
 	Map map = new HashMap();
 	map.set("obj", "pet");
-	assertEquals("cat", EL.eval("obj.pet.name ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("obj.pet.name ||| 'cat'", map));
 ```
 
 如果是严格模式(strict)，空对象的函数调用会抛出异常，比如：  
@@ -221,7 +221,7 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map map = new HashMap();
 	map.set("obj", "pet");
 	ELContext ctx = new ELContext(map, true);
-	assertEquals("cat", EL.eval("!!(obj.pet.name) ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("!!(obj.pet.name) ||| 'cat'", map));
 ```
 
 
@@ -242,12 +242,12 @@ Panda.EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比�
 	Map m = new HashMap();
 	m.put("a", 10);
 
-	System.out.println(exp.eval(m));  // 将打印 100 
+	System.out.println(exp.calculate(m));  // 将打印 100 
 ```
 
 EL在实例化时就会对表达式进行预编译，会直接编译成运算树，当调用eval方法时，就不用再耗时的编译动作了。它的 eval 函数是线程安全的。
 
-静态函数EL.eval("xxx")会通过内部WeakHashMap缓存中查找EL("xxx")的对象，如果没找到，就会生成一个，并且把它保存至缓存里。
+静态函数EL.calculate("xxx")会通过内部WeakHashMap缓存中查找EL("xxx")的对象，如果没找到，就会生成一个，并且把它保存至缓存里。
 
 
 ---

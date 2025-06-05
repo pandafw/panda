@@ -141,7 +141,7 @@ public class ELTemplate extends AbstractTemplate {
 		try {
 			for (Object o : segments) {
 				if (o instanceof EL) {
-					Object r = ((EL)o).eval(new ELContext(context, strict));
+					Object r = ((EL)o).calculate(new ELContext(context, strict));
 					if (r != null) {
 						out.append(r.toString());
 					}

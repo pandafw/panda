@@ -302,12 +302,12 @@ public abstract class Mvcs {
 	 */
 	public static Object findValue(ActionContext ac, String expr, Object arg) {
 		if (Objects.NULL == arg) {
-			return EL.eval(expr, ac);
+			return EL.calculate(expr, ac);
 		}
 
 		try {
 			ac.push(arg);
-			return EL.eval(expr, ac);
+			return EL.calculate(expr, ac);
 		}
 		finally {
 			ac.pop();

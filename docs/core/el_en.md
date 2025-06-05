@@ -7,14 +7,14 @@ Panda.EL evaluate this expression and return it's result.
 
 ### Simple usage
 ```Java
-	System.out.println(EL.eval("3+4*5"));  // Output: 23
+	System.out.println(EL.calculate("3+4*5"));  // Output: 23
 ```
 
 ### Variable support
 ```Java
 	Map m = new HashMap();
 	m.put("a", 10);
-	System.out.println(EL.eval("a*10", m));  // Output: 100 
+	System.out.println(EL.calculate("a*10", m));  // Output: 100 
 ```
 
 The following java type variable are supported.
@@ -89,29 +89,29 @@ Example:
 	Map map = new HashMap();
 	map.put("a", new BigDecimal("7"));
 	map.put("b", new BigDecimal("3"));
-	assertEquals(10, EL.eval(map, "a.add(b).intValue()"));
+	assertEquals(10, EL.calculate("a.add(b).intValue()", map));
 ```
 
 ### Static method call
 Example:  
 
 ```Java
-	assertFalse((Boolean)EL.eval("'java.lang.Boolean'@FALSE"));
-	assertEquals(Boolean.TRUE, EL.eval("'java.lang.Boolean'@parseBoolean('true')"));
+	assertFalse((Boolean)EL.calculate("'java.lang.Boolean'@FALSE"));
+	assertEquals(Boolean.TRUE, EL.calculate("'java.lang.Boolean'@parseBoolean('true')"));
 ```
 
 ### Some simple examples
 #### General operation
 
 ```Java
-	System.out.println(EL.eval("3+2*5"));
+	System.out.println(EL.calculate("3+2*5"));
 	// Output:  13
 ```
 
 #### String manipulation
 
 ```Java
-	System.out.println(EL.eval("'  abc  '.trim()"));
+	System.out.println(EL.calculate("'  abc  '.trim()"));
 	// Output:  abc
 ```
 
@@ -122,7 +122,7 @@ Example:
 	Pet pet = new Pet();
 	pet.setName("GFW");
 	map.put("pet", pet);
-	System.out.println(EL.eval("pet.name", map));
+	System.out.println(EL.calculate("pet.name", map));
 	// Output:  GFW
 ```
 
@@ -132,9 +132,9 @@ Example:
 	Map map = new HashMap();
 	Pet pet = new Pet();
 	map.put("pet", pet);
-	EL.eval("pet.setName('XiaoBai')", map);
+	EL.calculate("pet.setName('XiaoBai')", map);
 
-	System.out.println(EL.eval("pet.getName()", map));
+	System.out.println(EL.calculate("pet.getName()", map));
 	// Output:  XiaoBai
 ```
 
@@ -144,7 +144,7 @@ Example:
 	Map map = new HashMap();
 	map.put("x", new String[] { "A", "B", "C" });
 
-	System.out.println(EL.eval("x[0].toLowerCase()"), map);
+	System.out.println(EL.calculate("x[0].toLowerCase()"), map);
 	// Output:  a
 ```
 
@@ -154,7 +154,7 @@ Example:
 	Map map = new HashMap();
 	map.put("x", Arrays.asList("A", "B", "C"));
 
-	System.out.println(EL.eval("x.get(0).toLowerCase()", map));
+	System.out.println(EL.calculate("x.get(0).toLowerCase()", map));
 	// Output:  a
 ```
 
@@ -164,7 +164,7 @@ Example:
 	Map map = new HashMap();
 	map.put("map", Jsons.toJson("{x:10, y:5}"));
 
-	System.out.println(EL.eval("map['x'] * map['y']", map));
+	System.out.println(EL.calculate("map['x'] * map['y']", map));
 	// Output:  50
 ```
 
@@ -174,11 +174,11 @@ Example:
 	Map map = new HashMap();
 	map.put("a",5);
 
-	System.out.println(EL.eval("a>10", map));
+	System.out.println(EL.calculate("a>10", map));
 	// Output:  false
 
 	map.put("a",20);
-	System.out.println(EL.eval("a>10", map));
+	System.out.println(EL.calculate("a>10", map));
 	// Output:  true
 ```
 
@@ -188,7 +188,7 @@ Example:
 	Map map = new HashMap();
 	map.set("obj", "pet");
 	ELContext ctx = new ELContext(map, true);
-	assertTrue((Boolean)EL.eval("!!(obj.pet.name) == null", ctx));
+	assertTrue((Boolean)EL.calculate("!!(obj.pet.name) == null", ctx));
 ```
 
 #### A or B
@@ -196,7 +196,7 @@ Example:
 ```Java
 	Map map = new HashMap();
 	map.set("obj", "pet");
-	assertEquals("cat", EL.eval("!!(obj.pet.name) ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("!!(obj.pet.name) ||| 'cat'", map));
 ```
 
 ### strict mode
@@ -205,7 +205,7 @@ Example：
 ```Java
 	Map map = new HashMap();
 	map.set("obj", "pet");
-	assertEquals("cat", EL.eval("obj.pet.name ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("obj.pet.name ||| 'cat'", map));
 ```
 
 Run in strict mode will raise exception.  
@@ -214,7 +214,7 @@ Example:
 	Map map = new HashMap();
 	map.set("obj", "pet");
 	ELContext ctx = new ELContext(map, true);
-	assertEquals("cat", EL.eval("!!(obj.pet.name) ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("!!(obj.pet.name) ||| 'cat'", map));
 ```
 
 
@@ -234,12 +234,12 @@ Of course, I also provide a method to improve efficiency, because if each evalua
 	Map m = new HashMap();
 	m.put("a", 10);
 
-	System.out.println(exp.eval(m));  // Output: 100 
+	System.out.println(exp.calculate(m));  // Output: 100 
 ```
 
-EL.eval() method is thread-safe.
+EL.calculate() method is thread-safe.
 
-Static call EL.eval("xxx") will lookup EL("xxx") from a internal WeakHashMap cache. 
+Static call EL.calculate("xxx") will lookup EL("xxx") from a internal WeakHashMap cache. 
 if not found, will generate a EL("xxx") instance and save it to cache.
 
 

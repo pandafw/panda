@@ -22,7 +22,7 @@ public class NumberParse implements Parse {
 		case '7':
 		case '8':
 		case '9':
-			boolean hasPoint = exp.peek() == '.';
+			boolean dot = exp.peek() == '.';
 			sb.append(exp.poll());
 			while (!exp.isEmpty()) {
 				switch (exp.peek()) {
@@ -39,10 +39,10 @@ public class NumberParse implements Parse {
 					sb.append(exp.poll());
 					break;
 				case '.':
-					if (hasPoint) {
-						throw new ELException("表达式错误,请查看是否有多个'.'!");
+					if (dot) {
+						throw new ELException("Invalid number expression, multiple '.'!");
 					}
-					hasPoint = true;
+					dot = true;
 					sb.append(exp.poll());
 					break;
 				case 'l':
@@ -58,18 +58,18 @@ public class NumberParse implements Parse {
 					sb.append(exp.poll());
 					return Double.parseDouble(sb.toString());
 				default:
-					if (hasPoint) {
+					if (dot) {
 						return Double.parseDouble(sb.toString());
 					}
 					return Integer.parseInt(sb.toString());
 				}
 			}
-			if (hasPoint) {
+			if (dot) {
 				return Double.parseDouble(sb.toString());
 			}
 			return Integer.parseInt(sb.toString());
 		}
-		return NULL;
+		return null;
 	}
 
 }

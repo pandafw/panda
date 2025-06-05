@@ -16,6 +16,6 @@ public class ELCreator<T> implements Creator<T> {
 
 	@SuppressWarnings("unchecked")
 	public T create(Object... args) {
-		return (T)el.eval(new IocProxy(ioc));
+		return (T)el.calculate(new IocProxy(ioc));
 	}
 }

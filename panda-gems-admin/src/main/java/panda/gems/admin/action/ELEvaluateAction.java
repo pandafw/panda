@@ -40,7 +40,7 @@ public class ELEvaluateAction extends BaseAction {
 		}
 		
 		try {
-			return EL.eval(expr, getContext());
+			return EL.calculate(expr, getContext());
 		}
 		catch (Exception e) {
 			getContext().setError(e);

@@ -1,12 +1,12 @@
 package panda.el.opt.bit;
 
 import panda.el.ELContext;
-import panda.el.opt.AbstractSingleOpt;
+import panda.el.opt.SingleOp;
 
 /**
  * Bit Not: ~
  */
-public class BitNot extends AbstractSingleOpt {
+public class BitNot extends SingleOp {
 	public int getPriority() {
 		return 2;
 	}

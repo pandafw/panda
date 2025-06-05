@@ -4,11 +4,11 @@ import panda.el.ELContext;
 import panda.el.opt.DoubleOp;
 
 /**
- * bit or: |
+ * Unsigned Right Shift: >>>
  */
-public class BitOr extends DoubleOp {
+public class BitUnsignedRight extends DoubleOp {
 	public int getPriority() {
-		return 10;
+		return 5;
 	}
 
 	public Object calculate(ELContext ec) {
@@ -17,10 +17,10 @@ public class BitOr extends DoubleOp {
 		if (isReturnNull(ec, lval, rval)) {
 			return null;
 		}
-		return lval | rval;
+		return lval >>> rval;
 	}
 
 	public String operator() {
-		return "|";
+		return ">>>";
 	}
 }

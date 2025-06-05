@@ -8,14 +8,14 @@ Panda.ELはこのような式を評価して、その結果を返すモジュー
 
 ### シンプルな使い方
 ```Java
-	System.out.println(EL.eval("3+4*5"));  // Output: 23
+	System.out.println(EL.calculate("3+4*5"));  // Output: 23
 ```
 
 ### 変数のサポート
 ```Java
 	Map m = new HashMap();
 	m.put("a", 10);
-	System.out.println(EL.eval("a*10", m));  // Output: 100 
+	System.out.println(EL.calculate("a*10", m));  // Output: 100 
 ```
 
 以下のJava型変数がサポートされています。
@@ -90,29 +90,29 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Map map = new HashMap();
 	map.put("a", new BigDecimal("7"));
 	map.put("b", new BigDecimal("3"));
-	assertEquals(10, EL.eval(map, "a.add(b).intValue()"));
+	assertEquals(10, EL.calculate("a.add(b).intValue()", map));
 ```
 
 ### 静的メソッド呼び出し
 例:  
 
 ```Java
-	assertFalse((Boolean)EL.eval("'java.lang.Boolean'@FALSE"));
-	assertEquals(Boolean.TRUE, EL.eval("'java.lang.Boolean'@parseBoolean('true')"));
+	assertFalse((Boolean)EL.calculate("'java.lang.Boolean'@FALSE"));
+	assertEquals(Boolean.TRUE, EL.calculate("'java.lang.Boolean'@parseBoolean('true')"));
 ```
 
 ### シンプルな使い方
 #### 四則演算
 
 ```Java
-	System.out.println(EL.eval("3+2*5"));
+	System.out.println(EL.calculate("3+2*5"));
 	// Output:  13
 ```
 
 #### 文字列操作
 
 ```Java
-	System.out.println(EL.eval("'  abc  '.trim()"));
+	System.out.println(EL.calculate("'  abc  '.trim()"));
 	// Output:  abc
 ```
 
@@ -123,7 +123,7 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Pet pet = new Pet();
 	pet.setName("GFW");
 	map.put("pet", pet);
-	System.out.println(EL.eval("pet.name", map));
+	System.out.println(EL.calculate("pet.name", map));
 	// Output:  GFW
 ```
 
@@ -133,9 +133,9 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Map map = new HashMap();
 	Pet pet = new Pet();
 	map.put("pet", pet);
-	EL.eval("pet.setName('XiaoBai')", map);
+	EL.calculate("pet.setName('XiaoBai')", map);
 
-	System.out.println(EL.eval("pet.getName()", map));
+	System.out.println(EL.calculate("pet.getName()", map));
 	// Output:  XiaoBai
 ```
 
@@ -145,7 +145,7 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Map map = new HashMap();
 	map.put("x", new String[] { "A", "B", "C" });
 
-	System.out.println(EL.eval("x[0].toLowerCase()"), map);
+	System.out.println(EL.calculate("x[0].toLowerCase()"), map);
 	// Output:  a
 ```
 
@@ -155,7 +155,7 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Map map = new HashMap();
 	map.put("x", Arrays.asList("A", "B", "C"));
 
-	System.out.println(EL.eval("x.get(0).toLowerCase()", map));
+	System.out.println(EL.calculate("x.get(0).toLowerCase()", map));
 	// Output:  a
 ```
 
@@ -165,7 +165,7 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Map map = new HashMap();
 	map.put("map", Jsons.toJson("{x:10, y:5}"));
 
-	System.out.println(EL.eval("map['x'] * map['y']", map));
+	System.out.println(EL.calculate("map['x'] * map['y']", map));
 	// Output:  50
 ```
 
@@ -175,11 +175,11 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Map map = new HashMap();
 	map.put("a",5);
 
-	System.out.println(EL.eval("a>10", map));
+	System.out.println(EL.calculate("a>10", map));
 	// Output:  false
 
 	map.put("a",20);
-	System.out.println(EL.eval("a>10", map));
+	System.out.println(EL.calculate("a>10", map));
 	// Output:  true
 ```
 
@@ -189,7 +189,7 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 	Map map = new HashMap();
 	map.set("obj", "pet");
 	ELContext ctx = new ELContext(map, true);
-	assertTrue((Boolean)EL.eval("!!(obj.pet.name) == null", ctx));
+	assertTrue((Boolean)EL.calculate("!!(obj.pet.name) == null", ctx));
 ```
 
 #### A or B
@@ -197,7 +197,7 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 ```Java
 	Map map = new HashMap();
 	map.set("obj", "pet");
-	assertEquals("cat", EL.eval("!!(obj.pet.name) ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("!!(obj.pet.name) ||| 'cat'", map));
 ```
 
 ### strict モード
@@ -207,7 +207,7 @@ Javaにおける数値計算の過程において、演算結果の型は、演�
 ```Java
 	Map map = new HashMap();
 	map.set("obj", "pet");
-	assertEquals("cat", EL.eval("obj.pet.name ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("obj.pet.name ||| 'cat'", map));
 ```
 
 strictモードで実行すると、exceptionが発生します。  
@@ -216,7 +216,7 @@ strictモードで実行すると、exceptionが発生します。
 	Map map = new HashMap();
 	map.set("obj", "pet");
 	ELContext ctx = new ELContext(map, true);
-	assertEquals("cat", EL.eval("!!(obj.pet.name) ||| 'cat'", map));
+	assertEquals("cat", EL.calculate("!!(obj.pet.name) ||| 'cat'", map));
 ```
 
 
@@ -237,12 +237,12 @@ Panda.ELは以下のように3つのステップで、EL式の評価を行って
 	Map m = new HashMap();
 	m.put("a", 10);
 
-	System.out.println(exp.eval(m));  // Output: 100 
+	System.out.println(exp.calculate(m));  // Output: 100 
 ```
 
-メソッドEL.eval()はthread-safeです。
+メソッドEL.calculate()はthread-safeです。
 
-EL.eval("xxx")の呼び出しは内部のWeakHashMapキャッシュからEL("xxx")を検索します。  
+EL.calculate("xxx")の呼び出しは内部のWeakHashMapキャッシュからEL("xxx")を検索します。  
 見つからない場合は、EL("xxx")インスタンスを生成してキャッシュに保存します。
 
 

@@ -6,8 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import panda.el.arithmetic.ShuntingYard;
-
 public class RPNTest {
 	private ShuntingYard sy = null;
 

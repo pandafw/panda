@@ -42,7 +42,7 @@ public class SimpleSpeedTest {
 				context.put("num", 0);
 				for (int i = 0; i < max; i++) {
 					context.put("i", i);
-					context.put("num", EL.eval(elstr, context));
+					context.put("num", EL.calculate(elstr, context));
 				}
 				System.out.println("Num: " + context.get("num"));
 			}
@@ -56,7 +56,7 @@ public class SimpleSpeedTest {
 				context.put("z", z);
 				for (int i = 0; i < max; i++) {
 					context.put("i", i);
-					context.put("num", el2pre.eval(context));
+					context.put("num", el2pre.calculate(context));
 				}
 				System.out.println("Num: " + context.get("num"));
 			}
@@ -70,7 +70,7 @@ public class SimpleSpeedTest {
 				context.put("z", z);
 				for (int i = 0; i < max; i++) {
 					context.put("i", i);
-					context.put("num", el2pre.eval(context));
+					context.put("num", el2pre.calculate(context));
 				}
 				System.out.println("Num: " + context.get("num"));
 			}

@@ -59,7 +59,7 @@ public class ELValue implements ValueProxy {
 
 	@Override
 	public Object get(IocMaking im) {
-		return el.eval(new IocProxy(im.getIoc()));
+		return el.calculate(new IocProxy(im.getIoc()));
 	}
 
 	@Override
