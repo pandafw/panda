@@ -530,7 +530,7 @@ public abstract class Texts {
 		}
 		
 		public Object evaluate(String expression) {
-			return new EL(expression).eval(context);
+			return new EL(expression).calculate(context);
 		}
 	}
 	
@@ -845,7 +845,7 @@ public abstract class Texts {
 	
 	/**
 	 * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
-	 * the length of charCodeAt(i) > 0xFF will be treated as 2.
+	 * the length of charCodeAt(i) > 0x80 will be treated as 2.
 	 * 
 	 * @param str value The string to truncate
 	 * @param len length The maximum length to allow before truncating
@@ -858,13 +858,13 @@ public abstract class Texts {
 		}
 
 		int max = len - ellipsis.length();
-		int sz = 0, j = 0;
+		int sz = 0, j = -1;
 		for (int i = 0; i < str.length(); i++) {
 			sz++;
-			if (str.charAt(i) > 0xFF) {
+			if (str.charAt(i) > 0x80) {
 				sz++;
 			}
-			if (sz > max && j == 0) {
+			if (sz > max && j < 0) {
 				j = i;
 			}
 			if (sz > len) {

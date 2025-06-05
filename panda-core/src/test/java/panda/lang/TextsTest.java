@@ -473,7 +473,7 @@ public class TextsTest {
 		assertEquals("あい...", Texts.ellipsiz("あいうえお", 7));
 		assertEquals("あ...", Texts.ellipsiz("あいうえお", 6));
 		assertEquals("あ...", Texts.ellipsiz("あいうえお", 5));
-		assertEquals("あ...", Texts.ellipsiz("あいうえお", 4));
+		assertEquals("...", Texts.ellipsiz("あいうえお", 4));
 		assertEquals("...", Texts.ellipsiz("あいうえお", 3));
 		assertEquals("..", Texts.ellipsiz("あいうえお", 2));
 		assertEquals(".", Texts.ellipsiz("あいうえお", 1));
