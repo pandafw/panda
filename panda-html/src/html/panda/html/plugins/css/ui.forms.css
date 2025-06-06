@@ -1,19 +1,113 @@
 /** checks, radios */
 .ui-checks > label, .ui-radios > label {
-	padding: 0 20px 0 0;
+	padding: 0 1.5em;
 }
 .ui-checks > label > input, .ui-radios > label > input {
-	margin: 0 7px 0 0;
-	vertical-align: middle;
+	float: left;
+	height: 1em;
+	width: 1em;
+	margin-left: -1.5em;
+	margin-top: 0.25em;
 }
 .ui-checks.vertical > label, .ui-radios.vertical > label {
 	display: block;
-	padding-left: 21px;
 }
-.ui-checks.vertical > label > input, .ui-radios.vertical > label > input {
-	margin-left: -21px;
-}
+/* bootstrap3 */
 .form-horizontal .ui-checks, .form-horizontal .ui-radios {
-	padding-top: 7px;
+	padding-top: var(--ui-input-py);
+}
+/* bootstrap4/5 */
+.row .ui-checks, .row .ui-radios {
+	padding: var(--ui-input-py) 0;
+}
+
+/** ordered checks */
+.ui-checks {
+	--ui-drag-color: #aaa;
+}
+.ui-checks hr {
+	margin: 5px 0;
+	border-style: dashed;
+}
+.ui-checks > label.dragover {
+	border-left: dotted 1px var(--ui-drag-color);
+	padding-left: 1.7em;
+}
+.ui-checks.vertical > label.dragover {
+	border-top: dotted 1px var(--ui-drag-color);
+	border-left: none;
+}
+
+/* bootstrap4/5 form row, view row */
+.ui-form, .ui-view {
+	--ui-row-py: var(--ui-row-py1);
+}
+.ui-form > .row, .ui-view > .row {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: var(--ui-row-py) 0;
+}
+.ui-row-py0 > .row {
+	--ui-row-py: var(--ui-row-py0) !important;
+}
+.ui-row-py1 > .row {
+	--ui-row-py: var(--ui-row-py1) !important;
+}
+.ui-row-py2 > .row {
+	--ui-row-py: var(--ui-row-py2) !important;
+}
+.ui-row-py3 > .row {
+	--ui-row-py: var(--ui-row-py3) !important;
+}
+
+/** form/view lined style */
+.ui-form.lined > .row, .ui-view.lined > .row {
+	--ui-row-py: var(--ui-row-py3);
+}
+
+.ui-form.lined > .row, .ui-view.lined > .row {
+	border-bottom: 1px solid var(--ui-lined-color);
+	margin: 0;
+	padding: var(--ui-row-py) 0;
+}
+.ui-form.lined > .row:last-of-type, .ui-view.lined > .row:last-of-type {
+	border-bottom: 0;
+}
+
+/** label weight **/
+.label-bold .ui-label {
+	font-weight: bold;
+}
+.label-normal .ui-label {
+	font-weight: normal;
+}
+
+/** label align **/
+@media (min-width: 768px) {
+	.ui-label, .label-right .ui-label {
+		text-align: right;
+	}
+	.label-left .ui-label {
+		text-align: left;
+	}
+}
+
+/** text **/
+.ui-label, .ui-value {
+	word-break: break-all;
+}
+
+.ui-label > pre, .ui-value > pre {
+	border: 0;
+	font-size: 1em;
+	margin: 0;
+	padding: 0;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.text-prewrap {
+	white-space: pre-wrap;
+	word-break: break-all;
 }
 

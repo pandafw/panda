@@ -1,32 +1,43 @@
 (function($) {
 	"use strict";
 
-	$.fn.checkAll = function(target) {
-		$(this).each(function() {
-			var $ca = $(this), $ct = $(target || $ca.attr('checkall'));
-			$ca.change(function(evt, sup) {
+	var E = 'change', P = 'checked';
+
+	$.fn.checkall = function(s) {
+		return this.each(function() {
+			var $a = $(this),
+				b = s || $a.attr('checkall'),
+				t = b, f = '',
+				i = b.indexOf(' ');
+
+			if (i > 0) {
+				t = b.substring(0, i);
+				f = b.substring(i+1);
+			}
+
+			$a.on(E, function(evt, sup) {
 				if (!sup) {
-					var c = $ca.prop('checked');
-					$ct.each(function() {
-						var $t = $(this), o = $t.prop('checked');
-						if (c != o) {
-							$t.prop('checked', c).trigger('change');
-						}
+					var c = $a.prop(P);
+					$(b)[c ? 'not' : 'filter'](':checked').each(function() {
+						$(this).prop(P, c).trigger(E);
 					});
 				}
 			});
-			$ct.change(function() {
-				var tz = $ct.length, cz = $ct.filter(':checked').length, c = (tz > 0 && tz == cz);
-				if (c != $ca.prop('checked')) {
-					$ca.prop('checked', c).trigger('change', true);
+
+			$(t).on(E, f, function() {
+				var $b = $(b), bz = $b.length, cz = $b.filter(':checked').length, ca = (bz > 0 && bz == cz);
+				if (ca != $a.prop(P)) {
+					$a.prop(P, ca).trigger(E, true);
 				}
-			}).first().trigger('change');
+			});
+			
+			$(b).first().trigger(E);
 		});
 	};
 
 
 	// ==================
 	$(window).on('load', function() {
-		$('[checkall]').checkAll();
+		$('[checkall]').checkall();
 	});
 })(jQuery);

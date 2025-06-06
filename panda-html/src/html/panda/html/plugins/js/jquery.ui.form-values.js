@@ -2,43 +2,70 @@
 	"use strict";
 
 	$.fn.changeValue = function(v) {
-		var o = this.val();
+		return this.each(function() {
+			var $t = $(this), o = $t.val();
 
-		this.val(v);
-		if (o != v) {
-			this.trigger('change');
-		}
+			$t.val(v);
+			if (o != v) {
+				$t.trigger('change');
+			}
+		});
 	};
 
-	$.fn.values = function(vs, trigger) {
+	$.fn.formClear = function(trigger) {
+		this.find('textarea, select')[trigger ? 'changeValue' : 'val']('');
+		this.find('input').each(function() {
+			var $i = $(this);
+			switch ($i.attr('type')) {
+			case 'hidden':
+			case 'button':
+			case 'submit':
+			case 'reset':
+				break;
+			case 'checkbox':
+			case 'radio':
+				var oc = $i.prop('checked');
+				$i.prop('checked', false);
+				if (oc && trigger) {
+					$i.trigger('change');
+				}
+				break;
+			default:
+				$i[trigger ? 'changeValue' : 'val']('');
+			}
+		});
+		return this;
+	};
+
+	$.fn.formValues = function(vs, trigger) {
 		if (vs) {
 			for (var n in vs) {
 				var v = vs[n];
-				this.find(':input[name="' + n + '"]').each(function() {
-					var $t = $(this);
-					switch ($t.attr('type')) {
-					case 'button':
+				this.find(':input').filter(function() { return this.name == n; }).each(function() {
+					var $i = $(this);
+					switch ($i.attr('type')) {
 					case 'file':
+					case 'button':
 					case 'submit':
 					case 'reset':
 						break;
 					case 'checkbox':
 						var va = $.isArray(v) ? v : [ v ];
-						var oc = $t.prop('checked'), nc = $.inArray($t.val(), va) >= 0;
-						$t.prop('checked', nc);
+						var oc = $i.prop('checked'), nc = $.inArray($i.val(), va) >= 0;
+						$i.prop('checked', nc);
 						if (trigger && nc != oc) {
-							$t.trigger('change');
+							$i.trigger('change');
 						}
 						break;
 					case 'radio':
-						var oc = $t.prop('checked'), nc = ($t.val() == v);
-						$t.prop('checked', nc);
+						var oc = $i.prop('checked'), nc = ($i.val() == v);
+						$i.prop('checked', nc);
 						if (trigger && nc && !oc) {
-							$t.trigger('change');
+							$i.trigger('change');
 						}
 						break;
 					default:
-						trigger ? $t.changeValue(v) : $t.val(v);
+						trigger ? $i.changeValue(v) : $i.val(v);
 						break;
 					}
 				});

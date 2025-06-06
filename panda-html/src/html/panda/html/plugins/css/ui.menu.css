@@ -14,13 +14,19 @@
 	border-radius: 5px;
 	text-align: center;
 	vertical-align: middle;
-}
-.ui-menu-item > div {
-	line-height: 1em;
-	padding: 10px 0 0 0;
+	text-decoration: none;
 }
 .ui-menu-item:hover {
 	background-color: #FFF8DC;
 	text-decoration: none;
 }
-
+.ui-menu-item > div {
+	line-height: 1em;
+	padding: 10px 0 0 0;
+}
+[data-bs-theme=dark] .ui-menu-item {
+	background-color: #292c2f;
+}
+[data-bs-theme=dark] .ui-menu-item:hover {
+	background-color: #393c3f;
+}

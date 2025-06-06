@@ -2,19 +2,23 @@
 	"use strict";
 
 	function init($t) {
-		$t.find('li').removeClass('node leaf').children('.item').off('.treeview').each(function() {
+		$t.find('li').removeClass('node leaf').children('.item').each(function() {
 			var $i = $(this), $n = $i.parent();
 			if ($i.next('ul').length) {
 				$n.addClass('node');
-				$i.on('click.treeview', _on_item_click);
 			} else {
 				$n.addClass('leaf');
 			}
 		});
+
+		$t.off('.treeview').on('click.treeview', '.item', _on_item_click);
 	}
 
 	function _on_item_click() {
-		_toggle($(this).parent());
+		var $i = $(this);
+		if ($i.next('ul').length) {
+			_toggle($i.parent());
+		}
 	}
 
 	function _collapse($n) {
@@ -42,7 +46,7 @@
 	}
 
 	function unbind($t) {
-		$t.find('li').removeClass('node').children('.item').off('.treeview');
+		$t.off('.treeview').find('li').removeClass('node');
 	}
 
 	var api = {
@@ -55,7 +59,7 @@
 	$.fn.treeview = function(method, target) {
 		// Methods
 		if (typeof method == 'string') {
-			api[method].call(this, target);
+			api[method](this, target);
 			return this;
 		}
 

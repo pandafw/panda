@@ -7,24 +7,22 @@
 	cursor: pointer;
 	display: inline-block;
 	font-family: inherit;
-	font-size: 14px;
+	font-size: 1rem;
 	font-weight: normal;
-	height: 34px;
-	line-height: 32px;
 	outline: none;
-	padding-left: 18px;
-	padding-right: 30px;
 	position: relative;
-	text-align: left !important;
-	-webkit-transition: all 0.2s ease-in-out;
-	transition: all 0.2s ease-in-out;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+	text-align: left;
 	vertical-align: middle;
-	white-space: nowrap;
 	width: auto;
+	height: auto;
+	padding: .25em 2.25em .25em .75em;
+	line-height: 1.5em;
+	min-height: 2em;
+	transition: all 0.2s ease-in-out;
+	user-select: none;
+}
+.ui-nice-select.multiple {
+	min-height: 2.25em;
 }
 
 .ui-nice-select:hover {
@@ -35,7 +33,6 @@
 .ui-nice-select.open,
 .ui-nice-select:focus {
 	border-color: #66afe9;
-	-webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
 	box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
 }
 
@@ -50,27 +47,39 @@
 	position: absolute;
 	right: 12px;
 	top: 50%;
-	-webkit-transform-origin: 66% 66%;
-	-ms-transform-origin: 66% 66%;
 	transform-origin: 66% 66%;
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
 	transform: rotate(45deg);
-	-webkit-transition: all 0.15s ease-in-out;
 	transition: all 0.15s ease-in-out;
 	width: 5px;
 }
 
 .ui-nice-select.disabled {
-	border-color: #ededed;
-	color: #999;
+	background-color: #eee;
 	pointer-events: none;
 }
 .ui-nice-select.disabled:after {
-	border-color: #cccccc;
+	border-color: #ccc;
 }
 
-.ui-nice-select>ul {
+.ui-nice-select .current {
+	display: inline-block;
+	vertical-align: middle;
+}
+.ui-nice-select.multiple .current {
+	border: solid 1px #ccc;
+	border-radius: 5px;
+	padding: 2px 10px;
+	margin: 2px 5px;
+}
+.ui-nice-select.multiple .current:after {
+	content: "\00d7";
+	padding: 0 0 0 5px;
+}
+.ui-nice-select.multiple.disabled .current:after {
+	display: none;
+}
+
+.ui-nice-select > ul {
 	background-color: #fff;
 	border-radius: 5px;
 	box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11);
@@ -85,123 +94,140 @@
 	height: 0px;
 	max-height: 0px;
 	pointer-events: none;
-	-webkit-transform-origin: 50% 0;
-	-ms-transform-origin: 50% 0;
 	transform-origin: 50% 0;
-	-webkit-transform: scale(0.75) translateY(-21px);
-	-ms-transform: scale(0.75) translateY(-21px);
 	transform: scale(0.75) translateY(-21px);
-	-webkit-transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
 	transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+	white-space: nowrap;
 	z-index: 9;
 }
 
-.ui-nice-select>ul>li {
+.ui-nice-select.wrap > ul {
+	white-space: normal;
+	word-break: break-all;
+}
+
+.ui-nice-select > ul > li {
 	cursor: pointer;
 	font-weight: 400;
 	line-height: 40px;
 	list-style: none;
 	min-height: 40px;
 	outline: none;
-	padding-left: 18px;
-	padding-right: 29px;
+	padding: 0 2.25em 0 .75em;
 	text-align: left;
-	-webkit-transition: all 0.2s;
 	transition: all 0.2s;
 }
-.ui-nice-select>ul>li:hover,
-.ui-nice-select>ul>li.focus,
-.ui-nice-select>ul>li.selected.focus {
-	background-color: #f6f6f6;
+.ui-nice-select > ul > li:hover,
+.ui-nice-select > ul > li.focus,
+.ui-nice-select > ul > li.selected.focus {
+	background-color: #ddd;
 }
-.ui-nice-select>ul>li.selected {
+.ui-nice-select > ul > li.selected {
 	font-weight: bold;
+	background-color: #eee;
 }
-.ui-nice-select>ul>li.disabled {
+.ui-nice-select > ul > li.disabled {
 	background-color: transparent;
 	color: #999;
 	cursor: default;
 }
-.ui-nice-select>ul:hover>li:not(:hover) {
-	background-color: transparent !important;
-}
 
 .ui-nice-select.open:after {
-	-webkit-transform: rotate(-135deg);
-	-ms-transform: rotate(-135deg);
 	transform: rotate(-135deg);
 }
-.ui-nice-select.open>ul {
+.ui-nice-select.open > ul {
 	opacity: 1;
 	height: auto;
 	max-height: 365px;
 	overflow: auto;
 	pointer-events: auto;
-	-webkit-transform: scale(1) translateY(0);
-	-ms-transform: scale(1) translateY(0);
 	transform: scale(1) translateY(0);
 }
 
 .ui-nice-select.wide {
 	width: 100%;
 }
-.ui-nice-select.wide>ul {
+.ui-nice-select.wide > ul {
 	left: 0 !important;
 	right: 0 !important;
 }
 
-.ui-nice-select.right>ul {
+.ui-nice-select.right > ul {
 	left: auto;
 	right: 0;
 }
 
+.ui-nice-select.small.multiple {
+	min-height: 40px;
+}
 .ui-nice-select.small {
-	font-size: 12px;
-	height: 32px;
-	line-height: 30px;
+	font-size: .75rem;
+	min-height: 30px;
 }
 .ui-nice-select.small:after {
 	height: 4px;
 	width: 4px;
 }
-.ui-nice-select.small>ul>li {
+.ui-nice-select.small > ul > li {
 	line-height: 34px;
 	min-height: 34px;
 }
 
-.ui-nice-select.col2>ul {
+.ui-nice-select.col2 > ul {
 	width: 600px;
 	display: flex;
 	flex-wrap: wrap;
 }
-.ui-nice-select.col2.open>ul {
+.ui-nice-select.col2.open > ul {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.ui-nice-select.col2>ul>li {
+.ui-nice-select.col2 > ul > li {
 	display: block;
 	flex: 0 0 50%;
 	white-space: nowrap;
 }
 
-.ui-nice-select.col3>ul {
+.ui-nice-select.col3 > ul {
 	width: 750px;
 	display: flex;
 	flex-wrap: wrap;
 }
-.ui-nice-select.col3.open>ul {
+.ui-nice-select.col3.open > ul {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.ui-nice-select.col3>ul>li {
+.ui-nice-select.col3 > ul > li {
 	display: block;
 	flex: 0 0 33%;
 	white-space: nowrap;
 }
 
-.ui-nice-select-no-csspointerevents .ui-nice-select>ul {
+.ui-nice-select-no-csspointerevents .ui-nice-select > ul {
 	display: none;
 }
-.ui-nice-select-no-csspointerevents .ui-nice-select.open>ul {
+.ui-nice-select-no-csspointerevents .ui-nice-select.open > ul {
 	display: block;
+}
+
+[data-bs-theme=dark] .ui-nice-select {
+	background-color: var(--bs-body-bg);
+	border-color: var(--bs-border-color);
+}
+[data-bs-theme=dark] .ui-nice-select > ul {
+	background-color: var(--bs-body-bg);
+}
+[data-bs-theme=dark] .ui-nice-select:hover {
+	border-color: #999;
+}
+[data-bs-theme=dark] .ui-nice-select.disabled {
+	background-color: #292c2f;
+}
+[data-bs-theme=dark] .ui-nice-select > ul > li.selected {
+	background-color: #292c2f;
+}
+[data-bs-theme=dark] .ui-nice-select > ul > li:hover,
+[data-bs-theme=dark] .ui-nice-select > ul > li.focus,
+[data-bs-theme=dark] .ui-nice-select > ul > li.selected.focus {
+	background-color: #393c3f;
 }

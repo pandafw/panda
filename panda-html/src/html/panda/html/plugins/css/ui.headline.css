@@ -12,8 +12,8 @@
 	padding: 8px 10px 4px 10px;
 }
 .ui-headline > h3 i, .ui-headline > .breadcrumb i {
-	color: #2f6f9f;
 	font-size: 150%;
+	margin-right: 8px;
 	vertical-align: middle;
 }
 .ui-headline > h3.error > i, .ui-headline > i.error {

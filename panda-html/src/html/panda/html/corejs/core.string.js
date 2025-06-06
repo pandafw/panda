@@ -53,21 +53,36 @@
 	}
 
 	if (typeof String.prototype.stripLeft != "function") {
-		var re = /^[\s\u3000]+/;
+		var re = /^[\s\u0085\u00a0\u2000\u3000]+/;
 		String.prototype.stripLeft = function() {
 			return this.replace(re, "");
 		};
 	}
 	if (typeof String.prototype.stripRight != "function") {
-		var re = /[\s\u3000]+$/;
+		var re = /[\s\u0085\u00a0\u2000\u3000]+$/;
 		String.prototype.stripRight = function() {
 			return this.replace(re, "");
 		};
 	}
 	if (typeof String.prototype.strip != "function") {
-		var re = /^[\s\u3000]+|[\s\u3000]+$/g;
+		var re = /^[\s\u0085\u00a0\u2000\u3000]+|[\s\u0085\u00a0\u2000\u3000]+$/g;
 		String.prototype.strip = function() {
 			return this.replace(re, "");
+		};
+	}
+
+	if (typeof String.prototype.fields != "function") {
+		var ws = /[\s\u0085\u00a0\u2000\u3000]/g;
+		String.prototype.fields = function(re) {
+			re ||= ws;
+
+			var ss = this.split(re), rs = [];
+			for (var i = 0; i < ss.length; i++) {
+				if (ss[i].length) {
+					rs.push(ss[i])
+				}
+			}
+			return rs;
 		};
 	}
 
@@ -138,11 +153,31 @@
 
 
 	if (typeof String.prototype.snakeCase != "function") {
-		String.prototype.snakeCase = function(c) {
-			c = c || '_';
-			return this.camelCase().replace(/[A-Z]/g, function(m) {
-				return c + m.charAt(0).toLowerCase();
-			});
+		String.prototype.snakeCase = function(d) {
+			d ||= '_';
+
+			var s = this, uc = 0, lc = '', n = '';
+			for (var i = 0; i < s.length; i++) {
+				var x = s.charCodeAt(i), c = s.charAt(i);
+				if (x >= 0x41 && x <= 0x5A) {
+					if (i > 0 && uc == 0 && lc != d) {
+						n += d
+					}
+
+					uc++;
+					lc = c.toLowerCase()
+					n += lc;
+					continue
+				}
+
+				if (uc > 1 && d != c) {
+					n += d;
+				}
+				n += c;
+				uc = 0;
+				lc = c;
+			}
+			return n;
 		};
 	}
 	if (typeof String.prototype.camelCase != "function") {

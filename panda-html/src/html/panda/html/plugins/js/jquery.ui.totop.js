@@ -2,7 +2,7 @@
 	"use strict";
 
 	$.fn.totop = function() {
-		$(this).each(function() {
+		return this.each(function() {
 			var $t = $(this), $w = $(window);
 
 			$t.click(function() {
@@ -16,7 +16,7 @@
 	};
 
 	$(window).on('load', function() {
-		$('[totop="true"]').totop();
+		$('[totop]').totop();
 	});
 
 })(jQuery);

@@ -1,7 +1,7 @@
 (function($) {
 	"use strict";
 
-	$.fn.textClear = function() {
+	$.fn.textclear = function() {
 		return this.each(function() {
 			var $t = $(this);
 			if ($t.hasClass('ui-has-textclear')) {
@@ -17,12 +17,12 @@
 				}
 				$t.focus();
 				return false;
-			});
+			}).parent().css('position', 'relative');
 		});
 	};
 	
 	// ==================
 	$(window).on('load', function () {
-		$('[textclear]').textClear();
+		$('[textclear]').textclear();
 	});
 })(jQuery);

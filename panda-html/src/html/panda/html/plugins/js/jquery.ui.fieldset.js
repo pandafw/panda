@@ -1,46 +1,77 @@
 (function($) {
 	"use strict";
 
+	function _collapse($f, t) {
+		t = t || $f.data('fieldset').hideTransition;
+		$f.addClass('collapsing').trigger('collapse.fieldset').children(':not(legend)')[t](function() {
+			$f.removeClass('collapsing').addClass('collapsed').trigger('collapsed.fieldset');
+		});
+	}
+
+	function _expand($f, t) {
+		t = t || $f.data('fieldset').showTransition;
+		$f.addClass('expanding').trigger('expand.fieldset').children(':not(legend)')[t](function() {
+			$f.removeClass('expanding collapsed').trigger('expanded.fieldset');
+		});
+	}
+
 	function collapse($f, t) {
 		if (!$f.hasClass('collapsed')) {
-			$f.addClass('collapsed').children(':not(legend)')[t || 'slideUp']();
+			_collapse($f, t);
 		}
 	}
 
 	function expand($f, t) {
 		if ($f.hasClass('collapsed')) {
-			$f.removeClass('collapsed').children(':not(legend)')[t || 'slideDown']();
+			_expand($f, t);
 		}
 	}
 
-	$.fn.fieldset = function(config, transition) {
-		config = config || {};
+	function toggle($f) {
+		$f.hasClass('collapsed') ? _expand($f) : _collapse($f);
+	}
+
+	function _click() {
+		toggle($(this).closest('fieldset'));
+	}
+
+	function _init($f, c) {
+		if (!$f.data('fieldset')) {
+			c = $.extend({}, $.fieldset.defaults, c);
+
+			var h = c.collapsed || $f.hasClass('collapsed'), e = 'click.fieldset';
+	
+			$f.data('fieldset', c).addClass('ui-fieldset collapsible' + (h ? ' collapsed' : ''));
+			$f.children('legend').off(e).on(e, _click);
+			$f.children(':not(legend)').toggle(!h);
+		}
+	}
+
+	var api = {
+		collapse: collapse,
+		expand: expand,
+		toggle: toggle
+	};
+
+	$.fieldset = {
+		defaults: {
+			showTransition: 'slideDown',
+			hideTransition: 'slideUp'
+		}
+	};
+
+	$.fn.fieldset = function(c) {
+		var args = [].slice.call(arguments);
+
 		return this.each(function() {
 			var $f = $(this);
-			if (!$f.data('fieldset')) {
-				var $l = $f.children('legend'), c = config.collapsed && !($f.hasClass('collapsed'));
-				$f.data('fieldset', config).addClass('ui-fieldset' + (c ? ' collapsed' : ''));
-				$l.click(function() {
-					var $f = $(this).closest('fieldset');
-					if ($f.hasClass('collapsed')) {
-						expand($f);
-					} else {
-						collapse($f);
-					}
-				});
-
-				c = $f.hasClass('collapsed');
-				$f.children(':not(legend)')[c ? 'hide' : 'show']();
+			if (typeof(c) == 'string') {
+				_init($f);
+				args[0] = $f;
+				api[c].apply($f, args);
+				return;
 			}
-
-			switch (config) {
-			case 'collapse':
-				collapse($f, transition);
-				break;
-			case 'expand':
-				expand($f, transition);
-				break;
-			}
+			_init($f, c);
 		});
 	};
 

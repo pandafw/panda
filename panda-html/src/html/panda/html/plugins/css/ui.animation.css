@@ -1,0 +1,101 @@
+/* blink */
+.ui-blink-1s {
+	animation: ui-blink-frames 1s infinite linear;
+}
+.ui-blink-1s1 {
+	animation: ui-blink-frames 1s 1 linear;
+}
+.ui-blink-1s2 {
+	animation: ui-blink-frames 1s 2 linear;
+}
+.ui-blink-2s {
+	animation: ui-blink-frames 2s infinite linear;
+}
+.ui-blink-2s1 {
+	animation: ui-blink-frames 2s 1 linear;
+}
+.ui-blink-2s2 {
+	animation: ui-blink-frames 2s 2 linear;
+}
+.ui-blink-3s {
+	animation: ui-blink-frames 3s infinite linear;
+}
+.ui-blink-3s1 {
+	animation: ui-blink-frames 3s 1 linear;
+}
+.ui-blink-3s2 {
+	animation: ui-blink-frames 3s 2 linear;
+}
+.ui-blink-4s {
+	animation: ui-blink-frames 4s infinite linear;
+}
+.ui-blink-4s1 {
+	animation: ui-blink-frames 4s 1 linear;
+}
+.ui-blink-4s2 {
+	animation: ui-blink-frames 4s 2 linear;
+}
+@keyframes ui-blink-frames {
+	0%   { background-color: #fff; }
+	10%  { background-color: #eee; }
+	20%  { background-color: #ddd; }
+	30%  { background-color: #ccc; }
+	40%  { background-color: #bbb; }
+	50%  { background-color: #aaa; }
+	60%  { background-color: #bbb; }
+	70%  { background-color: #ccc; }
+	80%  { background-color: #ddd; }
+	90%  { background-color: #eee; }
+	100% { background-color: #fff; }
+}
+
+[data-bs-theme=dark] .ui-blink-1s {
+	animation: ui-blink-dark-frames 1s infinite linear;
+}
+[data-bs-theme=dark] .ui-blink-1s1 {
+	animation: ui-blink-dark-frames 1s 1 linear;
+}
+[data-bs-theme=dark] .ui-blink-1s2 {
+	animation: ui-blink-dark-frames 1s 2 linear;
+}
+[data-bs-theme=dark] .ui-blink-2s {
+	animation: ui-blink-dark-frames 2s infinite linear;
+}
+[data-bs-theme=dark] .ui-blink-2s1 {
+	animation: ui-blink-dark-frames 2s 1 linear;
+}
+[data-bs-theme=dark] .ui-blink-2s2 {
+	animation: ui-blink-dark-frames 2s 2 linear;
+}
+[data-bs-theme=dark] .ui-blink-3s {
+	animation: ui-blink-dark-frames 3s infinite linear;
+}
+[data-bs-theme=dark] .ui-blink-3s1 {
+	animation: ui-blink-dark-frames 3s 1 linear;
+}
+[data-bs-theme=dark] .ui-blink-3s2 {
+	animation: ui-blink-dark-frames 3s 2 linear;
+}
+[data-bs-theme=dark] .ui-blink-4s {
+	animation: ui-blink-dark-frames 4s infinite linear;
+}
+[data-bs-theme=dark] .ui-blink-4s1 {
+	animation: ui-blink-dark-frames 4s 1 linear;
+}
+[data-bs-theme=dark] .ui-blink-4s2 {
+	animation: ui-blink-dark-frames 4s 2 linear;
+}
+@keyframes ui-blink-dark-frames {
+	0%   { background-color: #111; }
+	10%  { background-color: #222; }
+	20%  { background-color: #333; }
+	30%  { background-color: #444; }
+	40%  { background-color: #555; }
+	50%  { background-color: #666; }
+	60%  { background-color: #555; }
+	70%  { background-color: #444; }
+	80%  { background-color: #333; }
+	90%  { background-color: #222; }
+	100% { background-color: #111; }
+}
+

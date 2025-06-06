@@ -635,46 +635,38 @@
 	"use strict";
 
 	$.queryArrays = function(s, f) {
-		var qs = [], i = s.indexOf('#');
-		if (i >= 0) {
-			s = s.substring(0, i);
-		}
+		var qa = [], ss = s.split('&');
 
-		i = s.indexOf('?');
-		if (i >= 0) {
-			s = s.substring(i + 1);
-		}
+		for (var i = 0; i < ss.length; i++) {
+			var p = ss[i].split('='),
+				k = decodeURIComponent(p[0]),
+				v = p.length > 1 ? decodeURIComponent(p[1]) : '';
 
-		var ss = s.split('&');
-		for (i = 0; i < ss.length; i++) {
-			var pv = ss[i].split('=');
-			var n = decodeURIComponent(pv[0]);
-			if (f == null || f == n) {
-				qs.push({
-					name: n,
-					value: pv.length > 1 ? decodeURIComponent(pv[1]) : ''
+			if (!f || f == k) {
+				qa.push({
+					name: k,
+					value: v
 				});
 			}
 		}
-		return qs;
+		return qa;
 	};
 
 	$.queryParams = function(s) {
-		var qs = {}, i = s.indexOf('#');
-		if (i >= 0) {
-			s = s.substring(0, i);
-		}
+		var qs = {}, ss = s.split('&');
 
-		i = s.indexOf('?');
-		if (i >= 0) {
-			s = s.substring(i + 1);
-		}
-
-		var ss = s.split('&');
-		for (i = 0; i < ss.length; i++) {
-			var pv = ss[i].split('=');
-			var n = decodeURIComponent(pv[0]);
-			qs[n] = pv.length > 1 ? decodeURIComponent(pv[1]) : '';
+		for (var i = 0; i < ss.length; i++) {
+			var p = ss[i].split('='),
+				k = decodeURIComponent(p[0]),
+				v = p.length > 1 ? decodeURIComponent(p[1]) : '';
+			if (k in qs) {
+				if (!$.isArray(qs[k])) {
+					qs[k] = [ qs[k] ];
+				}
+				qs[k].push(v);
+			} else {
+				qs[k] = v;
+			}
 		}
 		return qs;
 	};
@@ -740,33 +732,135 @@
 (function($) {
 	"use strict";
 
-	$.fn.checkAll = function(target) {
-		$(this).each(function() {
-			var $ca = $(this), $ct = $(target || $ca.attr('checkall'));
-			$ca.change(function(evt, sup) {
+	var E = 'change', P = 'checked';
+
+	$.fn.checkall = function(s) {
+		return this.each(function() {
+			var $a = $(this),
+				b = s || $a.attr('checkall'),
+				t = b, f = '',
+				i = b.indexOf(' ');
+
+			if (i > 0) {
+				t = b.substring(0, i);
+				f = b.substring(i+1);
+			}
+
+			$a.on(E, function(evt, sup) {
 				if (!sup) {
-					var c = $ca.prop('checked');
-					$ct.each(function() {
-						var $t = $(this), o = $t.prop('checked');
-						if (c != o) {
-							$t.prop('checked', c).trigger('change');
-						}
+					var c = $a.prop(P);
+					$(b)[c ? 'not' : 'filter'](':checked').each(function() {
+						$(this).prop(P, c).trigger(E);
 					});
 				}
 			});
-			$ct.change(function() {
-				var tz = $ct.length, cz = $ct.filter(':checked').length, c = (tz > 0 && tz == cz);
-				if (c != $ca.prop('checked')) {
-					$ca.prop('checked', c).trigger('change', true);
+
+			$(t).on(E, f, function() {
+				var $b = $(b), bz = $b.length, cz = $b.filter(':checked').length, ca = (bz > 0 && bz == cz);
+				if (ca != $a.prop(P)) {
+					$a.prop(P, ca).trigger(E, true);
 				}
-			}).first().trigger('change');
+			});
+			
+			$(b).first().trigger(E);
 		});
 	};
 
 
 	// ==================
 	$(window).on('load', function() {
-		$('[checkall]').checkAll();
+		$('[checkall]').checkall();
+	});
+})(jQuery);
+(function($) {
+	"use strict";
+
+	var E = 'click.checkorder',
+		DS = 'dragstart.checkorder',
+		DE = 'dragend.checkorder',
+		DO = 'dragover.checkorder',
+		DL = 'dragleave.checkorder',
+		DP = 'drop.checkorder';
+
+	var _d;
+	function _dragstart() {
+		_d = this;
+	}
+	function _dragend() {
+		_d = null;
+	}
+	function _dragover(e) {
+		e.preventDefault();
+		$(this).addClass('dragover');
+	}
+	function _dragleave() {
+		$(this).removeClass('dragover');
+	}
+
+	function _drop() {
+		var $l = $(this);
+		if (_d && _d !== this) {
+			var $d = $(_d), $p = $l.parent(), $ls = $p.children('label');
+			if ($ls.filter(function() { return this === _d; }).length) {
+				var c = $l.find(':checkbox').prop('checked');
+
+				var vs = [];
+				$ls.each(function() {
+					if (this !== _d) {
+						if (this === $l[0]) {
+							vs.push({ label: _d, drop: true, check: c });
+						}
+						vs.push({ label: this });
+					}
+				});
+
+				$p.data('checkorder', '').trigger('dropstart.checkorder', vs);
+				if ($p.data('checkorder') != 'cancel') {
+					$d.find(':checkbox').prop('checked', c);
+					$d.insertBefore($l);
+					$p.trigger('dropend.checkorder');
+				}
+			}
+		}
+		$l.removeClass('dragover');
+	}
+
+	function _click() {
+		var $c = $(this), $l = $c.closest('label'), $p = $l.parent();
+
+		$p.data('checkorder', '').trigger('checkclick.checkorder', [ $c[0] ]);
+		if ($p.data('checkorder') != 'cancel') {
+			$l.fadeOut(200, function() {
+				var $h = $c.closest('.ui-checks').find('hr');
+				if ($c.prop('checked')) {
+					$l.insertBefore($h);
+				} else {
+					$l.insertAfter($h);
+				}
+				$l.fadeIn(200);
+			});
+		}
+	}
+
+	$.fn.checkorder = function() {
+		var $t = $(this), $h = $t.find('hr');
+		if ($h.length == 0) {
+			$t.prepend($('<hr>'));
+		}
+		$t.off('.checkorder')
+			.on(E, ":checkbox", _click)
+			.on(DS, "label", _dragstart)
+			.on(DE, "label", _dragend)
+			.on(DO, "label", _dragover)
+			.on(DL, "label", _dragleave)
+			.on(DP, "label", _drop);
+		$t.children('label').prop('draggable', true);
+		return this;
+	}
+
+	// ==================
+	$(window).on('load', function() {
+		$('.ui-checks.ordered').checkorder();
 	});
 })(jQuery);
 /**
@@ -1011,13 +1105,24 @@
 })(jQuery);(function($) {
 	"use strict";
 
-	$.fn.enableBy = function(target) {
-		$(this).each(function() {
-			var $a = $(this), $cs = $(target || $a.attr('enableby'));
-			if ($cs.length) {
-				$cs.change(function() {
-					$a.prop('disabled', $cs.filter(':checked').length == 0);
-				}).trigger('change');
+	$.fn.enableby = function(s) {
+		return this.each(function() {
+			var $a = $(this),
+				b = s || $a.attr('enableby'),
+				t = b, f = '',
+				i = b.indexOf(' ');
+
+			if (i > 0) {
+				t = b.substring(0, i);
+				f = b.substring(i+1);
+			}
+
+			$(t).on('change', f, function() {
+				$a.prop('disabled', $(b).filter(':checked').length == 0);
+			});
+
+			if ($(b).length) {
+				$(b).first().trigger('change');
 			} else {
 				$a.prop('disabled', true);
 			}
@@ -1027,52 +1132,83 @@
 
 	// ==================
 	$(window).on('load', function() {
-		$('[enableby]').enableBy();
+		$('[enableby]').enableby();
 	});
 })(jQuery);
 (function($) {
 	"use strict";
 
+	function _collapse($f, t) {
+		t = t || $f.data('fieldset').hideTransition;
+		$f.addClass('collapsing').trigger('collapse.fieldset').children(':not(legend)')[t](function() {
+			$f.removeClass('collapsing').addClass('collapsed').trigger('collapsed.fieldset');
+		});
+	}
+
+	function _expand($f, t) {
+		t = t || $f.data('fieldset').showTransition;
+		$f.addClass('expanding').trigger('expand.fieldset').children(':not(legend)')[t](function() {
+			$f.removeClass('expanding collapsed').trigger('expanded.fieldset');
+		});
+	}
+
 	function collapse($f, t) {
 		if (!$f.hasClass('collapsed')) {
-			$f.addClass('collapsed').children(':not(legend)')[t || 'slideUp']();
+			_collapse($f, t);
 		}
 	}
 
 	function expand($f, t) {
 		if ($f.hasClass('collapsed')) {
-			$f.removeClass('collapsed').children(':not(legend)')[t || 'slideDown']();
+			_expand($f, t);
 		}
 	}
 
-	$.fn.fieldset = function(config, transition) {
-		config = config || {};
+	function toggle($f) {
+		$f.hasClass('collapsed') ? _expand($f) : _collapse($f);
+	}
+
+	function _click() {
+		toggle($(this).closest('fieldset'));
+	}
+
+	function _init($f, c) {
+		if (!$f.data('fieldset')) {
+			c = $.extend({}, $.fieldset.defaults, c);
+
+			var h = c.collapsed || $f.hasClass('collapsed'), e = 'click.fieldset';
+	
+			$f.data('fieldset', c).addClass('ui-fieldset collapsible' + (h ? ' collapsed' : ''));
+			$f.children('legend').off(e).on(e, _click);
+			$f.children(':not(legend)').toggle(!h);
+		}
+	}
+
+	var api = {
+		collapse: collapse,
+		expand: expand,
+		toggle: toggle
+	};
+
+	$.fieldset = {
+		defaults: {
+			showTransition: 'slideDown',
+			hideTransition: 'slideUp'
+		}
+	};
+
+	$.fn.fieldset = function(c) {
+		var args = [].slice.call(arguments);
+
 		return this.each(function() {
 			var $f = $(this);
-			if (!$f.data('fieldset')) {
-				var $l = $f.children('legend'), c = config.collapsed && !($f.hasClass('collapsed'));
-				$f.data('fieldset', config).addClass('ui-fieldset' + (c ? ' collapsed' : ''));
-				$l.click(function() {
-					var $f = $(this).closest('fieldset');
-					if ($f.hasClass('collapsed')) {
-						expand($f);
-					} else {
-						collapse($f);
-					}
-				});
-
-				c = $f.hasClass('collapsed');
-				$f.children(':not(legend)')[c ? 'hide' : 'show']();
+			if (typeof(c) == 'string') {
+				_init($f);
+				args[0] = $f;
+				api[c].apply($f, args);
+				return;
 			}
-
-			switch (config) {
-			case 'collapse':
-				collapse($f, transition);
-				break;
-			case 'expand':
-				expand($f, transition);
-				break;
-			}
+			_init($f, c);
 		});
 	};
 
@@ -1086,18 +1222,14 @@
 	"use strict";
 
 	$.fn.focusme = function() {
-		var f = false;
-		$(this).each(function() {
-			var $i = $(this);
-			if (f) {
-				$i.removeAttr('focusme');
+		var done = false;
+		return this.each(function() {
+			if (done) {
 				return;
 			}
 
-			var a = $i.attr('focusme');
-			$i.removeAttr('focusme');
+			var $i = $(this), a = $i.attr('focusme') || 'true', $a;
 
-			var $a;
 			if (a == 'true') {
 				$a = $i.find('input,select,textarea,button').not(':hidden,:disabled,[readonly]').eq(0);
 				if ($a.length < 1) {
@@ -1106,21 +1238,21 @@
 						$a = $i;
 					}
 				}
-			} else if (a != '' && a != 'false') {
+			} else if (a != 'false') {
 				$a = $i.find(a).eq(0);
 			}
 			
 			if ($a && $a.length) {
-				f = true;
 				var $w = $(window), st = $w.scrollTop(), sl = $w.scrollLeft();
 				$a.focus();
 				$(window).scrollTop(st).scrollLeft(sl);
+				done = true;
 			}
 		});
 	};
 
 	$(window).on('load', function() {
-		$('[focusme="true"]').focusme();
+		$('[focusme]').focusme();
 	});
 
 })(jQuery);
@@ -1139,43 +1271,70 @@
 	"use strict";
 
 	$.fn.changeValue = function(v) {
-		var o = this.val();
+		return this.each(function() {
+			var $t = $(this), o = $t.val();
 
-		this.val(v);
-		if (o != v) {
-			this.trigger('change');
-		}
+			$t.val(v);
+			if (o != v) {
+				$t.trigger('change');
+			}
+		});
 	};
 
-	$.fn.values = function(vs, trigger) {
+	$.fn.formClear = function(trigger) {
+		this.find('textarea, select')[trigger ? 'changeValue' : 'val']('');
+		this.find('input').each(function() {
+			var $i = $(this);
+			switch ($i.attr('type')) {
+			case 'hidden':
+			case 'button':
+			case 'submit':
+			case 'reset':
+				break;
+			case 'checkbox':
+			case 'radio':
+				var oc = $i.prop('checked');
+				$i.prop('checked', false);
+				if (oc && trigger) {
+					$i.trigger('change');
+				}
+				break;
+			default:
+				$i[trigger ? 'changeValue' : 'val']('');
+			}
+		});
+		return this;
+	};
+
+	$.fn.formValues = function(vs, trigger) {
 		if (vs) {
 			for (var n in vs) {
 				var v = vs[n];
-				this.find(':input[name="' + n + '"]').each(function() {
-					var $t = $(this);
-					switch ($t.attr('type')) {
-					case 'button':
+				this.find(':input').filter(function() { return this.name == n; }).each(function() {
+					var $i = $(this);
+					switch ($i.attr('type')) {
 					case 'file':
+					case 'button':
 					case 'submit':
 					case 'reset':
 						break;
 					case 'checkbox':
 						var va = $.isArray(v) ? v : [ v ];
-						var oc = $t.prop('checked'), nc = $.inArray($t.val(), va) >= 0;
-						$t.prop('checked', nc);
+						var oc = $i.prop('checked'), nc = $.inArray($i.val(), va) >= 0;
+						$i.prop('checked', nc);
 						if (trigger && nc != oc) {
-							$t.trigger('change');
+							$i.trigger('change');
 						}
 						break;
 					case 'radio':
-						var oc = $t.prop('checked'), nc = ($t.val() == v);
-						$t.prop('checked', nc);
+						var oc = $i.prop('checked'), nc = ($i.val() == v);
+						$i.prop('checked', nc);
 						if (trigger && nc && !oc) {
-							$t.trigger('change');
+							$i.trigger('change');
 						}
 						break;
 					default:
-						trigger ? $t.changeValue(v) : $t.val(v);
+						trigger ? $i.changeValue(v) : $i.val(v);
 						break;
 					}
 				});
@@ -1201,6 +1360,20 @@
 
 })(jQuery);
 
+(function($) {
+	"use strict";
+
+	$.fn.insertText = function(s, append) {
+		return this.each(function() {
+			var $t = $(this), tv = $t.val();
+			var ss = $t.prop('selectionStart') || (append ? tv.length : 0);
+			var tb = tv.substring(0, ss), ta = tv.substring(ss);
+
+			$t.val(tb + s + ta).prop('selectionEnd', tb.length + s.length);
+		});
+	};
+
+})(jQuery);
 /**
  * jQuery lightbox plugin
  * This jQuery plugin was inspired and based on 
@@ -1524,6 +1697,66 @@
 (function($) {
 	"use strict";
 
+	function linkify(node, c) {
+		switch (node.nodeType) {
+		case 3: // Text Node
+			c.regexp.lastIndex = 0;
+			var r = c.regexp.exec(node.nodeValue);
+			if (r) {
+				var $a = $('<a>', { target: c.target, href: r[0] }).text(r[0]);
+				if (c.prepend) {
+					$a.prepend(c.prepend);
+				}
+				if (c.append) {
+					$a.append(c.append);
+				}
+
+				var m = node.splitText(r.index);
+				m.splitText(r[0].length);
+				$(m).replaceWith($a);
+				return 1;
+			}
+			break;
+		case 1: // Element Node
+			if (node.childNodes && !c.ignore.test(node.tagName)) {
+				for (var i = 0; i < node.childNodes.length; i++) {
+					i += linkify(node.childNodes[i], c);
+				}
+			}
+			break;
+		}
+		return 0;
+	}
+
+	$.linkify = {
+		defaults: {
+			ignore: /(script|style|a)/i,
+			// URLs starting with http://, https://
+			regexp: /https?:\/\/[\w~!@#\$%&\*\(\)_\-\+=\[\]\|:;,\.\?\/']+/i,
+			target: '_blank',
+			prepend: '',
+			append: ''
+		}
+	};
+
+	$.fn.linkify = function(c) {
+		c = $.extend({}, $.linkify.defaults, c);
+
+		return this.each(function() {
+			linkify(this, c);
+			$(this).removeAttr('linkify');
+		});
+	};
+
+
+	// ==================
+	$(window).on('load', function() {
+		$('[linkify]').linkify();
+	});
+})(jQuery);
+(function($) {
+	"use strict";
+
 	function _clearTimeout($el) {
 		//if this element has delayed mask scheduled then remove it
 		var t = $el.data("_mask_timeout");
@@ -1552,7 +1785,9 @@
 			_clearTimeout($el);
 		}
 
-		var $lm = $('<div class="ui-loadmask">');
+		var fs = ($el.prop('tagName') == 'BODY' ? ' fullscreen' : '');
+
+		var $lm = $('<div>', { 'class': "ui-loadmask" + fs });
 		if (c.cssClass) {
 			$lm.addClass(c.cssClass);
 		}
@@ -1581,7 +1816,8 @@
 			$el.addClass("ui-loadmasked-relative");
 		}
 		if (c.mask) {
-			$el.append($('<div class="ui-loadmask-mask"></div>'));
+			var $m = $('<div>', { 'class': "ui-loadmask-mask" + fs });
+			$el.append($m);
 		}
 
 		$el.append($lm).addClass("ui-loadmasked");
@@ -1631,8 +1867,7 @@
 				$el.data("_mask_timeout", setTimeout(function() {
 					doMask($el, c);
 				}, c.delay));
-			}
-			else {
+			} else {
 				doMask($el, c);
 			}
 		});
@@ -1654,6 +1889,95 @@
 		return this.hasClass("ui-loadmasked");
 	};
 })(jQuery);
+(function($) {
+	"use strict";
+
+	var ws = /[\s\u0085\u00a0\u2000\u3000]/g;
+
+	function split(s) {
+		var ss = s.split(ws), rs = [];
+		for (var i = 0; i < ss.length; i++) {
+			if (ss[i].length) {
+				rs.push(ss[i])
+			}
+		}
+		return rs;
+	}
+
+	function index_any(s, c) {
+		var i = 0;
+		while (s.length > 0) {
+			for (var j = 0; j < c.markups.length; j++) {
+				var m = c.markups[j], l = m.length, t = s.substring(0, l);
+				if (t == m || (c.caseInsensitive && t.toLowerCase() == m)) {
+					return [i, l]
+				}
+			}
+			s = s.substring(1);
+			i++;
+		}
+		return false;
+	}
+
+	function markup(node, c) {
+		switch (node.nodeType) {
+		case 3: // Text Node
+			var r = index_any(node.nodeValue, c);
+			if (r) {
+				var m = node.splitText(r[0]);
+				m.splitText(r[1]);
+				$(m).wrap(c.wrap);
+				return 1;
+			}
+			break;
+		case 1: // Element Node
+			if (node.childNodes && !c.ignore.test(node.tagName)) {
+				for (var i = 0; i < node.childNodes.length; i++) {
+					i += markup(node.childNodes[i], c);
+				}
+			}
+			break;
+		}
+		return 0;
+	}
+
+	$.markup = {
+		defaults: {
+			caseInsensitive: true,
+			ignore: /(script|style|mark)/i,
+			wrap: '<mark></mark>',
+		}
+	};
+
+	$.fn.markup = function(o) {
+		if ($.isArray(o)) {
+			o = { markups: o };
+		} else if (typeof(o) == 'string') {
+			o = { markup: o };
+		}
+
+		return this.each(function() {
+			var $t = $(this), c = $.extend({}, $.markup.defaults, o);
+
+			c.markups ||= split(c.markup || $t.attr('markup') || '');
+			if (c.markups.length) {
+				if (c.caseInsensitive) {
+					for (var i = 0; i < c.markups.length; i++) {
+						c.markups[i] = c.markups[i].toLowerCase();
+					}
+				}
+				markup(this, c);
+			}
+			$t.removeAttr('markup');
+		});
+	};
+
+
+	// ==================
+	$(window).on('load', function() {
+		$('[markup]').markup();
+	});
+})(jQuery);
 // jQuery Nice Select - v1.1.0
 // https://github.com/hernansartorio/jquery-nice-select
 // Made by Hernán Sartorio
@@ -1670,45 +1994,45 @@
 
 	function __dropdown_keydown(evt) {
 		var $dropdown = $(this);
-		var $focused_option = $($dropdown.find('.focus') || $dropdown.find('ui li.selected'));
+		var $focused = ($dropdown.find('.focus') || $dropdown.find('.selected')).first();
 
-		switch (evt.keyCode) {
-		case 32: // Space
-		case 13: // Enter
+		switch (evt.key) {
+		case ' ': // Space
+		case 'Enter':
 			if ($dropdown.hasClass('open')) {
-				$focused_option.trigger('click');
+				$focused.trigger('click');
 			} else {
 				$dropdown.trigger('click');
 			}
 			return false;
-		case 40: // Down
+		case 'ArrowDown':
 			if (!$dropdown.hasClass('open')) {
 				$dropdown.trigger('click');
 			} else {
-				var $next = $focused_option.nextAll('li:not(.disabled)').first();
+				var $next = ($focused.length > 0 ? $focused.nextAll('li:not(.disabled)') : $dropdown.find('li:not(.disabled)')).first();
 				if ($next.length > 0) {
 					$dropdown.find('.focus').removeClass('focus');
-					$next.addClass('focus');
+					$next.addClass('focus').focus();
 				}
 			}
 			return false;
-		case 38: // Up
+		case 'ArrowUp':
 			if (!$dropdown.hasClass('open')) {
 				$dropdown.trigger('click');
 			} else {
-				var $prev = $focused_option.prevAll('li:not(.disabled)').first();
+				var $prev = ($focused.length > 0 ? $focused.prevAll('li:not(.disabled)').first() : $dropdown.find('li:not(.disabled)').last());
 				if ($prev.length > 0) {
 					$dropdown.find('.focus').removeClass('focus');
-					$prev.addClass('focus');
+					$prev.addClass('focus').focus();
 				}
 			}
 			return false;
-		case 27: // Esc
+		case 'Escape':
 			if ($dropdown.hasClass('open')) {
 				$dropdown.trigger('click');
 			}
 			break;
-		case 9: // Tab
+		case 'Tab':
 			if ($dropdown.hasClass('open')) {
 				return false;
 			}
@@ -1724,10 +2048,6 @@
 		$dropdown.toggleClass('open');
 
 		if ($dropdown.hasClass('open')) {
-			$dropdown.find('li');
-			$dropdown.find('.focus').removeClass('focus');
-			$dropdown.find('.selected').addClass('focus');
-
 			// Close when clicking outside
 			$(document).on('click.nice_select', __document_click);
 		} else {
@@ -1739,16 +2059,89 @@
 	}
 
 	function __dropdown_option_click() {
-		var $option = $(this);
-		var $dropdown = $option.closest('.ui-nice-select');
+		var $li = $(this);
 
-		$dropdown.find('.selected').removeClass('selected');
-		$option.addClass('selected');
+		if ($li.hasClass('selected')) {
+			return;
+		}
 
-		var text = $option.data('display') || $option.text();
-		$dropdown.find('.current').text(text);
+		var $dropdown = $li.closest('.ui-nice-select'),
+			$select = $dropdown.prev('select'),
+			val = $li.attr('value');
 
-		$dropdown.prev('select').val($option.data('value')).trigger('change');
+		if ($dropdown.hasClass('multiple')) {
+			var vs = $select.val() || [];
+			vs.push(val);
+			val = vs;
+		}
+		$select.val(val).trigger('change');
+	}
+
+	// multiple only
+	function __dropdown_current_click() {
+		var $t = $(this), val = $t.attr('value'),
+			$dropdown = $t.closest('.ui-nice-select'),
+			$select = $dropdown.prev('select');
+
+		$t.remove();
+		
+		$dropdown.find('li').filter(function() { return $(this).attr('value') == val; }).removeClass('selected');
+		var val = [];
+		$dropdown.find('.current').each(function() {
+			val.push($(this).attr('value'));
+		})
+		$select.val(val);
+		return false;
+	}
+
+	function __select_change() {
+		change.apply($(this));
+	}
+
+	function change() {
+		this.each(function() {
+			var $select = $(this), vs = $select.val();
+			var $dropdown = $select.next('.ui-nice-select');
+
+			var eq = $.isArray(vs)
+				? function(v, a) {
+					for (var i = 0; i < a.length; i++) {
+						if (v == a[i]) {
+							return true;
+						}
+					}
+					return false;
+				}
+				: function(v, a) {
+					return v == a;
+				};
+
+			$dropdown.find('.current').remove();
+			$dropdown.find('.selected').removeClass('selected');
+			$dropdown.find('li')
+				.filter(function() { return eq($(this).attr('value'), vs); })
+				.addClass('selected')
+				.each(function() {
+					var $t = $(this);
+					$dropdown.append($('<span>', { 'class': 'current', 'value': $t.attr('value')}).text($t.attr('display') || $t.text()));
+				});
+		});
+	}
+
+	function update() {
+		this.each(function() {
+			var $select = $(this);
+			var $dropdown = $select.next('.ui-nice-select');
+
+			if ($dropdown.length) {
+				$dropdown.remove();
+				create_nice_select($select);
+
+				if ($dropdown.hasClass('open')) {
+					$select.next().trigger('click');
+				}
+			}
+		});
 	}
 
 	function update() {
@@ -1774,7 +2167,7 @@
 
 			if ($dropdown.length) {
 				$dropdown.remove();
-				$select.css('display', '');
+				$select.css('display', '').off('.nice_select');
 			}
 		});
 		if ($('.ui-nice-select').length == 0) {
@@ -1794,26 +2187,30 @@
 	function create_nice_select($select) {
 		var $options = $select.find('option'),
 			$selected = $select.find('option:selected'),
-			$current = $('<span class="current"></span>'),
 			$ul = $('<ul></ul>'),
 			$dropdown = $('<div></div>')
 				.addClass('ui-nice-select')
 				.addClass($select.attr('class') || '')
-				.addClass($select.attr('disabled') ? 'disabled' : '')
-				.attr('tabindex', $select.attr('disabled') ? null : ($select.attr('tabindex') || '0'))
-				.append($current, $ul);
+				.addClass($select.prop('disabled') ? 'disabled' : '')
+				.addClass($select.prop('multiple') ? 'multiple' : '')
+				.attr('tabindex', $select.prop('disabled') ? null : ($select.attr('tabindex') || '0'))
+				.append($ul);
 
-		$current.text($selected.data('display') || $selected.text());
+		$selected.each(function() {
+			var $op = $(this);
+			$dropdown.append($('<span>', { 'class': 'current', 'value': $op.val()}).text($op.attr('display') || $op.text()));
+		});
 
 		$options.each(function() {
 			var $option = $(this);
 
 			$ul.append($('<li></li>')
-				.attr('data-value', $option.val())
-				.attr('data-display', ($option.data('display') || null))
+				.attr('value', $option.val())
+				.attr('display', ($option.attr('display') || ''))
 				.addClass(
 					($option.is(':selected') ? ' selected' : '') +
 					($option.is(':disabled') ? ' disabled' : ''))
+				.attr('tabindex', $option.is(':disabled') ? null : '0')
 				.text($option.text())
 			);
 		});
@@ -1827,7 +2224,14 @@
 		// Option click
 		$dropdown.on('click', 'li:not(.disabled)', __dropdown_option_click);
 
+		// multiple
+		if ($dropdown.hasClass('multiple')) {
+			$dropdown.on('click', '.current', __dropdown_current_click)
+		}
+
 		$select.after($dropdown);
+
+		$select.on('change.nice_select', __select_change);
 	}
 
 	var api = {
@@ -2062,6 +2466,7 @@
 		if ($p.is(':visible')) {
 			$c.trigger('hide.popup');
 			$p.hide();
+			$('body').removeClass('ui-popup-noscroll');
 			$(document).off('.popup');
 			$(window).off('.popup');
 			$c.trigger('hidden.popup');
@@ -2101,21 +2506,25 @@
 	}
 
 	function _show($p, $c, c, trigger) {
-		$c.trigger('show.popup');
+		c.trigger = trigger || window;
+
+		$c.trigger('show.popup', c.trigger);
+
+		if (!c.scroll) {
+			$('body').addClass('ui-popup-noscroll');
+		}
 
 		$p.find('.ui-popup-closer').toggle(c.closer);
 
-		c.trigger = trigger || window;
-
 		_align($p, c.trigger, c.position);
 
-		$p.children('.ui-popup-frame').hide()[c.transition](function() {
+		$p.focus().children('.ui-popup-frame').hide()[c.transition](function() {
 			_bind(c);
 			if (c.focus) {
-				$(c.focus).focus();
+				$p.find(c.focus).eq(0).focus();
 			}
-			$c.trigger('shown.popup');
-		}).focus();
+			$c.trigger('shown.popup', c.trigger);
+		});
 	}
 
 	function __doc_click(evt) {
@@ -2165,13 +2574,13 @@
 						return false;
 					});
 					c.loaded = true;
-					$c.trigger('loaded.popup', data);
+					$c.trigger('loaded.popup', [ data, status, xhr ]);
 				}
 			},
 			error: function(xhr, status, err) {
 				if (seq == c.sequence) {
 					c.ajaxFail.call($c, xhr, status, err);
-					$c.trigger('failed.popup');
+					$c.trigger('failed.popup', [ xhr, status, err ]);
 				}
 			},
 			complete: function() {
@@ -2187,12 +2596,14 @@
 	function _ajaxFail(xhr, status, err) {
 		var $c = $(this), $e = $('<div class="ui-popup-error">');
 
-		if (xhr.responseJSON) {
-			$e.addClass('json').text(JSON.stringify(xhr.responseJSON, null, 4));
-		} else if (xhr.responseText) {
-			$e.html(xhr.responseText);
+		var j = xhr.responseJSON, t = xhr.responseText;
+		if (j) {
+			var e = j.error;
+			$e.addClass('text').text(typeof(e) == 'string' ? e : JSON.stringify(j, null, 4));
+		} else if (t) {
+			$e.html(t);
 		} else {
-			$e.text(err || status || 'Server error!');
+			$e.addClass('text').text((xhr.status ? (xhr.status + ' ') : '')  + (err || status || 'error'));
 		}
 
 		$c.empty().append($e);
@@ -2231,7 +2642,7 @@
 
 	function _options($c) {
 		var fs = ['ajax-done', 'ajax-fail'];
-		var bs = ['loaded', 'autoload', 'mask', 'loader', 'closer', 'mouse', 'keyboard', 'resize'];
+		var bs = ['loaded', 'autoload', 'mask', 'loader', 'closer', 'mouse', 'keyboard', 'resize', 'scroll'];
 
 		var c = {};
 		$.each($c[0].attributes, function(i, a) {
@@ -2277,7 +2688,7 @@
 
 		var $f = $('<div class="ui-popup-frame" tabindex="0">')
 			.append($('<div class="ui-popup-arrow">'))
-			.append($('<i class="ui-close circle ui-popup-closer"></i>').click(function() {
+			.append($('<i class="ui-popup-closer"></i>').hide().on('click', function() {
 				hide($c);
 			}));
 
@@ -2348,6 +2759,7 @@
 		mouse: true,
 		keyboard: true,
 		resize: true,
+		scroll: true,
 		ajax: {},
 		ajaxDone: _ajaxDone,
 		ajaxFail: _ajaxFail
@@ -2357,10 +2769,12 @@
 	// ==================
 	$(window).on('load', function() {
 		$('[data-spy="popup"]').popup();
+
 		$('body').on('click.popup', '[popup-target]', function(evt) {
 			evt.stopPropagation();
 			var $t = $(this), c = _options($t);
 			$($t.attr('popup-target')).popup(c).popup('toggle', this);
+			return false;
 		});
 	});
 
@@ -2589,11 +3003,13 @@
 
 	function _autosize() {
 		var $t = $(this);
-		$t.css('height', 'auto').height($t.prop('scrollHeight'));
+		$t.css('height', 'auto').outerHeight($t.prop('scrollHeight'));
 	}
 
+	var E = 'input.autosize';
+
 	$.fn.autosize = function() {
-		return $(this).off('input.autosize').on('input.autosize', _autosize).css({
+		return this.off(E).on(E, _autosize).css({
 			'overflow-y': 'hidden',
 			'resize': 'none'
 		}).trigger('input');
@@ -2608,9 +3024,9 @@
 	"use strict";
 
 	function _enterfire(evt) {
-		if (evt.ctrlKey && evt.which == 13) {
-			var $t = $(this), ef = $t.attr('enterfire');
-			if (ef == 'form' || ef == 'submit' || ef == 'true') {
+		if (evt.ctrlKey && evt.key == 'Enter') {
+			var $t = $(this), ef = $t.attr('enterfire') || 'true';
+			if (ef == 'true' || ef == 'form' || ef == 'submit') {
 				$t.closest('form').submit();
 			} else {
 				$(ef).click();
@@ -2619,7 +3035,7 @@
 	}
 
 	$.fn.enterfire = function() {
-		$(this).off('keyup.enterfire').on('keyup.enterfire', _enterfire);
+		return this.off('keyup.enterfire').on('keyup.enterfire', _enterfire);
 	};
 
 	$(window).on('load', function() {
@@ -2630,7 +3046,7 @@
 (function($) {
 	"use strict";
 
-	$.fn.textClear = function() {
+	$.fn.textclear = function() {
 		return this.each(function() {
 			var $t = $(this);
 			if ($t.hasClass('ui-has-textclear')) {
@@ -2646,13 +3062,34 @@
 				}
 				$t.focus();
 				return false;
-			});
+			}).parent().css('position', 'relative');
 		});
 	};
 	
 	// ==================
 	$(window).on('load', function () {
-		$('[textclear]').textClear();
+		$('[textclear]').textclear();
+	});
+})(jQuery);
+(function($) {
+	"use strict";
+
+	var E = 'blur.textstrip', re = /^[\s\u3000]+|[\s\u3000]+$/g;
+
+	function _textstrip() {
+		var $t = $(this), a = $t.attr('textstrip') || '';
+		if (a != 'false') {
+			$t.val(($t.val() || '').replace(re, ''));
+		}
+	}
+
+	$.fn.textstrip = function() {
+		return this.off(E).on(E, _textstrip);
+	};
+	
+	// ==================
+	$(window).on('load', function () {
+		$('[textstrip]').textstrip();
 	});
 })(jQuery);
 // jQuery toast plugin created by Kamran Ahmed copyright MIT license 2015 (modified by Frank Wang)
@@ -2663,7 +3100,7 @@
 		var o = {};
 
 		if ((typeof options === 'string') || $.isArray(options)) {
-			o.text = options;
+			o.message = options;
 		} else {
 			o = options;
 		}
@@ -2682,21 +3119,23 @@
 			$t.append($('<span class="ui-toast-close">&times;</span>'));
 		}
 
-		var sm = os.html ? 'html' : 'text';
+		var m = os.html ? 'html' : 'text';
 		if (os.heading) {
-			$t.append($('<h2 class="ui-toast-heading">')[sm](os.heading));
+			$t.append($('<h4 class="ui-toast-heading">')[m](os.heading));
 		}
 
-		if ($.isArray(os.text)) {
-			var $ul = $('<ul class="ui-toast-ul">');
-			$.each(os.text, function(i, t) {
+		var $c = $('<div class="ui-toast-content">').appendTo($t);
+		var t = os.message || os.text;
+		if ($.isArray(t)) {
+			var $ul = $('<ul class="ui-toast-list">');
+			$.each(t, function(i, t) {
 				if (t) {
-					$ul.append($('<li class="ui-toast-' + sm + '">')[sm](t));
+					$ul.append($('<li>')[m](t));
 				}
 			});
-			$t.append($ul);
+			$c.append($ul);
 		} else {
-			$t.append($('<div class="ui-toast-' + sm + '">')[sm](os.text));
+			$c.append($('<div class="ui-toast-text">')[m](t));
 		}
 
 		if (os.bgColor !== false) {
@@ -2712,7 +3151,7 @@
 		}
 
 		if (os.icon !== false) {
-			$t.addClass('ui-toast-has-icon ui-toast-icon-' + os.icon);
+			$t.addClass('has-icon ' + os.icon);
 		}
 
 		if (os['class'] !== false) {
@@ -2762,18 +3201,18 @@
 				op.left = 20;
 				op.right = 20;
 				break;
-			case 'top center':
+			case 'top right':
 				op.top = 5;
-				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
+				op.right = 20;
 				break;
 			case 'top left':
 				op.top = 5;
 				op.left = 20;
 				break;
-			//case 'top right':
+			// case 'top center':
 			default:
 				op.top = 5;
-				op.right = 20;
+				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
 				break;
 			}
 		}
@@ -2868,7 +3307,6 @@
 
 			$t.find('.ui-toast-loader').css({
 				'width': '100%',
-				'-webkit-transition': transition,
 				'transition': transition,
 				'background-color': os.loaderBg
 			});
@@ -2879,7 +3317,6 @@
 		if (os.loader) {
 			$t.find('.ui-toast-loader').css({
 				'width': '0%',
-				'-webkit-transition': 'none',
 				'transition': 'none'
 			});
 		}
@@ -2988,15 +3425,15 @@
 	$.toast.defaults = {
 		icon: false,
 		html: false,
-		text: '',
 		heading: '',
+		message: '',
 		loader: true,
 		transition: 'fade',
 		closeable: true,
 		hideAfter: 5000,
 		stopHideOnHover: true,
 		stack: 5,
-		position: 'top right',
+		position: 'top center',
 		bgColor: false,
 		textColor: false,
 		textAlign: 'left',
@@ -3008,7 +3445,7 @@
 	"use strict";
 
 	$.fn.totop = function() {
-		$(this).each(function() {
+		return this.each(function() {
 			var $t = $(this), $w = $(window);
 
 			$t.click(function() {
@@ -3022,7 +3459,7 @@
 	};
 
 	$(window).on('load', function() {
-		$('[totop="true"]').totop();
+		$('[totop]').totop();
 	});
 
 })(jQuery);
@@ -3030,19 +3467,23 @@
 	"use strict";
 
 	function init($t) {
-		$t.find('li').removeClass('node leaf').children('.item').off('.treeview').each(function() {
+		$t.find('li').removeClass('node leaf').children('.item').each(function() {
 			var $i = $(this), $n = $i.parent();
 			if ($i.next('ul').length) {
 				$n.addClass('node');
-				$i.on('click.treeview', _on_item_click);
 			} else {
 				$n.addClass('leaf');
 			}
 		});
+
+		$t.off('.treeview').on('click.treeview', '.item', _on_item_click);
 	}
 
 	function _on_item_click() {
-		_toggle($(this).parent());
+		var $i = $(this);
+		if ($i.next('ul').length) {
+			_toggle($i.parent());
+		}
 	}
 
 	function _collapse($n) {
@@ -3070,7 +3511,7 @@
 	}
 
 	function unbind($t) {
-		$t.find('li').removeClass('node').children('.item').off('.treeview');
+		$t.off('.treeview').find('li').removeClass('node');
 	}
 
 	var api = {
@@ -3083,7 +3524,7 @@
 	$.fn.treeview = function(method, target) {
 		// Methods
 		if (typeof method == 'string') {
-			api[method].call(this, target);
+			api[method](this, target);
 			return this;
 		}
 
@@ -3159,7 +3600,7 @@
 
 		var $fit = $('<div>', { 'class': 'ui-uploader-item' }).data('file', f);
 
-		$('<input', { type: 'hidden', name: uc.name, 'class': 'ui-uploader-fid' }).appendTo($fit);
+		$('<input>', { type: 'hidden', name: uc.name, 'class': 'ui-uploader-fid' }).appendTo($fit);
 		$('<i>', { 'class': 'ui-close' }).click(_item_on_remove).appendTo($fit);
 
 		$('<span>', { 'class': 'ui-uploader-info' })
@@ -3227,12 +3668,14 @@
 	function _ajaxFail(xhr, status, err) {
 		var $e = $('<div class="ui-uploader-error">');
 
-		if (xhr.responseJSON) {
-			$e.addClass('json').text(JSON.stringify(xhr.responseJSON, null, 4));
-		} else if (xhr.responseText) {
-			$e.html(xhr.responseText);
+		var j = xhr.responseJSON, t = xhr.responseText;
+		if (j) {
+			var e = j.error;
+			$e.addClass('text').text(typeof(e) == 'string' ? e : JSON.stringify(j, null, 4));
+		} else if (t) {
+			$e.html(t);
 		} else {
-			$e.text(err || status || 'Server error!');
+			$e.addClass('text').text((xhr.status ? (xhr.status + ' ') : '')  + (err || status || 'error'));
 		}
 
 		$(this).append($e);
@@ -3442,15 +3885,15 @@
 			// show image download view
 			dnloadView: false,
 
-			// fontawesome4 css
+			// fontawesome4/5/6 css
 			cssIcons: {
-				file: 'fa fa-file-o',
-				image: 'fa fa-file-image-o',
-				audio: 'fa fa-file-audio-o',
-				video: 'fa fa-file-video-o',
-				error: 'fa fa-exclamation-circle',
-				waiting: 'fa fa-refresh',
-				loading: 'fa fa-refresh fa-spin'
+				file: 'fa fa-file-o far fa-file',
+				image: 'fa fa-file-image-o far fa-file-image',
+				audio: 'fa fa-file-audio-o far fa-file-audio',
+				video: 'fa fa-file-video-o far fa-file-video',
+				error: 'fa fa-exclamation-circle fas fa-circle-exclamation',
+				waiting: 'fa fas fa-refresh',
+				loading: 'fa fas fa-refresh fa-spin'
 			},
 
 			pgbarFgcolor: '#ccc',

@@ -1,55 +1,71 @@
 /** pagination **/
 .ui-pager {
-	margin: 20px 0;
-	text-align: center;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	margin: 1.5em 0;
 }
-.ui-pager > div.infos {
-	float: left;
-	padding: 8px;
+.ui-pager > * {
+	margin: 0.25em 1em;
+	white-space: nowrap;
 }
-.ui-pager > div.limits {
-	float: right;
+.ui-pager > *:first-child {
+	margin-left: 0;
+	margin-right: auto;
+}
+.ui-pager > *:last-child {
+	margin-left: auto;
+	margin-right: 0;
 }
 .ui-pager > .pagination {
-	margin: 0;
-}
-.ui-pager > .pagination > li.limits > select {
-	display: inline;
-	float: left;
-	width: auto;
+	display: flex;
+	font-family: var(--bs-font-monospace);
 }
 
+/** center **/
+.ui-pager.center > *:first-child {
+	margin-left: auto;
+	margin-right: 1em;
+}
+.ui-pager.center > *:last-child {
+	margin-left: 1em;
+	margin-right: auto;
+}
+
+/** lined **/
+.ui-pager.lined > .pagination > li > * {
+	margin: 0 0.15em;
+}
 .ui-pager.lined > .pagination > li > a,
 .ui-pager.lined > .pagination > li > span {
 	background-color: #fff;
 	border: 0 none;
-	border-bottom: 3px solid #ddd;
+	border-bottom: 0.15em solid #ddd;
 	border-radius: 0;
 	color: #888;
-	margin-left: 3px;
-	padding: 5px 11px;
+	padding: 0.25em 0.75em;
 }
 .ui-pager.lined > .pagination > li > a:hover,
 .ui-pager.lined > .pagination > li > span:hover {
 	background-color: #eee;
-	border-bottom: 3px solid #337ab7;
+	border-bottom-color: #337ab7;
 }
 
 .ui-pager.lined > .pagination > li.eleft > span,
 .ui-pager.lined > .pagination > li.eright > span {
-	border-bottom: 3px solid transparent;
-	padding-left: 8px;
-	padding-right: 8px;
+	border-bottom-color: transparent;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 }
 
 .ui-pager.lined > .pagination > .active > a,
-.ui-pager.lined > .pagination > .active > span,
 .ui-pager.lined > .pagination > .active > a:hover,
-.ui-pager.lined > .pagination > .active > span:hover,
 .ui-pager.lined > .pagination > .active > a:focus,
+.ui-pager.lined > .pagination > .active > span,
+.ui-pager.lined > .pagination > .active > span:hover,
 .ui-pager.lined > .pagination > .active > span:focus {
 	background-color: #fff;
-	border-bottom: 3px solid #337ab7;
+	border-bottom-color: #337ab7;
 	color: #000;
 	font-weight: bold;
 }

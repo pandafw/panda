@@ -6,7 +6,7 @@
 		var o = {};
 
 		if ((typeof options === 'string') || $.isArray(options)) {
-			o.text = options;
+			o.message = options;
 		} else {
 			o = options;
 		}
@@ -25,21 +25,23 @@
 			$t.append($('<span class="ui-toast-close">&times;</span>'));
 		}
 
-		var sm = os.html ? 'html' : 'text';
+		var m = os.html ? 'html' : 'text';
 		if (os.heading) {
-			$t.append($('<h2 class="ui-toast-heading">')[sm](os.heading));
+			$t.append($('<h4 class="ui-toast-heading">')[m](os.heading));
 		}
 
-		if ($.isArray(os.text)) {
-			var $ul = $('<ul class="ui-toast-ul">');
-			$.each(os.text, function(i, t) {
+		var $c = $('<div class="ui-toast-content">').appendTo($t);
+		var t = os.message || os.text;
+		if ($.isArray(t)) {
+			var $ul = $('<ul class="ui-toast-list">');
+			$.each(t, function(i, t) {
 				if (t) {
-					$ul.append($('<li class="ui-toast-' + sm + '">')[sm](t));
+					$ul.append($('<li>')[m](t));
 				}
 			});
-			$t.append($ul);
+			$c.append($ul);
 		} else {
-			$t.append($('<div class="ui-toast-' + sm + '">')[sm](os.text));
+			$c.append($('<div class="ui-toast-text">')[m](t));
 		}
 
 		if (os.bgColor !== false) {
@@ -55,7 +57,7 @@
 		}
 
 		if (os.icon !== false) {
-			$t.addClass('ui-toast-has-icon ui-toast-icon-' + os.icon);
+			$t.addClass('has-icon ' + os.icon);
 		}
 
 		if (os['class'] !== false) {
@@ -105,18 +107,18 @@
 				op.left = 20;
 				op.right = 20;
 				break;
-			case 'top center':
+			case 'top right':
 				op.top = 5;
-				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
+				op.right = 20;
 				break;
 			case 'top left':
 				op.top = 5;
 				op.left = 20;
 				break;
-			//case 'top right':
+			// case 'top center':
 			default:
 				op.top = 5;
-				op.right = 20;
+				op.left = ($(window).outerWidth() / 2) - $c.outerWidth() / 2;
 				break;
 			}
 		}
@@ -211,7 +213,6 @@
 
 			$t.find('.ui-toast-loader').css({
 				'width': '100%',
-				'-webkit-transition': transition,
 				'transition': transition,
 				'background-color': os.loaderBg
 			});
@@ -222,7 +223,6 @@
 		if (os.loader) {
 			$t.find('.ui-toast-loader').css({
 				'width': '0%',
-				'-webkit-transition': 'none',
 				'transition': 'none'
 			});
 		}
@@ -331,15 +331,15 @@
 	$.toast.defaults = {
 		icon: false,
 		html: false,
-		text: '',
 		heading: '',
+		message: '',
 		loader: true,
 		transition: 'fade',
 		closeable: true,
 		hideAfter: 5000,
 		stopHideOnHover: true,
 		stack: 5,
-		position: 'top right',
+		position: 'top center',
 		bgColor: false,
 		textColor: false,
 		textAlign: 'left',

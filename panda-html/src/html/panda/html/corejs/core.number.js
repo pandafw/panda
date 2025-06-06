@@ -345,7 +345,7 @@ function DecimalFormat(pattern) {
 			}
 
 			p = Math.pow(10, p || 2);
-			return Math.round(n * p) / p + UNITS[i];
+			return Math.round(n * p) / p + ' ' + UNITS[i];
 		};
 	}
 })();

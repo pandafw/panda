@@ -1,52 +1,66 @@
-fieldset.ui-fieldset {
-	border: solid 1px #ccc;
-	margin: 10px 0;
-	padding: 10px;
+.ui-fieldset {
+	--ui-arrow-color: #999;
+	border: solid 1px var(--ui-border-color, #ccc);
+	margin: 0 0 1em 0;
+	padding: 1em;
 }
 
-fieldset.ui-fieldset>legend {
+.ui-fieldset > legend {
 	border: 0;
-	cursor: pointer;
+	float: none;
 	font-size: inherit;
 	margin: 0;
-	padding: 0 10px 0 25px;
+	padding: 0 1em 0 2em;
 	position: relative;
 	width: auto;
 }
-fieldset.ui-fieldset>legend::before {
-	border-top: 2px solid #999;
-	border-right: 2px solid #999;
+.ui-fieldset.collapsible > legend {
+	cursor: pointer;
+} 
+.ui-fieldset > legend.circle {
+	border: solid 1px var(--ui-border-color, #ccc);
+	border-radius: 1em;
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+}
+
+.ui-fieldset > legend::before {
+	border-top: 2px solid var(--ui-arrow-color);
+	border-right: 2px solid var(--ui-arrow-color);
 	content: "";
 	display: block;
 	position: absolute;
-	margin-top: -4px;
-	left: 10px;
+	margin-top: -0.3em;
+	left: 0.75em;
 	top: 50%;
-	width: 5px;
-	height: 5px;
-	-webkit-transform-origin: 66% 66%;
-	-ms-transform-origin: 66% 66%;
-	transform-origin: 66% 66%;
-	-webkit-transform: rotate(135deg);
-	-ms-transform: rotate(135deg);
+	width: 0.35em;
+	height: 0.35em;
 	transform: rotate(135deg);
-	-webkit-transition: all 0.15s ease-in-out;
-	transition: all 0.15s ease-in-out;
-}
-fieldset.ui-fieldset>:not(legend) {
-	display: block;
+	transform-origin: 66% 66%;
+	transition: all 0.2s ease-in-out;
 }
 
-fieldset.ui-fieldset.collapsed {
-	border-color: #ccc transparent transparent transparent;
+.ui-fieldset.collapsed {
+	border-color: var(--ui-border-color, #ccc) transparent transparent transparent;
 	border-radius: 0;
-	-webkit-transition: all 0.4s;
-	transition: all 0.4s;
+	padding: 0 1em;
 }
-fieldset.ui-fieldset.collapsed>legend::before {
-	margin-top: -2px;
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
+.ui-fieldset.collapsed > * {
+	display: none;
+}
+.ui-fieldset.collapsed > legend {
+	display: block;
+}
+.ui-fieldset.collapsed > legend::before {
+	margin-top: -0.15em;
 	transform: rotate(45deg);
 }
 
+.ui-fieldset.collapsed.expanding {
+	padding: 1em;
+}
+.ui-fieldset.collapsing {
+	height: auto;
+	padding: 0 1em;
+	transition: padding 0.4s ease;
+}

@@ -2,6 +2,10 @@
 	display: none;
 }
 
+.ui-popup-noscroll {
+	overflow: hidden !important;
+}
+
 .ui-popup-mask {
 	background-color: #000;
 	opacity: 0.5;
@@ -26,8 +30,8 @@
 	border-radius: 5px;
 	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-	min-width: 100px;
-	min-height: 100px;
+	min-width: 60px;
+	min-height: 60px;
 }
 
 .ui-popup-wrap.loading .ui-popup-frame {
@@ -84,7 +88,7 @@
 
 .ui-popup-arrow.hc {
 	left: 50%;
-	margin-left: -10px;
+	margin-left: -6px;
 }
 
 .ui-popup-arrow.vt {
@@ -97,7 +101,7 @@
 
 .ui-popup-arrow.vm {
 	top: 50%;
-	margin-top: -10px;
+	margin-top: -6px;
 }
 
 .ui-popup-arrow.vb1 {
@@ -109,11 +113,39 @@
 }
 
 .ui-popup-closer {
+	display: block;
+	width: 24px;
+	height: 24px;
+	opacity: 0.5;
+
 	cursor: pointer;
 	position: absolute;
-	top: -6px;
-	right: -6px;
+	top: 6px;
+	right: 6px;
 	z-index: 10210;
+}
+.ui-popup-closer:hover {
+	opacity: 1;
+}
+.ui-popup-closer:before, .ui-popup-closer:after {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -10px;
+	margin-left: -1px;
+	content: '';
+	height: 19px;
+	width: 2px;
+	background-color: #000;
+}
+.ui-popup-closer:before {
+	transform: rotate(45deg);
+}
+.ui-popup-closer:after {
+	transform: rotate(-45deg);
+}
+[data-bs-theme=dark] .ui-popup-closer:before, [data-bs-theme=dark] .ui-popup-closer:after {
+	background-color: #fff;
 }
 
 .ui-popup-loader {
@@ -143,24 +175,39 @@
 	margin: 15px;
 	padding: 15px;
 }
-.ui-popup-error.json {
+.ui-popup-error.text {
 	white-space: pre-wrap;
 }
 
 .ui-popup-header {
-	padding: 15px;
 	border-bottom: 1px solid #e5e5e5;
+	padding: 20px;
+	position: relative;
 }
 .ui-popup-header h1, .ui-popup-header h2, .ui-popup-header h3, .ui-popup-header h4, .ui-popup-header h5, .ui-popup-header h6 {
 	margin: 0;
 }
 
 .ui-popup-body {
+	padding: 20px;
 	position: relative;
-	padding: 15px;
 }
 .ui-popup-footer {
-	padding: 15px;
-	text-align: center;
 	border-top: 1px solid #e5e5e5;
+	padding: 20px;
+	position: relative;
+	text-align: center;
+}
+
+[data-bs-theme=dark] .ui-popup-mask {
+	background-color: #fff;
+}
+[data-bs-theme=dark] .ui-popup-frame, [data-bs-theme=dark] .ui-popup-arrow {
+	background-color: var(--bs-body-bg);
+}
+[data-bs-theme=dark] .ui-popup-header {
+	border-bottom-color: #999;
+}
+[data-bs-theme=dark] .ui-popup-footer {
+	border-top-color: #999;
 }

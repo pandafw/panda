@@ -1,0 +1,11 @@
+:root {
+	--ui-border-color: #ccc;
+}
+[data-bs-theme=dark] {
+	--ui-border-color: #555;
+}
+
+.ui-bordered {
+	border: solid 1px var(--ui-border-color);
+}
+

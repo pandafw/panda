@@ -1,13 +1,24 @@
 (function($) {
 	"use strict";
 
-	$.fn.enableBy = function(target) {
-		$(this).each(function() {
-			var $a = $(this), $cs = $(target || $a.attr('enableby'));
-			if ($cs.length) {
-				$cs.change(function() {
-					$a.prop('disabled', $cs.filter(':checked').length == 0);
-				}).trigger('change');
+	$.fn.enableby = function(s) {
+		return this.each(function() {
+			var $a = $(this),
+				b = s || $a.attr('enableby'),
+				t = b, f = '',
+				i = b.indexOf(' ');
+
+			if (i > 0) {
+				t = b.substring(0, i);
+				f = b.substring(i+1);
+			}
+
+			$(t).on('change', f, function() {
+				$a.prop('disabled', $(b).filter(':checked').length == 0);
+			});
+
+			if ($(b).length) {
+				$(b).first().trigger('change');
 			} else {
 				$a.prop('disabled', true);
 			}
@@ -17,6 +28,6 @@
 
 	// ==================
 	$(window).on('load', function() {
-		$('[enableby]').enableBy();
+		$('[enableby]').enableby();
 	});
 })(jQuery);

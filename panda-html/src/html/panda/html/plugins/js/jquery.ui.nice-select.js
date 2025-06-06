@@ -14,45 +14,45 @@
 
 	function __dropdown_keydown(evt) {
 		var $dropdown = $(this);
-		var $focused_option = $($dropdown.find('.focus') || $dropdown.find('ui li.selected'));
+		var $focused = ($dropdown.find('.focus') || $dropdown.find('.selected')).first();
 
-		switch (evt.keyCode) {
-		case 32: // Space
-		case 13: // Enter
+		switch (evt.key) {
+		case ' ': // Space
+		case 'Enter':
 			if ($dropdown.hasClass('open')) {
-				$focused_option.trigger('click');
+				$focused.trigger('click');
 			} else {
 				$dropdown.trigger('click');
 			}
 			return false;
-		case 40: // Down
+		case 'ArrowDown':
 			if (!$dropdown.hasClass('open')) {
 				$dropdown.trigger('click');
 			} else {
-				var $next = $focused_option.nextAll('li:not(.disabled)').first();
+				var $next = ($focused.length > 0 ? $focused.nextAll('li:not(.disabled)') : $dropdown.find('li:not(.disabled)')).first();
 				if ($next.length > 0) {
 					$dropdown.find('.focus').removeClass('focus');
-					$next.addClass('focus');
+					$next.addClass('focus').focus();
 				}
 			}
 			return false;
-		case 38: // Up
+		case 'ArrowUp':
 			if (!$dropdown.hasClass('open')) {
 				$dropdown.trigger('click');
 			} else {
-				var $prev = $focused_option.prevAll('li:not(.disabled)').first();
+				var $prev = ($focused.length > 0 ? $focused.prevAll('li:not(.disabled)').first() : $dropdown.find('li:not(.disabled)').last());
 				if ($prev.length > 0) {
 					$dropdown.find('.focus').removeClass('focus');
-					$prev.addClass('focus');
+					$prev.addClass('focus').focus();
 				}
 			}
 			return false;
-		case 27: // Esc
+		case 'Escape':
 			if ($dropdown.hasClass('open')) {
 				$dropdown.trigger('click');
 			}
 			break;
-		case 9: // Tab
+		case 'Tab':
 			if ($dropdown.hasClass('open')) {
 				return false;
 			}
@@ -68,10 +68,6 @@
 		$dropdown.toggleClass('open');
 
 		if ($dropdown.hasClass('open')) {
-			$dropdown.find('li');
-			$dropdown.find('.focus').removeClass('focus');
-			$dropdown.find('.selected').addClass('focus');
-
 			// Close when clicking outside
 			$(document).on('click.nice_select', __document_click);
 		} else {
@@ -83,16 +79,89 @@
 	}
 
 	function __dropdown_option_click() {
-		var $option = $(this);
-		var $dropdown = $option.closest('.ui-nice-select');
+		var $li = $(this);
 
-		$dropdown.find('.selected').removeClass('selected');
-		$option.addClass('selected');
+		if ($li.hasClass('selected')) {
+			return;
+		}
 
-		var text = $option.data('display') || $option.text();
-		$dropdown.find('.current').text(text);
+		var $dropdown = $li.closest('.ui-nice-select'),
+			$select = $dropdown.prev('select'),
+			val = $li.attr('value');
 
-		$dropdown.prev('select').val($option.data('value')).trigger('change');
+		if ($dropdown.hasClass('multiple')) {
+			var vs = $select.val() || [];
+			vs.push(val);
+			val = vs;
+		}
+		$select.val(val).trigger('change');
+	}
+
+	// multiple only
+	function __dropdown_current_click() {
+		var $t = $(this), val = $t.attr('value'),
+			$dropdown = $t.closest('.ui-nice-select'),
+			$select = $dropdown.prev('select');
+
+		$t.remove();
+		
+		$dropdown.find('li').filter(function() { return $(this).attr('value') == val; }).removeClass('selected');
+		var val = [];
+		$dropdown.find('.current').each(function() {
+			val.push($(this).attr('value'));
+		})
+		$select.val(val);
+		return false;
+	}
+
+	function __select_change() {
+		change.apply($(this));
+	}
+
+	function change() {
+		this.each(function() {
+			var $select = $(this), vs = $select.val();
+			var $dropdown = $select.next('.ui-nice-select');
+
+			var eq = $.isArray(vs)
+				? function(v, a) {
+					for (var i = 0; i < a.length; i++) {
+						if (v == a[i]) {
+							return true;
+						}
+					}
+					return false;
+				}
+				: function(v, a) {
+					return v == a;
+				};
+
+			$dropdown.find('.current').remove();
+			$dropdown.find('.selected').removeClass('selected');
+			$dropdown.find('li')
+				.filter(function() { return eq($(this).attr('value'), vs); })
+				.addClass('selected')
+				.each(function() {
+					var $t = $(this);
+					$dropdown.append($('<span>', { 'class': 'current', 'value': $t.attr('value')}).text($t.attr('display') || $t.text()));
+				});
+		});
+	}
+
+	function update() {
+		this.each(function() {
+			var $select = $(this);
+			var $dropdown = $select.next('.ui-nice-select');
+
+			if ($dropdown.length) {
+				$dropdown.remove();
+				create_nice_select($select);
+
+				if ($dropdown.hasClass('open')) {
+					$select.next().trigger('click');
+				}
+			}
+		});
 	}
 
 	function update() {
@@ -118,7 +187,7 @@
 
 			if ($dropdown.length) {
 				$dropdown.remove();
-				$select.css('display', '');
+				$select.css('display', '').off('.nice_select');
 			}
 		});
 		if ($('.ui-nice-select').length == 0) {
@@ -138,26 +207,30 @@
 	function create_nice_select($select) {
 		var $options = $select.find('option'),
 			$selected = $select.find('option:selected'),
-			$current = $('<span class="current"></span>'),
 			$ul = $('<ul></ul>'),
 			$dropdown = $('<div></div>')
 				.addClass('ui-nice-select')
 				.addClass($select.attr('class') || '')
-				.addClass($select.attr('disabled') ? 'disabled' : '')
-				.attr('tabindex', $select.attr('disabled') ? null : ($select.attr('tabindex') || '0'))
-				.append($current, $ul);
+				.addClass($select.prop('disabled') ? 'disabled' : '')
+				.addClass($select.prop('multiple') ? 'multiple' : '')
+				.attr('tabindex', $select.prop('disabled') ? null : ($select.attr('tabindex') || '0'))
+				.append($ul);
 
-		$current.text($selected.data('display') || $selected.text());
+		$selected.each(function() {
+			var $op = $(this);
+			$dropdown.append($('<span>', { 'class': 'current', 'value': $op.val()}).text($op.attr('display') || $op.text()));
+		});
 
 		$options.each(function() {
 			var $option = $(this);
 
 			$ul.append($('<li></li>')
-				.attr('data-value', $option.val())
-				.attr('data-display', ($option.data('display') || null))
+				.attr('value', $option.val())
+				.attr('display', ($option.attr('display') || ''))
 				.addClass(
 					($option.is(':selected') ? ' selected' : '') +
 					($option.is(':disabled') ? ' disabled' : ''))
+				.attr('tabindex', $option.is(':disabled') ? null : '0')
 				.text($option.text())
 			);
 		});
@@ -171,7 +244,14 @@
 		// Option click
 		$dropdown.on('click', 'li:not(.disabled)', __dropdown_option_click);
 
+		// multiple
+		if ($dropdown.hasClass('multiple')) {
+			$dropdown.on('click', '.current', __dropdown_current_click)
+		}
+
 		$select.after($dropdown);
+
+		$select.on('change.nice_select', __select_change);
 	}
 
 	var api = {

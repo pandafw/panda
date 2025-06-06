@@ -2,15 +2,13 @@
 	display: block;
 	width: 16px;
 	height: 16px;
-	opacity: 0.3;
+	opacity: 0.5;
 }
-
 .ui-close:hover {
 	opacity: 1;
 }
 
-.ui-close:before,
-.ui-close:after {
+.ui-close:before, .ui-close:after {
 	position: absolute;
 	left: 50%;
 	top: 50%;
@@ -21,6 +19,12 @@
 	width: 2px;
 	background-color: #333;
 }
+.ui-close:before {
+	transform: rotate(45deg);
+}
+.ui-close:after {
+	transform: rotate(-45deg);
+}
 
 .ui-close.circle {
 	background-color: #fff;
@@ -28,10 +32,10 @@
 	border-radius: 50%;
 }
 
-.ui-close:before {
-	transform: rotate(45deg);
+[data-bs-theme=dark] .ui-close:before, [data-bs-theme=dark] .ui-close:after {
+	background-color: #ccc;
 }
-
-.ui-close:after {
-	transform: rotate(-45deg);
+[data-bs-theme=dark] .ui-close.circle {
+	background-color: #000;
+	border-color: #ccc;
 }

@@ -59,7 +59,7 @@
 
 		var $fit = $('<div>', { 'class': 'ui-uploader-item' }).data('file', f);
 
-		$('<input', { type: 'hidden', name: uc.name, 'class': 'ui-uploader-fid' }).appendTo($fit);
+		$('<input>', { type: 'hidden', name: uc.name, 'class': 'ui-uploader-fid' }).appendTo($fit);
 		$('<i>', { 'class': 'ui-close' }).click(_item_on_remove).appendTo($fit);
 
 		$('<span>', { 'class': 'ui-uploader-info' })
@@ -127,12 +127,14 @@
 	function _ajaxFail(xhr, status, err) {
 		var $e = $('<div class="ui-uploader-error">');
 
-		if (xhr.responseJSON) {
-			$e.addClass('json').text(JSON.stringify(xhr.responseJSON, null, 4));
-		} else if (xhr.responseText) {
-			$e.html(xhr.responseText);
+		var j = xhr.responseJSON, t = xhr.responseText;
+		if (j) {
+			var e = j.error;
+			$e.addClass('text').text(typeof(e) == 'string' ? e : JSON.stringify(j, null, 4));
+		} else if (t) {
+			$e.html(t);
 		} else {
-			$e.text(err || status || 'Server error!');
+			$e.addClass('text').text((xhr.status ? (xhr.status + ' ') : '')  + (err || status || 'error'));
 		}
 
 		$(this).append($e);
@@ -342,15 +344,15 @@
 			// show image download view
 			dnloadView: false,
 
-			// fontawesome4 css
+			// fontawesome4/5/6 css
 			cssIcons: {
-				file: 'fa fa-file-o',
-				image: 'fa fa-file-image-o',
-				audio: 'fa fa-file-audio-o',
-				video: 'fa fa-file-video-o',
-				error: 'fa fa-exclamation-circle',
-				waiting: 'fa fa-refresh',
-				loading: 'fa fa-refresh fa-spin'
+				file: 'fa fa-file-o far fa-file',
+				image: 'fa fa-file-image-o far fa-file-image',
+				audio: 'fa fa-file-audio-o far fa-file-audio',
+				video: 'fa fa-file-video-o far fa-file-video',
+				error: 'fa fa-exclamation-circle fas fa-circle-exclamation',
+				waiting: 'fa fas fa-refresh',
+				loading: 'fa fas fa-refresh fa-spin'
 			},
 
 			pgbarFgcolor: '#ccc',
